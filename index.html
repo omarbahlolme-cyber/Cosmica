@@ -1,0 +1,461 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cosmica - Language Worlds</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Rajdhani:wght@400;600;700&family=Oxanium:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="aurora"></div>
+    <div class="starfield starfield-deep" data-depth="0.15" aria-hidden="true"></div>
+    <div class="starfield starfield-mid" data-depth="0.3" aria-hidden="true"></div>
+    <div class="starfield starfield-near" data-depth="0.5" aria-hidden="true"></div>
+
+    <header class="nav">
+      <div class="brand">
+        <span class="brand-mark">C</span>
+        <div>
+          <div class="brand-title">Cosmica</div>
+          <div class="brand-sub">Language Worlds</div>
+        </div>
+      </div>
+      <nav class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#how">How it works</a>
+        <a href="#worlds">Worlds</a>
+        <a href="#guide">Alien guide</a>
+        <a href="#join">Feedback</a>
+      </nav>
+      <button class="sound-toggle" id="soundToggle" type="button">
+        <span class="dot" aria-hidden="true"></span>
+        <span class="sound-label">Sound: On</span>
+      </button>
+    </header>
+
+    <main>
+      <section class="hero" id="home">
+        <div class="hero-left">
+          <div class="eyebrow">A universe for language learning</div>
+          <h1>
+            Explore worlds. Learn in a structured order.
+            Made for all levels.
+          </h1>
+          <p class="lede">
+            Cosmica is an interactive, open-space language-learning platform.
+            Choose your language world and start your voyage today.
+            Meet our cute alien guide "Mimi" a ChatGPT-powered AI
+            designed to answer all your questions.
+          </p>
+          <div class="hero-actions">
+            <button class="primary" id="startVoyageButton" type="button">Start your voyage</button>
+            <button class="ghost" id="talkButton" type="button">
+              Talk to Mimi
+            </button>
+          </div>
+          <div class="hero-meta">
+            <div>
+              <div class="meta-number">12</div>
+              <div class="meta-label">Worlds to discover</div>
+            </div>
+            <div>
+              <div class="meta-number">Limitless</div>
+              <div class="meta-label">Interactive animations</div>
+            </div>
+            <div>
+              <div class="meta-number">Completely free</div>
+              <div class="meta-label">No subscription needed</div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-right">
+          <div class="orbit-system" aria-hidden="true">
+            <div class="orbit-sun"></div>
+            <div class="orbit-ring orbit-ring-inner">
+              <div class="orbit-planet" style="--angle: 0deg;">
+                <div class="planet-body">
+                  <div class="flag-badge" data-flag="gb"></div>
+                </div>
+              </div>
+              <div class="orbit-planet" style="--angle: 60deg;">
+                <div class="planet-body">
+                  <div class="flag-badge" data-flag="fr"></div>
+                </div>
+              </div>
+              <div class="orbit-planet" style="--angle: 120deg;">
+                <div class="planet-body">
+                  <div class="flag-badge" data-flag="es"></div>
+                </div>
+              </div>
+              <div class="orbit-planet" style="--angle: 300deg;">
+                <div class="planet-body">
+                  <div class="flag-badge" data-flag="se"></div>
+                </div>
+              </div>
+              <div class="orbit-planet" style="--angle: 240deg;">
+                <div class="planet-body">
+                  <div class="flag-badge" data-flag="kr"></div>
+                </div>
+              </div>
+              <div class="orbit-planet" style="--angle: 180deg;">
+                <div class="planet-body">
+                  <div class="flag-badge" data-flag="ae"></div>
+                </div>
+              </div>
+            </div>
+            <div class="orbit-ring orbit-ring-outer">
+              <div class="orbit-planet" style="--angle: 30deg;">
+                <div class="planet-body">
+                  <div class="flag-badge" data-flag="nl"></div>
+                </div>
+              </div>
+              <div class="orbit-planet" style="--angle: 90deg;">
+                <div class="planet-body">
+                  <div class="flag-badge" data-flag="de"></div>
+                </div>
+              </div>
+              <div class="orbit-planet" style="--angle: 150deg;">
+                <div class="planet-body">
+                  <div class="flag-badge" data-flag="jp"></div>
+                </div>
+              </div>
+              <div class="orbit-planet" style="--angle: 210deg;">
+                <div class="planet-body">
+                  <div class="flag-badge" data-flag="cn"></div>
+                </div>
+              </div>
+              <div class="orbit-planet" style="--angle: 270deg;">
+                <div class="planet-body">
+                  <div class="flag-badge" data-flag="pt"></div>
+                </div>
+              </div>
+              <div class="orbit-planet" style="--angle: 330deg;">
+                <div class="planet-body">
+                  <div class="flag-badge" data-flag="in"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section reveal" id="how">
+        <div class="section-title">
+          <h2>Explore and learn effortlessly</h2>
+          <p>
+            Follow four focused maps: Letters, Words, Phrases, and Grammar. Each
+            map is a path designed to build confidence
+            step‑by‑step without overwhelm.
+          </p>
+        </div>
+        <div class="steps">
+          <div class="card">
+            <div class="card-number">01</div>
+            <h3>Choose a world</h3>
+            <p>
+              Learn Letters, common words, everyday native phrases, and core/advanced grammar
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-number">02</div>
+            <h3>Practice as you listen</h3>
+            <p>
+              Learn and improve pronunciation with native audio.
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-number">03</div>
+            <h3>Build real fluency</h3>
+            <p>
+              Start real conversations with native speakers—confidently and naturally.
+            </p>
+          </div>
+        </div>
+      </section>
+
+              <section class="section worlds reveal" id="worlds">
+          <div class="section-title">
+            <h2>The worlds open today</h2>
+            <p>
+              Each planet has a distinct culture, soundscape, and learning path. More
+              worlds are already in orbit.
+            </p>
+          </div>
+          <div class="world-grid">
+            <article class="world-card" data-world="English" role="button" tabindex="0">
+              <div class="world-surface english">
+                <div class="flag-badge" data-flag="gb" role="img" aria-label="United Kingdom flag"></div>
+              </div>
+              <div class="world-info">
+                <h3>English</h3>
+                <p>Global signal capitals, story arcs, and dialect constellations.</p>
+              </div>
+            </article>
+            <article class="world-card coming-soon" data-world="French" role="button" aria-disabled="true" tabindex="-1">
+              <div class="world-surface french">
+                <div class="flag-badge" data-flag="fr" role="img" aria-label="France flag"></div>
+              </div>
+              <span class="coming-soon-badge">Coming soon</span>
+              <div class="world-info">
+                <h3>French</h3>
+                <p>Lyric salons, cinema nebulae, and artful sound gardens.</p>
+              </div>
+            </article>
+            <article class="world-card coming-soon" data-world="German" role="button" aria-disabled="true" tabindex="-1">
+              <div class="world-surface german">
+                <div class="flag-badge" data-flag="de" role="img" aria-label="Germany flag"></div>
+              </div>
+              <span class="coming-soon-badge">Coming soon</span>
+              <div class="world-info">
+                <h3>German</h3>
+                <p>Precision starports, forest moons, and engineered dialogue routes.</p>
+              </div>
+            </article>
+            <article class="world-card coming-soon" data-world="Spanish" role="button" aria-disabled="true" tabindex="-1">
+              <div class="world-surface spanish">
+                <div class="flag-badge" data-flag="es" role="img" aria-label="Spain flag"></div>
+              </div>
+              <span class="coming-soon-badge">Coming soon</span>
+              <div class="world-info">
+                <h3>Spanish</h3>
+                <p>Sunlit plazas, rhythm trails, and story markets in orbit.</p>
+              </div>
+            </article>
+            <article class="world-card coming-soon" data-world="Portuguese" role="button" aria-disabled="true" tabindex="-1">
+              <div class="world-surface portuguese">
+                <div class="flag-badge" data-flag="pt" role="img" aria-label="Portugal flag"></div>
+              </div>
+              <span class="coming-soon-badge">Coming soon</span>
+              <div class="world-info">
+                <h3>Portuguese</h3>
+                <p>Oceanic star harbors, saudade tides, and melody routes.</p>
+              </div>
+            </article>
+            <article class="world-card coming-soon" data-world="Dutch" role="button" aria-disabled="true" tabindex="-1">
+              <div class="world-surface dutch">
+                <div class="flag-badge" data-flag="nl" role="img" aria-label="Netherlands flag"></div>
+              </div>
+              <span class="coming-soon-badge">Coming soon</span>
+              <div class="world-info">
+                <h3>Dutch</h3>
+                <p>Tide-ringed stations, trade routes, and crisp everyday speech.</p>
+              </div>
+            </article>
+            <article class="world-card coming-soon" data-world="Swedish" role="button" aria-disabled="true" tabindex="-1">
+              <div class="world-surface swedish">
+                <div class="flag-badge" data-flag="se" role="img" aria-label="Sweden flag"></div>
+              </div>
+              <span class="coming-soon-badge">Coming soon</span>
+              <div class="world-info">
+                <h3>Swedish</h3>
+                <p>Aurora forests, quiet light, and slow-breath fluency loops.</p>
+              </div>
+            </article>
+            <article class="world-card coming-soon" data-world="Arabic" role="button" aria-disabled="true" tabindex="-1">
+              <div class="world-surface arabic">
+                <div class="flag-badge" data-flag="ae" role="img" aria-label="United Arab Emirates flag"></div>
+              </div>
+              <span class="coming-soon-badge">Coming soon</span>
+              <div class="world-info">
+                <h3>Arabic</h3>
+                <p>Calligraphy constellations, desert star caravans, poetic echoes.</p>
+              </div>
+            </article>
+            <article class="world-card coming-soon" data-world="Chinese" role="button" aria-disabled="true" tabindex="-1">
+              <div class="world-surface chinese">
+                <div class="flag-badge" data-flag="cn" role="img" aria-label="China flag"></div>
+              </div>
+              <span class="coming-soon-badge">Coming soon</span>
+              <div class="world-info">
+                <h3>Chinese</h3>
+                <p>Silk-road skies, festival arcs, and calligraphy rivers of light.</p>
+              </div>
+            </article>
+            <article class="world-card coming-soon" data-world="Japanese" role="button" aria-disabled="true" tabindex="-1">
+              <div class="world-surface japanese">
+                <div class="flag-badge" data-flag="jp" role="img" aria-label="Japan flag"></div>
+              </div>
+              <span class="coming-soon-badge">Coming soon</span>
+              <div class="world-info">
+                <h3>Japanese</h3>
+                <p>Paper-moon gardens, lantern bays, and mindful honor routes.</p>
+              </div>
+            </article>
+            <article class="world-card coming-soon" data-world="Korean" role="button" aria-disabled="true" tabindex="-1">
+              <div class="world-surface korean">
+                <div class="flag-badge" data-flag="kr" role="img" aria-label="South Korea flag"></div>
+              </div>
+              <span class="coming-soon-badge">Coming soon</span>
+              <div class="world-info">
+                <h3>Korean</h3>
+                <p>Hangeul stargrid, neon rhythms, and pop-culture routes.</p>
+              </div>
+            </article>
+            <article class="world-card coming-soon" data-world="Hindi" role="button" aria-disabled="true" tabindex="-1">
+              <div class="world-surface hindi">
+                <div class="flag-badge" data-flag="in" role="img" aria-label="India flag"></div>
+              </div>
+              <span class="coming-soon-badge">Coming soon</span>
+              <div class="world-info">
+                <h3>Hindi</h3>
+                <p>Festival supernovas, sacred geometry, and lyrical cadence paths.</p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+      <section class="section guide reveal" id="guide">
+        <div class="guide-left">
+          <h2>Meet your alien guide</h2>
+          <p>
+            This is Mimi, your cosmic companion. Mimi reacts to your progress,
+            plots your next jump, and keeps you on the most playful voyage in
+            the galaxy.
+          </p>
+          <div class="speech" id="speechBubble" aria-live="polite">
+            <span class="speech-text" id="speechText">
+              Hi, explorer! I’m Mimi, your alien guide. Ask me anything—I’m here to help.
+            </span>
+            <div class="speech-bars" aria-hidden="true">
+              <span class="speech-bar"></span>
+              <span class="speech-bar"></span>
+              <span class="speech-bar"></span>
+            </div>
+          </div>
+          <div class="mimi-chat" id="mimiChat">
+            <div class="chat-header">
+              <span class="chat-title">Mimi chat</span>
+              <span class="chat-status" id="chatStatus">
+                <span class="chat-dot" aria-hidden="true"></span>
+                <span class="chat-status-text">Ready</span>
+              </span>
+            </div>
+            <div class="chat-log" id="chatLog" aria-live="polite" aria-label="Mimi chat messages"></div>
+            <form class="chat-input" id="chatForm">
+              <input
+                id="chatInput"
+                type="text"
+                placeholder="Ask Mimi anything..."
+                autocomplete="off"
+                maxlength="220"
+                aria-label="Ask Mimi"
+              />
+              <button class="primary chat-send" type="submit">Send</button>
+            </form>
+              <div class="chat-hints">
+                <button class="chat-chip" type="button" data-prompt="Teach me a simple greeting.">Teach a greeting</button>
+                <button class="chat-chip" type="button" data-prompt="Surprise me with a challenge.">Surprise me</button>
+              </div>
+          </div>
+        </div>
+        <div class="guide-right">
+          <div class="alien" id="alien">
+            <div class="alien-glow"></div>
+            <div class="alien-head">
+              <div class="alien-antenna"></div>
+              <div class="alien-antenna right"></div>
+              <div class="alien-eye left"></div>
+              <div class="alien-eye right"></div>
+              <div class="alien-blush left"></div>
+              <div class="alien-blush right"></div>
+              <div class="alien-mouth">
+                <svg viewBox="0 0 64 32" aria-hidden="true">
+                  <path id="mouthPath" d="M10 10 C 22 26, 42 26, 54 10" />
+                </svg>
+              </div>
+            </div>
+            <div class="alien-body">
+              <div class="alien-arm left"></div>
+              <div class="alien-arm right"></div>
+            </div>
+            <div class="alien-tail"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section join reveal" id="join">
+        <div class="join-panel">
+          <h2>Help shape the next worlds</h2>
+          <p>
+            Share your ideas and feedback to help us improve our site, build new worlds
+            and create a better learning experiences across the galaxy.
+          </p>
+          <form class="join-actions" id="joinForm">
+            <input
+              type="text"
+              id="joinName"
+              name="name"
+              placeholder="Your name"
+              aria-label="Your name"
+            />
+            <input
+              type="email"
+              id="joinEmail"
+              name="email"
+              placeholder="Email address"
+              aria-label="Email address"
+            />
+            <textarea
+              id="joinFeedback"
+              name="feedback"
+              placeholder="Your text here..."
+              aria-label="Your feedback"
+            ></textarea>
+            <button class="primary" id="joinSubmit" type="submit">Send feedback</button>
+          </form>
+          <div class="join-status" id="joinStatus" aria-live="polite"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div>Cosmica Academy</div>
+      <div>Built for explorers of every language.</div>
+    </footer>
+
+
+    <div class="warp-overlay" id="warpOverlay" aria-hidden="true">
+      <div class="warp-dust" aria-hidden="true"></div>
+      <div class="warp-streaks" aria-hidden="true">
+        <span style="--x:12%;--y:18%;--l:200px;--t:1.2s;--d:0s;"></span>
+        <span style="--x:30%;--y:35%;--l:160px;--t:1.4s;--d:0.2s;"></span>
+        <span style="--x:50%;--y:22%;--l:220px;--t:1.1s;--d:0.1s;"></span>
+        <span style="--x:70%;--y:40%;--l:180px;--t:1.5s;--d:0.3s;"></span>
+        <span style="--x:85%;--y:60%;--l:200px;--t:1.3s;--d:0.45s;"></span>
+        <span style="--x:18%;--y:70%;--l:140px;--t:1.6s;--d:0.15s;"></span>
+        <span style="--x:40%;--y:82%;--l:190px;--t:1.2s;--d:0.55s;"></span>
+        <span style="--x:62%;--y:75%;--l:210px;--t:1.4s;--d:0.25s;"></span>
+        <span style="--x:78%;--y:20%;--l:160px;--t:1.3s;--d:0.35s;"></span>
+        <span style="--x:10%;--y:50%;--l:220px;--t:1.5s;--d:0.5s;"></span>
+        <span style="--x:32%;--y:10%;--l:180px;--t:1.1s;--d:0.4s;"></span>
+        <span style="--x:92%;--y:32%;--l:140px;--t:1.6s;--d:0.6s;"></span>
+      </div>
+      <div class="warp-flare" aria-hidden="true"></div>
+      <div class="warp-smoke smoke-a"></div>
+      <div class="warp-smoke smoke-b"></div>
+      <div class="warp-smoke smoke-c"></div>
+      <div class="warp-scene">
+        <div class="ship">
+          <div class="ship-body"></div>
+          <div class="ship-window"></div>
+          <div class="ship-flame"></div>
+        </div>
+        <div class="warp-text" id="warpText">Entering world</div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
+
+
+
+
+
+

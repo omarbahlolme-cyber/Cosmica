@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cosmica - English World</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Rajdhani:wght@400;600;700&family=Oxanium:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="world-page">
+    <div class="aurora"></div>
+    <div class="starfield starfield-deep" data-depth="0.15" aria-hidden="true"></div>
+    <div class="starfield starfield-mid" data-depth="0.3" aria-hidden="true"></div>
+    <div class="starfield starfield-near" data-depth="0.5" aria-hidden="true"></div>
+
+    <header class="nav">
+      <div class="brand">
+        <span class="brand-mark">C</span>
+        <div>
+          <div class="brand-title">Cosmica</div>
+          <div class="brand-sub">Language Worlds</div>
+        </div>
+      </div>
+      <nav class="nav-links">
+        <a href="index.html?skipIntro=1">Return to home page</a>
+      </nav>
+      <button class="sound-toggle" id="soundToggle" type="button">
+        <span class="dot" aria-hidden="true"></span>
+        <span class="sound-label">Sound: On</span>
+      </button>
+    </header>
+
+    <main>
+      <style>
+        body.world-page:not(.show-language) #language {
+          opacity: 0 !important;
+          transform: translateY(24px) !important;
+          pointer-events: none !important;
+        }
+      </style>
+      <section class="section world-hero" id="world">
+        <div class="section-title">
+          <div class="eyebrow">English World</div>
+          <h2>Welcome to the English World</h2>
+          <p class="lede">
+            Build confident foundations with letters, words, and short conversations
+            you can use immediately. Every section is short, visual, and mission-based.
+          </p>
+        </div>
+        <div class="hero-actions">
+          <a class="primary" href="#language">Start Lesson</a>
+        </div>
+      </section>
+
+      <section class="section world-language reveal language-reveal" id="language">
+        <div class="section-title">
+          <h2>Choose your base language</h2>
+          <p>Get Words & Phrases cards translated from English to your base language.</p>
+        </div>
+        <div class="language-box" aria-labelledby="languageLabel">
+            <div class="language-search-wrap">
+              <input id="languageSearch" class="language-search" type="search" placeholder="Find your language…" aria-label="Search languages" />
+            </div>
+          <div class="language-list" id="languageList" tabindex="0">
+            <button class="language-pill" type="button">Albanian</button>
+            <button class="language-pill" type="button">Arabic</button>
+            <button class="language-pill" type="button">Bulgarian</button>
+            <button class="language-pill" type="button">Chinese</button>
+            <button class="language-pill" type="button">Croatian</button>
+            <button class="language-pill" type="button">Czech</button>
+            <button class="language-pill" type="button">Dutch</button>
+            <button class="language-pill" type="button">Finnish</button>
+            <button class="language-pill" type="button">French</button>
+            <button class="language-pill" type="button">German</button>
+            <button class="language-pill" type="button">Greek</button>
+            <button class="language-pill" type="button">Hebrew</button>
+            <button class="language-pill" type="button">Hindi</button>
+            <button class="language-pill" type="button">Indonesian</button>
+            <button class="language-pill" type="button">Italian</button>
+            <button class="language-pill" type="button">Japanese</button>
+            <button class="language-pill" type="button">Korean</button>
+            <button class="language-pill" type="button">Kurdish</button>
+            <button class="language-pill" type="button">Malaysian</button>
+            <button class="language-pill" type="button">Norwegian</button>
+            <button class="language-pill" type="button">Persian</button>
+            <button class="language-pill" type="button">Polish</button>
+            <button class="language-pill" type="button">Romanian</button>
+            <button class="language-pill" type="button">Russian</button>
+            <button class="language-pill" type="button">Somali</button>
+            <button class="language-pill" type="button">Spanish</button>
+            <button class="language-pill" type="button">Swedish</button>
+            <button class="language-pill" type="button">Tagalog</button>
+            <button class="language-pill" type="button">Thai</button>
+            <button class="language-pill" type="button">Turkish</button>
+            <button class="language-pill" type="button">Ukrainian</button>
+            <button class="language-pill" type="button">Urdu</button>
+            <button class="language-pill" type="button">Uzbek</button>
+            <button class="language-pill" type="button">Vietnamese</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="section world-maps reveal" id="maps">
+        <div class="section-title">
+          <h2>Choose a map</h2>
+          <p>Pick your path to start exploring English.</p>
+        </div>
+        <div class="steps">
+          <a class="card map-card map-letters map-link" href="letters.html">
+            <span class="map-stamp" aria-hidden="true"></span>
+            <span class="map-icon" aria-hidden="true">
+              <svg viewBox="0 0 64 64" role="presentation">
+                <path d="M18 50 L32 14 L46 50" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M24 36 H40" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <h3>Letters</h3>
+          </a>
+          <a class="card map-card map-words map-link" href="words.html">
+            <span class="map-stamp" aria-hidden="true"></span>
+            <span class="map-icon" aria-hidden="true">
+              <svg viewBox="0 0 64 64" role="presentation">
+                <rect x="14" y="18" width="20" height="20" rx="6" fill="currentColor"/>
+                <rect x="30" y="30" width="20" height="20" rx="6" fill="currentColor" opacity="0.6"/>
+              </svg>
+            </span>
+            <h3>Words</h3>
+          </a>
+          <a class="card map-card map-phrases map-link" href="phrases.html">
+            <span class="map-stamp" aria-hidden="true"></span>
+            <span class="map-icon" aria-hidden="true">
+              <svg viewBox="0 0 64 64" role="presentation">
+                <path d="M14 20 H42 a8 8 0 0 1 8 8 v6 a8 8 0 0 1-8 8 H28 L18 48 V42 H22 A8 8 0 0 1 14 34 Z" fill="currentColor"/>
+              </svg>
+            </span>
+            <h3>Phrases</h3>
+          </a>
+          <a class="card map-card map-grammar map-link" href="grammar.html">
+            <span class="map-stamp" aria-hidden="true"></span>
+            <span class="map-icon" aria-hidden="true">
+              <svg viewBox="0 0 64 64" role="presentation">
+                <path d="M22 18 L16 24 L22 30" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M42 18 L48 24 L42 30" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M26 38 H38" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <h3>Grammar</h3>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>Cosmica Academy</span>
+      <span>Explore, learn, and travel through words.</span>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cosmica - English Phrases</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Rajdhani:wght@400;600;700&family=Oxanium:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="world-page phrases-page">
+    <div class="aurora"></div>
+    <div class="starfield starfield-deep" data-depth="0.15" aria-hidden="true"></div>
+    <div class="starfield starfield-mid" data-depth="0.3" aria-hidden="true"></div>
+    <div class="starfield starfield-near" data-depth="0.5" aria-hidden="true"></div>
+
+    <header class="nav">
+      <div class="brand">
+        <span class="brand-mark">C</span>
+        <div>
+          <div class="brand-title">Cosmica</div>
+          <div class="brand-sub">English World</div>
+        </div>
+      </div>
+      <nav class="nav-links">
+        <a href="world.html#maps">Return to English World</a>
+      </nav>
+      <button class="sound-toggle" id="soundToggle" type="button">
+        <span class="dot" aria-hidden="true"></span>
+        <span class="sound-label">Sound: On</span>
+      </button>
+    </header>
+
+    <main>
+      <div class="words-controls" id="phrasesControls"></div>
+      <div id="phrasesSections"></div>
+    </main>
+
+    <footer class="footer">
+      <span>Cosmica Academy</span>
+      <span>Phrases help you speak naturally and confidently.</span>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
