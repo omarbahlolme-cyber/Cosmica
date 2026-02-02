@@ -2698,12 +2698,12 @@ body:not(.world-page) .footer {
   }
 
   .nav-links a {
-    padding: 5px 8px;
+    padding: 4px 7px;
     border-radius: 999px;
     border: 1px solid rgba(255, 255, 255, 0.14);
     background: rgba(20, 28, 56, 0.6);
-    font-size: 10px;
-    letter-spacing: 0.08em;
+    font-size: 9.5px;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
   }
 
@@ -2847,6 +2847,29 @@ body:not(.world-page) .footer {
   .grammar-modal {
     width: min(720px, 94vw);
     border-radius: 22px;
+  }
+
+  .grammar-modal::before,
+  .grammar-modal::after {
+    content: "";
+    position: sticky;
+    left: 0;
+    right: 0;
+    height: 14px;
+    display: block;
+    z-index: 2;
+    pointer-events: none;
+    border-radius: 22px;
+  }
+
+  .grammar-modal::before {
+    top: 0;
+    background: linear-gradient(180deg, rgba(12, 20, 45, 0.9), rgba(12, 20, 45, 0));
+  }
+
+  .grammar-modal::after {
+    bottom: 0;
+    background: linear-gradient(0deg, rgba(12, 20, 45, 0.9), rgba(12, 20, 45, 0));
   }
 
   .grammar-close {
