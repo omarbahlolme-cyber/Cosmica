@@ -3140,6 +3140,7 @@ body.world-page .language-box::after {
   transition: transform 0.3s ease, opacity 0.3s ease;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
+  padding-top: 10px;
 }
 
 body.modal-open {
@@ -3152,13 +3153,13 @@ body.modal-open {
 }
 
 .grammar-modal-body {
-  padding: 34px 28px 28px;
+  padding: 40px 28px 28px;
 }
 
 .grammar-close {
   position: absolute;
-  top: 14px;
-  right: 14px;
+  top: 16px;
+  right: 16px;
   width: 38px;
   height: 38px;
   border-radius: 50%;
