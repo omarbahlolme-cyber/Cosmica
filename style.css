@@ -2812,6 +2812,10 @@ body:not(.world-page) .footer {
     font-size: 1rem;
   }
 
+  .hero .eyebrow {
+    margin-top: 10px;
+  }
+
   .steps {
     grid-template-columns: 1fr;
   }
