@@ -2693,17 +2693,17 @@ body:not(.world-page) .footer {
     overflow-x: auto;
     padding-bottom: 4px;
     margin-top: 12px;
-    gap: 10px;
+    gap: 6px;
     white-space: nowrap;
   }
 
   .nav-links a {
-    padding: 6px 10px;
+    padding: 5px 8px;
     border-radius: 999px;
     border: 1px solid rgba(255, 255, 255, 0.14);
     background: rgba(20, 28, 56, 0.6);
-    font-size: 11px;
-    letter-spacing: 0.12em;
+    font-size: 10px;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
   }
 
