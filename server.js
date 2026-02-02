@@ -15,7 +15,17 @@ const allowedOrigins = new Set([
   `http://127.0.0.1:${port}`,
   "http://localhost:5500",
   "http://127.0.0.1:5500",
+  "https://cosmicalearn.com",
+  "https://www.cosmicalearn.com",
+  "https://cosmica-03wo.onrender.com",
 ]);
+
+const extraOrigins = (process.env.ALLOWED_ORIGINS || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+extraOrigins.forEach((origin) => allowedOrigins.add(origin));
 
 const isLocalOrigin = (origin) => {
   try {
