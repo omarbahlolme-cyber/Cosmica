@@ -863,6 +863,7 @@ let audioContext;
 let ambientGain;
 let ambientPlaying = false;
 let ambientPrimed = false;
+let desiredSoundOn = false;
 let barTimer;
 let barCount = 0;
 let intensityRaf;
@@ -1189,9 +1190,18 @@ const ensureAmbient = async () => {
 
 const playAmbient = async () => {
   await ensureAmbient();
+  if (audioContext && audioContext.state === "suspended") {
+    try {
+      await audioContext.resume();
+    } catch (error) {
+      console.warn("Audio resume failed, recreating engine.", error);
+      createAmbientSound();
+    }
+  }
   ambientGain.gain.setTargetAtTime(7.56, audioContext.currentTime, 0.8);
   ambientPlaying = true;
   ambientPrimed = true;
+  desiredSoundOn = true;
   setSoundUi(true);
   updateStarEnergy(0.3);
   barCount = 0;
@@ -1205,19 +1215,25 @@ const stopAmbient = async () => {
   await ensureAmbient();
   ambientGain.gain.setTargetAtTime(0.0, audioContext.currentTime, 0.3);
   ambientPlaying = false;
+  desiredSoundOn = false;
   setSoundUi(false);
-  if (barTimer) {
-    window.clearInterval(barTimer);
-    barTimer = null;
-  }
-  nextBarTime = 0;
-  barCount = 0;
 };
 
 const toggleSound = async () => {
+  await ensureAmbient();
+  if (audioContext && audioContext.state === "suspended") {
+    try {
+      await audioContext.resume();
+    } catch (error) {
+      console.warn("Audio resume failed on toggle, recreating engine.", error);
+      createAmbientSound();
+    }
+  }
   if (ambientPlaying) {
+    desiredSoundOn = false;
     await stopAmbient();
   } else {
+    desiredSoundOn = true;
     await playAmbient();
   }
 };
@@ -1227,6 +1243,30 @@ if (soundToggle) {
 }
 
 setSoundUi(false);
+
+const unlockAudioContext = async () => {
+  await ensureAmbient();
+  if (audioContext && audioContext.state === "suspended") {
+    try {
+      await audioContext.resume();
+    } catch (error) {
+      console.warn("Audio resume failed on unlock, recreating engine.", error);
+      createAmbientSound();
+    }
+  }
+  if (desiredSoundOn && !ambientPlaying) {
+    await playAmbient();
+  }
+};
+
+window.addEventListener("pointerdown", unlockAudioContext, { once: true });
+window.addEventListener("touchstart", unlockAudioContext, { once: true });
+window.addEventListener("keydown", unlockAudioContext, { once: true });
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden && desiredSoundOn) {
+    unlockAudioContext();
+  }
+});
 
 window.addEventListener("scroll", () => {
   if (!audioContext || !ambientPlaying) {
@@ -1818,10 +1858,10 @@ const setupSpeechCards = () => {
       return null;
     }
     const voiceScore = (voice) => {
-      const name = voice.name.toLowerCase();
+      const name = (voice.name || "").toLowerCase();
       let score = 0;
       if (voice.lang && voice.lang.toLowerCase().startsWith("en-gb")) {
-        score += 7;
+        score += 8;
       }
       if (voice.lang && voice.lang.toLowerCase().startsWith("en")) {
         score += 1.5;
@@ -1845,8 +1885,13 @@ const setupSpeechCards = () => {
       return score;
     };
 
-    const sorted = [...availableVoices].sort((a, b) => voiceScore(b) - voiceScore(a));
-    return sorted[0] || null;
+    const pickFrom = (voices) =>
+      [...voices].sort((a, b) => voiceScore(b) - voiceScore(a))[0] || null;
+
+    const enGbVoices = availableVoices.filter((voice) =>
+      (voice.lang || "").toLowerCase().startsWith("en-gb")
+    );
+    return pickFrom(enGbVoices) || pickFrom(availableVoices);
   };
 
   const loadVoices = () => {
@@ -1860,8 +1905,12 @@ const setupSpeechCards = () => {
     if (!text) {
       return;
     }
+    if (!selectedVoice) {
+      loadVoices();
+      selectedVoice = pickVoice();
+    }
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "en-GB";
+    utterance.lang = selectedVoice?.lang || "en-GB";
     utterance.rate = rate;
     utterance.pitch = pitch;
     if (selectedVoice) {
@@ -2709,7 +2758,7 @@ const WORD_SECTION_LISTS = {
     "Niger",
     "Nigeria",
     "Ghana",
-    "Côte d’Ivoire",
+    "C?te d?Ivoire",
     "Burkina Faso",
     "Mali",
     "Senegal",
@@ -2807,8 +2856,8 @@ const WORD_SECTION_LISTS = {
     "stepdaughter",
     "boyfriend",
     "girlfriend",
-    "fiancé",
-    "fiancée",
+    "fianc?",
+    "fianc?e",
     "spouse",
     "relative",
     "roommate",
@@ -4367,6 +4416,70 @@ const GRAMMAR_TRANSLATIONS = Object.fromEntries(
   ])
 );
 
+const GRAMMAR_EXPLANATION_TRANSLATIONS = Object.fromEntries(
+  GRAMMAR_SECTION_ORDER.map((section) => [section, {}])
+);
+
+const ensureGrammarExplanationEntry = (section, key) => {
+  if (!section || !key) {
+    return null;
+  }
+  if (!GRAMMAR_EXPLANATION_TRANSLATIONS[section]) {
+    GRAMMAR_EXPLANATION_TRANSLATIONS[section] = {};
+  }
+  if (!GRAMMAR_EXPLANATION_TRANSLATIONS[section][key]) {
+    GRAMMAR_EXPLANATION_TRANSLATIONS[section][key] = createTranslationShell();
+  }
+  return GRAMMAR_EXPLANATION_TRANSLATIONS[section][key];
+};
+
+const hydrateGrammarExplanationTranslations = (data) => {
+  if (!data || typeof data !== "object") {
+    return;
+  }
+  const explanations = data.grammar?.explanations;
+  if (explanations && typeof explanations === "object") {
+    Object.entries(explanations).forEach(([section, items]) => {
+      Object.values(items || {}).forEach((payload) => {
+        const source = String(payload?.source || "").toLowerCase().trim();
+        if (!source) {
+          return;
+        }
+        const entry = ensureGrammarExplanationEntry(section, source);
+        if (!entry) {
+          return;
+        }
+        const translations = payload?.translations;
+        if (translations && typeof translations === "object") {
+          Object.entries(translations).forEach(([lang, value]) => {
+            if (typeof value === "string" && value.trim()) {
+              entry[String(lang).toLowerCase()] = value;
+            }
+          });
+        }
+      });
+    });
+  }
+
+  const legacy = data.grammarExplanations;
+  const legacyLang = String(data.worldLanguage || "").toLowerCase();
+  if (legacy && typeof legacy === "object" && legacyLang) {
+    Object.entries(legacy).forEach(([section, items]) => {
+      Object.entries(items || {}).forEach(([sourceText, translation]) => {
+        const key = String(sourceText || "").toLowerCase().trim();
+        if (!key || typeof translation !== "string" || !translation.trim()) {
+          return;
+        }
+        const entry = ensureGrammarExplanationEntry(section, key);
+        if (!entry) {
+          return;
+        }
+        entry[legacyLang] = translation;
+      });
+    });
+  }
+};
+
 const hydrateTranslations = (target, source) => {
   if (!source || typeof source !== "object") {
     return;
@@ -4396,12 +4509,29 @@ const hydrateTranslations = (target, source) => {
 
 const loadTranslations = async () => {
   try {
+    let explanationPackLoaded = false;
     const baseResponse = await fetch("translations.json", { cache: "no-store" });
     if (baseResponse.ok) {
       const baseData = await baseResponse.json();
       hydrateTranslations(WORD_TRANSLATIONS, baseData.words);
       hydrateTranslations(PHRASE_TRANSLATIONS, baseData.phrases);
       hydrateTranslations(GRAMMAR_TRANSLATIONS, baseData.grammar);
+      if (baseData?.grammar?.explanations || baseData?.grammarExplanations) {
+        hydrateGrammarExplanationTranslations(baseData);
+        explanationPackLoaded = true;
+      }
+    }
+    if (!explanationPackLoaded) {
+      try {
+        const explanationResponse = await fetch("translations.french.json", { cache: "no-store" });
+        if (explanationResponse.ok) {
+          const explanationData = await explanationResponse.json();
+          hydrateGrammarExplanationTranslations(explanationData);
+          explanationPackLoaded = true;
+        }
+      } catch (error) {
+        console.warn("Failed to load translations.french.json", error);
+      }
     }
     if (isNonEnglishWorld && WORLD_TRANSLATION_FILE !== "translations.json") {
       const response = await fetch(WORLD_TRANSLATION_FILE, { cache: "no-store" });
@@ -4412,6 +4542,7 @@ const loadTranslations = async () => {
       if (data?.worldLanguage) {
         WORLD_TRANSLATIONS = data;
         buildWorldGrammarMaps();
+        hydrateGrammarExplanationTranslations(data);
       }
     }
   } catch (error) {
@@ -4905,19 +5036,12 @@ const resolveGrammarExplanation = (section, explanationText, baseLanguage) => {
   const sectionKey = section || GRAMMAR_SECTION_ORDER[0];
   const key = (explanationText || "").toLowerCase().trim();
   const langKey = (baseLanguage || "").toLowerCase();
-  const entry = WORLD_TRANSLATIONS?.grammarExplanations?.[sectionKey]?.[key];
+  if (!langKey) {
+    return "";
+  }
+  const entry = GRAMMAR_EXPLANATION_TRANSLATIONS?.[sectionKey]?.[key];
   if (!entry) {
     return "";
-  }
-  if (typeof entry === "string") {
-    const worldLangKey = (WORLD_TRANSLATIONS?.worldLanguage || "").toLowerCase();
-    if (langKey && worldLangKey && langKey === worldLangKey) {
-      return entry;
-    }
-    return "";
-  }
-  if (entry.translations) {
-    return entry.translations?.[langKey] || "";
   }
   return entry[langKey] || "";
 };
@@ -7358,8 +7482,30 @@ const formatGrammarExample = (card, sentence) => {
   return sentence;
 };
 
+const ensureGrammarOverlay = () => {
+  let overlay = document.getElementById("grammarOverlay");
+  const needsRebuild =
+    !overlay ||
+    !overlay.querySelector(".grammar-modal") ||
+    !overlay.querySelector(".grammar-modal-body");
+  if (needsRebuild) {
+    if (!overlay) {
+      overlay = document.createElement("div");
+      overlay.className = "grammar-overlay";
+      overlay.id = "grammarOverlay";
+      document.body.appendChild(overlay);
+    }
+    overlay.innerHTML = `
+      <div class="grammar-modal" role="dialog" aria-modal="true" aria-live="polite">
+        <button class="grammar-close" type="button" aria-label="Close">&times;</button>
+        <div class="grammar-modal-body"></div>
+      </div>
+    `;
+  }
+  return overlay;
+};
 const renderGrammarModal = (section, index) => {
-  const overlay = document.getElementById("grammarOverlay");
+  const overlay = ensureGrammarOverlay();
   if (!overlay) {
     return;
   }
@@ -7379,10 +7525,9 @@ const renderGrammarModal = (section, index) => {
 
   const baseLanguage = localStorage.getItem("cosmicaBaseLanguage") || "";
   const explanation = buildGrammarExplanation(cardData);
-  const explanationTranslation =
-    isNonEnglishWorld && baseLanguage
-      ? resolveGrammarExplanation(section, explanation, baseLanguage)
-      : "";
+  const explanationTranslation = baseLanguage
+    ? resolveGrammarExplanation(section, explanation, baseLanguage)
+    : "";
   const mistakes = buildGrammarMistakes(cardData);
   const howItWorks = buildGrammarHowItWorks(cardData);
   const examples = [cardData.example, buildAltGrammarExample(cardData, index)];
@@ -7520,23 +7665,24 @@ const renderGrammarModal = (section, index) => {
   `;
 };
 
-const setupGrammarModal = () => {
-  if (!document.body.classList.contains("grammar-page")) {
+
+const openGrammarModal = (section, index) => {
+  const overlay = ensureGrammarOverlay();
+  if (!overlay) {
     return;
   }
-  let overlay = document.getElementById("grammarOverlay");
-  if (!overlay) {
-    overlay = document.createElement("div");
-    overlay.className = "grammar-overlay";
-    overlay.id = "grammarOverlay";
-    overlay.innerHTML = `
-      <div class="grammar-modal" role="dialog" aria-modal="true" aria-live="polite">
-        <button class="grammar-close" type="button" aria-label="Close">×</button>
-        <div class="grammar-modal-body"></div>
-      </div>
-    `;
-    document.body.appendChild(overlay);
+  renderGrammarModal(section, index);
+  overlay.classList.add("is-visible");
+  document.body.classList.add("modal-open");
+  overlay.querySelector(".grammar-modal")?.focus?.();
+};
+const setupGrammarModal = () => {
+  const hasGrammarPage = document.body.classList.contains("grammar-page");
+  const hasGrammarCards = !!document.querySelector(".grammar-card");
+  if (!hasGrammarPage && !hasGrammarCards) {
+    return;
   }
+  const overlay = ensureGrammarOverlay();
   const modal = overlay.querySelector(".grammar-modal");
   const closeBtn = overlay.querySelector(".grammar-close");
 
@@ -7559,23 +7705,22 @@ const setupGrammarModal = () => {
       closeModal();
     }
   });
-  closeBtn.addEventListener("click", closeModal);
+  if (closeBtn) {
+    closeBtn.addEventListener("click", closeModal);
+  }
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && overlay.classList.contains("is-visible")) {
       closeModal();
     }
   });
-
-  const cards = document.querySelectorAll(".grammar-card");
-  cards.forEach((card) => {
-    card.addEventListener("click", () => {
-      const section = card.dataset.section;
-      const index = Number(card.dataset.index);
-      renderGrammarModal(section, index);
-      overlay.classList.add("is-visible");
-      document.body.classList.add("modal-open");
-      modal.focus?.();
-    });
+  document.addEventListener("click", (event) => {
+    const card = event.target.closest(".grammar-card");
+    if (!card) {
+      return;
+    }
+    const section = card.dataset.section;
+    const index = Number(card.dataset.index);
+    openGrammarModal(section, index);
   });
 };
 
@@ -7688,7 +7833,7 @@ const refreshMapsForBaseLanguage = () => {
   if (document.querySelector(".phrase-card")) {
     applyPhraseTranslations();
   }
-  const overlay = document.getElementById("grammarOverlay");
+  const overlay = ensureGrammarOverlay();
   if (overlay && typeof overlay.__refresh === "function") {
     overlay.__refresh();
   }
@@ -7742,7 +7887,7 @@ loadTranslations().then(() => {
   if (document.querySelector(".phrase-card")) {
     applyPhraseTranslations();
   }
-  const overlay = document.getElementById("grammarOverlay");
+  const overlay = ensureGrammarOverlay();
   if (overlay && typeof overlay.__refresh === "function") {
     overlay.__refresh();
   }
@@ -7780,6 +7925,7 @@ window.addEventListener(
   },
   { passive: true }
 );
+
 
 
 

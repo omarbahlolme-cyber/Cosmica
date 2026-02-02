@@ -2692,6 +2692,7 @@ body:not(.world-page) .footer {
     justify-content: flex-start;
     overflow-x: auto;
     padding-bottom: 4px;
+    margin-top: 6px;
     gap: 10px;
     white-space: nowrap;
   }
@@ -2763,7 +2764,7 @@ body:not(.world-page) .footer {
 
 @media (max-width: 600px) {
   main {
-    padding: 10px 5vw 90px;
+    padding: 28px 5vw 90px;
   }
 
   .hero {
@@ -2781,6 +2782,12 @@ body:not(.world-page) .footer {
 
   .steps {
     grid-template-columns: 1fr;
+  }
+
+  .worlds .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 
   .map-card {
@@ -2807,6 +2814,14 @@ body:not(.world-page) .footer {
   .grammar-modal {
     width: min(720px, 94vw);
     border-radius: 22px;
+  }
+
+  .grammar-close {
+    top: 22px;
+  }
+
+  body.world-page #language {
+    scroll-margin-top: 220px;
   }
 
   .section {
@@ -3037,6 +3052,9 @@ body.world-page .language-box::after {
   display: grid;
   place-items: center;
   text-align: center;
+  position: relative;
+  z-index: 1;
+  pointer-events: auto;
 }
 
 .grammar-card .grammar-text {
