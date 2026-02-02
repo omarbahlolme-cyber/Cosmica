@@ -2784,8 +2784,8 @@ body:not(.world-page) .footer {
     grid-template-columns: 1fr;
   }
 
-  .worlds .reveal,
-  .worlds .reveal.is-visible {
+  .worlds.reveal,
+  .worlds.reveal.is-visible {
     opacity: 1;
     transform: none;
     transition: none;
