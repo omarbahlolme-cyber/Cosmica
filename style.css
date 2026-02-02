@@ -2689,7 +2689,7 @@ body:not(.world-page) .footer {
   .nav-links {
     width: 100%;
     order: 3;
-    justify-content: flex-start;
+    justify-content: center;
     overflow-x: auto;
     padding-bottom: 4px;
     margin-top: 12px;
