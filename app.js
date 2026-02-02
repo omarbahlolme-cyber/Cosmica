@@ -7674,7 +7674,37 @@ const openGrammarModal = (section, index) => {
   renderGrammarModal(section, index);
   overlay.classList.add("is-visible");
   document.body.classList.add("modal-open");
+  lockModalScroll();
+  const modal = overlay.querySelector(".grammar-modal");
+  const modalBody = overlay.querySelector(".grammar-modal-body");
+  if (modal) {
+    modal.scrollTop = 0;
+  }
+  if (modalBody) {
+    modalBody.scrollTop = 0;
+  }
   overlay.querySelector(".grammar-modal")?.focus?.();
+};
+
+let modalScrollLockY = 0;
+const lockModalScroll = () => {
+  if (document.body.style.position === "fixed") {
+    return;
+  }
+  modalScrollLockY = window.scrollY || 0;
+  document.body.style.position = "fixed";
+  document.body.style.top = `-${modalScrollLockY}px`;
+  document.body.style.width = "100%";
+};
+
+const unlockModalScroll = () => {
+  if (document.body.style.position !== "fixed") {
+    return;
+  }
+  document.body.style.position = "";
+  document.body.style.top = "";
+  document.body.style.width = "";
+  window.scrollTo(0, modalScrollLockY || 0);
 };
 const setupGrammarModal = () => {
   const hasGrammarPage = document.body.classList.contains("grammar-page");
@@ -7698,6 +7728,7 @@ const setupGrammarModal = () => {
   const closeModal = () => {
     overlay.classList.remove("is-visible");
     document.body.classList.remove("modal-open");
+    unlockModalScroll();
   };
 
   overlay.addEventListener("click", (event) => {

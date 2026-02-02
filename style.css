@@ -2822,7 +2822,7 @@ body:not(.world-page) .footer {
   }
 
   body.world-page #language {
-    scroll-margin-top: 220px;
+    scroll-margin-top: 140px;
   }
 
   .section {
