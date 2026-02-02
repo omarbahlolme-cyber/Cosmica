@@ -3075,6 +3075,7 @@ body.world-page .language-box::after {
   pointer-events: none;
   transition: opacity 0.3s ease;
   z-index: 999;
+  overscroll-behavior: contain;
 }
 
 .grammar-overlay.is-visible {
@@ -3095,6 +3096,12 @@ body.world-page .language-box::after {
   transform: translateY(20px) scale(0.98);
   opacity: 0;
   transition: transform 0.3s ease, opacity 0.3s ease;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+body.modal-open {
+  overflow: hidden;
 }
 
 .grammar-overlay.is-visible .grammar-modal {

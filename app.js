@@ -7663,6 +7663,8 @@ const renderGrammarModal = (section, index) => {
       </div>
     </div>
   `;
+  modalBody.scrollTop = 0;
+  overlay.querySelector(".grammar-modal")?.scrollTo(0, 0);
 };
 
 
