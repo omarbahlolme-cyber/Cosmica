@@ -108,11 +108,6 @@ const sendViaResend = async ({ from, to, replyTo, subject, text }) => {
 };
 
 app.post("/api/feedback", async (req, res) => {
-  const mailer = getMailer();
-  if (!mailer) {
-    return res.status(500).json({ error: "Missing SMTP configuration" });
-  }
-
   const { name, email, message } = req.body || {};
   const safeName = typeof name === "string" ? name.trim() : "";
   const safeEmail = typeof email === "string" ? email.trim() : "";
@@ -152,6 +147,7 @@ app.post("/api/feedback", async (req, res) => {
         throw new Error(resendResult.error || "Resend failed");
       }
     } else {
+      const mailer = getMailer();
       if (!mailer || !smtpUser) {
         return res.status(500).json({ error: "Missing SMTP configuration" });
       }

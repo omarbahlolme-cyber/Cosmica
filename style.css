@@ -2933,6 +2933,8 @@ body:not(.world-page) .footer {
   .grammar-modal {
     width: min(720px, 94vw);
     border-radius: 22px;
+    max-height: 78vh;
+    overflow: hidden;
   }
 
   .grammar-modal::before,
@@ -2959,7 +2961,48 @@ body:not(.world-page) .footer {
   }
 
   .grammar-close {
-    top: 22px;
+    top: 14px;
+    right: 14px;
+  }
+
+  .grammar-modal-body {
+    padding: 18px 14px 14px;
+  }
+
+  .grammar-modal-header h3 {
+    font-size: 1rem;
+  }
+
+  .grammar-modal-section {
+    font-size: 0.58rem;
+  }
+
+  .grammar-modal-grid {
+    margin-top: 10px;
+    gap: 10px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .grammar-block {
+    padding: 8px;
+  }
+
+  .grammar-block h4 {
+    font-size: 0.82rem;
+    margin-bottom: 4px;
+  }
+
+  .grammar-order,
+  .grammar-template,
+  .grammar-example,
+  .grammar-example-expanded,
+  .grammar-example-labels {
+    font-size: 0.75rem;
+  }
+
+  .grammar-template,
+  .grammar-example {
+    padding: 8px;
   }
 
   body.world-page #language {
