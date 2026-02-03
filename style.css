@@ -1235,8 +1235,8 @@ body.hide-guide-overlap .guide-right {
 .tap-bubble {
   display: none;
   position: absolute;
-  right: 6%;
-  top: 16%;
+  right: 4%;
+  top: 28%;
   padding: 8px 14px;
   border-radius: 999px;
   background: rgba(19, 24, 48, 0.92);
@@ -1252,13 +1252,13 @@ body.hide-guide-overlap .guide-right {
 .tap-bubble::after {
   content: "";
   position: absolute;
-  left: 16px;
-  bottom: -6px;
+  left: -6px;
+  bottom: 10px;
   width: 10px;
   height: 10px;
   background: rgba(19, 24, 48, 0.92);
   transform: rotate(45deg);
-  border-right: 1px solid rgba(104, 225, 255, 0.3);
+  border-left: 1px solid rgba(104, 225, 255, 0.3);
   border-bottom: 1px solid rgba(104, 225, 255, 0.3);
 }
 

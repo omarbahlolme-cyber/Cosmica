@@ -906,7 +906,8 @@ const createAmbientSound = () => {
   }
   audioContext = new (window.AudioContext || window.webkitAudioContext)();
   ambientGain = audioContext.createGain();
-  ambientGain.gain.value = 1.35;
+  // Start muted so "Sound: Off" stays silent until explicitly toggled on.
+  ambientGain.gain.value = 0;
 
   const spaceBus = audioContext.createGain();
   spaceBus.gain.value = 1;
@@ -1279,6 +1280,26 @@ if (soundToggle) {
 
 setSoundUi(false);
 
+const enforceSoundOffForMaps = () => {
+  const isMapPage =
+    document.body.classList.contains("letters-page") ||
+    document.body.classList.contains("words-page") ||
+    document.body.classList.contains("phrases-page") ||
+    document.body.classList.contains("grammar-page");
+  if (!isMapPage) {
+    return;
+  }
+  desiredSoundOn = false;
+  setSoundUi(false);
+  if (ambientPlaying) {
+    stopAmbient();
+    return;
+  }
+  if (audioContext && audioContext.state === "running") {
+    audioContext.suspend().catch(() => {});
+  }
+};
+
 const unlockAudioContext = async () => {
   await ensureAmbient();
   if (audioContext && audioContext.state === "suspended") {
@@ -1293,6 +1314,8 @@ const unlockAudioContext = async () => {
     await playAmbient();
   }
 };
+
+enforceSoundOffForMaps();
 
 window.addEventListener("pointerdown", unlockAudioContext, { once: true });
 window.addEventListener("touchstart", unlockAudioContext, { once: true });
