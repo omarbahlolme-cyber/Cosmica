@@ -90,27 +90,40 @@ app.post("/api/feedback", async (req, res) => {
   }
 
   const to = process.env.FEEDBACK_TO || process.env.SMTP_USER;
-  const fromAddress = process.env.FEEDBACK_FROM || process.env.SMTP_USER;
-  if (!to || !fromAddress) {
+  const smtpUser = process.env.SMTP_USER;
+  const fromAddress = process.env.FEEDBACK_FROM || smtpUser;
+  if (!to || !smtpUser) {
     return res.status(500).json({ error: "Missing FEEDBACK_TO or FEEDBACK_FROM" });
   }
 
   try {
     const displayName = safeName && safeEmail ? `${safeName} (${safeEmail})` : safeName;
-    const fromHeader = displayName ? `${displayName} <${fromAddress}>` : fromAddress;
     const replyToHeader = safeEmail
       ? safeName
         ? `${safeName} <${safeEmail}>`
         : safeEmail
       : undefined;
 
-    await mailer.sendMail({
-      from: fromHeader,
-      to,
-      replyTo: replyToHeader,
-      subject: `Cosmica feedback from ${safeName}${safeEmail ? ` (${safeEmail})` : ""}`,
-      text: `Name: ${safeName}\nEmail: ${safeEmail}\n\n${safeMessage}`,
-    });
+    const sendFeedback = async (senderAddress) => {
+      const fromHeader = displayName ? `${displayName} <${senderAddress}>` : senderAddress;
+      await mailer.sendMail({
+        from: fromHeader,
+        to,
+        replyTo: replyToHeader,
+        subject: `Cosmica feedback from ${safeName}${safeEmail ? ` (${safeEmail})` : ""}`,
+        text: `Name: ${safeName}\nEmail: ${safeEmail}\n\n${safeMessage}`,
+      });
+    };
+
+    try {
+      await sendFeedback(fromAddress);
+    } catch (error) {
+      if (fromAddress !== smtpUser) {
+        await sendFeedback(smtpUser);
+      } else {
+        throw error;
+      }
+    }
 
     return res.json({ ok: true });
   } catch (error) {
