@@ -2929,6 +2929,21 @@ body:not(.world-page) .footer {
     scroll-margin-top: 100px;
   }
 
+  .support-panel {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    transform: translateY(16px);
+  }
+
+  .support-copy {
+    text-align: center;
+  }
+
+  .support-button {
+    align-self: center;
+  }
+
   input,
   select,
   textarea,
