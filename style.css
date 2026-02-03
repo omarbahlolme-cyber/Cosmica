@@ -2097,6 +2097,7 @@ body.intro-leave .intro-overlay {
   border: 1px solid rgba(155, 210, 255, 0.25);
   box-shadow: 0 18px 42px rgba(3, 6, 14, 0.4);
   backdrop-filter: blur(10px);
+  transform: translateY(36px);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -2933,7 +2934,7 @@ body:not(.world-page) .footer {
     justify-content: center;
     align-items: center;
     text-align: center;
-    transform: translateY(28px);
+    transform: translateY(56px);
   }
 
   .support-copy {
