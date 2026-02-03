@@ -1225,10 +1225,41 @@ body.hide-guide-overlap .guide-left {
 
 .guide-right {
   transition: opacity 0.3s ease;
+  position: relative;
 }
 
 body.hide-guide-overlap .guide-right {
   opacity: 0;
+}
+
+.tap-bubble {
+  display: none;
+  position: absolute;
+  right: 6%;
+  top: 16%;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(19, 24, 48, 0.92);
+  border: 1px solid rgba(104, 225, 255, 0.35);
+  color: var(--text);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  box-shadow: 0 14px 26px rgba(3, 6, 14, 0.35);
+  backdrop-filter: blur(8px);
+}
+
+.tap-bubble::after {
+  content: "";
+  position: absolute;
+  left: 16px;
+  bottom: -6px;
+  width: 10px;
+  height: 10px;
+  background: rgba(19, 24, 48, 0.92);
+  transform: rotate(45deg);
+  border-right: 1px solid rgba(104, 225, 255, 0.3);
+  border-bottom: 1px solid rgba(104, 225, 255, 0.3);
 }
 
 
@@ -2692,6 +2723,7 @@ body:not(.world-page) .footer {
     white-space: nowrap;
   }
 
+
   .steps {
     grid-template-columns: repeat(2, minmax(200px, 1fr));
   }
@@ -2985,6 +3017,12 @@ body:not(.world-page) .footer {
     display: block;
     width: 100%;
     height: 0;
+  }
+
+  .tap-bubble {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 
