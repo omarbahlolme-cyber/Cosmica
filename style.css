@@ -2938,7 +2938,7 @@ body:not(.world-page) .footer {
     justify-content: center;
     align-items: center;
     text-align: center;
-    transform: translateY(80px);
+    transform: translateY(60px);
   }
 
   .support-copy {
@@ -2947,6 +2947,24 @@ body:not(.world-page) .footer {
 
   .support-button {
     align-self: center;
+  }
+
+  body.world-page .nav {
+    padding: 14px 6vw;
+  }
+
+  body.world-page .brand-mark {
+    width: 36px;
+    height: 36px;
+    font-size: 24px;
+  }
+
+  body.world-page .brand-title {
+    font-size: 16px;
+  }
+
+  body.world-page .brand-sub {
+    font-size: 11px;
   }
 
   input,
