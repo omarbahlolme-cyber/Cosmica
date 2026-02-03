@@ -2938,7 +2938,7 @@ body:not(.world-page) .footer {
     justify-content: center;
     align-items: center;
     text-align: center;
-    transform: translateY(112px);
+    transform: translateY(80px);
   }
 
   .support-copy {
