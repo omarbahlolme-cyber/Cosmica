@@ -1581,6 +1581,8 @@ if (joinForm) {
       joinStatus.textContent = "Sending feedback...";
     }
     try {
+      const controller = new AbortController();
+      const timeoutId = window.setTimeout(() => controller.abort(), 12000);
       const response = await fetch("/api/feedback", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -1589,7 +1591,8 @@ if (joinForm) {
           email: joinEmail.value.trim(),
           message: joinFeedback.value.trim(),
         }),
-      });
+        signal: controller.signal,
+      }).finally(() => window.clearTimeout(timeoutId));
 
       if (!response.ok) {
         const data = await response.json().catch(() => ({}));
@@ -1602,7 +1605,10 @@ if (joinForm) {
       }
     } catch (error) {
       if (joinStatus) {
-        joinStatus.textContent = error.message || "Unable to send feedback right now.";
+        joinStatus.textContent =
+          error.name === "AbortError"
+            ? "Feedback request timed out. Please try again."
+            : error.message || "Unable to send feedback right now.";
       }
     } finally {
       if (submitButton) {
