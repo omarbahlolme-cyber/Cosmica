@@ -875,7 +875,35 @@ let starIndex = 0;
 let starEnergy = 0;
 let starEnergyTarget = 0;
 
+const resetAmbientEngine = () => {
+  if (barTimer) {
+    window.clearInterval(barTimer);
+    barTimer = null;
+  }
+  if (intensityRaf) {
+    window.cancelAnimationFrame(intensityRaf);
+    intensityRaf = null;
+  }
+  if (audioContext && audioContext.state !== "closed") {
+    try {
+      audioContext.close();
+    } catch (error) {
+      console.warn("Audio close failed during reset.", error);
+    }
+  }
+  audioContext = null;
+  ambientGain = null;
+  ambientPlaying = false;
+  ambientPrimed = false;
+  orchestra = null;
+  nextBarTime = 0;
+  barCount = 0;
+};
+
 const createAmbientSound = () => {
+  if (audioContext) {
+    resetAmbientEngine();
+  }
   audioContext = new (window.AudioContext || window.webkitAudioContext)();
   ambientGain = audioContext.createGain();
   ambientGain.gain.value = 1.35;
@@ -1217,6 +1245,13 @@ const stopAmbient = async () => {
   ambientPlaying = false;
   desiredSoundOn = false;
   setSoundUi(false);
+  if (audioContext && audioContext.state === "running") {
+    try {
+      await audioContext.suspend();
+    } catch (error) {
+      console.warn("Audio suspend failed on stop.", error);
+    }
+  }
 };
 
 const toggleSound = async () => {
