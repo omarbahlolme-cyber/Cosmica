@@ -74,6 +74,39 @@ const getMailer = () => {
   });
 };
 
+const sendViaResend = async ({ from, to, replyTo, subject, text }) => {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    return { ok: false, error: "Missing RESEND_API_KEY" };
+  }
+  const payload = {
+    from,
+    to,
+    subject,
+    text,
+  };
+  if (replyTo) {
+    payload.reply_to = replyTo;
+  }
+  try {
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+    if (!response.ok) {
+      const body = await response.json().catch(() => ({}));
+      return { ok: false, error: body?.message || `Resend error ${response.status}` };
+    }
+    return { ok: true };
+  } catch (error) {
+    return { ok: false, error: error.message || "Resend request failed" };
+  }
+};
+
 app.post("/api/feedback", async (req, res) => {
   const mailer = getMailer();
   if (!mailer) {
@@ -92,7 +125,7 @@ app.post("/api/feedback", async (req, res) => {
   const to = process.env.FEEDBACK_TO || process.env.SMTP_USER;
   const smtpUser = process.env.SMTP_USER;
   const fromAddress = process.env.FEEDBACK_FROM || smtpUser;
-  if (!to || !smtpUser) {
+  if (!to || !fromAddress) {
     return res.status(500).json({ error: "Missing FEEDBACK_TO or FEEDBACK_FROM" });
   }
 
@@ -104,24 +137,43 @@ app.post("/api/feedback", async (req, res) => {
         : safeEmail
       : undefined;
 
-    const sendFeedback = async (senderAddress) => {
-      const fromHeader = displayName ? `${displayName} <${senderAddress}>` : senderAddress;
-      await mailer.sendMail({
-        from: fromHeader,
+    const subject = `Cosmica feedback from ${safeName}${safeEmail ? ` (${safeEmail})` : ""}`;
+    const text = `Name: ${safeName}\nEmail: ${safeEmail}\n\n${safeMessage}`;
+
+    if (process.env.RESEND_API_KEY) {
+      const resendResult = await sendViaResend({
+        from: fromAddress,
         to,
         replyTo: replyToHeader,
-        subject: `Cosmica feedback from ${safeName}${safeEmail ? ` (${safeEmail})` : ""}`,
-        text: `Name: ${safeName}\nEmail: ${safeEmail}\n\n${safeMessage}`,
+        subject,
+        text,
       });
-    };
+      if (!resendResult.ok) {
+        throw new Error(resendResult.error || "Resend failed");
+      }
+    } else {
+      if (!mailer || !smtpUser) {
+        return res.status(500).json({ error: "Missing SMTP configuration" });
+      }
+      const sendFeedback = async (senderAddress) => {
+        const fromHeader = displayName ? `${displayName} <${senderAddress}>` : senderAddress;
+        await mailer.sendMail({
+          from: fromHeader,
+          to,
+          replyTo: replyToHeader,
+          subject,
+          text,
+        });
+      };
 
-    try {
-      await sendFeedback(fromAddress);
-    } catch (error) {
-      if (fromAddress !== smtpUser) {
-        await sendFeedback(smtpUser);
-      } else {
-        throw error;
+      try {
+        await sendFeedback(fromAddress);
+      } catch (error) {
+        if (fromAddress !== smtpUser) {
+          await sendFeedback(smtpUser);
+        } else {
+          throw error;
+        }
       }
     }
 
