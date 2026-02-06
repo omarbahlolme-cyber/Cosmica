@@ -1,11 +1,20 @@
+/*
+  Cosmica front-end script (single file)
+  Organization notes:
+  - Keep data/config near the top.
+  - UI helpers and feature blocks follow in the order they appear on the page.
+  - Search for section comments like "// ===" to navigate.
+  - Avoid reordering unless you verify all DOM lookups are ready.
+*/
+// === DOM references & runtime state ===
 const starfields = document.querySelectorAll(".starfield");
 const soundToggle = document.getElementById("soundToggle");
 const soundLabel = soundToggle ? soundToggle.querySelector(".sound-label") : null;
 const speechBubble = document.getElementById("speechBubble");
 const speechText = document.getElementById("speechText");
 const talkButton = document.getElementById("talkButton");
-  const chatForm = document.getElementById("chatForm");
-  const startVoyageButton = document.getElementById("startVoyageButton");
+const chatForm = document.getElementById("chatForm");
+const startVoyageButton = document.getElementById("startVoyageButton");
 const chatInput = document.getElementById("chatInput");
 const chatLog = document.getElementById("chatLog");
 const chatStatus = document.getElementById("chatStatus");
@@ -19,23 +28,21 @@ const worldCards = document.querySelectorAll(".world-card");
 const introOverlay = document.getElementById("introOverlay");
 const introButton = document.getElementById("introButton");
 const introSpeechText = document.getElementById("introSpeechText");
+// === Page context & world selection ===
 const urlParams = new URLSearchParams(window.location.search);
 const skipIntro = urlParams.get("skipIntro") === "1";
-const WORLD_NAME =
-  urlParams.get("world") ||
-  document.body.dataset.world ||
-  "English";
+const WORLD_NAME = urlParams.get("world") || document.body.dataset.world || "English";
 const WORLD_KEY = WORLD_NAME.toLowerCase();
 const WORLD_TRANSLATION_FILES = {
   french: "translations.french.json",
 };
-const WORLD_TRANSLATION_FILE =
-  WORLD_TRANSLATION_FILES[WORLD_KEY] || "translations.json";
+const WORLD_TRANSLATION_FILE = WORLD_TRANSLATION_FILES[WORLD_KEY] || "translations.json";
 let WORLD_TRANSLATIONS = null;
 let WORLD_GRAMMAR_TITLE_MAP = null;
 let WORLD_GRAMMAR_EXAMPLE_MAP = null;
 const isNonEnglishWorld = WORLD_KEY !== "english";
 
+// === Intro overlay controls ===
 if (skipIntro) {
   document.body.classList.remove("intro-active", "intro-leave");
   if (introOverlay) {
@@ -43,6 +50,7 @@ if (skipIntro) {
     introOverlay.style.display = "none";
   }
 }
+// === Layout helpers ===
 const setScrollbarWidth = () => {
   const width = window.innerWidth - document.documentElement.clientWidth;
   document.documentElement.style.setProperty("--scrollbar-width", `${Math.max(0, width)}px`);
@@ -51,10 +59,9 @@ const setScrollbarWidth = () => {
 setScrollbarWidth();
 window.addEventListener("resize", setScrollbarWidth);
 
-const prefersReducedMotion = window.matchMedia(
-  "(prefers-reduced-motion: reduce)"
-).matches;
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+// === Mimi chat configuration ===
 const lines = [
   "I can feel your words forming. Let's light another star.",
   "Your voice vibrates the nebula. Want a new quest?",
@@ -87,6 +94,7 @@ const MIMI_SYSTEM_PROMPT = [
   "Never claim to access user data or progress.",
   MIMI_SITE_CONTEXT,
 ].join(" ");
+// === World text + routes ===
 const worldLines = {
   English: "English world online. Neon cities are ready for your hello.",
   French: "French world humming. Soft vowels and poetic trails await.",
@@ -336,6 +344,7 @@ const FLAG_SVGS = {
   `,
 };
 
+// === UI helpers: flag icons ===
 let lineIndex = 0;
 let activeLine = lines[0];
 let typingTimer;
@@ -357,6 +366,7 @@ const renderFlags = () => {
 
 renderFlags();
 
+// === Mimi avatar (mood + mouth shapes) ===
 const mouthShapes = {
   happy: "M10 10 C 22 26, 42 26, 54 10",
   curious: "M10 10 C 22 26, 42 26, 54 10",
@@ -414,6 +424,7 @@ const speakLine = (text, mood = "happy", options = {}) => {
   step();
 };
 
+// === Mimi chat UI helpers ===
 const scrollChatToBottom = () => {
   if (!chatLog) {
     return;
@@ -471,6 +482,7 @@ const setChatStatus = (text) => {
   }
 };
 
+// === Mimi chat API helpers ===
 const getApiEndpoint = () => {
   const endpoint = MIMI_CONFIG.endpoint || "/api/chat";
   if (endpoint.startsWith("http")) {
@@ -493,6 +505,7 @@ const buildChatMessages = (message) => {
   ];
 };
 
+// === Mimi chat presets (offline mode) ===
 const greetings = {
   English: "Hello",
   French: "Bonjour",
@@ -589,6 +602,7 @@ const getMimiReply = async (message) => {
   }
 };
 
+// === Mimi chat submission flow ===
 const sendChatMessage = async (message) => {
   if (!chatInput) {
     return;
@@ -646,6 +660,7 @@ if (chatLog) {
   chatLog.innerHTML = "";
 }
 
+// === Background: starfield generator ===
 const createStars = (layer, count, sizeRange) => {
   for (let i = 0; i < count; i += 1) {
     const star = document.createElement("span");
@@ -671,6 +686,7 @@ starfields.forEach((layer) => {
   }
 });
 
+// === Reveal-on-scroll section animations ===
 const observer = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
@@ -695,6 +711,7 @@ document.querySelectorAll(".reveal").forEach((el) => {
   observer.observe(el);
 });
 
+// === World page: language/maps section logic ===
 let setActiveWorldSection = null;
 const languageSection = document.querySelector("#language");
 const mapsSection = document.querySelector("#maps");
@@ -720,7 +737,11 @@ if (languageSection) {
     window.setTimeout(() => window.scrollTo(0, 0), 0);
   }
   const enforceLanguageHiddenAtTop = () => {
-    if (document.body.classList.contains("world-page") && document.getElementById("world") && mapsSection) {
+    if (
+      document.body.classList.contains("world-page") &&
+      document.getElementById("world") &&
+      mapsSection
+    ) {
       updateMapsTitleVisibility();
       return;
     }
@@ -770,9 +791,7 @@ if (languageSection) {
     );
   });
 
-  const startLessonLink = document.querySelector(
-    '.world-hero .primary[href="#language"]'
-  );
+  const startLessonLink = document.querySelector('.world-hero .primary[href="#language"]');
   if (startLessonLink) {
     startLessonLink.addEventListener("click", () => {
       languageForceShow = true;
@@ -805,6 +824,7 @@ if (languageSection) {
   );
 }
 
+// === World page: active section sync ===
 if (document.body.classList.contains("world-page")) {
   const worldSections = ["world", "language", "maps"]
     .map((id) => document.getElementById(id))
@@ -850,15 +870,21 @@ if (document.body.classList.contains("world-page")) {
         setActiveWorldSection(closest);
       }
     };
-    setActiveWorldSection(location.hash === "#maps" ? "maps" : location.hash === "#language" ? "language" : "world");
-    window.addEventListener("scroll", () => {
-      window.requestAnimationFrame(handleWorldScroll);
-    }, { passive: true });
+    setActiveWorldSection(
+      location.hash === "#maps" ? "maps" : location.hash === "#language" ? "language" : "world"
+    );
+    window.addEventListener(
+      "scroll",
+      () => {
+        window.requestAnimationFrame(handleWorldScroll);
+      },
+      { passive: true }
+    );
     window.addEventListener("hashchange", handleWorldScroll);
   }
 }
 
-
+// === Ambient audio engine ===
 let audioContext;
 let ambientGain;
 let ambientPlaying = false;
@@ -875,6 +901,7 @@ let starIndex = 0;
 let starEnergy = 0;
 let starEnergyTarget = 0;
 
+// --- Audio engine lifecycle (create/reset)
 const resetAmbientEngine = () => {
   if (barTimer) {
     window.clearInterval(barTimer);
@@ -900,6 +927,7 @@ const resetAmbientEngine = () => {
   barCount = 0;
 };
 
+// --- Audio graph + scheduling (music system)
 const createAmbientSound = () => {
   if (audioContext) {
     resetAmbientEngine();
@@ -998,27 +1026,35 @@ const createAmbientSound = () => {
   };
 
   const scheduleStrings = (startTime, chord) => {
-    spawnLayer([chord[0] / 2], {
-      type: "sine",
-      filterType: "lowpass",
-      filterFreq: 200,
-      gainNode: celloGain,
-      attack: 0.7,
-      duration: 5.2,
-      release: 6.0,
-      level: 0.09,
-    }, startTime);
+    spawnLayer(
+      [chord[0] / 2],
+      {
+        type: "sine",
+        filterType: "lowpass",
+        filterFreq: 200,
+        gainNode: celloGain,
+        attack: 0.7,
+        duration: 5.2,
+        release: 6.0,
+        level: 0.09,
+      },
+      startTime
+    );
 
-    spawnLayer([chord[1], chord[2]], {
-      type: "triangle",
-      filterType: "lowpass",
-      filterFreq: 2000,
-      gainNode: violinGain,
-      attack: 0.6,
-      duration: 4.0,
-      release: 4.6,
-      level: 0.06,
-    }, startTime + 0.2);
+    spawnLayer(
+      [chord[1], chord[2]],
+      {
+        type: "triangle",
+        filterType: "lowpass",
+        filterFreq: 2000,
+        gainNode: violinGain,
+        attack: 0.6,
+        duration: 4.0,
+        release: 4.6,
+        level: 0.06,
+      },
+      startTime + 0.2
+    );
   };
 
   const playPianoNote = (frequency, startTime, duration, level) => {
@@ -1167,6 +1203,7 @@ const createAmbientSound = () => {
     scheduleBar(nextBarTime);
   }
 };
+// --- Sound UI + intensity helpers
 const setSoundUi = (isOn) => {
   if (!soundToggle || !soundLabel) {
     return;
@@ -1280,6 +1317,7 @@ if (soundToggle) {
 
 setSoundUi(false);
 
+// --- Sound gating for map-style pages
 const enforceSoundOffForMaps = () => {
   const isMapPage =
     document.body.classList.contains("letters-page") ||
@@ -1300,6 +1338,7 @@ const enforceSoundOffForMaps = () => {
   }
 };
 
+// --- Audio unlock on user gesture
 const unlockAudioContext = async () => {
   await ensureAmbient();
   if (audioContext && audioContext.state === "suspended") {
@@ -1334,6 +1373,7 @@ window.addEventListener("scroll", () => {
   updateStarEnergy(window.scrollY / (document.body.scrollHeight - window.innerHeight || 1));
 });
 
+// --- Star energy sync (visual intensity)
 const updateStarEnergy = (value) => {
   starEnergyTarget = Math.max(0, Math.min(1, value));
 };
@@ -1373,6 +1413,7 @@ if (speechText && speechBubble) {
   }
 }
 
+// === Mimi idle line cycling ===
 const triggerMimiLine = () => {
   lineIndex = (lineIndex + 1) % lines.length;
   activeLine = lines[lineIndex];
@@ -1389,25 +1430,27 @@ const triggerMimiLine = () => {
   }
 };
 
-  const scrollToAnchor = (hash) => {
-    const targetId = hash.slice(1);
-    const target = document.getElementById(targetId);
-    if (!target) {
-      return false;
-    }
-    const top = hash === "#home"
+// === Navigation anchors (smooth scroll) ===
+const scrollToAnchor = (hash) => {
+  const targetId = hash.slice(1);
+  const target = document.getElementById(targetId);
+  if (!target) {
+    return false;
+  }
+  const top =
+    hash === "#home"
       ? 0
-      : target.getBoundingClientRect().top
-        + window.scrollY
-        - (Number.parseFloat(window.getComputedStyle(target).scrollMarginTop) || 0);
-    history.replaceState(null, "", `${baseUrl}${hash}`);
-    window.scrollTo({ top, behavior: "smooth" });
-    return true;
-  };
+      : target.getBoundingClientRect().top +
+        window.scrollY -
+        (Number.parseFloat(window.getComputedStyle(target).scrollMarginTop) || 0);
+  history.replaceState(null, "", `${baseUrl}${hash}`);
+  window.scrollTo({ top, behavior: "smooth" });
+  return true;
+};
 
-  if (talkButton) {
-    talkButton.addEventListener("click", () => {
-      const guideSection = document.getElementById("guide");
+if (talkButton) {
+  talkButton.addEventListener("click", () => {
+    const guideSection = document.getElementById("guide");
     const guideTitle = guideSection ? guideSection.querySelector("h2") : null;
     const chatPanel = document.getElementById("mimiChat");
     if (guideSection && guideTitle && chatPanel) {
@@ -1428,12 +1471,13 @@ const triggerMimiLine = () => {
   });
 }
 
-  const navLinks = document.querySelectorAll(".nav-links a[href^=\"#\"]");
-  const anchorTargets = new Set(["#how", "#home"]);
-  const baseUrl = `${window.location.pathname}${window.location.search}`;
+const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+const anchorTargets = new Set(["#how", "#home"]);
+const baseUrl = `${window.location.pathname}${window.location.search}`;
 const navEntry = performance.getEntriesByType("navigation")[0];
-const navType = navEntry?.type
-  ?? (performance.navigation && performance.navigation.type === 1 ? "reload" : "navigate");
+const navType =
+  navEntry?.type ??
+  (performance.navigation && performance.navigation.type === 1 ? "reload" : "navigate");
 
 window.addEventListener("load", () => {
   if (navType !== "reload") {
@@ -1445,29 +1489,30 @@ window.addEventListener("load", () => {
   window.scrollTo({ top: 0, behavior: "auto" });
 });
 
-  navLinks.forEach((link) => {
-    const hash = link.getAttribute("href");
-    if (!hash || !anchorTargets.has(hash)) {
+navLinks.forEach((link) => {
+  const hash = link.getAttribute("href");
+  if (!hash || !anchorTargets.has(hash)) {
+    return;
+  }
+  link.addEventListener("click", (event) => {
+    event.preventDefault();
+    scrollToAnchor(hash);
+  });
+});
+
+if (startVoyageButton) {
+  startVoyageButton.addEventListener("click", () => {
+    if (scrollToAnchor("#worlds")) {
       return;
     }
-    link.addEventListener("click", (event) => {
-      event.preventDefault();
-      scrollToAnchor(hash);
-    });
+    const fallback = document.getElementById("worlds");
+    if (fallback) {
+      fallback.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   });
+}
 
-  if (startVoyageButton) {
-    startVoyageButton.addEventListener("click", () => {
-      if (scrollToAnchor("#worlds")) {
-        return;
-      }
-      const fallback = document.getElementById("worlds");
-      if (fallback) {
-        fallback.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    });
-  }
-
+// === Intro overlay flow ===
 const closeIntro = () => {
   if (document.body.classList.contains("intro-leave")) {
     return;
@@ -1516,12 +1561,12 @@ const startIntroTyping = () => {
   }
   introSpeechText.textContent = "";
   let index = 0;
-    const step = () => {
-      index += 1;
-      introSpeechText.textContent = text.slice(0, index);
-      if (index < text.length) {
-        introTypingTimer = window.setTimeout(step, 18 + Math.random() * 22);
-      } else if (introBubble) {
+  const step = () => {
+    index += 1;
+    introSpeechText.textContent = text.slice(0, index);
+    if (index < text.length) {
+      introTypingTimer = window.setTimeout(step, 18 + Math.random() * 22);
+    } else if (introBubble) {
       introSpeakingTimer = window.setTimeout(() => {
         introBubble.classList.remove("speaking");
       }, 600);
@@ -1538,6 +1583,7 @@ if (alien) {
   });
 }
 
+// === Feedback form (join section) ===
 const guideSection = document.getElementById("guide");
 const howSection = document.getElementById("how");
 const worldsSection = document.getElementById("worlds");
@@ -1631,7 +1677,7 @@ if (joinForm) {
     joinName.classList.remove("field-error");
     joinEmail.classList.remove("field-error");
     joinFeedback.classList.remove("field-error");
-    const submitButton = joinForm.querySelector("button[type=\"submit\"]");
+    const submitButton = joinForm.querySelector('button[type="submit"]');
     if (submitButton) {
       submitButton.disabled = true;
     }
@@ -1675,6 +1721,7 @@ if (joinForm) {
     }
   });
 }
+// === Hero parallax + alien gaze ===
 const hero = document.querySelector(".hero-right");
 const parallaxLayers = document.querySelectorAll("[data-depth]");
 let mouseX = 0;
@@ -1755,6 +1802,7 @@ if (!prefersReducedMotion) {
   updateParallax();
 }
 
+// === World cards + warp transition ===
 const triggerWarp = (worldName, onDone) => {
   if (!warpOverlay || !warpText) {
     if (typeof onDone === "function") {
@@ -1859,9 +1907,7 @@ if (languagePills.length) {
       updateMapsTitleVisibility();
       if (mapsSection) {
         const targetTop = mapsSection.getBoundingClientRect().top + window.scrollY;
-        const offset = Number.parseFloat(
-          window.getComputedStyle(mapsSection).scrollMarginTop
-        ) || 0;
+        const offset = Number.parseFloat(window.getComputedStyle(mapsSection).scrollMarginTop) || 0;
         const y = targetTop - offset;
         window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
       }
@@ -1886,9 +1932,7 @@ if (languageSearch && languagePills.length) {
     const firstLetter = query[0];
     languagePills.forEach((pill) => {
       const name = pill.textContent.trim().toLowerCase();
-      const matches = isSingleLetter
-        ? name.startsWith(firstLetter)
-        : name.includes(query);
+      const matches = isSingleLetter ? name.startsWith(firstLetter) : name.includes(query);
       pill.style.display = matches ? "" : "none";
     });
   };
@@ -1897,6 +1941,7 @@ if (languageSearch && languagePills.length) {
   applyLanguageFirstLetterFilter();
 }
 
+// === Speech cards (text-to-speech playback) ===
 const setupSpeechCards = () => {
   const letterButtons = document.querySelectorAll(".letter-audio");
   const wordButtons = document.querySelectorAll(".word-audio");
@@ -3539,58 +3584,34 @@ const GRAMMAR_SECTION_LISTS = {
   "Sentence Structure": [
     {
       title: "basic word order",
-      points: [
-        "basic word order for statements",
-        "subject before verb",
-        "object after verb",
-      ],
+      points: ["basic word order for statements", "subject before verb", "object after verb"],
       example: "She reads a book.",
     },
     {
       title: "sentence parts",
-      points: [
-        "core subject slot",
-        "core verb slot",
-        "object and complement slot",
-      ],
+      points: ["core subject slot", "core verb slot", "object and complement slot"],
       example: "They named her captain.",
     },
     {
       title: "adding details",
-      points: [
-        "time at sentence end",
-        "place after verb",
-        "extra phrases after objects",
-      ],
+      points: ["time at sentence end", "place after verb", "extra phrases after objects"],
       example: "She met him at noon at the station.",
     },
     {
       title: "linking clauses",
-      points: [
-        "main clause idea",
-        "reason clause add-on",
-        "time clause add-on",
-      ],
+      points: ["main clause idea", "reason clause add-on", "time clause add-on"],
       example: "I stayed home because it rained.",
     },
     {
       title: "sentence variety",
-      points: [
-        "short sentences for impact",
-        "long sentences for detail",
-        "avoid run-on sentences",
-      ],
+      points: ["short sentences for impact", "long sentences for detail", "avoid run-on sentences"],
       example: "We finished early. We went home after class because we were tired.",
     },
   ],
   Verbs: [
     {
       title: "action verbs",
-      points: [
-        "action verbs for movement",
-        "action verbs for tasks",
-        "action verbs for change",
-      ],
+      points: ["action verbs for movement", "action verbs for tasks", "action verbs for change"],
       example: "They carry the boxes.",
     },
     {
@@ -3604,11 +3625,7 @@ const GRAMMAR_SECTION_LISTS = {
     },
     {
       title: "linking verbs",
-      points: [
-        "be as linking verb",
-        "feel and seem links",
-        "become and remain links",
-      ],
+      points: ["be as linking verb", "feel and seem links", "become and remain links"],
       example: "The room feels quiet.",
     },
     {
@@ -3622,20 +3639,12 @@ const GRAMMAR_SECTION_LISTS = {
     },
     {
       title: "verb combinations",
-      points: [
-        "verb plus infinitive",
-        "verb plus gerund",
-        "verb plus that clause",
-      ],
+      points: ["verb plus infinitive", "verb plus gerund", "verb plus that clause"],
       example: "We decided to stay.",
     },
     {
       title: "phrasal verbs",
-      points: [
-        "verb plus particle",
-        "separable phrasal verbs",
-        "meaning shift with particles",
-      ],
+      points: ["verb plus particle", "separable phrasal verbs", "meaning shift with particles"],
       example: "She turned off the light.",
     },
   ],
@@ -3696,11 +3705,7 @@ const GRAMMAR_SECTION_LISTS = {
     },
     {
       title: "future forms",
-      points: [
-        "will for decisions",
-        "going to for plans",
-        "present continuous for plans",
-      ],
+      points: ["will for decisions", "going to for plans", "present continuous for plans"],
       example: "We are meeting tomorrow.",
     },
     {
@@ -3761,195 +3766,111 @@ const GRAMMAR_SECTION_LISTS = {
     },
     {
       title: "plural forms",
-      points: [
-        "regular plural endings",
-        "spelling changes in plurals",
-        "irregular plural forms",
-      ],
+      points: ["regular plural endings", "spelling changes in plurals", "irregular plural forms"],
       example: "Two children are here.",
     },
     {
       title: "possessive nouns",
-      points: [
-        "apostrophe s ownership",
-        "plural possessive endings",
-        "things and relationships",
-      ],
+      points: ["apostrophe s ownership", "plural possessive endings", "things and relationships"],
       example: "Sara's phone is new.",
     },
     {
       title: "noun phrases",
-      points: [
-        "determiner plus noun",
-        "adjective plus noun",
-        "noun plus noun pairing",
-      ],
+      points: ["determiner plus noun", "adjective plus noun", "noun plus noun pairing"],
       example: "The small kitchen table broke.",
     },
     {
       title: "quantifiers",
-      points: [
-        "many and much choice",
-        "few and little choice",
-        "a lot of for quantity",
-      ],
+      points: ["many and much choice", "few and little choice", "a lot of for quantity"],
       example: "There are many options.",
     },
   ],
   "Pronouns & Reference": [
     {
       title: "subject pronouns",
-      points: [
-        "i you he she set",
-        "we and they plural",
-        "it for things",
-      ],
+      points: ["i you he she set", "we and they plural", "it for things"],
       example: "They are ready.",
     },
     {
       title: "object pronouns",
-      points: [
-        "me him her set",
-        "us and them plural",
-        "object position after verbs",
-      ],
+      points: ["me him her set", "us and them plural", "object position after verbs"],
       example: "She called me.",
     },
     {
       title: "possessive forms",
-      points: [
-        "my your his her set",
-        "our their with nouns",
-        "mine yours for standalone",
-      ],
+      points: ["my your his her set", "our their with nouns", "mine yours for standalone"],
       example: "This is my bag.",
     },
     {
       title: "reflexive pronouns",
-      points: [
-        "myself yourself pattern",
-        "herself himself pattern",
-        "emphasis with reflexives",
-      ],
+      points: ["myself yourself pattern", "herself himself pattern", "emphasis with reflexives"],
       example: "He hurt himself.",
     },
     {
       title: "demonstratives",
-      points: [
-        "this that for single",
-        "these those for plural",
-        "near vs far reference",
-      ],
+      points: ["this that for single", "these those for plural", "near vs far reference"],
       example: "Those are my keys.",
     },
     {
       title: "relative reference",
-      points: [
-        "who for people",
-        "which for things",
-        "that for general use",
-      ],
+      points: ["who for people", "which for things", "that for general use"],
       example: "The man who called left.",
     },
     {
       title: "indefinite reference",
-      points: [
-        "someone anyone set",
-        "everyone no one set",
-        "something anything set",
-      ],
+      points: ["someone anyone set", "everyone no one set", "something anything set"],
       example: "Someone is waiting.",
     },
   ],
   Modifiers: [
     {
       title: "adjectives basics",
-      points: [
-        "adjectives describe nouns",
-        "adjectives before nouns",
-        "adjectives after be",
-      ],
+      points: ["adjectives describe nouns", "adjectives before nouns", "adjectives after be"],
       example: "The house is quiet.",
     },
     {
       title: "adjective order",
-      points: [
-        "opinion before size",
-        "age before color",
-        "material near noun",
-      ],
+      points: ["opinion before size", "age before color", "material near noun"],
       example: "She bought a small red bag.",
     },
     {
       title: "comparatives",
-      points: [
-        "er or more forms",
-        "than comparisons",
-        "irregular comparative forms",
-      ],
+      points: ["er or more forms", "than comparisons", "irregular comparative forms"],
       example: "This is faster than that.",
     },
     {
       title: "superlatives",
-      points: [
-        "est or most forms",
-        "the with superlative",
-        "group comparison focus",
-      ],
+      points: ["est or most forms", "the with superlative", "group comparison focus"],
       example: "He is the tallest.",
     },
     {
       title: "adverbs basics",
-      points: [
-        "adverbs describe verbs",
-        "adverbs after verb",
-        "adverbs before adjectives",
-      ],
+      points: ["adverbs describe verbs", "adverbs after verb", "adverbs before adjectives"],
       example: "She speaks clearly.",
     },
     {
       title: "frequency adverbs",
-      points: [
-        "always usually often set",
-        "rarely never set",
-        "position with be",
-      ],
+      points: ["always usually often set", "rarely never set", "position with be"],
       example: "I usually wake early.",
     },
     {
       title: "time and place adverbs",
-      points: [
-        "time at end position",
-        "place at the end",
-        "time before place order",
-      ],
+      points: ["time at end position", "place at the end", "time before place order"],
       example: "We met there yesterday.",
     },
     {
       title: "degree words",
-      points: [
-        "very really set",
-        "too and enough",
-        "quite and rather",
-      ],
+      points: ["very really set", "too and enough", "quite and rather"],
       example: "The room is very warm.",
     },
     {
       title: "participles",
-      points: [
-        "ing adjectives for cause",
-        "ed adjectives for feeling",
-        "avoid confusion",
-      ],
+      points: ["ing adjectives for cause", "ed adjectives for feeling", "avoid confusion"],
       example: "The movie was boring.",
     },
     {
       title: "modifier stacking",
-      points: [
-        "multiple adjectives",
-        "multiple adverbs",
-        "keep focus clear",
-      ],
+      points: ["multiple adjectives", "multiple adverbs", "keep focus clear"],
       example: "She quickly answered the hard question.",
     },
   ],
@@ -4163,219 +4084,127 @@ const GRAMMAR_SECTION_LISTS = {
   "Reported Speech": [
     {
       title: "reporting statements",
-      points: [
-        "say with that clause",
-        "tell with object",
-        "reporting verbs set",
-      ],
+      points: ["say with that clause", "tell with object", "reporting verbs set"],
       example: "She said she was ready.",
     },
     {
       title: "reporting questions",
-      points: [
-        "ask with if",
-        "ask with question word",
-        "no inversion",
-      ],
+      points: ["ask with if", "ask with question word", "no inversion"],
       example: "He asked if I was okay.",
     },
     {
       title: "reporting requests",
-      points: [
-        "ask to do",
-        "tell to do requests",
-        "polite reporting",
-      ],
+      points: ["ask to do", "tell to do requests", "polite reporting"],
       example: "She asked me to wait.",
     },
     {
       title: "reporting commands",
-      points: [
-        "tell to do commands",
-        "order to do",
-        "instruction shift",
-      ],
+      points: ["tell to do commands", "order to do", "instruction shift"],
       example: "He told us to leave.",
     },
     {
       title: "backshift basics",
-      points: [
-        "present to past shift",
-        "will to would shift",
-        "can to could shift",
-      ],
+      points: ["present to past shift", "will to would shift", "can to could shift"],
       example: "They said they had time.",
     },
     {
       title: "time place changes",
-      points: [
-        "now to then",
-        "here to there",
-        "today to that day",
-      ],
+      points: ["now to then", "here to there", "today to that day"],
       example: "He said he was there.",
     },
   ],
   "Formality & Style": [
     {
       title: "formal vs informal",
-      points: [
-        "formal word choice",
-        "informal word choice",
-        "match audience tone",
-      ],
+      points: ["formal word choice", "informal word choice", "match audience tone"],
       example: "Could you assist me?",
     },
     {
       title: "contractions",
-      points: [
-        "short forms in speech",
-        "avoid in formal writing",
-        "clarity choices",
-      ],
+      points: ["short forms in speech", "avoid in formal writing", "clarity choices"],
       example: "I can't stay long.",
     },
     {
       title: "polite softening",
-      points: [
-        "please for politeness",
-        "soft request forms",
-        "indirect language",
-      ],
+      points: ["please for politeness", "soft request forms", "indirect language"],
       example: "Could you close the door?",
     },
     {
       title: "spoken vs written",
-      points: [
-        "spoken simplicity",
-        "written clarity",
-        "sentence length control",
-      ],
+      points: ["spoken simplicity", "written clarity", "sentence length control"],
       example: "Please see the details below.",
     },
     {
       title: "professional style",
-      points: [
-        "clear purpose first",
-        "neutral tone",
-        "polite closing",
-      ],
+      points: ["clear purpose first", "neutral tone", "polite closing"],
       example: "Thank you for your time.",
     },
     {
       title: "casual style",
-      points: [
-        "friendly tone",
-        "short phrases",
-        "informal openings",
-      ],
+      points: ["friendly tone", "short phrases", "informal openings"],
       example: "Hey, how is it going?",
     },
     {
       title: "clarity and brevity",
-      points: [
-        "short sentences",
-        "avoid extra words",
-        "main point first",
-      ],
+      points: ["short sentences", "avoid extra words", "main point first"],
       example: "We need a quick answer.",
     },
   ],
   "Discourse & Flow": [
     {
       title: "opening and closing",
-      points: [
-        "start a talk",
-        "end a talk",
-        "closing signal words",
-      ],
+      points: ["start a talk", "end a talk", "closing signal words"],
       example: "Anyway, that is all.",
     },
     {
       title: "topic shifts",
-      points: [
-        "change topic smoothly",
-        "return to topic",
-        "signal the shift",
-      ],
+      points: ["change topic smoothly", "return to topic", "signal the shift"],
       example: "By the way, I have news.",
     },
     {
       title: "cohesion tools",
-      points: [
-        "reference words",
-        "linking phrases",
-        "topic tracking",
-      ],
+      points: ["reference words", "linking phrases", "topic tracking"],
       example: "This idea connects to the last point.",
     },
     {
       title: "sequencing ideas",
-      points: [
-        "first next last",
-        "sequence signal words",
-        "clear sequence",
-      ],
+      points: ["first next last", "sequence signal words", "clear sequence"],
       example: "First we pack, then we leave.",
     },
     {
       title: "clarification moves",
-      points: [
-        "rephrase key point",
-        "ask for clarity",
-        "confirm meaning",
-      ],
+      points: ["rephrase key point", "ask for clarity", "confirm meaning"],
       example: "Let me put it another way.",
     },
     {
       title: "summaries",
-      points: [
-        "in short",
-        "to sum up",
-        "main point recap",
-      ],
+      points: ["in short", "to sum up", "main point recap"],
       example: "In short, we are ready.",
     },
     {
       title: "emphasis and repetition",
-      points: [
-        "stress key idea",
-        "repeat for focus",
-        "signal emphasis",
-      ],
+      points: ["stress key idea", "repeat for focus", "signal emphasis"],
       example: "It is really important.",
     },
     {
       title: "conversation flow",
-      points: [
-        "turn taking",
-        "listening signals",
-        "smooth exchange",
-      ],
+      points: ["turn taking", "listening signals", "smooth exchange"],
       example: "I see, please continue.",
     },
     {
       title: "giving examples",
-      points: [
-        "for example",
-        "for instance",
-        "such as",
-      ],
+      points: ["for example", "for instance", "such as"],
       example: "For example, call the help desk.",
     },
     {
       title: "repair and correction",
-      points: [
-        "self correction",
-        "clarify quickly",
-        "restart phrasing",
-      ],
+      points: ["self correction", "clarify quickly", "restart phrasing"],
       example: "Sorry, let me try again.",
     },
   ],
 };
 
-
+// === Translations: data maps + hydration ===
 const createTranslationShell = () => {
   const shell = {};
   BASE_LANGUAGES.forEach((lang) => {
@@ -4505,7 +4334,9 @@ const hydrateGrammarExplanationTranslations = (data) => {
   if (explanations && typeof explanations === "object") {
     Object.entries(explanations).forEach(([section, items]) => {
       Object.values(items || {}).forEach((payload) => {
-        const source = String(payload?.source || "").toLowerCase().trim();
+        const source = String(payload?.source || "")
+          .toLowerCase()
+          .trim();
         if (!source) {
           return;
         }
@@ -4530,7 +4361,9 @@ const hydrateGrammarExplanationTranslations = (data) => {
   if (legacy && typeof legacy === "object" && legacyLang) {
     Object.entries(legacy).forEach(([section, items]) => {
       Object.entries(items || {}).forEach(([sourceText, translation]) => {
-        const key = String(sourceText || "").toLowerCase().trim();
+        const key = String(sourceText || "")
+          .toLowerCase()
+          .trim();
         if (!key || typeof translation !== "string" || !translation.trim()) {
           return;
         }
@@ -4614,6 +4447,7 @@ const loadTranslations = async () => {
   }
 };
 
+// === Words page rendering ===
 const renderWordsSections = () => {
   const container = document.getElementById("wordsSections");
   const controls = document.getElementById("wordsControls");
@@ -4751,6 +4585,7 @@ const renderWordsSections = () => {
   }
 };
 
+// === Phrases page rendering ===
 const renderPhrasesSections = () => {
   const container = document.getElementById("phrasesSections");
   const controls = document.getElementById("phrasesControls");
@@ -4887,6 +4722,7 @@ const renderPhrasesSections = () => {
   }
 };
 
+// === Grammar page rendering ===
 const renderGrammarSections = () => {
   const container = document.getElementById("grammarSections");
   const controls = document.getElementById("grammarControls");
@@ -5077,17 +4913,9 @@ const buildAltGrammarExample = (() => {
     }
     const s = subjects[index % subjects.length];
     const v = verbs[Math.floor(index / subjects.length) % verbs.length];
-    const o =
-      objects[
-        Math.floor(index / (subjects.length * verbs.length)) % objects.length
-      ];
+    const o = objects[Math.floor(index / (subjects.length * verbs.length)) % objects.length];
     const t =
-      times[
-        Math.floor(
-          index /
-            (subjects.length * verbs.length * objects.length)
-        ) % times.length
-      ];
+      times[Math.floor(index / (subjects.length * verbs.length * objects.length)) % times.length];
     return `${s} ${v} ${o} ${t}.`;
   };
 })();
@@ -5134,27 +4962,27 @@ const GRAMMAR_TEMPLATES = {
   "aspect contrasts": "simple = whole; continuous = in progress; perfect = result",
   "countable nouns": "a/an + noun | two + nouns",
   "uncountable nouns": "some + noun | much + noun",
-  "articles": "a/an + noun | the + noun | no article",
+  articles: "a/an + noun | the + noun | no article",
   "plural forms": "noun + -s/-es",
   "possessive nouns": "noun + 's",
   "noun phrases": "determiner + adjective + noun",
-  "quantifiers": "some/any/many/much + noun",
+  quantifiers: "some/any/many/much + noun",
   "subject pronouns": "subject pronoun + verb",
   "object pronouns": "verb + object pronoun",
   "possessive forms": "my/your + noun | mine/yours",
   "reflexive pronouns": "subject + verb + reflexive",
-  "demonstratives": "this/that/these/those + noun",
+  demonstratives: "this/that/these/those + noun",
   "relative reference": "noun + who/which/that + clause",
   "indefinite reference": "someone/anyone/anything",
   "adjectives basics": "adjective + noun",
   "adjective order": "opinion + size + age + color + noun",
-  "comparatives": "adj-er/more + than",
-  "superlatives": "the + adj-est/most + noun",
+  comparatives: "adj-er/more + than",
+  superlatives: "the + adj-est/most + noun",
   "adverbs basics": "verb + adverb",
   "frequency adverbs": "always/often + verb",
   "time and place adverbs": "verb + time/place adverb",
   "degree words": "very/too/enough + adjective",
-  "participles": "boring/ bored + noun/person",
+  participles: "boring/ bored + noun/person",
   "modifier stacking": "multiple modifiers before noun",
   "yes no questions": "do/does + subject + verb",
   "wh questions": "wh-word + do/does + subject + verb",
@@ -5187,12 +5015,12 @@ const GRAMMAR_TEMPLATES = {
   "focus shifts": "fronted phrase + sentence",
   "cleft sentences": "it is/was + focus + that + clause",
   "there and it subjects": "there is/are | it is/was",
-  "ability": "can/could + base verb",
-  "permission": "can/may + base verb",
-  "obligation": "must/have to + base verb",
-  "advice": "should/ought to + base verb",
-  "possibility": "may/might + base verb",
-  "probability": "will/probably + verb",
+  ability: "can/could + base verb",
+  permission: "can/may + base verb",
+  obligation: "must/have to + base verb",
+  advice: "should/ought to + base verb",
+  possibility: "may/might + base verb",
+  probability: "will/probably + verb",
   "polite requests": "could you + base verb",
   "offers and invitations": "would you like to + verb",
   "reporting statements": "said (that) + clause",
@@ -5202,7 +5030,7 @@ const GRAMMAR_TEMPLATES = {
   "backshift basics": "present -> past, will -> would",
   "time place changes": "today -> that day, here -> there",
   "formal vs informal": "formal forms vs casual forms",
-  "contractions": "I'm/you're vs I am/you are",
+  contractions: "I'm/you're vs I am/you are",
   "polite softening": "could/would + verb",
   "spoken vs written": "short spoken vs structured written",
   "professional style": "clear, neutral tone",
@@ -5213,7 +5041,7 @@ const GRAMMAR_TEMPLATES = {
   "cohesion tools": "this/that/these + noun",
   "sequencing ideas": "first/next/then",
   "clarification moves": "do you mean + ...",
-  "summaries": "in short/in summary",
+  summaries: "in short/in summary",
   "emphasis and repetition": "really + verb | do + verb",
   "conversation flow": "turn-taking signals",
   "giving examples": "for example + clause",
@@ -5276,32 +5104,17 @@ const buildStructureExamples = (card) => {
   if (title.includes("sentence parts")) {
     return [
       {
-        labels: [
-          "Subject: They",
-          "Verb: named",
-          "Object: her",
-          "Complement: captain",
-        ],
+        labels: ["Subject: They", "Verb: named", "Object: her", "Complement: captain"],
         base: "They named her captain.",
         expanded: "They named her captain today.",
       },
       {
-        labels: [
-          "Subject: My sister",
-          "Verb: is",
-          "Complement: a pilot",
-          "Place: at the airport",
-        ],
+        labels: ["Subject: My sister", "Verb: is", "Complement: a pilot", "Place: at the airport"],
         base: "My sister is a pilot.",
         expanded: "My sister is a pilot at the airport.",
       },
       {
-        labels: [
-          "Subject: The room",
-          "Verb: feels",
-          "Complement: cold",
-          "Time: after sunset",
-        ],
+        labels: ["Subject: The room", "Verb: feels", "Complement: cold", "Time: after sunset"],
         base: "The room feels cold.",
         expanded: "The room feels cold after sunset.",
       },
@@ -5321,12 +5134,7 @@ const buildStructureExamples = (card) => {
         expanded: "She met him at noon at the station.",
       },
       {
-        labels: [
-          "Subject: We",
-          "Verb: talked",
-          "Place: in the kitchen",
-          "Time: after dinner",
-        ],
+        labels: ["Subject: We", "Verb: talked", "Place: in the kitchen", "Time: after dinner"],
         base: "We talked.",
         expanded: "We talked in the kitchen after dinner.",
       },
@@ -5346,29 +5154,17 @@ const buildStructureExamples = (card) => {
   if (title.includes("linking clauses")) {
     return [
       {
-        labels: [
-          "Main clause: I stayed home",
-          "Connector: because",
-          "Clause: it rained",
-        ],
+        labels: ["Main clause: I stayed home", "Connector: because", "Clause: it rained"],
         base: "I stayed home.",
         expanded: "I stayed home because it rained.",
       },
       {
-        labels: [
-          "Main clause: She left early",
-          "Connector: so",
-          "Clause: she could rest",
-        ],
+        labels: ["Main clause: She left early", "Connector: so", "Clause: she could rest"],
         base: "She left early.",
         expanded: "She left early so she could rest.",
       },
       {
-        labels: [
-          "Main clause: We waited",
-          "Connector: until",
-          "Clause: the bus arrived",
-        ],
+        labels: ["Main clause: We waited", "Connector: until", "Clause: the bus arrived"],
         base: "We waited.",
         expanded: "We waited until the bus arrived.",
       },
@@ -5385,18 +5181,12 @@ const buildStructureExamples = (card) => {
         expanded: "We finished early. We went home after class because we were tired.",
       },
       {
-        labels: [
-          "Short sentence: He called me",
-          "Long sentence: I missed it because I was busy",
-        ],
+        labels: ["Short sentence: He called me", "Long sentence: I missed it because I was busy"],
         base: "He called me.",
         expanded: "He called me. I missed it because I was busy.",
       },
       {
-        labels: [
-          "Short sentence: We met",
-          "Long sentence: We talked for a while after class",
-        ],
+        labels: ["Short sentence: We met", "Long sentence: We talked for a while after class"],
         base: "We met.",
         expanded: "We met. We talked for a while after class.",
       },
@@ -5537,12 +5327,7 @@ const buildTenseExamples = (card) => {
   if (title.includes("future continuous")) {
     return [
       {
-        labels: [
-          "Subject: I",
-          "Future marker: will",
-          "Be verb: be",
-          "Verb-ing: working",
-        ],
+        labels: ["Subject: I", "Future marker: will", "Be verb: be", "Verb-ing: working"],
         base: "I will be working at six.",
         expanded: "I will be working at six.",
       },
@@ -5724,13 +5509,7 @@ const buildModifierExamples = (card) => {
   if (title.includes("adjective order")) {
     return [
       {
-        labels: [
-          "Opinion: lovely",
-          "Size: small",
-          "Age: old",
-          "Color: red",
-          "Noun: bag",
-        ],
+        labels: ["Opinion: lovely", "Size: small", "Age: old", "Color: red", "Noun: bag"],
         base: "a lovely small old red bag",
         expanded: "She bought a lovely small old red bag.",
       },
@@ -5843,10 +5622,7 @@ const buildConditionExamples = (card) => {
   if (title.includes("unreal past")) {
     return [
       {
-        labels: [
-          "If clause: if we had left earlier",
-          "Would have clause: we would have arrived",
-        ],
+        labels: ["If clause: if we had left earlier", "Would have clause: we would have arrived"],
         base: "if we had left earlier, we would have arrived",
         expanded: "If we had left earlier, we would have arrived.",
       },
@@ -5896,11 +5672,7 @@ const buildVoiceExamples = (card) => {
   if (title.includes("focus shifts")) {
     return [
       {
-        labels: [
-          "Focus phrase: that book",
-          "Subject: i",
-          "Verb: finished",
-        ],
+        labels: ["Focus phrase: that book", "Subject: i", "Verb: finished"],
         base: "that book, i finished",
         expanded: "That book, I finished yesterday.",
       },
@@ -5909,11 +5681,7 @@ const buildVoiceExamples = (card) => {
   if (title.includes("cleft sentences")) {
     return [
       {
-        labels: [
-          "It subject: it is",
-          "Focus phrase: john",
-          "Clause: who called",
-        ],
+        labels: ["It subject: it is", "Focus phrase: john", "Clause: who called"],
         base: "it is john who called",
         expanded: "It is John who called.",
       },
@@ -5981,12 +5749,7 @@ const buildModalityExamples = (card) => {
   if (title.includes("probability")) {
     return [
       {
-        labels: [
-          "Subject: he",
-          "Modal: will",
-          "Probability word: probably",
-          "Base verb: come",
-        ],
+        labels: ["Subject: he", "Modal: will", "Probability word: probably", "Base verb: come"],
         base: "he will probably come",
         expanded: "He will probably come.",
       },
@@ -5995,12 +5758,7 @@ const buildModalityExamples = (card) => {
   if (title.includes("polite requests")) {
     return [
       {
-        labels: [
-          "Modal: could",
-          "Subject: you",
-          "Base verb: open",
-          "Object: the window",
-        ],
+        labels: ["Modal: could", "Subject: you", "Base verb: open", "Object: the window"],
         base: "could you open the window",
         expanded: "Could you open the window?",
       },
@@ -6032,12 +5790,7 @@ const buildQuestionExamples = (card) => {
   if (title.includes("wh questions")) {
     return [
       {
-        labels: [
-          "Wh word: where",
-          "Aux: do",
-          "Subject: you",
-          "Base verb: live",
-        ],
+        labels: ["Wh word: where", "Aux: do", "Subject: you", "Base verb: live"],
         base: "where do you live",
         expanded: "Where do you live?",
       },
@@ -6096,12 +5849,7 @@ const buildNegationExamples = (card) => {
   if (title.includes("not with be")) {
     return [
       {
-        labels: [
-          "Subject: she",
-          "Be verb: is",
-          "Not: not",
-          "Complement: ready",
-        ],
+        labels: ["Subject: she", "Be verb: is", "Not: not", "Complement: ready"],
         base: "she is not ready",
         expanded: "She is not ready.",
       },
@@ -6110,12 +5858,7 @@ const buildNegationExamples = (card) => {
   if (title.includes("not with do")) {
     return [
       {
-        labels: [
-          "Subject: they",
-          "Aux: do",
-          "Not: not",
-          "Base verb: agree",
-        ],
+        labels: ["Subject: they", "Aux: do", "Not: not", "Base verb: agree"],
         base: "they do not agree",
         expanded: "They do not agree.",
       },
@@ -6165,11 +5908,7 @@ const buildConnectionExamples = (card) => {
   if (title.includes("basic connectors")) {
     return [
       {
-        labels: [
-          "Clause 1: I called",
-          "Connector: but",
-          "Clause 2: no one answered",
-        ],
+        labels: ["Clause 1: I called", "Connector: but", "Clause 2: no one answered"],
         base: "i called, but no one answered",
         expanded: "I called, but no one answered.",
       },
@@ -6178,11 +5917,7 @@ const buildConnectionExamples = (card) => {
   if (title.includes("reason and result")) {
     return [
       {
-        labels: [
-          "Reason clause: it rained",
-          "Connector: so",
-          "Result clause: we stayed",
-        ],
+        labels: ["Reason clause: it rained", "Connector: so", "Result clause: we stayed"],
         base: "it rained, so we stayed",
         expanded: "It rained, so we stayed.",
       },
@@ -6191,11 +5926,7 @@ const buildConnectionExamples = (card) => {
   if (title.includes("contrast and choice")) {
     return [
       {
-        labels: [
-          "Clause 1: she went",
-          "Contrast connector: although",
-          "Clause 2: she was tired",
-        ],
+        labels: ["Clause 1: she went", "Contrast connector: although", "Clause 2: she was tired"],
         base: "she went, although she was tired",
         expanded: "She went, although she was tired.",
       },
@@ -6213,12 +5944,7 @@ const buildConnectionExamples = (card) => {
   if (title.includes("comparison links")) {
     return [
       {
-        labels: [
-          "Subject: this",
-          "Verb: feels",
-          "Comparison: like",
-          "Object: home",
-        ],
+        labels: ["Subject: this", "Verb: feels", "Comparison: like", "Object: home"],
         base: "this feels like home",
         expanded: "This feels like home.",
       },
@@ -6236,12 +5962,7 @@ const buildConnectionExamples = (card) => {
   if (title.includes("ordering ideas")) {
     return [
       {
-        labels: [
-          "Sequence: first",
-          "Clause: we plan",
-          "Sequence: then",
-          "Clause: we act",
-        ],
+        labels: ["Sequence: first", "Clause: we plan", "Sequence: then", "Clause: we act"],
         base: "first we plan, then we act",
         expanded: "First we plan, then we act.",
       },
@@ -6627,8 +6348,7 @@ const normalizeLabelType = (label) => {
   return "generic";
 };
 
-const escapeRegExp = (value) =>
-  value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 const buildWordBoundaryPattern = (phrase) => {
   const escaped = escapeRegExp(phrase);
@@ -6663,7 +6383,6 @@ const applyGrammarHighlights = (sentence, labels = []) => {
   return output;
 };
 
-
 const findFirstMatch = (sentence, patterns = []) => {
   const lower = sentence.toLowerCase();
   for (const pattern of patterns) {
@@ -6695,8 +6414,14 @@ const splitByConnector = (sentence) => {
   for (const conn of connectors) {
     const idx = lower.indexOf(` ${conn} `);
     if (idx >= 0) {
-      const left = sentence.slice(0, idx).replace(/[,\s]+$/, "").trim();
-      const right = sentence.slice(idx + conn.length + 2).replace(/^[,\s]+/, "").trim();
+      const left = sentence
+        .slice(0, idx)
+        .replace(/[,\s]+$/, "")
+        .trim();
+      const right = sentence
+        .slice(idx + conn.length + 2)
+        .replace(/^[,\s]+/, "")
+        .trim();
       return { left, connector: conn, right };
     }
   }
@@ -6726,7 +6451,10 @@ const parseSVO = (sentence) => {
   const subject = startsWithDet && words.length >= 3 ? `${words[0]} ${words[1]}` : words[0];
   const verbIndex = startsWithDet && words.length >= 3 ? 2 : 1;
   const verb = words[verbIndex] || "";
-  const object = words.slice(verbIndex + 1).join(" ").trim();
+  const object = words
+    .slice(verbIndex + 1)
+    .join(" ")
+    .trim();
   return { subject, verb, object };
 };
 
@@ -6762,7 +6490,8 @@ const findPlacePhrase = (sentence) => {
 };
 
 const findVerbPhrase = (sentence) => {
-  const auxRegex = /\b(am|is|are|was|were|has|have|had|will|would|can|could|should|might|must)\s+([a-z]+(?:ing|ed)?)\b/i;
+  const auxRegex =
+    /\b(am|is|are|was|were|has|have|had|will|would|can|could|should|might|must)\s+([a-z]+(?:ing|ed)?)\b/i;
   const auxMatch = sentence.match(auxRegex);
   if (auxMatch) {
     return auxMatch[0];
@@ -6783,7 +6512,11 @@ const buildLabelsForCard = (card, sentence) => {
     if (!labels.includes(label)) labels.push(label);
   };
 
-  if (title.includes("linking clauses") || section.includes("connections") || section.includes("conditions")) {
+  if (
+    title.includes("linking clauses") ||
+    section.includes("connections") ||
+    section.includes("conditions")
+  ) {
     const split = splitByConnector(sentence);
     if (split) {
       addLabel("Main clause", split.left);
@@ -6863,19 +6596,25 @@ const buildLabelsForCard = (card, sentence) => {
   if (section.includes("nouns") || title.includes("article") || title.includes("quantifier")) {
     const articleMatch = sentence.match(/\b(a|an|the|some|many|much|few|little)\b/i);
     if (articleMatch) addLabel("Article", articleMatch[0]);
-    const nounMatch = sentence.match(/\b[a-z]+(?:s|ren)?\b(?!.*\b(a|an|the|some|many|much|few|little)\b)/i);
+    const nounMatch = sentence.match(
+      /\b[a-z]+(?:s|ren)?\b(?!.*\b(a|an|the|some|many|much|few|little)\b)/i
+    );
     if (nounMatch) addLabel("Noun", nounMatch[0]);
     if (labels.length) return labels;
   }
 
   if (section.includes("pronouns") || title.includes("pronoun")) {
-    const pronounMatch = sentence.match(/\b(i|you|he|she|we|they|me|him|her|us|them|my|your|his|their|our|mine|yours|hers|theirs|myself|yourself|himself|herself|ourselves|themselves)\b/i);
+    const pronounMatch = sentence.match(
+      /\b(i|you|he|she|we|they|me|him|her|us|them|my|your|his|their|our|mine|yours|hers|theirs|myself|yourself|himself|herself|ourselves|themselves)\b/i
+    );
     if (pronounMatch) addLabel("Pronoun", pronounMatch[0]);
     if (labels.length) return labels;
   }
 
   if (section.includes("modifiers") || title.includes("adjective") || title.includes("adverb")) {
-    const adjMatch = sentence.match(/\b(quiet|small|red|tall|fast|slow|happy|cold|warm|new|old|clear|bright)\b/i);
+    const adjMatch = sentence.match(
+      /\b(quiet|small|red|tall|fast|slow|happy|cold|warm|new|old|clear|bright)\b/i
+    );
     const advMatch = sentence.match(/\b(quickly|slowly|clearly|quietly|carefully)\b/i);
     if (adjMatch) addLabel("Adjective", adjMatch[0]);
     if (advMatch) addLabel("Adverb", advMatch[0]);
@@ -6957,7 +6696,16 @@ const extractLabelsFromSentence = (sentence) => {
   const reasonWords = ["because", "so", "since"];
   const contrastWords = ["but", "although", "though", "however"];
   const connectorWords = ["and", "or", "when", "while", "if", "unless", "until"];
-  const mannerWords = ["quickly", "slowly", "carefully", "well", "badly", "politely", "quietly", "loudly"];
+  const mannerWords = [
+    "quickly",
+    "slowly",
+    "carefully",
+    "well",
+    "badly",
+    "politely",
+    "quietly",
+    "loudly",
+  ];
   const timeWords = [
     "today",
     "yesterday",
@@ -7011,9 +6759,7 @@ const extractLabelsFromSentence = (sentence) => {
     addMatch("Place", phrase, match.index);
   }
 
-  const ordered = matches
-    .sort((a, b) => a.index - b.index)
-    .map((item) => item.label);
+  const ordered = matches.sort((a, b) => a.index - b.index).map((item) => item.label);
   if (!ordered.length) {
     const clean = sentence.replace(/[.!?]$/, "").trim();
     if (clean) {
@@ -7063,7 +6809,6 @@ const buildGenericExamplePairs = (cardData, index) => {
     return { base, expanded, labels };
   });
 };
-
 
 const buildGrammarHowItWorks = (card) => {
   const title = card.title.toLowerCase();
@@ -7178,7 +6923,7 @@ const GRAMMAR_MISTAKES = {
     wrong: "I need two breads.",
     fix: "I need some bread.",
   },
-  "articles": {
+  articles: {
     wrong: "I saw movie.",
     fix: "I saw a movie.",
   },
@@ -7194,7 +6939,7 @@ const GRAMMAR_MISTAKES = {
     wrong: "She bought dress red.",
     fix: "She bought a red dress.",
   },
-  "quantifiers": {
+  quantifiers: {
     wrong: "How much apples?",
     fix: "How many apples?",
   },
@@ -7214,7 +6959,7 @@ const GRAMMAR_MISTAKES = {
     wrong: "I hurt me.",
     fix: "I hurt myself.",
   },
-  "demonstratives": {
+  demonstratives: {
     wrong: "These book is mine.",
     fix: "This book is mine.",
   },
@@ -7234,11 +6979,11 @@ const GRAMMAR_MISTAKES = {
     wrong: "A red small car.",
     fix: "A small red car.",
   },
-  "comparatives": {
+  comparatives: {
     wrong: "This is more cheap.",
     fix: "This is cheaper.",
   },
-  "superlatives": {
+  superlatives: {
     wrong: "He is the most fast.",
     fix: "He is the fastest.",
   },
@@ -7258,7 +7003,7 @@ const GRAMMAR_MISTAKES = {
     wrong: "It is enough hot.",
     fix: "It is hot enough.",
   },
-  "participles": {
+  participles: {
     wrong: "The story was boringed.",
     fix: "The story was boring.",
   },
@@ -7390,27 +7135,27 @@ const GRAMMAR_MISTAKES = {
     wrong: "Is a problem in the room.",
     fix: "There is a problem in the room.",
   },
-  "ability": {
+  ability: {
     wrong: "She can to swim.",
     fix: "She can swim.",
   },
-  "permission": {
+  permission: {
     wrong: "May I to sit here?",
     fix: "May I sit here?",
   },
-  "obligation": {
+  obligation: {
     wrong: "You must to wear a badge.",
     fix: "You must wear a badge.",
   },
-  "advice": {
+  advice: {
     wrong: "You should to rest.",
     fix: "You should rest.",
   },
-  "possibility": {
+  possibility: {
     wrong: "It might to rain.",
     fix: "It might rain.",
   },
-  "probability": {
+  probability: {
     wrong: "He probably to arrive late.",
     fix: "He will probably arrive late.",
   },
@@ -7450,7 +7195,7 @@ const GRAMMAR_MISTAKES = {
     wrong: "Hey, give me the report.",
     fix: "Hello, could you send the report?",
   },
-  "contractions": {
+  contractions: {
     wrong: "I am late, do not wait.",
     fix: "I'm late, don't wait.",
   },
@@ -7494,7 +7239,7 @@ const GRAMMAR_MISTAKES = {
     wrong: "What you said?",
     fix: "What do you mean?",
   },
-  "summaries": {
+  summaries: {
     wrong: "In short, many things.",
     fix: "In short, we need more time.",
   },
@@ -7539,13 +7284,20 @@ const formatGrammarExample = (card, sentence) => {
       .replace(/yesterday/i, '<span class="highlight highlight-time">yesterday</span>')
       .replace(/in the kitchen/i, '<span class="highlight highlight-place">in the kitchen</span>')
       .replace(/after dinner/i, '<span class="highlight highlight-time">after dinner</span>')
-      .replace(/because it rained/i, '<span class="highlight highlight-reason">because it rained</span>')
-      .replace(/because it was late/i, '<span class="highlight highlight-reason">because it was late</span>')
+      .replace(
+        /because it rained/i,
+        '<span class="highlight highlight-reason">because it rained</span>'
+      )
+      .replace(
+        /because it was late/i,
+        '<span class="highlight highlight-reason">because it was late</span>'
+      )
       .replace(/quickly/i, '<span class="highlight highlight-manner">quickly</span>');
   }
   return sentence;
 };
 
+// === Grammar modal (overlay) ===
 const ensureGrammarOverlay = () => {
   let overlay = document.getElementById("grammarOverlay");
   const needsRebuild =
@@ -7601,26 +7353,17 @@ const renderGrammarModal = (section, index) => {
   const structureExamples =
     section === "Sentence Structure" ? buildStructureExamples(cardData) : null;
   const verbExamples = section === "Verbs" ? buildVerbExamples(cardData) : null;
-  const tenseExamples =
-    section === "Tenses & Aspect" ? buildTenseExamples(cardData) : null;
-  const nounExamples =
-    section === "Nouns & Articles" ? buildNounExamples(cardData) : null;
+  const tenseExamples = section === "Tenses & Aspect" ? buildTenseExamples(cardData) : null;
+  const nounExamples = section === "Nouns & Articles" ? buildNounExamples(cardData) : null;
   const pronounExamples =
     section === "Pronouns & Reference" ? buildPronounExamples(cardData) : null;
-  const modifierExamples =
-    section === "Modifiers" ? buildModifierExamples(cardData) : null;
-  const questionExamples =
-    section === "Questions" ? buildQuestionExamples(cardData) : null;
-  const negationExamples =
-    section === "Negation" ? buildNegationExamples(cardData) : null;
-  const connectionExamples =
-    section === "Connections" ? buildConnectionExamples(cardData) : null;
-  const conditionExamples =
-    section === "Conditions" ? buildConditionExamples(cardData) : null;
-  const voiceExamples =
-    section === "Voice & Focus" ? buildVoiceExamples(cardData) : null;
-  const modalityExamples =
-    section === "Modality" ? buildModalityExamples(cardData) : null;
+  const modifierExamples = section === "Modifiers" ? buildModifierExamples(cardData) : null;
+  const questionExamples = section === "Questions" ? buildQuestionExamples(cardData) : null;
+  const negationExamples = section === "Negation" ? buildNegationExamples(cardData) : null;
+  const connectionExamples = section === "Connections" ? buildConnectionExamples(cardData) : null;
+  const conditionExamples = section === "Conditions" ? buildConditionExamples(cardData) : null;
+  const voiceExamples = section === "Voice & Focus" ? buildVoiceExamples(cardData) : null;
+  const modalityExamples = section === "Modality" ? buildModalityExamples(cardData) : null;
   const activeExamples =
     structureExamples ||
     verbExamples ||
@@ -7640,21 +7383,16 @@ const renderGrammarModal = (section, index) => {
       shouldCapPhrase && item.expanded
         ? item.expanded.charAt(0).toUpperCase() + item.expanded.slice(1)
         : item.expanded;
-    const baseTranslation = resolveGrammarTranslation(
-      section,
-      item.base,
-      baseLanguage
-    );
-    const expandedTranslation = resolveGrammarTranslation(
-      section,
-      item.expanded,
-      baseLanguage
-    );
+    const baseTranslation = resolveGrammarTranslation(section, item.base, baseLanguage);
+    const expandedTranslation = resolveGrammarTranslation(section, item.expanded, baseLanguage);
     renderedExamples = `
       <div class="grammar-example">
         <div class="grammar-example-labels">
           ${item.labels
-            .map((label) => `<span class="grammar-label ${getExampleLabelClass(label)}">${getExampleLabelText(label)}</span>`)
+            .map(
+              (label) =>
+                `<span class="grammar-label ${getExampleLabelClass(label)}">${getExampleLabelText(label)}</span>`
+            )
             .join("")}
         </div>
         <div class="grammar-example-expanded">Phrase: ${applyGrammarHighlights(expandedText, item.labels)}</div>
@@ -7669,21 +7407,16 @@ const renderGrammarModal = (section, index) => {
           shouldCapPhrase && item.expanded
             ? item.expanded.charAt(0).toUpperCase() + item.expanded.slice(1)
             : item.expanded;
-        const baseTranslation = resolveGrammarTranslation(
-          section,
-          item.base,
-          baseLanguage
-        );
-        const expandedTranslation = resolveGrammarTranslation(
-          section,
-          item.expanded,
-          baseLanguage
-        );
+        const baseTranslation = resolveGrammarTranslation(section, item.base, baseLanguage);
+        const expandedTranslation = resolveGrammarTranslation(section, item.expanded, baseLanguage);
         return `
           <div class="grammar-example">
             <div class="grammar-example-labels">
               ${item.labels
-                .map((label) => `<span class="grammar-label ${getExampleLabelClass(label)}">${getExampleLabelText(label)}</span>`)
+                .map(
+                  (label) =>
+                    `<span class="grammar-label ${getExampleLabelClass(label)}">${getExampleLabelText(label)}</span>`
+                )
                 .join("")}
             </div>
             <div class="grammar-example-expanded">Phrase: ${applyGrammarHighlights(expandedText, item.labels)}</div>
@@ -7730,7 +7463,6 @@ const renderGrammarModal = (section, index) => {
   modalBody.scrollTop = 0;
   overlay.querySelector(".grammar-modal")?.scrollTo(0, 0);
 };
-
 
 const openGrammarModal = (section, index) => {
   const overlay = ensureGrammarOverlay();
@@ -7821,6 +7553,7 @@ const setupGrammarModal = () => {
   });
 };
 
+// === Translation helpers (apply base language to maps) ===
 const resolveWordTranslation = (section, englishWord, baseLanguage) => {
   const sectionKey = section || WORD_SECTION_ORDER[0];
   const wordKey = (englishWord || "").toLowerCase();
@@ -8022,15 +7755,3 @@ window.addEventListener(
   },
   { passive: true }
 );
-
-
-
-
-
-
-
-
-
-
-
-

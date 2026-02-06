@@ -34,10 +34,7 @@ const extractObject = (regex, label) => {
   return vm.runInNewContext(`(${match[1]})`);
 };
 
-const BASE_LANGUAGES = extractArray(
-  /const BASE_LANGUAGES = \[([\s\S]*?)\];/,
-  "BASE_LANGUAGES"
-);
+const BASE_LANGUAGES = extractArray(/const BASE_LANGUAGES = \[([\s\S]*?)\];/, "BASE_LANGUAGES");
 const WORD_SECTION_LISTS = extractObject(
   /const WORD_SECTION_LISTS = ({[\s\S]*?});/,
   "WORD_SECTION_LISTS"
@@ -69,7 +66,8 @@ const translateBatch = async (items, sourceLanguage, targetLanguage, label) => {
     messages: [
       {
         role: "system",
-        content: "You are a professional human translator. Output valid JSON only with no extra text.",
+        content:
+          "You are a professional human translator. Output valid JSON only with no extra text.",
       },
       {
         role: "user",
@@ -92,9 +90,8 @@ const translateBatch = async (items, sourceLanguage, targetLanguage, label) => {
   }
 
   const parsed = JSON.parse(content);
-  const translations = parsed?.translations && typeof parsed.translations === "object"
-    ? parsed.translations
-    : {};
+  const translations =
+    parsed?.translations && typeof parsed.translations === "object" ? parsed.translations : {};
 
   const normalized = {};
   Object.entries(translations).forEach(([source, translated]) => {
@@ -170,7 +167,9 @@ const translateSectionItems = async (sectionItems, label, resultSection, sourceM
       if (!batch.length) {
         continue;
       }
-      console.log(`Translating ${label} | ${WORLD_LANGUAGE} -> ${language} | ${batch.length} items`);
+      console.log(
+        `Translating ${label} | ${WORLD_LANGUAGE} -> ${language} | ${batch.length} items`
+      );
       const translatedMap = await translateBatch(batch, WORLD_LANGUAGE, language, label);
       batch.forEach((item) => {
         const translation = translatedMap[item] || "";
@@ -208,20 +207,35 @@ const translateGrammar = async (result) => {
     const exampleSourceMap = result.worldSource.grammarExamples[section];
     const explanationSourceMap = result.worldSource.grammarExplanations[section];
 
-    await translateSectionItems(titles, "grammar titles", {
-      data: grammarResult.titles[section],
-      root: result,
-    }, titleSourceMap);
+    await translateSectionItems(
+      titles,
+      "grammar titles",
+      {
+        data: grammarResult.titles[section],
+        root: result,
+      },
+      titleSourceMap
+    );
 
-    await translateSectionItems(examples, "grammar examples", {
-      data: grammarResult.examples[section],
-      root: result,
-    }, exampleSourceMap);
+    await translateSectionItems(
+      examples,
+      "grammar examples",
+      {
+        data: grammarResult.examples[section],
+        root: result,
+      },
+      exampleSourceMap
+    );
 
-    await translateSectionItems(explanations, "grammar explanations", {
-      data: grammarResult.explanations[section],
-      root: result,
-    }, explanationSourceMap);
+    await translateSectionItems(
+      explanations,
+      "grammar explanations",
+      {
+        data: grammarResult.explanations[section],
+        root: result,
+      },
+      explanationSourceMap
+    );
   }
 };
 
@@ -253,17 +267,27 @@ const run = async () => {
   }
 
   for (const [sectionName, items] of Object.entries(WORD_SECTION_LISTS)) {
-    await translateSectionItems(items, "words", {
-      data: result.words[sectionName],
-      root: result,
-    }, result.worldSource.words[sectionName]);
+    await translateSectionItems(
+      items,
+      "words",
+      {
+        data: result.words[sectionName],
+        root: result,
+      },
+      result.worldSource.words[sectionName]
+    );
   }
 
   for (const [sectionName, items] of Object.entries(PHRASE_SECTION_LISTS)) {
-    await translateSectionItems(items, "phrases", {
-      data: result.phrases[sectionName],
-      root: result,
-    }, result.worldSource.phrases[sectionName]);
+    await translateSectionItems(
+      items,
+      "phrases",
+      {
+        data: result.phrases[sectionName],
+        root: result,
+      },
+      result.worldSource.phrases[sectionName]
+    );
   }
 
   await translateGrammar(result);

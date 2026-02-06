@@ -5,7 +5,11 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "generate:translations": "node scripts/generate-translations.js"
+    "generate:translations": "node scripts/generate-translations.js",
+    "format": "prettier --write \"**/*.{html,css,js,json,md}\""
+  },
+  "devDependencies": {
+    "prettier": "^3.2.5"
   },
   "dependencies": {
     "cors": "^2.8.5",

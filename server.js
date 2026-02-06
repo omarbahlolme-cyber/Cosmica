@@ -50,8 +50,7 @@ app.use(
 app.use(express.static(path.join(__dirname)));
 
 const createClient = (apiKey) => new OpenAI({ apiKey });
-const getChatClient = () =>
-  createClient(process.env.OPENAI_CHAT_KEY || process.env.OPENAI_API_KEY);
+const getChatClient = () => createClient(process.env.OPENAI_CHAT_KEY || process.env.OPENAI_API_KEY);
 
 const getMailer = () => {
   const host = process.env.SMTP_HOST;
@@ -122,10 +121,7 @@ app.post("/api/feedback", async (req, res) => {
   const fromAddress = process.env.FEEDBACK_FROM || smtpUser;
   const hasResend = Boolean(process.env.RESEND_API_KEY);
   const hasSmtp = Boolean(
-    process.env.SMTP_HOST &&
-      process.env.SMTP_PORT &&
-      process.env.SMTP_USER &&
-      process.env.SMTP_PASS
+    process.env.SMTP_HOST && process.env.SMTP_PORT && process.env.SMTP_USER && process.env.SMTP_PASS
   );
   if (!to || !fromAddress) {
     return res.status(500).json({ error: "Missing FEEDBACK_TO or FEEDBACK_FROM" });
@@ -219,7 +215,6 @@ app.post("/api/chat", async (req, res) => {
     return res.status(500).json({ error: "Chat request failed" });
   }
 });
-
 
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok" });

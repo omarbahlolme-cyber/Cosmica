@@ -33,10 +33,7 @@ const extractObject = (regex, label) => {
   return vm.runInNewContext(`(${match[1]})`);
 };
 
-const BASE_LANGUAGES = extractArray(
-  /const BASE_LANGUAGES = \[([\s\S]*?)\];/,
-  "BASE_LANGUAGES"
-);
+const BASE_LANGUAGES = extractArray(/const BASE_LANGUAGES = \[([\s\S]*?)\];/, "BASE_LANGUAGES");
 const WORD_SECTION_LISTS = extractObject(
   /const WORD_SECTION_LISTS = ({[\s\S]*?});/,
   "WORD_SECTION_LISTS"
@@ -87,9 +84,8 @@ const translateBatch = async (items, targetLanguage, label) => {
   }
 
   const parsed = JSON.parse(content);
-  const translations = parsed?.translations && typeof parsed.translations === "object"
-    ? parsed.translations
-    : {};
+  const translations =
+    parsed?.translations && typeof parsed.translations === "object" ? parsed.translations : {};
 
   const normalized = {};
   Object.entries(translations).forEach(([source, translated]) => {
