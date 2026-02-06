@@ -120,8 +120,18 @@ app.post("/api/feedback", async (req, res) => {
   const to = process.env.FEEDBACK_TO || process.env.SMTP_USER;
   const smtpUser = process.env.SMTP_USER;
   const fromAddress = process.env.FEEDBACK_FROM || smtpUser;
+  const hasResend = Boolean(process.env.RESEND_API_KEY);
+  const hasSmtp = Boolean(
+    process.env.SMTP_HOST &&
+      process.env.SMTP_PORT &&
+      process.env.SMTP_USER &&
+      process.env.SMTP_PASS
+  );
   if (!to || !fromAddress) {
     return res.status(500).json({ error: "Missing FEEDBACK_TO or FEEDBACK_FROM" });
+  }
+  if (!hasResend && !hasSmtp) {
+    return res.status(500).json({ error: "Missing email configuration" });
   }
 
   try {
@@ -135,7 +145,7 @@ app.post("/api/feedback", async (req, res) => {
     const subject = `Cosmica feedback from ${safeName}${safeEmail ? ` (${safeEmail})` : ""}`;
     const text = `Name: ${safeName}\nEmail: ${safeEmail}\n\n${safeMessage}`;
 
-    if (process.env.RESEND_API_KEY) {
+    if (hasResend) {
       const resendResult = await sendViaResend({
         from: fromAddress,
         to,

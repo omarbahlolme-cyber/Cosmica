@@ -1969,22 +1969,27 @@ body.intro-leave .intro-overlay {
 
 .mimi-hello-bubble {
   position: absolute;
-  right: -38px;
-  bottom: 18px;
+  right: -110px;
+  bottom: 32px;
   display: inline-flex;
   align-items: center;
-  z-index: 4;
-  background: rgba(14, 22, 44, 0.9);
-  color: #e8f6ff;
-  border: 1px solid rgba(104, 225, 255, 0.35);
-  border-radius: 16px;
-  padding: 6px 10px;
+  justify-content: center;
+  gap: 8px;
+  min-width: 120px;
+  z-index: 6;
+  background: rgba(18, 28, 54, 0.9);
+  color: #eef7ff;
+  border: 1px solid rgba(120, 214, 255, 0.35);
+  border-radius: 20px;
+  padding: 10px 16px;
   font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   white-space: nowrap;
-  box-shadow: 0 12px 22px rgba(3, 6, 14, 0.35);
-  backdrop-filter: blur(8px);
+  box-shadow:
+    0 16px 34px rgba(2, 6, 18, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(12px);
   pointer-events: none;
 }
 
@@ -1992,13 +1997,24 @@ body.intro-leave .intro-overlay {
   content: "";
   position: absolute;
   left: -6px;
-  bottom: 6px;
-  width: 10px;
-  height: 10px;
-  background: rgba(14, 22, 44, 0.9);
-  transform: rotate(45deg);
-  border-left: 1px solid rgba(104, 225, 255, 0.3);
-  border-bottom: 1px solid rgba(104, 225, 255, 0.3);
+  bottom: 14px;
+  width: 12px;
+  height: 12px;
+  background: rgba(18, 28, 54, 0.9);
+  border-radius: 50%;
+  box-shadow: -4px 4px 10px rgba(2, 6, 18, 0.25);
+}
+
+.mimi-hello-bubble::before {
+  content: "";
+  position: absolute;
+  left: -16px;
+  bottom: 12px;
+  width: 16px;
+  height: 16px;
+  background: rgba(18, 28, 54, 0.6);
+  border-radius: 50%;
+  filter: blur(0.2px);
 }
 
 
@@ -3098,7 +3114,7 @@ body:not(.world-page) .footer {
   }
 
   .tap-bubble {
-    display: inline-flex;
+    display: none;
     align-items: center;
     justify-content: center;
     left: -4%;
