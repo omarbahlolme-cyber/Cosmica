@@ -1882,6 +1882,7 @@ body.intro-leave .intro-overlay {
   box-shadow: 0 0 20px rgba(59, 191, 166, 0.45);
   animation: head-tilt 6s ease-in-out infinite;
   transform-origin: 50% 80%;
+  overflow: visible;
 }
 
 .alien-antenna {
@@ -1964,6 +1965,40 @@ body.intro-leave .intro-overlay {
   stroke-width: 4;
   stroke-linecap: round;
   stroke-linejoin: round;
+}
+
+.mimi-hello-bubble {
+  position: absolute;
+  right: -38px;
+  bottom: 18px;
+  display: inline-flex;
+  align-items: center;
+  z-index: 4;
+  background: rgba(14, 22, 44, 0.9);
+  color: #e8f6ff;
+  border: 1px solid rgba(104, 225, 255, 0.35);
+  border-radius: 16px;
+  padding: 6px 10px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  box-shadow: 0 12px 22px rgba(3, 6, 14, 0.35);
+  backdrop-filter: blur(8px);
+  pointer-events: none;
+}
+
+.mimi-hello-bubble::after {
+  content: "";
+  position: absolute;
+  left: -6px;
+  bottom: 6px;
+  width: 10px;
+  height: 10px;
+  background: rgba(14, 22, 44, 0.9);
+  transform: rotate(45deg);
+  border-left: 1px solid rgba(104, 225, 255, 0.3);
+  border-bottom: 1px solid rgba(104, 225, 255, 0.3);
 }
 
 
@@ -3066,6 +3101,16 @@ body:not(.world-page) .footer {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    left: -4%;
+    right: auto;
+    top: 10%;
+  }
+
+  .mimi-hello-bubble {
+    right: -28px;
+    bottom: 14px;
+    font-size: 10px;
+    padding: 5px 8px;
   }
 }
 
