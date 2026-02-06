@@ -3192,12 +3192,6 @@ body:not(.world-page) .footer {
     top: 10%;
   }
 
-  .mimi-hello-bubble {
-    right: -28px;
-    bottom: 14px;
-    font-size: 10px;
-    padding: 5px 8px;
-  }
 }
 
 /* === Accessibility: reduced motion === */
