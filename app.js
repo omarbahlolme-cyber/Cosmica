@@ -7947,10 +7947,11 @@ const setupBackToTopButton = () => {
   button.className = "scroll-top-btn";
   button.type = "button";
   button.setAttribute("aria-label", "Scroll to top");
-  button.textContent = "↑";
+  button.innerHTML = "&#8593;";
 
   const updateVisibility = () => {
-    if (window.scrollY > 300) {
+    const threshold = window.matchMedia("(max-width: 720px)").matches ? 80 : 300;
+    if (window.scrollY > threshold) {
       button.classList.add("is-visible");
     } else {
       button.classList.remove("is-visible");
