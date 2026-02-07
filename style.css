@@ -202,10 +202,16 @@ input {
   padding: 24px 6vw;
   position: sticky;
   top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
   backdrop-filter: blur(20px);
   background: linear-gradient(180deg, rgba(5, 5, 11, 0.85), rgba(5, 5, 11, 0.2));
+  border-radius: 0 0 18px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: none;
+  overflow: hidden;
   z-index: 10;
-  width: 100%;
 }
 
 .brand {
@@ -1336,7 +1342,7 @@ body.intro-active {
     radial-gradient(circle at 80% 10%, rgba(255, 111, 177, 0.18), transparent 50%),
     radial-gradient(circle at 50% 80%, rgba(110, 247, 194, 0.16), transparent 55%),
     radial-gradient(circle at center, rgba(6, 8, 18, 0.92), rgba(5, 5, 12, 0.98));
-  z-index: 999;
+  z-index: 20000;
   opacity: 1;
   transition: opacity 0.4s ease, transform 0.4s ease;
 }
@@ -2813,7 +2819,10 @@ body:not(.world-page) .footer {
     flex-direction: row;
     justify-content: space-between;
     gap: 12px;
-    padding: 18px 5vw;
+    padding: 16px 4vw;
+    left: 0;
+    right: 0;
+    border-radius: 0 0 14px 14px;
     flex-wrap: wrap;
   }
 
@@ -3013,11 +3022,15 @@ body:not(.world-page) .footer {
   }
 
   .grammar-modal {
-    width: min(640px, 92vw);
+    width: min(640px, calc(100vw - 20px));
     border-radius: 20px;
     max-height: none;
     overflow: visible;
-    margin: 0 auto 14px;
+    margin: 0 auto 16px;
+    border: 1px solid rgba(140, 210, 255, 0.28);
+    box-shadow:
+      0 20px 46px rgba(0, 0, 0, 0.52),
+      0 0 0 1px rgba(255, 255, 255, 0.08) inset;
   }
 
   .grammar-modal::before,
@@ -3036,8 +3049,8 @@ body:not(.world-page) .footer {
   }
 
   .grammar-close {
-    top: 12px;
-    right: 12px;
+    top: 14px;
+    right: 14px;
   }
 
   .grammar-modal-body {
@@ -3083,7 +3096,7 @@ body:not(.world-page) .footer {
   .grammar-overlay {
     align-items: flex-start;
     overflow-y: auto;
-    padding: calc(12px + env(safe-area-inset-top)) 0 18px;
+    padding: calc(34px + env(safe-area-inset-top)) 10px 20px;
   }
 
   body.world-page #language {
@@ -3106,7 +3119,7 @@ body:not(.world-page) .footer {
   }
 
   body.world-page .nav {
-    padding: 14px 6vw;
+    padding: 16px 4vw;
   }
 
   body.world-page .brand-mark {
@@ -3116,11 +3129,11 @@ body:not(.world-page) .footer {
   }
 
   body.world-page .brand-title {
-    font-size: 16px;
+    font-size: 14px;
   }
 
   body.world-page .brand-sub {
-    font-size: 11px;
+    font-size: 10px;
   }
 
   input,
@@ -3404,7 +3417,7 @@ body.world-page .language-box::after {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
-  z-index: 999;
+  z-index: 20000;
   overscroll-behavior: contain;
 }
 
@@ -3746,3 +3759,4 @@ body.modal-open {
 .grammar-label.label-sentence-1 { background: rgba(170, 255, 210, 0.26); border-color: rgba(170, 255, 210, 0.45); }
 .grammar-label.label-sentence-2 { background: rgba(255, 210, 140, 0.24); border-color: rgba(255, 210, 140, 0.45); }
 .grammar-label.label-sentence { background: rgba(180, 230, 255, 0.24); border-color: rgba(180, 230, 255, 0.35); }
+
