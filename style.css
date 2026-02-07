@@ -2168,6 +2168,191 @@ body.intro-leave .intro-overlay {
   filter: blur(10px);
 }
 
+/* === Space frog companion === */
+.space-frog {
+  position: absolute;
+  right: -24px;
+  top: 14px;
+  width: 110px;
+  height: 120px;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.space-frog-float {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  animation: frogFloat 6s ease-in-out infinite,
+    frogSpin 14s linear infinite;
+  transform-origin: 50% 60%;
+}
+
+.frog-helmet {
+  position: absolute;
+  inset: -6px -10px auto -10px;
+  height: 78px;
+  border-radius: 50%;
+  border: 2px solid rgba(160, 235, 255, 0.6);
+  background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.45), rgba(120, 190, 255, 0.12) 55%, transparent 72%);
+  box-shadow: 0 10px 24px rgba(2, 6, 18, 0.35);
+  backdrop-filter: blur(4px);
+}
+
+.frog-head {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  width: 64px;
+  height: 56px;
+  transform: translateX(-50%);
+  background: radial-gradient(circle at 30% 30%, #dfffe9, #41c98f 70%);
+  border-radius: 45% 45% 50% 50%;
+  box-shadow: inset 0 -6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.frog-head::before,
+.frog-head::after {
+  content: "";
+  position: absolute;
+  bottom: 6px;
+  width: 12px;
+  height: 8px;
+  background: rgba(120, 255, 210, 0.6);
+  border-radius: 999px;
+}
+
+.frog-head::before {
+  left: 10px;
+}
+
+.frog-head::after {
+  right: 10px;
+}
+
+.frog-eye {
+  position: absolute;
+  top: 12px;
+  width: 16px;
+  height: 16px;
+  background: #0a1d24;
+  border-radius: 50%;
+  box-shadow: inset 0 0 4px rgba(120, 240, 255, 0.6);
+}
+
+.frog-eye.left {
+  left: 10px;
+}
+
+.frog-eye.right {
+  right: 10px;
+}
+
+.frog-smile {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  width: 26px;
+  height: 12px;
+  border-bottom: 3px solid #0c2a2b;
+  border-radius: 0 0 18px 18px;
+  transform: translateX(-50%);
+}
+
+.frog-body {
+  position: absolute;
+  top: 56px;
+  left: 50%;
+  width: 70px;
+  height: 72px;
+  transform: translateX(-50%);
+  background: radial-gradient(circle at 35% 25%, #d6ffe9, #33b881 70%);
+  border-radius: 50% 50% 48% 48%;
+  box-shadow:
+    inset 0 -12px 18px rgba(0, 0, 0, 0.12),
+    0 10px 18px rgba(2, 6, 18, 0.25);
+}
+
+.frog-belly {
+  position: absolute;
+  inset: 14px 12px;
+  border-radius: 50%;
+  background: rgba(240, 250, 255, 0.9);
+  border: 1px solid rgba(160, 220, 255, 0.6);
+  box-shadow: inset 0 0 10px rgba(140, 200, 255, 0.3);
+}
+
+.frog-arm,
+.frog-leg {
+  position: absolute;
+  width: 18px;
+  height: 8px;
+  background: #3cbc87;
+  border-radius: 999px;
+  box-shadow:
+    inset 0 0 6px rgba(255, 255, 255, 0.35),
+    0 4px 10px rgba(2, 6, 18, 0.2);
+}
+
+.frog-arm::after,
+.frog-leg::after {
+  content: "";
+  position: absolute;
+  right: -3px;
+  top: -2px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #f4fbff;
+  box-shadow: 0 0 4px rgba(120, 255, 210, 0.6);
+}
+
+.frog-arm.left {
+  left: 8px;
+  top: 78px;
+  transform: rotate(-18deg);
+}
+
+.frog-arm.right {
+  right: 8px;
+  top: 78px;
+  transform: rotate(18deg);
+}
+
+.frog-leg.left {
+  left: 22px;
+  top: 106px;
+  transform: rotate(8deg);
+}
+
+.frog-leg.right {
+  right: 22px;
+  top: 106px;
+  transform: rotate(-8deg);
+}
+
+@keyframes frogFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes frogSpin {
+  0% {
+    rotate: -2deg;
+  }
+  50% {
+    rotate: 2deg;
+  }
+  100% {
+    rotate: -2deg;
+  }
+}
+
 .alien-blush {
   position: absolute;
   width: 22px;
@@ -3192,6 +3377,12 @@ body:not(.world-page) .footer {
     left: -4%;
     right: auto;
     top: 10%;
+  }
+
+  .space-frog {
+    right: -8px;
+    top: 8px;
+    transform: scale(0.85);
   }
 
 }
