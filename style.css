@@ -2233,8 +2233,8 @@ body.intro-leave .intro-overlay {
 
 .footer {
   padding: 28px 6vw 44px;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
   align-items: center;
   gap: 24px;
   color: var(--muted);
@@ -2243,17 +2243,19 @@ body.intro-leave .intro-overlay {
 }
 
 .footer > :first-child {
-  flex: 0 0 auto;
+  grid-column: 1;
+  justify-self: start;
   text-align: left;
   min-width: 0;
 }
 
 .footer > :last-child {
   display: block;
-  flex: 1 1 auto;
+  grid-column: 2;
+  justify-self: end;
   font-size: 12px;
   opacity: 0.85;
-  margin-left: auto;
+  margin-left: 0;
   text-align: right !important;
   min-width: 0;
 }
@@ -2938,15 +2940,15 @@ body:not(.world-page) .footer {
   }
 
   .footer {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
     align-items: center;
     gap: 10px 16px;
-    flex-wrap: nowrap;
   }
 
   .footer > :last-child {
-    margin-left: auto;
+    justify-self: end;
+    margin-left: 0;
     text-align: right !important;
     font-size: 11px;
     max-width: 52vw;
