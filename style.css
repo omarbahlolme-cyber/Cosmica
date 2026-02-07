@@ -309,6 +309,12 @@ body:not(.world-page) main {
   min-height: 85vh;
 }
 
+@media (min-width: 721px) {
+  body:not(.world-page) .hero {
+    margin-top: -18px;
+  }
+}
+
 .eyebrow {
   text-transform: uppercase;
   letter-spacing: 0.35em;
@@ -2236,12 +2242,14 @@ body.intro-leave .intro-overlay {
 }
 
 .footer > :first-child {
-  flex: 0 1 auto;
+  flex: 0 0 auto;
   text-align: left;
   min-width: 0;
 }
 
 .footer > :last-child {
+  display: block;
+  flex: 1 1 auto;
   font-size: 12px;
   opacity: 0.85;
   margin-left: auto;
