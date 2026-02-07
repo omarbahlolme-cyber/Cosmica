@@ -1,29 +1,4 @@
-﻿/*
-  Cosmica styles (single file)
-  Organization notes:
-  - Tokens/variables at top.
-  - Base elements, layout, then components.
-  - Page-specific sections are labeled with "===" comments.
-  - Media queries sit near the rules they modify.
-*/
-/*
-  Table of contents (approximate)
-  - Tokens + base elements
-  - Background visuals (aurora + starfields)
-  - Navigation header
-  - Home hero + portal/orbits
-  - Layout + sections + cards
-  - Home: Worlds grid
-  - Home: Guide/Mimi + chat
-  - Home: Join/Support + footer
-  - World pages: hero, language, maps
-  - Letters/Words/Phrases/Grammar pages
-  - Overlays (intro, warp, modal)
-  - Reveal + animations
-  - Responsive + accessibility
-*/
-/* === Design tokens (colors, fonts) === */
-:root {
+﻿:root {
   color-scheme: dark;
   --bg: #05050b;
   --bg-deep: #060617;
@@ -40,7 +15,6 @@
   --font-body: "Rajdhani", sans-serif;
 }
 
-/* === Page-specific: Letters page === */
 /* === Letters map === */
 .letters-page .letters-grid-section.section {
   margin-top: 18px;
@@ -90,21 +64,16 @@ body.letters-page main {
   gap: 10px;
   background: rgba(10, 16, 32, 0.58);
   border: 1px solid rgba(255, 255, 255, 0.16);
-  box-shadow:
-    0 16px 28px rgba(2, 6, 18, 0.4),
+  box-shadow: 0 16px 28px rgba(2, 6, 18, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
   cursor: pointer;
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    border-color 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .letter-card:hover {
   transform: translateY(-6px);
   border-color: rgba(120, 235, 255, 0.7);
-  box-shadow:
-    0 22px 36px rgba(2, 8, 24, 0.45),
+  box-shadow: 0 22px 36px rgba(2, 8, 24, 0.45),
     0 0 26px rgba(120, 235, 255, 0.35),
     inset 0 0 0 1px rgba(120, 235, 255, 0.4);
 }
@@ -150,7 +119,6 @@ body.letters-page main {
   }
 }
 
-/* === Base / global element defaults === */
 * {
   box-sizing: border-box;
 }
@@ -167,6 +135,7 @@ body {
 html {
   overflow-y: scroll;
 }
+
 
 h1,
 h2,
@@ -186,12 +155,10 @@ input {
   font-family: var(--font-title);
 }
 
-/* === Background visuals (aurora + starfields) === */
 .aurora {
   position: fixed;
   inset: -30vh -20vw;
-  background:
-    radial-gradient(circle at 20% 20%, rgba(104, 225, 255, 0.18), transparent 45%),
+  background: radial-gradient(circle at 20% 20%, rgba(104, 225, 255, 0.18), transparent 45%),
     radial-gradient(circle at 80% 10%, rgba(255, 111, 177, 0.15), transparent 50%),
     radial-gradient(circle at 40% 80%, rgba(110, 247, 194, 0.15), transparent 55%);
   z-index: -2;
@@ -228,7 +195,6 @@ input {
   opacity: 1;
 }
 
-/* === Navigation header === */
 .nav {
   display: flex;
   justify-content: space-between;
@@ -292,9 +258,7 @@ input {
   padding: 10px 16px;
   border-radius: 999px;
   cursor: pointer;
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .sound-toggle .dot {
@@ -322,6 +286,7 @@ main {
 body:not(.world-page) main {
   padding-bottom: 70px;
 }
+
 
 .hero {
   display: grid;
@@ -367,9 +332,7 @@ body:not(.world-page) main {
   cursor: pointer;
   font-weight: 700;
   box-shadow: var(--glow);
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .ghost {
@@ -379,9 +342,7 @@ body:not(.world-page) main {
   padding: 14px 24px;
   border-radius: 999px;
   cursor: pointer;
-  transition:
-    transform 0.2s ease,
-    border-color 0.2s ease;
+  transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
 .primary:hover,
@@ -432,10 +393,13 @@ body:not(.world-page) main {
   width: 140px;
   height: 140px;
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, #fff4c7, #ffbf6b 45%, #ff7d44 75%);
-  box-shadow:
-    0 0 45px rgba(255, 190, 100, 0.6),
-    0 0 90px rgba(255, 130, 70, 0.35);
+  background: radial-gradient(
+    circle at 30% 30%,
+    #fff4c7,
+    #ffbf6b 45%,
+    #ff7d44 75%
+  );
+  box-shadow: 0 0 45px rgba(255, 190, 100, 0.6), 0 0 90px rgba(255, 130, 70, 0.35);
   transform: translate(-50%, -50%);
   z-index: 2;
 }
@@ -537,11 +501,7 @@ body:not(.world-page) main {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    circle at 28% 25%,
-    rgba(255, 255, 255, 0.32),
-    rgba(255, 255, 255, 0) 55%
-  );
+  background: radial-gradient(circle at 28% 25%, rgba(255, 255, 255, 0.32), rgba(255, 255, 255, 0) 55%);
   opacity: 0.6;
   z-index: 3;
   pointer-events: none;
@@ -599,7 +559,6 @@ body:not(.world-page) main {
   transform-origin: 50% 50%;
 }
 
-/* === Home hero: portal/orbit visuals === */
 .portal {
   position: relative;
   width: 240px;
@@ -629,7 +588,6 @@ body:not(.world-page) main {
   animation-delay: 1.5s;
 }
 
-/* === Layout: sections + spacing === */
 .section {
   margin: 80px 0;
 }
@@ -642,12 +600,10 @@ body:not(.world-page) main {
   max-width: 360px;
   margin: 8px 0 0;
   padding: 12px;
-  background: linear-gradient(140deg, rgba(255, 255, 255, 0.14), rgba(12, 16, 32, 0.28));
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: linear-gradient(140deg, rgba(255,255,255,0.14), rgba(12,16,32,0.28));
+  border: 1px solid rgba(255,255,255,0.22);
   border-radius: 24px;
-  box-shadow:
-    0 18px 45px rgba(3, 6, 14, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  box-shadow: 0 18px 45px rgba(3,6,14,0.35), inset 0 1px 0 rgba(255,255,255,0.28);
   backdrop-filter: blur(18px) saturate(170%);
   -webkit-backdrop-filter: blur(18px) saturate(170%);
 }
@@ -678,16 +634,14 @@ body.world-page .world-language .language-box {
   width: 100%;
   padding: 10px 14px;
   border-radius: 12px;
-  border: 1px solid rgba(237, 243, 255, 0.35);
-  background: rgba(6, 8, 18, 0.6);
+  border: 1px solid rgba(237,243,255,0.35);
+  background: rgba(6,8,18,0.6);
   color: var(--text);
   font-weight: 600;
-  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.35);
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.35);
 }
 
-.language-shortcuts {
-  display: none;
-}
+.language-shortcuts { display: none; }
 
 .language-list {
   max-height: 220px;
@@ -704,39 +658,32 @@ body.world-page .world-language .language-box {
 }
 
 .language-pill {
-  background: linear-gradient(180deg, rgba(18, 22, 40, 0.55), rgba(10, 14, 28, 0.65));
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: linear-gradient(180deg, rgba(18,22,40,0.55), rgba(10,14,28,0.65));
+  border: 1px solid rgba(255,255,255,0.18);
   color: #f2f6ff;
   padding: 8px 14px;
   border-radius: 12px;
   cursor: pointer;
   font-weight: 600;
   text-align: left;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 8px 16px rgba(2, 6, 18, 0.35);
-  transition:
-    transform 180ms cubic-bezier(0.2, 0.9, 0.3, 1),
-    box-shadow 180ms,
-    background 180ms,
-    color 180ms,
-    border-color 180ms;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 8px 16px rgba(2, 6, 18, 0.35);
+  transition: transform 180ms cubic-bezier(.2,.9,.3,1), box-shadow 180ms, background 180ms, color 180ms, border-color 180ms;
 }
+
+
 
 .language-pill:hover,
 .language-pill:active {
   transform: translateY(-2px);
-  box-shadow:
-    0 14px 26px rgba(0, 0, 0, 0.5),
-    0 0 18px rgba(120, 200, 255, 0.18);
-  background: linear-gradient(180deg, rgba(28, 34, 54, 0.72), rgba(18, 22, 38, 0.85));
+  box-shadow: 0 14px 26px rgba(0,0,0,0.5), 0 0 18px rgba(120,200,255,0.18);
+  background: linear-gradient(180deg, rgba(28,34,54,0.72), rgba(18,22,38,0.85));
   color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.32);
+  border-color: rgba(255,255,255,0.32);
 }
 
 .language-pill:focus {
   outline: none;
-  box-shadow: 0 0 0 4px rgba(104, 225, 255, 0.12);
+  box-shadow: 0 0 0 4px rgba(104,225,255,0.12);
 }
 
 .language-box::before,
@@ -753,12 +700,12 @@ body.world-page .world-language .language-box {
 
 .language-box::before {
   top: 0;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 100%);
+  background: linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0) 100%);
 }
 
 .language-box::after {
   bottom: 0;
-  background: linear-gradient(0deg, rgba(6, 8, 18, 0.35) 0%, rgba(6, 8, 18, 0) 100%);
+  background: linear-gradient(0deg, rgba(6,8,18,0.35) 0%, rgba(6,8,18,0) 100%);
 }
 
 /* Custom thin scrollbar (WebKit) */
@@ -769,25 +716,25 @@ body.world-page .world-language .language-box {
   background: transparent;
 }
 .language-list::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, rgba(255, 184, 60, 0.22), rgba(255, 140, 16, 0.14));
+  background: linear-gradient(180deg, rgba(255,184,60,0.22), rgba(255,140,16,0.14));
   border-radius: 999px;
-  border: 2px solid rgba(6, 8, 18, 0);
+  border: 2px solid rgba(6,8,18,0.0);
 }
 
 /* Firefox scrollbar colors */
 .language-list {
   scrollbar-width: thin;
-  scrollbar-color: rgba(104, 225, 255, 0.18) transparent;
+  scrollbar-color: rgba(104,225,255,0.18) transparent;
 }
 
 /* highlight matched pills and make them stand out */
 .language-pill.match {
   transform: translateY(-6px) scale(1.02);
   z-index: 4;
-  background: linear-gradient(120deg, rgba(255, 184, 60, 0.18), rgba(255, 140, 16, 0.12));
+  background: linear-gradient(120deg, rgba(255,184,60,0.18), rgba(255,140,16,0.12));
   color: #0b0b00;
-  border-color: rgba(255, 180, 60, 0.22);
-  box-shadow: 0 26px 54px rgba(40, 26, 6, 0.7);
+  border-color: rgba(255,180,60,0.22);
+  box-shadow: 0 26px 54px rgba(40,26,6,0.7);
 }
 
 /* Alphabetical grouping and quick index */
@@ -802,7 +749,7 @@ body.world-page .world-language .language-box {
   padding: 6px 4px;
   position: sticky;
   top: 0;
-  background: linear-gradient(180deg, rgba(6, 8, 18, 0.02), rgba(6, 8, 18, 0));
+  background: linear-gradient(180deg, rgba(6,8,18,0.02), rgba(6,8,18,0));
   z-index: 3;
 }
 .alpha-items {
@@ -829,7 +776,7 @@ body.world-page .world-language .language-box {
   font-weight: 700;
 }
 .alpha-index-btn:hover {
-  background: rgba(255, 184, 60, 0.12);
+  background: rgba(255,184,60,0.12);
   color: #0b0b00;
 }
 
@@ -879,7 +826,6 @@ body.world-page .section-title {
   }
 }
 
-/* === Anchor offsets for nav links === */
 #how,
 #journey,
 #worlds,
@@ -897,7 +843,6 @@ body.world-page .section-title {
   margin-top: 280px;
 }
 
-/* === Section titles + cards (home + shared) === */
 .section-title {
   max-width: 700px;
   margin-bottom: 40px;
@@ -925,9 +870,7 @@ body.world-page .section-title {
   padding: 28px;
   border: 1px solid rgba(237, 243, 255, 0.08);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card:hover {
@@ -948,14 +891,11 @@ body.world-page .section-title {
   border: 1px solid rgba(255, 255, 255, 0.22);
   background: rgba(8, 14, 28, 0.48);
   backdrop-filter: blur(18px);
-  box-shadow:
-    0 22px 52px rgba(2, 6, 20, 0.65),
+  box-shadow: 0 22px 52px rgba(2, 6, 20, 0.65),
     inset 0 1px 0 rgba(255, 255, 255, 0.16),
     inset 0 -12px 28px rgba(0, 0, 0, 0.25);
   overflow: hidden;
-  transition:
-    transform 220ms ease,
-    box-shadow 220ms ease;
+  transition: transform 220ms ease, box-shadow 220ms ease;
 }
 
 .map-card::before {
@@ -963,9 +903,9 @@ body.world-page .section-title {
   position: absolute;
   inset: -30%;
   background:
-    radial-gradient(circle at 22% 18%, rgba(255, 255, 255, 0.35), transparent 38%),
-    radial-gradient(circle at 86% 16%, rgba(104, 225, 255, 0.28), transparent 38%),
-    radial-gradient(circle at 18% 82%, rgba(255, 111, 177, 0.22), transparent 42%),
+    radial-gradient(circle at 22% 18%, rgba(255,255,255,0.35), transparent 38%),
+    radial-gradient(circle at 86% 16%, rgba(104,225,255,0.28), transparent 38%),
+    radial-gradient(circle at 18% 82%, rgba(255,111,177,0.22), transparent 42%),
     radial-gradient(2px 2px at 20% 30%, rgba(255, 255, 255, 0.55), transparent 60%),
     radial-gradient(1.5px 1.5px at 70% 45%, rgba(255, 255, 255, 0.45), transparent 60%),
     radial-gradient(1.5px 1.5px at 40% 75%, rgba(255, 255, 255, 0.4), transparent 60%);
@@ -1008,7 +948,7 @@ body.world-page .section-title {
   height: 28px;
   color: rgba(237, 243, 255, 0.9);
   opacity: 0.9;
-  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4));
+  filter: drop-shadow(0 8px 16px rgba(0,0,0,0.4));
 }
 
 .map-card .map-icon svg {
@@ -1022,29 +962,21 @@ body.world-page .section-title {
   font-weight: 700;
   color: var(--text);
   z-index: 2;
-  text-shadow: 0 8px 22px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 8px 22px rgba(0,0,0,0.5);
   text-align: left;
 }
 
-.map-card.map-letters {
-  background: linear-gradient(135deg, rgba(122, 214, 255, 0.78), rgba(12, 32, 58, 0.82));
-}
-.map-card.map-words {
-  background: linear-gradient(135deg, rgba(255, 196, 118, 0.78), rgba(40, 26, 14, 0.82));
-}
-.map-card.map-phrases {
-  background: linear-gradient(135deg, rgba(150, 230, 190, 0.78), rgba(10, 32, 26, 0.82));
-}
-.map-card.map-grammar {
-  background: linear-gradient(135deg, rgba(255, 170, 220, 0.78), rgba(40, 16, 40, 0.82));
-}
+.map-card.map-letters { background: linear-gradient(135deg, rgba(122, 214, 255, 0.78), rgba(12, 32, 58, 0.82)); }
+.map-card.map-words { background: linear-gradient(135deg, rgba(255, 196, 118, 0.78), rgba(40, 26, 14, 0.82)); }
+.map-card.map-phrases { background: linear-gradient(135deg, rgba(150, 230, 190, 0.78), rgba(10, 32, 26, 0.82)); }
+.map-card.map-grammar { background: linear-gradient(135deg, rgba(255, 170, 220, 0.78), rgba(40, 16, 40, 0.82)); }
 
 .map-card:hover {
   transform: translateY(-6px);
-  box-shadow:
-    0 26px 52px rgba(2, 6, 20, 0.65),
+  box-shadow: 0 26px 52px rgba(2, 6, 20, 0.65),
     inset 0 1px 0 rgba(255, 255, 255, 0.16);
 }
+
 
 .card-number {
   color: var(--accent);
@@ -1052,7 +984,6 @@ body.world-page .section-title {
   margin-bottom: 10px;
 }
 
-/* === Home: Worlds grid === */
 .worlds .section-title {
   text-align: center;
   margin: 0 auto 50px;
@@ -1083,9 +1014,7 @@ body.hide-worlds-overlap .worlds {
   border: 1px solid rgba(237, 243, 255, 0.08);
   display: grid;
   gap: 20px;
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
   position: relative;
   overflow: hidden;
@@ -1168,9 +1097,7 @@ body.hide-worlds-overlap .worlds {
   transform: translate(-50%, -50%);
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.18);
   overflow: hidden;
   background: rgba(10, 14, 28, 0.35);
   display: grid;
@@ -1261,9 +1188,7 @@ body.hide-worlds-overlap .worlds {
   border-radius: 24px;
   padding: 28px;
   border: 1px solid rgba(237, 243, 255, 0.08);
-  transition:
-    transform 0.4s ease,
-    box-shadow 0.4s ease;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
   transform: translateY(10px) scale(0.98);
   opacity: 0.7;
 }
@@ -1283,7 +1208,6 @@ body.hide-worlds-overlap .worlds {
   margin-bottom: 12px;
 }
 
-/* === Home: Guide/Mimi section === */
 .guide {
   display: grid;
   grid-template-columns: minmax(260px, 1fr) minmax(260px, 1fr);
@@ -1337,6 +1261,7 @@ body.hide-guide-overlap .guide-right {
   border-left: 1px solid rgba(104, 225, 255, 0.3);
   border-bottom: 1px solid rgba(104, 225, 255, 0.3);
 }
+
 
 .speech {
   background: rgba(19, 24, 48, 0.95);
@@ -1413,9 +1338,7 @@ body.intro-active {
     radial-gradient(circle at center, rgba(6, 8, 18, 0.92), rgba(5, 5, 12, 0.98));
   z-index: 999;
   opacity: 1;
-  transition:
-    opacity 0.4s ease,
-    transform 0.4s ease;
+  transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
 body.intro-active header,
@@ -1542,7 +1465,7 @@ body.world-page .eyebrow {
 body.world-page .card,
 body.world-page .world-card {
   border-radius: 24px;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 18px 40px rgba(0,0,0,0.35);
 }
 
 .intro-overlay[aria-hidden="true"] {
@@ -1554,6 +1477,7 @@ body.intro-leave .intro-overlay {
   opacity: 0;
   transform: scale(0.98);
 }
+
 
 .intro-bg {
   position: absolute;
@@ -1598,12 +1522,7 @@ body.intro-leave .intro-overlay {
   width: 360px;
   height: 360px;
   border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(255, 255, 255, 0.2),
-    rgba(104, 225, 255, 0.08),
-    transparent 70%
-  );
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.2), rgba(104, 225, 255, 0.08), transparent 70%);
   filter: blur(2px);
   opacity: 0.7;
 }
@@ -1623,12 +1542,7 @@ body.intro-leave .intro-overlay {
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  background: radial-gradient(
-    circle at 30% 30%,
-    rgba(255, 255, 255, 0.6),
-    rgba(104, 225, 255, 0.2),
-    rgba(20, 30, 60, 0.9)
-  );
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.6), rgba(104, 225, 255, 0.2), rgba(20, 30, 60, 0.9));
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
 }
 
@@ -1640,12 +1554,7 @@ body.intro-leave .intro-overlay {
 .intro-planet.intro-planet-b {
   bottom: 14%;
   left: 12%;
-  background: radial-gradient(
-    circle at 25% 25%,
-    rgba(255, 255, 255, 0.7),
-    rgba(255, 180, 90, 0.28),
-    rgba(40, 30, 20, 0.9)
-  );
+  background: radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.7), rgba(255, 180, 90, 0.28), rgba(40, 30, 20, 0.9));
 }
 
 .intro-ring {
@@ -1663,12 +1572,7 @@ body.intro-leave .intro-overlay {
   position: absolute;
   width: 180px;
   height: 4px;
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.95),
-    rgba(255, 255, 255, 0.35),
-    transparent
-  );
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.35), transparent);
   opacity: 0.95;
   transform: rotate(-20deg);
   border-radius: 999px;
@@ -1684,12 +1588,7 @@ body.intro-leave .intro-overlay {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(255, 255, 255, 0.9),
-    rgba(255, 220, 160, 0.6),
-    transparent 70%
-  );
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.9), rgba(255, 220, 160, 0.6), transparent 70%);
   transform: translateY(-50%);
   box-shadow: 0 0 10px rgba(255, 220, 160, 0.7);
 }
@@ -1787,7 +1686,6 @@ body.intro-leave .intro-overlay {
   margin-top: 14px;
 }
 
-/* === Home: Mimi chat panel === */
 .mimi-chat {
   background: rgba(12, 18, 36, 0.92);
   border-radius: 20px;
@@ -1920,10 +1818,7 @@ body.intro-leave .intro-overlay {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   cursor: pointer;
-  transition:
-    transform 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .chat-chip:hover {
@@ -1958,7 +1853,6 @@ body.intro-leave .intro-overlay {
   animation-delay: 0.3s;
 }
 
-/* === Home: Mimi avatar illustration === */
 .alien {
   position: relative;
   width: 210px;
@@ -2073,6 +1967,8 @@ body.intro-leave .intro-overlay {
   stroke-linejoin: round;
 }
 
+
+
 .alien-body {
   width: 170px;
   height: 190px;
@@ -2168,195 +2064,6 @@ body.intro-leave .intro-overlay {
   filter: blur(10px);
 }
 
-/* === Space frog companion === */
-.space-frog {
-  position: absolute;
-  right: -10px;
-  top: 10px;
-  width: 120px;
-  height: 130px;
-  pointer-events: none;
-  z-index: 3;
-}
-
-.space-frog-float {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  animation: frogFloat 6s ease-in-out infinite,
-    frogSpin 18s linear infinite;
-  transform-origin: 50% 60%;
-}
-
-.frog-astro {
-  width: 100%;
-  height: 100%;
-  display: block;
-  filter: drop-shadow(0 14px 24px rgba(6, 12, 24, 0.45));
-}
-
-.frog-helmet {
-  position: absolute;
-  inset: -6px -10px auto -10px;
-  height: 78px;
-  border-radius: 50%;
-  border: 2px solid rgba(160, 235, 255, 0.6);
-  background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.45), rgba(120, 190, 255, 0.12) 55%, transparent 72%);
-  box-shadow: 0 10px 24px rgba(2, 6, 18, 0.35);
-  backdrop-filter: blur(4px);
-}
-
-.frog-head {
-  position: absolute;
-  top: 12px;
-  left: 50%;
-  width: 64px;
-  height: 56px;
-  transform: translateX(-50%);
-  background: radial-gradient(circle at 30% 30%, #dfffe9, #41c98f 70%);
-  border-radius: 45% 45% 50% 50%;
-  box-shadow: inset 0 -6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.frog-head::before,
-.frog-head::after {
-  content: "";
-  position: absolute;
-  bottom: 6px;
-  width: 12px;
-  height: 8px;
-  background: rgba(120, 255, 210, 0.6);
-  border-radius: 999px;
-}
-
-.frog-head::before {
-  left: 10px;
-}
-
-.frog-head::after {
-  right: 10px;
-}
-
-.frog-eye {
-  position: absolute;
-  top: 12px;
-  width: 16px;
-  height: 16px;
-  background: #0a1d24;
-  border-radius: 50%;
-  box-shadow: inset 0 0 4px rgba(120, 240, 255, 0.6);
-}
-
-.frog-eye.left {
-  left: 10px;
-}
-
-.frog-eye.right {
-  right: 10px;
-}
-
-.frog-smile {
-  position: absolute;
-  left: 50%;
-  bottom: 12px;
-  width: 26px;
-  height: 12px;
-  border-bottom: 3px solid #0c2a2b;
-  border-radius: 0 0 18px 18px;
-  transform: translateX(-50%);
-}
-
-.frog-body {
-  position: absolute;
-  top: 56px;
-  left: 50%;
-  width: 70px;
-  height: 72px;
-  transform: translateX(-50%);
-  background: radial-gradient(circle at 35% 25%, #d6ffe9, #33b881 70%);
-  border-radius: 50% 50% 48% 48%;
-  box-shadow:
-    inset 0 -12px 18px rgba(0, 0, 0, 0.12),
-    0 10px 18px rgba(2, 6, 18, 0.25);
-}
-
-.frog-belly {
-  position: absolute;
-  inset: 14px 12px;
-  border-radius: 50%;
-  background: rgba(240, 250, 255, 0.9);
-  border: 1px solid rgba(160, 220, 255, 0.6);
-  box-shadow: inset 0 0 10px rgba(140, 200, 255, 0.3);
-}
-
-.frog-arm,
-.frog-leg {
-  position: absolute;
-  width: 18px;
-  height: 8px;
-  background: #3cbc87;
-  border-radius: 999px;
-  box-shadow:
-    inset 0 0 6px rgba(255, 255, 255, 0.35),
-    0 4px 10px rgba(2, 6, 18, 0.2);
-}
-
-.frog-arm::after,
-.frog-leg::after {
-  content: "";
-  position: absolute;
-  right: -3px;
-  top: -2px;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #f4fbff;
-  box-shadow: 0 0 4px rgba(120, 255, 210, 0.6);
-}
-
-.frog-arm.left {
-  left: 8px;
-  top: 78px;
-  transform: rotate(-18deg);
-}
-
-.frog-arm.right {
-  right: 8px;
-  top: 78px;
-  transform: rotate(18deg);
-}
-
-.frog-leg.left {
-  left: 22px;
-  top: 106px;
-  transform: rotate(8deg);
-}
-
-.frog-leg.right {
-  right: 22px;
-  top: 106px;
-  transform: rotate(-8deg);
-}
-
-@keyframes frogFloat {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
-}
-
-@keyframes frogSpin {
-  0% {
-    rotate: 0deg;
-  }
-  100% {
-    rotate: 360deg;
-  }
-}
-
 .alien-blush {
   position: absolute;
   width: 22px;
@@ -2388,7 +2095,6 @@ body.intro-leave .intro-overlay {
   border: 1px solid rgba(237, 243, 255, 0.06);
 }
 
-/* === Home: Join/feedback section === */
 .join-panel {
   background: linear-gradient(120deg, rgba(104, 225, 255, 0.14), rgba(255, 111, 177, 0.22));
   border-radius: 32px;
@@ -2416,7 +2122,6 @@ body.intro-leave .intro-overlay {
   margin: 0;
 }
 
-/* === Home: Support / donate === */
 .support-panel {
   margin-top: 18px;
   padding: 22px 26px;
@@ -2457,15 +2162,14 @@ body.intro-leave .intro-overlay {
   font-weight: 600;
   text-decoration: none;
   box-shadow: 0 12px 26px rgba(40, 210, 255, 0.28);
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .support-button:hover {
   transform: translateY(-1px);
   box-shadow: 0 16px 32px rgba(40, 210, 255, 0.38);
 }
+
 
 /* Extra spacing above the feedback / join section to separate it from Mimi chat */
 /* (removed per revert request) */
@@ -2504,12 +2208,9 @@ body.intro-leave .intro-overlay {
 
 .join-actions .field-error {
   border-color: rgba(255, 95, 95, 0.9) !important;
-  box-shadow:
-    0 0 0 1px rgba(255, 95, 95, 0.35),
-    0 0 14px rgba(255, 95, 95, 0.25) !important;
+  box-shadow: 0 0 0 1px rgba(255, 95, 95, 0.35), 0 0 14px rgba(255, 95, 95, 0.25) !important;
 }
 
-/* === Footer === */
 .footer {
   padding: 28px 6vw 44px;
   display: flex;
@@ -2530,7 +2231,6 @@ body:not(.world-page) .footer {
   padding: 24px 6vw 36px;
 }
 
-/* === Warp transition overlay === */
 .warp-overlay {
   position: fixed;
   inset: 0;
@@ -2541,9 +2241,7 @@ body:not(.world-page) .footer {
     radial-gradient(circle at center, rgba(4, 6, 16, 0.98), rgba(3, 4, 12, 0.98));
   opacity: 0;
   visibility: hidden;
-  transition:
-    opacity 0.3s ease,
-    visibility 0.3s ease;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
   z-index: 30;
   pointer-events: none;
 }
@@ -2659,12 +2357,7 @@ body:not(.world-page) .footer {
   position: absolute;
   width: var(--l, 180px);
   height: 2px;
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.9),
-    rgba(104, 225, 255, 0.2),
-    transparent
-  );
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.9), rgba(104, 225, 255, 0.2), transparent);
   top: var(--y, 50%);
   left: var(--x, 50%);
   opacity: 0;
@@ -2767,7 +2460,12 @@ body:not(.world-page) .footer {
   position: absolute;
   width: 40px;
   height: 26px;
-  background: radial-gradient(circle at 20% 50%, #ffe29f, #68e1ff 60%, transparent 70%);
+  background: radial-gradient(
+    circle at 20% 50%,
+    #ffe29f,
+    #68e1ff 60%,
+    transparent 70%
+  );
   top: 57px;
   left: -10px;
   border-radius: 50% 60% 60% 50%;
@@ -2790,13 +2488,10 @@ body:not(.world-page) .footer {
   overflow: hidden;
 }
 
-/* === Reveal on scroll === */
 .reveal {
   opacity: 0;
   transform: translateY(30px);
-  transition:
-    opacity 0.8s ease,
-    transform 0.8s ease;
+  transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
 .reveal.is-visible {
@@ -2814,9 +2509,7 @@ body:not(.world-page) .footer {
 .language-reveal {
   opacity: 0;
   transform: translateY(24px);
-  transition:
-    opacity 0.6s ease,
-    transform 0.6s ease;
+  transition: opacity 0.6s ease, transform 0.6s ease;
   pointer-events: none;
 }
 
@@ -2826,7 +2519,6 @@ body:not(.world-page) .footer {
   pointer-events: auto;
 }
 
-/* === Animations (keyframes) === */
 @keyframes spin {
   to {
     transform: rotate(360deg);
@@ -3014,7 +2706,6 @@ body:not(.world-page) .footer {
   }
 }
 
-/* === Responsive: tablet === */
 @media (max-width: 960px) {
   .hero {
     grid-template-columns: 1fr;
@@ -3033,6 +2724,7 @@ body:not(.world-page) .footer {
     letter-spacing: 0.12em;
     white-space: nowrap;
   }
+
 
   .steps {
     grid-template-columns: repeat(2, minmax(200px, 1fr));
@@ -3055,7 +2747,6 @@ body:not(.world-page) .footer {
   }
 }
 
-/* === Responsive: mobile === */
 @media (max-width: 720px) {
   .nav {
     flex-direction: row;
@@ -3189,7 +2880,6 @@ body:not(.world-page) .footer {
   }
 }
 
-/* === Responsive: small mobile === */
 @media (max-width: 600px) {
   main {
     padding: 28px 5vw 90px;
@@ -3207,6 +2897,8 @@ body:not(.world-page) .footer {
   .lede {
     font-size: 1rem;
   }
+
+
 
   .steps {
     grid-template-columns: 1fr;
@@ -3240,24 +2932,24 @@ body:not(.world-page) .footer {
     min-height: 130px;
   }
 
-  .grammar-overlay {
-    align-items: flex-start;
-    overflow-y: auto;
-    padding: 16px 12px 28px;
-  }
-
   .grammar-modal {
-    width: min(560px, 92vw);
-    border-radius: 20px;
-    max-height: none;
-    height: auto;
-    overflow: visible;
-    margin-top: 48px;
+    width: min(720px, 94vw);
+    border-radius: 22px;
+    max-height: 78vh;
+    overflow: hidden;
   }
 
   .grammar-modal::before,
   .grammar-modal::after {
-    display: none;
+    content: "";
+    position: sticky;
+    left: 0;
+    right: 0;
+    height: 14px;
+    display: block;
+    z-index: 2;
+    pointer-events: none;
+    border-radius: 22px;
   }
 
   .grammar-modal::before {
@@ -3271,14 +2963,12 @@ body:not(.world-page) .footer {
   }
 
   .grammar-close {
-    position: fixed;
-    top: 12px;
-    right: 12px;
-    z-index: 1002;
+    top: 14px;
+    right: 14px;
   }
 
   .grammar-modal-body {
-    padding: 24px 14px 16px;
+    padding: 18px 14px 14px;
   }
 
   .grammar-modal-header h3 {
@@ -3383,17 +3073,14 @@ body:not(.world-page) .footer {
     top: 10%;
   }
 
-  .space-frog {
-    right: 8px;
-    top: 70px;
-    width: 120px;
-    height: 130px;
-    transform: scale(1);
+  .mimi-hello-bubble {
+    right: -28px;
+    bottom: 14px;
+    font-size: 10px;
+    padding: 5px 8px;
   }
-
 }
 
-/* === Accessibility: reduced motion === */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;
@@ -3441,13 +3128,11 @@ body:not(.world-page) .footer {
   width: 100%;
   max-width: 360px;
   margin: 8px 0 0;
-  background: linear-gradient(140deg, rgba(255, 255, 255, 0.14), rgba(12, 16, 32, 0.28));
+  background: linear-gradient(140deg, rgba(255,255,255,0.14), rgba(12,16,32,0.28));
   border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(255,255,255,0.22);
   padding: 12px;
-  box-shadow:
-    0 18px 45px rgba(3, 6, 14, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  box-shadow: 0 18px 45px rgba(3,6,14,0.35), inset 0 1px 0 rgba(255,255,255,0.28);
   backdrop-filter: blur(18px) saturate(170%);
   -webkit-backdrop-filter: blur(18px) saturate(170%);
   overflow: hidden;
@@ -3465,31 +3150,25 @@ body:not(.world-page) .footer {
 .language-pill {
   padding: 8px 14px;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: linear-gradient(180deg, rgba(18, 22, 40, 0.55), rgba(10, 14, 28, 0.65));
+  border: 1px solid rgba(255,255,255,0.18);
+  background: linear-gradient(180deg, rgba(18,22,40,0.55), rgba(10,14,28,0.65));
   color: #f2f6ff;
   font-weight: 600;
   cursor: pointer;
   text-align: left;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 8px 16px rgba(2, 6, 18, 0.35);
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    background 0.2s ease,
-    border-color 0.2s ease;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 8px 16px rgba(2, 6, 18, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
 }
 
 .language-pill:hover {
   transform: translateY(-2px);
   box-shadow:
-    0 14px 26px rgba(0, 0, 0, 0.5),
+    0 14px 26px rgba(0,0,0,0.5),
     0 0 18px rgba(104, 225, 255, 0.28),
     0 0 36px rgba(104, 225, 255, 0.16);
-  background: linear-gradient(180deg, rgba(28, 34, 54, 0.72), rgba(18, 22, 38, 0.85));
+  background: linear-gradient(180deg, rgba(28,34,54,0.72), rgba(18,22,38,0.85));
   color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.32);
+  border-color: rgba(255,255,255,0.32);
 }
 
 .language-pill.is-active {
@@ -3548,10 +3227,7 @@ body.world-page .language-box::after {
   color: var(--text);
   cursor: pointer;
   font-weight: 600;
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    background 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
 .words-filter:hover {
@@ -3569,15 +3245,10 @@ body.world-page .language-box::after {
   border-color: rgba(255, 210, 120, 0.6);
 }
 
-/* Keep grid rows stable to reduce CLS on map pages */
 .words-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 18px;
-}
-
-.grammar-page .words-grid {
-  grid-auto-rows: minmax(190px, auto);
 }
 
 .word-card,
@@ -3586,18 +3257,14 @@ body.world-page .language-box::after {
   position: relative;
   min-height: 150px;
   cursor: pointer;
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    border-color 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .word-card:hover,
 .phrase-card:hover,
 .grammar-card:hover {
   border-color: rgba(120, 235, 255, 0.6);
-  box-shadow:
-    0 22px 36px rgba(2, 8, 24, 0.45),
+  box-shadow: 0 22px 36px rgba(2, 8, 24, 0.45),
     0 0 26px rgba(120, 235, 255, 0.35),
     inset 0 0 0 1px rgba(120, 235, 255, 0.35);
 }
@@ -3609,6 +3276,7 @@ body.world-page .language-box::after {
   font-weight: 700;
   margin-bottom: 6px;
 }
+
 
 .word-translation,
 .phrase-translation {
@@ -3639,7 +3307,6 @@ body.world-page .language-box::after {
   position: relative;
   z-index: 1;
   pointer-events: auto;
-  min-height: 190px;
 }
 
 .grammar-card .grammar-text {
@@ -3676,14 +3343,10 @@ body.world-page .language-box::after {
   backdrop-filter: blur(18px) saturate(135%);
   border-radius: 28px;
   border: 1px solid rgba(140, 210, 255, 0.18);
-  box-shadow:
-    0 24px 60px rgba(0, 0, 0, 0.45),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
   transform: translateY(20px) scale(0.98);
   opacity: 0;
-  transition:
-    transform 0.3s ease,
-    opacity 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
   padding-top: 10px;
@@ -3715,10 +3378,7 @@ body.modal-open {
   display: grid;
   place-items: center;
   cursor: pointer;
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    border-color 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .grammar-close:hover {
@@ -3829,746 +3489,181 @@ body.modal-open {
 }
 
 /* === Grammar highlight + label colors (restored) === */
-.grammar-example .highlight-time {
-  background: rgba(120, 220, 255, 0.18);
-  border: 1px solid rgba(120, 220, 255, 0.3);
-}
-.grammar-example .highlight-place {
-  background: rgba(147, 246, 200, 0.18);
-  border: 1px solid rgba(147, 246, 200, 0.3);
-}
-.grammar-example .highlight-reason {
-  background: rgba(255, 198, 122, 0.18);
-  border: 1px solid rgba(255, 198, 122, 0.3);
-}
-.grammar-example .highlight-manner {
-  background: rgba(192, 154, 255, 0.18);
-  border: 1px solid rgba(192, 154, 255, 0.3);
-}
-.grammar-example .highlight-subject {
-  background: rgba(165, 200, 255, 0.22);
-  border: 1px solid rgba(165, 200, 255, 0.5);
-}
-.grammar-example .highlight-verb {
-  background: rgba(255, 120, 120, 0.22);
-  border: 1px solid rgba(255, 120, 120, 0.5);
-}
-.grammar-example .highlight-action-verb {
-  background: rgba(255, 200, 120, 0.22);
-  border: 1px solid rgba(255, 200, 120, 0.5);
-}
-.grammar-example .highlight-state-verb {
-  background: rgba(120, 190, 255, 0.22);
-  border: 1px solid rgba(120, 190, 255, 0.5);
-}
-.grammar-example .highlight-linking-verb {
-  background: rgba(205, 160, 255, 0.22);
-  border: 1px solid rgba(205, 160, 255, 0.5);
-}
-.grammar-example .highlight-be-verb {
-  background: rgba(165, 185, 95, 0.2);
-  border: 1px solid rgba(165, 185, 95, 0.5);
-}
-.grammar-example .highlight-verb-ing {
-  background: rgba(255, 180, 120, 0.2);
-  border: 1px solid rgba(255, 180, 120, 0.5);
-}
-.grammar-example .highlight-past-verb {
-  background: rgba(190, 255, 140, 0.2);
-  border: 1px solid rgba(190, 255, 140, 0.5);
-}
-.grammar-example .highlight-past-participle {
-  background: rgba(255, 120, 190, 0.2);
-  border: 1px solid rgba(255, 120, 190, 0.5);
-}
-.grammar-example .highlight-auxiliary {
-  background: rgba(180, 120, 255, 0.2);
-  border: 1px solid rgba(180, 120, 255, 0.5);
-}
-.grammar-example .highlight-aux {
-  background: rgba(120, 80, 40, 0.22);
-  border: 1px solid rgba(120, 80, 40, 0.55);
-}
-.grammar-example .highlight-wh-word {
-  background: rgba(255, 210, 120, 0.2);
-  border: 1px solid rgba(255, 210, 120, 0.5);
-}
-.grammar-example .highlight-wh-clause {
-  background: rgba(200, 255, 140, 0.2);
-  border: 1px solid rgba(200, 255, 140, 0.5);
-}
-.grammar-example .highlight-modal {
-  background: rgba(255, 150, 190, 0.2);
-  border: 1px solid rgba(255, 150, 190, 0.5);
-}
-.grammar-example .highlight-intro {
-  background: rgba(140, 200, 255, 0.2);
-  border: 1px solid rgba(140, 200, 255, 0.5);
-}
-.grammar-example .highlight-statement {
-  background: rgba(255, 170, 120, 0.2);
-  border: 1px solid rgba(255, 170, 120, 0.5);
-}
-.grammar-example .highlight-tag {
-  background: rgba(120, 255, 160, 0.2);
-  border: 1px solid rgba(120, 255, 160, 0.5);
-}
-.grammar-example .highlight-not {
-  background: rgba(255, 90, 140, 0.2);
-  border: 1px solid rgba(255, 90, 140, 0.5);
-}
-.grammar-example .highlight-negative-word {
-  background: rgba(255, 180, 90, 0.2);
-  border: 1px solid rgba(255, 180, 90, 0.5);
-}
-.grammar-example .highlight-negative-adverb {
-  background: rgba(190, 140, 255, 0.2);
-  border: 1px solid rgba(190, 140, 255, 0.5);
-}
-.grammar-example .highlight-if-clause {
-  background: rgba(255, 120, 120, 0.22);
-  border: 1px solid rgba(255, 120, 120, 0.55);
-}
-.grammar-example .highlight-unless-clause {
-  background: rgba(255, 140, 110, 0.2);
-  border: 1px solid rgba(255, 140, 110, 0.5);
-}
-.grammar-example .highlight-would-clause {
-  background: rgba(180, 120, 255, 0.2);
-  border: 1px solid rgba(180, 120, 255, 0.5);
-}
-.grammar-example .highlight-would-have-clause {
-  background: rgba(255, 210, 90, 0.2);
-  border: 1px solid rgba(255, 210, 90, 0.5);
-}
-.grammar-example .highlight-doer {
-  background: rgba(120, 220, 255, 0.2);
-  border: 1px solid rgba(120, 220, 255, 0.5);
-}
-.grammar-example .highlight-focus-phrase {
-  background: rgba(255, 150, 200, 0.2);
-  border: 1px solid rgba(255, 150, 200, 0.5);
-}
-.grammar-example .highlight-it-subject {
-  background: rgba(120, 160, 255, 0.22);
-  border: 1px solid rgba(120, 160, 255, 0.55);
-}
-.grammar-example .highlight-there-subject {
-  background: rgba(255, 170, 120, 0.2);
-  border: 1px solid rgba(255, 170, 120, 0.5);
-}
-.grammar-example .highlight-probability-word {
-  background: rgba(255, 220, 120, 0.22);
-  border: 1px solid rgba(255, 220, 120, 0.55);
-}
-.grammar-example .highlight-modal-phrase {
-  background: rgba(200, 170, 255, 0.2);
-  border: 1px solid rgba(200, 170, 255, 0.5);
-}
-.grammar-example .highlight-reason-clause {
-  background: rgba(255, 140, 100, 0.2);
-  border: 1px solid rgba(255, 140, 100, 0.5);
-}
-.grammar-example .highlight-result-clause {
-  background: rgba(120, 255, 220, 0.2);
-  border: 1px solid rgba(120, 255, 220, 0.5);
-}
-.grammar-example .highlight-time-connector {
-  background: rgba(120, 200, 255, 0.2);
-  border: 1px solid rgba(120, 200, 255, 0.5);
-}
-.grammar-example .highlight-contrast-connector {
-  background: rgba(255, 140, 210, 0.2);
-  border: 1px solid rgba(255, 140, 210, 0.5);
-}
-.grammar-example .highlight-addition-marker {
-  background: rgba(255, 155, 90, 0.22);
-  border: 1px solid rgba(255, 155, 90, 0.55);
-}
-.grammar-example .highlight-comparison {
-  background: rgba(255, 210, 180, 0.2);
-  border: 1px solid rgba(255, 210, 180, 0.5);
-}
-.grammar-example .highlight-sequence {
-  background: rgba(255, 200, 90, 0.2);
-  border: 1px solid rgba(255, 200, 90, 0.5);
-}
-.grammar-example .highlight-clause-1 {
-  background: rgba(120, 255, 180, 0.2);
-  border: 1px solid rgba(120, 255, 180, 0.5);
-}
-.grammar-example .highlight-clause-2 {
-  background: rgba(255, 180, 150, 0.2);
-  border: 1px solid rgba(255, 180, 150, 0.5);
-}
-.grammar-example .highlight-future-marker {
-  background: rgba(255, 230, 120, 0.2);
-  border: 1px solid rgba(255, 230, 120, 0.5);
-}
-.grammar-example .highlight-base-verb {
-  background: rgba(120, 255, 210, 0.2);
-  border: 1px solid rgba(120, 255, 210, 0.5);
-}
-.grammar-example .highlight-simple-form {
-  background: rgba(120, 255, 150, 0.2);
-  border: 1px solid rgba(120, 255, 150, 0.5);
-}
-.grammar-example .highlight-continuous-form {
-  background: rgba(255, 150, 120, 0.2);
-  border: 1px solid rgba(255, 150, 120, 0.5);
-}
-.grammar-example .highlight-article {
-  background: rgba(70, 130, 220, 0.24);
-  border: 1px solid rgba(70, 130, 220, 0.6);
-}
-.grammar-example .highlight-determiner {
-  background: rgba(255, 190, 140, 0.2);
-  border: 1px solid rgba(255, 190, 140, 0.5);
-}
-.grammar-example .highlight-adjective {
-  background: rgba(170, 255, 190, 0.2);
-  border: 1px solid rgba(170, 255, 190, 0.5);
-}
-.grammar-example .highlight-adverb {
-  background: rgba(255, 170, 230, 0.2);
-  border: 1px solid rgba(255, 170, 230, 0.5);
-}
-.grammar-example .highlight-frequency-adverb {
-  background: rgba(150, 255, 170, 0.2);
-  border: 1px solid rgba(150, 255, 170, 0.5);
-}
-.grammar-example .highlight-time-adverb {
-  background: rgba(90, 170, 255, 0.2);
-  border: 1px solid rgba(90, 170, 255, 0.5);
-}
-.grammar-example .highlight-place-adverb {
-  background: rgba(90, 240, 180, 0.2);
-  border: 1px solid rgba(90, 240, 180, 0.5);
-}
-.grammar-example .highlight-degree-word {
-  background: rgba(255, 210, 110, 0.2);
-  border: 1px solid rgba(255, 210, 110, 0.5);
-}
-.grammar-example .highlight-opinion {
-  background: rgba(200, 140, 255, 0.2);
-  border: 1px solid rgba(200, 140, 255, 0.5);
-}
-.grammar-example .highlight-size {
-  background: rgba(255, 150, 160, 0.2);
-  border: 1px solid rgba(255, 150, 160, 0.5);
-}
-.grammar-example .highlight-age {
-  background: rgba(140, 255, 240, 0.2);
-  border: 1px solid rgba(140, 255, 240, 0.5);
-}
-.grammar-example .highlight-color {
-  background: rgba(255, 120, 90, 0.2);
-  border: 1px solid rgba(255, 120, 90, 0.5);
-}
-.grammar-example .highlight-comparative {
-  background: rgba(120, 255, 120, 0.2);
-  border: 1px solid rgba(120, 255, 120, 0.5);
-}
-.grammar-example .highlight-than {
-  background: rgba(255, 180, 160, 0.2);
-  border: 1px solid rgba(255, 180, 160, 0.5);
-}
-.grammar-example .highlight-superlative {
-  background: rgba(180, 255, 220, 0.2);
-  border: 1px solid rgba(180, 255, 220, 0.5);
-}
-.grammar-example .highlight-participle {
-  background: rgba(255, 170, 90, 0.2);
-  border: 1px solid rgba(255, 170, 90, 0.5);
-}
-.grammar-example .highlight-number {
-  background: rgba(255, 170, 220, 0.2);
-  border: 1px solid rgba(255, 170, 220, 0.5);
-}
-.grammar-example .highlight-quantifier {
-  background: rgba(200, 160, 255, 0.2);
-  border: 1px solid rgba(200, 160, 255, 0.5);
-}
-.grammar-example .highlight-plural-noun {
-  background: rgba(120, 255, 210, 0.2);
-  border: 1px solid rgba(120, 255, 210, 0.5);
-}
-.grammar-example .highlight-possessive {
-  background: rgba(255, 210, 120, 0.2);
-  border: 1px solid rgba(255, 210, 120, 0.5);
-}
-.grammar-example .highlight-noun {
-  background: rgba(160, 220, 255, 0.2);
-  border: 1px solid rgba(160, 220, 255, 0.5);
-}
-.grammar-example .highlight-subject-pronoun {
-  background: rgba(255, 180, 120, 0.2);
-  border: 1px solid rgba(255, 180, 120, 0.5);
-}
-.grammar-example .highlight-object-pronoun {
-  background: rgba(120, 255, 200, 0.2);
-  border: 1px solid rgba(120, 255, 200, 0.5);
-}
-.grammar-example .highlight-reflexive {
-  background: rgba(200, 160, 255, 0.2);
-  border: 1px solid rgba(200, 160, 255, 0.5);
-}
-.grammar-example .highlight-demonstrative {
-  background: rgba(255, 210, 140, 0.2);
-  border: 1px solid rgba(255, 210, 140, 0.5);
-}
-.grammar-example .highlight-relative {
-  background: rgba(255, 130, 150, 0.2);
-  border: 1px solid rgba(255, 130, 150, 0.5);
-}
-.grammar-example .highlight-indefinite {
-  background: rgba(170, 255, 160, 0.2);
-  border: 1px solid rgba(170, 255, 160, 0.5);
-}
-.grammar-example .highlight-object {
-  background: rgba(255, 235, 120, 0.22);
-  border: 1px solid rgba(255, 235, 120, 0.5);
-}
-.grammar-example .highlight-complement {
-  background: rgba(120, 255, 220, 0.2);
-  border: 1px solid rgba(120, 255, 220, 0.5);
-}
-.grammar-example .highlight-connector {
-  background: rgba(120, 200, 255, 0.2);
-  border: 1px solid rgba(120, 200, 255, 0.45);
-}
-.grammar-example .highlight-contrast {
-  background: rgba(255, 160, 220, 0.2);
-  border: 1px solid rgba(255, 160, 220, 0.45);
-}
-.grammar-example .highlight-particle {
-  background: rgba(160, 255, 180, 0.2);
-  border: 1px solid rgba(160, 255, 180, 0.5);
-}
-.grammar-example .highlight-preposition {
-  background: rgba(140, 255, 160, 0.2);
-  border: 1px solid rgba(140, 255, 160, 0.5);
-}
-.grammar-example .highlight-infinitive {
-  background: rgba(200, 255, 140, 0.2);
-  border: 1px solid rgba(200, 255, 140, 0.5);
-}
-.grammar-example .highlight-gerund {
-  background: rgba(120, 230, 255, 0.2);
-  border: 1px solid rgba(120, 230, 255, 0.5);
-}
-.grammar-example .highlight-that-clause {
-  background: rgba(255, 180, 120, 0.2);
-  border: 1px solid rgba(255, 180, 120, 0.5);
-}
-.grammar-example .highlight-sentence-1 {
-  background: rgba(170, 255, 210, 0.2);
-  border: 1px solid rgba(170, 255, 210, 0.45);
-}
-.grammar-example .highlight-sentence-2 {
-  background: rgba(255, 210, 140, 0.18);
-  border: 1px solid rgba(255, 210, 140, 0.45);
-}
-.grammar-example .highlight-sentence {
-  background: rgba(180, 230, 255, 0.18);
-  border: 1px solid rgba(180, 230, 255, 0.35);
-}
-.grammar-example .highlight-main-clause {
-  background: rgba(255, 230, 120, 0.22);
-  border: 1px solid rgba(255, 230, 120, 0.5);
-}
-.grammar-example .highlight-clause {
-  background: rgba(170, 255, 190, 0.18);
-  border: 1px solid rgba(170, 255, 190, 0.45);
-}
-.grammar-example .highlight-generic {
-  background: rgba(160, 210, 240, 0.18);
-  border: 1px solid rgba(160, 210, 240, 0.35);
-}
+.grammar-example .highlight-time { background: rgba(120, 220, 255, 0.18); border: 1px solid rgba(120, 220, 255, 0.3); }
+.grammar-example .highlight-place { background: rgba(147, 246, 200, 0.18); border: 1px solid rgba(147, 246, 200, 0.3); }
+.grammar-example .highlight-reason { background: rgba(255, 198, 122, 0.18); border: 1px solid rgba(255, 198, 122, 0.3); }
+.grammar-example .highlight-manner { background: rgba(192, 154, 255, 0.18); border: 1px solid rgba(192, 154, 255, 0.3); }
+.grammar-example .highlight-subject { background: rgba(165, 200, 255, 0.22); border: 1px solid rgba(165, 200, 255, 0.5); }
+.grammar-example .highlight-verb { background: rgba(255, 120, 120, 0.22); border: 1px solid rgba(255, 120, 120, 0.5); }
+.grammar-example .highlight-action-verb { background: rgba(255, 200, 120, 0.22); border: 1px solid rgba(255, 200, 120, 0.5); }
+.grammar-example .highlight-state-verb { background: rgba(120, 190, 255, 0.22); border: 1px solid rgba(120, 190, 255, 0.5); }
+.grammar-example .highlight-linking-verb { background: rgba(205, 160, 255, 0.22); border: 1px solid rgba(205, 160, 255, 0.5); }
+.grammar-example .highlight-be-verb { background: rgba(165, 185, 95, 0.2); border: 1px solid rgba(165, 185, 95, 0.5); }
+.grammar-example .highlight-verb-ing { background: rgba(255, 180, 120, 0.2); border: 1px solid rgba(255, 180, 120, 0.5); }
+.grammar-example .highlight-past-verb { background: rgba(190, 255, 140, 0.2); border: 1px solid rgba(190, 255, 140, 0.5); }
+.grammar-example .highlight-past-participle { background: rgba(255, 120, 190, 0.2); border: 1px solid rgba(255, 120, 190, 0.5); }
+.grammar-example .highlight-auxiliary { background: rgba(180, 120, 255, 0.2); border: 1px solid rgba(180, 120, 255, 0.5); }
+.grammar-example .highlight-aux { background: rgba(120, 80, 40, 0.22); border: 1px solid rgba(120, 80, 40, 0.55); }
+.grammar-example .highlight-wh-word { background: rgba(255, 210, 120, 0.2); border: 1px solid rgba(255, 210, 120, 0.5); }
+.grammar-example .highlight-wh-clause { background: rgba(200, 255, 140, 0.2); border: 1px solid rgba(200, 255, 140, 0.5); }
+.grammar-example .highlight-modal { background: rgba(255, 150, 190, 0.2); border: 1px solid rgba(255, 150, 190, 0.5); }
+.grammar-example .highlight-intro { background: rgba(140, 200, 255, 0.2); border: 1px solid rgba(140, 200, 255, 0.5); }
+.grammar-example .highlight-statement { background: rgba(255, 170, 120, 0.2); border: 1px solid rgba(255, 170, 120, 0.5); }
+.grammar-example .highlight-tag { background: rgba(120, 255, 160, 0.2); border: 1px solid rgba(120, 255, 160, 0.5); }
+.grammar-example .highlight-not { background: rgba(255, 90, 140, 0.2); border: 1px solid rgba(255, 90, 140, 0.5); }
+.grammar-example .highlight-negative-word { background: rgba(255, 180, 90, 0.2); border: 1px solid rgba(255, 180, 90, 0.5); }
+.grammar-example .highlight-negative-adverb { background: rgba(190, 140, 255, 0.2); border: 1px solid rgba(190, 140, 255, 0.5); }
+.grammar-example .highlight-if-clause { background: rgba(255, 120, 120, 0.22); border: 1px solid rgba(255, 120, 120, 0.55); }
+.grammar-example .highlight-unless-clause { background: rgba(255, 140, 110, 0.2); border: 1px solid rgba(255, 140, 110, 0.5); }
+.grammar-example .highlight-would-clause { background: rgba(180, 120, 255, 0.2); border: 1px solid rgba(180, 120, 255, 0.5); }
+.grammar-example .highlight-would-have-clause { background: rgba(255, 210, 90, 0.2); border: 1px solid rgba(255, 210, 90, 0.5); }
+.grammar-example .highlight-doer { background: rgba(120, 220, 255, 0.2); border: 1px solid rgba(120, 220, 255, 0.5); }
+.grammar-example .highlight-focus-phrase { background: rgba(255, 150, 200, 0.2); border: 1px solid rgba(255, 150, 200, 0.5); }
+.grammar-example .highlight-it-subject { background: rgba(120, 160, 255, 0.22); border: 1px solid rgba(120, 160, 255, 0.55); }
+.grammar-example .highlight-there-subject { background: rgba(255, 170, 120, 0.2); border: 1px solid rgba(255, 170, 120, 0.5); }
+.grammar-example .highlight-probability-word { background: rgba(255, 220, 120, 0.22); border: 1px solid rgba(255, 220, 120, 0.55); }
+.grammar-example .highlight-modal-phrase { background: rgba(200, 170, 255, 0.2); border: 1px solid rgba(200, 170, 255, 0.5); }
+.grammar-example .highlight-reason-clause { background: rgba(255, 140, 100, 0.2); border: 1px solid rgba(255, 140, 100, 0.5); }
+.grammar-example .highlight-result-clause { background: rgba(120, 255, 220, 0.2); border: 1px solid rgba(120, 255, 220, 0.5); }
+.grammar-example .highlight-time-connector { background: rgba(120, 200, 255, 0.2); border: 1px solid rgba(120, 200, 255, 0.5); }
+.grammar-example .highlight-contrast-connector { background: rgba(255, 140, 210, 0.2); border: 1px solid rgba(255, 140, 210, 0.5); }
+.grammar-example .highlight-addition-marker { background: rgba(255, 155, 90, 0.22); border: 1px solid rgba(255, 155, 90, 0.55); }
+.grammar-example .highlight-comparison { background: rgba(255, 210, 180, 0.2); border: 1px solid rgba(255, 210, 180, 0.5); }
+.grammar-example .highlight-sequence { background: rgba(255, 200, 90, 0.2); border: 1px solid rgba(255, 200, 90, 0.5); }
+.grammar-example .highlight-clause-1 { background: rgba(120, 255, 180, 0.2); border: 1px solid rgba(120, 255, 180, 0.5); }
+.grammar-example .highlight-clause-2 { background: rgba(255, 180, 150, 0.2); border: 1px solid rgba(255, 180, 150, 0.5); }
+.grammar-example .highlight-future-marker { background: rgba(255, 230, 120, 0.2); border: 1px solid rgba(255, 230, 120, 0.5); }
+.grammar-example .highlight-base-verb { background: rgba(120, 255, 210, 0.2); border: 1px solid rgba(120, 255, 210, 0.5); }
+.grammar-example .highlight-simple-form { background: rgba(120, 255, 150, 0.2); border: 1px solid rgba(120, 255, 150, 0.5); }
+.grammar-example .highlight-continuous-form { background: rgba(255, 150, 120, 0.2); border: 1px solid rgba(255, 150, 120, 0.5); }
+.grammar-example .highlight-article { background: rgba(70, 130, 220, 0.24); border: 1px solid rgba(70, 130, 220, 0.6); }
+.grammar-example .highlight-determiner { background: rgba(255, 190, 140, 0.2); border: 1px solid rgba(255, 190, 140, 0.5); }
+.grammar-example .highlight-adjective { background: rgba(170, 255, 190, 0.2); border: 1px solid rgba(170, 255, 190, 0.5); }
+.grammar-example .highlight-adverb { background: rgba(255, 170, 230, 0.2); border: 1px solid rgba(255, 170, 230, 0.5); }
+.grammar-example .highlight-frequency-adverb { background: rgba(150, 255, 170, 0.2); border: 1px solid rgba(150, 255, 170, 0.5); }
+.grammar-example .highlight-time-adverb { background: rgba(90, 170, 255, 0.2); border: 1px solid rgba(90, 170, 255, 0.5); }
+.grammar-example .highlight-place-adverb { background: rgba(90, 240, 180, 0.2); border: 1px solid rgba(90, 240, 180, 0.5); }
+.grammar-example .highlight-degree-word { background: rgba(255, 210, 110, 0.2); border: 1px solid rgba(255, 210, 110, 0.5); }
+.grammar-example .highlight-opinion { background: rgba(200, 140, 255, 0.2); border: 1px solid rgba(200, 140, 255, 0.5); }
+.grammar-example .highlight-size { background: rgba(255, 150, 160, 0.2); border: 1px solid rgba(255, 150, 160, 0.5); }
+.grammar-example .highlight-age { background: rgba(140, 255, 240, 0.2); border: 1px solid rgba(140, 255, 240, 0.5); }
+.grammar-example .highlight-color { background: rgba(255, 120, 90, 0.2); border: 1px solid rgba(255, 120, 90, 0.5); }
+.grammar-example .highlight-comparative { background: rgba(120, 255, 120, 0.2); border: 1px solid rgba(120, 255, 120, 0.5); }
+.grammar-example .highlight-than { background: rgba(255, 180, 160, 0.2); border: 1px solid rgba(255, 180, 160, 0.5); }
+.grammar-example .highlight-superlative { background: rgba(180, 255, 220, 0.2); border: 1px solid rgba(180, 255, 220, 0.5); }
+.grammar-example .highlight-participle { background: rgba(255, 170, 90, 0.2); border: 1px solid rgba(255, 170, 90, 0.5); }
+.grammar-example .highlight-number { background: rgba(255, 170, 220, 0.2); border: 1px solid rgba(255, 170, 220, 0.5); }
+.grammar-example .highlight-quantifier { background: rgba(200, 160, 255, 0.2); border: 1px solid rgba(200, 160, 255, 0.5); }
+.grammar-example .highlight-plural-noun { background: rgba(120, 255, 210, 0.2); border: 1px solid rgba(120, 255, 210, 0.5); }
+.grammar-example .highlight-possessive { background: rgba(255, 210, 120, 0.2); border: 1px solid rgba(255, 210, 120, 0.5); }
+.grammar-example .highlight-noun { background: rgba(160, 220, 255, 0.2); border: 1px solid rgba(160, 220, 255, 0.5); }
+.grammar-example .highlight-subject-pronoun { background: rgba(255, 180, 120, 0.2); border: 1px solid rgba(255, 180, 120, 0.5); }
+.grammar-example .highlight-object-pronoun { background: rgba(120, 255, 200, 0.2); border: 1px solid rgba(120, 255, 200, 0.5); }
+.grammar-example .highlight-reflexive { background: rgba(200, 160, 255, 0.2); border: 1px solid rgba(200, 160, 255, 0.5); }
+.grammar-example .highlight-demonstrative { background: rgba(255, 210, 140, 0.2); border: 1px solid rgba(255, 210, 140, 0.5); }
+.grammar-example .highlight-relative { background: rgba(255, 130, 150, 0.2); border: 1px solid rgba(255, 130, 150, 0.5); }
+.grammar-example .highlight-indefinite { background: rgba(170, 255, 160, 0.2); border: 1px solid rgba(170, 255, 160, 0.5); }
+.grammar-example .highlight-object { background: rgba(255, 235, 120, 0.22); border: 1px solid rgba(255, 235, 120, 0.5); }
+.grammar-example .highlight-complement { background: rgba(120, 255, 220, 0.2); border: 1px solid rgba(120, 255, 220, 0.5); }
+.grammar-example .highlight-connector { background: rgba(120, 200, 255, 0.2); border: 1px solid rgba(120, 200, 255, 0.45); }
+.grammar-example .highlight-contrast { background: rgba(255, 160, 220, 0.2); border: 1px solid rgba(255, 160, 220, 0.45); }
+.grammar-example .highlight-particle { background: rgba(160, 255, 180, 0.2); border: 1px solid rgba(160, 255, 180, 0.5); }
+.grammar-example .highlight-preposition { background: rgba(140, 255, 160, 0.2); border: 1px solid rgba(140, 255, 160, 0.5); }
+.grammar-example .highlight-infinitive { background: rgba(200, 255, 140, 0.2); border: 1px solid rgba(200, 255, 140, 0.5); }
+.grammar-example .highlight-gerund { background: rgba(120, 230, 255, 0.2); border: 1px solid rgba(120, 230, 255, 0.5); }
+.grammar-example .highlight-that-clause { background: rgba(255, 180, 120, 0.2); border: 1px solid rgba(255, 180, 120, 0.5); }
+.grammar-example .highlight-sentence-1 { background: rgba(170, 255, 210, 0.2); border: 1px solid rgba(170, 255, 210, 0.45); }
+.grammar-example .highlight-sentence-2 { background: rgba(255, 210, 140, 0.18); border: 1px solid rgba(255, 210, 140, 0.45); }
+.grammar-example .highlight-sentence { background: rgba(180, 230, 255, 0.18); border: 1px solid rgba(180, 230, 255, 0.35); }
+.grammar-example .highlight-main-clause { background: rgba(255, 230, 120, 0.22); border: 1px solid rgba(255, 230, 120, 0.5); }
+.grammar-example .highlight-clause { background: rgba(170, 255, 190, 0.18); border: 1px solid rgba(170, 255, 190, 0.45); }
+.grammar-example .highlight-generic { background: rgba(160, 210, 240, 0.18); border: 1px solid rgba(160, 210, 240, 0.35); }
 
-.grammar-label.label-time {
-  background: rgba(120, 220, 255, 0.22);
-  border-color: rgba(120, 220, 255, 0.5);
-}
-.grammar-label.label-place {
-  background: rgba(147, 246, 200, 0.22);
-  border-color: rgba(147, 246, 200, 0.45);
-}
-.grammar-label.label-reason {
-  background: rgba(255, 198, 122, 0.22);
-  border-color: rgba(255, 198, 122, 0.55);
-}
-.grammar-label.label-manner {
-  background: rgba(192, 154, 255, 0.22);
-  border-color: rgba(192, 154, 255, 0.55);
-}
-.grammar-label.label-subject {
-  background: rgba(165, 200, 255, 0.26);
-  border-color: rgba(165, 200, 255, 0.6);
-}
-.grammar-label.label-verb {
-  background: rgba(255, 120, 120, 0.26);
-  border-color: rgba(255, 120, 120, 0.6);
-}
-.grammar-label.label-action-verb {
-  background: rgba(255, 200, 120, 0.26);
-  border-color: rgba(255, 200, 120, 0.6);
-}
-.grammar-label.label-state-verb {
-  background: rgba(120, 190, 255, 0.26);
-  border-color: rgba(120, 190, 255, 0.6);
-}
-.grammar-label.label-linking-verb {
-  background: rgba(205, 160, 255, 0.26);
-  border-color: rgba(205, 160, 255, 0.6);
-}
-.grammar-label.label-be-verb {
-  background: rgba(165, 185, 95, 0.26);
-  border-color: rgba(165, 185, 95, 0.6);
-}
-.grammar-label.label-verb-ing {
-  background: rgba(255, 180, 120, 0.26);
-  border-color: rgba(255, 180, 120, 0.6);
-}
-.grammar-label.label-past-verb {
-  background: rgba(190, 255, 140, 0.26);
-  border-color: rgba(190, 255, 140, 0.6);
-}
-.grammar-label.label-past-participle {
-  background: rgba(255, 120, 190, 0.26);
-  border-color: rgba(255, 120, 190, 0.6);
-}
-.grammar-label.label-auxiliary {
-  background: rgba(180, 120, 255, 0.26);
-  border-color: rgba(180, 120, 255, 0.6);
-}
-.grammar-label.label-aux {
-  background: rgba(120, 80, 40, 0.26);
-  border-color: rgba(120, 80, 40, 0.6);
-}
-.grammar-label.label-wh-word {
-  background: rgba(255, 210, 120, 0.26);
-  border-color: rgba(255, 210, 120, 0.6);
-}
-.grammar-label.label-wh-clause {
-  background: rgba(200, 255, 140, 0.26);
-  border-color: rgba(200, 255, 140, 0.6);
-}
-.grammar-label.label-modal {
-  background: rgba(255, 150, 190, 0.26);
-  border-color: rgba(255, 150, 190, 0.6);
-}
-.grammar-label.label-intro {
-  background: rgba(140, 200, 255, 0.26);
-  border-color: rgba(140, 200, 255, 0.6);
-}
-.grammar-label.label-statement {
-  background: rgba(255, 170, 120, 0.26);
-  border-color: rgba(255, 170, 120, 0.6);
-}
-.grammar-label.label-tag {
-  background: rgba(120, 255, 160, 0.26);
-  border-color: rgba(120, 255, 160, 0.6);
-}
-.grammar-label.label-not {
-  background: rgba(255, 90, 140, 0.26);
-  border-color: rgba(255, 90, 140, 0.6);
-}
-.grammar-label.label-negative-word {
-  background: rgba(255, 180, 90, 0.26);
-  border-color: rgba(255, 180, 90, 0.6);
-}
-.grammar-label.label-negative-adverb {
-  background: rgba(190, 140, 255, 0.26);
-  border-color: rgba(190, 140, 255, 0.6);
-}
-.grammar-label.label-if-clause {
-  background: rgba(255, 120, 120, 0.26);
-  border-color: rgba(255, 120, 120, 0.6);
-}
-.grammar-label.label-unless-clause {
-  background: rgba(255, 140, 110, 0.26);
-  border-color: rgba(255, 140, 110, 0.6);
-}
-.grammar-label.label-would-clause {
-  background: rgba(180, 120, 255, 0.26);
-  border-color: rgba(180, 120, 255, 0.6);
-}
-.grammar-label.label-would-have-clause {
-  background: rgba(255, 210, 90, 0.26);
-  border-color: rgba(255, 210, 90, 0.6);
-}
-.grammar-label.label-doer {
-  background: rgba(120, 220, 255, 0.26);
-  border-color: rgba(120, 220, 255, 0.6);
-}
-.grammar-label.label-focus-phrase {
-  background: rgba(255, 150, 200, 0.26);
-  border-color: rgba(255, 150, 200, 0.6);
-}
-.grammar-label.label-it-subject {
-  background: rgba(120, 160, 255, 0.26);
-  border-color: rgba(120, 160, 255, 0.6);
-}
-.grammar-label.label-there-subject {
-  background: rgba(255, 170, 120, 0.26);
-  border-color: rgba(255, 170, 120, 0.6);
-}
-.grammar-label.label-probability-word {
-  background: rgba(255, 220, 120, 0.26);
-  border-color: rgba(255, 220, 120, 0.6);
-}
-.grammar-label.label-modal-phrase {
-  background: rgba(200, 170, 255, 0.26);
-  border-color: rgba(200, 170, 255, 0.6);
-}
-.grammar-label.label-reason-clause {
-  background: rgba(255, 140, 100, 0.26);
-  border-color: rgba(255, 140, 100, 0.6);
-}
-.grammar-label.label-result-clause {
-  background: rgba(120, 255, 220, 0.26);
-  border-color: rgba(120, 255, 220, 0.6);
-}
-.grammar-label.label-time-connector {
-  background: rgba(120, 200, 255, 0.26);
-  border-color: rgba(120, 200, 255, 0.6);
-}
-.grammar-label.label-contrast-connector {
-  background: rgba(255, 140, 210, 0.26);
-  border-color: rgba(255, 140, 210, 0.6);
-}
-.grammar-label.label-addition-marker {
-  background: rgba(255, 155, 90, 0.26);
-  border-color: rgba(255, 155, 90, 0.6);
-}
-.grammar-label.label-comparison {
-  background: rgba(255, 210, 180, 0.26);
-  border-color: rgba(255, 210, 180, 0.6);
-}
-.grammar-label.label-sequence {
-  background: rgba(255, 200, 90, 0.26);
-  border-color: rgba(255, 200, 90, 0.6);
-}
-.grammar-label.label-clause-1 {
-  background: rgba(120, 255, 180, 0.26);
-  border-color: rgba(120, 255, 180, 0.6);
-}
-.grammar-label.label-clause-2 {
-  background: rgba(255, 180, 150, 0.26);
-  border-color: rgba(255, 180, 150, 0.6);
-}
-.grammar-label.label-future-marker {
-  background: rgba(255, 230, 120, 0.26);
-  border-color: rgba(255, 230, 120, 0.6);
-}
-.grammar-label.label-base-verb {
-  background: rgba(120, 255, 210, 0.26);
-  border-color: rgba(120, 255, 210, 0.6);
-}
-.grammar-label.label-simple-form {
-  background: rgba(120, 255, 150, 0.26);
-  border-color: rgba(120, 255, 150, 0.6);
-}
-.grammar-label.label-continuous-form {
-  background: rgba(255, 150, 120, 0.26);
-  border-color: rgba(255, 150, 120, 0.6);
-}
-.grammar-label.label-article {
-  background: rgba(70, 130, 220, 0.28);
-  border-color: rgba(70, 130, 220, 0.65);
-}
-.grammar-label.label-determiner {
-  background: rgba(255, 190, 140, 0.26);
-  border-color: rgba(255, 190, 140, 0.6);
-}
-.grammar-label.label-adjective {
-  background: rgba(170, 255, 190, 0.26);
-  border-color: rgba(170, 255, 190, 0.6);
-}
-.grammar-label.label-adverb {
-  background: rgba(255, 170, 230, 0.26);
-  border-color: rgba(255, 170, 230, 0.6);
-}
-.grammar-label.label-frequency-adverb {
-  background: rgba(150, 255, 170, 0.26);
-  border-color: rgba(150, 255, 170, 0.6);
-}
-.grammar-label.label-time-adverb {
-  background: rgba(90, 170, 255, 0.26);
-  border-color: rgba(90, 170, 255, 0.6);
-}
-.grammar-label.label-place-adverb {
-  background: rgba(90, 240, 180, 0.26);
-  border-color: rgba(90, 240, 180, 0.6);
-}
-.grammar-label.label-degree-word {
-  background: rgba(255, 210, 110, 0.26);
-  border-color: rgba(255, 210, 110, 0.6);
-}
-.grammar-label.label-opinion {
-  background: rgba(200, 140, 255, 0.26);
-  border-color: rgba(200, 140, 255, 0.6);
-}
-.grammar-label.label-size {
-  background: rgba(255, 150, 160, 0.26);
-  border-color: rgba(255, 150, 160, 0.6);
-}
-.grammar-label.label-age {
-  background: rgba(140, 255, 240, 0.26);
-  border-color: rgba(140, 255, 240, 0.6);
-}
-.grammar-label.label-color {
-  background: rgba(255, 120, 90, 0.26);
-  border-color: rgba(255, 120, 90, 0.6);
-}
-.grammar-label.label-comparative {
-  background: rgba(120, 255, 120, 0.26);
-  border-color: rgba(120, 255, 120, 0.6);
-}
-.grammar-label.label-than {
-  background: rgba(255, 180, 160, 0.26);
-  border-color: rgba(255, 180, 160, 0.6);
-}
-.grammar-label.label-superlative {
-  background: rgba(180, 255, 220, 0.26);
-  border-color: rgba(180, 255, 220, 0.6);
-}
-.grammar-label.label-participle {
-  background: rgba(255, 170, 90, 0.26);
-  border-color: rgba(255, 170, 90, 0.6);
-}
-.grammar-label.label-number {
-  background: rgba(255, 170, 220, 0.26);
-  border-color: rgba(255, 170, 220, 0.6);
-}
-.grammar-label.label-quantifier {
-  background: rgba(200, 160, 255, 0.26);
-  border-color: rgba(200, 160, 255, 0.6);
-}
-.grammar-label.label-plural-noun {
-  background: rgba(120, 255, 210, 0.26);
-  border-color: rgba(120, 255, 210, 0.6);
-}
-.grammar-label.label-possessive {
-  background: rgba(255, 210, 120, 0.26);
-  border-color: rgba(255, 210, 120, 0.6);
-}
-.grammar-label.label-noun {
-  background: rgba(160, 220, 255, 0.26);
-  border-color: rgba(160, 220, 255, 0.6);
-}
-.grammar-label.label-subject-pronoun {
-  background: rgba(255, 180, 120, 0.26);
-  border-color: rgba(255, 180, 120, 0.6);
-}
-.grammar-label.label-object-pronoun {
-  background: rgba(120, 255, 200, 0.26);
-  border-color: rgba(120, 255, 200, 0.6);
-}
-.grammar-label.label-reflexive {
-  background: rgba(200, 160, 255, 0.26);
-  border-color: rgba(200, 160, 255, 0.6);
-}
-.grammar-label.label-demonstrative {
-  background: rgba(255, 210, 140, 0.26);
-  border-color: rgba(255, 210, 140, 0.6);
-}
-.grammar-label.label-relative {
-  background: rgba(255, 130, 150, 0.26);
-  border-color: rgba(255, 130, 150, 0.6);
-}
-.grammar-label.label-indefinite {
-  background: rgba(170, 255, 160, 0.26);
-  border-color: rgba(170, 255, 160, 0.6);
-}
-.grammar-label.label-particle {
-  background: rgba(160, 255, 180, 0.26);
-  border-color: rgba(160, 255, 180, 0.6);
-}
-.grammar-label.label-preposition {
-  background: rgba(140, 255, 160, 0.26);
-  border-color: rgba(140, 255, 160, 0.6);
-}
-.grammar-label.label-infinitive {
-  background: rgba(200, 255, 140, 0.26);
-  border-color: rgba(200, 255, 140, 0.6);
-}
-.grammar-label.label-gerund {
-  background: rgba(120, 230, 255, 0.26);
-  border-color: rgba(120, 230, 255, 0.6);
-}
-.grammar-label.label-that-clause {
-  background: rgba(255, 180, 120, 0.26);
-  border-color: rgba(255, 180, 120, 0.6);
-}
-.grammar-label.label-object {
-  background: rgba(255, 235, 120, 0.26);
-  border-color: rgba(255, 235, 120, 0.6);
-}
-.grammar-label.label-complement {
-  background: rgba(120, 255, 220, 0.26);
-  border-color: rgba(120, 255, 220, 0.6);
-}
-.grammar-label.label-connector {
-  background: rgba(120, 200, 255, 0.26);
-  border-color: rgba(120, 200, 255, 0.5);
-}
-.grammar-label.label-contrast {
-  background: rgba(255, 160, 220, 0.26);
-  border-color: rgba(255, 160, 220, 0.5);
-}
-.grammar-label.label-main-clause {
-  background: rgba(255, 230, 120, 0.26);
-  border-color: rgba(255, 230, 120, 0.5);
-}
-.grammar-label.label-clause {
-  background: rgba(170, 255, 190, 0.26);
-  border-color: rgba(170, 255, 190, 0.45);
-}
-.grammar-label.label-sentence-1 {
-  background: rgba(170, 255, 210, 0.26);
-  border-color: rgba(170, 255, 210, 0.45);
-}
-.grammar-label.label-sentence-2 {
-  background: rgba(255, 210, 140, 0.24);
-  border-color: rgba(255, 210, 140, 0.45);
-}
-.grammar-label.label-sentence {
-  background: rgba(180, 230, 255, 0.24);
-  border-color: rgba(180, 230, 255, 0.35);
-}
-
-/* === Mobile override: grammar modal should feel like a card (no inner scroll) === */
-@media (max-width: 720px) {
-  .grammar-overlay {
-    align-items: flex-start;
-    overflow-y: auto;
-    padding: 16px 12px 28px;
-  }
-
-  .grammar-modal {
-    width: min(520px, 92vw);
-    border-radius: 20px;
-    max-height: none;
-    height: auto;
-    overflow: visible;
-    margin-top: calc(env(safe-area-inset-top) + 36px);
-  }
-
-  .grammar-modal::before,
-  .grammar-modal::after {
-    display: none;
-  }
-
-  .grammar-close {
-    position: fixed;
-    top: calc(env(safe-area-inset-top) + 10px);
-    right: calc(env(safe-area-inset-right) + 10px);
-    z-index: 1002;
-  }
-
-  .grammar-modal-body {
-    padding: 24px 14px 16px;
-  }
-}
+.grammar-label.label-time { background: rgba(120, 220, 255, 0.22); border-color: rgba(120, 220, 255, 0.5); }
+.grammar-label.label-place { background: rgba(147, 246, 200, 0.22); border-color: rgba(147, 246, 200, 0.45); }
+.grammar-label.label-reason { background: rgba(255, 198, 122, 0.22); border-color: rgba(255, 198, 122, 0.55); }
+.grammar-label.label-manner { background: rgba(192, 154, 255, 0.22); border-color: rgba(192, 154, 255, 0.55); }
+.grammar-label.label-subject { background: rgba(165, 200, 255, 0.26); border-color: rgba(165, 200, 255, 0.6); }
+.grammar-label.label-verb { background: rgba(255, 120, 120, 0.26); border-color: rgba(255, 120, 120, 0.6); }
+.grammar-label.label-action-verb { background: rgba(255, 200, 120, 0.26); border-color: rgba(255, 200, 120, 0.6); }
+.grammar-label.label-state-verb { background: rgba(120, 190, 255, 0.26); border-color: rgba(120, 190, 255, 0.6); }
+.grammar-label.label-linking-verb { background: rgba(205, 160, 255, 0.26); border-color: rgba(205, 160, 255, 0.6); }
+.grammar-label.label-be-verb { background: rgba(165, 185, 95, 0.26); border-color: rgba(165, 185, 95, 0.6); }
+.grammar-label.label-verb-ing { background: rgba(255, 180, 120, 0.26); border-color: rgba(255, 180, 120, 0.6); }
+.grammar-label.label-past-verb { background: rgba(190, 255, 140, 0.26); border-color: rgba(190, 255, 140, 0.6); }
+.grammar-label.label-past-participle { background: rgba(255, 120, 190, 0.26); border-color: rgba(255, 120, 190, 0.6); }
+.grammar-label.label-auxiliary { background: rgba(180, 120, 255, 0.26); border-color: rgba(180, 120, 255, 0.6); }
+.grammar-label.label-aux { background: rgba(120, 80, 40, 0.26); border-color: rgba(120, 80, 40, 0.6); }
+.grammar-label.label-wh-word { background: rgba(255, 210, 120, 0.26); border-color: rgba(255, 210, 120, 0.6); }
+.grammar-label.label-wh-clause { background: rgba(200, 255, 140, 0.26); border-color: rgba(200, 255, 140, 0.6); }
+.grammar-label.label-modal { background: rgba(255, 150, 190, 0.26); border-color: rgba(255, 150, 190, 0.6); }
+.grammar-label.label-intro { background: rgba(140, 200, 255, 0.26); border-color: rgba(140, 200, 255, 0.6); }
+.grammar-label.label-statement { background: rgba(255, 170, 120, 0.26); border-color: rgba(255, 170, 120, 0.6); }
+.grammar-label.label-tag { background: rgba(120, 255, 160, 0.26); border-color: rgba(120, 255, 160, 0.6); }
+.grammar-label.label-not { background: rgba(255, 90, 140, 0.26); border-color: rgba(255, 90, 140, 0.6); }
+.grammar-label.label-negative-word { background: rgba(255, 180, 90, 0.26); border-color: rgba(255, 180, 90, 0.6); }
+.grammar-label.label-negative-adverb { background: rgba(190, 140, 255, 0.26); border-color: rgba(190, 140, 255, 0.6); }
+.grammar-label.label-if-clause { background: rgba(255, 120, 120, 0.26); border-color: rgba(255, 120, 120, 0.6); }
+.grammar-label.label-unless-clause { background: rgba(255, 140, 110, 0.26); border-color: rgba(255, 140, 110, 0.6); }
+.grammar-label.label-would-clause { background: rgba(180, 120, 255, 0.26); border-color: rgba(180, 120, 255, 0.6); }
+.grammar-label.label-would-have-clause { background: rgba(255, 210, 90, 0.26); border-color: rgba(255, 210, 90, 0.6); }
+.grammar-label.label-doer { background: rgba(120, 220, 255, 0.26); border-color: rgba(120, 220, 255, 0.6); }
+.grammar-label.label-focus-phrase { background: rgba(255, 150, 200, 0.26); border-color: rgba(255, 150, 200, 0.6); }
+.grammar-label.label-it-subject { background: rgba(120, 160, 255, 0.26); border-color: rgba(120, 160, 255, 0.6); }
+.grammar-label.label-there-subject { background: rgba(255, 170, 120, 0.26); border-color: rgba(255, 170, 120, 0.6); }
+.grammar-label.label-probability-word { background: rgba(255, 220, 120, 0.26); border-color: rgba(255, 220, 120, 0.6); }
+.grammar-label.label-modal-phrase { background: rgba(200, 170, 255, 0.26); border-color: rgba(200, 170, 255, 0.6); }
+.grammar-label.label-reason-clause { background: rgba(255, 140, 100, 0.26); border-color: rgba(255, 140, 100, 0.6); }
+.grammar-label.label-result-clause { background: rgba(120, 255, 220, 0.26); border-color: rgba(120, 255, 220, 0.6); }
+.grammar-label.label-time-connector { background: rgba(120, 200, 255, 0.26); border-color: rgba(120, 200, 255, 0.6); }
+.grammar-label.label-contrast-connector { background: rgba(255, 140, 210, 0.26); border-color: rgba(255, 140, 210, 0.6); }
+.grammar-label.label-addition-marker { background: rgba(255, 155, 90, 0.26); border-color: rgba(255, 155, 90, 0.6); }
+.grammar-label.label-comparison { background: rgba(255, 210, 180, 0.26); border-color: rgba(255, 210, 180, 0.6); }
+.grammar-label.label-sequence { background: rgba(255, 200, 90, 0.26); border-color: rgba(255, 200, 90, 0.6); }
+.grammar-label.label-clause-1 { background: rgba(120, 255, 180, 0.26); border-color: rgba(120, 255, 180, 0.6); }
+.grammar-label.label-clause-2 { background: rgba(255, 180, 150, 0.26); border-color: rgba(255, 180, 150, 0.6); }
+.grammar-label.label-future-marker { background: rgba(255, 230, 120, 0.26); border-color: rgba(255, 230, 120, 0.6); }
+.grammar-label.label-base-verb { background: rgba(120, 255, 210, 0.26); border-color: rgba(120, 255, 210, 0.6); }
+.grammar-label.label-simple-form { background: rgba(120, 255, 150, 0.26); border-color: rgba(120, 255, 150, 0.6); }
+.grammar-label.label-continuous-form { background: rgba(255, 150, 120, 0.26); border-color: rgba(255, 150, 120, 0.6); }
+.grammar-label.label-article { background: rgba(70, 130, 220, 0.28); border-color: rgba(70, 130, 220, 0.65); }
+.grammar-label.label-determiner { background: rgba(255, 190, 140, 0.26); border-color: rgba(255, 190, 140, 0.6); }
+.grammar-label.label-adjective { background: rgba(170, 255, 190, 0.26); border-color: rgba(170, 255, 190, 0.6); }
+.grammar-label.label-adverb { background: rgba(255, 170, 230, 0.26); border-color: rgba(255, 170, 230, 0.6); }
+.grammar-label.label-frequency-adverb { background: rgba(150, 255, 170, 0.26); border-color: rgba(150, 255, 170, 0.6); }
+.grammar-label.label-time-adverb { background: rgba(90, 170, 255, 0.26); border-color: rgba(90, 170, 255, 0.6); }
+.grammar-label.label-place-adverb { background: rgba(90, 240, 180, 0.26); border-color: rgba(90, 240, 180, 0.6); }
+.grammar-label.label-degree-word { background: rgba(255, 210, 110, 0.26); border-color: rgba(255, 210, 110, 0.6); }
+.grammar-label.label-opinion { background: rgba(200, 140, 255, 0.26); border-color: rgba(200, 140, 255, 0.6); }
+.grammar-label.label-size { background: rgba(255, 150, 160, 0.26); border-color: rgba(255, 150, 160, 0.6); }
+.grammar-label.label-age { background: rgba(140, 255, 240, 0.26); border-color: rgba(140, 255, 240, 0.6); }
+.grammar-label.label-color { background: rgba(255, 120, 90, 0.26); border-color: rgba(255, 120, 90, 0.6); }
+.grammar-label.label-comparative { background: rgba(120, 255, 120, 0.26); border-color: rgba(120, 255, 120, 0.6); }
+.grammar-label.label-than { background: rgba(255, 180, 160, 0.26); border-color: rgba(255, 180, 160, 0.6); }
+.grammar-label.label-superlative { background: rgba(180, 255, 220, 0.26); border-color: rgba(180, 255, 220, 0.6); }
+.grammar-label.label-participle { background: rgba(255, 170, 90, 0.26); border-color: rgba(255, 170, 90, 0.6); }
+.grammar-label.label-number { background: rgba(255, 170, 220, 0.26); border-color: rgba(255, 170, 220, 0.6); }
+.grammar-label.label-quantifier { background: rgba(200, 160, 255, 0.26); border-color: rgba(200, 160, 255, 0.6); }
+.grammar-label.label-plural-noun { background: rgba(120, 255, 210, 0.26); border-color: rgba(120, 255, 210, 0.6); }
+.grammar-label.label-possessive { background: rgba(255, 210, 120, 0.26); border-color: rgba(255, 210, 120, 0.6); }
+.grammar-label.label-noun { background: rgba(160, 220, 255, 0.26); border-color: rgba(160, 220, 255, 0.6); }
+.grammar-label.label-subject-pronoun { background: rgba(255, 180, 120, 0.26); border-color: rgba(255, 180, 120, 0.6); }
+.grammar-label.label-object-pronoun { background: rgba(120, 255, 200, 0.26); border-color: rgba(120, 255, 200, 0.6); }
+.grammar-label.label-reflexive { background: rgba(200, 160, 255, 0.26); border-color: rgba(200, 160, 255, 0.6); }
+.grammar-label.label-demonstrative { background: rgba(255, 210, 140, 0.26); border-color: rgba(255, 210, 140, 0.6); }
+.grammar-label.label-relative { background: rgba(255, 130, 150, 0.26); border-color: rgba(255, 130, 150, 0.6); }
+.grammar-label.label-indefinite { background: rgba(170, 255, 160, 0.26); border-color: rgba(170, 255, 160, 0.6); }
+.grammar-label.label-particle { background: rgba(160, 255, 180, 0.26); border-color: rgba(160, 255, 180, 0.6); }
+.grammar-label.label-preposition { background: rgba(140, 255, 160, 0.26); border-color: rgba(140, 255, 160, 0.6); }
+.grammar-label.label-infinitive { background: rgba(200, 255, 140, 0.26); border-color: rgba(200, 255, 140, 0.6); }
+.grammar-label.label-gerund { background: rgba(120, 230, 255, 0.26); border-color: rgba(120, 230, 255, 0.6); }
+.grammar-label.label-that-clause { background: rgba(255, 180, 120, 0.26); border-color: rgba(255, 180, 120, 0.6); }
+.grammar-label.label-object { background: rgba(255, 235, 120, 0.26); border-color: rgba(255, 235, 120, 0.6); }
+.grammar-label.label-complement { background: rgba(120, 255, 220, 0.26); border-color: rgba(120, 255, 220, 0.6); }
+.grammar-label.label-connector { background: rgba(120, 200, 255, 0.26); border-color: rgba(120, 200, 255, 0.5); }
+.grammar-label.label-contrast { background: rgba(255, 160, 220, 0.26); border-color: rgba(255, 160, 220, 0.5); }
+.grammar-label.label-main-clause { background: rgba(255, 230, 120, 0.26); border-color: rgba(255, 230, 120, 0.5); }
+.grammar-label.label-clause { background: rgba(170, 255, 190, 0.26); border-color: rgba(170, 255, 190, 0.45); }
+.grammar-label.label-sentence-1 { background: rgba(170, 255, 210, 0.26); border-color: rgba(170, 255, 210, 0.45); }
+.grammar-label.label-sentence-2 { background: rgba(255, 210, 140, 0.24); border-color: rgba(255, 210, 140, 0.45); }
+.grammar-label.label-sentence { background: rgba(180, 230, 255, 0.24); border-color: rgba(180, 230, 255, 0.35); }
