@@ -661,13 +661,18 @@ const createStars = (layer, count, sizeRange) => {
   }
 };
 
+const isSmallViewport = window.matchMedia("(max-width: 960px)").matches;
+const isWorldPage = document.body.classList.contains("world-page");
+const starDensityMultiplier = isSmallViewport ? (isWorldPage ? 0.48 : 0.58) : 1;
+const scaledCount = (count) => Math.max(24, Math.round(count * starDensityMultiplier));
+
 starfields.forEach((layer) => {
   if (layer.classList.contains("starfield-deep")) {
-    createStars(layer, 90, 1.4);
+    createStars(layer, scaledCount(90), 1.4);
   } else if (layer.classList.contains("starfield-mid")) {
-    createStars(layer, 120, 1.8);
+    createStars(layer, scaledCount(120), 1.8);
   } else {
-    createStars(layer, 140, 2.2);
+    createStars(layer, scaledCount(140), 2.2);
   }
 });
 
@@ -1326,13 +1331,26 @@ document.addEventListener("visibilitychange", () => {
   }
 });
 
-window.addEventListener("scroll", () => {
-  if (!audioContext || !ambientPlaying) {
-    return;
-  }
-  refreshIntensityFromScroll();
-  updateStarEnergy(window.scrollY / (document.body.scrollHeight - window.innerHeight || 1));
-});
+let audioScrollRaf = null;
+window.addEventListener(
+  "scroll",
+  () => {
+    if (!audioContext || !ambientPlaying) {
+      return;
+    }
+    if (audioScrollRaf) {
+      return;
+    }
+    audioScrollRaf = window.requestAnimationFrame(() => {
+      audioScrollRaf = null;
+      refreshIntensityFromScroll();
+      const maxScroll = document.body.scrollHeight - window.innerHeight;
+      const ratio = maxScroll > 0 ? window.scrollY / maxScroll : 0;
+      updateStarEnergy(ratio);
+    });
+  },
+  { passive: true }
+);
 
 const updateStarEnergy = (value) => {
   starEnergyTarget = Math.max(0, Math.min(1, value));
