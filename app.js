@@ -1677,6 +1677,9 @@ if (joinForm) {
 }
 const hero = document.querySelector(".hero-right");
 const parallaxLayers = document.querySelectorAll("[data-depth]");
+const canUseParallax =
+  !prefersReducedMotion &&
+  window.matchMedia("(pointer: fine) and (min-width: 961px)").matches;
 let mouseX = 0;
 let mouseY = 0;
 let currentX = 0;
@@ -1695,7 +1698,7 @@ if (hero && !prefersReducedMotion) {
   });
 }
 
-if (!prefersReducedMotion) {
+if (canUseParallax) {
   window.addEventListener("mousemove", (event) => {
     mouseX = event.clientX / window.innerWidth - 0.5;
     mouseY = event.clientY / window.innerHeight - 0.5;
@@ -1734,25 +1737,32 @@ if (!prefersReducedMotion && alien && alienHead) {
 }
 
 const updateParallax = () => {
-  if (prefersReducedMotion) {
+  if (!canUseParallax) {
     return;
   }
   currentX += (mouseX - currentX) * 0.08;
   currentY += (mouseY - currentY) * 0.08;
-  const scrollOffset = window.scrollY * 0.2;
 
   parallaxLayers.forEach((layer) => {
+    // Keep full-screen starfields stable to avoid mobile/background stretch artifacts.
+    if (layer.classList.contains("starfield")) {
+      return;
+    }
     const depth = Number(layer.dataset.depth || 0.2);
     const translateX = currentX * 40 * depth;
-    const translateY = currentY * 40 * depth + scrollOffset * depth * 0.1;
+    const translateY = currentY * 40 * depth;
     layer.style.transform = `translate3d(${translateX}px, ${translateY}px, 0)`;
   });
 
   window.requestAnimationFrame(updateParallax);
 };
 
-if (!prefersReducedMotion) {
+if (canUseParallax) {
   updateParallax();
+} else {
+  parallaxLayers.forEach((layer) => {
+    layer.style.transform = "";
+  });
 }
 
 const triggerWarp = (worldName, onDone) => {

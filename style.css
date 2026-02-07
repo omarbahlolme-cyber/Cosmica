@@ -2759,6 +2759,16 @@ body:not(.world-page) .footer {
 }
 
 @media (max-width: 960px) {
+  .aurora {
+    animation: none;
+    transform: none;
+    inset: -20svh -20vw;
+  }
+
+  .starfield {
+    transform: none !important;
+  }
+
   .hero {
     grid-template-columns: 1fr;
   }
