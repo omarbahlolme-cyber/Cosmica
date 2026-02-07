@@ -3013,23 +3013,16 @@ body:not(.world-page) .footer {
   }
 
   .grammar-modal {
-    width: min(720px, 94vw);
-    border-radius: 22px;
-    max-height: 78vh;
-    overflow: hidden;
+    width: min(640px, 92vw);
+    border-radius: 20px;
+    max-height: none;
+    overflow: visible;
+    margin: 0 auto 14px;
   }
 
   .grammar-modal::before,
   .grammar-modal::after {
-    content: "";
-    position: sticky;
-    left: 0;
-    right: 0;
-    height: 14px;
-    display: block;
-    z-index: 2;
-    pointer-events: none;
-    border-radius: 22px;
+    display: none;
   }
 
   .grammar-modal::before {
@@ -3043,12 +3036,12 @@ body:not(.world-page) .footer {
   }
 
   .grammar-close {
-    top: 14px;
-    right: 14px;
+    top: 12px;
+    right: 12px;
   }
 
   .grammar-modal-body {
-    padding: 18px 14px 14px;
+    padding: 18px 14px 16px;
   }
 
   .grammar-modal-header h3 {
@@ -3062,7 +3055,7 @@ body:not(.world-page) .footer {
   .grammar-modal-grid {
     margin-top: 10px;
     gap: 10px;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
   }
 
   .grammar-block {
@@ -3085,6 +3078,12 @@ body:not(.world-page) .footer {
   .grammar-template,
   .grammar-example {
     padding: 8px;
+  }
+
+  .grammar-overlay {
+    align-items: flex-start;
+    overflow-y: auto;
+    padding: calc(12px + env(safe-area-inset-top)) 0 18px;
   }
 
   body.world-page #language {
