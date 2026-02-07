@@ -7936,6 +7936,39 @@ const refreshMapsForBaseLanguage = () => {
   }
 };
 
+const setupBackToTopButton = () => {
+  const existing = document.getElementById("backToTopButton");
+  if (existing) {
+    return existing;
+  }
+
+  const button = document.createElement("button");
+  button.id = "backToTopButton";
+  button.className = "scroll-top-btn";
+  button.type = "button";
+  button.setAttribute("aria-label", "Scroll to top");
+  button.textContent = "↑";
+
+  const updateVisibility = () => {
+    if (window.scrollY > 300) {
+      button.classList.add("is-visible");
+    } else {
+      button.classList.remove("is-visible");
+    }
+  };
+
+  button.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  window.addEventListener("scroll", updateVisibility, { passive: true });
+  window.addEventListener("resize", updateVisibility, { passive: true });
+  updateVisibility();
+
+  document.body.appendChild(button);
+  return button;
+};
+
 let wordsHasScrolled = false;
 let phrasesHasScrolled = false;
 let grammarHasScrolled = false;
@@ -7967,6 +8000,7 @@ renderGrammarSections();
 setupGrammarModal();
 document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
 setupSpeechCards();
+setupBackToTopButton();
 if (document.querySelector(".word-card")) {
   applyWordTranslations();
 }
