@@ -4345,18 +4345,19 @@ body.modal-open {
 /* === Mobile override: grammar modal should feel like a card (no inner scroll) === */
 @media (max-width: 720px) {
   .grammar-overlay {
-    align-items: flex-start;
-    overflow-y: auto;
-    padding: 16px 12px 28px;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 14px 12px;
   }
 
   .grammar-modal {
     width: min(520px, 92vw);
     border-radius: 20px;
-    max-height: none;
+    max-height: 86vh;
     height: auto;
-    overflow: visible;
-    margin-top: calc(env(safe-area-inset-top) + 36px);
+    overflow: hidden;
+    margin-top: 0;
   }
 
   .grammar-modal::before,
@@ -4365,13 +4366,27 @@ body.modal-open {
   }
 
   .grammar-close {
-    position: fixed;
-    top: calc(env(safe-area-inset-top) + 10px);
-    right: calc(env(safe-area-inset-right) + 10px);
-    z-index: 1002;
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
   }
 
   .grammar-modal-body {
-    padding: 24px 14px 16px;
+    padding: 18px 14px 18px;
+    font-size: 0.92rem;
+  }
+
+  .grammar-modal-grid {
+    gap: 12px;
+  }
+
+  .grammar-block {
+    padding: 12px;
+  }
+
+  .grammar-template,
+  .grammar-example {
+    font-size: 0.85rem;
   }
 }
