@@ -3051,11 +3051,18 @@ body:not(.world-page) .footer {
     min-height: 130px;
   }
 
+  .grammar-overlay {
+    align-items: flex-start;
+    overflow-y: auto;
+    padding: 20px 12px 28px;
+  }
+
   .grammar-modal {
     width: min(720px, 94vw);
     border-radius: 22px;
-    max-height: 78vh;
-    overflow: hidden;
+    max-height: none;
+    height: auto;
+    overflow: visible;
   }
 
   .grammar-modal::before,
@@ -3082,12 +3089,12 @@ body:not(.world-page) .footer {
   }
 
   .grammar-close {
-    top: 14px;
-    right: 14px;
+    top: 10px;
+    right: 10px;
   }
 
   .grammar-modal-body {
-    padding: 18px 14px 14px;
+    padding: 48px 14px 16px;
   }
 
   .grammar-modal-header h3 {
@@ -3370,10 +3377,15 @@ body.world-page .language-box::after {
   border-color: rgba(255, 210, 120, 0.6);
 }
 
+/* Keep grid rows stable to reduce CLS on map pages */
 .words-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 18px;
+}
+
+.grammar-page .words-grid {
+  grid-auto-rows: minmax(190px, auto);
 }
 
 .word-card,
@@ -3435,6 +3447,7 @@ body.world-page .language-box::after {
   position: relative;
   z-index: 1;
   pointer-events: auto;
+  min-height: 190px;
 }
 
 .grammar-card .grammar-text {
