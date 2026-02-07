@@ -205,17 +205,14 @@ input {
   left: 0;
   right: 0;
   width: 100%;
-  backdrop-filter: blur(20px) saturate(130%);
-  -webkit-backdrop-filter: blur(20px) saturate(130%);
-  background:
-    radial-gradient(circle at 14% 20%, rgba(104, 225, 255, 0.18), transparent 48%),
-    radial-gradient(circle at 86% 12%, rgba(255, 111, 177, 0.14), transparent 52%),
-    linear-gradient(
-      180deg,
-      rgba(10, 16, 34, 0.84) 0%,
-      rgba(10, 16, 34, 0.62) 52%,
-      rgba(10, 16, 34, 0.26) 100%
-    );
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: linear-gradient(
+    180deg,
+    rgba(6, 8, 18, 0.88) 0%,
+    rgba(6, 8, 18, 0.66) 56%,
+    rgba(6, 8, 18, 0.32) 100%
+  );
   border-radius: 0 0 18px 18px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-top: none;
@@ -2831,7 +2828,13 @@ body:not(.world-page) .footer {
     padding: 16px 4vw;
     left: 0;
     right: 0;
-    border-radius: 0 0 14px 14px;
+    border-radius: 0 0 18px 18px;
+    background: linear-gradient(
+      180deg,
+      rgba(6, 8, 18, 0.88) 0%,
+      rgba(6, 8, 18, 0.66) 56%,
+      rgba(6, 8, 18, 0.32) 100%
+    );
     flex-wrap: wrap;
   }
 
@@ -3129,6 +3132,13 @@ body:not(.world-page) .footer {
 
   body.world-page .nav {
     padding: 16px 4vw;
+    border-radius: 0 0 18px 18px;
+    background: linear-gradient(
+      180deg,
+      rgba(6, 8, 18, 0.88) 0%,
+      rgba(6, 8, 18, 0.66) 56%,
+      rgba(6, 8, 18, 0.32) 100%
+    );
   }
 
   body.world-page .brand-mark {
