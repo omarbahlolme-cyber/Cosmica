@@ -2214,9 +2214,10 @@ body.intro-leave .intro-overlay {
 .footer {
   padding: 28px 6vw 44px;
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
   gap: 24px;
+  flex-wrap: wrap;
   color: var(--muted);
   font-size: 14px;
   border-top: 1px solid rgba(237, 243, 255, 0.08);
@@ -2225,6 +2226,8 @@ body.intro-leave .intro-overlay {
 .footer > :last-child {
   font-size: 12px;
   opacity: 0.85;
+  margin-left: auto;
+  text-align: right;
 }
 
 body:not(.world-page) .footer {
@@ -2851,8 +2854,16 @@ body:not(.world-page) .footer {
   }
 
   .footer {
-    flex-direction: column;
-    gap: 10px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px 16px;
+  }
+
+  .footer > :last-child {
+    margin-left: auto;
+    text-align: right;
   }
 
   .hero-actions {
