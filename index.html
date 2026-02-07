@@ -457,19 +457,56 @@
           </div>
           <div class="space-frog" aria-hidden="true">
             <div class="space-frog-float">
-              <div class="frog-helmet"></div>
-              <div class="frog-head">
-                <div class="frog-eye left"></div>
-                <div class="frog-eye right"></div>
-                <div class="frog-smile"></div>
-              </div>
-              <div class="frog-body">
-                <div class="frog-belly"></div>
-              </div>
-              <div class="frog-arm left"></div>
-              <div class="frog-arm right"></div>
-              <div class="frog-leg left"></div>
-              <div class="frog-leg right"></div>
+              <svg class="frog-astro" viewBox="0 0 140 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <defs>
+                  <linearGradient id="frogSuit" x1="0" x2="1">
+                    <stop offset="0" stop-color="#f6fbff"/>
+                    <stop offset="1" stop-color="#cfe6ff"/>
+                  </linearGradient>
+                  <radialGradient id="frogHelmet" cx="35%" cy="25%" r="70%">
+                    <stop offset="0" stop-color="rgba(255,255,255,0.6)"/>
+                    <stop offset="0.6" stop-color="rgba(150,210,255,0.2)"/>
+                    <stop offset="1" stop-color="rgba(150,210,255,0)"/>
+                  </radialGradient>
+                </defs>
+
+                <!-- backpack -->
+                <rect x="22" y="74" width="20" height="46" rx="9" fill="#9fbfe8" opacity="0.65"/>
+                <rect x="98" y="74" width="20" height="46" rx="9" fill="#9fbfe8" opacity="0.65"/>
+
+                <!-- helmet -->
+                <circle cx="70" cy="52" r="46" fill="url(#frogHelmet)" stroke="rgba(170,235,255,0.7)" stroke-width="3"/>
+                <circle cx="70" cy="52" r="38" fill="rgba(18,28,48,0.18)" stroke="rgba(170,235,255,0.35)" stroke-width="2"/>
+
+                <!-- frog head with eye bumps -->
+                <circle cx="52" cy="38" r="12" fill="#57d9a2"/>
+                <circle cx="88" cy="38" r="12" fill="#57d9a2"/>
+                <circle cx="70" cy="60" r="28" fill="#57d9a2"/>
+                <circle cx="52" cy="38" r="6" fill="#0b1f2a"/>
+                <circle cx="88" cy="38" r="6" fill="#0b1f2a"/>
+                <circle cx="50" cy="36" r="2" fill="#ffffff"/>
+                <circle cx="86" cy="36" r="2" fill="#ffffff"/>
+                <path d="M58 70 Q70 78 82 70" stroke="#0c2a2b" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <circle cx="54" cy="70" r="4" fill="#7beab8" opacity="0.7"/>
+                <circle cx="86" cy="70" r="4" fill="#7beab8" opacity="0.7"/>
+
+                <!-- suit -->
+                <rect x="36" y="86" width="68" height="58" rx="24" fill="url(#frogSuit)" stroke="rgba(165,210,255,0.7)" stroke-width="2"/>
+                <rect x="48" y="96" width="44" height="30" rx="12" fill="rgba(120,210,255,0.2)" stroke="rgba(120,210,255,0.35)" stroke-width="1.5"/>
+                <circle cx="70" cy="90" r="7" fill="#a6d5ff"/>
+
+                <!-- arms -->
+                <rect x="18" y="96" width="22" height="12" rx="6" fill="#f6fbff" stroke="rgba(165,210,255,0.6)" stroke-width="1.5"/>
+                <rect x="100" y="96" width="22" height="12" rx="6" fill="#f6fbff" stroke="rgba(165,210,255,0.6)" stroke-width="1.5"/>
+                <circle cx="18" cy="102" r="7" fill="#57d9a2"/>
+                <circle cx="122" cy="102" r="7" fill="#57d9a2"/>
+
+                <!-- legs -->
+                <rect x="44" y="136" width="18" height="12" rx="6" fill="#f6fbff" stroke="rgba(165,210,255,0.6)" stroke-width="1.5"/>
+                <rect x="78" y="136" width="18" height="12" rx="6" fill="#f6fbff" stroke="rgba(165,210,255,0.6)" stroke-width="1.5"/>
+                <circle cx="46" cy="142" r="7" fill="#57d9a2"/>
+                <circle cx="96" cy="142" r="7" fill="#57d9a2"/>
+              </svg>
             </div>
           </div>
           <div class="tap-bubble" aria-hidden="true">Tap me</div>

@@ -2171,10 +2171,10 @@ body.intro-leave .intro-overlay {
 /* === Space frog companion === */
 .space-frog {
   position: absolute;
-  right: -24px;
-  top: 14px;
-  width: 110px;
-  height: 120px;
+  right: -10px;
+  top: 10px;
+  width: 120px;
+  height: 130px;
   pointer-events: none;
   z-index: 3;
 }
@@ -2186,6 +2186,13 @@ body.intro-leave .intro-overlay {
   animation: frogFloat 6s ease-in-out infinite,
     frogSpin 14s linear infinite;
   transform-origin: 50% 60%;
+}
+
+.frog-astro {
+  width: 100%;
+  height: 100%;
+  display: block;
+  filter: drop-shadow(0 14px 24px rgba(6, 12, 24, 0.45));
 }
 
 .frog-helmet {
@@ -3380,9 +3387,11 @@ body:not(.world-page) .footer {
   }
 
   .space-frog {
-    right: -8px;
-    top: 8px;
-    transform: scale(0.85);
+    right: 8px;
+    top: 70px;
+    width: 120px;
+    height: 130px;
+    transform: scale(1);
   }
 
 }
