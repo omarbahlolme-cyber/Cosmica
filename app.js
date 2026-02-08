@@ -21,6 +21,31 @@ const warpOverlay = document.getElementById("warpOverlay");
 const warpText = document.getElementById("warpText");
 const worldCards = document.querySelectorAll(".world-card");
 const urlParams = new URLSearchParams(window.location.search);
+
+/* ==========================================================================
+   LEGACY UI CLEANUP
+   Remove any cached/legacy skip-link fragments without touching header layout.
+   ========================================================================== */
+const normalizeText = (value) => String(value || "").toLowerCase().replace(/\s+/g, " ").trim();
+const removeLegacySkipLinks = () => {
+  document.querySelectorAll("a, button").forEach((el) => {
+    const text = normalizeText(el.textContent);
+    const href = normalizeText(el.getAttribute("href"));
+    const className = normalizeText(el.className);
+    const looksLikeSkipLink =
+      className.includes("skip-link") ||
+      href === "#main-content" ||
+      text === "skip to main content" ||
+      text === "skip to content";
+    if (looksLikeSkipLink) {
+      el.remove();
+    }
+  });
+};
+
+removeLegacySkipLinks();
+window.addEventListener("load", removeLegacySkipLinks);
+
 if (urlParams.has("skipIntro")) {
   const cleanUrl = new URL(window.location.href);
   cleanUrl.searchParams.delete("skipIntro");
