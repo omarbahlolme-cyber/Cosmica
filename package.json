@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "generate:translations": "node scripts/generate-translations.js",
+    "smoke": "node scripts/smoke.js",
     "format": "prettier --write \"**/*.{html,css,js,json,md}\""
   },
   "devDependencies": {

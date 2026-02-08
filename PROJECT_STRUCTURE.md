@@ -26,6 +26,7 @@
 |-- README.md                   # High-level setup + workflow
 |-- PROJECT_STRUCTURE.md        # This file
 `-- scripts/
+    |-- smoke.js                        # Link + route smoke checks
     |-- generate-translations.js        # Builds translations.json
     `-- generate-world-translations.js  # Builds translations.<world>.json
 ```

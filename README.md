@@ -31,3 +31,13 @@ npm start
 ```bash
 npm run format
 ```
+
+## Smoke checks
+
+```bash
+npm run smoke
+```
+
+Runs two quick safeguards:
+1. Verifies local HTML `href/src` references point to real files.
+2. Starts the local server on an isolated port and checks core routes return `200`.
