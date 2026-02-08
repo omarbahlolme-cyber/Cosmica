@@ -34,8 +34,8 @@ for (const fileName of htmlFiles) {
     failures.push(`${fileName}: missing <html lang="...">`);
   }
 
-  if (!/<main[^>]*\bid=["']main-content["']/i.test(content)) {
-    failures.push(`${fileName}: missing <main id="main-content">`);
+  if (!/<main[\s>]/i.test(content)) {
+    failures.push(`${fileName}: missing <main> landmark`);
   }
 
   const h1Count = countMatches(content, /<h1[\s>]/gi);

@@ -98,8 +98,6 @@ const applyPageBaseline = (fileName) => {
     return addAttributeToTag(tag, 'aria-label="Primary navigation"');
   });
 
-  html = html.replace(/<main(?![^>]*\bid=)[^>]*>/i, (tag) => addAttributeToTag(tag, 'id="main-content"'));
-
   if (!/<h1[\s>]/i.test(html)) {
     const titleMatch = html.match(/<title>([^<]+)<\/title>/i);
     const headingText = toHeadingFromTitle(titleMatch ? titleMatch[1] : "Cosmica");
