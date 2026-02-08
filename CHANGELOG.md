@@ -5,10 +5,13 @@ All notable changes to this project are documented in this file.
 ## [Unreleased]
 
 ### Added
-- No changes yet.
+- Scheduled uptime monitoring workflow with automatic incident issue handling.
+- Automated release workflow for `v*` tags plus manual backfill trigger.
+- Enforced bloat allowlist baseline (`scripts/bloat-allowlist.json`).
 
 ### Changed
-- No changes yet.
+- Server error monitoring with request IDs, structured error reporting, and optional webhook alerts.
+- Health endpoint now returns status + version + uptime metadata for monitoring integrations.
 
 ## [1.1.0] - 2026-02-08
 

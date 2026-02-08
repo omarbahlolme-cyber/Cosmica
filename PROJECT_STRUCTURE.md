@@ -32,9 +32,12 @@
 |   `-- baseline.json           # Performance baseline used by perf checks
 |-- .github/
 |   `-- workflows/
-|       `-- quality.yml         # CI workflow for syntax/bloat/perf/release/smoke checks
+|       |-- quality.yml         # CI workflow for syntax/bloat/perf/release/smoke checks
+|       |-- uptime-monitor.yml  # Scheduled production uptime checks + incident issue alerts
+|       `-- release.yml         # Automated GitHub release publishing for v* tags
 `-- scripts/
-    |-- check-bloat.js                  # Orphan asset check + selector advisory report
+    |-- check-bloat.js                  # Orphan asset check + enforced selector allowlist
+    |-- bloat-allowlist.json            # Baseline allowlist for known-unused selectors
     |-- perf-snapshot.js                # Captures current performance snapshot
     |-- perf-check.js                   # Compares current perf snapshot vs baseline
     |-- check-release.js                # Enforces changelog/version hygiene
@@ -51,3 +54,4 @@
 4. Add new utility scripts under `scripts/` with top-level section comments.
 5. Prefer non-functional cleanup (comments/formatting/docs) when the goal is readability.
 6. Keep performance baseline updated intentionally (`npm run perf:baseline`) after verified optimizations.
+7. Keep bloat allowlist intentional (`npm run check:bloat:refresh`) after verified selector cleanup.

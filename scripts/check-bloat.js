@@ -1,7 +1,7 @@
 /* ==========================================================================
    BLOAT GUARD
    - Fails on orphaned root assets that are no longer referenced.
-   - Reports potentially unused CSS selectors as warnings for cleanup.
+   - Enforces an allowlist for known-unused selectors.
    ========================================================================== */
 const fs = require("fs");
 const path = require("path");
@@ -10,6 +10,7 @@ const path = require("path");
    PATHS + CONSTANTS
    -------------------------------------------------------------------------- */
 const ROOT = path.resolve(__dirname, "..");
+const ALLOWLIST_PATH = path.join(__dirname, "bloat-allowlist.json");
 const ROOT_FILES = fs.readdirSync(ROOT);
 const LOCAL_REF_REGEX = /\b(?:href|src)\s*=\s*["']([^"']+)["']/gi;
 const JS_FILE_REF_REGEX = /["']([A-Za-z0-9._/-]+\.(?:js|css|json|html))["']/g;
@@ -31,6 +32,7 @@ const HTML_CLASS_ATTR_REGEX = /\bclass\s*=\s*["']([^"']+)["']/gi;
 const HTML_ID_ATTR_REGEX = /\bid\s*=\s*["']([^"']+)["']/gi;
 const JS_SELECTOR_REGEX = /["'`](?:[#.]([A-Za-z_][A-Za-z0-9_-]*))/g;
 const HEX_COLOR_TOKEN_REGEX = /^[A-Fa-f0-9]{3,8}$/;
+const WRITE_ALLOWLIST = process.argv.includes("--write-allowlist");
 
 /* --------------------------------------------------------------------------
    HELPERS
@@ -172,12 +174,24 @@ const findPotentiallyUnusedCssTokens = () => {
   };
 };
 
+const loadAllowlist = () => {
+  if (!fs.existsSync(ALLOWLIST_PATH)) {
+    return { classes: [], ids: [] };
+  }
+  const parsed = JSON.parse(fs.readFileSync(ALLOWLIST_PATH, "utf8"));
+  return {
+    classes: Array.isArray(parsed.classes) ? parsed.classes : [],
+    ids: Array.isArray(parsed.ids) ? parsed.ids : [],
+  };
+};
+
 /* --------------------------------------------------------------------------
    MAIN
    -------------------------------------------------------------------------- */
 const referencedFiles = collectLocalReferences();
 const orphanAssets = findOrphanRootAssets(referencedFiles);
 const unusedTokens = findPotentiallyUnusedCssTokens();
+const allowlist = loadAllowlist();
 
 const failures = [];
 
@@ -187,6 +201,31 @@ if (orphanAssets.length) {
   );
 }
 
+if (WRITE_ALLOWLIST) {
+  const nextAllowlist = {
+    classes: unusedTokens.classes,
+    ids: unusedTokens.ids,
+  };
+  fs.writeFileSync(ALLOWLIST_PATH, `${JSON.stringify(nextAllowlist, null, 2)}\n`, "utf8");
+  console.log(`PASS [bloat] allowlist refreshed: ${path.relative(ROOT, ALLOWLIST_PATH)}`);
+  process.exit(0);
+}
+
+const allowlistClassSet = new Set(allowlist.classes);
+const allowlistIdSet = new Set(allowlist.ids);
+const unexpectedClasses = unusedTokens.classes.filter((item) => !allowlistClassSet.has(item));
+const unexpectedIds = unusedTokens.ids.filter((item) => !allowlistIdSet.has(item));
+
+if (unexpectedClasses.length) {
+  failures.push(
+    `Unexpected unused classes (${unexpectedClasses.length}): ${unexpectedClasses.join(", ")}`
+  );
+}
+
+if (unexpectedIds.length) {
+  failures.push(`Unexpected unused ids (${unexpectedIds.length}): ${unexpectedIds.join(", ")}`);
+}
+
 if (failures.length) {
   console.error("BLOAT CHECK FAILED");
   failures.forEach((failure) => console.error(`- ${failure}`));
@@ -194,16 +233,6 @@ if (failures.length) {
 }
 
 console.log("PASS [bloat] no orphan root JS/CSS assets");
-
-// Keep selector output informative only to avoid false positives on dynamic classes.
-if (unusedTokens.classes.length || unusedTokens.ids.length) {
-  const classPreview = unusedTokens.classes.slice(0, 20);
-  const idPreview = unusedTokens.ids.slice(0, 20);
-  console.log("WARN [bloat] possible unused selectors detected (advisory)");
-  if (classPreview.length) {
-    console.log(`- classes (${unusedTokens.classes.length}): ${classPreview.join(", ")}`);
-  }
-  if (idPreview.length) {
-    console.log(`- ids (${unusedTokens.ids.length}): ${idPreview.join(", ")}`);
-  }
-}
+console.log(
+  `PASS [bloat] allowlisted unused selectors classes=${unusedTokens.classes.length}, ids=${unusedTokens.ids.length}`
+);

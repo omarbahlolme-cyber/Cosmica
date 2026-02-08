@@ -1,0 +1,107 @@
+name: Uptime Monitor
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  uptime:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check production homepage + health
+        id: check
+        shell: bash
+        run: |
+          set -euo pipefail
+          HOME_URL="https://www.cosmicalearn.com/"
+          HEALTH_URL="https://www.cosmicalearn.com/api/health"
+
+          curl -fsSIL --max-time 20 "$HOME_URL" > home_headers.txt
+          curl -fsS --max-time 20 "$HEALTH_URL" > health.json
+
+          node -e "const fs=require('fs'); const h=JSON.parse(fs.readFileSync('health.json','utf8')); if(h.status!=='ok'){throw new Error('health status not ok')} if(!h.version){throw new Error('missing health version')}"
+
+      - name: Create or update incident issue on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = "[Uptime] Production check failed";
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const runUrl = `https://github.com/${owner}/${repo}/actions/runs/${context.runId}`;
+            const body = [
+              "Automated uptime check failed.",
+              "",
+              `- Workflow run: ${runUrl}`,
+              `- Timestamp (UTC): ${new Date().toISOString()}`,
+              "",
+              "Please investigate production availability and API health."
+            ].join("\n");
+
+            const existing = await github.rest.issues.listForRepo({
+              owner,
+              repo,
+              state: "open",
+              labels: "monitoring,uptime",
+              per_page: 100,
+            });
+            const found = existing.data.find((issue) => issue.title === title);
+
+            if (found) {
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: found.number,
+                body,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner,
+                repo,
+                title,
+                body,
+                labels: ["monitoring", "uptime"],
+              });
+            }
+
+      - name: Close open incident issue on recovery
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = "[Uptime] Production check failed";
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+
+            const existing = await github.rest.issues.listForRepo({
+              owner,
+              repo,
+              state: "open",
+              labels: "monitoring,uptime",
+              per_page: 100,
+            });
+            const found = existing.data.find((issue) => issue.title === title);
+            if (!found) {
+              return;
+            }
+
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: found.number,
+              body: `Recovery confirmed at ${new Date().toISOString()} (UTC). Closing incident.`,
+            });
+            await github.rest.issues.update({
+              owner,
+              repo,
+              issue_number: found.number,
+              state: "closed",
+            });

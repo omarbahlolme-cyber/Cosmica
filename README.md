@@ -52,7 +52,7 @@ npm run quality
 
 Runs:
 1. Syntax checks for key server/client bundles.
-2. Bloat checks (orphan root assets + selector advisory report).
+2. Bloat checks (orphan root assets + enforced selector allowlist).
 3. Performance regression check against `perf/baseline.json`.
 4. Release hygiene checks (`CHANGELOG.md` + semver).
 5. Smoke checks for links and core routes.
@@ -62,3 +62,15 @@ To refresh the perf baseline after intentional optimizations:
 ```bash
 npm run perf:baseline
 ```
+
+To intentionally refresh the bloat allowlist after verified cleanup/refactors:
+
+```bash
+npm run check:bloat:refresh
+```
+
+## Monitoring + releases
+
+- Uptime monitor runs every 15 minutes via `.github/workflows/uptime-monitor.yml`.
+- Release publishing is automated for `v*` tags via `.github/workflows/release.yml`.
+- Optional server error webhook alerts can be enabled with `ERROR_WEBHOOK_URL`.

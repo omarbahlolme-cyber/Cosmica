@@ -9,6 +9,7 @@
     "smoke": "node scripts/smoke.js",
     "check:syntax": "node --check server.js && node --check app.js && node --check app-maps.js",
     "check:bloat": "node scripts/check-bloat.js",
+    "check:bloat:refresh": "node scripts/check-bloat.js --write-allowlist",
     "perf:baseline": "node scripts/perf-snapshot.js --write",
     "perf:check": "node scripts/perf-check.js",
     "release:check": "node scripts/check-release.js",

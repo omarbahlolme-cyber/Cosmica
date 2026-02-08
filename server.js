@@ -3,6 +3,7 @@
    Serves static site assets and exposes feedback/chat API endpoints.
    ========================================================================== */
 const path = require("path");
+const crypto = require("crypto");
 const express = require("express");
 const cors = require("cors");
 const OpenAI = require("openai");
@@ -15,8 +16,21 @@ require("dotenv").config();
 const app = express();
 const port = Number(process.env.PORT) || 3000;
 app.disable("x-powered-by");
+const APP_VERSION = (() => {
+  try {
+    return require("./package.json").version || "unknown";
+  } catch {
+    return "unknown";
+  }
+})();
 
 app.use(express.json({ limit: "1mb" }));
+app.use((req, res, next) => {
+  const requestId = crypto.randomUUID();
+  req.requestId = requestId;
+  res.setHeader("X-Request-Id", requestId);
+  next();
+});
 
 /* --------------------------------------------------------------------------
    CORS CONFIGURATION
@@ -112,6 +126,37 @@ app.use("/api", (req, res, next) => {
    -------------------------------------------------------------------------- */
 const createClient = (apiKey) => new OpenAI({ apiKey });
 const getChatClient = () => createClient(process.env.OPENAI_CHAT_KEY || process.env.OPENAI_API_KEY);
+const ERROR_WEBHOOK_URL = process.env.ERROR_WEBHOOK_URL || "";
+
+const postErrorWebhook = async (payload) => {
+  if (!ERROR_WEBHOOK_URL) {
+    return;
+  }
+  try {
+    await fetch(ERROR_WEBHOOK_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+  } catch (error) {
+    console.error("Error webhook failed:", error.message || error);
+  }
+};
+
+const reportServerError = (scope, error, context = {}) => {
+  const message = error?.message || String(error);
+  const record = {
+    scope,
+    message,
+    stack: error?.stack || "",
+    context,
+    timestamp: new Date().toISOString(),
+  };
+  console.error(`[${scope}] ${message}`, context);
+  void postErrorWebhook({ type: "server_error", ...record });
+};
 
 const getMailer = () => {
   const host = process.env.SMTP_HOST;
@@ -245,7 +290,11 @@ app.post("/api/feedback", async (req, res) => {
 
     return res.json({ ok: true });
   } catch (error) {
-    console.error("Feedback error:", error.message || error);
+    reportServerError("feedback", error, {
+      requestId: req.requestId,
+      method: req.method,
+      path: req.originalUrl,
+    });
     return res.status(500).json({ error: "Failed to send feedback" });
   }
 });
@@ -278,7 +327,11 @@ app.post("/api/chat", async (req, res) => {
 
     return res.json({ content });
   } catch (error) {
-    console.error("Chat error:", error.message || error);
+    reportServerError("chat", error, {
+      requestId: req.requestId,
+      method: req.method,
+      path: req.originalUrl,
+    });
     return res.status(500).json({ error: "Chat request failed" });
   }
 });
@@ -287,7 +340,36 @@ app.post("/api/chat", async (req, res) => {
    ROUTE: HEALTH CHECK
    -------------------------------------------------------------------------- */
 app.get("/api/health", (req, res) => {
-  res.json({ status: "ok" });
+  res.json({
+    status: "ok",
+    version: APP_VERSION,
+    uptimeSec: Math.round(process.uptime()),
+    timestamp: new Date().toISOString(),
+  });
+});
+
+app.use((error, req, res, next) => {
+  reportServerError("express", error, {
+    requestId: req?.requestId,
+    method: req?.method,
+    path: req?.originalUrl,
+  });
+  if (res.headersSent) {
+    return next(error);
+  }
+  return res.status(500).json({
+    error: "Internal server error",
+    requestId: req?.requestId || null,
+  });
+});
+
+process.on("unhandledRejection", (reason) => {
+  const error = reason instanceof Error ? reason : new Error(String(reason));
+  reportServerError("unhandledRejection", error);
+});
+
+process.on("uncaughtException", (error) => {
+  reportServerError("uncaughtException", error);
 });
 
 /* --------------------------------------------------------------------------
