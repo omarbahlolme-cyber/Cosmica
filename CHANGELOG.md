@@ -8,10 +8,14 @@ All notable changes to this project are documented in this file.
 - Scheduled uptime monitoring workflow with automatic incident issue handling.
 - Automated release workflow for `v*` tags plus manual backfill trigger.
 - Enforced bloat allowlist baseline (`scripts/bloat-allowlist.json`).
+- Security dependency audit workflow.
+- Legal/security pages (`privacy.html`, `terms.html`, `license.html`), `LICENSE`, and `SECURITY.md`.
+- Security contact file served at `/.well-known/security.txt`.
 
 ### Changed
 - Server error monitoring with request IDs, structured error reporting, and optional webhook alerts.
 - Health endpoint now returns status + version + uptime metadata for monitoring integrations.
+- Server transport hardening with production HTTPS enforcement, Helmet headers/CSP/HSTS, and API rate limiting.
 
 ## [1.1.0] - 2026-02-08
 

@@ -54,8 +54,9 @@ Runs:
 1. Syntax checks for key server/client bundles.
 2. Bloat checks (orphan root assets + enforced selector allowlist).
 3. Performance regression check against `perf/baseline.json`.
-4. Release hygiene checks (`CHANGELOG.md` + semver).
-5. Smoke checks for links and core routes.
+4. Security dependency audit.
+5. Release hygiene checks (`CHANGELOG.md` + semver).
+6. Smoke checks for links and core routes.
 
 To refresh the perf baseline after intentional optimizations:
 
@@ -73,4 +74,22 @@ npm run check:bloat:refresh
 
 - Uptime monitor runs every 15 minutes via `.github/workflows/uptime-monitor.yml`.
 - Release publishing is automated for `v*` tags via `.github/workflows/release.yml`.
+- Security dependency audit runs on schedule via `.github/workflows/security-audit.yml`.
 - Optional server error webhook alerts can be enabled with `ERROR_WEBHOOK_URL`.
+
+## Security hardening
+
+Implemented in app/server:
+- HTTPS enforcement in production.
+- Helmet headers including CSP/HSTS/frame protections.
+- API rate limiting (`/api`, `/api/chat`, `/api/feedback`, `/api/health`).
+- Request IDs on responses (`X-Request-Id`) for incident tracing.
+- Security contact endpoint: `/.well-known/security.txt`.
+- Legal protection pages: `privacy.html`, `terms.html`, `license.html`.
+
+Recommended external platform settings:
+1. Cloudflare WAF with managed rules enabled.
+2. Bot protection and rate limiting at edge.
+3. SSL/TLS mode: `Full (strict)`.
+4. Always Use HTTPS + automatic HTTP->HTTPS redirect.
+5. DNSSEC enabled for domain integrity.

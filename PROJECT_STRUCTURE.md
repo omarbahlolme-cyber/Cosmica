@@ -25,6 +25,9 @@
 |-- robots.txt                  # Robots directives
 |-- sitemap.xml                 # Sitemap for indexed pages
 |-- package.json                # Node scripts/dependencies
+|-- LICENSE                     # Proprietary license (all rights reserved)
+|-- SECURITY.md                 # Vulnerability reporting/security policy
+|-- security.txt                # Security contact file served at /.well-known/security.txt
 |-- CHANGELOG.md                # Release/change history
 |-- README.md                   # High-level setup + workflow
 |-- PROJECT_STRUCTURE.md        # This file
@@ -33,6 +36,7 @@
 |-- .github/
 |   `-- workflows/
 |       |-- quality.yml         # CI workflow for syntax/bloat/perf/release/smoke checks
+|       |-- security-audit.yml  # Scheduled dependency security audit
 |       |-- uptime-monitor.yml  # Scheduled production uptime checks + incident issue alerts
 |       `-- release.yml         # Automated GitHub release publishing for v* tags
 `-- scripts/
@@ -55,3 +59,4 @@
 5. Prefer non-functional cleanup (comments/formatting/docs) when the goal is readability.
 6. Keep performance baseline updated intentionally (`npm run perf:baseline`) after verified optimizations.
 7. Keep bloat allowlist intentional (`npm run check:bloat:refresh`) after verified selector cleanup.
+8. Keep legal/security pages and security contact file updated with current policies/contact.
