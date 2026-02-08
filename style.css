@@ -703,7 +703,8 @@ body.world-page .section-title {
 #journey,
 #worlds,
 #guide,
-#join {
+#join,
+#support {
   scroll-margin-top: 150px;
 }
 
@@ -2562,32 +2563,56 @@ body:not(.world-page) .footer {
     --orbit-radius: 170px;
   }
 
+  body:not(.world-page) #how,
+  body:not(.world-page) #journey,
+  body:not(.world-page) #worlds,
+  body:not(.world-page) #guide,
+  body:not(.world-page) #join,
+  body:not(.world-page) #support {
+    scroll-margin-top: 210px;
+  }
+
+  body:not(.world-page) #worlds {
+    scroll-margin-top: 190px;
+  }
+
   .footer {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    grid-template-areas:
-      "left right"
-      "legal legal";
-    align-items: center;
-    gap: 8px 12px;
+    align-items: end;
+    gap: 10px 12px;
   }
 
   .footer > :first-child {
-    grid-area: left;
+    grid-column: 1;
+    grid-row: 1;
+    align-self: end;
+    line-height: 1.35;
   }
 
   .footer-inline-links {
-    display: contents;
+    grid-column: 1 / -1;
+    grid-row: 1 / span 2;
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      "spacer right"
+      "legal legal";
+    gap: 8px 12px;
+    align-items: end;
   }
 
   .footer-right-text {
     grid-area: right;
+    display: block;
     justify-self: end;
     text-align: right !important;
-    margin-right: 0;
+    margin: 0;
     font-size: 11px;
+    line-height: 1.35;
     opacity: 0.85;
-    max-width: none;
+    max-width: min(56vw, 280px);
   }
 
   .footer-legal-links {
@@ -2595,11 +2620,12 @@ body:not(.world-page) .footer {
     justify-self: center;
     display: inline-flex;
     flex-wrap: wrap;
-    margin-left: 0;
+    margin: 0;
     transform: none;
     gap: 8px;
     align-items: center;
     justify-content: center;
+    text-align: center;
   }
 
   .scroll-top-btn {
@@ -2637,6 +2663,19 @@ body:not(.world-page) .footer {
 }
 
 @media (max-width: 600px) {
+  body:not(.world-page) #how,
+  body:not(.world-page) #journey,
+  body:not(.world-page) #worlds,
+  body:not(.world-page) #guide,
+  body:not(.world-page) #join,
+  body:not(.world-page) #support {
+    scroll-margin-top: 228px;
+  }
+
+  body:not(.world-page) #worlds {
+    scroll-margin-top: 205px;
+  }
+
   main {
     padding: 28px 5vw 90px;
   }

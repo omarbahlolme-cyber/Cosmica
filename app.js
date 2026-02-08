@@ -72,6 +72,21 @@ window.addEventListener("resize", setScrollbarWidth);
 const prefersReducedMotion = window.matchMedia(
   "(prefers-reduced-motion: reduce)"
 ).matches;
+const connectionInfo =
+  navigator.connection || navigator.mozConnection || navigator.webkitConnection || null;
+const prefersReducedData =
+  (connectionInfo && connectionInfo.saveData === true) ||
+  window.matchMedia("(prefers-reduced-data: reduce)").matches;
+const effectiveNetworkType = String(
+  (connectionInfo && connectionInfo.effectiveType) || ""
+).toLowerCase();
+const isSlowNetwork =
+  effectiveNetworkType === "slow-2g" || effectiveNetworkType === "2g";
+const deviceMemoryGb = Number(navigator.deviceMemory || 0);
+const cpuThreadCount = Number(navigator.hardwareConcurrency || 0);
+const isLowPowerDevice =
+  (deviceMemoryGb > 0 && deviceMemoryGb <= 4) ||
+  (cpuThreadCount > 0 && cpuThreadCount <= 4);
 
 /* ==========================================================================
    MIMI CHAT CONFIGURATION
@@ -126,6 +141,102 @@ const worldLines = {
 const worldPages = {
   English: "world.html",
 };
+
+/* ==========================================================================
+   NAVIGATION PREFETCH
+   Warms likely next pages on capable networks/devices for smoother transitions.
+   ========================================================================== */
+const CAN_PREFETCH_NAVIGATION = !prefersReducedData && !isSlowNetwork;
+const prefetchedDocuments = new Set();
+const currentDocumentKey = `${window.location.origin}${window.location.pathname}${window.location.search}`;
+
+const normalizeInternalDocumentUrl = (href) => {
+  if (!href) {
+    return "";
+  }
+  try {
+    const parsed = new URL(href, window.location.href);
+    if (parsed.origin !== window.location.origin) {
+      return "";
+    }
+    const pathname = parsed.pathname.toLowerCase();
+    const isHtmlDoc = pathname === "/" || pathname.endsWith(".html");
+    if (!isHtmlDoc) {
+      return "";
+    }
+    return `${parsed.origin}${parsed.pathname}${parsed.search}`;
+  } catch {
+    return "";
+  }
+};
+
+const prefetchDocument = (href) => {
+  if (!CAN_PREFETCH_NAVIGATION) {
+    return;
+  }
+  const normalizedUrl = normalizeInternalDocumentUrl(href);
+  if (!normalizedUrl || normalizedUrl === currentDocumentKey || prefetchedDocuments.has(normalizedUrl)) {
+    return;
+  }
+  prefetchedDocuments.add(normalizedUrl);
+  const link = document.createElement("link");
+  link.rel = "prefetch";
+  link.as = "document";
+  link.href = normalizedUrl;
+  link.fetchPriority = "low";
+  link.addEventListener("load", () => link.remove(), { once: true });
+  link.addEventListener("error", () => link.remove(), { once: true });
+  document.head.appendChild(link);
+};
+
+const bindNavigationPrefetch = (element, resolveHref) => {
+  if (!element || typeof resolveHref !== "function" || !CAN_PREFETCH_NAVIGATION) {
+    return;
+  }
+  const triggerPrefetch = () => {
+    const href = resolveHref();
+    if (href) {
+      prefetchDocument(href);
+    }
+  };
+  element.addEventListener("pointerenter", triggerPrefetch, {
+    passive: true,
+    once: true,
+  });
+  element.addEventListener("focusin", triggerPrefetch, { once: true });
+  element.addEventListener("touchstart", triggerPrefetch, {
+    passive: true,
+    once: true,
+  });
+};
+
+document.querySelectorAll("a[href]").forEach((link) => {
+  bindNavigationPrefetch(link, () => link.getAttribute("href") || "");
+});
+
+const scheduleCoreRoutePrefetch = () => {
+  if (!CAN_PREFETCH_NAVIGATION) {
+    return;
+  }
+  const warmRoutes = [
+    "/",
+    "/world.html",
+    "/letters.html",
+    "/words.html",
+    "/phrases.html",
+    "/grammar.html",
+  ];
+  const runPrefetch = () => {
+    warmRoutes.forEach((route) => prefetchDocument(route));
+  };
+  if ("requestIdleCallback" in window) {
+    window.requestIdleCallback(runPrefetch, { timeout: 2500 });
+    return;
+  }
+  window.setTimeout(runPrefetch, 1200);
+};
+scheduleCoreRoutePrefetch();
+
 const FLAG_SVGS = {
   gb: `
     <svg viewBox="0 0 30 20" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
@@ -670,8 +781,14 @@ const createStars = (layer, count, sizeRange) => {
 
 const isSmallViewport = window.matchMedia("(max-width: 960px)").matches;
 const isWorldPage = document.body.classList.contains("world-page");
-const starDensityMultiplier = isSmallViewport ? (isWorldPage ? 0.48 : 0.58) : 1;
-const scaledCount = (count) => Math.max(24, Math.round(count * starDensityMultiplier));
+const viewportDensityMultiplier = isSmallViewport ? (isWorldPage ? 0.48 : 0.58) : 1;
+const performanceDensityMultiplier = isLowPowerDevice || prefersReducedData ? 0.72 : 1;
+const reducedMotionDensityMultiplier = prefersReducedMotion ? 0.85 : 1;
+const starDensityMultiplier =
+  viewportDensityMultiplier *
+  performanceDensityMultiplier *
+  reducedMotionDensityMultiplier;
+const scaledCount = (count) => Math.max(16, Math.round(count * starDensityMultiplier));
 
 starfields.forEach((layer) => {
   if (layer.classList.contains("starfield-deep")) {
@@ -1815,14 +1932,15 @@ const isRecentTouchActivation = (element, windowMs = 500) => {
 
 worldCards.forEach((card) => {
   const worldName = card.dataset.world || "World";
+  const targetWorldUrl = worldPages[worldName] || "";
+  bindNavigationPrefetch(card, () => targetWorldUrl);
   const activateWorldCard = () => {
     if (card.classList.contains("coming-soon")) {
       return;
     }
-    const targetUrl = worldPages[worldName];
-    if (targetUrl) {
+    if (targetWorldUrl) {
       triggerWarp(worldName, () => {
-        window.location.href = targetUrl;
+        window.location.href = targetWorldUrl;
       });
       return;
     }
@@ -1867,6 +1985,7 @@ worldCards.forEach((card) => {
    ========================================================================== */
 const mapLinks = document.querySelectorAll(".map-link");
 mapLinks.forEach((link) => {
+  bindNavigationPrefetch(link, () => link.getAttribute("href") || "");
   link.addEventListener("pointerup", (event) => {
     if (event.pointerType !== "touch") {
       return;

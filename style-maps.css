@@ -609,7 +609,7 @@ body.modal-open {
     overflow-y: auto;
     overflow-x: hidden;
     margin: 0 auto;
-    padding-top: 48px;
+    padding-top: 14px;
     border: 1px solid rgba(140, 210, 255, 0.28);
     box-shadow:
       0 20px 46px rgba(0, 0, 0, 0.52),
@@ -633,16 +633,22 @@ body.modal-open {
   }
 
   .grammar-close {
-    top: 10px;
-    right: 14px;
+    top: 8px;
+    right: 12px;
   }
 
   .grammar-modal-body {
-    padding: 18px 14px 16px;
+    padding: 10px 14px 16px;
+  }
+
+  .grammar-modal-header {
+    padding-right: 48px;
   }
 
   .grammar-modal-header h3 {
     font-size: 1rem;
+    margin-top: 0;
+    line-height: 1.2;
   }
 
   .grammar-modal-section {
