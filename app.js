@@ -16,11 +16,17 @@ const alienHead = alien ? alien.querySelector(".alien-head") : null;
 const warpOverlay = document.getElementById("warpOverlay");
 const warpText = document.getElementById("warpText");
 const worldCards = document.querySelectorAll(".world-card");
-const introOverlay = document.getElementById("introOverlay");
-const introButton = document.getElementById("introButton");
-const introSpeechText = document.getElementById("introSpeechText");
 const urlParams = new URLSearchParams(window.location.search);
-const skipIntro = urlParams.get("skipIntro") === "1";
+if (urlParams.has("skipIntro")) {
+  const cleanUrl = new URL(window.location.href);
+  cleanUrl.searchParams.delete("skipIntro");
+  const nextQuery = cleanUrl.searchParams.toString();
+  const normalizedUrl =
+    cleanUrl.pathname +
+    (nextQuery ? `?${nextQuery}` : "") +
+    cleanUrl.hash;
+  window.history.replaceState({}, "", normalizedUrl);
+}
 const WORLD_NAME =
   urlParams.get("world") ||
   document.body.dataset.world ||
@@ -35,14 +41,6 @@ let WORLD_TRANSLATIONS = null;
 let WORLD_GRAMMAR_TITLE_MAP = null;
 let WORLD_GRAMMAR_EXAMPLE_MAP = null;
 const isNonEnglishWorld = WORLD_KEY !== "english";
-
-if (skipIntro) {
-  document.body.classList.remove("intro-active", "intro-leave");
-  if (introOverlay) {
-    introOverlay.setAttribute("aria-hidden", "true");
-    introOverlay.style.display = "none";
-  }
-}
 const setScrollbarWidth = () => {
   const width = window.innerWidth - document.documentElement.clientWidth;
   document.documentElement.style.setProperty("--scrollbar-width", `${Math.max(0, width)}px`);
@@ -341,8 +339,6 @@ let activeLine = lines[0];
 let typingTimer;
 let speakingTimer;
 let gazeResetTimer;
-let introTypingTimer;
-let introSpeakingTimer;
 const chatHistory = [];
 
 const renderFlags = () => {
@@ -1485,70 +1481,6 @@ window.addEventListener("load", () => {
       }
     });
   }
-
-const closeIntro = () => {
-  if (document.body.classList.contains("intro-leave")) {
-    return;
-  }
-  if (introTypingTimer) {
-    window.clearTimeout(introTypingTimer);
-    introTypingTimer = null;
-  }
-  if (introSpeakingTimer) {
-    window.clearTimeout(introSpeakingTimer);
-    introSpeakingTimer = null;
-  }
-  document.body.classList.add("intro-leave");
-  window.setTimeout(() => {
-    document.body.classList.remove("intro-active", "intro-leave");
-    if (introOverlay) {
-      introOverlay.setAttribute("aria-hidden", "true");
-    }
-  }, 650);
-};
-
-if (introButton) {
-  introButton.addEventListener("click", () => {
-    closeIntro();
-  });
-}
-
-const startIntroTyping = () => {
-  if (skipIntro) {
-    return;
-  }
-  if (!introSpeechText) {
-    return;
-  }
-  const text = introSpeechText.dataset.text || introSpeechText.textContent.trim();
-  if (!text) {
-    return;
-  }
-  const introBubble = introSpeechText.closest(".speech");
-  if (prefersReducedMotion) {
-    introSpeechText.textContent = text;
-    return;
-  }
-  if (introBubble) {
-    introBubble.classList.add("speaking");
-  }
-  introSpeechText.textContent = "";
-  let index = 0;
-    const step = () => {
-      index += 1;
-      introSpeechText.textContent = text.slice(0, index);
-      if (index < text.length) {
-        introTypingTimer = window.setTimeout(step, 18 + Math.random() * 22);
-      } else if (introBubble) {
-      introSpeakingTimer = window.setTimeout(() => {
-        introBubble.classList.remove("speaking");
-      }, 600);
-    }
-  };
-  step();
-};
-
-window.addEventListener("load", startIntroTyping, { once: true });
 
 if (alien) {
   alien.addEventListener("click", () => {
