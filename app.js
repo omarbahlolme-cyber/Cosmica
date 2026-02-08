@@ -21,9 +21,21 @@ const warpOverlay = document.getElementById("warpOverlay");
 const warpText = document.getElementById("warpText");
 const worldCards = document.querySelectorAll(".world-card");
 const urlParams = new URLSearchParams(window.location.search);
+const currentPath = window.location.pathname.toLowerCase();
+const isWorldLandingPage = currentPath.endsWith("/world.html");
 if (urlParams.has("skipIntro")) {
   const cleanUrl = new URL(window.location.href);
   cleanUrl.searchParams.delete("skipIntro");
+  const nextQuery = cleanUrl.searchParams.toString();
+  const normalizedUrl =
+    cleanUrl.pathname +
+    (nextQuery ? `?${nextQuery}` : "") +
+    cleanUrl.hash;
+  window.history.replaceState({}, "", normalizedUrl);
+}
+if (isWorldLandingPage && urlParams.has("world")) {
+  const cleanUrl = new URL(window.location.href);
+  cleanUrl.searchParams.delete("world");
   const nextQuery = cleanUrl.searchParams.toString();
   const normalizedUrl =
     cleanUrl.pathname +
@@ -35,10 +47,9 @@ if (urlParams.has("skipIntro")) {
    WORLD CONTEXT
    Resolve active world from URL/body and select world-specific translation packs.
    ========================================================================== */
-const WORLD_NAME =
-  urlParams.get("world") ||
-  document.body.dataset.world ||
-  "English";
+const WORLD_NAME = isWorldLandingPage
+  ? document.body.dataset.world || "English"
+  : urlParams.get("world") || document.body.dataset.world || "English";
 const WORLD_KEY = WORLD_NAME.toLowerCase();
 const WORLD_TRANSLATION_FILE = "translations.json";
 let WORLD_TRANSLATIONS = null;
@@ -113,7 +124,7 @@ const worldLines = {
 };
 
 const worldPages = {
-  English: "world.html?world=English",
+  English: "world.html",
 };
 const FLAG_SVGS = {
   gb: `
