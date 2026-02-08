@@ -1790,6 +1790,7 @@ body.world-page .world-card {
 .footer-right-text {
   display: inline;
   margin-left: 0;
+  margin-right: 22px;
   text-align: right;
   min-width: 0;
   max-width: none;
@@ -1819,8 +1820,8 @@ body.world-page .world-card {
   justify-self: end;
   display: inline-flex;
   flex-wrap: wrap;
-  margin-left: 28px;
-  transform: translateX(10px);
+  margin-left: 0;
+  transform: none;
   gap: 8px;
   align-items: center;
   justify-content: flex-end;
@@ -2583,6 +2584,7 @@ body:not(.world-page) .footer {
     grid-area: right;
     justify-self: end;
     text-align: right !important;
+    margin-right: 0;
     font-size: 11px;
     opacity: 0.85;
     max-width: none;
