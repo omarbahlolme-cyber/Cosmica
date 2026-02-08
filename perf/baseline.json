@@ -1,53 +1,53 @@
 {
-  "generatedAt": "2026-02-08T08:56:44.699Z",
+  "generatedAt": "2026-02-08T11:58:47.236Z",
   "baseUrl": "http://127.0.0.1:4174",
   "routes": {
     "/index.html": {
       "status": 200,
-      "durationMs": 8,
-      "bytes": 23273,
+      "durationMs": 9,
+      "bytes": 23846,
       "cacheControl": "no-cache"
     },
     "/world.html": {
       "status": 200,
-      "durationMs": 4,
-      "bytes": 11130,
+      "durationMs": 3,
+      "bytes": 12290,
       "cacheControl": "no-cache"
     },
     "/world-french.html": {
       "status": 200,
       "durationMs": 3,
-      "bytes": 10837,
+      "bytes": 12001,
       "cacheControl": "no-cache"
     },
     "/letters.html": {
       "status": 200,
       "durationMs": 3,
-      "bytes": 20655,
+      "bytes": 21775,
       "cacheControl": "no-cache"
     },
     "/words.html": {
       "status": 200,
-      "durationMs": 2,
-      "bytes": 3448,
+      "durationMs": 4,
+      "bytes": 4582,
       "cacheControl": "no-cache"
     },
     "/phrases.html": {
       "status": 200,
       "durationMs": 3,
-      "bytes": 3461,
+      "bytes": 4597,
       "cacheControl": "no-cache"
     },
     "/grammar.html": {
       "status": 200,
-      "durationMs": 2,
-      "bytes": 3437,
+      "durationMs": 3,
+      "bytes": 4575,
       "cacheControl": "no-cache"
     },
     "/style.css": {
       "status": 200,
       "durationMs": 2,
-      "bytes": 57833,
+      "bytes": 59461,
       "cacheControl": "public, max-age=86400, stale-while-revalidate=604800"
     },
     "/style-maps.css": {
@@ -58,8 +58,8 @@
     },
     "/app.js": {
       "status": 200,
-      "durationMs": 4,
-      "bytes": 75277,
+      "durationMs": 2,
+      "bytes": 79353,
       "cacheControl": "public, max-age=86400, stale-while-revalidate=604800"
     },
     "/app-maps.js": {
@@ -70,13 +70,13 @@
     },
     "/translations.json": {
       "status": 200,
-      "durationMs": 7,
+      "durationMs": 8,
       "bytes": 1633998,
       "cacheControl": "public, max-age=300, stale-while-revalidate=600"
     },
     "/translations.french.json": {
       "status": 200,
-      "durationMs": 13,
+      "durationMs": 12,
       "bytes": 2854026,
       "cacheControl": "public, max-age=300, stale-while-revalidate=600"
     }

@@ -38,6 +38,7 @@
 |-- .github/
 |   |-- dependabot.yml          # Dependabot security/dependency update automation
 |   `-- workflows/
+|       |-- backup-restore-drill.yml # Monthly backup restore validation drill
 |       |-- backup-weekly.yml   # Weekly backup artifact + optional offsite mirror push
 |       |-- github-hardening.yml# Manual branch-protection/security automation
 |       |-- live-security-check.yml # Scheduled production redirect/header/health checks
@@ -46,9 +47,14 @@
 |       |-- uptime-monitor.yml  # Scheduled production uptime checks + incident issue alerts
 |       `-- release.yml         # Automated GitHub release publishing for v* tags
 `-- scripts/
+    |-- apply-html-baseline.js          # Applies shared HTML a11y/SEO/integrity baseline
     |-- apply-github-hardening.js      # Applies GitHub branch protection + security settings via API
+    |-- check-accessibility-baseline.js # Validates accessibility structural baseline for HTML pages
     |-- create-backup.js               # Creates timestamped source and git-history backups
+    |-- check-external-integrity.js     # Enforces SRI/exemption policy for third-party assets
     |-- verify-backup.js               # Verifies backup bundle integrity + paired source archive
+    |-- check-seo-baseline.js           # Validates canonical metadata, JSON-LD, and sitemap coverage
+    |-- check-security-txt.js           # Validates security.txt required fields and expiry freshness
     |-- live-security-check.js         # Checks production redirects, headers, and health endpoint
     |-- check-bloat.js                  # Orphan asset check + enforced selector allowlist
     |-- bloat-allowlist.json            # Baseline allowlist for known-unused selectors

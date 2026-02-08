@@ -200,6 +200,11 @@ const healthLimiter = createLimiter({
   max: 120,
   scope: "health",
 });
+const webVitalsLimiter = createLimiter({
+  windowMs: 60 * 1000,
+  max: 240,
+  scope: "web-vitals",
+});
 
 /* --------------------------------------------------------------------------
    STATIC ASSET HOSTING
@@ -265,6 +270,7 @@ app.get("/.well-known/security.txt", (req, res) => {
 const createClient = (apiKey) => new OpenAI({ apiKey });
 const getChatClient = () => createClient(process.env.OPENAI_CHAT_KEY || process.env.OPENAI_API_KEY);
 const ERROR_WEBHOOK_URL = process.env.ERROR_WEBHOOK_URL || "";
+const RUM_WEBHOOK_URL = process.env.RUM_WEBHOOK_URL || "";
 
 const postErrorWebhook = async (payload) => {
   if (!ERROR_WEBHOOK_URL) {
@@ -280,6 +286,23 @@ const postErrorWebhook = async (payload) => {
     });
   } catch (error) {
     console.error("Error webhook failed:", error.message || error);
+  }
+};
+
+const postRumWebhook = async (payload) => {
+  if (!RUM_WEBHOOK_URL) {
+    return;
+  }
+  try {
+    await fetch(RUM_WEBHOOK_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+  } catch (error) {
+    console.error("RUM webhook failed:", error.message || error);
   }
 };
 
@@ -484,6 +507,64 @@ app.get("/api/health", healthLimiter, (req, res) => {
     uptimeSec: Math.round(process.uptime()),
     timestamp: new Date().toISOString(),
   });
+});
+
+/* --------------------------------------------------------------------------
+   ROUTE: WEB VITALS INGEST
+   -------------------------------------------------------------------------- */
+const VALID_WEB_VITAL_NAMES = new Set(["CLS", "FCP", "INP", "LCP", "TTFB"]);
+const MAX_VITALS_BATCH = 5;
+
+app.post("/api/web-vitals", webVitalsLimiter, async (req, res) => {
+  const payload = req.body;
+  const rawMetrics = Array.isArray(payload) ? payload : [payload];
+
+  if (!rawMetrics.length || rawMetrics.length > MAX_VITALS_BATCH) {
+    return res.status(400).json({ error: "Invalid web-vitals payload" });
+  }
+
+  const metrics = [];
+  for (const metric of rawMetrics) {
+    if (!metric || typeof metric !== "object") {
+      return res.status(400).json({ error: "Invalid web-vitals metric entry" });
+    }
+
+    const name = String(metric.name || "").toUpperCase();
+    const value = Number(metric.value);
+    const rating = String(metric.rating || "").toLowerCase();
+    const page = String(metric.page || "").slice(0, 180);
+    const id = String(metric.id || "").slice(0, 120);
+    const ts = String(metric.timestamp || new Date().toISOString()).slice(0, 64);
+
+    if (!VALID_WEB_VITAL_NAMES.has(name)) {
+      return res.status(400).json({ error: `Unsupported metric name: ${name}` });
+    }
+    if (!Number.isFinite(value) || value < 0 || value > 120000) {
+      return res.status(400).json({ error: `Invalid metric value for ${name}` });
+    }
+    if (!["good", "needs-improvement", "poor"].includes(rating)) {
+      return res.status(400).json({ error: `Invalid metric rating for ${name}` });
+    }
+
+    metrics.push({
+      name,
+      value,
+      rating,
+      page,
+      id,
+      timestamp: ts,
+      userAgent: req.headers["user-agent"] || "",
+      requestId: req.requestId || "",
+    });
+  }
+
+  void postRumWebhook({
+    type: "web_vitals",
+    source: "cosmica",
+    metrics,
+  });
+
+  return res.status(202).json({ ok: true });
 });
 
 app.use((error, req, res, next) => {

@@ -68,6 +68,38 @@ input {
   font-family: var(--font-title);
 }
 
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: -48px;
+  z-index: 1001;
+  background: #0c1430;
+  color: #edf3ff;
+  border: 1px solid rgba(104, 225, 255, 0.6);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-family: var(--font-title);
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  transition: top 0.18s ease;
+}
+
+.skip-link:focus {
+  top: 12px;
+}
+
 .aurora {
   position: fixed;
   inset: -30vh -20vw;
