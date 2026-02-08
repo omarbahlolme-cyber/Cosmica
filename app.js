@@ -52,6 +52,7 @@ const WORLD_NAME = isWorldLandingPage
   : urlParams.get("world") || document.body.dataset.world || "English";
 const WORLD_KEY = WORLD_NAME.toLowerCase();
 const WORLD_TRANSLATION_FILE = "translations.json";
+const ASSET_VERSION = "20260208";
 let WORLD_TRANSLATIONS = null;
 let WORLD_GRAMMAR_TITLE_MAP = null;
 let WORLD_GRAMMAR_EXAMPLE_MAP = null;
@@ -2456,7 +2457,7 @@ const loadMapsBundle = () =>
     }
 
     const script = document.createElement("script");
-    script.src = "app-maps.js";
+    script.src = `app-maps.js?v=${ASSET_VERSION}`;
     script.async = true;
     script.dataset.cosmicaBundle = "maps";
     script.addEventListener(
