@@ -1564,7 +1564,18 @@ if (speechText && speechBubble) {
     const navEl = document.querySelector(".nav");
     const navHeight = navEl ? navEl.getBoundingClientRect().height : 0;
     const mobileExtraOffset = isHomeMobile
-      ? Math.max(18, Math.min(42, Math.round(navHeight * 0.14)))
+      ? Math.max(62, Math.min(120, Math.round(navHeight * 0.48)))
+      : 0;
+    const mobileSectionOffset = isHomeMobile
+      ? (hash === "#support"
+        ? 44
+        : hash === "#join"
+          ? 40
+          : hash === "#guide"
+            ? 34
+            : hash === "#worlds"
+              ? 30
+              : 26)
       : 0;
     const baseOffset =
       Number.parseFloat(window.getComputedStyle(target).scrollMarginTop) || 0;
@@ -1573,7 +1584,8 @@ if (speechText && speechBubble) {
       : target.getBoundingClientRect().top
         + window.scrollY
         - baseOffset
-        - mobileExtraOffset;
+        - mobileExtraOffset
+        - mobileSectionOffset;
     history.replaceState(null, "", `${baseUrl}${hash}`);
     window.scrollTo({ top, behavior: "smooth" });
     return true;
