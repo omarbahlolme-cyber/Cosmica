@@ -1,4 +1,11 @@
-﻿:root {
+﻿/* ==========================================================================
+   COSMICA STYLESHEET ARCHITECTURE
+   1) Tokens and global defaults
+   2) Shared layout/components
+   3) Page-specific sections (home/world/maps)
+   4) Responsive overrides and reduced-motion support
+   ========================================================================== */
+:root {
   color-scheme: dark;
   --bg: #05050b;
   --bg-deep: #060617;
@@ -22,6 +29,9 @@
   --font-body: "Rajdhani", sans-serif;
 }
 
+/* --------------------------------------------------------------------------
+   PAGE: LETTERS MAP
+   -------------------------------------------------------------------------- */
 /* === Letters map === */
 .letters-page .letters-grid-section.section {
   margin-top: 18px;
@@ -126,6 +136,9 @@ body.letters-page main {
   }
 }
 
+/* --------------------------------------------------------------------------
+   GLOBAL RESET + BASE ELEMENTS
+   -------------------------------------------------------------------------- */
 * {
   box-sizing: border-box;
 }
@@ -202,6 +215,9 @@ input {
   opacity: 1;
 }
 
+/* --------------------------------------------------------------------------
+   HEADER / NAVIGATION
+   -------------------------------------------------------------------------- */
 .nav {
   display: flex;
   justify-content: space-between;
@@ -302,6 +318,9 @@ body:not(.world-page) main {
 }
 
 
+/* --------------------------------------------------------------------------
+   HOME PAGE HERO
+   -------------------------------------------------------------------------- */
 .hero {
   display: grid;
   grid-template-columns: minmax(280px, 1.1fr) minmax(260px, 0.9fr);
@@ -579,35 +598,6 @@ body:not(.world-page) main {
   transform-origin: 50% 50%;
 }
 
-.portal {
-  position: relative;
-  width: 240px;
-  height: 240px;
-}
-
-.portal-core {
-  position: absolute;
-  inset: 25%;
-  background: radial-gradient(circle, rgba(104, 225, 255, 0.8), rgba(4, 6, 18, 0.3));
-  border-radius: 50%;
-  box-shadow: 0 0 30px rgba(104, 225, 255, 0.8);
-  animation: pulse 4s ease-in-out infinite;
-}
-
-.portal-ring {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  border: 1px solid rgba(104, 225, 255, 0.4);
-  box-shadow: 0 0 25px rgba(104, 225, 255, 0.25);
-  animation: ripple 5s ease-in-out infinite;
-}
-
-.ring-two {
-  inset: 18px;
-  animation-delay: 1.5s;
-}
-
 .section {
   margin: 80px 0;
 }
@@ -660,8 +650,6 @@ body.world-page .world-language .language-box {
   font-weight: 600;
   box-shadow: inset 0 2px 8px rgba(0,0,0,0.35);
 }
-
-.language-shortcuts { display: none; }
 
 .language-list {
   max-height: 220px;
@@ -757,49 +745,6 @@ body.world-page .world-language .language-box {
   box-shadow: 0 26px 54px rgba(40,26,6,0.7);
 }
 
-/* Alphabetical grouping and quick index */
-.alpha-group {
-  padding: 6px 0 12px;
-}
-.alpha-letter {
-  font-family: var(--font-title);
-  font-size: 13px;
-  color: var(--muted);
-  margin: 0 0 6px 0;
-  padding: 6px 4px;
-  position: sticky;
-  top: 0;
-  background: linear-gradient(180deg, rgba(6,8,18,0.02), rgba(6,8,18,0));
-  z-index: 3;
-}
-.alpha-items {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 10px;
-}
-.alpha-index {
-  position: absolute;
-  top: 12px;
-  right: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  z-index: 6;
-}
-.alpha-index-btn {
-  background: transparent;
-  border: none;
-  color: var(--muted);
-  padding: 6px 8px;
-  cursor: pointer;
-  border-radius: 6px;
-  font-weight: 700;
-}
-.alpha-index-btn:hover {
-  background: rgba(255,184,60,0.12);
-  color: #0b0b00;
-}
-
 @media (max-width: 680px) {
   .language-list {
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -808,7 +753,10 @@ body.world-page .world-language .language-box {
 }
 
 /* === Layout: left-align content only on the English world page === */
-body.world-page main {
+body/* --------------------------------------------------------------------------
+   WORLD PAGES (LANGUAGE PICKER + MAP LAYOUT)
+   -------------------------------------------------------------------------- */
+.world-page main {
   max-width: 1100px;
   margin-left: 6vw;
   margin-right: auto;
@@ -1074,23 +1022,6 @@ body.hide-worlds-overlap .worlds {
   z-index: 3;
 }
 
-.dev-badge {
-  position: fixed;
-  left: 18px;
-  bottom: 18px;
-  padding: 8px 14px;
-  border-radius: 999px;
-  font-size: 0.7rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgba(10, 18, 36, 0.9);
-  background: rgba(122, 236, 255, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
-  z-index: 9999;
-  pointer-events: none;
-}
-
 .world-card:hover {
   transform: translateY(-10px) scale(1.02);
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
@@ -1197,37 +1128,6 @@ body.hide-worlds-overlap .worlds {
   color: var(--muted);
 }
 
-.journey-track {
-  display: grid;
-  gap: 22px;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-}
-
-.story-step {
-  background: rgba(10, 16, 34, 0.8);
-  border-radius: 24px;
-  padding: 28px;
-  border: 1px solid rgba(237, 243, 255, 0.08);
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
-  transform: translateY(10px) scale(0.98);
-  opacity: 0.7;
-}
-
-.story-step.active {
-  transform: translateY(-6px) scale(1.02);
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
-  opacity: 1;
-  border-color: rgba(104, 225, 255, 0.5);
-}
-
-.step-tag {
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.25em;
-  color: var(--accent);
-  margin-bottom: 12px;
-}
-
 .guide {
   display: grid;
   grid-template-columns: minmax(260px, 1fr) minmax(260px, 1fr);
@@ -1239,17 +1139,9 @@ body.hide-worlds-overlap .worlds {
   transition: opacity 0.3s ease;
 }
 
-body.hide-guide-overlap .guide-left {
-  opacity: 0;
-}
-
 .guide-right {
   transition: opacity 0.3s ease;
   position: relative;
-}
-
-body.hide-guide-overlap .guide-right {
-  opacity: 0;
 }
 
 .tap-bubble {
@@ -1539,11 +1431,6 @@ body.world-page .world-card {
   border-radius: 16px 16px 6px 16px;
 }
 
-.chat-message.miri .chat-bubble {
-  background: rgba(255, 111, 177, 0.1);
-  border-color: rgba(255, 111, 177, 0.35);
-}
-
 .chat-label {
   font-size: 10px;
   text-transform: uppercase;
@@ -1758,18 +1645,6 @@ body.world-page .world-card {
   z-index: 2;
   animation: breathe 6s ease-in-out infinite;
   transform-origin: 50% 20%;
-}
-
-.alien-heart {
-  position: absolute;
-  width: 34px;
-  height: 34px;
-  background: #ff6fb1;
-  border-radius: 50% 50% 40% 40%;
-  top: 45px;
-  left: 50%;
-  transform: translateX(-50%) rotate(45deg);
-  animation: pulse 3s ease-in-out infinite;
 }
 
 .alien-arm {
@@ -2540,6 +2415,9 @@ body:not(.world-page) .footer {
   }
 }
 
+/* --------------------------------------------------------------------------
+   RESPONSIVE OVERRIDES
+   -------------------------------------------------------------------------- */
 @media (max-width: 960px) {
   .aurora {
     animation: none;
@@ -2950,14 +2828,11 @@ body:not(.world-page) .footer {
     top: 10%;
   }
 
-  .mimi-hello-bubble {
-    right: -28px;
-    bottom: 14px;
-    font-size: 10px;
-    padding: 5px 8px;
-  }
 }
 
+/* --------------------------------------------------------------------------
+   ACCESSIBILITY: REDUCED MOTION
+   -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;

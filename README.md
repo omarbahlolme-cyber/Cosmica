@@ -1,31 +1,33 @@
-# Cosmica Website
+﻿# Cosmica Website
 
-## What is this?
-Cosmica is a static front-end site with a small Node/Express backend for chat and feedback.
+Cosmica is a static language-learning site with a small Node/Express backend for chat and feedback APIs.
 
-## Project layout
-- HTML pages: `index.html`, `world*.html`, `words*.html`, `phrases*.html`, `letters*.html`, `grammar*.html`
-- Styles: `style.css`
-- Front-end logic: `app.js`
-- Server: `server.js`
-- Translations: `translations.json`, `translations.french.json`
-- Scripts: `scripts/` (translation generators)
-- SEO: `sitemap.xml`, `robots.txt`
+## Developer map
 
-## How to keep code organized (safe)
-- **Do not remove code** unless you verify it’s unused (use browser coverage first).
-- **Format only** to improve readability:
-  - Run: `npm run format`
-- **Add comments** to mark sections instead of moving code.
-- Keep HTML in page order, CSS in section order, JS in feature order.
+- Full file-by-file map: `PROJECT_STRUCTURE.md`
+- Front-end entry points: `index.html`, `world*.html`, `letters*.html`, `words*.html`, `phrases*.html`, `grammar*.html`
+- Shared front-end logic: `app.js`
+- Shared styling: `style.css`
+- Backend/API: `server.js`
+- Translation data: `translations.json`, `translations.french.json`
+- Translation generators: `scripts/`
+
+## Organization standards
+
+1. Keep URL-facing HTML files in root unless route changes are intentional.
+2. Keep non-functional cleanups focused on comments, structure, and formatting.
+3. Add section headers for every major block in JS/CSS/server/script files.
+4. Preserve behavior for readability-only refactors.
 
 ## Local run
+
 ```bash
 npm install
 npm start
 ```
 
 ## Formatting
+
 ```bash
 npm run format
 ```

@@ -1,6 +1,8 @@
 <!doctype html>
+<!-- Page Structure: metadata, navigation, main content, footer -->
 <html lang="en">
   <head>
+    <!-- Metadata, SEO, social tags, and shared font assets -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cosmica | English World</title>
@@ -41,6 +43,7 @@
     <!-- End Cloudflare Web Analytics -->
   </head>
   <body class="world-page">
+    <!-- Decorative background layers (aurora + starfield) -->
     <div class="aurora"></div>
     <div class="starfield starfield-deep" data-depth="0.15" aria-hidden="true"></div>
     <div class="starfield starfield-mid" data-depth="0.3" aria-hidden="true"></div>
@@ -52,6 +55,7 @@
       <span class="world-orbit orbit-a"></span>
     </div>
 
+    <!-- Global navigation header -->
     <header class="nav">
       <div class="brand">
         <span class="brand-mark">C</span>
@@ -69,6 +73,7 @@
       </button>
     </header>
 
+    <!-- Page-specific main content -->
     <main>
       <style>
         body.world-page:not(.show-language) #language {
@@ -77,6 +82,7 @@
           pointer-events: none !important;
         }
       </style>
+      <!-- Content section -->
       <section class="section world-hero" id="world">
         <div class="section-title">
           <div class="eyebrow">English World</div>
@@ -90,6 +96,8 @@
           <a class="primary" href="#language">Start Lesson</a>
         </div>
       </section>
+
+      <!-- Content section -->
 
       <section class="section world-language reveal language-reveal" id="language">
         <div class="section-title">
@@ -148,6 +156,8 @@
           </div>
         </div>
       </section>
+
+      <!-- Content section -->
 
       <section class="section world-maps reveal" id="maps">
         <div class="section-title">
@@ -243,11 +253,13 @@
       </section>
     </main>
 
+    <!-- Shared footer -->
     <footer class="footer">
       <span>Cosmica Academy</span>
       <span>Explore, learn, and travel through words.</span>
     </footer>
 
+    <!-- Shared client bundle -->
     <script src="app.js"></script>
   </body>
 </html>

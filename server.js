@@ -1,3 +1,7 @@
+/* ==========================================================================
+   COSMICA API SERVER
+   Serves static site assets and exposes feedback/chat API endpoints.
+   ========================================================================== */
 const path = require("path");
 const express = require("express");
 const cors = require("cors");
@@ -5,11 +9,17 @@ const OpenAI = require("openai");
 const nodemailer = require("nodemailer");
 require("dotenv").config();
 
+/* --------------------------------------------------------------------------
+   EXPRESS APP + CORE MIDDLEWARE
+   -------------------------------------------------------------------------- */
 const app = express();
 const port = Number(process.env.PORT) || 3000;
 
 app.use(express.json({ limit: "1mb" }));
 
+/* --------------------------------------------------------------------------
+   CORS CONFIGURATION
+   -------------------------------------------------------------------------- */
 const allowedOrigins = new Set([
   `http://localhost:${port}`,
   `http://127.0.0.1:${port}`,
@@ -47,8 +57,14 @@ app.use(
   })
 );
 
+/* --------------------------------------------------------------------------
+   STATIC ASSET HOSTING
+   -------------------------------------------------------------------------- */
 app.use(express.static(path.join(__dirname)));
 
+/* --------------------------------------------------------------------------
+   SERVICE CLIENT HELPERS (OPENAI + EMAIL)
+   -------------------------------------------------------------------------- */
 const createClient = (apiKey) => new OpenAI({ apiKey });
 const getChatClient = () => createClient(process.env.OPENAI_CHAT_KEY || process.env.OPENAI_API_KEY);
 
@@ -106,6 +122,9 @@ const sendViaResend = async ({ from, to, replyTo, subject, text }) => {
   }
 };
 
+/* --------------------------------------------------------------------------
+   ROUTE: FEEDBACK SUBMISSION
+   -------------------------------------------------------------------------- */
 app.post("/api/feedback", async (req, res) => {
   const { name, email, message } = req.body || {};
   const safeName = typeof name === "string" ? name.trim() : "";
@@ -186,6 +205,9 @@ app.post("/api/feedback", async (req, res) => {
   }
 });
 
+/* --------------------------------------------------------------------------
+   ROUTE: MIMI CHAT PROXY
+   -------------------------------------------------------------------------- */
 app.post("/api/chat", async (req, res) => {
   if (!process.env.OPENAI_CHAT_KEY && !process.env.OPENAI_API_KEY) {
     return res.status(500).json({ error: "Missing OPENAI_CHAT_KEY" });
@@ -216,10 +238,16 @@ app.post("/api/chat", async (req, res) => {
   }
 });
 
+/* --------------------------------------------------------------------------
+   ROUTE: HEALTH CHECK
+   -------------------------------------------------------------------------- */
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok" });
 });
 
+/* --------------------------------------------------------------------------
+   SERVER STARTUP
+   -------------------------------------------------------------------------- */
 app.listen(port, () => {
   console.log(`Server listening on http://localhost:${port}`);
 });

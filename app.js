@@ -1,11 +1,15 @@
+/* ==========================================================================
+   DOM HOOKS AND GLOBAL PAGE REFERENCES
+   Collect shared elements once so all page modules reuse the same references.
+   ========================================================================== */
 const starfields = document.querySelectorAll(".starfield");
 const soundToggle = document.getElementById("soundToggle");
 const soundLabel = soundToggle ? soundToggle.querySelector(".sound-label") : null;
 const speechBubble = document.getElementById("speechBubble");
 const speechText = document.getElementById("speechText");
 const talkButton = document.getElementById("talkButton");
-  const chatForm = document.getElementById("chatForm");
-  const startVoyageButton = document.getElementById("startVoyageButton");
+const chatForm = document.getElementById("chatForm");
+const startVoyageButton = document.getElementById("startVoyageButton");
 const chatInput = document.getElementById("chatInput");
 const chatLog = document.getElementById("chatLog");
 const chatStatus = document.getElementById("chatStatus");
@@ -27,6 +31,10 @@ if (urlParams.has("skipIntro")) {
     cleanUrl.hash;
   window.history.replaceState({}, "", normalizedUrl);
 }
+/* ==========================================================================
+   WORLD CONTEXT
+   Resolve active world from URL/body and select world-specific translation packs.
+   ========================================================================== */
 const WORLD_NAME =
   urlParams.get("world") ||
   document.body.dataset.world ||
@@ -53,6 +61,10 @@ const prefersReducedMotion = window.matchMedia(
   "(prefers-reduced-motion: reduce)"
 ).matches;
 
+/* ==========================================================================
+   MIMI CHAT CONFIGURATION
+   Shared prompt data and canned lines for the assistant persona.
+   ========================================================================== */
 const lines = [
   "I can feel your words forming. Let's light another star.",
   "Your voice vibrates the nebula. Want a new quest?",
@@ -415,16 +427,6 @@ const scrollChatToBottom = () => {
     return;
   }
   chatLog.scrollTop = chatLog.scrollHeight;
-};
-
-const createTypingIndicator = () => {
-  const typing = document.createElement("span");
-  typing.classList.add("chat-typing");
-  for (let i = 0; i < 3; i += 1) {
-    const dot = document.createElement("span");
-    typing.appendChild(dot);
-  }
-  return typing;
 };
 
 const appendChatMessage = (role, text, options = {}) => {
@@ -860,6 +862,10 @@ if (document.body.classList.contains("world-page")) {
 }
 
 
+/* ==========================================================================
+   AMBIENT AUDIO ENGINE
+   Procedural soundscape used by home and world pages (toggle + intensity sync).
+   ========================================================================== */
 let audioContext;
 let ambientGain;
 let ambientPlaying = false;
@@ -872,7 +878,6 @@ let intensity = 0.7;
 let intensityTarget = 0.7;
 let orchestra;
 let nextBarTime;
-let starIndex = 0;
 let starEnergy = 0;
 let starEnergyTarget = 0;
 
@@ -1387,22 +1392,6 @@ if (speechText && speechBubble) {
   }
 }
 
-const triggerMimiLine = () => {
-  lineIndex = (lineIndex + 1) % lines.length;
-  activeLine = lines[lineIndex];
-  speakLine(activeLine, lineMoods[lineIndex] || "happy");
-  if (speechBubble) {
-    speechBubble.animate(
-      [
-        { transform: "translateY(0)", opacity: 1 },
-        { transform: "translateY(-8px)", opacity: 0.6 },
-        { transform: "translateY(0)", opacity: 1 },
-      ],
-      { duration: 600, easing: "ease-out" }
-    );
-  }
-};
-
   const scrollToAnchor = (hash) => {
     const targetId = hash.slice(1);
     const target = document.getElementById(targetId);
@@ -1811,6 +1800,10 @@ worldCards.forEach((card) => {
   });
 });
 
+/* ==========================================================================
+   WORLD PAGE NAVIGATION + LANGUAGE PICKER
+   Handles map-card navigation and base-language selection persistence.
+   ========================================================================== */
 const mapLinks = document.querySelectorAll(".map-link");
 mapLinks.forEach((link) => {
   link.addEventListener("pointerup", (event) => {
@@ -1913,6 +1906,10 @@ if (languageSearch && languagePills.length) {
   applyLanguageFirstLetterFilter();
 }
 
+/* ==========================================================================
+   CARD AUDIO (LETTER / WORD / PHRASE)
+   Unifies click, keyboard, and touch behavior for pronunciation playback.
+   ========================================================================== */
 const setupSpeechCards = () => {
   const letterButtons = document.querySelectorAll(".letter-audio");
   const wordButtons = document.querySelectorAll(".word-audio");
@@ -2046,6 +2043,10 @@ const setupSpeechCards = () => {
   });
 };
 
+/* ==========================================================================
+   LEARNING DATASETS
+   Source lists for words, phrases, and grammar used by map renderers/translations.
+   ========================================================================== */
 const BASE_LANGUAGES = [
   "albanian",
   "arabic",
@@ -4465,12 +4466,6 @@ const getWorldGrammarTitle = (section, title) => {
   return map?.[key] || title;
 };
 
-const getWorldGrammarExample = (section, englishExample) => {
-  const map = WORLD_GRAMMAR_EXAMPLE_MAP?.[section];
-  const key = String(englishExample || "").toLowerCase();
-  return map?.[key] || englishExample;
-};
-
 const WORD_TRANSLATIONS = Object.fromEntries(
   WORD_SECTION_ORDER.map((section) => [
     section,
@@ -4598,6 +4593,10 @@ const hydrateTranslations = (target, source) => {
   });
 };
 
+/* ==========================================================================
+   TRANSLATION LOADING + HYDRATION
+   Fetches static translation JSON files and hydrates in-memory lookup tables.
+   ========================================================================== */
 const loadTranslations = async () => {
   try {
     let explanationPackLoaded = false;
@@ -4641,6 +4640,10 @@ const loadTranslations = async () => {
   }
 };
 
+/* ==========================================================================
+   DYNAMIC MAP RENDERERS
+   Build Words, Phrases, and Grammar pages from shared section datasets.
+   ========================================================================== */
 const renderWordsSections = () => {
   const container = document.getElementById("wordsSections");
   const controls = document.getElementById("wordsControls");
@@ -6968,88 +6971,6 @@ const buildLabelsForCard = (card, sentence) => {
   return labels;
 };
 
-const extractLabelsFromSentence = (sentence) => {
-  if (!sentence) {
-    return [];
-  }
-  const lower = sentence.toLowerCase();
-  const matches = [];
-  const addMatch = (type, phrase, index) => {
-    const label = `${type}: ${phrase}`;
-    if (!matches.some((item) => item.label === label)) {
-      matches.push({ label, index });
-    }
-  };
-
-  const reasonWords = ["because", "so", "since"];
-  const contrastWords = ["but", "although", "though", "however"];
-  const connectorWords = ["and", "or", "when", "while", "if", "unless", "until"];
-  const mannerWords = ["quickly", "slowly", "carefully", "well", "badly", "politely", "quietly", "loudly"];
-  const timeWords = [
-    "today",
-    "yesterday",
-    "tomorrow",
-    "tonight",
-    "morning",
-    "afternoon",
-    "evening",
-    "night",
-    "now",
-    "later",
-  ];
-
-  reasonWords.forEach((word) => {
-    const idx = lower.indexOf(` ${word} `);
-    if (idx >= 0) addMatch("Reason", word, idx);
-  });
-  contrastWords.forEach((word) => {
-    const idx = lower.indexOf(` ${word} `);
-    if (idx >= 0) addMatch("Contrast", word, idx);
-  });
-  connectorWords.forEach((word) => {
-    const idx = lower.indexOf(` ${word} `);
-    if (idx >= 0) addMatch("Connector", word, idx);
-  });
-  mannerWords.forEach((word) => {
-    const idx = lower.indexOf(` ${word} `);
-    if (idx >= 0) addMatch("Manner", word, idx);
-  });
-
-  const timeRegex = /\b(?:at|after|before|by)\s+(?:the\s+)?([a-z]+(?:\s+[a-z]+)?)/gi;
-  let match;
-  while ((match = timeRegex.exec(sentence)) !== null) {
-    const phrase = match[0].trim();
-    addMatch("Time", phrase, match.index);
-  }
-
-  timeWords.forEach((word) => {
-    const idx = lower.indexOf(` ${word}`);
-    if (idx >= 0) {
-      addMatch("Time", word, idx);
-    }
-  });
-
-  const placeRegex = /\b(?:in|at|on)\s+(?:the\s+)?([a-z]+(?:\s+[a-z]+)?)/gi;
-  while ((match = placeRegex.exec(sentence)) !== null) {
-    const phrase = match[0].trim();
-    if (phrase.toLowerCase().startsWith("at the") && phrase.toLowerCase().includes("noon")) {
-      continue;
-    }
-    addMatch("Place", phrase, match.index);
-  }
-
-  const ordered = matches
-    .sort((a, b) => a.index - b.index)
-    .map((item) => item.label);
-  if (!ordered.length) {
-    const clean = sentence.replace(/[.!?]$/, "").trim();
-    if (clean) {
-      ordered.push(`Sentence: ${clean}`);
-    }
-  }
-  return ordered;
-};
-
 const stripLabelPhrases = (sentence, labels) => {
   let output = sentence;
   labels.forEach((label) => {
@@ -7557,22 +7478,10 @@ const buildGrammarMistakes = (card) => {
   ];
 };
 
-const formatGrammarExample = (card, sentence) => {
-  const title = card.title.toLowerCase();
-  if (title.includes("adding details")) {
-    return sentence
-      .replace(/at noon/i, '<span class="highlight highlight-time">at noon</span>')
-      .replace(/at the station/i, '<span class="highlight highlight-place">at the station</span>')
-      .replace(/yesterday/i, '<span class="highlight highlight-time">yesterday</span>')
-      .replace(/in the kitchen/i, '<span class="highlight highlight-place">in the kitchen</span>')
-      .replace(/after dinner/i, '<span class="highlight highlight-time">after dinner</span>')
-      .replace(/because it rained/i, '<span class="highlight highlight-reason">because it rained</span>')
-      .replace(/because it was late/i, '<span class="highlight highlight-reason">because it was late</span>')
-      .replace(/quickly/i, '<span class="highlight highlight-manner">quickly</span>');
-  }
-  return sentence;
-};
-
+/* ==========================================================================
+   GRAMMAR MODAL OVERLAY
+   Lazy-creates and refreshes the grammar deep-dive modal on grammar pages.
+   ========================================================================== */
 const ensureGrammarOverlay = () => {
   let overlay = document.getElementById("grammarOverlay");
   const needsRebuild =
@@ -8014,10 +7923,6 @@ const setupBackToTopButton = () => {
   return button;
 };
 
-let wordsHasScrolled = false;
-let phrasesHasScrolled = false;
-let grammarHasScrolled = false;
-
 const updateWordsTopState = () => {
   if (!document.body.classList.contains("words-page")) {
     return;
@@ -8039,6 +7944,10 @@ const updateGrammarTopState = () => {
   document.body.classList.remove("grammar-at-top");
 };
 
+/* ==========================================================================
+   APPLICATION BOOTSTRAP
+   Render page modules, wire observers/listeners, then hydrate translations.
+   ========================================================================== */
 renderWordsSections();
 renderPhrasesSections();
 renderGrammarSections();
@@ -8074,7 +7983,6 @@ window.addEventListener(
     if (!document.body.classList.contains("words-page")) {
       return;
     }
-    wordsHasScrolled = true;
     window.requestAnimationFrame(updateWordsTopState);
   },
   { passive: true }
@@ -8085,7 +7993,6 @@ window.addEventListener(
     if (!document.body.classList.contains("phrases-page")) {
       return;
     }
-    phrasesHasScrolled = true;
     window.requestAnimationFrame(updatePhrasesTopState);
   },
   { passive: true }
@@ -8096,7 +8003,6 @@ window.addEventListener(
     if (!document.body.classList.contains("grammar-page")) {
       return;
     }
-    grammarHasScrolled = true;
     window.requestAnimationFrame(updateGrammarTopState);
   },
   { passive: true }

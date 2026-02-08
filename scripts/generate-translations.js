@@ -1,12 +1,22 @@
+/* ==========================================================================
+   TRANSLATION GENERATOR (BASE ENGLISH MAPS)
+   Builds translations.json from WORD_SECTION_LISTS and PHRASE_SECTION_LISTS.
+   ========================================================================== */
 const fs = require("fs");
 const path = require("path");
 const vm = require("vm");
 const OpenAI = require("openai");
 require("dotenv").config();
 
+/* --------------------------------------------------------------------------
+   INPUT/OUTPUT PATHS
+   -------------------------------------------------------------------------- */
 const appPath = path.join(__dirname, "..", "app.js");
 const outputPath = path.join(__dirname, "..", "translations.json");
 
+/* --------------------------------------------------------------------------
+   API CLIENT BOOTSTRAP
+   -------------------------------------------------------------------------- */
 const apiKey = process.env.OPENAI_TRANSLATE_KEY || process.env.OPENAI_API_KEY;
 if (!apiKey) {
   console.error("Missing OPENAI_TRANSLATE_KEY or OPENAI_API_KEY");
@@ -17,6 +27,9 @@ const client = new OpenAI({ apiKey });
 
 const appSource = fs.readFileSync(appPath, "utf8");
 
+/* --------------------------------------------------------------------------
+   DATA EXTRACTION FROM app.js
+   -------------------------------------------------------------------------- */
 const extractArray = (regex, label) => {
   const match = appSource.match(regex);
   if (!match) {
@@ -52,9 +65,15 @@ const chunkArray = (items, size) => {
   return chunks;
 };
 
+/* --------------------------------------------------------------------------
+   TRANSLATION REQUEST TUNING
+   -------------------------------------------------------------------------- */
 const REQUEST_DELAY_MS = Number(process.env.TRANSLATION_DELAY_MS || 150);
 const BATCH_SIZE = Number(process.env.TRANSLATION_BATCH_SIZE || 60);
 
+/* --------------------------------------------------------------------------
+   TRANSLATION REQUEST EXECUTION
+   -------------------------------------------------------------------------- */
 const translateBatch = async (items, targetLanguage, label) => {
   const response = await client.chat.completions.create({
     model: process.env.OPENAI_TRANSLATE_MODEL || process.env.OPENAI_MODEL || "gpt-4o-mini",
@@ -97,6 +116,9 @@ const translateBatch = async (items, targetLanguage, label) => {
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+/* --------------------------------------------------------------------------
+   PERSISTENCE HELPERS
+   -------------------------------------------------------------------------- */
 const loadExisting = () => {
   if (!fs.existsSync(outputPath)) {
     return null;
@@ -153,6 +175,9 @@ const translateSections = async (sections, label, output, result) => {
   }
 };
 
+/* --------------------------------------------------------------------------
+   MAIN EXECUTION FLOW
+   -------------------------------------------------------------------------- */
 const run = async () => {
   const existing = loadExisting();
   const result = {
