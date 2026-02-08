@@ -1830,6 +1830,7 @@ body.world-page .world-card {
 
 .footer-legal-links a {
   color: rgba(104, 225, 255, 0.92);
+  font-size: 12px;
   text-decoration: none;
   text-shadow: 0 0 8px rgba(104, 225, 255, 0.28);
 }
@@ -2629,7 +2630,7 @@ body:not(.world-page) .footer {
   }
 
   .footer-legal-links a {
-    font-size: 11px;
+    font-size: 5.5px;
   }
 
   .footer-divider {
