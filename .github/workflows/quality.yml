@@ -1,0 +1,41 @@
+name: Quality Checks
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Syntax checks
+        run: npm run check:syntax
+
+      - name: Bloat checks
+        run: npm run check:bloat
+
+      - name: Performance regression checks
+        run: npm run perf:check
+
+      - name: Release hygiene checks
+        run: npm run release:check
+
+      - name: Smoke checks
+        run: npm run smoke

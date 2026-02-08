@@ -11,7 +11,7 @@ require("dotenv").config();
 /* --------------------------------------------------------------------------
    INPUT/OUTPUT PATHS
    -------------------------------------------------------------------------- */
-const appPath = path.join(__dirname, "..", "app.js");
+const mapsPath = path.join(__dirname, "..", "app-maps.js");
 const WORLD_LANGUAGE = process.env.WORLD_LANGUAGE || "French";
 const WORLD_LANG_KEY = WORLD_LANGUAGE.toLowerCase();
 const outputPath = path.join(__dirname, "..", `translations.${WORLD_LANG_KEY}.json`);
@@ -26,23 +26,23 @@ if (!apiKey) {
 }
 
 const client = new OpenAI({ apiKey });
-const appSource = fs.readFileSync(appPath, "utf8");
+const mapsSource = fs.readFileSync(mapsPath, "utf8");
 
 /* --------------------------------------------------------------------------
-   DATA EXTRACTION FROM app.js
+   DATA EXTRACTION FROM app-maps.js
    -------------------------------------------------------------------------- */
 const extractArray = (regex, label) => {
-  const match = appSource.match(regex);
+  const match = mapsSource.match(regex);
   if (!match) {
-    throw new Error(`Unable to find ${label} in app.js`);
+    throw new Error(`Unable to find ${label} in app-maps.js`);
   }
   return vm.runInNewContext(`[${match[1]}]`);
 };
 
 const extractObject = (regex, label) => {
-  const match = appSource.match(regex);
+  const match = mapsSource.match(regex);
   if (!match) {
-    throw new Error(`Unable to find ${label} in app.js`);
+    throw new Error(`Unable to find ${label} in app-maps.js`);
   }
   return vm.runInNewContext(`(${match[1]})`);
 };

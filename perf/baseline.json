@@ -1,0 +1,84 @@
+{
+  "generatedAt": "2026-02-08T08:56:44.699Z",
+  "baseUrl": "http://127.0.0.1:4174",
+  "routes": {
+    "/index.html": {
+      "status": 200,
+      "durationMs": 8,
+      "bytes": 23273,
+      "cacheControl": "no-cache"
+    },
+    "/world.html": {
+      "status": 200,
+      "durationMs": 4,
+      "bytes": 11130,
+      "cacheControl": "no-cache"
+    },
+    "/world-french.html": {
+      "status": 200,
+      "durationMs": 3,
+      "bytes": 10837,
+      "cacheControl": "no-cache"
+    },
+    "/letters.html": {
+      "status": 200,
+      "durationMs": 3,
+      "bytes": 20655,
+      "cacheControl": "no-cache"
+    },
+    "/words.html": {
+      "status": 200,
+      "durationMs": 2,
+      "bytes": 3448,
+      "cacheControl": "no-cache"
+    },
+    "/phrases.html": {
+      "status": 200,
+      "durationMs": 3,
+      "bytes": 3461,
+      "cacheControl": "no-cache"
+    },
+    "/grammar.html": {
+      "status": 200,
+      "durationMs": 2,
+      "bytes": 3437,
+      "cacheControl": "no-cache"
+    },
+    "/style.css": {
+      "status": 200,
+      "durationMs": 2,
+      "bytes": 57833,
+      "cacheControl": "public, max-age=86400, stale-while-revalidate=604800"
+    },
+    "/style-maps.css": {
+      "status": 200,
+      "durationMs": 2,
+      "bytes": 31895,
+      "cacheControl": "public, max-age=86400, stale-while-revalidate=604800"
+    },
+    "/app.js": {
+      "status": 200,
+      "durationMs": 4,
+      "bytes": 75277,
+      "cacheControl": "public, max-age=86400, stale-while-revalidate=604800"
+    },
+    "/app-maps.js": {
+      "status": 200,
+      "durationMs": 5,
+      "bytes": 160595,
+      "cacheControl": "public, max-age=86400, stale-while-revalidate=604800"
+    },
+    "/translations.json": {
+      "status": 200,
+      "durationMs": 7,
+      "bytes": 1633998,
+      "cacheControl": "public, max-age=300, stale-while-revalidate=600"
+    },
+    "/translations.french.json": {
+      "status": 200,
+      "durationMs": 13,
+      "bytes": 2854026,
+      "cacheControl": "public, max-age=300, stale-while-revalidate=600"
+    }
+  }
+}

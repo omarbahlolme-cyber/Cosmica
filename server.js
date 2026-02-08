@@ -14,6 +14,7 @@ require("dotenv").config();
    -------------------------------------------------------------------------- */
 const app = express();
 const port = Number(process.env.PORT) || 3000;
+app.disable("x-powered-by");
 
 app.use(express.json({ limit: "1mb" }));
 
@@ -60,7 +61,51 @@ app.use(
 /* --------------------------------------------------------------------------
    STATIC ASSET HOSTING
    -------------------------------------------------------------------------- */
-app.use(express.static(path.join(__dirname)));
+const CACHEABLE_EXTENSIONS = new Set([
+  ".js",
+  ".css",
+  ".svg",
+  ".png",
+  ".jpg",
+  ".jpeg",
+  ".webp",
+  ".gif",
+  ".ico",
+  ".woff",
+  ".woff2",
+]);
+
+app.use(
+  express.static(path.join(__dirname), {
+    etag: true,
+    lastModified: true,
+    setHeaders: (res, filePath) => {
+      const ext = path.extname(filePath).toLowerCase();
+      if (ext === ".html") {
+        res.setHeader("Cache-Control", "no-cache");
+        return;
+      }
+      if (ext === ".json") {
+        res.setHeader("Cache-Control", "public, max-age=300, stale-while-revalidate=600");
+        return;
+      }
+      if (CACHEABLE_EXTENSIONS.has(ext)) {
+        res.setHeader("Cache-Control", "public, max-age=86400, stale-while-revalidate=604800");
+        return;
+      }
+      res.setHeader("Cache-Control", "public, max-age=3600");
+    },
+  })
+);
+
+/* --------------------------------------------------------------------------
+   API CACHE POLICY
+   Keep API responses dynamic while static files use tuned cache headers.
+   -------------------------------------------------------------------------- */
+app.use("/api", (req, res, next) => {
+  res.setHeader("Cache-Control", "no-store");
+  next();
+});
 
 /* --------------------------------------------------------------------------
    SERVICE CLIENT HELPERS (OPENAI + EMAIL)

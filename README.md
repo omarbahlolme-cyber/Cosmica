@@ -6,8 +6,10 @@ Cosmica is a static language-learning site with a small Node/Express backend for
 
 - Full file-by-file map: `PROJECT_STRUCTURE.md`
 - Front-end entry points: `index.html`, `world*.html`, `letters*.html`, `words*.html`, `phrases*.html`, `grammar*.html`
-- Shared front-end logic: `app.js`
+- Base front-end logic: `app.js`
+- Map-only front-end bundle: `app-maps.js`
 - Shared styling: `style.css`
+- Map-only styling: `style-maps.css`
 - Backend/API: `server.js`
 - Translation data: `translations.json`, `translations.french.json`
 - Translation generators: `scripts/`
@@ -41,3 +43,22 @@ npm run smoke
 Runs two quick safeguards:
 1. Verifies local HTML `href/src` references point to real files.
 2. Starts the local server on an isolated port and checks core routes return `200`.
+
+## Quality checks (CI + local)
+
+```bash
+npm run quality
+```
+
+Runs:
+1. Syntax checks for key server/client bundles.
+2. Bloat checks (orphan root assets + selector advisory report).
+3. Performance regression check against `perf/baseline.json`.
+4. Release hygiene checks (`CHANGELOG.md` + semver).
+5. Smoke checks for links and core routes.
+
+To refresh the perf baseline after intentional optimizations:
+
+```bash
+npm run perf:baseline
+```
