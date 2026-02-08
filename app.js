@@ -692,15 +692,46 @@ const observer = new IntersectionObserver(
   { threshold: 0.18 }
 );
 
+const observedRevealElements = new WeakSet();
+const shouldObserveReveal = (el) => {
+  if (!el) {
+    return false;
+  }
+  if (el.id === "language") {
+    return false;
+  }
+  if (document.body.classList.contains("world-page") && (el.id === "world" || el.id === "maps")) {
+    return false;
+  }
+  return true;
+};
+
+const observeRevealElement = (el) => {
+  if (!shouldObserveReveal(el) || observedRevealElements.has(el)) {
+    return;
+  }
+  observer.observe(el);
+  observedRevealElements.add(el);
+};
+
+const createRafThrottled = (callback) => {
+  let rafId = 0;
+  return () => {
+    if (rafId) {
+      return;
+    }
+    rafId = window.requestAnimationFrame(() => {
+      rafId = 0;
+      callback();
+    });
+  };
+};
+
 document.querySelectorAll(".section").forEach((el) => {
   el.classList.add("reveal");
 });
 document.querySelectorAll(".reveal").forEach((el) => {
-  if (el.id === "language") return;
-  if (document.body.classList.contains("world-page") && (el.id === "world" || el.id === "maps")) {
-    return;
-  }
-  observer.observe(el);
+  observeRevealElement(el);
 });
 
 let setActiveWorldSection = null;
@@ -717,7 +748,6 @@ const updateMapsTitleVisibility = () => {
 if (languageSection) {
   languageSection.classList.add("language-reveal");
   languageSection.classList.remove("is-visible");
-  let languageHasUserScrolled = false;
   let languageUserActivated = false;
   let languageForceShow = false;
   if (document.body.classList.contains("world-page")) {
@@ -758,12 +788,12 @@ if (languageSection) {
     }
     updateMapsTitleVisibility();
   };
+  const scheduleLanguageVisibilityCheck = createRafThrottled(enforceLanguageHiddenAtTop);
   enforceLanguageHiddenAtTop();
   window.addEventListener(
     "scroll",
     () => {
-      languageHasUserScrolled = true;
-      window.requestAnimationFrame(enforceLanguageHiddenAtTop);
+      scheduleLanguageVisibilityCheck();
     },
     { passive: true }
   );
@@ -772,7 +802,7 @@ if (languageSection) {
       eventName,
       () => {
         languageUserActivated = true;
-        enforceLanguageHiddenAtTop();
+        scheduleLanguageVisibilityCheck();
       },
       { passive: true, once: true }
     );
@@ -785,30 +815,35 @@ if (languageSection) {
     startLessonLink.addEventListener("click", () => {
       languageForceShow = true;
       languageUserActivated = true;
-      languageSection.classList.add("is-visible");
       if (document.body.classList.contains("world-page")) {
-        document.body.classList.add("show-language");
         document.body.classList.add("hide-maps");
       }
-      updateMapsTitleVisibility();
-      if (setActiveWorldSection) {
-        setActiveWorldSection("language");
-      }
+      window.requestAnimationFrame(() => {
+        languageSection.classList.add("is-visible");
+        if (document.body.classList.contains("world-page")) {
+          document.body.classList.add("show-language");
+        }
+        updateMapsTitleVisibility();
+        if (setActiveWorldSection) {
+          setActiveWorldSection("language");
+        }
+      });
     });
   }
 
+  const scheduleHideMapsCheck = createRafThrottled(() => {
+    if (!document.body.classList.contains("hide-maps")) {
+      return;
+    }
+    const languageBottom = languageSection.offsetTop + languageSection.offsetHeight;
+    if (window.scrollY > languageBottom - 80) {
+      document.body.classList.remove("hide-maps");
+    }
+    updateMapsTitleVisibility();
+  });
   window.addEventListener(
     "scroll",
-    () => {
-      if (!document.body.classList.contains("hide-maps")) {
-        return;
-      }
-      const languageBottom = languageSection.offsetTop + languageSection.offsetHeight;
-      if (window.scrollY > languageBottom - 80) {
-        document.body.classList.remove("hide-maps");
-      }
-      updateMapsTitleVisibility();
-    },
+    scheduleHideMapsCheck,
     { passive: true }
   );
 }
@@ -858,11 +893,10 @@ if (document.body.classList.contains("world-page")) {
         setActiveWorldSection(closest);
       }
     };
+    const scheduleWorldScroll = createRafThrottled(handleWorldScroll);
     setActiveWorldSection(location.hash === "#maps" ? "maps" : location.hash === "#language" ? "language" : "world");
-    window.addEventListener("scroll", () => {
-      window.requestAnimationFrame(handleWorldScroll);
-    }, { passive: true });
-    window.addEventListener("hashchange", handleWorldScroll);
+    window.addEventListener("scroll", scheduleWorldScroll, { passive: true });
+    window.addEventListener("hashchange", scheduleWorldScroll);
   }
 }
 
@@ -1642,13 +1676,6 @@ if (hero && !prefersReducedMotion) {
   });
 }
 
-if (canUseParallax) {
-  window.addEventListener("mousemove", (event) => {
-    mouseX = event.clientX / window.innerWidth - 0.5;
-    mouseY = event.clientY / window.innerHeight - 0.5;
-  });
-}
-
 const resetGaze = () => {
   if (!alien) {
     return;
@@ -1684,6 +1711,7 @@ const updateParallax = () => {
   if (!canUseParallax) {
     return;
   }
+  parallaxRaf = null;
   currentX += (mouseX - currentX) * 0.08;
   currentY += (mouseY - currentY) * 0.08;
 
@@ -1698,11 +1726,35 @@ const updateParallax = () => {
     layer.style.transform = `translate3d(${translateX}px, ${translateY}px, 0)`;
   });
 
-  window.requestAnimationFrame(updateParallax);
+  if (Math.abs(mouseX - currentX) + Math.abs(mouseY - currentY) > 0.002) {
+    parallaxRaf = window.requestAnimationFrame(updateParallax);
+  }
+};
+
+let parallaxRaf = null;
+const scheduleParallaxUpdate = () => {
+  if (!canUseParallax || parallaxRaf) {
+    return;
+  }
+  parallaxRaf = window.requestAnimationFrame(updateParallax);
 };
 
 if (canUseParallax) {
-  updateParallax();
+  window.addEventListener(
+    "mousemove",
+    (event) => {
+      mouseX = event.clientX / window.innerWidth - 0.5;
+      mouseY = event.clientY / window.innerHeight - 0.5;
+      scheduleParallaxUpdate();
+    },
+    { passive: true }
+  );
+  window.addEventListener("mouseleave", () => {
+    mouseX = 0;
+    mouseY = 0;
+    scheduleParallaxUpdate();
+  });
+  scheduleParallaxUpdate();
 } else {
   parallaxLayers.forEach((layer) => {
     layer.style.transform = "";
@@ -2284,7 +2336,7 @@ const loadMapsBundle = () =>
   });
 
 const initializeCommonShell = () => {
-  document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+  document.querySelectorAll(".reveal").forEach((el) => observeRevealElement(el));
   setupSpeechCards();
   setupBackToTopButton();
 };
