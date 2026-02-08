@@ -2556,6 +2556,28 @@ body:not(.world-page) .footer {
     max-width: none;
   }
 
+  .footer-inline-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    row-gap: 6px;
+    column-gap: 8px;
+  }
+
+  .footer-inline-links > :first-child {
+    flex: 0 0 100%;
+    text-align: right;
+  }
+
+  /* Center legal links on the bottom row while preserving right-aligned footer text. */
+  .footer-inline-links > :nth-child(2) {
+    margin-left: auto;
+  }
+
+  .footer-inline-links > :last-child {
+    margin-right: auto;
+  }
+
   .scroll-top-btn {
     right: 14px;
     top: 14px;
