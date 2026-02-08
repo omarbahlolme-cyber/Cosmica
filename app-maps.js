@@ -3075,18 +3075,66 @@ const buildGrammarExplanation = (card) => {
   return `This card explains ${card.title} and how to form it clearly in real sentences.`;
 };
 
+const normalizeTranslationLookupKey = (value) =>
+  String(value || "")
+    .toLowerCase()
+    .replace(/’/g, "'")
+    .replace(/\s+/g, " ")
+    .trim();
+
+const buildTranslationLookupVariants = (value) => {
+  const normalized = normalizeTranslationLookupKey(value);
+  if (!normalized) {
+    return [];
+  }
+  const stripped = normalized.replace(/[.!?…]+$/g, "").trim();
+  const variants = [normalized];
+  if (stripped && stripped !== normalized) {
+    variants.push(stripped);
+  }
+  if (stripped) {
+    variants.push(`${stripped}.`);
+    variants.push(`${stripped}?`);
+    variants.push(`${stripped}!`);
+  }
+  return [...new Set(variants.filter(Boolean))];
+};
+
 const resolveGrammarExplanation = (section, explanationText, baseLanguage) => {
   const sectionKey = section || GRAMMAR_SECTION_ORDER[0];
-  const key = (explanationText || "").toLowerCase().trim();
+  const keyVariants = buildTranslationLookupVariants(explanationText);
+  const variantSet = new Set(keyVariants);
   const langKey = (baseLanguage || "").toLowerCase();
   if (!langKey) {
     return "";
   }
-  const entry = GRAMMAR_EXPLANATION_TRANSLATIONS?.[sectionKey]?.[key];
-  if (!entry) {
-    return "";
+  const bySection = GRAMMAR_EXPLANATION_TRANSLATIONS || {};
+  const sectionOrder = [
+    sectionKey,
+    ...Object.keys(bySection).filter((name) => name !== sectionKey),
+  ];
+  for (const sectionName of sectionOrder) {
+    const entries = bySection?.[sectionName];
+    if (!entries) {
+      continue;
+    }
+    for (const variant of keyVariants) {
+      const value = entries?.[variant]?.[langKey];
+      if (value) {
+        return value;
+      }
+    }
+    for (const [rawKey, translations] of Object.entries(entries)) {
+      if (!variantSet.has(normalizeTranslationLookupKey(rawKey))) {
+        continue;
+      }
+      const value = translations?.[langKey];
+      if (value) {
+        return value;
+      }
+    }
   }
-  return entry[langKey] || "";
+  return "";
 };
 
 const GRAMMAR_TEMPLATES = {
@@ -5535,6 +5583,7 @@ const renderGrammarModal = (section, index) => {
       item.expanded,
       baseLanguage
     );
+    const exampleTranslation = expandedTranslation || baseTranslation;
     renderedExamples = `
       <div class="grammar-example">
         <div class="grammar-example-labels">
@@ -5543,7 +5592,7 @@ const renderGrammarModal = (section, index) => {
             .join("")}
         </div>
         <div class="grammar-example-expanded">Phrase: ${applyGrammarHighlights(expandedText, item.labels)}</div>
-        ${expandedTranslation ? `<div class="grammar-translation">${expandedTranslation}</div>` : ""}
+        ${exampleTranslation ? `<div class="grammar-translation">${exampleTranslation}</div>` : ""}
       </div>
     `;
   } else {
@@ -5564,6 +5613,7 @@ const renderGrammarModal = (section, index) => {
           item.expanded,
           baseLanguage
         );
+        const exampleTranslation = expandedTranslation || baseTranslation;
         return `
           <div class="grammar-example">
             <div class="grammar-example-labels">
@@ -5572,7 +5622,7 @@ const renderGrammarModal = (section, index) => {
                 .join("")}
             </div>
             <div class="grammar-example-expanded">Phrase: ${applyGrammarHighlights(expandedText, item.labels)}</div>
-            ${expandedTranslation ? `<div class="grammar-translation">${expandedTranslation}</div>` : ""}
+            ${exampleTranslation ? `<div class="grammar-translation">${exampleTranslation}</div>` : ""}
           </div>
         `;
       })
@@ -5804,25 +5854,70 @@ const applyPhraseTranslations = () => {
 
 const resolveGrammarTranslation = (section, exampleSentence, baseLanguage) => {
   const sectionKey = section || GRAMMAR_SECTION_ORDER[0];
-  const sentenceKey = (exampleSentence || "").toLowerCase();
+  const keyVariants = buildTranslationLookupVariants(exampleSentence);
+  const variantSet = new Set(keyVariants);
   const langKey = (baseLanguage || "").toLowerCase();
   let translation = "";
-  const worldEntry = WORLD_TRANSLATIONS?.grammar?.examples?.[sectionKey]?.[sentenceKey];
-  if (worldEntry && worldEntry.translations) {
-    translation = worldEntry.translations?.[langKey] || "";
-  }
-  if (!translation) {
-    translation = GRAMMAR_TRANSLATIONS[sectionKey]?.[sentenceKey]?.[langKey] || "";
-  }
-  if (!translation) {
-    if (exampleSentence && baseLanguage) {
-      console.warn(
-        `Missing translation: section="${sectionKey}", example="${exampleSentence}", language="${baseLanguage}"`
-      );
+
+  const worldExamples = WORLD_TRANSLATIONS?.grammar?.examples || {};
+  const worldSections = [
+    sectionKey,
+    ...Object.keys(worldExamples).filter((name) => name !== sectionKey),
+  ];
+  for (const sectionName of worldSections) {
+    const sectionEntries = worldExamples?.[sectionName];
+    if (!sectionEntries) {
+      continue;
     }
-    return "";
+    for (const variant of keyVariants) {
+      const direct = sectionEntries?.[variant]?.translations?.[langKey];
+      if (direct) {
+        return direct;
+      }
+    }
+    for (const [rawKey, payload] of Object.entries(sectionEntries)) {
+      if (!variantSet.has(normalizeTranslationLookupKey(rawKey))) {
+        continue;
+      }
+      const value = payload?.translations?.[langKey];
+      if (value) {
+        return value;
+      }
+    }
   }
-  return translation;
+
+  const grammarSections = [
+    sectionKey,
+    ...Object.keys(GRAMMAR_TRANSLATIONS).filter((name) => name !== sectionKey),
+  ];
+  for (const sectionName of grammarSections) {
+    const sectionEntries = GRAMMAR_TRANSLATIONS?.[sectionName];
+    if (!sectionEntries) {
+      continue;
+    }
+    for (const variant of keyVariants) {
+      const direct = sectionEntries?.[variant]?.[langKey];
+      if (direct) {
+        return direct;
+      }
+    }
+    for (const [rawKey, payload] of Object.entries(sectionEntries)) {
+      if (!variantSet.has(normalizeTranslationLookupKey(rawKey))) {
+        continue;
+      }
+      const value = payload?.[langKey];
+      if (value) {
+        return value;
+      }
+    }
+  }
+
+  if (exampleSentence && baseLanguage) {
+    console.warn(
+      `Missing translation: section="${sectionKey}", example="${exampleSentence}", language="${baseLanguage}"`
+    );
+  }
+  return "";
 };
 
 refreshMapsForBaseLanguage = () => {

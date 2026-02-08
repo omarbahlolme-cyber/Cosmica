@@ -1,0 +1,8 @@
+Essential Notes
+
+
+- update site deploy terminal:
+git add .
+git commit -m "update"
+git push
+

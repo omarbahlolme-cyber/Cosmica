@@ -1558,11 +1558,21 @@ if (speechText && speechBubble) {
     if (!target) {
       return false;
     }
+    const isHomeMobile = !document.body.classList.contains("world-page")
+      && window.matchMedia("(max-width: 960px)").matches;
+    const navEl = document.querySelector(".nav");
+    const navHeight = navEl ? navEl.getBoundingClientRect().height : 0;
+    const mobileExtraOffset = isHomeMobile
+      ? Math.max(18, Math.min(42, Math.round(navHeight * 0.14)))
+      : 0;
+    const baseOffset =
+      Number.parseFloat(window.getComputedStyle(target).scrollMarginTop) || 0;
     const top = hash === "#home"
       ? 0
       : target.getBoundingClientRect().top
         + window.scrollY
-        - (Number.parseFloat(window.getComputedStyle(target).scrollMarginTop) || 0);
+        - baseOffset
+        - mobileExtraOffset;
     history.replaceState(null, "", `${baseUrl}${hash}`);
     window.scrollTo({ top, behavior: "smooth" });
     return true;
@@ -1592,7 +1602,14 @@ if (speechText && speechBubble) {
 }
 
   const navLinks = document.querySelectorAll(".nav-links a[href^=\"#\"]");
-  const anchorTargets = new Set(["#how", "#home"]);
+  const anchorTargets = new Set([
+    "#home",
+    "#how",
+    "#worlds",
+    "#guide",
+    "#join",
+    "#support",
+  ]);
   const baseUrl = `${window.location.pathname}${window.location.search}`;
 const navEntry = performance.getEntriesByType("navigation")[0];
 const navType = navEntry?.type
