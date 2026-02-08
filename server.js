@@ -59,11 +59,14 @@ app.use((req, res, next) => {
   if (!isProduction || isLocalHost(req.headers.host || "")) {
     return next();
   }
-  if (isSecureRequest(req)) {
+  const hostHeader = req.headers.host || "www.cosmicalearn.com";
+  const [hostname, portPart] = hostHeader.split(":");
+  const canonicalHost = hostname.toLowerCase() === "cosmicalearn.com" ? "www.cosmicalearn.com" : hostname;
+  const normalizedHost = portPart ? `${canonicalHost}:${portPart}` : canonicalHost;
+  if (isSecureRequest(req) && normalizedHost === hostHeader) {
     return next();
   }
-  const host = req.headers.host || "www.cosmicalearn.com";
-  return res.redirect(308, `https://${host}${req.originalUrl}`);
+  return res.redirect(308, `https://${normalizedHost}${req.originalUrl}`);
 });
 
 app.use(

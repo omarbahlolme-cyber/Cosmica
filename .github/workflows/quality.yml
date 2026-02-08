@@ -34,6 +34,9 @@ jobs:
       - name: Performance regression checks
         run: npm run perf:check
 
+      - name: Security dependency audit
+        run: npm run security:audit
+
       - name: Release hygiene checks
         run: npm run release:check
 
