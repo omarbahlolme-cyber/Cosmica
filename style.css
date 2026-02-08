@@ -2252,7 +2252,8 @@ body.intro-leave .intro-overlay {
 .footer > :last-child {
   display: block;
   grid-column: 2;
-  justify-self: end;
+  justify-self: stretch;
+  width: 100%;
   font-size: 12px;
   opacity: 0.85;
   margin-left: 0;
@@ -2947,11 +2948,12 @@ body:not(.world-page) .footer {
   }
 
   .footer > :last-child {
-    justify-self: end;
+    justify-self: stretch;
+    width: 100%;
     margin-left: 0;
     text-align: right !important;
     font-size: 11px;
-    max-width: 52vw;
+    max-width: none;
   }
 
   .scroll-top-btn {
@@ -3784,4 +3786,40 @@ body.modal-open {
 .grammar-label.label-sentence-1 { background: rgba(170, 255, 210, 0.26); border-color: rgba(170, 255, 210, 0.45); }
 .grammar-label.label-sentence-2 { background: rgba(255, 210, 140, 0.24); border-color: rgba(255, 210, 140, 0.45); }
 .grammar-label.label-sentence { background: rgba(180, 230, 255, 0.24); border-color: rgba(180, 230, 255, 0.35); }
+
+/* Mobile/touch: prevent hover-first double-tap behavior on interactive controls */
+@media (hover: none), (pointer: coarse) {
+  .card:hover,
+  .map-card:hover,
+  .world-card:hover,
+  .language-pill:hover,
+  .words-filter:hover,
+  .word-card:hover,
+  .phrase-card:hover,
+  .grammar-card:hover,
+  .letter-card:hover,
+  .primary:hover,
+  .ghost:hover,
+  .sound-toggle:hover,
+  .grammar-close:hover {
+    transform: none !important;
+  }
+
+  .map-link,
+  .world-card,
+  .language-pill,
+  .words-filter,
+  .letter-card,
+  .word-card,
+  .phrase-card,
+  .grammar-card,
+  .primary,
+  .ghost,
+  .nav-links a,
+  .sound-toggle,
+  .grammar-close {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(104, 225, 255, 0.14);
+  }
+}
 

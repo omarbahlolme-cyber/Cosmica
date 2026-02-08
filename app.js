@@ -1813,10 +1813,27 @@ const triggerWarp = (worldName, onDone) => {
   }, 1500);
 };
 
+const markTouchActivation = (element) => {
+  if (!element) {
+    return;
+  }
+  element.dataset.touchActivatedAt = String(Date.now());
+};
+
+const isRecentTouchActivation = (element, windowMs = 500) => {
+  if (!element) {
+    return false;
+  }
+  const last = Number(element.dataset.touchActivatedAt || "0");
+  if (!Number.isFinite(last) || last <= 0) {
+    return false;
+  }
+  return Date.now() - last < windowMs;
+};
+
 worldCards.forEach((card) => {
   const worldName = card.dataset.world || "World";
-  const worldLine = worldLines[worldName] || "A new world is ready.";
-  card.addEventListener("click", () => {
+  const activateWorldCard = () => {
     if (card.classList.contains("coming-soon")) {
       return;
     }
@@ -1828,21 +1845,25 @@ worldCards.forEach((card) => {
       return;
     }
     triggerWarp(worldName);
+  };
+  card.addEventListener("pointerup", (event) => {
+    if (event.pointerType !== "touch") {
+      return;
+    }
+    event.preventDefault();
+    markTouchActivation(card);
+    activateWorldCard();
+  });
+  card.addEventListener("click", () => {
+    if (isRecentTouchActivation(card)) {
+      return;
+    }
+    activateWorldCard();
   });
   card.addEventListener("keydown", (event) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
-      if (card.classList.contains("coming-soon")) {
-        return;
-      }
-      const targetUrl = worldPages[worldName];
-      if (targetUrl) {
-        triggerWarp(worldName, () => {
-          window.location.href = targetUrl;
-        });
-        return;
-      }
-      triggerWarp(worldName);
+      activateWorldCard();
     }
   });
   card.addEventListener("mouseenter", () => {
@@ -1858,6 +1879,24 @@ worldCards.forEach((card) => {
   });
 });
 
+const mapLinks = document.querySelectorAll(".map-link");
+mapLinks.forEach((link) => {
+  link.addEventListener("pointerup", (event) => {
+    if (event.pointerType !== "touch") {
+      return;
+    }
+    event.preventDefault();
+    markTouchActivation(link);
+    window.location.href = link.href;
+  });
+  link.addEventListener("click", (event) => {
+    if (isRecentTouchActivation(link)) {
+      event.preventDefault();
+      return;
+    }
+  });
+});
+
 const languagePills = document.querySelectorAll(".language-pill");
 if (languagePills.length) {
   const mapsSection = document.querySelector("#maps");
@@ -1870,32 +1909,49 @@ if (languagePills.length) {
       }
     });
   }
+  const selectLanguagePill = (pill) => {
+    if (!pill) {
+      return;
+    }
+    languagePills.forEach((btn) => btn.classList.remove("is-selected"));
+    pill.classList.add("is-selected");
+    const selected = pill.textContent.trim().toLowerCase();
+    if (selected) {
+      localStorage.setItem("cosmicaBaseLanguage", selected);
+    }
+    document.body.classList.add("language-picked");
+    languageSection?.classList.remove("is-visible");
+    if (document.body.classList.contains("world-page")) {
+      document.body.classList.remove("show-language");
+    }
+    refreshMapsForBaseLanguage();
+    updateMapsTitleVisibility();
+    if (mapsSection) {
+      const targetTop = mapsSection.getBoundingClientRect().top + window.scrollY;
+      const offset = Number.parseFloat(
+        window.getComputedStyle(mapsSection).scrollMarginTop
+      ) || 0;
+      const y = targetTop - offset;
+      window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
+    }
+    if (setActiveWorldSection) {
+      setActiveWorldSection("maps");
+    }
+  };
   languagePills.forEach((pill) => {
+    pill.addEventListener("pointerup", (event) => {
+      if (event.pointerType !== "touch") {
+        return;
+      }
+      event.preventDefault();
+      markTouchActivation(pill);
+      selectLanguagePill(pill);
+    });
     pill.addEventListener("click", () => {
-      languagePills.forEach((btn) => btn.classList.remove("is-selected"));
-      pill.classList.add("is-selected");
-      const selected = pill.textContent.trim().toLowerCase();
-      if (selected) {
-        localStorage.setItem("cosmicaBaseLanguage", selected);
+      if (isRecentTouchActivation(pill)) {
+        return;
       }
-      document.body.classList.add("language-picked");
-      languageSection?.classList.remove("is-visible");
-      if (document.body.classList.contains("world-page")) {
-        document.body.classList.remove("show-language");
-      }
-      refreshMapsForBaseLanguage();
-      updateMapsTitleVisibility();
-      if (mapsSection) {
-        const targetTop = mapsSection.getBoundingClientRect().top + window.scrollY;
-        const offset = Number.parseFloat(
-          window.getComputedStyle(mapsSection).scrollMarginTop
-        ) || 0;
-        const y = targetTop - offset;
-        window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
-      }
-      if (setActiveWorldSection) {
-        setActiveWorldSection("maps");
-      }
+      selectLanguagePill(pill);
     });
   });
 }
@@ -2025,7 +2081,18 @@ const setupSpeechCards = () => {
       if (card.dataset[datasetKey]) {
         card.setAttribute("aria-label", `${ariaPrefix} ${card.dataset[datasetKey]}`);
       }
+      card.addEventListener("pointerup", (event) => {
+        if (event.pointerType !== "touch") {
+          return;
+        }
+        event.preventDefault();
+        markTouchActivation(card);
+        playSpeech(card.dataset[datasetKey], { rate, pitch });
+      });
       card.addEventListener("click", () => {
+        if (isRecentTouchActivation(card)) {
+          return;
+        }
         playSpeech(card.dataset[datasetKey], { rate, pitch });
       });
       card.addEventListener("keydown", (event) => {
@@ -7843,6 +7910,23 @@ const setupGrammarModal = () => {
     if (!card) {
       return;
     }
+    if (isRecentTouchActivation(card)) {
+      return;
+    }
+    const section = card.dataset.section;
+    const index = Number(card.dataset.index);
+    openGrammarModal(section, index);
+  });
+  document.addEventListener("pointerup", (event) => {
+    if (event.pointerType !== "touch") {
+      return;
+    }
+    const card = event.target.closest(".grammar-card");
+    if (!card) {
+      return;
+    }
+    event.preventDefault();
+    markTouchActivation(card);
     const section = card.dataset.section;
     const index = Number(card.dataset.index);
     openGrammarModal(section, index);
