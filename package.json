@@ -12,8 +12,9 @@
     "check:bloat:refresh": "node scripts/check-bloat.js --write-allowlist",
     "perf:baseline": "node scripts/perf-snapshot.js --write",
     "perf:check": "node scripts/perf-check.js",
+    "security:audit": "npm audit --audit-level=moderate",
     "release:check": "node scripts/check-release.js",
-    "quality": "npm run check:syntax && npm run check:bloat && npm run perf:check && npm run release:check && npm run smoke",
+    "quality": "npm run check:syntax && npm run check:bloat && npm run perf:check && npm run security:audit && npm run release:check && npm run smoke",
     "format": "prettier --write \"**/*.{html,css,js,json,md}\""
   },
   "devDependencies": {

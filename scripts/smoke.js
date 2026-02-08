@@ -26,12 +26,16 @@ const ROUTES = [
   "/phrases-french.html",
   "/grammar.html",
   "/grammar-french.html",
+  "/privacy.html",
+  "/terms.html",
+  "/license.html",
   "/style.css",
   "/style-maps.css",
   "/app.js",
   "/app-maps.js",
   "/translations.json",
   "/translations.french.json",
+  "/.well-known/security.txt",
   "/api/health",
 ];
 
