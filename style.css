@@ -1772,9 +1772,9 @@ body.world-page .world-card {
 .footer {
   padding: 28px 6vw 44px;
   display: grid;
-  grid-template-columns: minmax(0, max-content) minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
   align-items: center;
-  gap: 12px;
+  gap: 24px;
   color: var(--muted);
   font-size: 14px;
   border-top: 1px solid rgba(237, 243, 255, 0.08);
@@ -1788,32 +1788,52 @@ body.world-page .world-card {
 }
 
 .footer-right-text {
-  display: block;
-  grid-column: 2;
-  justify-self: end;
-  text-align: right !important;
+  display: inline;
+  margin-left: 0;
+  text-align: right;
+  min-width: 0;
+  max-width: none;
+  white-space: normal;
+  justify-self: auto;
+  width: auto;
+  grid-column: auto;
+  grid-row: auto;
   font-size: 12px;
   opacity: 0.85;
+}
+
+.footer-inline-links {
+  grid-column: 2;
+  justify-self: stretch;
+  width: 100%;
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
   min-width: 0;
 }
 
 .footer-legal-links {
-  grid-column: 3;
+  grid-column: auto;
   justify-self: end;
-  display: flex;
+  display: inline-flex;
   flex-wrap: wrap;
   gap: 8px;
   align-items: center;
+  justify-content: flex-end;
 }
 
 .footer-legal-links a {
   color: rgba(104, 225, 255, 0.92);
   text-decoration: none;
+  text-shadow: 0 0 8px rgba(104, 225, 255, 0.28);
 }
 
 .footer-legal-links a:hover,
 .footer-legal-links a:focus-visible {
   text-decoration: underline;
+  text-shadow: 0 0 10px rgba(104, 225, 255, 0.4);
 }
 
 .footer-divider {
@@ -2541,25 +2561,35 @@ body:not(.world-page) .footer {
 
   .footer {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, max-content) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      "left right"
+      "legal legal";
     align-items: center;
     gap: 8px 12px;
   }
 
+  .footer > :first-child {
+    grid-area: left;
+  }
+
+  .footer-inline-links {
+    display: contents;
+  }
+
   .footer-right-text {
-    grid-column: 3;
-    grid-row: 1;
+    grid-area: right;
     justify-self: end;
-    text-align: right;
+    text-align: right !important;
     font-size: 11px;
+    opacity: 0.85;
     max-width: none;
   }
 
   .footer-legal-links {
-    grid-column: 2;
-    grid-row: 2;
+    grid-area: legal;
     justify-self: center;
-    display: flex;
+    display: inline-flex;
     flex-wrap: wrap;
     gap: 8px;
     align-items: center;
