@@ -40,11 +40,7 @@ const WORLD_NAME =
   document.body.dataset.world ||
   "English";
 const WORLD_KEY = WORLD_NAME.toLowerCase();
-const WORLD_TRANSLATION_FILES = {
-  french: "translations.french.json",
-};
-const WORLD_TRANSLATION_FILE =
-  WORLD_TRANSLATION_FILES[WORLD_KEY] || "translations.json";
+const WORLD_TRANSLATION_FILE = "translations.json";
 let WORLD_TRANSLATIONS = null;
 let WORLD_GRAMMAR_TITLE_MAP = null;
 let WORLD_GRAMMAR_EXAMPLE_MAP = null;
@@ -86,7 +82,7 @@ const MIMI_CONFIG = {
 };
 const MIMI_SITE_CONTEXT = [
   "Cosmica is a space-universe language learning site where each language is a world.",
-  "Worlds available now: English, French, Dutch, Swedish, Korean, Arabic, Spanish, German, Japanese, Chinese, Portuguese, Hindi.",
+  "Worlds available now: English.",
   "User actions: click a world to trigger a warp transition that says 'Entering {World} World'.",
   "Tone: cinematic, exploratory, playful, focused on discovery and learning by missions.",
   "Mimi can suggest worlds, give short quests, and teach greetings.",
@@ -104,7 +100,6 @@ const MIMI_SYSTEM_PROMPT = [
 ].join(" ");
 const worldLines = {
   English: "English world online. Neon cities are ready for your hello.",
-  French: "French world humming. Soft vowels and poetic trails await.",
   Dutch: "Dutch world steady. Quick missions and clear sounds ahead.",
   Swedish: "Swedish world glowing. Breathe with the aurora and speak.",
   Korean: "Korean world pulsing. Follow the beat of the script.",
@@ -119,7 +114,6 @@ const worldLines = {
 
 const worldPages = {
   English: "world.html?world=English",
-  French: "world-french.html?world=French",
 };
 const FLAG_SVGS = {
   gb: `
@@ -498,7 +492,6 @@ const buildChatMessages = (message) => {
 
 const greetings = {
   English: "Hello",
-  French: "Bonjour",
   Dutch: "Hallo",
   Swedish: "Hej",
   Korean: "Annyeong",

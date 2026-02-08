@@ -6,22 +6,16 @@
 .
 |-- index.html                  # Home/landing page
 |-- world.html                  # English world entry page
-|-- world-french.html           # French world entry page
 |-- letters.html                # English letters map
-|-- letters-french.html         # French letters map
 |-- words.html                  # English words map
-|-- words-french.html           # French words map
 |-- phrases.html                # English phrases map
-|-- phrases-french.html         # French phrases map
 |-- grammar.html                # English grammar map
-|-- grammar-french.html         # French grammar map
 |-- style.css                   # Shared stylesheet for all pages
 |-- style-maps.css              # Map-only stylesheet (letters/words/phrases/grammar)
 |-- app.js                      # Base front-end behavior + lazy bundle loader
 |-- app-maps.js                 # Maps bundle (datasets/renderers/translations)
 |-- server.js                   # Express server + API routes
 |-- translations.json           # Base translation pack
-|-- translations.french.json    # French world translation pack
 |-- robots.txt                  # Robots directives
 |-- sitemap.xml                 # Sitemap for indexed pages
 |-- package.json                # Node scripts/dependencies
@@ -63,7 +57,7 @@
     |-- check-release.js                # Enforces changelog/version hygiene
     |-- smoke.js                        # Link + route smoke checks
     |-- generate-translations.js        # Builds translations.json
-    `-- generate-world-translations.js  # Builds translations.<world>.json
+    `-- generate-world-translations.js  # Builds translations.<world>.json (optional future worlds)
 ```
 
 ## Organizational rules

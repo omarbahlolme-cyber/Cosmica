@@ -12,7 +12,7 @@ require("dotenv").config();
    INPUT/OUTPUT PATHS
    -------------------------------------------------------------------------- */
 const mapsPath = path.join(__dirname, "..", "app-maps.js");
-const WORLD_LANGUAGE = process.env.WORLD_LANGUAGE || "French";
+const WORLD_LANGUAGE = process.env.WORLD_LANGUAGE || "Spanish";
 const WORLD_LANG_KEY = WORLD_LANGUAGE.toLowerCase();
 const outputPath = path.join(__dirname, "..", `translations.${WORLD_LANG_KEY}.json`);
 

@@ -14,12 +14,6 @@
       "bytes": 12290,
       "cacheControl": "no-cache"
     },
-    "/world-french.html": {
-      "status": 200,
-      "durationMs": 3,
-      "bytes": 12001,
-      "cacheControl": "no-cache"
-    },
     "/letters.html": {
       "status": 200,
       "durationMs": 3,
@@ -72,12 +66,6 @@
       "status": 200,
       "durationMs": 8,
       "bytes": 1633998,
-      "cacheControl": "public, max-age=300, stale-while-revalidate=600"
-    },
-    "/translations.french.json": {
-      "status": 200,
-      "durationMs": 12,
-      "bytes": 2854026,
       "cacheControl": "public, max-age=300, stale-while-revalidate=600"
     }
   }

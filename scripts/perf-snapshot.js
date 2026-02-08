@@ -21,7 +21,6 @@ const REQUEST_TIMEOUT_MS = 10000;
 const ROUTES = [
   "/index.html",
   "/world.html",
-  "/world-french.html",
   "/letters.html",
   "/words.html",
   "/phrases.html",
@@ -31,7 +30,6 @@ const ROUTES = [
   "/app.js",
   "/app-maps.js",
   "/translations.json",
-  "/translations.french.json",
 ];
 
 /* --------------------------------------------------------------------------

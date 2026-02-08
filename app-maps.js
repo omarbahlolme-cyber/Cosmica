@@ -16,7 +16,6 @@ const BASE_LANGUAGES = [
   "czech",
   "dutch",
   "finnish",
-  "french",
   "german",
   "greek",
   "hebrew",
@@ -2569,18 +2568,6 @@ const loadTranslations = async () => {
       if (needsGrammarDetails && (baseData?.grammar?.explanations || baseData?.grammarExplanations)) {
         hydrateGrammarExplanationTranslations(baseData);
         explanationPackLoaded = true;
-      }
-    }
-    if (needsGrammarDetails && !explanationPackLoaded) {
-      try {
-        const explanationResponse = await fetch("translations.french.json", { cache: "no-store" });
-        if (explanationResponse.ok) {
-          const explanationData = await explanationResponse.json();
-          hydrateGrammarExplanationTranslations(explanationData);
-          explanationPackLoaded = true;
-        }
-      } catch (error) {
-        console.warn("Failed to load translations.french.json", error);
       }
     }
     if (isNonEnglishWorld && WORLD_TRANSLATION_FILE !== "translations.json") {
