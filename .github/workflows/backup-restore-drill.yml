@@ -1,0 +1,58 @@
+name: Backup Restore Drill
+
+on:
+  schedule:
+    - cron: "0 4 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  restore-drill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Create and verify backup
+        run: |
+          npm run backup:create
+          npm run backup:verify
+
+      - name: Restore from bundle into temp clone
+        shell: bash
+        run: |
+          set -euo pipefail
+          BUNDLE="$(ls backups/*.bundle | tail -n1)"
+          git clone "$BUNDLE" restore-drill
+
+      - name: Validate restored repository
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd restore-drill
+          npm ci
+          npm run check:syntax
+          npm run check:bloat
+
+      - name: Upload drill artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: backup-restore-drill-${{ github.run_number }}
+          path: backups/*
+          retention-days: 30

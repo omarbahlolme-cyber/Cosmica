@@ -33,7 +33,7 @@
     <link
       href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Rajdhani:wght@400;600;700&family=Oxanium:wght@600&display=swap"
       rel="stylesheet"
-    />
+     data-sri-exempt="google-fonts-dynamic-css" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -51,9 +51,10 @@
         "url": "https://www.cosmicalearn.com/"
       }
     </script>
-  <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "041d74ecd7df4a418564fff0b1d1f030"}'></script><!-- End Cloudflare Web Analytics -->
+  <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "041d74ecd7df4a418564fff0b1d1f030"}' data-sri-exempt="cloudflare-beacon-dynamic-script" crossorigin="anonymous"></script><!-- End Cloudflare Web Analytics -->
 </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <!-- Decorative background layers (aurora + starfield) -->
     <div class="aurora"></div>
     <div class="starfield starfield-deep" data-depth="0.15" aria-hidden="true"></div>
@@ -69,7 +70,7 @@
           <div class="brand-sub">Language Worlds</div>
         </div>
       </div>
-      <nav class="nav-links">
+      <nav class="nav-links" aria-label="Primary navigation">
         <a href="#how">How it works</a>
         <a href="#worlds">Worlds</a>
         <a href="#guide">Alien guide</a>
@@ -83,7 +84,7 @@
     </header>
 
     <!-- Page-specific main content -->
-    <main>
+    <main id="main-content">
       <!-- Content section -->
       <section class="hero" id="home">
         <div class="hero-left">

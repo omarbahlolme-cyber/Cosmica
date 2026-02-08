@@ -74,7 +74,14 @@ The workflow `.github/workflows/backup-weekly.yml` runs weekly and:
 3. Uploads backup artifact for retention.
 4. Optionally pushes a full mirror to `BACKUP_REPO` if secrets are configured.
 
-### 3.3 Recovery drill (recommended monthly)
+### 3.3 Automated monthly restore drill
+
+The workflow `.github/workflows/backup-restore-drill.yml` runs monthly and:
+1. Creates and verifies a fresh backup.
+2. Clones a test repository directly from the generated `.bundle`.
+3. Runs syntax + bloat checks in the restored clone to prove recoverability.
+
+### 3.4 Manual recovery drill (recommended)
 
 1. Download latest backup artifact from Actions.
 2. Restore in a temp folder:
@@ -92,3 +99,5 @@ The workflow `.github/workflows/backup-weekly.yml` runs weekly and:
    - API health
 2. `Security Audit` workflow checks dependency vulnerabilities.
 3. `Uptime Monitor` workflow creates incident issues on failures.
+4. Optional real-user performance forwarding:
+   - Configure `RUM_WEBHOOK_URL` to receive sampled `/api/web-vitals` metrics (LCP, INP, CLS, FCP, TTFB).

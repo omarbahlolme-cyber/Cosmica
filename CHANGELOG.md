@@ -16,12 +16,18 @@ All notable changes to this project are documented in this file.
 - Manual GitHub hardening workflow + API automation script for branch protection/security features.
 - Dependabot configuration for weekly dependency/security update PRs.
 - Operations hardening runbook (`OPERATIONS_HARDENING.md`).
+- Monthly backup restore drill workflow.
+- Accessibility/SEO/integrity/security.txt baseline check scripts added to quality pipeline.
+- HTML baseline updater script for consistent skip links, main landmarks, semantic h1, and JSON-LD.
+- Real-user performance telemetry endpoint (`/api/web-vitals`) and client-side Core Web Vitals reporting.
 
 ### Changed
 - Server error monitoring with request IDs, structured error reporting, and optional webhook alerts.
 - Health endpoint now returns status + version + uptime metadata for monitoring integrations.
 - Server transport hardening with production HTTPS enforcement, Helmet headers/CSP/HSTS, and API rate limiting.
 - Repository ignores generated local backups under `backups/`.
+- All HTML pages now include skip-link navigation, explicit main landmark IDs, structured data, and third-party integrity exemptions.
+- Performance baseline refreshed after intentional metadata/accessibility additions.
 
 ## [1.1.0] - 2026-02-08
 

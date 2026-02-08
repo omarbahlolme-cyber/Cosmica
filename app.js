@@ -2071,6 +2071,149 @@ const runWhenBrowserIdle = (task) => {
   window.setTimeout(task, 280);
 };
 
+/* ==========================================================================
+   REAL-USER PERFORMANCE (CORE WEB VITALS)
+   Captures field performance metrics and posts sampled telemetry to the server.
+   ========================================================================== */
+const WEB_VITAL_SAMPLE_RATE = 0.35;
+
+const setupWebVitalsReporting = () => {
+  if (
+    typeof window === "undefined" ||
+    typeof document === "undefined" ||
+    typeof PerformanceObserver === "undefined" ||
+    Math.random() > WEB_VITAL_SAMPLE_RATE
+  ) {
+    return;
+  }
+
+  const metricBuffer = new Map();
+  let clsValue = 0;
+  let lcpValue = 0;
+  let inpValue = 0;
+  let finalized = false;
+
+  const getRating = (name, value) => {
+    const thresholds = {
+      CLS: [0.1, 0.25],
+      FCP: [1800, 3000],
+      INP: [200, 500],
+      LCP: [2500, 4000],
+      TTFB: [800, 1800],
+    };
+    const [good, poor] = thresholds[name] || [Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY];
+    if (value <= good) {
+      return "good";
+    }
+    if (value <= poor) {
+      return "needs-improvement";
+    }
+    return "poor";
+  };
+
+  const queueMetric = (name, value) => {
+    if (!Number.isFinite(value) || value < 0) {
+      return;
+    }
+    metricBuffer.set(name, {
+      name,
+      value: Number(value.toFixed(3)),
+      rating: getRating(name, value),
+      id: `${name}-${Math.random().toString(36).slice(2, 10)}`,
+      page: window.location.pathname,
+      timestamp: new Date().toISOString(),
+    });
+  };
+
+  const sendMetric = (metric) => {
+    const payload = JSON.stringify(metric);
+    if (navigator.sendBeacon) {
+      const blob = new Blob([payload], { type: "application/json" });
+      navigator.sendBeacon("/api/web-vitals", blob);
+      return;
+    }
+    void fetch("/api/web-vitals", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: payload,
+      keepalive: true,
+    });
+  };
+
+  const flushMetrics = () => {
+    if (finalized) {
+      return;
+    }
+    finalized = true;
+
+    queueMetric("CLS", clsValue);
+    if (lcpValue > 0) {
+      queueMetric("LCP", lcpValue);
+    }
+    if (inpValue > 0) {
+      queueMetric("INP", inpValue);
+    }
+    const navEntry = performance.getEntriesByType("navigation")[0];
+    if (navEntry && Number.isFinite(navEntry.responseStart)) {
+      queueMetric("TTFB", navEntry.responseStart);
+    }
+
+    metricBuffer.forEach((metric) => sendMetric(metric));
+    metricBuffer.clear();
+  };
+
+  try {
+    const fcpObserver = new PerformanceObserver((entryList) => {
+      entryList.getEntries().forEach((entry) => {
+        if (entry.name === "first-contentful-paint") {
+          queueMetric("FCP", entry.startTime);
+        }
+      });
+    });
+    fcpObserver.observe({ type: "paint", buffered: true });
+  } catch {}
+
+  try {
+    const clsObserver = new PerformanceObserver((entryList) => {
+      entryList.getEntries().forEach((entry) => {
+        if (!entry.hadRecentInput) {
+          clsValue += entry.value;
+        }
+      });
+    });
+    clsObserver.observe({ type: "layout-shift", buffered: true });
+  } catch {}
+
+  try {
+    const lcpObserver = new PerformanceObserver((entryList) => {
+      const entries = entryList.getEntries();
+      const lastEntry = entries[entries.length - 1];
+      if (lastEntry && Number.isFinite(lastEntry.startTime)) {
+        lcpValue = lastEntry.startTime;
+      }
+    });
+    lcpObserver.observe({ type: "largest-contentful-paint", buffered: true });
+  } catch {}
+
+  try {
+    const inpObserver = new PerformanceObserver((entryList) => {
+      entryList.getEntries().forEach((entry) => {
+        if (entry.interactionId && Number.isFinite(entry.duration)) {
+          inpValue = Math.max(inpValue, entry.duration);
+        }
+      });
+    });
+    inpObserver.observe({ type: "event", buffered: true, durationThreshold: 40 });
+  } catch {}
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") {
+      flushMetrics();
+    }
+  });
+  window.addEventListener("pagehide", flushMetrics);
+};
+
 const setupBackToTopButton = () => {
   const existing = document.getElementById("backToTopButton");
   if (existing) {
@@ -2161,3 +2304,4 @@ if (needsMapTranslations) {
   initializeCommonShell();
 }
 
+setupWebVitalsReporting();

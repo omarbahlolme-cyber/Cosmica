@@ -53,11 +53,15 @@ npm run quality
 
 Runs:
 1. Syntax checks for key server/client bundles.
-2. Bloat checks (orphan root assets + enforced selector allowlist).
-3. Performance regression check against `perf/baseline.json`.
-4. Security dependency audit.
-5. Release hygiene checks (`CHANGELOG.md` + semver).
-6. Smoke checks for links and core routes.
+2. Accessibility baseline checks (skip link, `<main>`, `<h1>`, nav labels).
+3. SEO baseline checks (canonical metadata, JSON-LD, sitemap coverage).
+4. External third-party integrity policy checks (SRI or explicit exemption).
+5. `security.txt` freshness and policy checks.
+6. Bloat checks (orphan root assets + enforced selector allowlist).
+7. Performance regression check against `perf/baseline.json`.
+8. Security dependency audit.
+9. Release hygiene checks (`CHANGELOG.md` + semver).
+10. Smoke checks for links and core routes.
 
 To refresh the perf baseline after intentional optimizations:
 
@@ -87,9 +91,11 @@ npm run backup:verify
 - Security dependency audit runs on schedule via `.github/workflows/security-audit.yml`.
 - Live production security checks run every 6 hours via `.github/workflows/live-security-check.yml`.
 - Weekly backup snapshots run via `.github/workflows/backup-weekly.yml`.
+- Monthly backup restore drill runs via `.github/workflows/backup-restore-drill.yml`.
 - Manual GitHub protection automation is available via `.github/workflows/github-hardening.yml`.
 - Dependabot dependency update PRs are enabled via `.github/dependabot.yml`.
 - Optional server error webhook alerts can be enabled with `ERROR_WEBHOOK_URL`.
+- Optional real-user performance webhook forwarding can be enabled with `RUM_WEBHOOK_URL`.
 
 ## Security hardening
 
@@ -97,6 +103,7 @@ Implemented in app/server:
 - HTTPS enforcement in production.
 - Helmet headers including CSP/HSTS/frame protections.
 - API rate limiting (`/api`, `/api/chat`, `/api/feedback`, `/api/health`).
+- Field performance telemetry endpoint (`/api/web-vitals`) with rate limiting.
 - Request IDs on responses (`X-Request-Id`) for incident tracing.
 - Security contact endpoint: `/.well-known/security.txt`.
 - Legal protection pages: `privacy.html`, `terms.html`, `license.html`.

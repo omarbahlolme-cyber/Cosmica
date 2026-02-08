@@ -1,0 +1,68 @@
+/* ==========================================================================
+   ACCESSIBILITY BASELINE CHECK
+   - Enforces foundational accessibility structure across static HTML pages.
+   ========================================================================== */
+const fs = require("fs");
+const path = require("path");
+
+/* --------------------------------------------------------------------------
+   PATHS
+   -------------------------------------------------------------------------- */
+const ROOT = path.resolve(__dirname, "..");
+const htmlFiles = fs
+  .readdirSync(ROOT)
+  .filter((name) => name.toLowerCase().endsWith(".html"))
+  .sort();
+
+/* --------------------------------------------------------------------------
+   HELPERS
+   -------------------------------------------------------------------------- */
+const countMatches = (content, regex) => {
+  const matches = content.match(regex);
+  return matches ? matches.length : 0;
+};
+
+/* --------------------------------------------------------------------------
+   MAIN
+   -------------------------------------------------------------------------- */
+const failures = [];
+
+for (const fileName of htmlFiles) {
+  const content = fs.readFileSync(path.join(ROOT, fileName), "utf8");
+
+  if (!/<html[^>]*\blang=["'][^"']+["']/i.test(content)) {
+    failures.push(`${fileName}: missing <html lang="...">`);
+  }
+
+  if (!/\bclass=["'][^"']*\bskip-link\b[^"']*["'][^>]*href=["']#main-content["']/i.test(content)) {
+    failures.push(`${fileName}: missing skip link to #main-content`);
+  }
+
+  if (!/<main[^>]*\bid=["']main-content["']/i.test(content)) {
+    failures.push(`${fileName}: missing <main id="main-content">`);
+  }
+
+  const h1Count = countMatches(content, /<h1[\s>]/gi);
+  if (h1Count !== 1) {
+    failures.push(`${fileName}: expected exactly one <h1>, found ${h1Count}`);
+  }
+
+  const navTags = content.match(/<nav\b[^>]*class=["'][^"']*\bnav-links\b[^"']*["'][^>]*>/gi) || [];
+  if (!navTags.length) {
+    failures.push(`${fileName}: missing .nav-links navigation`);
+  } else {
+    navTags.forEach((tag) => {
+      if (!/\baria-label=["'][^"']+["']/i.test(tag)) {
+        failures.push(`${fileName}: .nav-links is missing aria-label`);
+      }
+    });
+  }
+}
+
+if (failures.length) {
+  console.error("ACCESSIBILITY CHECK FAILED");
+  failures.forEach((failure) => console.error(`- ${failure}`));
+  process.exit(1);
+}
+
+console.log(`PASS [a11y] baseline checks across ${htmlFiles.length} pages`);
