@@ -53,7 +53,7 @@ npm run quality
 
 Runs:
 1. Syntax checks for key server/client bundles.
-2. Accessibility baseline checks (skip link, `<main>`, `<h1>`, nav labels).
+2. Accessibility baseline checks (`<main>`, `<h1>`, nav labels).
 3. SEO baseline checks (canonical metadata, JSON-LD, sitemap coverage).
 4. External third-party integrity policy checks (SRI or explicit exemption).
 5. `security.txt` freshness and policy checks.

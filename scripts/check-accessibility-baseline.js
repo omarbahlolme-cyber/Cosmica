@@ -34,10 +34,6 @@ for (const fileName of htmlFiles) {
     failures.push(`${fileName}: missing <html lang="...">`);
   }
 
-  if (!/\bclass=["'][^"']*\bskip-link\b[^"']*["'][^>]*href=["']#main-content["']/i.test(content)) {
-    failures.push(`${fileName}: missing skip link to #main-content`);
-  }
-
   if (!/<main[^>]*\bid=["']main-content["']/i.test(content)) {
     failures.push(`${fileName}: missing <main id="main-content">`);
   }

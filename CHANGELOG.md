@@ -26,7 +26,7 @@ All notable changes to this project are documented in this file.
 - Health endpoint now returns status + version + uptime metadata for monitoring integrations.
 - Server transport hardening with production HTTPS enforcement, Helmet headers/CSP/HSTS, and API rate limiting.
 - Repository ignores generated local backups under `backups/`.
-- All HTML pages now include skip-link navigation, explicit main landmark IDs, structured data, and third-party integrity exemptions.
+- All HTML pages now include explicit main landmark IDs, structured data, and third-party integrity exemptions.
 - Performance baseline refreshed after intentional metadata/accessibility additions.
 
 ## [1.1.0] - 2026-02-08

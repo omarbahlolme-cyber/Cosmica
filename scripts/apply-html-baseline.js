@@ -11,7 +11,6 @@ const path = require("path");
    -------------------------------------------------------------------------- */
 const ROOT = path.resolve(__dirname, "..");
 const SITE_ORIGIN = "https://www.cosmicalearn.com";
-const SKIP_LINK_MARKUP = '<a class="skip-link" href="#main-content">Skip to main content</a>';
 
 /* --------------------------------------------------------------------------
    HELPERS
@@ -91,10 +90,6 @@ const applyPageBaseline = (fileName) => {
   const original = html;
 
   html = annotateThirdPartyTags(html);
-
-  if (!/\bclass=["'][^"']*\bskip-link\b/i.test(html)) {
-    html = html.replace(/<body[^>]*>/i, (tag) => `${tag}\n    ${SKIP_LINK_MARKUP}`);
-  }
 
   html = html.replace(/<nav\b[^>]*\bclass=["'][^"']*\bnav-links\b[^"']*["'][^>]*>/gi, (tag) => {
     if (/\baria-label=["'][^"']+["']/i.test(tag)) {
