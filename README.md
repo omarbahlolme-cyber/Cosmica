@@ -5,6 +5,7 @@ Cosmica is a static language-learning site with a small Node/Express backend for
 ## Developer map
 
 - Full file-by-file map: `PROJECT_STRUCTURE.md`
+- Ops/security runbook: `OPERATIONS_HARDENING.md`
 - Front-end entry points: `index.html`, `world*.html`, `letters*.html`, `words*.html`, `phrases*.html`, `grammar*.html`
 - Base front-end logic: `app.js`
 - Map-only front-end bundle: `app-maps.js`
@@ -70,11 +71,24 @@ To intentionally refresh the bloat allowlist after verified cleanup/refactors:
 npm run check:bloat:refresh
 ```
 
+## Backups
+
+Create a local source + history backup:
+
+```bash
+npm run backup:create
+npm run backup:verify
+```
+
 ## Monitoring + releases
 
 - Uptime monitor runs every 15 minutes via `.github/workflows/uptime-monitor.yml`.
 - Release publishing is automated for `v*` tags via `.github/workflows/release.yml`.
 - Security dependency audit runs on schedule via `.github/workflows/security-audit.yml`.
+- Live production security checks run every 6 hours via `.github/workflows/live-security-check.yml`.
+- Weekly backup snapshots run via `.github/workflows/backup-weekly.yml`.
+- Manual GitHub protection automation is available via `.github/workflows/github-hardening.yml`.
+- Dependabot dependency update PRs are enabled via `.github/dependabot.yml`.
 - Optional server error webhook alerts can be enabled with `ERROR_WEBHOOK_URL`.
 
 ## Security hardening
@@ -93,3 +107,5 @@ Recommended external platform settings:
 3. SSL/TLS mode: `Full (strict)`.
 4. Always Use HTTPS + automatic HTTP->HTTPS redirect.
 5. DNSSEC enabled for domain integrity.
+
+For exact step-by-step platform setup, use `OPERATIONS_HARDENING.md`.

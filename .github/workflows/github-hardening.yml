@@ -1,0 +1,48 @@
+name: GitHub Hardening
+
+on:
+  workflow_dispatch:
+    inputs:
+      protected_branch:
+        description: Branch to protect
+        required: true
+        default: main
+      required_checks:
+        description: Comma-separated checks required before merge
+        required: true
+        default: quality
+      min_reviewers:
+        description: Minimum approving reviewers
+        required: true
+        default: "1"
+
+permissions:
+  contents: read
+
+jobs:
+  harden:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Ensure admin token is configured
+        shell: bash
+        env:
+          GH_ADMIN_TOKEN: ${{ secrets.GH_ADMIN_TOKEN }}
+        run: |
+          if [ -z "${GH_ADMIN_TOKEN}" ]; then
+            echo "Missing GH_ADMIN_TOKEN secret (admin PAT)."
+            exit 1
+          fi
+
+      - name: Apply repository hardening
+        env:
+          GH_ADMIN_TOKEN: ${{ secrets.GH_ADMIN_TOKEN }}
+          TARGET_BRANCH: ${{ inputs.protected_branch }}
+          REQUIRED_CHECKS: ${{ inputs.required_checks }}
+          MIN_REVIEWERS: ${{ inputs.min_reviewers }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: npm run github:harden

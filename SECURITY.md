@@ -21,3 +21,12 @@ We aim to acknowledge reports quickly and prioritize remediation based on severi
 - API rate limiting and request IDs.
 - Structured error monitoring and optional webhook alerting.
 - Scheduled uptime monitoring workflow.
+- Scheduled live security checks for redirects/headers/health.
+- Scheduled dependency security audit workflow.
+- Weekly backup workflow with optional offsite repository mirror.
+
+## Platform Controls (Account/Provider Side)
+
+Additional controls that are required outside source code are documented in:
+
+- `OPERATIONS_HARDENING.md`

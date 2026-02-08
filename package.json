@@ -13,6 +13,10 @@
     "perf:baseline": "node scripts/perf-snapshot.js --write",
     "perf:check": "node scripts/perf-check.js",
     "security:audit": "npm audit --audit-level=moderate",
+    "security:live": "node scripts/live-security-check.js",
+    "github:harden": "node scripts/apply-github-hardening.js",
+    "backup:create": "node scripts/create-backup.js",
+    "backup:verify": "node scripts/verify-backup.js",
     "release:check": "node scripts/check-release.js",
     "quality": "npm run check:syntax && npm run check:bloat && npm run perf:check && npm run security:audit && npm run release:check && npm run smoke",
     "format": "prettier --write \"**/*.{html,css,js,json,md}\""

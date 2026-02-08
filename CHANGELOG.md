@@ -11,11 +11,17 @@ All notable changes to this project are documented in this file.
 - Security dependency audit workflow.
 - Legal/security pages (`privacy.html`, `terms.html`, `license.html`), `LICENSE`, and `SECURITY.md`.
 - Security contact file served at `/.well-known/security.txt`.
+- Weekly backup workflow and backup scripts (`create-backup`, `verify-backup`).
+- Live production security monitoring workflow (redirect/header/health checks).
+- Manual GitHub hardening workflow + API automation script for branch protection/security features.
+- Dependabot configuration for weekly dependency/security update PRs.
+- Operations hardening runbook (`OPERATIONS_HARDENING.md`).
 
 ### Changed
 - Server error monitoring with request IDs, structured error reporting, and optional webhook alerts.
 - Health endpoint now returns status + version + uptime metadata for monitoring integrations.
 - Server transport hardening with production HTTPS enforcement, Helmet headers/CSP/HSTS, and API rate limiting.
+- Repository ignores generated local backups under `backups/`.
 
 ## [1.1.0] - 2026-02-08
 

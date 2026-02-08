@@ -30,16 +30,26 @@
 |-- security.txt                # Security contact file served at /.well-known/security.txt
 |-- CHANGELOG.md                # Release/change history
 |-- README.md                   # High-level setup + workflow
+|-- OPERATIONS_HARDENING.md     # Platform hardening + backup runbook
 |-- PROJECT_STRUCTURE.md        # This file
+|-- backups/                    # Local backup outputs (*.zip, *.bundle, *.json) [gitignored]
 |-- perf/
 |   `-- baseline.json           # Performance baseline used by perf checks
 |-- .github/
+|   |-- dependabot.yml          # Dependabot security/dependency update automation
 |   `-- workflows/
+|       |-- backup-weekly.yml   # Weekly backup artifact + optional offsite mirror push
+|       |-- github-hardening.yml# Manual branch-protection/security automation
+|       |-- live-security-check.yml # Scheduled production redirect/header/health checks
 |       |-- quality.yml         # CI workflow for syntax/bloat/perf/release/smoke checks
 |       |-- security-audit.yml  # Scheduled dependency security audit
 |       |-- uptime-monitor.yml  # Scheduled production uptime checks + incident issue alerts
 |       `-- release.yml         # Automated GitHub release publishing for v* tags
 `-- scripts/
+    |-- apply-github-hardening.js      # Applies GitHub branch protection + security settings via API
+    |-- create-backup.js               # Creates timestamped source and git-history backups
+    |-- verify-backup.js               # Verifies backup bundle integrity + paired source archive
+    |-- live-security-check.js         # Checks production redirects, headers, and health endpoint
     |-- check-bloat.js                  # Orphan asset check + enforced selector allowlist
     |-- bloat-allowlist.json            # Baseline allowlist for known-unused selectors
     |-- perf-snapshot.js                # Captures current performance snapshot
