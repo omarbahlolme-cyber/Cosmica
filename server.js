@@ -6,6 +6,8 @@ const path = require("path");
 const crypto = require("crypto");
 const express = require("express");
 const cors = require("cors");
+const helmet = require("helmet");
+const { rateLimit } = require("express-rate-limit");
 const OpenAI = require("openai");
 const nodemailer = require("nodemailer");
 require("dotenv").config();
@@ -16,6 +18,7 @@ require("dotenv").config();
 const app = express();
 const port = Number(process.env.PORT) || 3000;
 app.disable("x-powered-by");
+app.set("trust proxy", 1);
 const APP_VERSION = (() => {
   try {
     return require("./package.json").version || "unknown";
@@ -23,12 +26,93 @@ const APP_VERSION = (() => {
     return "unknown";
   }
 })();
+const isProduction = process.env.NODE_ENV === "production";
 
 app.use(express.json({ limit: "1mb" }));
 app.use((req, res, next) => {
   const requestId = crypto.randomUUID();
   req.requestId = requestId;
   res.setHeader("X-Request-Id", requestId);
+  next();
+});
+
+/* --------------------------------------------------------------------------
+   TRANSPORT + SECURITY HEADERS
+   -------------------------------------------------------------------------- */
+const isLocalHost = (host = "") => {
+  const hostname = host.split(":")[0].toLowerCase();
+  return hostname === "localhost" || hostname === "127.0.0.1";
+};
+
+const isSecureRequest = (req) => {
+  if (req.secure) {
+    return true;
+  }
+  const forwarded = req.headers["x-forwarded-proto"];
+  if (typeof forwarded === "string") {
+    return forwarded.split(",")[0].trim().toLowerCase() === "https";
+  }
+  return false;
+};
+
+app.use((req, res, next) => {
+  if (!isProduction || isLocalHost(req.headers.host || "")) {
+    return next();
+  }
+  if (isSecureRequest(req)) {
+    return next();
+  }
+  const host = req.headers.host || "www.cosmicalearn.com";
+  return res.redirect(308, `https://${host}${req.originalUrl}`);
+});
+
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      useDefaults: true,
+      directives: {
+        defaultSrc: ["'self'"],
+        baseUri: ["'self'"],
+        fontSrc: ["'self'", "https://fonts.gstatic.com", "data:"],
+        formAction: ["'self'"],
+        frameAncestors: ["'none'"],
+        imgSrc: ["'self'", "data:", "https:"],
+        objectSrc: ["'none'"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "https://static.cloudflareinsights.com"],
+        styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+        connectSrc: ["'self'", "https://www.cosmicalearn.com", "https://cosmicalearn.com"],
+        upgradeInsecureRequests: isProduction ? [] : null,
+      },
+    },
+    crossOriginEmbedderPolicy: false,
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+    hsts: isProduction
+      ? {
+          maxAge: 31536000,
+          includeSubDomains: true,
+          preload: true,
+        }
+      : false,
+    referrerPolicy: { policy: "strict-origin-when-cross-origin" },
+  })
+);
+
+app.use((req, res, next) => {
+  res.setHeader(
+    "Permissions-Policy",
+    [
+      "accelerometer=()",
+      "autoplay=()",
+      "camera=()",
+      "display-capture=()",
+      "fullscreen=(self)",
+      "geolocation=()",
+      "gyroscope=()",
+      "microphone=()",
+      "payment=()",
+      "usb=()",
+    ].join(", ")
+  );
   next();
 });
 
@@ -71,6 +155,48 @@ app.use(
     },
   })
 );
+
+/* --------------------------------------------------------------------------
+   RATE LIMITING
+   -------------------------------------------------------------------------- */
+const shouldSkipRateLimit = (req) => isLocalHost(req.headers.host || "");
+
+const createLimiter = ({ windowMs, max, scope }) =>
+  rateLimit({
+    windowMs,
+    max,
+    standardHeaders: true,
+    legacyHeaders: false,
+    skip: shouldSkipRateLimit,
+    handler: (req, res) => {
+      res.status(429).json({
+        error: "Too many requests, please try again later.",
+        scope,
+        requestId: req.requestId || null,
+      });
+    },
+  });
+
+const apiLimiter = createLimiter({
+  windowMs: 15 * 60 * 1000,
+  max: 500,
+  scope: "api",
+});
+const chatLimiter = createLimiter({
+  windowMs: 5 * 60 * 1000,
+  max: 45,
+  scope: "chat",
+});
+const feedbackLimiter = createLimiter({
+  windowMs: 60 * 60 * 1000,
+  max: 12,
+  scope: "feedback",
+});
+const healthLimiter = createLimiter({
+  windowMs: 60 * 1000,
+  max: 120,
+  scope: "health",
+});
 
 /* --------------------------------------------------------------------------
    STATIC ASSET HOSTING
@@ -119,6 +245,15 @@ app.use(
 app.use("/api", (req, res, next) => {
   res.setHeader("Cache-Control", "no-store");
   next();
+});
+app.use("/api", apiLimiter);
+
+/* --------------------------------------------------------------------------
+   SECURITY CONTACT FILE
+   -------------------------------------------------------------------------- */
+app.get("/.well-known/security.txt", (req, res) => {
+  res.type("text/plain");
+  return res.sendFile(path.join(__dirname, "security.txt"));
 });
 
 /* --------------------------------------------------------------------------
@@ -215,7 +350,7 @@ const sendViaResend = async ({ from, to, replyTo, subject, text }) => {
 /* --------------------------------------------------------------------------
    ROUTE: FEEDBACK SUBMISSION
    -------------------------------------------------------------------------- */
-app.post("/api/feedback", async (req, res) => {
+app.post("/api/feedback", feedbackLimiter, async (req, res) => {
   const { name, email, message } = req.body || {};
   const safeName = typeof name === "string" ? name.trim() : "";
   const safeEmail = typeof email === "string" ? email.trim() : "";
@@ -302,7 +437,7 @@ app.post("/api/feedback", async (req, res) => {
 /* --------------------------------------------------------------------------
    ROUTE: MIMI CHAT PROXY
    -------------------------------------------------------------------------- */
-app.post("/api/chat", async (req, res) => {
+app.post("/api/chat", chatLimiter, async (req, res) => {
   if (!process.env.OPENAI_CHAT_KEY && !process.env.OPENAI_API_KEY) {
     return res.status(500).json({ error: "Missing OPENAI_CHAT_KEY" });
   }
@@ -339,7 +474,7 @@ app.post("/api/chat", async (req, res) => {
 /* --------------------------------------------------------------------------
    ROUTE: HEALTH CHECK
    -------------------------------------------------------------------------- */
-app.get("/api/health", (req, res) => {
+app.get("/api/health", healthLimiter, (req, res) => {
   res.json({
     status: "ok",
     version: APP_VERSION,
