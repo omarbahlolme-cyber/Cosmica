@@ -223,6 +223,24 @@ const CACHEABLE_EXTENSIONS = new Set([
   ".woff2",
 ]);
 
+const RETIRED_WORLD_PATHS = new Set([
+  "/world-french.html",
+  "/letters-french.html",
+  "/words-french.html",
+  "/phrases-french.html",
+  "/grammar-french.html",
+]);
+
+app.use((req, res, next) => {
+  const requestPath = String(req.path || "").toLowerCase();
+  if (!RETIRED_WORLD_PATHS.has(requestPath)) {
+    return next();
+  }
+  res.setHeader("Cache-Control", "no-store");
+  res.setHeader("X-Robots-Tag", "noindex, nofollow");
+  return res.status(410).type("text/plain").send("This page has been removed.");
+});
+
 app.use(
   express.static(path.join(__dirname), {
     etag: true,
