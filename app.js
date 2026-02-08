@@ -49,6 +49,11 @@ let WORLD_TRANSLATIONS = null;
 let WORLD_GRAMMAR_TITLE_MAP = null;
 let WORLD_GRAMMAR_EXAMPLE_MAP = null;
 const isNonEnglishWorld = WORLD_KEY !== "english";
+const isWordsPage = document.body.classList.contains("words-page");
+const isPhrasesPage = document.body.classList.contains("phrases-page");
+const isGrammarPage = document.body.classList.contains("grammar-page");
+const needsMapTranslations = isWordsPage || isPhrasesPage || isGrammarPage;
+const needsGrammarDetails = isGrammarPage;
 const setScrollbarWidth = () => {
   const width = window.innerWidth - document.documentElement.clientWidth;
   document.documentElement.style.setProperty("--scrollbar-width", `${Math.max(0, width)}px`);
@@ -4606,12 +4611,12 @@ const loadTranslations = async () => {
       hydrateTranslations(WORD_TRANSLATIONS, baseData.words);
       hydrateTranslations(PHRASE_TRANSLATIONS, baseData.phrases);
       hydrateTranslations(GRAMMAR_TRANSLATIONS, baseData.grammar);
-      if (baseData?.grammar?.explanations || baseData?.grammarExplanations) {
+      if (needsGrammarDetails && (baseData?.grammar?.explanations || baseData?.grammarExplanations)) {
         hydrateGrammarExplanationTranslations(baseData);
         explanationPackLoaded = true;
       }
     }
-    if (!explanationPackLoaded) {
+    if (needsGrammarDetails && !explanationPackLoaded) {
       try {
         const explanationResponse = await fetch("translations.french.json", { cache: "no-store" });
         if (explanationResponse.ok) {
@@ -4631,8 +4636,10 @@ const loadTranslations = async () => {
       const data = await response.json();
       if (data?.worldLanguage) {
         WORLD_TRANSLATIONS = data;
-        buildWorldGrammarMaps();
-        hydrateGrammarExplanationTranslations(data);
+        if (needsGrammarDetails) {
+          buildWorldGrammarMaps();
+          hydrateGrammarExplanationTranslations(data);
+        }
       }
     }
   } catch (error) {
@@ -7923,6 +7930,22 @@ const setupBackToTopButton = () => {
   return button;
 };
 
+const runWhenBrowserIdle = (task) => {
+  if (typeof task !== "function") {
+    return;
+  }
+  if ("requestIdleCallback" in window) {
+    window.requestIdleCallback(
+      () => {
+        task();
+      },
+      { timeout: 1400 }
+    );
+    return;
+  }
+  window.setTimeout(task, 280);
+};
+
 const updateWordsTopState = () => {
   if (!document.body.classList.contains("words-page")) {
     return;
@@ -7946,67 +7969,77 @@ const updateGrammarTopState = () => {
 
 /* ==========================================================================
    APPLICATION BOOTSTRAP
-   Render page modules, wire observers/listeners, then hydrate translations.
+   Render page modules, wire observers/listeners, then hydrate translations only
+   on map pages that actually require translation payloads.
    ========================================================================== */
-renderWordsSections();
-renderPhrasesSections();
-renderGrammarSections();
-setupGrammarModal();
+if (isWordsPage) {
+  renderWordsSections();
+}
+if (isPhrasesPage) {
+  renderPhrasesSections();
+}
+if (isGrammarPage) {
+  renderGrammarSections();
+  setupGrammarModal();
+}
 document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
 setupSpeechCards();
 setupBackToTopButton();
-if (document.querySelector(".word-card")) {
+if (isWordsPage && document.querySelector(".word-card")) {
   applyWordTranslations();
 }
-if (document.querySelector(".phrase-card")) {
+if (isPhrasesPage && document.querySelector(".phrase-card")) {
   applyPhraseTranslations();
 }
-updateWordsTopState();
-updatePhrasesTopState();
-updateGrammarTopState();
+if (isWordsPage) {
+  updateWordsTopState();
+  window.addEventListener(
+    "scroll",
+    () => {
+      window.requestAnimationFrame(updateWordsTopState);
+    },
+    { passive: true }
+  );
+}
+if (isPhrasesPage) {
+  updatePhrasesTopState();
+  window.addEventListener(
+    "scroll",
+    () => {
+      window.requestAnimationFrame(updatePhrasesTopState);
+    },
+    { passive: true }
+  );
+}
+if (isGrammarPage) {
+  updateGrammarTopState();
+  window.addEventListener(
+    "scroll",
+    () => {
+      window.requestAnimationFrame(updateGrammarTopState);
+    },
+    { passive: true }
+  );
+}
 
-loadTranslations().then(() => {
-  if (document.querySelector(".word-card")) {
-    applyWordTranslations();
-  }
-  if (document.querySelector(".phrase-card")) {
-    applyPhraseTranslations();
-  }
-  const overlay = ensureGrammarOverlay();
-  if (overlay && typeof overlay.__refresh === "function") {
-    overlay.__refresh();
-  }
-});
-window.addEventListener(
-  "scroll",
-  () => {
-    if (!document.body.classList.contains("words-page")) {
-      return;
-    }
-    window.requestAnimationFrame(updateWordsTopState);
-  },
-  { passive: true }
-);
-window.addEventListener(
-  "scroll",
-  () => {
-    if (!document.body.classList.contains("phrases-page")) {
-      return;
-    }
-    window.requestAnimationFrame(updatePhrasesTopState);
-  },
-  { passive: true }
-);
-window.addEventListener(
-  "scroll",
-  () => {
-    if (!document.body.classList.contains("grammar-page")) {
-      return;
-    }
-    window.requestAnimationFrame(updateGrammarTopState);
-  },
-  { passive: true }
-);
+if (needsMapTranslations) {
+  runWhenBrowserIdle(() => {
+    loadTranslations().then(() => {
+      if (isWordsPage && document.querySelector(".word-card")) {
+        applyWordTranslations();
+      }
+      if (isPhrasesPage && document.querySelector(".phrase-card")) {
+        applyPhraseTranslations();
+      }
+      if (isGrammarPage) {
+        const overlay = ensureGrammarOverlay();
+        if (overlay && typeof overlay.__refresh === "function") {
+          overlay.__refresh();
+        }
+      }
+    });
+  });
+}
 
 
 
