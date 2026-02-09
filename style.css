@@ -2566,9 +2566,32 @@ body:not(.world-page) .footer {
     text-transform: uppercase;
   }
 
+  body:not(.world-page) .nav-links {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    width: 100%;
+    overflow: visible;
+    white-space: normal;
+    gap: 8px;
+    padding-bottom: 0;
+  }
+
+  body:not(.world-page) .nav-links a {
+    width: 100%;
+    min-height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 6px;
+    text-align: center;
+    font-size: 10px;
+    line-height: 1.05;
+    letter-spacing: 0.055em;
+  }
+
   body:not(.world-page) .nav-links a:nth-child(1),
   body:not(.world-page) .nav-links a:nth-child(2) {
-    margin-top: 4px;
+    margin-top: 0;
   }
 
   .sound-toggle {

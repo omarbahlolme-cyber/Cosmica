@@ -190,6 +190,8 @@ const MIMI_CONFIG = {
   mode: "api",
   endpoint: "/api/chat",
   timeoutMs: 15000,
+  mobileTimeoutMs: 26000,
+  retryLimit: 3,
   historyLimit: 10,
 };
 const MIMI_SITE_CONTEXT = [
@@ -748,6 +750,23 @@ const getApiEndpoint = () => {
   return endpoint;
 };
 
+const getChatRequestTimeoutMs = () => {
+  const isMobileViewport = window.matchMedia("(max-width: 960px)").matches;
+  if (!isMobileViewport) {
+    return MIMI_CONFIG.timeoutMs;
+  }
+  return Math.max(MIMI_CONFIG.timeoutMs, MIMI_CONFIG.mobileTimeoutMs || MIMI_CONFIG.timeoutMs);
+};
+
+const getDegradedMimiReply = (message) => {
+  const sanitized = String(message || "").replace(/\s+/g, " ").trim();
+  const snippet = sanitized.length > 110 ? `${sanitized.slice(0, 110)}...` : sanitized;
+  if (snippet) {
+    return `I heard you: "${snippet}". My deep AI link is unstable right now, so please send it once more and I will answer properly.`;
+  }
+  return "My deep AI link is unstable right now. Please send your question once more and I will answer properly.";
+};
+
 const buildChatMessages = (message) => {
   const recentHistory = chatHistory.slice(-Math.max(0, MIMI_CONFIG.historyLimit || 0));
   const lastMessage = recentHistory[recentHistory.length - 1];
@@ -827,17 +846,26 @@ const getMimiReply = async (message) => {
   const endpoint = getApiEndpoint();
   const requestChatReply = async () => {
     const controller = new AbortController();
-    const timeout = window.setTimeout(() => controller.abort(), MIMI_CONFIG.timeoutMs);
+    const timeout = window.setTimeout(() => controller.abort(), getChatRequestTimeoutMs());
     try {
       const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: buildChatMessages(message) }),
+        cache: "no-store",
+        credentials: "same-origin",
         signal: controller.signal,
       });
 
       if (!response.ok) {
-        throw new Error(`Chat request failed (${response.status})`);
+        let detail = "";
+        try {
+          const errorPayload = await response.json();
+          detail = errorPayload?.error || errorPayload?.message || "";
+        } catch {
+          detail = "";
+        }
+        throw new Error(`Chat request failed (${response.status})${detail ? `: ${detail}` : ""}`);
       }
 
       const data = await response.json();
@@ -851,23 +879,31 @@ const getMimiReply = async (message) => {
     }
   };
 
-  try {
-    const content = await requestChatReply();
-    return { content, source: "api" };
-  } catch (firstError) {
-    if (navigator.onLine) {
-      try {
-        await new Promise((resolve) => window.setTimeout(resolve, 180));
-        const content = await requestChatReply();
-        return { content, source: "api" };
-      } catch (secondError) {
-        console.warn("Mimi API retry failed, falling back to preset reply.", secondError);
+  const attempts = navigator.onLine ? Math.max(1, MIMI_CONFIG.retryLimit || 1) : 1;
+  let lastError = null;
+
+  for (let attemptIndex = 0; attemptIndex < attempts; attemptIndex += 1) {
+    try {
+      const content = await requestChatReply();
+      return { content, source: "api" };
+    } catch (error) {
+      lastError = error;
+      const isLastAttempt = attemptIndex === attempts - 1;
+      if (isLastAttempt || !navigator.onLine) {
+        break;
       }
-    } else {
-      console.warn("Mimi API unavailable while offline, falling back to preset reply.", firstError);
+      const retryDelayMs = 240 + attemptIndex * 320;
+      await new Promise((resolve) => window.setTimeout(resolve, retryDelayMs));
     }
+  }
+
+  if (!navigator.onLine) {
+    console.warn("Mimi API unavailable while offline, falling back to preset reply.", lastError);
     return { content: getPresetReply(message), source: "preset" };
   }
+
+  console.warn("Mimi API unavailable after retries, returning degraded reply.", lastError);
+  return { content: getDegradedMimiReply(message), source: "degraded" };
 };
 
 const sendChatMessage = async (message) => {
@@ -906,6 +942,8 @@ const sendChatMessage = async (message) => {
     }
     if (reply.source === "api") {
       setChatStatus("AI live");
+    } else if (reply.source === "degraded") {
+      setChatStatus("AI reconnecting");
     } else {
       setChatStatus("Mimi ready");
     }
