@@ -93,6 +93,27 @@ const isPhrasesPage = document.body.classList.contains("phrases-page");
 const isGrammarPage = document.body.classList.contains("grammar-page");
 const needsMapTranslations = isWordsPage || isPhrasesPage || isGrammarPage;
 const needsGrammarDetails = isGrammarPage;
+
+const preloadMapsBundleAsset = () => {
+  if (!needsMapTranslations) {
+    return;
+  }
+  const href = withAssetVersion("app-maps.js");
+  if (!href || document.querySelector(`link[rel="preload"][as="script"][href="${href}"]`)) {
+    return;
+  }
+  const preload = document.createElement("link");
+  preload.rel = "preload";
+  preload.as = "script";
+  preload.href = href;
+  try {
+    preload.fetchPriority = "high";
+  } catch {}
+  document.head.appendChild(preload);
+};
+
+preloadMapsBundleAsset();
+
 const setScrollbarWidth = () => {
   const width = window.innerWidth - document.documentElement.clientWidth;
   document.documentElement.style.setProperty("--scrollbar-width", `${Math.max(0, width)}px`);
@@ -735,32 +756,48 @@ const getMimiReply = async (message) => {
   }
 
   const endpoint = getApiEndpoint();
-  const controller = new AbortController();
-  const timeout = window.setTimeout(() => controller.abort(), MIMI_CONFIG.timeoutMs);
+  const requestChatReply = async () => {
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), MIMI_CONFIG.timeoutMs);
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: buildChatMessages(message) }),
+        signal: controller.signal,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Chat request failed (${response.status})`);
+      }
+
+      const data = await response.json();
+      if (data && typeof data.content === "string" && data.content.trim()) {
+        return data.content.trim();
+      }
+
+      throw new Error("Empty response");
+    } finally {
+      window.clearTimeout(timeout);
+    }
+  };
 
   try {
-    const response = await fetch(endpoint, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ messages: buildChatMessages(message) }),
-      signal: controller.signal,
-    });
-
-    if (!response.ok) {
-      throw new Error("Chat request failed");
+    const content = await requestChatReply();
+    return { content, source: "api" };
+  } catch (firstError) {
+    if (navigator.onLine) {
+      try {
+        await new Promise((resolve) => window.setTimeout(resolve, 180));
+        const content = await requestChatReply();
+        return { content, source: "api" };
+      } catch (secondError) {
+        console.warn("Mimi API retry failed, falling back to preset reply.", secondError);
+      }
+    } else {
+      console.warn("Mimi API unavailable while offline, falling back to preset reply.", firstError);
     }
-
-    const data = await response.json();
-    if (data && typeof data.content === "string" && data.content.trim()) {
-      return { content: data.content.trim(), source: "api" };
-    }
-
-    throw new Error("Empty response");
-  } catch (error) {
-    console.warn("Mimi API unavailable, falling back to preset reply.", error);
     return { content: getPresetReply(message), source: "preset" };
-  } finally {
-    window.clearTimeout(timeout);
   }
 };
 
@@ -1616,11 +1653,11 @@ if (speechText && speechBubble) {
 }
 
 const MOBILE_HOME_ANCHOR_DOWN_SHIFT = Object.freeze({
-  default: 32,
-  "#worlds": 40,
-  "#guide": 56,
-  "#join": 72,
-  "#support": 88,
+  default: 64,
+  "#worlds": 80,
+  "#guide": 112,
+  "#join": 144,
+  "#support": 176,
 });
 const getMobileHomeAnchorDownShift = (hash) =>
   MOBILE_HOME_ANCHOR_DOWN_SHIFT[hash] ?? MOBILE_HOME_ANCHOR_DOWN_SHIFT.default;
@@ -2215,6 +2252,10 @@ const setupSpeechCards = () => {
     /espeak|festival|compact|robot|offline|basic|legacy/i;
   const HIGH_QUALITY_HINT =
     /neural|natural|premium|enhanced|wavenet|online|studio/i;
+  const IOS_FEMALE_HINT = /samantha|karen|moira|ava|allison|serena/i;
+  const ANDROID_FEMALE_HINT =
+    /google.*female|wavenet.*(f|a)|neural2.*(f|a)|en-us-studio-o|en-gb-studio-a/i;
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent || "");
 
   const pickVoice = () => {
     if (!availableVoices.length) {
@@ -2241,6 +2282,12 @@ const setupSpeechCards = () => {
       }
       if (HIGH_QUALITY_HINT.test(name)) {
         score += 6;
+      }
+      if (isIOS && IOS_FEMALE_HINT.test(name)) {
+        score += 10;
+      }
+      if (!isIOS && ANDROID_FEMALE_HINT.test(name)) {
+        score += 8;
       }
       if (MALE_HINT.test(name)) {
         score -= 9;
