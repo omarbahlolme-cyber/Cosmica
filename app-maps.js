@@ -2466,8 +2466,8 @@ const GRAMMAR_EXPLANATION_TRANSLATIONS = Object.fromEntries(
 );
 
 let translationPayloadReady = false;
-const MAP_TRANSLATIONS_CACHE_KEY = "cosmicaMapTranslationsCache:v1";
-const MAP_TRANSLATIONS_CACHE_MAX_AGE_MS = 24 * 60 * 60 * 1000;
+const MAPS_BUNDLE_TRANSLATIONS_CACHE_KEY = "cosmicaMapTranslationsCache:v1";
+const MAPS_BUNDLE_TRANSLATIONS_CACHE_MAX_AGE_MS = 24 * 60 * 60 * 1000;
 
 const normalizeGrammarSectionLookup = (value) =>
   String(value || "")
@@ -2600,7 +2600,7 @@ const loadTranslations = async () => {
     if (baseResponse.ok) {
       const baseData = await baseResponse.json();
       hydrateBaseTranslationsPayload(baseData);
-      writeMapTranslationsCache(baseData);
+      writeMapsBundleTranslationsCache(baseData);
     }
     if (isNonEnglishWorld && WORLD_TRANSLATION_FILE !== "translations.json") {
       const response = await fetch(WORLD_TRANSLATION_FILE, { cache: "no-store" });
@@ -5996,9 +5996,9 @@ const hydrateBaseTranslationsPayload = (payload) => {
   }
 };
 
-const readMapTranslationsCache = () => {
+const readMapsBundleTranslationsCache = () => {
   try {
-    const raw = localStorage.getItem(MAP_TRANSLATIONS_CACHE_KEY);
+    const raw = localStorage.getItem(MAPS_BUNDLE_TRANSLATIONS_CACHE_KEY);
     if (!raw) {
       return null;
     }
@@ -6007,7 +6007,7 @@ const readMapTranslationsCache = () => {
     if (!Number.isFinite(savedAt) || savedAt <= 0) {
       return null;
     }
-    if (Date.now() - savedAt > MAP_TRANSLATIONS_CACHE_MAX_AGE_MS) {
+    if (Date.now() - savedAt > MAPS_BUNDLE_TRANSLATIONS_CACHE_MAX_AGE_MS) {
       return null;
     }
     const payload = parsed?.payload;
@@ -6023,7 +6023,7 @@ const readMapTranslationsCache = () => {
   }
 };
 
-const writeMapTranslationsCache = (payload) => {
+const writeMapsBundleTranslationsCache = (payload) => {
   if (!payload || typeof payload !== "object") {
     return;
   }
@@ -6032,7 +6032,7 @@ const writeMapTranslationsCache = (payload) => {
   }
   try {
     localStorage.setItem(
-      MAP_TRANSLATIONS_CACHE_KEY,
+      MAPS_BUNDLE_TRANSLATIONS_CACHE_KEY,
       JSON.stringify({
         savedAt: Date.now(),
         payload,
@@ -6233,7 +6233,7 @@ const updateGrammarTopState = () => {
    Render page modules, wire observers/listeners, then hydrate translations only
    on map pages that actually require translation payloads.
    ========================================================================== */
-const cachedBaseTranslations = readMapTranslationsCache();
+const cachedBaseTranslations = readMapsBundleTranslationsCache();
 if (cachedBaseTranslations) {
   hydrateBaseTranslationsPayload(cachedBaseTranslations);
   translationPayloadReady = true;
