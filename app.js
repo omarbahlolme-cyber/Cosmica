@@ -190,7 +190,7 @@ const MIMI_CONFIG = {
   mode: "api",
   endpoint: "/api/chat",
   timeoutMs: 12000,
-  mobileTimeoutMs: 12000,
+  mobileTimeoutMs: 18000,
   retryLimit: 3,
   historyLimit: 12,
 };
@@ -579,7 +579,9 @@ const sanitizeChatHistory = (value) => {
 
 const loadChatHistoryFromStorage = () => {
   try {
-    const raw = sessionStorage.getItem(MIMI_CHAT_HISTORY_KEY);
+    const raw =
+      sessionStorage.getItem(MIMI_CHAT_HISTORY_KEY) ||
+      localStorage.getItem(MIMI_CHAT_HISTORY_KEY);
     if (!raw) {
       return;
     }
@@ -589,6 +591,7 @@ const loadChatHistoryFromStorage = () => {
       return;
     }
     chatHistory.push(...restored);
+    userHasMessagedMimi = restored.some((entry) => entry.role === "user");
     const latestAssistant = [...restored].reverse().find((entry) => entry.role === "assistant");
     if (latestAssistant) {
       lastMimiReply = latestAssistant.content;
@@ -596,13 +599,16 @@ const loadChatHistoryFromStorage = () => {
         speechText.dataset.text = latestAssistant.content;
       }
     }
+    persistChatHistoryToStorage();
   } catch {}
 };
 
 const persistChatHistoryToStorage = () => {
   try {
     const payload = chatHistory.slice(-Math.max(0, MIMI_CONFIG.historyLimit || 0));
-    sessionStorage.setItem(MIMI_CHAT_HISTORY_KEY, JSON.stringify(payload));
+    const serialized = JSON.stringify(payload);
+    sessionStorage.setItem(MIMI_CHAT_HISTORY_KEY, serialized);
+    localStorage.setItem(MIMI_CHAT_HISTORY_KEY, serialized);
   } catch {}
 };
 
@@ -853,7 +859,11 @@ const getApiEndpointCandidates = () => {
 };
 
 const getChatRequestTimeoutMs = () => {
-  return MIMI_CONFIG.timeoutMs;
+  const isMobileViewport = window.matchMedia("(max-width: 960px)").matches;
+  if (isMobileViewport) {
+    return Math.max(1000, Number(MIMI_CONFIG.mobileTimeoutMs || MIMI_CONFIG.timeoutMs || 12000));
+  }
+  return Math.max(1000, Number(MIMI_CONFIG.timeoutMs || 12000));
 };
 
 const buildChatMessages = (message) => {
@@ -968,53 +978,20 @@ const getMimiReply = async (message) => {
     }
   };
 
-  const runEndpointRace = async () => {
-    const runners = endpointCandidates.map((endpoint, index) =>
-      new Promise((resolve, reject) => {
-        const delayMs = index * 160;
-        window.setTimeout(() => {
-          requestChatReply(endpoint)
-            .then((content) => resolve({ content, endpoint }))
-            .catch((error) => {
-              reject(error);
-            });
-        }, delayMs);
-      })
-    );
-
-    if (typeof Promise.any === "function") {
-      return Promise.any(runners);
-    }
-
-    return new Promise((resolve, reject) => {
-      let pending = runners.length;
-      let lastFailure = null;
-      runners.forEach((runner) => {
-        runner
-          .then(resolve)
-          .catch((error) => {
-            lastFailure = error;
-            pending -= 1;
-            if (pending === 0) {
-              reject(lastFailure || new Error("All endpoint attempts failed"));
-            }
-          });
-      });
-    });
-  };
-
   const attempts = navigator.onLine ? Math.max(1, MIMI_CONFIG.retryLimit || 1) : 1;
   let lastError = null;
-  for (let attemptIndex = 0; attemptIndex < attempts; attemptIndex += 1) {
-    try {
-      const result = await runEndpointRace();
-      return { content: result.content, source: "api" };
-    } catch (error) {
-      lastError = error;
-      const isLastAttempt = attemptIndex === attempts - 1;
-      if (isLastAttempt || !navigator.onLine) {
-        break;
+  for (let attemptIndex = 0; attemptIndex < attempts && navigator.onLine; attemptIndex += 1) {
+    for (let endpointIndex = 0; endpointIndex < endpointCandidates.length; endpointIndex += 1) {
+      const endpoint = endpointCandidates[endpointIndex];
+      try {
+        const content = await requestChatReply(endpoint);
+        return { content, source: "api" };
+      } catch (error) {
+        lastError = error;
       }
+    }
+    const hasMoreAttempts = attemptIndex < attempts - 1;
+    if (hasMoreAttempts) {
       const retryDelayMs = 220 + attemptIndex * 260;
       await new Promise((resolve) => window.setTimeout(resolve, retryDelayMs));
     }
@@ -1022,14 +999,17 @@ const getMimiReply = async (message) => {
 
   if (!navigator.onLine) {
     console.warn("Mimi API unavailable while offline, falling back to preset reply.", lastError);
-    return { content: getPresetReply(message), source: "preset" };
+    return { content: getPresetReply(message), source: "offline" };
   }
 
-  console.warn("Mimi API unavailable after retries, falling back to preset reply.", {
+  console.warn("Mimi API unavailable after retries.", {
     error: lastError,
     endpointCandidates,
   });
-  return { content: getPresetReply(message), source: "preset" };
+  return {
+    content: "My AI link is unstable right now. Please try again in a few seconds.",
+    source: "error",
+  };
 };
 
 const sendChatMessage = async (message) => {
@@ -1056,18 +1036,26 @@ const sendChatMessage = async (message) => {
     if (chatHistory.length > MIMI_CONFIG.historyLimit) {
       chatHistory.splice(0, chatHistory.length - MIMI_CONFIG.historyLimit);
     }
+    persistChatHistoryToStorage();
     if (!message) {
       chatInput.value = "";
     }
 
     setChatStatus("Mimi is charting a reply");
     const reply = await getMimiReply(text);
-    chatHistory.push({ role: "assistant", content: reply.content });
-    if (chatHistory.length > MIMI_CONFIG.historyLimit) {
-      chatHistory.splice(0, chatHistory.length - MIMI_CONFIG.historyLimit);
+    if (reply.source !== "error") {
+      chatHistory.push({ role: "assistant", content: reply.content });
+      if (chatHistory.length > MIMI_CONFIG.historyLimit) {
+        chatHistory.splice(0, chatHistory.length - MIMI_CONFIG.historyLimit);
+      }
+      persistChatHistoryToStorage();
     }
     if (reply.source === "api") {
       setChatStatus("AI live");
+    } else if (reply.source === "error") {
+      setChatStatus("AI reconnecting");
+    } else if (reply.source === "offline") {
+      setChatStatus("Offline mode");
     } else {
       setChatStatus("Mimi ready");
     }
