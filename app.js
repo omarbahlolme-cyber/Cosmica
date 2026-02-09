@@ -190,8 +190,8 @@ const MIMI_CONFIG = {
   mode: "api",
   endpoint: "/api/chat",
   timeoutMs: 15000,
-  mobileTimeoutMs: 32000,
-  retryLimit: 4,
+  mobileTimeoutMs: 42000,
+  retryLimit: 5,
   historyLimit: 10,
 };
 const WORLD_START_LESSON_DESKTOP_DOWN_SHIFT = 34;
@@ -767,6 +767,7 @@ const getApiEndpointCandidates = () => {
   }
 
   const { protocol, hostname, port } = window.location;
+  const normalizedHost = String(hostname || "").toLowerCase();
   const candidates = [];
   const addCandidate = (url) => {
     if (!url) {
@@ -789,6 +790,17 @@ const getApiEndpointCandidates = () => {
   // Local/mobile dev fallback: when UI runs on a dev port, API usually runs on :3000.
   if (port && port !== "3000" && isLocalDevHost(hostname)) {
     addCandidate(`${protocol}//${hostname}:3000${endpoint}`);
+  }
+
+  // Production fallback chain for mobile sessions that open a host without a live API route.
+  const isCosmicaPublicHost =
+    normalizedHost === "cosmicalearn.com" ||
+    normalizedHost === "www.cosmicalearn.com" ||
+    normalizedHost === "cosmica-03wo.onrender.com";
+  if (isCosmicaPublicHost) {
+    addCandidate(`https://www.cosmicalearn.com${endpoint}`);
+    addCandidate(`https://cosmicalearn.com${endpoint}`);
+    addCandidate(`https://cosmica-03wo.onrender.com${endpoint}`);
   }
 
   return candidates;

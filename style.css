@@ -1473,9 +1473,9 @@ body.world-page .world-card {
 
 @media (max-width: 960px) {
   .chat-log {
-    height: clamp(210px, 34vh, 420px);
-    max-height: 420px;
-    min-height: 210px;
+    height: clamp(180px, 26vh, 280px);
+    max-height: 280px;
+    min-height: 180px;
   }
 
   .chat-bubble {
