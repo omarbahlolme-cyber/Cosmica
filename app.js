@@ -2863,9 +2863,13 @@ const setupSpeechCards = () => {
   ) => {
     cards.forEach((card) => {
       const label = card.querySelector(labelSelector);
-      if (label && !card.dataset[datasetKey]) {
-        const sourceText = label.textContent.trim();
-        card.dataset[datasetKey] = normalizeText ? normalizeText(sourceText) : sourceText;
+      const sourceText = String(
+        label?.textContent?.trim() || card.dataset[datasetKey] || ""
+      ).trim();
+      if (sourceText) {
+        card.dataset[datasetKey] = normalizeText
+          ? normalizeText(sourceText)
+          : sourceText;
       }
       card.setAttribute("role", "button");
       card.setAttribute("tabindex", "0");
