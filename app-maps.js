@@ -2465,42 +2465,82 @@ const GRAMMAR_EXPLANATION_TRANSLATIONS = Object.fromEntries(
   GRAMMAR_SECTION_ORDER.map((section) => [section, {}])
 );
 
+let translationPayloadReady = false;
+
+const normalizeGrammarSectionLookup = (value) =>
+  String(value || "")
+    .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+
+const resolveGrammarSectionName = (rawSection) => {
+  const section = String(rawSection || "").trim();
+  if (section && GRAMMAR_SECTION_LISTS[section]) {
+    return section;
+  }
+  const normalized = normalizeGrammarSectionLookup(section);
+  if (!normalized) {
+    return "";
+  }
+  return (
+    GRAMMAR_SECTION_ORDER.find(
+      (candidate) => normalizeGrammarSectionLookup(candidate) === normalized
+    ) || ""
+  );
+};
+
 const ensureGrammarExplanationEntry = (section, key) => {
-  if (!section || !key) {
+  const resolvedSection = resolveGrammarSectionName(section);
+  const resolvedKey = normalizeTranslationLookupKey(key);
+  if (!resolvedSection || !resolvedKey) {
     return null;
   }
-  if (!GRAMMAR_EXPLANATION_TRANSLATIONS[section]) {
-    GRAMMAR_EXPLANATION_TRANSLATIONS[section] = {};
+  if (!GRAMMAR_EXPLANATION_TRANSLATIONS[resolvedSection]) {
+    GRAMMAR_EXPLANATION_TRANSLATIONS[resolvedSection] = {};
   }
-  if (!GRAMMAR_EXPLANATION_TRANSLATIONS[section][key]) {
-    GRAMMAR_EXPLANATION_TRANSLATIONS[section][key] = createTranslationShell();
+  if (!GRAMMAR_EXPLANATION_TRANSLATIONS[resolvedSection][resolvedKey]) {
+    GRAMMAR_EXPLANATION_TRANSLATIONS[resolvedSection][resolvedKey] = createTranslationShell();
   }
-  return GRAMMAR_EXPLANATION_TRANSLATIONS[section][key];
+  return GRAMMAR_EXPLANATION_TRANSLATIONS[resolvedSection][resolvedKey];
 };
 
 const hydrateGrammarExplanationTranslations = (data) => {
   if (!data || typeof data !== "object") {
     return;
   }
+  const registerTranslations = (section, sourceText, translations) => {
+    const entry = ensureGrammarExplanationEntry(section, sourceText);
+    if (!entry || !translations || typeof translations !== "object") {
+      return;
+    }
+    Object.entries(translations).forEach(([lang, value]) => {
+      if (typeof value === "string" && value.trim()) {
+        entry[String(lang).toLowerCase()] = value.trim();
+      }
+    });
+  };
   const explanations = data.grammar?.explanations;
   if (explanations && typeof explanations === "object") {
     Object.entries(explanations).forEach(([section, items]) => {
-      Object.values(items || {}).forEach((payload) => {
-        const source = String(payload?.source || "").toLowerCase().trim();
-        if (!source) {
+      Object.entries(items || {}).forEach(([itemKey, payload]) => {
+        if (typeof payload === "string") {
+          if (data.worldLanguage) {
+            registerTranslations(section, itemKey, {
+              [String(data.worldLanguage).toLowerCase()]: payload,
+            });
+          }
           return;
         }
-        const entry = ensureGrammarExplanationEntry(section, source);
-        if (!entry) {
-          return;
-        }
-        const translations = payload?.translations;
-        if (translations && typeof translations === "object") {
-          Object.entries(translations).forEach(([lang, value]) => {
-            if (typeof value === "string" && value.trim()) {
-              entry[String(lang).toLowerCase()] = value;
-            }
-          });
+        const source = String(payload?.source || itemKey || "").trim();
+        registerTranslations(section, source, payload?.translations);
+        if (payload && typeof payload === "object" && !payload.translations) {
+          const directLangMap = Object.fromEntries(
+            Object.entries(payload).filter(
+              ([lang, value]) => lang !== "source" && typeof value === "string"
+            )
+          );
+          registerTranslations(section, source, directLangMap);
         }
       });
     });
@@ -2511,15 +2551,11 @@ const hydrateGrammarExplanationTranslations = (data) => {
   if (legacy && typeof legacy === "object" && legacyLang) {
     Object.entries(legacy).forEach(([section, items]) => {
       Object.entries(items || {}).forEach(([sourceText, translation]) => {
-        const key = String(sourceText || "").toLowerCase().trim();
+        const key = String(sourceText || "").trim();
         if (!key || typeof translation !== "string" || !translation.trim()) {
           return;
         }
-        const entry = ensureGrammarExplanationEntry(section, key);
-        if (!entry) {
-          return;
-        }
-        entry[legacyLang] = translation;
+        registerTranslations(section, key, { [legacyLang]: translation });
       });
     });
   }
@@ -2558,7 +2594,6 @@ const hydrateTranslations = (target, source) => {
    ========================================================================== */
 const loadTranslations = async () => {
   try {
-    let explanationPackLoaded = false;
     const baseResponse = await fetch("translations.json", { cache: "no-store" });
     if (baseResponse.ok) {
       const baseData = await baseResponse.json();
@@ -2567,7 +2602,6 @@ const loadTranslations = async () => {
       hydrateTranslations(GRAMMAR_TRANSLATIONS, baseData.grammar);
       if (needsGrammarDetails && (baseData?.grammar?.explanations || baseData?.grammarExplanations)) {
         hydrateGrammarExplanationTranslations(baseData);
-        explanationPackLoaded = true;
       }
     }
     if (isNonEnglishWorld && WORLD_TRANSLATION_FILE !== "translations.json") {
@@ -2586,6 +2620,8 @@ const loadTranslations = async () => {
     }
   } catch (error) {
     console.warn("Failed to load translations.json", error);
+  } finally {
+    translationPayloadReady = true;
   }
 };
 
@@ -3101,7 +3137,8 @@ const buildTranslationLookupVariants = (value) => {
 };
 
 const resolveGrammarExplanation = (section, explanationText, baseLanguage) => {
-  const sectionKey = section || GRAMMAR_SECTION_ORDER[0];
+  const sectionKey =
+    resolveGrammarSectionName(section) || GRAMMAR_SECTION_ORDER[0];
   const keyVariants = buildTranslationLookupVariants(explanationText);
   const variantSet = new Set(keyVariants);
   const langKey = (baseLanguage || "").toLowerCase();
@@ -3135,6 +3172,101 @@ const resolveGrammarExplanation = (section, explanationText, baseLanguage) => {
     }
   }
   return "";
+};
+
+const runtimeGrammarExplanationCache = new Map();
+const runtimeGrammarExplanationRequests = new Map();
+
+const cacheRuntimeGrammarExplanationTranslation = (
+  section,
+  explanationText,
+  baseLanguage,
+  translation
+) => {
+  const sectionKey =
+    resolveGrammarSectionName(section) || GRAMMAR_SECTION_ORDER[0];
+  const langKey = String(baseLanguage || "").toLowerCase();
+  const normalizedKey = normalizeTranslationLookupKey(explanationText);
+  if (!sectionKey || !langKey || !normalizedKey || !translation) {
+    return;
+  }
+  runtimeGrammarExplanationCache.set(
+    `${sectionKey}|${langKey}|${normalizedKey}`,
+    translation
+  );
+  const entry = ensureGrammarExplanationEntry(sectionKey, normalizedKey);
+  if (entry) {
+    entry[langKey] = translation;
+  }
+};
+
+const requestRuntimeGrammarExplanationTranslation = async (
+  section,
+  explanationText,
+  baseLanguage
+) => {
+  const sectionKey =
+    resolveGrammarSectionName(section) || GRAMMAR_SECTION_ORDER[0];
+  const langKey = String(baseLanguage || "").toLowerCase();
+  const normalizedKey = normalizeTranslationLookupKey(explanationText);
+  if (!sectionKey || !langKey || !normalizedKey) {
+    return "";
+  }
+  const cacheKey = `${sectionKey}|${langKey}|${normalizedKey}`;
+  if (runtimeGrammarExplanationCache.has(cacheKey)) {
+    return runtimeGrammarExplanationCache.get(cacheKey) || "";
+  }
+  const pending = runtimeGrammarExplanationRequests.get(cacheKey);
+  if (pending) {
+    return pending;
+  }
+  const request = fetch("/api/chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      messages: [
+        {
+          role: "system",
+          content:
+            "Translate the provided educational sentence exactly into the target language. Return only the translated sentence.",
+        },
+        {
+          role: "user",
+          content: `Target language: ${baseLanguage}\nText: ${explanationText}`,
+        },
+      ],
+    }),
+  })
+    .then(async (response) => {
+      if (!response.ok) {
+        runtimeGrammarExplanationCache.set(cacheKey, "");
+        return "";
+      }
+      const data = await response.json().catch(() => ({}));
+      const translated = String(data?.content || "")
+        .replace(/^["'`]|["'`]$/g, "")
+        .trim();
+      if (!translated) {
+        runtimeGrammarExplanationCache.set(cacheKey, "");
+        return "";
+      }
+      cacheRuntimeGrammarExplanationTranslation(
+        sectionKey,
+        explanationText,
+        langKey,
+        translated
+      );
+      return translated;
+    })
+    .catch(() => {
+      runtimeGrammarExplanationCache.set(cacheKey, "");
+      return "";
+    })
+    .finally(() => {
+      runtimeGrammarExplanationRequests.delete(cacheKey);
+    });
+  runtimeGrammarExplanationRequests.set(cacheKey, request);
+  return request;
 };
 
 const GRAMMAR_TEMPLATES = {
@@ -5521,10 +5653,15 @@ const renderGrammarModal = (section, index) => {
   }
 
   const baseLanguage = localStorage.getItem("cosmicaBaseLanguage") || "";
+  const baseLanguageKey = String(baseLanguage || "").toLowerCase();
+  const shouldTranslateExplanation = !!baseLanguage && baseLanguageKey !== "english";
   const explanation = buildGrammarExplanation(cardData);
-  const explanationTranslation = baseLanguage
+  const explanationTranslation = shouldTranslateExplanation
     ? resolveGrammarExplanation(section, explanation, baseLanguage)
     : "";
+  const renderedExplanation = shouldTranslateExplanation
+    ? explanationTranslation
+    : explanation;
   const mistakes = buildGrammarMistakes(cardData);
   const howItWorks = buildGrammarHowItWorks(cardData);
   const examples = [cardData.example, buildAltGrammarExample(cardData, index)];
@@ -5632,8 +5769,7 @@ const renderGrammarModal = (section, index) => {
   modalBody.innerHTML = `
     <div class="grammar-modal-header">
       <h3>${cardData.title}</h3>
-      <p>${explanation}</p>
-      ${explanationTranslation ? `<p class="grammar-translation grammar-explanation-translation">${explanationTranslation}</p>` : ""}
+      <p class="grammar-explanation-text${shouldTranslateExplanation ? " grammar-translation grammar-explanation-translation" : ""}">${renderedExplanation || ""}</p>
     </div>
     <div class="grammar-modal-grid">
       <div class="grammar-block">
@@ -5664,6 +5800,36 @@ const renderGrammarModal = (section, index) => {
   `;
   modalBody.scrollTop = 0;
   overlay.querySelector(".grammar-modal")?.scrollTo(0, 0);
+
+  if (shouldTranslateExplanation && !explanationTranslation) {
+    void requestRuntimeGrammarExplanationTranslation(
+      section,
+      explanation,
+      baseLanguage
+    ).then((translated) => {
+      if (!translated) {
+        return;
+      }
+      const expectedSection = String(section || "");
+      const expectedIndex = String(index ?? "0");
+      if (
+        overlay.dataset.section !== expectedSection ||
+        overlay.dataset.index !== expectedIndex
+      ) {
+        return;
+      }
+      const activeBody = overlay.querySelector(".grammar-modal-body");
+      const header = activeBody?.querySelector(".grammar-modal-header");
+      if (!header) {
+        return;
+      }
+      const explanationNode = header.querySelector(".grammar-explanation-text");
+      if (!explanationNode) {
+        return;
+      }
+      explanationNode.textContent = translated;
+    });
+  }
 };
 
 
@@ -5774,6 +5940,9 @@ const setupGrammarModal = () => {
 };
 
 const resolveWordTranslation = (section, englishWord, baseLanguage) => {
+  if (!baseLanguage || !translationPayloadReady) {
+    return "";
+  }
   const sectionKey = section || WORD_SECTION_ORDER[0];
   const wordKey = (englishWord || "").toLowerCase();
   const langKey = (baseLanguage || "").toLowerCase();
@@ -5791,7 +5960,7 @@ const resolveWordTranslation = (section, englishWord, baseLanguage) => {
         `Missing translation: section="${sectionKey}", word="${englishWord}", language="${baseLanguage}"`
       );
     }
-    return "(translation unavailable)";
+    return "";
   }
   return translation;
 };
@@ -5813,6 +5982,9 @@ const applyWordTranslations = () => {
 };
 
 const resolvePhraseTranslation = (section, englishPhrase, baseLanguage) => {
+  if (!baseLanguage || !translationPayloadReady) {
+    return "";
+  }
   const sectionKey = section || PHRASE_SECTION_ORDER[0];
   const phraseKey = (englishPhrase || "").toLowerCase();
   const langKey = (baseLanguage || "").toLowerCase();
@@ -5830,7 +6002,7 @@ const resolvePhraseTranslation = (section, englishPhrase, baseLanguage) => {
         `Missing translation: section="${sectionKey}", phrase="${englishPhrase}", language="${baseLanguage}"`
       );
     }
-    return "(translation unavailable)";
+    return "";
   }
   return translation;
 };

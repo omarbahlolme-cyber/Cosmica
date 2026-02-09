@@ -505,6 +505,7 @@ let typingTimer;
 let speakingTimer;
 let gazeResetTimer;
 const chatHistory = [];
+let chatRequestInFlight = false;
 
 const renderFlags = () => {
   document.querySelectorAll(".flag-badge").forEach((badge) => {
@@ -586,16 +587,42 @@ const appendChatMessage = (role, text, options = {}) => {
   if (!chatLog) {
     return null;
   }
-  if (role === "mimi") {
-    if (options.typing) {
+  const existingTyping = chatLog.querySelector('.chat-message.typing[data-role="mimi"]');
+  if (role === "mimi" && options.typing) {
+    if (existingTyping) {
       chatLog.classList.add("typing");
-    } else {
-      chatLog.classList.remove("typing");
+      scrollChatToBottom();
+      return existingTyping;
     }
-    return chatLog;
+    const typingMessage = document.createElement("div");
+    typingMessage.classList.add("chat-message", "mimi", "typing");
+    typingMessage.dataset.role = "mimi";
+    const typingBubble = document.createElement("div");
+    typingBubble.classList.add("chat-bubble");
+    const typingLabel = document.createElement("div");
+    typingLabel.classList.add("chat-label");
+    typingLabel.textContent = "Mimi";
+    const typingBody = document.createElement("div");
+    typingBody.classList.add("chat-text", "chat-typing");
+    typingBody.innerHTML = "<span></span><span></span><span></span>";
+    typingBubble.appendChild(typingLabel);
+    typingBubble.appendChild(typingBody);
+    typingMessage.appendChild(typingBubble);
+    chatLog.appendChild(typingMessage);
+    chatLog.classList.add("typing");
+    scrollChatToBottom();
+    return typingMessage;
   }
+  if (existingTyping) {
+    existingTyping.remove();
+  }
+  chatLog.classList.remove("typing");
+
   const message = document.createElement("div");
   message.classList.add("chat-message", role);
+  if (role === "mimi") {
+    message.dataset.role = "mimi";
+  }
   const bubble = document.createElement("div");
   bubble.classList.add("chat-bubble");
   const body = document.createElement("div");
@@ -603,7 +630,7 @@ const appendChatMessage = (role, text, options = {}) => {
   body.textContent = text;
   const label = document.createElement("div");
   label.classList.add("chat-label");
-  label.textContent = "You";
+  label.textContent = role === "mimi" ? "Mimi" : "You";
   bubble.appendChild(label);
   bubble.appendChild(body);
   message.appendChild(bubble);
@@ -730,10 +757,8 @@ const getMimiReply = async (message) => {
 
     throw new Error("Empty response");
   } catch (error) {
-    if (MIMI_CONFIG.mode === "hybrid") {
-      return { content: getPresetReply(message), source: "preset" };
-    }
-    return { content: "AI link is offline right now. Check the server and key.", source: "error" };
+    console.warn("Mimi API unavailable, falling back to preset reply.", error);
+    return { content: getPresetReply(message), source: "preset" };
   } finally {
     window.clearTimeout(timeout);
   }
@@ -743,39 +768,45 @@ const sendChatMessage = async (message) => {
   if (!chatInput) {
     return;
   }
+  if (chatRequestInFlight) {
+    return;
+  }
   const text = (message ?? chatInput.value).trim();
   if (!text) {
     return;
   }
-  if (chatLog) {
-    chatLog.innerHTML = "";
-    chatLog.classList.remove("typing");
-  }
-  appendChatMessage("user", text);
-  chatHistory.push({ role: "user", content: text });
-  if (chatHistory.length > MIMI_CONFIG.historyLimit) {
-    chatHistory.splice(0, chatHistory.length - MIMI_CONFIG.historyLimit);
-  }
-  if (!message) {
-    chatInput.value = "";
-  }
+  chatRequestInFlight = true;
+  chatInput.disabled = true;
+  try {
+    appendChatMessage("user", text);
+    chatHistory.push({ role: "user", content: text });
+    if (chatHistory.length > MIMI_CONFIG.historyLimit) {
+      chatHistory.splice(0, chatHistory.length - MIMI_CONFIG.historyLimit);
+    }
+    if (!message) {
+      chatInput.value = "";
+    }
 
-  appendChatMessage("mimi", "", { typing: true });
-  setChatStatus("Mimi is charting a reply");
-  const reply = await getMimiReply(text);
-  appendChatMessage("mimi", "", { typing: false });
-  chatHistory.push({ role: "assistant", content: reply.content });
-  if (chatHistory.length > MIMI_CONFIG.historyLimit) {
-    chatHistory.splice(0, chatHistory.length - MIMI_CONFIG.historyLimit);
+    appendChatMessage("mimi", "", { typing: true });
+    setChatStatus("Mimi is charting a reply");
+    const reply = await getMimiReply(text);
+    appendChatMessage("mimi", "", { typing: false });
+    appendChatMessage("mimi", reply.content);
+    chatHistory.push({ role: "assistant", content: reply.content });
+    if (chatHistory.length > MIMI_CONFIG.historyLimit) {
+      chatHistory.splice(0, chatHistory.length - MIMI_CONFIG.historyLimit);
+    }
+    if (reply.source === "api") {
+      setChatStatus("AI live");
+    } else {
+      setChatStatus("Mimi ready");
+    }
+    speakLine(reply.content, "curious");
+  } finally {
+    chatRequestInFlight = false;
+    chatInput.disabled = false;
+    chatInput.focus();
   }
-  if (reply.source === "api") {
-    setChatStatus("AI live");
-  } else if (reply.source === "preset") {
-    setChatStatus("Offline - preset");
-  } else {
-    setChatStatus("AI offline");
-  }
-  speakLine(reply.content, "curious");
 };
 
 if (chatForm) {
@@ -1585,11 +1616,11 @@ if (speechText && speechBubble) {
 }
 
 const MOBILE_HOME_ANCHOR_DOWN_SHIFT = Object.freeze({
-  default: 16,
-  "#worlds": 20,
-  "#guide": 28,
-  "#join": 36,
-  "#support": 44,
+  default: 32,
+  "#worlds": 40,
+  "#guide": 56,
+  "#join": 72,
+  "#support": 88,
 });
 const getMobileHomeAnchorDownShift = (hash) =>
   MOBILE_HOME_ANCHOR_DOWN_SHIFT[hash] ?? MOBILE_HOME_ANCHOR_DOWN_SHIFT.default;
@@ -1706,7 +1737,6 @@ if (guideSection && chatLog) {
     (entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) {
-          chatLog.innerHTML = "";
           chatLog.classList.remove("typing");
         }
       });
@@ -1956,6 +1986,18 @@ const triggerWarp = (worldName, onDone) => {
   }
   updateStarEnergy(1);
   window.clearTimeout(triggerWarp.timer);
+  window.clearTimeout(triggerWarp.cleanupTimer);
+
+  if (typeof onDone === "function") {
+    triggerWarp.timer = window.setTimeout(() => {
+      onDone();
+      triggerWarp.cleanupTimer = window.setTimeout(() => {
+        warpOverlay.classList.remove("active");
+        document.body.classList.remove("warp-lock");
+      }, 2200);
+    }, 850);
+    return;
+  }
 
   triggerWarp.timer = window.setTimeout(() => {
     warpOverlay.classList.remove("active");
@@ -2165,34 +2207,46 @@ const setupSpeechCards = () => {
   let availableVoices = [];
   let selectedVoice = null;
 
+  const FEMALE_HINT =
+    /female|woman|girl|samantha|karen|moira|ava|allison|serena|zira|jenny|aria|joanna|emma|lily|lucy|zoe|google uk english female|google us english female|microsoft aria|microsoft jenny/i;
+  const MALE_HINT =
+    /male|man|david|mark|alex|george|fred|daniel|ryan|tom|google uk english male|microsoft david/i;
+  const LOW_QUALITY_HINT =
+    /espeak|festival|compact|robot|offline|basic|legacy/i;
+  const HIGH_QUALITY_HINT =
+    /neural|natural|premium|enhanced|wavenet|online|studio/i;
+
   const pickVoice = () => {
     if (!availableVoices.length) {
       return null;
     }
     const voiceScore = (voice) => {
       const name = (voice.name || "").toLowerCase();
+      const lang = (voice.lang || "").toLowerCase();
       let score = 0;
-      if (voice.lang && voice.lang.toLowerCase().startsWith("en-gb")) {
+      if (lang.startsWith("en-us")) {
         score += 8;
       }
-      if (voice.lang && voice.lang.toLowerCase().startsWith("en")) {
-        score += 1.5;
+      if (lang.startsWith("en-gb")) {
+        score += 7;
       }
-      if (voice.localService) {
-        score += 1.5;
+      if (lang.startsWith("en")) {
+        score += 3;
       }
-      if (
-        /female|woman|girl|zira|jenny|samantha|aria|ava|allison|amber|serena|michelle|joanna|lucy|zoe|lily|emma/.test(
-          name
-        )
-      ) {
-        score += 4;
-      }
-      if (/male|man|david|mark|alex|daniel|ryan|tom|george/.test(name)) {
-        score -= 3;
-      }
-      if (/natural|neural|premium|enhanced/.test(name)) {
+      if (voice.default) {
         score += 2;
+      }
+      if (FEMALE_HINT.test(name)) {
+        score += 14;
+      }
+      if (HIGH_QUALITY_HINT.test(name)) {
+        score += 6;
+      }
+      if (MALE_HINT.test(name)) {
+        score -= 9;
+      }
+      if (LOW_QUALITY_HINT.test(name)) {
+        score -= 12;
       }
       return score;
     };
@@ -2200,10 +2254,17 @@ const setupSpeechCards = () => {
     const pickFrom = (voices) =>
       [...voices].sort((a, b) => voiceScore(b) - voiceScore(a))[0] || null;
 
-    const enGbVoices = availableVoices.filter((voice) =>
-      (voice.lang || "").toLowerCase().startsWith("en-gb")
+    const englishVoices = availableVoices.filter((voice) =>
+      (voice.lang || "").toLowerCase().startsWith("en")
     );
-    return pickFrom(enGbVoices) || pickFrom(availableVoices);
+    const preferredEnglishVoices = englishVoices.filter((voice) =>
+      FEMALE_HINT.test(voice.name || "") || HIGH_QUALITY_HINT.test(voice.name || "")
+    );
+    return (
+      pickFrom(preferredEnglishVoices) ||
+      pickFrom(englishVoices) ||
+      pickFrom(availableVoices)
+    );
   };
 
   const loadVoices = () => {
@@ -2222,7 +2283,7 @@ const setupSpeechCards = () => {
       selectedVoice = pickVoice();
     }
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = selectedVoice?.lang || "en-GB";
+    utterance.lang = selectedVoice?.lang || "en-US";
     utterance.rate = rate;
     utterance.pitch = pitch;
     if (selectedVoice) {
@@ -2495,7 +2556,11 @@ const loadMapsBundle = () =>
 
     const script = document.createElement("script");
     script.src = withAssetVersion("app-maps.js");
-    script.async = true;
+    script.async = false;
+    script.defer = false;
+    try {
+      script.fetchPriority = "high";
+    } catch {}
     script.dataset.cosmicaBundle = "maps";
     script.addEventListener(
       "load",
@@ -2525,10 +2590,8 @@ const initializeCommonShell = () => {
    Map pages lazy-load app-maps.js to keep the base bundle small.
    ========================================================================== */
 if (needsMapTranslations) {
-  runWhenBrowserIdle(() => {
-    loadMapsBundle().catch((error) => {
-      console.warn(error.message || error);
-    });
+  loadMapsBundle().catch((error) => {
+    console.warn(error.message || error);
   });
 } else {
   initializeCommonShell();
