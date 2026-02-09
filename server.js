@@ -209,9 +209,14 @@ const webVitalsLimiter = createLimiter({
 /* --------------------------------------------------------------------------
    STATIC ASSET HOSTING
    -------------------------------------------------------------------------- */
-const CACHEABLE_EXTENSIONS = new Set([
+const FRESH_ASSET_EXTENSIONS = new Set([
   ".js",
   ".css",
+  ".json",
+  ".map",
+]);
+
+const CACHEABLE_MEDIA_EXTENSIONS = new Set([
   ".svg",
   ".png",
   ".jpg",
@@ -248,18 +253,24 @@ app.use(
     setHeaders: (res, filePath) => {
       const ext = path.extname(filePath).toLowerCase();
       if (ext === ".html") {
-        res.setHeader("Cache-Control", "no-cache");
+        // Keep documents always fresh so mobile browsers never pin stale layout shells.
+        res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+        res.setHeader("Pragma", "no-cache");
+        res.setHeader("Expires", "0");
         return;
       }
-      if (ext === ".json") {
-        res.setHeader("Cache-Control", "public, max-age=300, stale-while-revalidate=600");
+      if (FRESH_ASSET_EXTENSIONS.has(ext)) {
+        // Force immediate revalidation for active bundles/data during rapid deploy cycles.
+        res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+        res.setHeader("Pragma", "no-cache");
+        res.setHeader("Expires", "0");
         return;
       }
-      if (CACHEABLE_EXTENSIONS.has(ext)) {
+      if (CACHEABLE_MEDIA_EXTENSIONS.has(ext)) {
         res.setHeader("Cache-Control", "public, max-age=86400, stale-while-revalidate=604800");
         return;
       }
-      res.setHeader("Cache-Control", "public, max-age=3600");
+      res.setHeader("Cache-Control", "no-cache");
     },
   })
 );

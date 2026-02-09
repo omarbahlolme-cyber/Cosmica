@@ -2468,7 +2468,7 @@ const GRAMMAR_EXPLANATION_TRANSLATIONS = Object.fromEntries(
 let translationPayloadReady = false;
 let translationsLoadPromise = null;
 let translationNetworkHydrated = false;
-const MAPS_BUNDLE_TRANSLATIONS_CACHE_KEY = "cosmicaMapTranslationsCache:v1";
+const MAPS_BUNDLE_TRANSLATIONS_CACHE_KEY = "cosmicaMapTranslationsCache:v2";
 const MAPS_BUNDLE_TRANSLATIONS_CACHE_MAX_AGE_MS = 24 * 60 * 60 * 1000;
 
 const normalizeGrammarSectionLookup = (value) =>
@@ -2598,14 +2598,14 @@ const hydrateTranslations = (target, source) => {
    ========================================================================== */
 const loadTranslations = async () => {
   try {
-    const baseResponse = await fetch("translations.json", { cache: "default" });
+    const baseResponse = await fetch("translations.json", { cache: "no-store" });
     if (baseResponse.ok) {
       const baseData = await baseResponse.json();
       hydrateBaseTranslationsPayload(baseData);
       writeMapsBundleTranslationsCache(baseData);
     }
     if (isNonEnglishWorld && WORLD_TRANSLATION_FILE !== "translations.json") {
-      const response = await fetch(WORLD_TRANSLATION_FILE, { cache: "default" });
+      const response = await fetch(WORLD_TRANSLATION_FILE, { cache: "no-store" });
       if (!response.ok) {
         return;
       }
@@ -3189,7 +3189,7 @@ const resolveGrammarExplanation = (section, explanationText, baseLanguage) => {
 };
 
 const GRAMMAR_EXPLANATION_RUNTIME_CACHE_KEY =
-  "cosmicaGrammarExplanationRuntimeCache:v1";
+  "cosmicaGrammarExplanationRuntimeCache:v2";
 const runtimeGrammarExplanationCache = new Map();
 const runtimeGrammarExplanationRequests = new Map();
 

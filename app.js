@@ -112,7 +112,7 @@ const WORLD_NAME = isWorldLandingPage
   : urlParams.get("world") || document.body.dataset.world || "English";
 const WORLD_KEY = WORLD_NAME.toLowerCase();
 const WORLD_TRANSLATION_FILE = "translations.json";
-const MAP_TRANSLATIONS_CACHE_KEY = "cosmicaMapTranslationsCache:v1";
+const MAP_TRANSLATIONS_CACHE_KEY = "cosmicaMapTranslationsCache:v2";
 const readAssetVersionParam = (rawUrl) => {
   if (!rawUrl) {
     return "";
@@ -178,7 +178,7 @@ const warmMapTranslationsCache = async () => {
     return;
   }
   try {
-    const response = await fetch(WORLD_TRANSLATION_FILE, { cache: "force-cache" });
+    const response = await fetch(WORLD_TRANSLATION_FILE, { cache: "no-store" });
     if (!response.ok) {
       return;
     }
