@@ -2467,8 +2467,7 @@ const GRAMMAR_EXPLANATION_TRANSLATIONS = Object.fromEntries(
 
 let translationPayloadReady = false;
 let translationsLoadPromise = null;
-let translationNetworkHydrated = false;
-const MAPS_BUNDLE_TRANSLATIONS_CACHE_KEY = "cosmicaMapTranslationsCache:v1";
+const MAPS_BUNDLE_TRANSLATIONS_CACHE_KEY = "cosmicaMapTranslationsCache:v2";
 const MAPS_BUNDLE_TRANSLATIONS_CACHE_MAX_AGE_MS = 24 * 60 * 60 * 1000;
 
 const normalizeGrammarSectionLookup = (value) =>
@@ -2598,14 +2597,14 @@ const hydrateTranslations = (target, source) => {
    ========================================================================== */
 const loadTranslations = async () => {
   try {
-    const baseResponse = await fetch("translations.json", { cache: "default" });
+    const baseResponse = await fetch("translations.json", { cache: "no-store" });
     if (baseResponse.ok) {
       const baseData = await baseResponse.json();
       hydrateBaseTranslationsPayload(baseData);
       writeMapsBundleTranslationsCache(baseData);
     }
     if (isNonEnglishWorld && WORLD_TRANSLATION_FILE !== "translations.json") {
-      const response = await fetch(WORLD_TRANSLATION_FILE, { cache: "default" });
+      const response = await fetch(WORLD_TRANSLATION_FILE, { cache: "no-store" });
       if (!response.ok) {
         return;
       }
@@ -2622,7 +2621,6 @@ const loadTranslations = async () => {
     console.warn("Failed to load translations.json", error);
   } finally {
     translationPayloadReady = true;
-    translationNetworkHydrated = true;
   }
 };
 
@@ -3155,7 +3153,7 @@ const resolveGrammarExplanation = (section, explanationText, baseLanguage) => {
     resolveGrammarSectionName(section) || GRAMMAR_SECTION_ORDER[0];
   const keyVariants = buildTranslationLookupVariants(explanationText);
   const variantSet = new Set(keyVariants);
-  const langKey = (baseLanguage || "").toLowerCase();
+  const langKey = String(baseLanguage || "").trim().toLowerCase();
   if (!langKey) {
     return "";
   }
@@ -3189,7 +3187,7 @@ const resolveGrammarExplanation = (section, explanationText, baseLanguage) => {
 };
 
 const GRAMMAR_EXPLANATION_RUNTIME_CACHE_KEY =
-  "cosmicaGrammarExplanationRuntimeCache:v1";
+  "cosmicaGrammarExplanationRuntimeCache:v2";
 const runtimeGrammarExplanationCache = new Map();
 const runtimeGrammarExplanationRequests = new Map();
 
@@ -3237,7 +3235,7 @@ const cacheRuntimeGrammarExplanationTranslation = (
 ) => {
   const sectionKey =
     resolveGrammarSectionName(section) || GRAMMAR_SECTION_ORDER[0];
-  const langKey = String(baseLanguage || "").toLowerCase();
+  const langKey = String(baseLanguage || "").trim().toLowerCase();
   const normalizedKey = normalizeTranslationLookupKey(explanationText);
   if (!sectionKey || !langKey || !normalizedKey || !translation) {
     return;
@@ -3260,7 +3258,7 @@ const requestRuntimeGrammarExplanationTranslation = async (
 ) => {
   const sectionKey =
     resolveGrammarSectionName(section) || GRAMMAR_SECTION_ORDER[0];
-  const langKey = String(baseLanguage || "").toLowerCase();
+  const langKey = String(baseLanguage || "").trim().toLowerCase();
   const normalizedKey = normalizeTranslationLookupKey(explanationText);
   if (!sectionKey || !langKey || !normalizedKey) {
     return "";
@@ -3275,62 +3273,159 @@ const requestRuntimeGrammarExplanationTranslation = async (
     return pending;
   }
 
-  const translateOnce = async () => {
-    const response = await fetch("/api/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        messages: [
-          {
-            role: "system",
-            content:
-              "Translate the provided educational sentence exactly into the target language. Return only the translated sentence.",
-          },
-          {
-            role: "user",
-            content: `Target language: ${baseLanguage}\nText: ${explanationText}`,
-          },
-        ],
-      }),
-    });
-    if (!response.ok) {
-      throw new Error(`Translation request failed with status ${response.status}`);
+  const toTranslateEndpoint = (candidate) =>
+    String(candidate || "").replace(/\/api\/chat(?=$|[?#])/i, "/api/translate");
+
+  const endpointCandidates = (() => {
+    if (typeof getApiEndpointCandidates === "function") {
+      const sharedCandidates = getApiEndpointCandidates();
+      if (Array.isArray(sharedCandidates) && sharedCandidates.length) {
+        const candidates = [];
+        const addCandidate = (url) => {
+          const normalized = String(url || "").trim();
+          if (!normalized || candidates.includes(normalized)) {
+            return;
+          }
+          candidates.push(normalized);
+        };
+        sharedCandidates.forEach((candidate) =>
+          addCandidate(toTranslateEndpoint(candidate))
+        );
+        // Keep a chat-endpoint fallback for environments that have not yet deployed /api/translate.
+        sharedCandidates.forEach((candidate) => addCandidate(candidate));
+        return candidates;
+      }
     }
-    const data = await response.json().catch(() => ({}));
-    const translated = String(data?.content || "")
-      .replace(/^["'`]|["'`]$/g, "")
-      .trim();
-    if (!translated) {
-      throw new Error("Empty translation response");
+    const endpoint = "/api/translate";
+    const { protocol, hostname, port } = window.location;
+    const normalizedHost = String(hostname || "").toLowerCase();
+    const candidates = [];
+    const addCandidate = (url) => {
+      if (!url) {
+        return;
+      }
+      if (!candidates.includes(url)) {
+        candidates.push(url);
+      }
+    };
+    const isLocalDevHost =
+      normalizedHost === "localhost" ||
+      normalizedHost === "127.0.0.1" ||
+      normalizedHost === "::1" ||
+      /^10\./.test(normalizedHost) ||
+      /^192\.168\./.test(normalizedHost) ||
+      /^172\.(1[6-9]|2\d|3[0-1])\./.test(normalizedHost) ||
+      normalizedHost.endsWith(".local");
+    const isCosmicaPublicHost =
+      normalizedHost === "cosmicalearn.com" ||
+      normalizedHost === "www.cosmicalearn.com" ||
+      normalizedHost === "cosmica-03wo.onrender.com";
+
+    if (!hostname || protocol === "file:") {
+      addCandidate(`http://localhost:3000${endpoint}`);
+      addCandidate(endpoint);
+      return candidates;
     }
-    return translated;
+
+    if (isCosmicaPublicHost) {
+      addCandidate(`https://www.cosmicalearn.com${endpoint}`);
+      addCandidate(endpoint);
+      addCandidate("/api/chat");
+      return candidates;
+    }
+
+    if (port && port !== "3000" && isLocalDevHost) {
+      addCandidate(`${protocol}//${hostname}:3000${endpoint}`);
+      addCandidate(`${protocol}//${hostname}:3000/api/chat`);
+    }
+    addCandidate(endpoint);
+    addCandidate("/api/chat");
+    return candidates;
+  })();
+
+  const getTimeoutMs = () => {
+    const fallbackTimeout = window.matchMedia("(max-width: 960px)").matches
+      ? 24000
+      : 14000;
+    if (
+      typeof MIMI_CONFIG === "object" &&
+      MIMI_CONFIG &&
+      Number.isFinite(Number(MIMI_CONFIG.timeoutMs))
+    ) {
+      return Math.max(fallbackTimeout, Number(MIMI_CONFIG.timeoutMs));
+    }
+    return fallbackTimeout;
+  };
+
+  const translateOnce = async (endpoint) => {
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), getTimeoutMs());
+    try {
+      const isChatFallback = /\/api\/chat(?=$|[?#])/i.test(String(endpoint || ""));
+      const body = isChatFallback
+        ? {
+            messages: [
+              {
+                role: "system",
+                content:
+                  "Translate the provided educational sentence exactly into the target language. Return only the translated sentence.",
+              },
+              {
+                role: "user",
+                content: `Target language: ${langKey}\nText: ${explanationText}`,
+              },
+            ],
+          }
+        : {
+            text: explanationText,
+            targetLanguage: langKey,
+          };
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+        cache: "no-store",
+        credentials: "same-origin",
+        signal: controller.signal,
+      });
+      if (!response.ok) {
+        throw new Error(`Translation request failed with status ${response.status}`);
+      }
+      const data = await response.json().catch(() => ({}));
+      const translated = String(data?.translation || data?.content || "")
+        .replace(/^["'`]|["'`]$/g, "")
+        .trim();
+      if (!translated) {
+        throw new Error("Empty translation response");
+      }
+      return translated;
+    } finally {
+      window.clearTimeout(timeout);
+    }
   };
 
   const request = (async () => {
     try {
-      const translated = await translateOnce();
-      cacheRuntimeGrammarExplanationTranslation(
-        sectionKey,
-        explanationText,
-        langKey,
-        translated
-      );
-      return translated;
-    } catch {
-      // Retry once to recover from transient mobile/network hiccups.
-      await new Promise((resolve) => window.setTimeout(resolve, 220));
-      try {
-        const translated = await translateOnce();
-        cacheRuntimeGrammarExplanationTranslation(
-          sectionKey,
-          explanationText,
-          langKey,
-          translated
-        );
-        return translated;
-      } catch {
-        return "";
+      const isMobileViewport = window.matchMedia("(max-width: 960px)").matches;
+      const attemptLimit = navigator.onLine ? (isMobileViewport ? 3 : 2) : 1;
+      for (let attemptIndex = 0; attemptIndex < attemptLimit; attemptIndex += 1) {
+        for (let endpointIndex = 0; endpointIndex < endpointCandidates.length; endpointIndex += 1) {
+          try {
+            const translated = await translateOnce(endpointCandidates[endpointIndex]);
+            cacheRuntimeGrammarExplanationTranslation(
+              sectionKey,
+              explanationText,
+              langKey,
+              translated
+            );
+            return translated;
+          } catch {}
+        }
+        if (attemptIndex < attemptLimit - 1) {
+          await new Promise((resolve) => window.setTimeout(resolve, 220 + attemptIndex * 260));
+        }
       }
+      return "";
     } finally {
       runtimeGrammarExplanationRequests.delete(cacheKey);
     }
@@ -3345,7 +3440,9 @@ const prewarmGrammarExplanationTranslations = () => {
   if (!isGrammarPage) {
     return;
   }
-  const baseLanguage = String(localStorage.getItem("cosmicaBaseLanguage") || "").toLowerCase();
+  const baseLanguage = String(localStorage.getItem("cosmicaBaseLanguage") || "")
+    .trim()
+    .toLowerCase();
   if (!baseLanguage || baseLanguage === "english") {
     return;
   }
@@ -3359,9 +3456,9 @@ const prewarmGrammarExplanationTranslations = () => {
     return;
   }
 
-  let queued = 0;
+  const tasks = [];
   cards.forEach((card) => {
-    if (queued >= 14) {
+    if (tasks.length >= 20) {
       return;
     }
     const section = card.dataset.section || "";
@@ -3374,8 +3471,25 @@ const prewarmGrammarExplanationTranslations = () => {
     if (resolveGrammarExplanation(section, explanation, baseLanguage)) {
       return;
     }
-    queued += 1;
-    void requestRuntimeGrammarExplanationTranslation(section, explanation, baseLanguage);
+    tasks.push(() =>
+      requestRuntimeGrammarExplanationTranslation(section, explanation, baseLanguage)
+    );
+  });
+
+  const scheduleTask = (task, delayMs) => {
+    if (typeof window.requestIdleCallback === "function") {
+      window.requestIdleCallback(() => {
+        void task();
+      }, { timeout: 500 });
+      return;
+    }
+    window.setTimeout(() => {
+      void task();
+    }, delayMs);
+  };
+
+  tasks.forEach((task, index) => {
+    scheduleTask(task, 90 + index * 85);
   });
 };
 
@@ -5762,7 +5876,7 @@ const renderGrammarModal = (section, index) => {
     return;
   }
 
-  const baseLanguage = localStorage.getItem("cosmicaBaseLanguage") || "";
+  const baseLanguage = String(localStorage.getItem("cosmicaBaseLanguage") || "").trim();
   const baseLanguageKey = String(baseLanguage || "").toLowerCase();
   const shouldTranslateExplanation = !!baseLanguage && baseLanguageKey !== "english";
   const explanation = buildGrammarExplanation(cardData);
@@ -5877,7 +5991,7 @@ const renderGrammarModal = (section, index) => {
     <div class="grammar-modal-header">
       <h3>${cardData.title}</h3>
       <p class="grammar-explanation-text">${explanation}</p>
-      ${shouldTranslateExplanation ? `<p class="grammar-translation grammar-explanation-translation">${explanationTranslation || "Loading translation..."}</p>` : ""}
+      ${shouldTranslateExplanation && explanationTranslation ? `<p class="grammar-translation grammar-explanation-translation">${explanationTranslation}</p>` : ""}
     </div>
     <div class="grammar-modal-grid">
       <div class="grammar-block">
@@ -5929,9 +6043,6 @@ const renderGrammarModal = (section, index) => {
         ".grammar-explanation-translation"
       );
       if (!translated) {
-        if (translationNode) {
-          translationNode.textContent = "";
-        }
         return;
       }
       if (!header) {
@@ -5979,14 +6090,29 @@ const openGrammarModal = (section, index) => {
     overlay.querySelector(".grammar-modal")?.focus?.();
   };
 
-  const baseLanguage = String(localStorage.getItem("cosmicaBaseLanguage") || "");
+  const baseLanguage = String(localStorage.getItem("cosmicaBaseLanguage") || "").trim();
   const shouldWaitForTranslations =
-    !!baseLanguage &&
-    baseLanguage.toLowerCase() !== "english" &&
-    !translationNetworkHydrated;
+    !!baseLanguage && baseLanguage.toLowerCase() !== "english";
+  const preloadActiveExplanationTranslation = async () => {
+    const cardData = GRAMMAR_SECTION_LISTS[section]?.[index];
+    if (!cardData) {
+      return;
+    }
+    const explanation = buildGrammarExplanation(cardData);
+    if (resolveGrammarExplanation(section, explanation, baseLanguage)) {
+      return;
+    }
+    await requestRuntimeGrammarExplanationTranslation(
+      section,
+      explanation,
+      baseLanguage
+    );
+  };
 
   if (shouldWaitForTranslations) {
-    ensureTranslationsLoaded({ awaitNetwork: true }).finally(showModal);
+    ensureTranslationsLoaded({ awaitNetwork: true })
+      .then(preloadActiveExplanationTranslation)
+      .finally(showModal);
     return;
   }
 
@@ -6142,7 +6268,7 @@ const resolveWordTranslation = (section, englishWord, baseLanguage) => {
   }
   const sectionKey = section || WORD_SECTION_ORDER[0];
   const wordKey = (englishWord || "").toLowerCase();
-  const langKey = (baseLanguage || "").toLowerCase();
+  const langKey = String(baseLanguage || "").trim().toLowerCase();
   let translation = "";
   const worldEntry = WORLD_TRANSLATIONS?.words?.[sectionKey]?.[wordKey];
   if (worldEntry && worldEntry.translations) {
@@ -6163,7 +6289,7 @@ const resolveWordTranslation = (section, englishWord, baseLanguage) => {
 };
 
 const applyWordTranslations = () => {
-  const baseLanguage = localStorage.getItem("cosmicaBaseLanguage") || "";
+  const baseLanguage = String(localStorage.getItem("cosmicaBaseLanguage") || "").trim();
   document.querySelectorAll(".word-card").forEach((card) => {
     const word = card.dataset.word || card.querySelector(".word")?.textContent?.trim() || "";
     const section = card.closest("[data-section]")?.dataset.section || "Core words";
@@ -6184,7 +6310,7 @@ const resolvePhraseTranslation = (section, englishPhrase, baseLanguage) => {
   }
   const sectionKey = section || PHRASE_SECTION_ORDER[0];
   const phraseKey = (englishPhrase || "").toLowerCase();
-  const langKey = (baseLanguage || "").toLowerCase();
+  const langKey = String(baseLanguage || "").trim().toLowerCase();
   let translation = "";
   const worldEntry = WORLD_TRANSLATIONS?.phrases?.[sectionKey]?.[phraseKey];
   if (worldEntry && worldEntry.translations) {
@@ -6205,7 +6331,7 @@ const resolvePhraseTranslation = (section, englishPhrase, baseLanguage) => {
 };
 
 const applyPhraseTranslations = () => {
-  const baseLanguage = localStorage.getItem("cosmicaBaseLanguage") || "";
+  const baseLanguage = String(localStorage.getItem("cosmicaBaseLanguage") || "").trim();
   document.querySelectorAll(".phrase-card").forEach((card) => {
     const phrase =
       card.dataset.phrase || card.querySelector(".phrase-text")?.textContent?.trim() || "";
@@ -6225,7 +6351,7 @@ const resolveGrammarTranslation = (section, exampleSentence, baseLanguage) => {
   const sectionKey = section || GRAMMAR_SECTION_ORDER[0];
   const keyVariants = buildTranslationLookupVariants(exampleSentence);
   const variantSet = new Set(keyVariants);
-  const langKey = (baseLanguage || "").toLowerCase();
+  const langKey = String(baseLanguage || "").trim().toLowerCase();
   let translation = "";
 
   const worldExamples = WORLD_TRANSLATIONS?.grammar?.examples || {};
@@ -6292,7 +6418,9 @@ const resolveGrammarTranslation = (section, exampleSentence, baseLanguage) => {
 refreshMapsForBaseLanguage = () => {
   const selectedBaseLanguage = String(
     localStorage.getItem("cosmicaBaseLanguage") || ""
-  ).toLowerCase();
+  )
+    .trim()
+    .toLowerCase();
   const shouldPrioritizeTranslations =
     !!selectedBaseLanguage && selectedBaseLanguage !== "english";
 
@@ -6408,7 +6536,9 @@ if (isGrammarPage) {
 if (needsMapTranslations) {
   const selectedBaseLanguage = String(
     localStorage.getItem("cosmicaBaseLanguage") || ""
-  ).toLowerCase();
+  )
+    .trim()
+    .toLowerCase();
   const shouldPrioritizeTranslations =
     !!selectedBaseLanguage && selectedBaseLanguage !== "english";
   const shouldAwaitNetworkHydration =

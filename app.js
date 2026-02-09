@@ -14,6 +14,7 @@ const chatInput = document.getElementById("chatInput");
 const chatLog = document.getElementById("chatLog");
 const chatStatus = document.getElementById("chatStatus");
 const chatChips = document.querySelectorAll(".chat-chip");
+const navRoot = document.querySelector(".nav");
 const alien = document.getElementById("alien");
 const mouthPath = document.getElementById("mouthPath");
 const alienHead = alien ? alien.querySelector(".alien-head") : null;
@@ -22,6 +23,92 @@ const warpText = document.getElementById("warpText");
 const worldCards = document.querySelectorAll(".world-card");
 const urlParams = new URLSearchParams(window.location.search);
 const currentPath = window.location.pathname.toLowerCase();
+
+// Keep viewport-height based layout stable on mobile when browser UI bars expand/collapse.
+const setupDynamicViewportHeight = () => {
+  const root = document.documentElement;
+  let stableHeight = 0;
+  let lastAppliedHeight = 0;
+  let orientationKey = "";
+  let rafId = 0;
+  const TOOLBAR_RESIZE_TOLERANCE_PX = 120;
+
+  const getOrientationKey = () => {
+    const landscape = window.matchMedia("(orientation: landscape)").matches;
+    return landscape ? "landscape" : "portrait";
+  };
+
+  const applyViewportHeight = (forceReset = false) => {
+    const innerHeight = Math.round(window.innerHeight || root.clientHeight || 0);
+    if (!innerHeight || !Number.isFinite(innerHeight)) {
+      return;
+    }
+    const nextOrientation = getOrientationKey();
+    const orientationChanged = orientationKey !== nextOrientation;
+    if (forceReset || !stableHeight || orientationChanged) {
+      orientationKey = nextOrientation;
+      stableHeight = innerHeight;
+    } else if (Math.abs(innerHeight - stableHeight) >= TOOLBAR_RESIZE_TOLERANCE_PX) {
+      // Ignore small viewport deltas from mobile browser toolbar show/hide.
+      stableHeight = innerHeight;
+    } else {
+      return;
+    }
+    if (stableHeight === lastAppliedHeight) {
+      return;
+    }
+    lastAppliedHeight = stableHeight;
+    root.style.setProperty("--vh", `${stableHeight * 0.01}px`);
+    root.style.setProperty("--app-height", `${stableHeight}px`);
+  };
+
+  const scheduleViewportHeightUpdate = (forceReset = false) => {
+    if (rafId) {
+      return;
+    }
+    rafId = window.requestAnimationFrame(() => {
+      rafId = 0;
+      applyViewportHeight(forceReset);
+    });
+  };
+
+  applyViewportHeight(true);
+  window.addEventListener("resize", scheduleViewportHeightUpdate, { passive: true });
+  window.addEventListener("orientationchange", () => scheduleViewportHeightUpdate(true), {
+    passive: true,
+  });
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener("resize", scheduleViewportHeightUpdate, {
+      passive: true,
+    });
+  }
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) {
+      scheduleViewportHeightUpdate(true);
+    }
+  });
+};
+
+setupDynamicViewportHeight();
+
+// Force the canonical secure origin for public traffic (extra safety layer on top of server/CDN redirects).
+const enforceProductionCanonicalOrigin = () => {
+  const host = String(window.location.hostname || "").toLowerCase();
+  const isPublicCosmicaHost = host === "cosmicalearn.com" || host === "www.cosmicalearn.com";
+  if (!isPublicCosmicaHost) {
+    return;
+  }
+  const needsHttps = window.location.protocol !== "https:";
+  const needsWww = host !== "www.cosmicalearn.com";
+  if (!needsHttps && !needsWww) {
+    return;
+  }
+  const targetUrl = `https://www.cosmicalearn.com${window.location.pathname}${window.location.search}${window.location.hash}`;
+  window.location.replace(targetUrl);
+};
+
+enforceProductionCanonicalOrigin();
+
 const isWorldLandingPage = currentPath.endsWith("/world.html");
 if (urlParams.has("skipIntro")) {
   const cleanUrl = new URL(window.location.href);
@@ -43,6 +130,11 @@ if (isWorldLandingPage && urlParams.has("world")) {
     cleanUrl.hash;
   window.history.replaceState({}, "", normalizedUrl);
 }
+
+if (navRoot) {
+  const navLinksCount = navRoot.querySelectorAll(".nav-links a").length;
+  navRoot.classList.toggle("nav-single-link", navLinksCount <= 1);
+}
 /* ==========================================================================
    WORLD CONTEXT
    Resolve active world from URL/body and select world-specific translation packs.
@@ -52,7 +144,7 @@ const WORLD_NAME = isWorldLandingPage
   : urlParams.get("world") || document.body.dataset.world || "English";
 const WORLD_KEY = WORLD_NAME.toLowerCase();
 const WORLD_TRANSLATION_FILE = "translations.json";
-const MAP_TRANSLATIONS_CACHE_KEY = "cosmicaMapTranslationsCache:v1";
+const MAP_TRANSLATIONS_CACHE_KEY = "cosmicaMapTranslationsCache:v2";
 const readAssetVersionParam = (rawUrl) => {
   if (!rawUrl) {
     return "";
@@ -118,7 +210,7 @@ const warmMapTranslationsCache = async () => {
     return;
   }
   try {
-    const response = await fetch(WORLD_TRANSLATION_FILE, { cache: "force-cache" });
+    const response = await fetch(WORLD_TRANSLATION_FILE, { cache: "no-store" });
     if (!response.ok) {
       return;
     }
@@ -190,8 +282,8 @@ const MIMI_CONFIG = {
   mode: "api",
   endpoint: "/api/chat",
   timeoutMs: 12000,
-  mobileTimeoutMs: 18000,
-  retryLimit: 3,
+  mobileTimeoutMs: 40000,
+  retryLimit: 4,
   historyLimit: 12,
 };
 const WORLD_START_LESSON_DESKTOP_DOWN_SHIFT = 34;
@@ -841,8 +933,9 @@ const getApiEndpointCandidates = () => {
     normalizedHost === "www.cosmicalearn.com" ||
     normalizedHost === "cosmica-03wo.onrender.com";
   if (isCosmicaPublicHost) {
-    addCandidate(`https://www.cosmicalearn.com${endpoint}`);
+    addCandidate(`${protocol}//${hostname}${endpoint}`);
     addCandidate(endpoint);
+    addCandidate(`https://www.cosmicalearn.com${endpoint}`);
     return candidates;
   }
 
@@ -978,9 +1071,9 @@ const getMimiReply = async (message) => {
     }
   };
 
-  const attempts = navigator.onLine ? Math.max(1, MIMI_CONFIG.retryLimit || 1) : 1;
+  const attempts = Math.max(1, MIMI_CONFIG.retryLimit || 1);
   let lastError = null;
-  for (let attemptIndex = 0; attemptIndex < attempts && navigator.onLine; attemptIndex += 1) {
+  for (let attemptIndex = 0; attemptIndex < attempts; attemptIndex += 1) {
     for (let endpointIndex = 0; endpointIndex < endpointCandidates.length; endpointIndex += 1) {
       const endpoint = endpointCandidates[endpointIndex];
       try {
@@ -1007,8 +1100,8 @@ const getMimiReply = async (message) => {
     endpointCandidates,
   });
   return {
-    content: "My AI link is unstable right now. Please try again in a few seconds.",
-    source: "error",
+    content: getPresetReply(message),
+    source: "fallback",
   };
 };
 
@@ -1023,12 +1116,13 @@ const sendChatMessage = async (message) => {
   if (!text) {
     return;
   }
+  const isMobileViewport = window.matchMedia("(max-width: 960px)").matches;
   chatRequestInFlight = true;
   chatInput.disabled = true;
   try {
     userHasMessagedMimi = true;
     appendChatMessage("user", text);
-    if (!message && window.matchMedia("(max-width: 960px)").matches && document.activeElement === chatInput) {
+    if (!message && isMobileViewport && document.activeElement === chatInput) {
       chatInput.blur();
     }
     revealMimiBubbleOnMobile();
@@ -1054,6 +1148,8 @@ const sendChatMessage = async (message) => {
       setChatStatus("AI live");
     } else if (reply.source === "error") {
       setChatStatus("AI reconnecting");
+    } else if (reply.source === "fallback") {
+      setChatStatus("AI reconnecting");
     } else if (reply.source === "offline") {
       setChatStatus("Offline mode");
     } else {
@@ -1068,7 +1164,9 @@ const sendChatMessage = async (message) => {
   } finally {
     chatRequestInFlight = false;
     chatInput.disabled = false;
-    chatInput.focus();
+    if (!isMobileViewport) {
+      chatInput.focus();
+    }
   }
 };
 
@@ -1934,11 +2032,11 @@ if (speechText && speechBubble) {
 }
 
 const MOBILE_HOME_ANCHOR_DOWN_SHIFT = Object.freeze({
-  default: 104,
-  "#how": 124,
-  "#worlds": 140,
-  "#guide": 172,
-  "#join": 188,
+  default: 92,
+  "#how": 110,
+  "#worlds": 126,
+  "#guide": 158,
+  "#join": 174,
   "#support": 220,
 });
 const getMobileHomeAnchorDownShift = (hash) =>
@@ -2571,13 +2669,36 @@ const setupSpeechCards = () => {
   const MALE_HINT =
     /male|man|david|mark|alex|george|fred|daniel|ryan|tom|google uk english male|microsoft david/i;
   const LOW_QUALITY_HINT =
-    /espeak|festival|compact|robot|offline|basic|legacy/i;
+    /espeak|festival|compact|robot|offline|basic|legacy|eloquence|embedded|local|svox/i;
   const HIGH_QUALITY_HINT =
-    /neural|natural|premium|enhanced|wavenet|online|studio/i;
+    /neural|natural|premium|enhanced|wavenet|online|studio|siri|google us english|google uk english female|microsoft aria|microsoft jenny|samantha/i;
   const IOS_FEMALE_HINT = /samantha|karen|moira|ava|allison|serena/i;
   const ANDROID_FEMALE_HINT =
-    /google.*female|wavenet.*(f|a)|neural2.*(f|a)|en-us-studio-o|en-gb-studio-a/i;
+    /google.*female|google us english|google uk english female|wavenet.*(f|a)|neural2.*(f|a)|en-us-studio-o|en-gb-studio-a/i;
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent || "");
+  const isAndroid = /android/i.test(navigator.userAgent || "");
+
+  const waitForVoicesReady = (timeoutMs = 1400) =>
+    new Promise((resolve) => {
+      if (!("speechSynthesis" in window)) {
+        resolve();
+        return;
+      }
+      const existing = window.speechSynthesis.getVoices();
+      if (existing && existing.length) {
+        resolve();
+        return;
+      }
+      const finish = () => {
+        window.clearTimeout(timeoutId);
+        window.speechSynthesis.removeEventListener("voiceschanged", finish);
+        resolve();
+      };
+      const timeoutId = window.setTimeout(finish, timeoutMs);
+      window.speechSynthesis.addEventListener("voiceschanged", finish, {
+        once: true,
+      });
+    });
 
   const pickVoice = () => {
     if (!availableVoices.length) {
@@ -2599,23 +2720,29 @@ const setupSpeechCards = () => {
       if (voice.default) {
         score += 2;
       }
+      if (voice.localService === false) {
+        score += 10;
+      }
+      if (voice.localService === true) {
+        score -= 2;
+      }
       if (FEMALE_HINT.test(name)) {
         score += 14;
       }
       if (HIGH_QUALITY_HINT.test(name)) {
-        score += 6;
-      }
-      if (isIOS && IOS_FEMALE_HINT.test(name)) {
         score += 10;
       }
-      if (!isIOS && ANDROID_FEMALE_HINT.test(name)) {
-        score += 8;
+      if (isIOS && IOS_FEMALE_HINT.test(name)) {
+        score += 18;
+      }
+      if (isAndroid && ANDROID_FEMALE_HINT.test(name)) {
+        score += 18;
       }
       if (MALE_HINT.test(name)) {
         score -= 9;
       }
       if (LOW_QUALITY_HINT.test(name)) {
-        score -= 12;
+        score -= 28;
       }
       return score;
     };
@@ -2626,10 +2753,19 @@ const setupSpeechCards = () => {
     const englishVoices = availableVoices.filter((voice) =>
       (voice.lang || "").toLowerCase().startsWith("en")
     );
+    const prioritizedVoiceHints = isIOS
+      ? ["samantha", "ava", "allison", "serena", "karen", "moira"]
+      : ["google us english", "google uk english female", "microsoft aria", "microsoft jenny"];
+    const prioritizedEnglishVoices = englishVoices.filter((voice) =>
+      prioritizedVoiceHints.some((hint) =>
+        (voice.name || "").toLowerCase().includes(hint)
+      )
+    );
     const preferredEnglishVoices = englishVoices.filter((voice) =>
       FEMALE_HINT.test(voice.name || "") || HIGH_QUALITY_HINT.test(voice.name || "")
     );
     return (
+      pickFrom(prioritizedEnglishVoices) ||
       pickFrom(preferredEnglishVoices) ||
       pickFrom(englishVoices) ||
       pickFrom(availableVoices)
@@ -2643,32 +2779,97 @@ const setupSpeechCards = () => {
   loadVoices();
   window.speechSynthesis.onvoiceschanged = loadVoices;
 
-  const playSpeech = (text, { rate = 0.92, pitch = 1.12 } = {}) => {
+  const playSpeech = async (text, { rate = 0.94, pitch = 1.02 } = {}) => {
     if (!text) {
       return;
     }
-    if (!selectedVoice) {
+    if (!availableVoices.length) {
+      await waitForVoicesReady();
       loadVoices();
+    }
+    if (!selectedVoice) {
       selectedVoice = pickVoice();
     }
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = selectedVoice?.lang || "en-US";
-    utterance.rate = rate;
+    const adjustedRate = window.matchMedia("(max-width: 960px)").matches
+      ? Math.max(0.86, rate - 0.04)
+      : rate;
+    utterance.rate = adjustedRate;
     utterance.pitch = pitch;
     if (selectedVoice) {
       utterance.voice = selectedVoice;
     }
     window.speechSynthesis.cancel();
     window.setTimeout(() => {
+      window.speechSynthesis.resume();
       window.speechSynthesis.speak(utterance);
     }, 60);
   };
 
-  const setupCards = (cards, labelSelector, datasetKey, ariaPrefix, rate, pitch) => {
+  const LETTER_SPEECH_MAP = Object.freeze({
+    A: "ay",
+    B: "bee",
+    C: "see",
+    D: "dee",
+    E: "ee",
+    F: "ef",
+    G: "jee",
+    H: "aitch",
+    I: "eye",
+    J: "jay",
+    K: "kay",
+    L: "el",
+    M: "em",
+    N: "en",
+    O: "oh",
+    P: "pee",
+    Q: "cue",
+    R: "ar",
+    S: "ess",
+    T: "tee",
+    U: "you",
+    V: "vee",
+    W: "double u",
+    X: "ex",
+    Y: "why",
+    Z: "zee",
+    "ɪ": "ih",
+  });
+
+  const normalizeLetterSpeechText = (rawText) => {
+    const text = String(rawText || "")
+      .replace(/\b(capital|uppercase|lowercase)\s+letter\b/gi, "")
+      .trim();
+    if (!text) {
+      return "";
+    }
+    const match = text.match(/[A-Za-z\u026A]/);
+    if (!match) {
+      return text.toLowerCase();
+    }
+    const first = match[0] === "ɪ" ? "ɪ" : match[0].toUpperCase();
+    return LETTER_SPEECH_MAP[first] || match[0].toLowerCase();
+  };
+
+  const setupCards = (
+    cards,
+    labelSelector,
+    datasetKey,
+    ariaPrefix,
+    rate,
+    pitch,
+    normalizeText
+  ) => {
     cards.forEach((card) => {
       const label = card.querySelector(labelSelector);
-      if (label && !card.dataset[datasetKey]) {
-        card.dataset[datasetKey] = label.textContent.trim();
+      const sourceText = String(
+        label?.textContent?.trim() || card.dataset[datasetKey] || ""
+      ).trim();
+      if (sourceText) {
+        card.dataset[datasetKey] = normalizeText
+          ? normalizeText(sourceText)
+          : sourceText;
       }
       card.setAttribute("role", "button");
       card.setAttribute("tabindex", "0");
@@ -2698,9 +2899,17 @@ const setupSpeechCards = () => {
     });
   };
 
-  setupCards(letterCards, ".letter", "letter", "Play letter", 0.92, 1.12);
-  setupCards(wordCards, ".word", "word", "Play word", 0.95, 1.05);
-  setupCards(phraseCards, ".phrase-text", "phrase", "Play phrase", 0.95, 1.02);
+  setupCards(
+    letterCards,
+    ".letter",
+    "letter",
+    "Play letter",
+    0.9,
+    1,
+    normalizeLetterSpeechText
+  );
+  setupCards(wordCards, ".word", "word", "Play word", 0.95, 1.01);
+  setupCards(phraseCards, ".phrase-text", "phrase", "Play phrase", 0.95, 1);
 
   [...letterButtons, ...wordButtons].forEach((button) => {
     button.setAttribute("aria-hidden", "true");
