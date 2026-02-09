@@ -2738,6 +2738,7 @@ body:not(.world-page) .footer {
     font-size: 9.5px;
     letter-spacing: 0.06em;
     text-transform: uppercase;
+    filter: brightness(1.1);
   }
 
   body:not(.world-page) .nav-links {
