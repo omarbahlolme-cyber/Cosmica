@@ -1994,12 +1994,12 @@ if (speechText && speechBubble) {
 }
 
 const MOBILE_HOME_ANCHOR_DOWN_SHIFT = Object.freeze({
-  default: 104,
-  "#how": 124,
-  "#worlds": 140,
-  "#guide": 172,
-  "#join": 188,
-  "#support": 220,
+  default: 92,
+  "#how": 110,
+  "#worlds": 126,
+  "#guide": 158,
+  "#join": 174,
+  "#support": 206,
 });
 const getMobileHomeAnchorDownShift = (hash) =>
   MOBILE_HOME_ANCHOR_DOWN_SHIFT[hash] ?? MOBILE_HOME_ANCHOR_DOWN_SHIFT.default;
