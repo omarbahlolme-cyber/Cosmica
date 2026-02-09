@@ -982,6 +982,14 @@ const createRafThrottled = (callback) => {
 };
 
 document.querySelectorAll(".section").forEach((el) => {
+  const isWorldHeroSection =
+    document.body.classList.contains("world-page") && el.id === "world";
+  if (isWorldHeroSection) {
+    // Keep the world hero visible at all times, including hard refresh.
+    el.classList.remove("reveal");
+    el.classList.add("is-visible");
+    return;
+  }
   el.classList.add("reveal");
 });
 document.querySelectorAll(".reveal").forEach((el) => {
@@ -1130,9 +1138,11 @@ if (document.body.classList.contains("world-page")) {
       }
       activeSectionId = id;
       worldSections.forEach((section) => {
+        const isWorldHero = section.id === "world";
         const isActive = section.id === id;
-        section.classList.toggle("is-visible", isActive);
-        section.setAttribute("aria-hidden", isActive ? "false" : "true");
+        const shouldShow = isWorldHero || isActive;
+        section.classList.toggle("is-visible", shouldShow);
+        section.setAttribute("aria-hidden", shouldShow ? "false" : "true");
       });
       if (id === "language") {
         document.body.classList.add("show-language");
