@@ -1066,17 +1066,36 @@ starfields.forEach((layer) => {
   }
 });
 
+const REVEAL_SHOW_RATIO = 0.2;
+const REVEAL_HIDE_RATIO = 0.07;
+const revealState = new WeakMap();
 const observer = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("is-visible");
-        // One-time reveal avoids threshold oscillation flicker on scroll stop.
-        observer.unobserve(entry.target);
+      const target = entry.target;
+      const currentlyVisible =
+        revealState.get(target) ?? target.classList.contains("is-visible");
+      let shouldBeVisible = currentlyVisible;
+
+      // Hysteresis prevents rapid toggling around the threshold while keeping fade-in/out behavior.
+      if (currentlyVisible) {
+        if (!entry.isIntersecting || entry.intersectionRatio <= REVEAL_HIDE_RATIO) {
+          shouldBeVisible = false;
+        }
+      } else if (entry.isIntersecting && entry.intersectionRatio >= REVEAL_SHOW_RATIO) {
+        shouldBeVisible = true;
+      }
+
+      if (shouldBeVisible !== currentlyVisible) {
+        target.classList.toggle("is-visible", shouldBeVisible);
+        revealState.set(target, shouldBeVisible);
       }
     });
   },
-  { threshold: 0.18 }
+  {
+    threshold: [0, REVEAL_HIDE_RATIO, REVEAL_SHOW_RATIO, 0.45],
+    rootMargin: "0px 0px -4% 0px",
+  }
 );
 
 const observedRevealElements = new WeakSet();
@@ -1852,17 +1871,17 @@ if (speechText && speechBubble) {
 }
 
 const MOBILE_HOME_ANCHOR_DOWN_SHIFT = Object.freeze({
-  default: 64,
-  "#how": 80,
-  "#worlds": 96,
-  "#guide": 128,
-  "#join": 144,
-  "#support": 176,
+  default: 104,
+  "#how": 124,
+  "#worlds": 140,
+  "#guide": 172,
+  "#join": 188,
+  "#support": 220,
 });
 const getMobileHomeAnchorDownShift = (hash) =>
   MOBILE_HOME_ANCHOR_DOWN_SHIFT[hash] ?? MOBILE_HOME_ANCHOR_DOWN_SHIFT.default;
 const DESKTOP_HOME_ANCHOR_DOWN_SHIFT = Object.freeze({
-  "#guide": 28,
+  "#guide": 64,
 });
 const getDesktopHomeAnchorDownShift = (hash) =>
   DESKTOP_HOME_ANCHOR_DOWN_SHIFT[hash] ?? 0;
