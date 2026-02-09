@@ -52,7 +52,7 @@ const WORLD_NAME = isWorldLandingPage
   : urlParams.get("world") || document.body.dataset.world || "English";
 const WORLD_KEY = WORLD_NAME.toLowerCase();
 const WORLD_TRANSLATION_FILE = "translations.json";
-const ASSET_VERSION = "20260213";
+const ASSET_VERSION = "20260214";
 let WORLD_TRANSLATIONS = null;
 let WORLD_GRAMMAR_TITLE_MAP = null;
 let WORLD_GRAMMAR_EXAMPLE_MAP = null;
@@ -1565,14 +1565,14 @@ if (speechText && speechBubble) {
     const navHeight = navEl ? navEl.getBoundingClientRect().height : 0;
     const mobileDownShift = isHomeMobile
       ? (hash === "#support"
-        ? 22
+        ? 44
         : hash === "#join"
-          ? 18
+          ? 36
           : hash === "#guide"
-            ? 14
+            ? 28
             : hash === "#worlds"
-              ? 10
-              : 8)
+              ? 20
+              : 16)
       : 0;
     const baseOffset =
       Number.parseFloat(window.getComputedStyle(target).scrollMarginTop) || 0;
@@ -2506,4 +2506,5 @@ if (needsMapTranslations) {
 }
 
 setupWebVitalsReporting();
+
 
