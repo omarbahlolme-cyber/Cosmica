@@ -189,7 +189,7 @@ const lineMoods = ["happy", "curious", "thinking", "happy", "curious"];
 const MIMI_CONFIG = {
   mode: "api",
   endpoint: "/api/chat",
-  timeoutMs: 8000,
+  timeoutMs: 15000,
   historyLimit: 10,
 };
 const MIMI_SITE_CONTEXT = [
@@ -202,14 +202,16 @@ const MIMI_SITE_CONTEXT = [
 ].join(" ");
 const MIMI_SYSTEM_PROMPT = [
   "You are Mimi, the alien guide for the Cosmica language academy.",
-  "Keep replies concise and helpful (1-3 sentences).",
-  "Maintain a cosmic discovery vibe without sounding overly emotional.",
-  "Stay on Cosmica language-learning topics only. If the user asks unrelated general-knowledge questions, briefly redirect back to language learning.",
-  "Do not provide external statistics, demographic claims, or factual claims outside Cosmica learning guidance.",
+  "You are highly intelligent, emotionally aware, warm, and supportive.",
+  "Keep replies concise and helpful (1-4 sentences).",
+  "You can answer broad questions across topics, then connect back to learning goals when useful.",
+  "Maintain a cosmic discovery vibe while sounding natural and smart.",
+  "Know Cosmica in detail: site sections, maps, world flow, base-language behavior, and currently available content.",
   "Only English world is available now. Mention other worlds as upcoming only.",
   "Ask for the user's target language, goal, and time available when needed.",
   "Give one concrete next step (a quick quest, a phrase to practice, or a world to enter).",
   "If asked about features beyond the current site, call them planned or upcoming.",
+  "If you are uncertain about a factual claim, say so briefly and avoid inventing specifics.",
   "Never claim to access user data or progress.",
   MIMI_SITE_CONTEXT,
 ].join(" ");
@@ -553,6 +555,7 @@ let speakingTimer;
 let gazeResetTimer;
 const chatHistory = [];
 let chatRequestInFlight = false;
+const MAX_VISIBLE_CHAT_MESSAGES = 16;
 
 const renderFlags = () => {
   document.querySelectorAll(".flag-badge").forEach((badge) => {
@@ -630,6 +633,20 @@ const scrollChatToBottom = () => {
   chatLog.scrollTop = chatLog.scrollHeight;
 };
 
+const trimVisibleChatMessages = () => {
+  if (!chatLog) {
+    return;
+  }
+  const messages = chatLog.querySelectorAll(".chat-message");
+  const overflowCount = messages.length - MAX_VISIBLE_CHAT_MESSAGES;
+  if (overflowCount <= 0) {
+    return;
+  }
+  for (let i = 0; i < overflowCount; i += 1) {
+    messages[i].remove();
+  }
+};
+
 const appendChatMessage = (role, text, options = {}) => {
   if (!chatLog) {
     return null;
@@ -682,6 +699,7 @@ const appendChatMessage = (role, text, options = {}) => {
   bubble.appendChild(body);
   message.appendChild(bubble);
   chatLog.appendChild(message);
+  trimVisibleChatMessages();
   scrollChatToBottom();
   return message;
 };
@@ -847,6 +865,7 @@ const sendChatMessage = async (message) => {
   chatRequestInFlight = true;
   chatInput.disabled = true;
   try {
+    appendChatMessage("user", text);
     chatHistory.push({ role: "user", content: text });
     if (chatHistory.length > MIMI_CONFIG.historyLimit) {
       chatHistory.splice(0, chatHistory.length - MIMI_CONFIG.historyLimit);
@@ -890,9 +909,9 @@ chatChips.forEach((chip) => {
 
 if (chatLog) {
   chatLog.innerHTML = "";
-  // Bubble-only mode: keep replies in Mimi's speech bubble, not in a scrolling chat history list.
-  chatLog.setAttribute("aria-hidden", "true");
-  chatLog.style.display = "none";
+  // Keep visible user message history while Mimi replies stay in the speech bubble.
+  chatLog.removeAttribute("aria-hidden");
+  chatLog.style.removeProperty("display");
 }
 
 const createStars = (layer, count, sizeRange) => {
