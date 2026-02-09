@@ -3266,43 +3266,49 @@ const requestRuntimeGrammarExplanationTranslation = async (
     return "";
   }
   const cacheKey = `${sectionKey}|${langKey}|${normalizedKey}`;
-  if (runtimeGrammarExplanationCache.has(cacheKey)) {
-    return runtimeGrammarExplanationCache.get(cacheKey) || "";
+  const cachedValue = runtimeGrammarExplanationCache.get(cacheKey);
+  if (typeof cachedValue === "string" && cachedValue.trim()) {
+    return cachedValue;
   }
   const pending = runtimeGrammarExplanationRequests.get(cacheKey);
   if (pending) {
     return pending;
   }
-  const request = fetch("/api/chat", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      messages: [
-        {
-          role: "system",
-          content:
-            "Translate the provided educational sentence exactly into the target language. Return only the translated sentence.",
-        },
-        {
-          role: "user",
-          content: `Target language: ${baseLanguage}\nText: ${explanationText}`,
-        },
-      ],
-    }),
-  })
-    .then(async (response) => {
-      if (!response.ok) {
-        runtimeGrammarExplanationCache.set(cacheKey, "");
-        return "";
-      }
-      const data = await response.json().catch(() => ({}));
-      const translated = String(data?.content || "")
-        .replace(/^["'`]|["'`]$/g, "")
-        .trim();
-      if (!translated) {
-        runtimeGrammarExplanationCache.set(cacheKey, "");
-        return "";
-      }
+
+  const translateOnce = async () => {
+    const response = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        messages: [
+          {
+            role: "system",
+            content:
+              "Translate the provided educational sentence exactly into the target language. Return only the translated sentence.",
+          },
+          {
+            role: "user",
+            content: `Target language: ${baseLanguage}\nText: ${explanationText}`,
+          },
+        ],
+      }),
+    });
+    if (!response.ok) {
+      throw new Error(`Translation request failed with status ${response.status}`);
+    }
+    const data = await response.json().catch(() => ({}));
+    const translated = String(data?.content || "")
+      .replace(/^["'`]|["'`]$/g, "")
+      .trim();
+    if (!translated) {
+      throw new Error("Empty translation response");
+    }
+    return translated;
+  };
+
+  const request = (async () => {
+    try {
+      const translated = await translateOnce();
       cacheRuntimeGrammarExplanationTranslation(
         sectionKey,
         explanationText,
@@ -3310,14 +3316,26 @@ const requestRuntimeGrammarExplanationTranslation = async (
         translated
       );
       return translated;
-    })
-    .catch(() => {
-      runtimeGrammarExplanationCache.set(cacheKey, "");
-      return "";
-    })
-    .finally(() => {
+    } catch {
+      // Retry once to recover from transient mobile/network hiccups.
+      await new Promise((resolve) => window.setTimeout(resolve, 220));
+      try {
+        const translated = await translateOnce();
+        cacheRuntimeGrammarExplanationTranslation(
+          sectionKey,
+          explanationText,
+          langKey,
+          translated
+        );
+        return translated;
+      } catch {
+        return "";
+      }
+    } finally {
       runtimeGrammarExplanationRequests.delete(cacheKey);
-    });
+    }
+  })();
+
   runtimeGrammarExplanationRequests.set(cacheKey, request);
   return request;
 };
@@ -3343,7 +3361,7 @@ const prewarmGrammarExplanationTranslations = () => {
 
   let queued = 0;
   cards.forEach((card) => {
-    if (queued >= 8) {
+    if (queued >= 14) {
       return;
     }
     const section = card.dataset.section || "";
@@ -5859,7 +5877,7 @@ const renderGrammarModal = (section, index) => {
     <div class="grammar-modal-header">
       <h3>${cardData.title}</h3>
       <p class="grammar-explanation-text">${explanation}</p>
-      ${shouldTranslateExplanation && explanationTranslation ? `<p class="grammar-translation grammar-explanation-translation">${explanationTranslation}</p>` : ""}
+      ${shouldTranslateExplanation ? `<p class="grammar-translation grammar-explanation-translation">${explanationTranslation || "Loading translation..."}</p>` : ""}
     </div>
     <div class="grammar-modal-grid">
       <div class="grammar-block">
@@ -5897,9 +5915,6 @@ const renderGrammarModal = (section, index) => {
       explanation,
       baseLanguage
     ).then((translated) => {
-      if (!translated) {
-        return;
-      }
       const expectedSection = String(section || "");
       const expectedIndex = String(index ?? "0");
       if (
@@ -5910,24 +5925,33 @@ const renderGrammarModal = (section, index) => {
       }
       const activeBody = overlay.querySelector(".grammar-modal-body");
       const header = activeBody?.querySelector(".grammar-modal-header");
+      const translationNode = header?.querySelector(
+        ".grammar-explanation-translation"
+      );
+      if (!translated) {
+        if (translationNode) {
+          translationNode.textContent = "";
+        }
+        return;
+      }
       if (!header) {
         return;
       }
       const explanationNode = header.querySelector(".grammar-explanation-text");
-      let translationNode = header.querySelector(
+      let liveTranslationNode = header.querySelector(
         ".grammar-explanation-translation"
       );
-      if (!translationNode) {
-        translationNode = document.createElement("p");
-        translationNode.className =
+      if (!liveTranslationNode) {
+        liveTranslationNode = document.createElement("p");
+        liveTranslationNode.className =
           "grammar-translation grammar-explanation-translation";
         if (explanationNode) {
-          explanationNode.insertAdjacentElement("afterend", translationNode);
+          explanationNode.insertAdjacentElement("afterend", liveTranslationNode);
         } else {
-          header.appendChild(translationNode);
+          header.appendChild(liveTranslationNode);
         }
       }
-      translationNode.textContent = translated;
+      liveTranslationNode.textContent = translated;
     });
   }
 };
@@ -6266,16 +6290,37 @@ const resolveGrammarTranslation = (section, exampleSentence, baseLanguage) => {
 };
 
 refreshMapsForBaseLanguage = () => {
-  if (document.querySelector(".word-card")) {
-    applyWordTranslations();
+  const selectedBaseLanguage = String(
+    localStorage.getItem("cosmicaBaseLanguage") || ""
+  ).toLowerCase();
+  const shouldPrioritizeTranslations =
+    !!selectedBaseLanguage && selectedBaseLanguage !== "english";
+
+  const refreshRenderedMaps = () => {
+    if (document.querySelector(".word-card")) {
+      applyWordTranslations();
+    }
+    if (document.querySelector(".phrase-card")) {
+      applyPhraseTranslations();
+    }
+    if (isGrammarPage) {
+      prewarmedGrammarExplanationLanguage = "";
+      prewarmGrammarExplanationTranslations();
+    }
+    const overlay = ensureGrammarOverlay();
+    if (overlay && typeof overlay.__refresh === "function") {
+      overlay.__refresh();
+    }
+  };
+
+  if (!shouldPrioritizeTranslations) {
+    refreshRenderedMaps();
+    return;
   }
-  if (document.querySelector(".phrase-card")) {
-    applyPhraseTranslations();
-  }
-  const overlay = ensureGrammarOverlay();
-  if (overlay && typeof overlay.__refresh === "function") {
-    overlay.__refresh();
-  }
+
+  ensureTranslationsLoaded({ awaitNetwork: isGrammarPage }).finally(
+    refreshRenderedMaps
+  );
 };
 
 const updateWordsTopState = () => {
