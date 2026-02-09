@@ -2740,9 +2740,11 @@ body:not(.world-page) .footer {
   }
 
   .nav-links a {
-    padding: 4px 7px;
-    font-size: 9.5px;
-    letter-spacing: 0.06em;
+    min-height: 38px;
+    padding: 8px 10px;
+    font-size: 10px;
+    line-height: 1.05;
+    letter-spacing: 0.055em;
     text-transform: uppercase;
     filter: brightness(1.05);
   }
@@ -2759,15 +2761,11 @@ body:not(.world-page) .footer {
 
   body:not(.world-page) .nav-links a {
     width: 100%;
-    min-height: 38px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 8px 6px;
+    padding: 8px 10px;
     text-align: center;
-    font-size: 10px;
-    line-height: 1.05;
-    letter-spacing: 0.055em;
   }
 
   body:not(.world-page) .nav-links a:nth-child(1),
