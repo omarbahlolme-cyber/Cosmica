@@ -8,7 +8,7 @@
 :root {
   color-scheme: dark;
   --vh: 1vh;
-  --app-height: 100vh;
+  --app-height: calc(var(--vh) * 100);
   --bg: #05050b;
   --bg-deep: #060617;
   --panel: rgba(14, 19, 40, 0.7);
@@ -29,12 +29,6 @@
   );
   --font-title: "Space Grotesk", sans-serif;
   --font-body: "Rajdhani", sans-serif;
-}
-
-@supports (height: 100dvh) {
-  :root {
-    --app-height: 100dvh;
-  }
 }
 
 /* --------------------------------------------------------------------------
@@ -94,7 +88,7 @@ input {
 
 .aurora {
   position: fixed;
-  inset: -30vh -20vw;
+  inset: calc(var(--vh) * -30) -20vw;
   background: radial-gradient(circle at 20% 20%, rgba(104, 225, 255, 0.18), transparent 45%),
     radial-gradient(circle at 80% 10%, rgba(255, 111, 177, 0.15), transparent 50%),
     radial-gradient(circle at 40% 80%, rgba(110, 247, 194, 0.15), transparent 55%);
@@ -1526,7 +1520,7 @@ body.world-page .world-card {
 }
 
 .chat-log {
-  height: clamp(180px, 24vh, 300px);
+  height: clamp(180px, calc(var(--vh) * 24), 300px);
   max-height: 300px;
   min-height: 180px;
   overflow-y: auto;
@@ -1567,7 +1561,7 @@ body.world-page .world-card {
 
 @media (max-width: 960px) {
   .chat-log {
-    height: clamp(160px, 22vh, 230px);
+    height: clamp(160px, calc(var(--vh) * 22), 230px);
     max-height: 230px;
     min-height: 160px;
   }
@@ -2660,7 +2654,7 @@ body:not(.world-page) .footer {
   .aurora {
     animation: none;
     transform: none;
-    inset: -20svh -20vw;
+    inset: calc(var(--vh) * -20) -20vw;
   }
 
   .starfield {
@@ -2789,6 +2783,21 @@ body:not(.world-page) .footer {
   body:not(.world-page) .nav-links a:nth-child(1),
   body:not(.world-page) .nav-links a:nth-child(2) {
     margin-top: 0;
+  }
+
+  .nav.nav-single-link .nav-links {
+    justify-content: center;
+    overflow: hidden;
+    padding-left: 2px;
+    padding-right: 2px;
+  }
+
+  .nav.nav-single-link .nav-links a {
+    width: min(92vw, 360px);
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .sound-toggle {
@@ -3127,7 +3136,7 @@ body:not(.world-page) .footer {
   }
 
   body.world-page .brand > div {
-    min-width: max-content;
+    min-width: 0;
   }
 
   body.world-page .brand-title {
@@ -3319,6 +3328,10 @@ body.world-page .language-box::after {
   .ghost:hover,
   .sound-toggle:hover,
   .grammar-close:hover {
+    transform: none !important;
+  }
+
+  .nav-links a:active {
     transform: none !important;
   }
 

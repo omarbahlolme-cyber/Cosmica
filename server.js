@@ -190,6 +190,11 @@ const chatLimiter = createLimiter({
   max: 45,
   scope: "chat",
 });
+const translateLimiter = createLimiter({
+  windowMs: 5 * 60 * 1000,
+  max: 90,
+  scope: "translate",
+});
 const feedbackLimiter = createLimiter({
   windowMs: 60 * 60 * 1000,
   max: 12,
@@ -486,6 +491,57 @@ app.post("/api/feedback", feedbackLimiter, async (req, res) => {
       path: req.originalUrl,
     });
     return res.status(500).json({ error: "Failed to send feedback" });
+  }
+});
+
+/* --------------------------------------------------------------------------
+   ROUTE: TRANSLATION PROXY
+   Dedicated endpoint for short UI translation tasks to avoid chat contention.
+   -------------------------------------------------------------------------- */
+app.post("/api/translate", translateLimiter, async (req, res) => {
+  if (!process.env.OPENAI_CHAT_KEY && !process.env.OPENAI_API_KEY) {
+    return res.status(500).json({ error: "Missing OPENAI_CHAT_KEY" });
+  }
+
+  const text = String(req.body?.text || "").trim();
+  const targetLanguage = String(req.body?.targetLanguage || "").trim();
+  if (!text || !targetLanguage) {
+    return res.status(400).json({ error: "Missing text or targetLanguage" });
+  }
+  if (text.length > 800 || targetLanguage.length > 80) {
+    return res.status(400).json({ error: "Translation payload too large" });
+  }
+
+  try {
+    const response = await getChatClient().chat.completions.create({
+      model: process.env.OPENAI_MODEL || "gpt-4o-mini",
+      temperature: 0.2,
+      max_tokens: 180,
+      messages: [
+        {
+          role: "system",
+          content:
+            "Translate the text to the requested target language. Return only the translated text without commentary.",
+        },
+        {
+          role: "user",
+          content: `Target language: ${targetLanguage}\nText: ${text}`,
+        },
+      ],
+    });
+
+    const translation = response.choices?.[0]?.message?.content?.trim();
+    if (!translation) {
+      return res.status(500).json({ error: "Empty translation response" });
+    }
+    return res.json({ translation });
+  } catch (error) {
+    reportServerError("translate", error, {
+      requestId: req.requestId,
+      method: req.method,
+      path: req.originalUrl,
+    });
+    return res.status(500).json({ error: "Translation request failed" });
   }
 });
 

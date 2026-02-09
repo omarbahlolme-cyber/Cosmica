@@ -14,6 +14,7 @@ const chatInput = document.getElementById("chatInput");
 const chatLog = document.getElementById("chatLog");
 const chatStatus = document.getElementById("chatStatus");
 const chatChips = document.querySelectorAll(".chat-chip");
+const navRoot = document.querySelector(".nav");
 const alien = document.getElementById("alien");
 const mouthPath = document.getElementById("mouthPath");
 const alienHead = alien ? alien.querySelector(".alien-head") : null;
@@ -26,28 +27,54 @@ const currentPath = window.location.pathname.toLowerCase();
 // Keep viewport-height based layout stable on mobile when browser UI bars expand/collapse.
 const setupDynamicViewportHeight = () => {
   const root = document.documentElement;
+  let stableHeight = 0;
+  let lastAppliedHeight = 0;
+  let orientationKey = "";
   let rafId = 0;
+  const TOOLBAR_RESIZE_TOLERANCE_PX = 120;
 
-  const applyViewportHeight = () => {
-    rafId = 0;
-    const innerHeight = window.innerHeight || root.clientHeight || 0;
-    if (!innerHeight) {
-      return;
-    }
-    root.style.setProperty("--vh", `${innerHeight * 0.01}px`);
-    root.style.setProperty("--app-height", `${innerHeight}px`);
+  const getOrientationKey = () => {
+    const landscape = window.matchMedia("(orientation: landscape)").matches;
+    return landscape ? "landscape" : "portrait";
   };
 
-  const scheduleViewportHeightUpdate = () => {
+  const applyViewportHeight = (forceReset = false) => {
+    const innerHeight = Math.round(window.innerHeight || root.clientHeight || 0);
+    if (!innerHeight || !Number.isFinite(innerHeight)) {
+      return;
+    }
+    const nextOrientation = getOrientationKey();
+    const orientationChanged = orientationKey !== nextOrientation;
+    if (forceReset || !stableHeight || orientationChanged) {
+      orientationKey = nextOrientation;
+      stableHeight = innerHeight;
+    } else if (Math.abs(innerHeight - stableHeight) >= TOOLBAR_RESIZE_TOLERANCE_PX) {
+      // Ignore small viewport deltas from mobile browser toolbar show/hide.
+      stableHeight = innerHeight;
+    } else {
+      return;
+    }
+    if (stableHeight === lastAppliedHeight) {
+      return;
+    }
+    lastAppliedHeight = stableHeight;
+    root.style.setProperty("--vh", `${stableHeight * 0.01}px`);
+    root.style.setProperty("--app-height", `${stableHeight}px`);
+  };
+
+  const scheduleViewportHeightUpdate = (forceReset = false) => {
     if (rafId) {
       return;
     }
-    rafId = window.requestAnimationFrame(applyViewportHeight);
+    rafId = window.requestAnimationFrame(() => {
+      rafId = 0;
+      applyViewportHeight(forceReset);
+    });
   };
 
-  applyViewportHeight();
+  applyViewportHeight(true);
   window.addEventListener("resize", scheduleViewportHeightUpdate, { passive: true });
-  window.addEventListener("orientationchange", scheduleViewportHeightUpdate, {
+  window.addEventListener("orientationchange", () => scheduleViewportHeightUpdate(true), {
     passive: true,
   });
   if (window.visualViewport) {
@@ -57,7 +84,7 @@ const setupDynamicViewportHeight = () => {
   }
   document.addEventListener("visibilitychange", () => {
     if (!document.hidden) {
-      scheduleViewportHeightUpdate();
+      scheduleViewportHeightUpdate(true);
     }
   });
 };
@@ -102,6 +129,11 @@ if (isWorldLandingPage && urlParams.has("world")) {
     (nextQuery ? `?${nextQuery}` : "") +
     cleanUrl.hash;
   window.history.replaceState({}, "", normalizedUrl);
+}
+
+if (navRoot) {
+  const navLinksCount = navRoot.querySelectorAll(".nav-links a").length;
+  navRoot.classList.toggle("nav-single-link", navLinksCount <= 1);
 }
 /* ==========================================================================
    WORLD CONTEXT
@@ -250,8 +282,8 @@ const MIMI_CONFIG = {
   mode: "api",
   endpoint: "/api/chat",
   timeoutMs: 12000,
-  mobileTimeoutMs: 18000,
-  retryLimit: 3,
+  mobileTimeoutMs: 40000,
+  retryLimit: 4,
   historyLimit: 12,
 };
 const WORLD_START_LESSON_DESKTOP_DOWN_SHIFT = 34;
@@ -901,8 +933,9 @@ const getApiEndpointCandidates = () => {
     normalizedHost === "www.cosmicalearn.com" ||
     normalizedHost === "cosmica-03wo.onrender.com";
   if (isCosmicaPublicHost) {
-    addCandidate(`https://www.cosmicalearn.com${endpoint}`);
+    addCandidate(`${protocol}//${hostname}${endpoint}`);
     addCandidate(endpoint);
+    addCandidate(`https://www.cosmicalearn.com${endpoint}`);
     return candidates;
   }
 
@@ -1038,9 +1071,9 @@ const getMimiReply = async (message) => {
     }
   };
 
-  const attempts = navigator.onLine ? Math.max(1, MIMI_CONFIG.retryLimit || 1) : 1;
+  const attempts = Math.max(1, MIMI_CONFIG.retryLimit || 1);
   let lastError = null;
-  for (let attemptIndex = 0; attemptIndex < attempts && navigator.onLine; attemptIndex += 1) {
+  for (let attemptIndex = 0; attemptIndex < attempts; attemptIndex += 1) {
     for (let endpointIndex = 0; endpointIndex < endpointCandidates.length; endpointIndex += 1) {
       const endpoint = endpointCandidates[endpointIndex];
       try {
@@ -1067,8 +1100,8 @@ const getMimiReply = async (message) => {
     endpointCandidates,
   });
   return {
-    content: "My AI link is unstable right now. Please try again in a few seconds.",
-    source: "error",
+    content: getPresetReply(message),
+    source: "fallback",
   };
 };
 
@@ -1083,12 +1116,13 @@ const sendChatMessage = async (message) => {
   if (!text) {
     return;
   }
+  const isMobileViewport = window.matchMedia("(max-width: 960px)").matches;
   chatRequestInFlight = true;
   chatInput.disabled = true;
   try {
     userHasMessagedMimi = true;
     appendChatMessage("user", text);
-    if (!message && window.matchMedia("(max-width: 960px)").matches && document.activeElement === chatInput) {
+    if (!message && isMobileViewport && document.activeElement === chatInput) {
       chatInput.blur();
     }
     revealMimiBubbleOnMobile();
@@ -1114,6 +1148,8 @@ const sendChatMessage = async (message) => {
       setChatStatus("AI live");
     } else if (reply.source === "error") {
       setChatStatus("AI reconnecting");
+    } else if (reply.source === "fallback") {
+      setChatStatus("AI reconnecting");
     } else if (reply.source === "offline") {
       setChatStatus("Offline mode");
     } else {
@@ -1128,7 +1164,9 @@ const sendChatMessage = async (message) => {
   } finally {
     chatRequestInFlight = false;
     chatInput.disabled = false;
-    chatInput.focus();
+    if (!isMobileViewport) {
+      chatInput.focus();
+    }
   }
 };
 
@@ -2682,6 +2720,12 @@ const setupSpeechCards = () => {
       if (voice.default) {
         score += 2;
       }
+      if (voice.localService === false) {
+        score += 10;
+      }
+      if (voice.localService === true) {
+        score -= 2;
+      }
       if (FEMALE_HINT.test(name)) {
         score += 14;
       }
@@ -2709,10 +2753,19 @@ const setupSpeechCards = () => {
     const englishVoices = availableVoices.filter((voice) =>
       (voice.lang || "").toLowerCase().startsWith("en")
     );
+    const prioritizedVoiceHints = isIOS
+      ? ["samantha", "ava", "allison", "serena", "karen", "moira"]
+      : ["google us english", "google uk english female", "microsoft aria", "microsoft jenny"];
+    const prioritizedEnglishVoices = englishVoices.filter((voice) =>
+      prioritizedVoiceHints.some((hint) =>
+        (voice.name || "").toLowerCase().includes(hint)
+      )
+    );
     const preferredEnglishVoices = englishVoices.filter((voice) =>
       FEMALE_HINT.test(voice.name || "") || HIGH_QUALITY_HINT.test(voice.name || "")
     );
     return (
+      pickFrom(prioritizedEnglishVoices) ||
       pickFrom(preferredEnglishVoices) ||
       pickFrom(englishVoices) ||
       pickFrom(availableVoices)
@@ -2739,19 +2792,55 @@ const setupSpeechCards = () => {
     }
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = selectedVoice?.lang || "en-US";
-    utterance.rate = rate;
+    const adjustedRate = window.matchMedia("(max-width: 960px)").matches
+      ? Math.max(0.86, rate - 0.04)
+      : rate;
+    utterance.rate = adjustedRate;
     utterance.pitch = pitch;
     if (selectedVoice) {
       utterance.voice = selectedVoice;
     }
     window.speechSynthesis.cancel();
     window.setTimeout(() => {
+      window.speechSynthesis.resume();
       window.speechSynthesis.speak(utterance);
     }, 60);
   };
 
+  const LETTER_SPEECH_MAP = Object.freeze({
+    A: "ay",
+    B: "bee",
+    C: "see",
+    D: "dee",
+    E: "ee",
+    F: "ef",
+    G: "jee",
+    H: "aitch",
+    I: "eye",
+    J: "jay",
+    K: "kay",
+    L: "el",
+    M: "em",
+    N: "en",
+    O: "oh",
+    P: "pee",
+    Q: "cue",
+    R: "ar",
+    S: "ess",
+    T: "tee",
+    U: "you",
+    V: "vee",
+    W: "double u",
+    X: "ex",
+    Y: "why",
+    Z: "zee",
+    "ɪ": "ih",
+  });
+
   const normalizeLetterSpeechText = (rawText) => {
-    const text = String(rawText || "").trim();
+    const text = String(rawText || "")
+      .replace(/\b(capital|uppercase|lowercase)\s+letter\b/gi, "")
+      .trim();
     if (!text) {
       return "";
     }
@@ -2759,8 +2848,8 @@ const setupSpeechCards = () => {
     if (!match) {
       return text.toLowerCase();
     }
-    const first = match[0] === "ɪ" ? "i" : match[0];
-    return first.toLowerCase();
+    const first = match[0] === "ɪ" ? "ɪ" : match[0].toUpperCase();
+    return LETTER_SPEECH_MAP[first] || match[0].toLowerCase();
   };
 
   const setupCards = (

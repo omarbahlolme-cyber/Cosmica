@@ -2467,7 +2467,6 @@ const GRAMMAR_EXPLANATION_TRANSLATIONS = Object.fromEntries(
 
 let translationPayloadReady = false;
 let translationsLoadPromise = null;
-let translationNetworkHydrated = false;
 const MAPS_BUNDLE_TRANSLATIONS_CACHE_KEY = "cosmicaMapTranslationsCache:v2";
 const MAPS_BUNDLE_TRANSLATIONS_CACHE_MAX_AGE_MS = 24 * 60 * 60 * 1000;
 
@@ -2622,7 +2621,6 @@ const loadTranslations = async () => {
     console.warn("Failed to load translations.json", error);
   } finally {
     translationPayloadReady = true;
-    translationNetworkHydrated = true;
   }
 };
 
@@ -3275,14 +3273,30 @@ const requestRuntimeGrammarExplanationTranslation = async (
     return pending;
   }
 
+  const toTranslateEndpoint = (candidate) =>
+    String(candidate || "").replace(/\/api\/chat(?=$|[?#])/i, "/api/translate");
+
   const endpointCandidates = (() => {
     if (typeof getApiEndpointCandidates === "function") {
       const sharedCandidates = getApiEndpointCandidates();
       if (Array.isArray(sharedCandidates) && sharedCandidates.length) {
-        return sharedCandidates;
+        const candidates = [];
+        const addCandidate = (url) => {
+          const normalized = String(url || "").trim();
+          if (!normalized || candidates.includes(normalized)) {
+            return;
+          }
+          candidates.push(normalized);
+        };
+        sharedCandidates.forEach((candidate) =>
+          addCandidate(toTranslateEndpoint(candidate))
+        );
+        // Keep a chat-endpoint fallback for environments that have not yet deployed /api/translate.
+        sharedCandidates.forEach((candidate) => addCandidate(candidate));
+        return candidates;
       }
     }
-    const endpoint = "/api/chat";
+    const endpoint = "/api/translate";
     const { protocol, hostname, port } = window.location;
     const normalizedHost = String(hostname || "").toLowerCase();
     const candidates = [];
@@ -3316,20 +3330,23 @@ const requestRuntimeGrammarExplanationTranslation = async (
     if (isCosmicaPublicHost) {
       addCandidate(`https://www.cosmicalearn.com${endpoint}`);
       addCandidate(endpoint);
+      addCandidate("/api/chat");
       return candidates;
     }
 
     if (port && port !== "3000" && isLocalDevHost) {
       addCandidate(`${protocol}//${hostname}:3000${endpoint}`);
+      addCandidate(`${protocol}//${hostname}:3000/api/chat`);
     }
     addCandidate(endpoint);
+    addCandidate("/api/chat");
     return candidates;
   })();
 
   const getTimeoutMs = () => {
     const fallbackTimeout = window.matchMedia("(max-width: 960px)").matches
-      ? 12000
-      : 10000;
+      ? 24000
+      : 14000;
     if (
       typeof MIMI_CONFIG === "object" &&
       MIMI_CONFIG &&
@@ -3344,22 +3361,29 @@ const requestRuntimeGrammarExplanationTranslation = async (
     const controller = new AbortController();
     const timeout = window.setTimeout(() => controller.abort(), getTimeoutMs());
     try {
+      const isChatFallback = /\/api\/chat(?=$|[?#])/i.test(String(endpoint || ""));
+      const body = isChatFallback
+        ? {
+            messages: [
+              {
+                role: "system",
+                content:
+                  "Translate the provided educational sentence exactly into the target language. Return only the translated sentence.",
+              },
+              {
+                role: "user",
+                content: `Target language: ${langKey}\nText: ${explanationText}`,
+              },
+            ],
+          }
+        : {
+            text: explanationText,
+            targetLanguage: langKey,
+          };
       const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          messages: [
-            {
-              role: "system",
-              content:
-                "Translate the provided educational sentence exactly into the target language. Return only the translated sentence.",
-            },
-            {
-              role: "user",
-              content: `Target language: ${langKey}\nText: ${explanationText}`,
-            },
-          ],
-        }),
+        body: JSON.stringify(body),
         cache: "no-store",
         credentials: "same-origin",
         signal: controller.signal,
@@ -3368,7 +3392,7 @@ const requestRuntimeGrammarExplanationTranslation = async (
         throw new Error(`Translation request failed with status ${response.status}`);
       }
       const data = await response.json().catch(() => ({}));
-      const translated = String(data?.content || "")
+      const translated = String(data?.translation || data?.content || "")
         .replace(/^["'`]|["'`]$/g, "")
         .trim();
       if (!translated) {
@@ -3382,7 +3406,8 @@ const requestRuntimeGrammarExplanationTranslation = async (
 
   const request = (async () => {
     try {
-      const attemptLimit = navigator.onLine ? 2 : 1;
+      const isMobileViewport = window.matchMedia("(max-width: 960px)").matches;
+      const attemptLimit = navigator.onLine ? (isMobileViewport ? 3 : 2) : 1;
       for (let attemptIndex = 0; attemptIndex < attemptLimit; attemptIndex += 1) {
         for (let endpointIndex = 0; endpointIndex < endpointCandidates.length; endpointIndex += 1) {
           try {
@@ -3433,7 +3458,7 @@ const prewarmGrammarExplanationTranslations = () => {
 
   const tasks = [];
   cards.forEach((card) => {
-    if (tasks.length >= 40) {
+    if (tasks.length >= 20) {
       return;
     }
     const section = card.dataset.section || "";
@@ -3464,7 +3489,7 @@ const prewarmGrammarExplanationTranslations = () => {
   };
 
   tasks.forEach((task, index) => {
-    scheduleTask(task, 60 + index * 45);
+    scheduleTask(task, 90 + index * 85);
   });
 };
 
@@ -5966,7 +5991,7 @@ const renderGrammarModal = (section, index) => {
     <div class="grammar-modal-header">
       <h3>${cardData.title}</h3>
       <p class="grammar-explanation-text">${explanation}</p>
-      ${shouldTranslateExplanation ? `<p class="grammar-translation grammar-explanation-translation">${explanationTranslation || "Loading translation..."}</p>` : ""}
+      ${shouldTranslateExplanation && explanationTranslation ? `<p class="grammar-translation grammar-explanation-translation">${explanationTranslation}</p>` : ""}
     </div>
     <div class="grammar-modal-grid">
       <div class="grammar-block">
@@ -6067,12 +6092,27 @@ const openGrammarModal = (section, index) => {
 
   const baseLanguage = String(localStorage.getItem("cosmicaBaseLanguage") || "").trim();
   const shouldWaitForTranslations =
-    !!baseLanguage &&
-    baseLanguage.toLowerCase() !== "english" &&
-    !translationNetworkHydrated;
+    !!baseLanguage && baseLanguage.toLowerCase() !== "english";
+  const preloadActiveExplanationTranslation = async () => {
+    const cardData = GRAMMAR_SECTION_LISTS[section]?.[index];
+    if (!cardData) {
+      return;
+    }
+    const explanation = buildGrammarExplanation(cardData);
+    if (resolveGrammarExplanation(section, explanation, baseLanguage)) {
+      return;
+    }
+    await requestRuntimeGrammarExplanationTranslation(
+      section,
+      explanation,
+      baseLanguage
+    );
+  };
 
   if (shouldWaitForTranslations) {
-    ensureTranslationsLoaded({ awaitNetwork: true }).finally(showModal);
+    ensureTranslationsLoaded({ awaitNetwork: true })
+      .then(preloadActiveExplanationTranslation)
+      .finally(showModal);
     return;
   }
 
