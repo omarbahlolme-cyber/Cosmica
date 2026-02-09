@@ -2466,6 +2466,8 @@ const GRAMMAR_EXPLANATION_TRANSLATIONS = Object.fromEntries(
 );
 
 let translationPayloadReady = false;
+const MAP_TRANSLATIONS_CACHE_KEY = "cosmicaMapTranslationsCache:v1";
+const MAP_TRANSLATIONS_CACHE_MAX_AGE_MS = 24 * 60 * 60 * 1000;
 
 const normalizeGrammarSectionLookup = (value) =>
   String(value || "")
@@ -2597,12 +2599,8 @@ const loadTranslations = async () => {
     const baseResponse = await fetch("translations.json", { cache: "no-store" });
     if (baseResponse.ok) {
       const baseData = await baseResponse.json();
-      hydrateTranslations(WORD_TRANSLATIONS, baseData.words);
-      hydrateTranslations(PHRASE_TRANSLATIONS, baseData.phrases);
-      hydrateTranslations(GRAMMAR_TRANSLATIONS, baseData.grammar);
-      if (needsGrammarDetails && (baseData?.grammar?.explanations || baseData?.grammarExplanations)) {
-        hydrateGrammarExplanationTranslations(baseData);
-      }
+      hydrateBaseTranslationsPayload(baseData);
+      writeMapTranslationsCache(baseData);
     }
     if (isNonEnglishWorld && WORLD_TRANSLATION_FILE !== "translations.json") {
       const response = await fetch(WORLD_TRANSLATION_FILE, { cache: "no-store" });
@@ -3174,8 +3172,46 @@ const resolveGrammarExplanation = (section, explanationText, baseLanguage) => {
   return "";
 };
 
+const GRAMMAR_EXPLANATION_RUNTIME_CACHE_KEY =
+  "cosmicaGrammarExplanationRuntimeCache:v1";
 const runtimeGrammarExplanationCache = new Map();
 const runtimeGrammarExplanationRequests = new Map();
+
+const loadRuntimeGrammarExplanationCache = () => {
+  try {
+    const raw = localStorage.getItem(GRAMMAR_EXPLANATION_RUNTIME_CACHE_KEY);
+    if (!raw) {
+      return;
+    }
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object") {
+      return;
+    }
+    Object.entries(parsed).forEach(([cacheKey, value]) => {
+      if (typeof value !== "string" || !value.trim()) {
+        return;
+      }
+      runtimeGrammarExplanationCache.set(cacheKey, value);
+      const [section, lang, ...rest] = cacheKey.split("|");
+      const normalizedKey = rest.join("|");
+      const entry = ensureGrammarExplanationEntry(section, normalizedKey);
+      if (entry) {
+        entry[String(lang || "").toLowerCase()] = value;
+      }
+    });
+  } catch {}
+};
+
+const persistRuntimeGrammarExplanationCache = () => {
+  try {
+    localStorage.setItem(
+      GRAMMAR_EXPLANATION_RUNTIME_CACHE_KEY,
+      JSON.stringify(Object.fromEntries(runtimeGrammarExplanationCache))
+    );
+  } catch {}
+};
+
+loadRuntimeGrammarExplanationCache();
 
 const cacheRuntimeGrammarExplanationTranslation = (
   section,
@@ -3198,6 +3234,7 @@ const cacheRuntimeGrammarExplanationTranslation = (
   if (entry) {
     entry[langKey] = translation;
   }
+  persistRuntimeGrammarExplanationCache();
 };
 
 const requestRuntimeGrammarExplanationTranslation = async (
@@ -5659,9 +5696,6 @@ const renderGrammarModal = (section, index) => {
   const explanationTranslation = shouldTranslateExplanation
     ? resolveGrammarExplanation(section, explanation, baseLanguage)
     : "";
-  const renderedExplanation = shouldTranslateExplanation
-    ? explanationTranslation
-    : explanation;
   const mistakes = buildGrammarMistakes(cardData);
   const howItWorks = buildGrammarHowItWorks(cardData);
   const examples = [cardData.example, buildAltGrammarExample(cardData, index)];
@@ -5769,7 +5803,8 @@ const renderGrammarModal = (section, index) => {
   modalBody.innerHTML = `
     <div class="grammar-modal-header">
       <h3>${cardData.title}</h3>
-      <p class="grammar-explanation-text${shouldTranslateExplanation ? " grammar-translation grammar-explanation-translation" : ""}">${renderedExplanation || ""}</p>
+      <p class="grammar-explanation-text">${explanation}</p>
+      ${shouldTranslateExplanation && explanationTranslation ? `<p class="grammar-translation grammar-explanation-translation">${explanationTranslation}</p>` : ""}
     </div>
     <div class="grammar-modal-grid">
       <div class="grammar-block">
@@ -5824,10 +5859,20 @@ const renderGrammarModal = (section, index) => {
         return;
       }
       const explanationNode = header.querySelector(".grammar-explanation-text");
-      if (!explanationNode) {
-        return;
+      let translationNode = header.querySelector(
+        ".grammar-explanation-translation"
+      );
+      if (!translationNode) {
+        translationNode = document.createElement("p");
+        translationNode.className =
+          "grammar-translation grammar-explanation-translation";
+        if (explanationNode) {
+          explanationNode.insertAdjacentElement("afterend", translationNode);
+        } else {
+          header.appendChild(translationNode);
+        }
       }
-      explanationNode.textContent = translated;
+      translationNode.textContent = translated;
     });
   }
 };
@@ -5937,6 +5982,63 @@ const setupGrammarModal = () => {
     const index = Number(card.dataset.index);
     openGrammarModal(section, index);
   });
+};
+
+const hydrateBaseTranslationsPayload = (payload) => {
+  if (!payload || typeof payload !== "object") {
+    return;
+  }
+  hydrateTranslations(WORD_TRANSLATIONS, payload.words);
+  hydrateTranslations(PHRASE_TRANSLATIONS, payload.phrases);
+  hydrateTranslations(GRAMMAR_TRANSLATIONS, payload.grammar);
+  if (needsGrammarDetails && (payload?.grammar?.explanations || payload?.grammarExplanations)) {
+    hydrateGrammarExplanationTranslations(payload);
+  }
+};
+
+const readMapTranslationsCache = () => {
+  try {
+    const raw = localStorage.getItem(MAP_TRANSLATIONS_CACHE_KEY);
+    if (!raw) {
+      return null;
+    }
+    const parsed = JSON.parse(raw);
+    const savedAt = Number(parsed?.savedAt || 0);
+    if (!Number.isFinite(savedAt) || savedAt <= 0) {
+      return null;
+    }
+    if (Date.now() - savedAt > MAP_TRANSLATIONS_CACHE_MAX_AGE_MS) {
+      return null;
+    }
+    const payload = parsed?.payload;
+    if (!payload || typeof payload !== "object") {
+      return null;
+    }
+    if (!payload.words && !payload.phrases && !payload.grammar) {
+      return null;
+    }
+    return payload;
+  } catch {
+    return null;
+  }
+};
+
+const writeMapTranslationsCache = (payload) => {
+  if (!payload || typeof payload !== "object") {
+    return;
+  }
+  if (!payload.words && !payload.phrases && !payload.grammar) {
+    return;
+  }
+  try {
+    localStorage.setItem(
+      MAP_TRANSLATIONS_CACHE_KEY,
+      JSON.stringify({
+        savedAt: Date.now(),
+        payload,
+      })
+    );
+  } catch {}
 };
 
 const resolveWordTranslation = (section, englishWord, baseLanguage) => {
@@ -6131,6 +6233,12 @@ const updateGrammarTopState = () => {
    Render page modules, wire observers/listeners, then hydrate translations only
    on map pages that actually require translation payloads.
    ========================================================================== */
+const cachedBaseTranslations = readMapTranslationsCache();
+if (cachedBaseTranslations) {
+  hydrateBaseTranslationsPayload(cachedBaseTranslations);
+  translationPayloadReady = true;
+}
+
 if (isWordsPage) {
   renderWordsSections();
 }

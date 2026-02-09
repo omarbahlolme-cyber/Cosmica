@@ -52,6 +52,7 @@ const WORLD_NAME = isWorldLandingPage
   : urlParams.get("world") || document.body.dataset.world || "English";
 const WORLD_KEY = WORLD_NAME.toLowerCase();
 const WORLD_TRANSLATION_FILE = "translations.json";
+const MAP_TRANSLATIONS_CACHE_KEY = "cosmicaMapTranslationsCache:v1";
 const readAssetVersionParam = (rawUrl) => {
   if (!rawUrl) {
     return "";
@@ -93,6 +94,38 @@ const isPhrasesPage = document.body.classList.contains("phrases-page");
 const isGrammarPage = document.body.classList.contains("grammar-page");
 const needsMapTranslations = isWordsPage || isPhrasesPage || isGrammarPage;
 const needsGrammarDetails = isGrammarPage;
+
+const writeMapTranslationsCache = (payload) => {
+  if (!payload || typeof payload !== "object") {
+    return;
+  }
+  if (!payload.words && !payload.phrases && !payload.grammar) {
+    return;
+  }
+  try {
+    localStorage.setItem(
+      MAP_TRANSLATIONS_CACHE_KEY,
+      JSON.stringify({
+        savedAt: Date.now(),
+        payload,
+      })
+    );
+  } catch {}
+};
+
+const warmMapTranslationsCache = async () => {
+  if (!document.body.classList.contains("world-page")) {
+    return;
+  }
+  try {
+    const response = await fetch(WORLD_TRANSLATION_FILE, { cache: "force-cache" });
+    if (!response.ok) {
+      return;
+    }
+    const payload = await response.json();
+    writeMapTranslationsCache(payload);
+  } catch {}
+};
 
 const preloadMapsBundleAsset = () => {
   if (!needsMapTranslations) {
@@ -2118,6 +2151,32 @@ worldCards.forEach((card) => {
    Handles map-card navigation and base-language selection persistence.
    ========================================================================== */
 const mapLinks = document.querySelectorAll(".map-link");
+const navigateToMapLink = (href) => {
+  if (!href) {
+    return;
+  }
+  const baseLanguage = localStorage.getItem("cosmicaBaseLanguage") || "";
+  if (!baseLanguage) {
+    window.location.href = href;
+    return;
+  }
+  let navigated = false;
+  const finalize = () => {
+    if (navigated) {
+      return;
+    }
+    navigated = true;
+    window.location.href = href;
+  };
+  const deadline = window.setTimeout(finalize, 350);
+  Promise.resolve(warmMapTranslationsCache())
+    .catch(() => {})
+    .finally(() => {
+      window.clearTimeout(deadline);
+      finalize();
+    });
+};
+
 mapLinks.forEach((link) => {
   bindNavigationPrefetch(link, () => link.getAttribute("href") || "");
   link.addEventListener("pointerup", (event) => {
@@ -2126,13 +2185,15 @@ mapLinks.forEach((link) => {
     }
     event.preventDefault();
     markTouchActivation(link);
-    window.location.href = link.href;
+    navigateToMapLink(link.href);
   });
   link.addEventListener("click", (event) => {
     if (isRecentTouchActivation(link)) {
       event.preventDefault();
       return;
     }
+    event.preventDefault();
+    navigateToMapLink(link.href);
   });
 });
 
@@ -2157,6 +2218,7 @@ if (languagePills.length) {
     const selected = pill.textContent.trim().toLowerCase();
     if (selected) {
       localStorage.setItem("cosmicaBaseLanguage", selected);
+      void warmMapTranslationsCache();
     }
     document.body.classList.add("language-picked");
     languageSection?.classList.remove("is-visible");
@@ -2193,6 +2255,8 @@ if (languagePills.length) {
       selectLanguagePill(pill);
     });
   });
+
+  void warmMapTranslationsCache();
 }
 
 const languageSearch = document.getElementById("languageSearch");
