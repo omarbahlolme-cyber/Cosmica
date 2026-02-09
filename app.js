@@ -1,4 +1,4 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    DOM HOOKS AND GLOBAL PAGE REFERENCES
    Collect shared elements once so all page modules reuse the same references.
    ========================================================================== */
@@ -52,7 +52,7 @@ const WORLD_NAME = isWorldLandingPage
   : urlParams.get("world") || document.body.dataset.world || "English";
 const WORLD_KEY = WORLD_NAME.toLowerCase();
 const WORLD_TRANSLATION_FILE = "translations.json";
-const ASSET_VERSION = "20260208";
+const ASSET_VERSION = "20260213";
 let WORLD_TRANSLATIONS = null;
 let WORLD_GRAMMAR_TITLE_MAP = null;
 let WORLD_GRAMMAR_EXAMPLE_MAP = null;
@@ -1563,19 +1563,16 @@ if (speechText && speechBubble) {
       && window.matchMedia("(max-width: 960px)").matches;
     const navEl = document.querySelector(".nav");
     const navHeight = navEl ? navEl.getBoundingClientRect().height : 0;
-    const mobileExtraOffset = isHomeMobile
-      ? Math.max(62, Math.min(120, Math.round(navHeight * 0.48)))
-      : 0;
-    const mobileSectionOffset = isHomeMobile
+    const mobileDownShift = isHomeMobile
       ? (hash === "#support"
-        ? 44
+        ? 22
         : hash === "#join"
-          ? 40
+          ? 18
           : hash === "#guide"
-            ? 34
+            ? 14
             : hash === "#worlds"
-              ? 30
-              : 26)
+              ? 10
+              : 8)
       : 0;
     const baseOffset =
       Number.parseFloat(window.getComputedStyle(target).scrollMarginTop) || 0;
@@ -1584,8 +1581,7 @@ if (speechText && speechBubble) {
       : target.getBoundingClientRect().top
         + window.scrollY
         - baseOffset
-        - mobileExtraOffset
-        - mobileSectionOffset;
+        + mobileDownShift;
     history.replaceState(null, "", `${baseUrl}${hash}`);
     window.scrollTo({ top, behavior: "smooth" });
     return true;
@@ -2510,3 +2506,4 @@ if (needsMapTranslations) {
 }
 
 setupWebVitalsReporting();
+

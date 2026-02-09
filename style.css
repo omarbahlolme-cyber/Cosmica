@@ -2570,76 +2570,70 @@ body:not(.world-page) .footer {
   body:not(.world-page) #guide,
   body:not(.world-page) #join,
   body:not(.world-page) #support {
-    scroll-margin-top: 210px;
+    scroll-margin-top: 176px;
   }
 
   body:not(.world-page) #worlds {
-    scroll-margin-top: 190px;
+    scroll-margin-top: 158px;
   }
 
   .footer {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    position: relative;
-    align-items: end;
-    gap: 8px 12px;
-    padding: 24px 6vw calc(50px + env(safe-area-inset-bottom));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 8px;
+    padding: 24px 6vw calc(36px + env(safe-area-inset-bottom));
   }
 
   .footer > :first-child {
-    grid-column: 1;
-    grid-row: 1;
-    align-self: end;
+    align-self: center;
     line-height: 1.2;
     font-size: 12px;
   }
 
   .footer-inline-links {
-    grid-column: 2;
-    grid-row: 1;
-    width: auto;
+    width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
-    justify-content: flex-end;
-    gap: 8px 12px;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
     min-width: 0;
   }
 
   .footer-right-text {
     display: block;
-    text-align: right !important;
+    text-align: center !important;
     margin: 0;
     font-size: 11px;
     line-height: 1.2;
-    opacity: 0.78;
-    max-width: min(56vw, 280px);
+    opacity: 0.8;
+    max-width: min(88vw, 460px);
   }
 
   .footer-legal-links {
-    position: absolute;
-    left: 50%;
-    bottom: calc(14px + env(safe-area-inset-bottom) * 0.4);
-    transform: translateX(-50%);
+    position: static;
     display: inline-flex;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     margin: 0;
     gap: 8px;
     align-items: center;
     justify-content: center;
     text-align: center;
-    white-space: nowrap;
+    white-space: normal;
   }
 
   .footer-legal-links a {
-    font-size: 9px;
+    font-size: 10px;
     line-height: 1;
     color: rgba(104, 225, 255, 0.95);
   }
 
   .footer-divider {
     font-size: 9px;
-    opacity: 0.65;
+    opacity: 0.55;
   }
 
   .scroll-top-btn {
@@ -2683,11 +2677,11 @@ body:not(.world-page) .footer {
   body:not(.world-page) #guide,
   body:not(.world-page) #join,
   body:not(.world-page) #support {
-    scroll-margin-top: 228px;
+    scroll-margin-top: 188px;
   }
 
   body:not(.world-page) #worlds {
-    scroll-margin-top: 205px;
+    scroll-margin-top: 170px;
   }
 
   main {
