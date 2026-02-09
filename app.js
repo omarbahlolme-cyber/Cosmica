@@ -194,6 +194,7 @@ const MIMI_CONFIG = {
   retryLimit: 3,
   historyLimit: 10,
 };
+const WORLD_START_LESSON_DESKTOP_DOWN_SHIFT = 62;
 const MIMI_SITE_CONTEXT = [
   "Cosmica is a space-universe language learning site where each language is a world.",
   "Worlds available now: English.",
@@ -1158,7 +1159,19 @@ if (languageSection) {
     '.world-hero .primary[href="#language"]'
   );
   if (startLessonLink) {
-    startLessonLink.addEventListener("click", () => {
+    startLessonLink.addEventListener("click", (event) => {
+      if (window.matchMedia("(min-width: 961px)").matches) {
+        event.preventDefault();
+        const baseOffset =
+          Number.parseFloat(window.getComputedStyle(languageSection).scrollMarginTop) || 0;
+        const targetTop =
+          languageSection.getBoundingClientRect().top +
+          window.scrollY -
+          baseOffset +
+          WORLD_START_LESSON_DESKTOP_DOWN_SHIFT;
+        history.replaceState(null, "", `${window.location.pathname}${window.location.search}#language`);
+        window.scrollTo({ top: Math.max(0, targetTop), behavior: "smooth" });
+      }
       languageForceShow = true;
       languageUserActivated = true;
       if (document.body.classList.contains("world-page")) {
