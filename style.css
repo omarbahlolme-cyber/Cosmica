@@ -2552,6 +2552,11 @@ body:not(.world-page) .footer {
     text-transform: uppercase;
   }
 
+  body:not(.world-page) .nav-links a:nth-child(1),
+  body:not(.world-page) .nav-links a:nth-child(2) {
+    margin-top: 4px;
+  }
+
   .sound-toggle {
     margin-left: auto;
     padding: 8px 12px;
