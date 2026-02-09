@@ -190,11 +190,11 @@ const MIMI_CONFIG = {
   mode: "api",
   endpoint: "/api/chat",
   timeoutMs: 15000,
-  mobileTimeoutMs: 26000,
-  retryLimit: 3,
+  mobileTimeoutMs: 32000,
+  retryLimit: 4,
   historyLimit: 10,
 };
-const WORLD_START_LESSON_DESKTOP_DOWN_SHIFT = 62;
+const WORLD_START_LESSON_DESKTOP_DOWN_SHIFT = 34;
 const MIMI_SITE_CONTEXT = [
   "Cosmica is a space-universe language learning site where each language is a world.",
   "Worlds available now: English.",
@@ -737,18 +737,61 @@ const setChatStatus = (text) => {
 };
 
 const getApiEndpoint = () => {
+  return getApiEndpointCandidates()[0];
+};
+
+const isLocalDevHost = (hostname) => {
+  const value = String(hostname || "").toLowerCase();
+  if (!value) {
+    return false;
+  }
+  if (value === "localhost" || value === "127.0.0.1" || value === "::1") {
+    return true;
+  }
+  if (/^10\./.test(value) || /^192\.168\./.test(value)) {
+    return true;
+  }
+  if (/^172\.(1[6-9]|2\d|3[0-1])\./.test(value)) {
+    return true;
+  }
+  if (value.endsWith(".local")) {
+    return true;
+  }
+  return false;
+};
+
+const getApiEndpointCandidates = () => {
   const endpoint = MIMI_CONFIG.endpoint || "/api/chat";
   if (endpoint.startsWith("http")) {
-    return endpoint;
+    return [endpoint];
   }
+
   const { protocol, hostname, port } = window.location;
+  const candidates = [];
+  const addCandidate = (url) => {
+    if (!url) {
+      return;
+    }
+    if (!candidates.includes(url)) {
+      candidates.push(url);
+    }
+  };
+
   if (!hostname || protocol === "file:") {
-    return `http://localhost:3000${endpoint}`;
+    addCandidate(`http://localhost:3000${endpoint}`);
+    return candidates;
   }
-  if ((hostname === "localhost" || hostname === "127.0.0.1") && port && port !== "3000") {
-    return `http://${hostname}:3000${endpoint}`;
+
+  // Primary: same-origin relative API route.
+  addCandidate(endpoint);
+  addCandidate(`${protocol}//${hostname}${port ? `:${port}` : ""}${endpoint}`);
+
+  // Local/mobile dev fallback: when UI runs on a dev port, API usually runs on :3000.
+  if (port && port !== "3000" && isLocalDevHost(hostname)) {
+    addCandidate(`${protocol}//${hostname}:3000${endpoint}`);
   }
-  return endpoint;
+
+  return candidates;
 };
 
 const getChatRequestTimeoutMs = () => {
@@ -757,15 +800,6 @@ const getChatRequestTimeoutMs = () => {
     return MIMI_CONFIG.timeoutMs;
   }
   return Math.max(MIMI_CONFIG.timeoutMs, MIMI_CONFIG.mobileTimeoutMs || MIMI_CONFIG.timeoutMs);
-};
-
-const getDegradedMimiReply = (message) => {
-  const sanitized = String(message || "").replace(/\s+/g, " ").trim();
-  const snippet = sanitized.length > 110 ? `${sanitized.slice(0, 110)}...` : sanitized;
-  if (snippet) {
-    return `I heard you: "${snippet}". My deep AI link is unstable right now, so please send it once more and I will answer properly.`;
-  }
-  return "My deep AI link is unstable right now. Please send your question once more and I will answer properly.";
 };
 
 const buildChatMessages = (message) => {
@@ -844,8 +878,8 @@ const getMimiReply = async (message) => {
     return { content: getPresetReply(message), source: "preset" };
   }
 
-  const endpoint = getApiEndpoint();
-  const requestChatReply = async () => {
+  const endpointCandidates = getApiEndpointCandidates();
+  const requestChatReply = async (endpoint) => {
     const controller = new AbortController();
     const timeout = window.setTimeout(() => controller.abort(), getChatRequestTimeoutMs());
     try {
@@ -882,19 +916,20 @@ const getMimiReply = async (message) => {
 
   const attempts = navigator.onLine ? Math.max(1, MIMI_CONFIG.retryLimit || 1) : 1;
   let lastError = null;
-
-  for (let attemptIndex = 0; attemptIndex < attempts; attemptIndex += 1) {
-    try {
-      const content = await requestChatReply();
-      return { content, source: "api" };
-    } catch (error) {
-      lastError = error;
-      const isLastAttempt = attemptIndex === attempts - 1;
-      if (isLastAttempt || !navigator.onLine) {
-        break;
+  for (const endpoint of endpointCandidates) {
+    for (let attemptIndex = 0; attemptIndex < attempts; attemptIndex += 1) {
+      try {
+        const content = await requestChatReply(endpoint);
+        return { content, source: "api" };
+      } catch (error) {
+        lastError = error;
+        const isLastAttempt = attemptIndex === attempts - 1;
+        if (isLastAttempt || !navigator.onLine) {
+          break;
+        }
+        const retryDelayMs = 240 + attemptIndex * 320;
+        await new Promise((resolve) => window.setTimeout(resolve, retryDelayMs));
       }
-      const retryDelayMs = 240 + attemptIndex * 320;
-      await new Promise((resolve) => window.setTimeout(resolve, retryDelayMs));
     }
   }
 
@@ -903,8 +938,11 @@ const getMimiReply = async (message) => {
     return { content: getPresetReply(message), source: "preset" };
   }
 
-  console.warn("Mimi API unavailable after retries, returning degraded reply.", lastError);
-  return { content: getDegradedMimiReply(message), source: "degraded" };
+  console.warn("Mimi API unavailable after retries, falling back to preset reply.", {
+    error: lastError,
+    endpointCandidates,
+  });
+  return { content: getPresetReply(message), source: "preset" };
 };
 
 const sendChatMessage = async (message) => {
@@ -943,8 +981,6 @@ const sendChatMessage = async (message) => {
     }
     if (reply.source === "api") {
       setChatStatus("AI live");
-    } else if (reply.source === "degraded") {
-      setChatStatus("AI reconnecting");
     } else {
       setChatStatus("Mimi ready");
     }
@@ -1023,8 +1059,8 @@ const observer = new IntersectionObserver(
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         entry.target.classList.add("is-visible");
-      } else {
-        entry.target.classList.remove("is-visible");
+        // One-time reveal avoids threshold oscillation flicker on scroll stop.
+        observer.unobserve(entry.target);
       }
     });
   },
@@ -1805,13 +1841,19 @@ if (speechText && speechBubble) {
 
 const MOBILE_HOME_ANCHOR_DOWN_SHIFT = Object.freeze({
   default: 64,
-  "#worlds": 80,
-  "#guide": 112,
+  "#how": 80,
+  "#worlds": 96,
+  "#guide": 128,
   "#join": 144,
   "#support": 176,
 });
 const getMobileHomeAnchorDownShift = (hash) =>
   MOBILE_HOME_ANCHOR_DOWN_SHIFT[hash] ?? MOBILE_HOME_ANCHOR_DOWN_SHIFT.default;
+const DESKTOP_HOME_ANCHOR_DOWN_SHIFT = Object.freeze({
+  "#guide": 28,
+});
+const getDesktopHomeAnchorDownShift = (hash) =>
+  DESKTOP_HOME_ANCHOR_DOWN_SHIFT[hash] ?? 0;
 
 const scrollToAnchor = (hash) => {
     const targetId = hash.slice(1);
@@ -1821,7 +1863,10 @@ const scrollToAnchor = (hash) => {
     }
     const isHomeMobile = !document.body.classList.contains("world-page")
       && window.matchMedia("(max-width: 960px)").matches;
+    const isHomeDesktop = !document.body.classList.contains("world-page")
+      && window.matchMedia("(min-width: 961px)").matches;
     const mobileDownShift = isHomeMobile ? getMobileHomeAnchorDownShift(hash) : 0;
+    const desktopDownShift = isHomeDesktop ? getDesktopHomeAnchorDownShift(hash) : 0;
     const baseOffset =
       Number.parseFloat(window.getComputedStyle(target).scrollMarginTop) || 0;
     const top = hash === "#home"
@@ -1829,7 +1874,8 @@ const scrollToAnchor = (hash) => {
       : target.getBoundingClientRect().top
         + window.scrollY
         - baseOffset
-        + mobileDownShift;
+        + mobileDownShift
+        + desktopDownShift;
     history.replaceState(null, "", `${baseUrl}${hash}`);
     window.scrollTo({ top, behavior: "smooth" });
     return true;

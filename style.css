@@ -511,17 +511,27 @@ body:not(.world-page) main {
   border-radius: 50%;
   overflow: hidden;
   clip-path: circle(50% at 50% 50%);
-  background: rgba(7, 12, 24, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background:
+    radial-gradient(
+      circle at 28% 24%,
+      rgba(255, 255, 255, 0.24) 0%,
+      rgba(255, 255, 255, 0.08) 30%,
+      rgba(10, 16, 34, 0.18) 64%,
+      rgba(4, 8, 18, 0.42) 100%
+    ),
+    rgba(7, 12, 24, 0.34);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow:
-    0 12px 24px rgba(0, 0, 0, 0.32),
-    0 0 16px rgba(104, 225, 255, 0.18),
-    inset -6px -6px 12px rgba(255, 255, 255, 0.1),
-    inset 10px 12px 16px rgba(0, 0, 0, 0.18);
+    0 14px 28px rgba(0, 0, 0, 0.42),
+    0 0 20px rgba(104, 225, 255, 0.2),
+    inset 10px 10px 16px rgba(255, 255, 255, 0.14),
+    inset -10px -12px 20px rgba(0, 0, 0, 0.28),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08);
   display: grid;
   place-items: center;
   transform: translate(-50%, -50%) rotate(0deg);
   animation: orbit-counter var(--orbit-duration) linear infinite;
+  filter: saturate(1.08) contrast(1.04);
 }
 
 .planet-body > .flag-badge {
@@ -533,9 +543,21 @@ body:not(.world-page) main {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.22) 100%);
-  opacity: 0.55;
-  filter: blur(1px);
+  background:
+    radial-gradient(
+      circle at 74% 68%,
+      rgba(0, 0, 0, 0.52) 0%,
+      rgba(0, 0, 0, 0.3) 34%,
+      rgba(0, 0, 0, 0) 66%
+    ),
+    linear-gradient(
+      142deg,
+      rgba(255, 255, 255, 0.06) 0%,
+      rgba(255, 255, 255, 0.01) 34%,
+      rgba(0, 0, 0, 0.16) 70%,
+      rgba(0, 0, 0, 0.34) 100%
+    );
+  opacity: 0.82;
   z-index: 2;
   pointer-events: none;
 }
@@ -544,8 +566,20 @@ body:not(.world-page) main {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 28% 25%, rgba(255, 255, 255, 0.32), rgba(255, 255, 255, 0) 55%);
-  opacity: 0.6;
+  background:
+    radial-gradient(
+      circle at 30% 24%,
+      rgba(255, 255, 255, 0.52) 0%,
+      rgba(255, 255, 255, 0.24) 15%,
+      rgba(255, 255, 255, 0.08) 32%,
+      rgba(255, 255, 255, 0) 56%
+    ),
+    radial-gradient(
+      circle at 22% 20%,
+      rgba(194, 236, 255, 0.28) 0%,
+      rgba(194, 236, 255, 0) 42%
+    );
+  opacity: 0.86;
   z-index: 3;
   pointer-events: none;
 }
@@ -2043,21 +2077,25 @@ body:not(.world-page) .footer {
 .warp-overlay {
   position: fixed;
   inset: 0;
+  background-color: #030713;
   background:
-    radial-gradient(circle at 20% 20%, rgba(104, 225, 255, 0.35), transparent 45%),
-    radial-gradient(circle at 80% 80%, rgba(255, 111, 177, 0.4), transparent 50%),
-    radial-gradient(circle at 50% 30%, rgba(110, 247, 194, 0.18), transparent 55%),
-    radial-gradient(circle at center, rgba(4, 6, 16, 0.98), rgba(3, 4, 12, 0.98));
+    radial-gradient(circle at 20% 20%, rgba(104, 225, 255, 0.32), transparent 46%),
+    radial-gradient(circle at 80% 80%, rgba(255, 111, 177, 0.32), transparent 52%),
+    radial-gradient(circle at 50% 30%, rgba(110, 247, 194, 0.16), transparent 58%),
+    linear-gradient(160deg, #040916 0%, #050b1a 55%, #030611 100%);
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
-  z-index: 30;
+  z-index: 9999;
   pointer-events: none;
 }
 
 .warp-overlay.active {
   opacity: 1;
   visibility: visible;
+  pointer-events: auto;
+  touch-action: none;
+  cursor: wait;
 }
 
 .warp-smoke {
@@ -2295,6 +2333,12 @@ body:not(.world-page) .footer {
 
 .warp-lock {
   overflow: hidden;
+  overscroll-behavior: none;
+}
+
+.warp-lock > :not(.warp-overlay) {
+  pointer-events: none !important;
+  user-select: none;
 }
 
 .reveal {
