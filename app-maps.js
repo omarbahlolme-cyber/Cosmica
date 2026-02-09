@@ -2466,6 +2466,8 @@ const GRAMMAR_EXPLANATION_TRANSLATIONS = Object.fromEntries(
 );
 
 let translationPayloadReady = false;
+let translationsLoadPromise = null;
+let translationNetworkHydrated = false;
 const MAPS_BUNDLE_TRANSLATIONS_CACHE_KEY = "cosmicaMapTranslationsCache:v1";
 const MAPS_BUNDLE_TRANSLATIONS_CACHE_MAX_AGE_MS = 24 * 60 * 60 * 1000;
 
@@ -2596,14 +2598,14 @@ const hydrateTranslations = (target, source) => {
    ========================================================================== */
 const loadTranslations = async () => {
   try {
-    const baseResponse = await fetch("translations.json", { cache: "no-store" });
+    const baseResponse = await fetch("translations.json", { cache: "default" });
     if (baseResponse.ok) {
       const baseData = await baseResponse.json();
       hydrateBaseTranslationsPayload(baseData);
       writeMapsBundleTranslationsCache(baseData);
     }
     if (isNonEnglishWorld && WORLD_TRANSLATION_FILE !== "translations.json") {
-      const response = await fetch(WORLD_TRANSLATION_FILE, { cache: "no-store" });
+      const response = await fetch(WORLD_TRANSLATION_FILE, { cache: "default" });
       if (!response.ok) {
         return;
       }
@@ -2620,7 +2622,21 @@ const loadTranslations = async () => {
     console.warn("Failed to load translations.json", error);
   } finally {
     translationPayloadReady = true;
+    translationNetworkHydrated = true;
   }
+};
+
+const ensureTranslationsLoaded = ({ awaitNetwork = false } = {}) => {
+  if (!translationsLoadPromise) {
+    translationsLoadPromise = loadTranslations();
+  }
+  if (awaitNetwork) {
+    return translationsLoadPromise;
+  }
+  if (translationPayloadReady) {
+    return Promise.resolve();
+  }
+  return translationsLoadPromise;
 };
 
 /* ==========================================================================
@@ -3304,6 +3320,45 @@ const requestRuntimeGrammarExplanationTranslation = async (
     });
   runtimeGrammarExplanationRequests.set(cacheKey, request);
   return request;
+};
+
+let prewarmedGrammarExplanationLanguage = "";
+const prewarmGrammarExplanationTranslations = () => {
+  if (!isGrammarPage) {
+    return;
+  }
+  const baseLanguage = String(localStorage.getItem("cosmicaBaseLanguage") || "").toLowerCase();
+  if (!baseLanguage || baseLanguage === "english") {
+    return;
+  }
+  if (prewarmedGrammarExplanationLanguage === baseLanguage) {
+    return;
+  }
+  prewarmedGrammarExplanationLanguage = baseLanguage;
+
+  const cards = document.querySelectorAll(".grammar-card");
+  if (!cards.length) {
+    return;
+  }
+
+  let queued = 0;
+  cards.forEach((card) => {
+    if (queued >= 8) {
+      return;
+    }
+    const section = card.dataset.section || "";
+    const index = Number(card.dataset.index || "-1");
+    const cardData = GRAMMAR_SECTION_LISTS[section]?.[index];
+    if (!cardData) {
+      return;
+    }
+    const explanation = buildGrammarExplanation(cardData);
+    if (resolveGrammarExplanation(section, explanation, baseLanguage)) {
+      return;
+    }
+    queued += 1;
+    void requestRuntimeGrammarExplanationTranslation(section, explanation, baseLanguage);
+  });
 };
 
 const GRAMMAR_TEMPLATES = {
@@ -5883,19 +5938,35 @@ const openGrammarModal = (section, index) => {
   if (!overlay) {
     return;
   }
-  renderGrammarModal(section, index);
-  overlay.classList.add("is-visible");
-  document.body.classList.add("modal-open");
-  lockModalScroll();
-  const modal = overlay.querySelector(".grammar-modal");
-  const modalBody = overlay.querySelector(".grammar-modal-body");
-  if (modal) {
-    modal.scrollTop = 0;
+
+  const showModal = () => {
+    renderGrammarModal(section, index);
+    overlay.classList.add("is-visible");
+    document.body.classList.add("modal-open");
+    lockModalScroll();
+    const modal = overlay.querySelector(".grammar-modal");
+    const modalBody = overlay.querySelector(".grammar-modal-body");
+    if (modal) {
+      modal.scrollTop = 0;
+    }
+    if (modalBody) {
+      modalBody.scrollTop = 0;
+    }
+    overlay.querySelector(".grammar-modal")?.focus?.();
+  };
+
+  const baseLanguage = String(localStorage.getItem("cosmicaBaseLanguage") || "");
+  const shouldWaitForTranslations =
+    !!baseLanguage &&
+    baseLanguage.toLowerCase() !== "english" &&
+    !translationNetworkHydrated;
+
+  if (shouldWaitForTranslations) {
+    ensureTranslationsLoaded({ awaitNetwork: true }).finally(showModal);
+    return;
   }
-  if (modalBody) {
-    modalBody.scrollTop = 0;
-  }
-  overlay.querySelector(".grammar-modal")?.focus?.();
+
+  showModal();
 };
 
 let modalScrollLockY = 0;
@@ -6290,8 +6361,16 @@ if (isGrammarPage) {
 }
 
 if (needsMapTranslations) {
-  runWhenBrowserIdle(() => {
-    loadTranslations().then(() => {
+  const selectedBaseLanguage = String(
+    localStorage.getItem("cosmicaBaseLanguage") || ""
+  ).toLowerCase();
+  const shouldPrioritizeTranslations =
+    !!selectedBaseLanguage && selectedBaseLanguage !== "english";
+  const shouldAwaitNetworkHydration =
+    shouldPrioritizeTranslations && isGrammarPage;
+
+  const refreshAfterTranslations = () => {
+    ensureTranslationsLoaded({ awaitNetwork: shouldAwaitNetworkHydration }).then(() => {
       if (isWordsPage && document.querySelector(".word-card")) {
         applyWordTranslations();
       }
@@ -6299,13 +6378,20 @@ if (needsMapTranslations) {
         applyPhraseTranslations();
       }
       if (isGrammarPage) {
+        prewarmGrammarExplanationTranslations();
         const overlay = ensureGrammarOverlay();
         if (overlay && typeof overlay.__refresh === "function") {
           overlay.__refresh();
         }
       }
     });
-  });
+  };
+
+  if (shouldPrioritizeTranslations) {
+    refreshAfterTranslations();
+  } else {
+    runWhenBrowserIdle(refreshAfterTranslations);
+  }
 }
 
 
