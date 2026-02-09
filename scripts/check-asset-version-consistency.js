@@ -1,0 +1,98 @@
+/* ==========================================================================
+   ASSET VERSION CONSISTENCY CHECK
+   - Enforces versioned CSS/JS query params in HTML asset tags.
+   - Ensures each shared asset uses one consistent version value site-wide.
+   ========================================================================== */
+const fs = require("fs");
+const path = require("path");
+
+/* --------------------------------------------------------------------------
+   PATHS + CONFIG
+   -------------------------------------------------------------------------- */
+const ROOT = path.resolve(__dirname, "..");
+const htmlFiles = fs
+  .readdirSync(ROOT)
+  .filter((name) => name.toLowerCase().endsWith(".html"))
+  .filter((name) => !name.toLowerCase().startsWith("live_"))
+  .sort();
+
+const ASSET_RULES = [
+  { file: "style.css", attr: "href", required: true },
+  { file: "app.js", attr: "src", required: true },
+  { file: "style-maps.css", attr: "href", required: false },
+];
+
+/* --------------------------------------------------------------------------
+   HELPERS
+   -------------------------------------------------------------------------- */
+const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+const collectAssetMatches = (htmlContent, assetFile, attrName) => {
+  const pattern = new RegExp(
+    `${attrName}\\s*=\\s*["']${escapeRegex(assetFile)}(?:\\?v=([^"']+))?["']`,
+    "gi"
+  );
+  const versions = [];
+  let match;
+  while ((match = pattern.exec(htmlContent)) !== null) {
+    versions.push(match[1] ? match[1].trim() : "");
+  }
+  return versions;
+};
+
+/* --------------------------------------------------------------------------
+   MAIN
+   -------------------------------------------------------------------------- */
+const failures = [];
+
+for (const rule of ASSET_RULES) {
+  const versionsByFile = new Map();
+  const uniqueVersions = new Set();
+  let totalMatches = 0;
+
+  for (const htmlFile of htmlFiles) {
+    const htmlPath = path.join(ROOT, htmlFile);
+    const content = fs.readFileSync(htmlPath, "utf8");
+    const matchedVersions = collectAssetMatches(content, rule.file, rule.attr);
+    if (!matchedVersions.length) {
+      continue;
+    }
+
+    totalMatches += matchedVersions.length;
+    matchedVersions.forEach((version) => {
+      if (!version) {
+        failures.push(
+          `${htmlFile}: ${rule.file} is missing ?v= version query param`
+        );
+        return;
+      }
+      uniqueVersions.add(version);
+      versionsByFile.set(htmlFile, version);
+    });
+  }
+
+  if (rule.required && totalMatches !== htmlFiles.length) {
+    failures.push(
+      `${rule.file}: expected one reference in each HTML page (${htmlFiles.length}), found ${totalMatches}`
+    );
+  }
+
+  if (uniqueVersions.size > 1) {
+    const detail = [...versionsByFile.entries()]
+      .map(([file, version]) => `${file}=>${version}`)
+      .join(", ");
+    failures.push(
+      `${rule.file}: inconsistent version values across pages (${detail})`
+    );
+  }
+}
+
+if (failures.length) {
+  console.error("ASSET VERSION CHECK FAILED");
+  failures.forEach((failure) => console.error(`- ${failure}`));
+  process.exit(1);
+}
+
+console.log(
+  `PASS [assets] consistent versioned style/app references across ${htmlFiles.length} pages`
+);

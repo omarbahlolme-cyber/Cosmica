@@ -48,6 +48,7 @@
     |-- check-external-integrity.js     # Enforces SRI/exemption policy for third-party assets
     |-- verify-backup.js               # Verifies backup bundle integrity + paired source archive
     |-- check-seo-baseline.js           # Validates canonical metadata, JSON-LD, and sitemap coverage
+    |-- check-asset-version-consistency.js # Enforces consistent cache-busting versions for shared CSS/JS links
     |-- check-security-txt.js           # Validates security.txt required fields and expiry freshness
     |-- live-security-check.js         # Checks production redirects, headers, and health endpoint
     |-- check-bloat.js                  # Orphan asset check + enforced selector allowlist

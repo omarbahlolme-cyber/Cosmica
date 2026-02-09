@@ -13,6 +13,7 @@ const ROOT = path.resolve(__dirname, "..");
 const htmlFiles = fs
   .readdirSync(ROOT)
   .filter((name) => name.toLowerCase().endsWith(".html"))
+  .filter((name) => !name.toLowerCase().startsWith("live_"))
   .sort();
 
 const EXEMPT_HOST_ALLOWLIST = new Set(["fonts.googleapis.com", "static.cloudflareinsights.com"]);

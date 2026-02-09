@@ -12,6 +12,7 @@ const path = require("path");
 const ROOT = path.resolve(__dirname, "..");
 const ALLOWLIST_PATH = path.join(__dirname, "bloat-allowlist.json");
 const ROOT_FILES = fs.readdirSync(ROOT);
+const IGNORE_ROOT_FILE_REGEX = /^live_.*\.(?:html|js|css)$/i;
 const LOCAL_REF_REGEX = /\b(?:href|src)\s*=\s*["']([^"']+)["']/gi;
 const JS_FILE_REF_REGEX = /["']([A-Za-z0-9._/-]+\.(?:js|css|json|html))["']/g;
 
@@ -38,7 +39,10 @@ const WRITE_ALLOWLIST = process.argv.includes("--write-allowlist");
    HELPERS
    -------------------------------------------------------------------------- */
 const getRootFilesByExtension = (extensions) =>
-  ROOT_FILES.filter((name) => extensions.has(path.extname(name).toLowerCase())).sort();
+  ROOT_FILES
+    .filter((name) => !IGNORE_ROOT_FILE_REGEX.test(name))
+    .filter((name) => extensions.has(path.extname(name).toLowerCase()))
+    .sort();
 
 const readText = (filePath) => fs.readFileSync(filePath, "utf8");
 
@@ -61,7 +65,7 @@ const collectLocalReferences = () => {
   const htmlFiles = ROOT_FILES.filter((name) => name.endsWith(".html"));
   const jsFiles = ROOT_FILES.filter((name) => name.endsWith(".js"));
 
-  for (const htmlFile of htmlFiles) {
+  for (const htmlFile of htmlFiles.filter((name) => !IGNORE_ROOT_FILE_REGEX.test(name))) {
     const content = readText(path.join(ROOT, htmlFile));
     let match;
     while ((match = LOCAL_REF_REGEX.exec(content)) !== null) {
@@ -72,7 +76,7 @@ const collectLocalReferences = () => {
     }
   }
 
-  for (const jsFile of jsFiles) {
+  for (const jsFile of jsFiles.filter((name) => !IGNORE_ROOT_FILE_REGEX.test(name))) {
     const content = readText(path.join(ROOT, jsFile));
     let match;
     while ((match = JS_FILE_REF_REGEX.exec(content)) !== null) {
@@ -111,8 +115,12 @@ const collectCssTokens = () => {
 const collectUsedTokens = () => {
   const classes = new Set();
   const ids = new Set();
-  const htmlFiles = ROOT_FILES.filter((name) => name.endsWith(".html"));
-  const jsFiles = ROOT_FILES.filter((name) => name.endsWith(".js"));
+  const htmlFiles = ROOT_FILES
+    .filter((name) => name.endsWith(".html"))
+    .filter((name) => !IGNORE_ROOT_FILE_REGEX.test(name));
+  const jsFiles = ROOT_FILES
+    .filter((name) => name.endsWith(".js"))
+    .filter((name) => !IGNORE_ROOT_FILE_REGEX.test(name));
 
   for (const htmlFile of htmlFiles) {
     const content = readText(path.join(ROOT, htmlFile));

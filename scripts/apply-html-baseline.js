@@ -144,6 +144,7 @@ const applyPageBaseline = (fileName) => {
 const htmlFiles = fs
   .readdirSync(ROOT)
   .filter((fileName) => fileName.toLowerCase().endsWith(".html"))
+  .filter((fileName) => !fileName.toLowerCase().startsWith("live_"))
   .sort();
 
 let updatedCount = 0;

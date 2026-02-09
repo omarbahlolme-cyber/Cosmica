@@ -1,3 +1,6 @@
 node_modules/
 .env
 backups/
+live_*.html
+live_*.js
+live_*.css

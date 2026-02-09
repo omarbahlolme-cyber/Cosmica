@@ -12,6 +12,7 @@ const ROOT = path.resolve(__dirname, "..");
 const htmlFiles = fs
   .readdirSync(ROOT)
   .filter((name) => name.toLowerCase().endsWith(".html"))
+  .filter((name) => !name.toLowerCase().startsWith("live_"))
   .sort();
 
 /* --------------------------------------------------------------------------

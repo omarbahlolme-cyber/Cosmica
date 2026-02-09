@@ -15,6 +15,7 @@ const SITEMAP_PATH = path.join(ROOT, "sitemap.xml");
 const htmlFiles = fs
   .readdirSync(ROOT)
   .filter((name) => name.toLowerCase().endsWith(".html"))
+  .filter((name) => !name.toLowerCase().startsWith("live_"))
   .sort();
 
 /* --------------------------------------------------------------------------

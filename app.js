@@ -2494,7 +2494,7 @@ const loadMapsBundle = () =>
     }
 
     const script = document.createElement("script");
-    script.src = `app-maps.js?v=${ASSET_VERSION}`;
+    script.src = withAssetVersion("app-maps.js");
     script.async = true;
     script.dataset.cosmicaBundle = "maps";
     script.addEventListener(

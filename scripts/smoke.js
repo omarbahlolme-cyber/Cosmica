@@ -49,6 +49,7 @@ const getHtmlFiles = () =>
   fs
     .readdirSync(ROOT)
     .filter((file) => file.endsWith(".html"))
+    .filter((file) => !file.toLowerCase().startsWith("live_"))
     .sort();
 
 const normalizeLocalRef = (ref, htmlFile) => {

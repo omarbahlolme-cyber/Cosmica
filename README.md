@@ -55,13 +55,14 @@ Runs:
 1. Syntax checks for key server/client bundles.
 2. Accessibility baseline checks (`<main>`, `<h1>`, nav labels).
 3. SEO baseline checks (canonical metadata, JSON-LD, sitemap coverage).
-4. External third-party integrity policy checks (SRI or explicit exemption).
-5. `security.txt` freshness and policy checks.
-6. Bloat checks (orphan root assets + enforced selector allowlist).
-7. Performance regression check against `perf/baseline.json`.
-8. Security dependency audit.
-9. Release hygiene checks (`CHANGELOG.md` + semver).
-10. Smoke checks for links and core routes.
+4. Asset version consistency checks for cache-busted `style.css`/`app.js` references.
+5. External third-party integrity policy checks (SRI or explicit exemption).
+6. `security.txt` freshness and policy checks.
+7. Bloat checks (orphan root assets + enforced selector allowlist).
+8. Performance regression check against `perf/baseline.json`.
+9. Security dependency audit.
+10. Release hygiene checks (`CHANGELOG.md` + semver).
+11. Smoke checks for links and core routes.
 
 To refresh the perf baseline after intentional optimizations:
 
