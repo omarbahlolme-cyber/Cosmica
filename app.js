@@ -189,10 +189,10 @@ const lineMoods = ["happy", "curious", "thinking", "happy", "curious"];
 const MIMI_CONFIG = {
   mode: "api",
   endpoint: "/api/chat",
-  timeoutMs: 15000,
-  mobileTimeoutMs: 15000,
-  retryLimit: 2,
-  historyLimit: 10,
+  timeoutMs: 12000,
+  mobileTimeoutMs: 12000,
+  retryLimit: 3,
+  historyLimit: 12,
 };
 const WORLD_START_LESSON_DESKTOP_DOWN_SHIFT = 34;
 const MIMI_SITE_CONTEXT = [
@@ -561,6 +561,52 @@ let chatRequestInFlight = false;
 const MAX_VISIBLE_CHAT_MESSAGES = 16;
 let userHasMessagedMimi = false;
 let lastMimiReply = "";
+const MIMI_CHAT_HISTORY_KEY = "cosmicaMimiChatHistory:v1";
+
+const sanitizeChatHistory = (value) => {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+  return value
+    .filter((entry) => entry && typeof entry === "object")
+    .map((entry) => ({
+      role: entry.role === "assistant" ? "assistant" : "user",
+      content: typeof entry.content === "string" ? entry.content.trim() : "",
+    }))
+    .filter((entry) => entry.content.length > 0)
+    .slice(-Math.max(0, MIMI_CONFIG.historyLimit || 0));
+};
+
+const loadChatHistoryFromStorage = () => {
+  try {
+    const raw = sessionStorage.getItem(MIMI_CHAT_HISTORY_KEY);
+    if (!raw) {
+      return;
+    }
+    const parsed = JSON.parse(raw);
+    const restored = sanitizeChatHistory(parsed);
+    if (!restored.length) {
+      return;
+    }
+    chatHistory.push(...restored);
+    const latestAssistant = [...restored].reverse().find((entry) => entry.role === "assistant");
+    if (latestAssistant) {
+      lastMimiReply = latestAssistant.content;
+      if (speechText) {
+        speechText.dataset.text = latestAssistant.content;
+      }
+    }
+  } catch {}
+};
+
+const persistChatHistoryToStorage = () => {
+  try {
+    const payload = chatHistory.slice(-Math.max(0, MIMI_CONFIG.historyLimit || 0));
+    sessionStorage.setItem(MIMI_CHAT_HISTORY_KEY, JSON.stringify(payload));
+  } catch {}
+};
+
+loadChatHistoryFromStorage();
 
 const renderFlags = () => {
   document.querySelectorAll(".flag-badge").forEach((badge) => {
