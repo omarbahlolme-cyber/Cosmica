@@ -556,6 +556,8 @@ let gazeResetTimer;
 const chatHistory = [];
 let chatRequestInFlight = false;
 const MAX_VISIBLE_CHAT_MESSAGES = 16;
+let userHasMessagedMimi = false;
+let lastMimiReply = "";
 
 const renderFlags = () => {
   document.querySelectorAll(".flag-badge").forEach((badge) => {
@@ -631,6 +633,23 @@ const scrollChatToBottom = () => {
     return;
   }
   chatLog.scrollTop = chatLog.scrollHeight;
+};
+
+const revealMimiBubbleOnMobile = () => {
+  if (!speechBubble) {
+    return;
+  }
+  if (!window.matchMedia("(max-width: 960px)").matches) {
+    return;
+  }
+  const rect = speechBubble.getBoundingClientRect();
+  const targetTop = Math.max(18, window.innerHeight * 0.12);
+  const delta = rect.top - targetTop;
+  if (Math.abs(delta) < 24) {
+    return;
+  }
+  const nextTop = Math.max(0, window.scrollY + delta);
+  window.scrollTo({ top: nextTop, behavior: "smooth" });
 };
 
 const trimVisibleChatMessages = () => {
@@ -865,7 +884,12 @@ const sendChatMessage = async (message) => {
   chatRequestInFlight = true;
   chatInput.disabled = true;
   try {
+    userHasMessagedMimi = true;
     appendChatMessage("user", text);
+    if (!message && window.matchMedia("(max-width: 960px)").matches && document.activeElement === chatInput) {
+      chatInput.blur();
+    }
+    revealMimiBubbleOnMobile();
     chatHistory.push({ role: "user", content: text });
     if (chatHistory.length > MIMI_CONFIG.historyLimit) {
       chatHistory.splice(0, chatHistory.length - MIMI_CONFIG.historyLimit);
@@ -885,7 +909,12 @@ const sendChatMessage = async (message) => {
     } else {
       setChatStatus("Mimi ready");
     }
+    lastMimiReply = reply.content;
+    if (speechText) {
+      speechText.dataset.text = reply.content;
+    }
     speakLine(reply.content, "curious");
+    revealMimiBubbleOnMobile();
   } finally {
     chatRequestInFlight = false;
     chatInput.disabled = false;
@@ -1686,20 +1715,31 @@ if (speechText) {
 }
 
 if (speechText && speechBubble) {
-  const mimiLine = speechText.dataset.text || speechText.textContent.trim();
-  if (mimiLine) {
-    speechText.dataset.text = mimiLine;
+  const defaultMimiLine = speechText.dataset.text || speechText.textContent.trim();
+  if (defaultMimiLine) {
+    speechText.dataset.text = defaultMimiLine;
     speechText.textContent = "";
     let mimiTypingArmed = true;
     const mimiObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
+            if (userHasMessagedMimi) {
+              if (lastMimiReply) {
+                speechText.textContent = lastMimiReply;
+              }
+              speechBubble.classList.remove("speaking");
+              return;
+            }
             if (mimiTypingArmed) {
-              speakLine(mimiLine, "happy");
+              speakLine(defaultMimiLine, "happy");
               mimiTypingArmed = false;
             }
           } else {
+            if (userHasMessagedMimi) {
+              speechBubble.classList.remove("speaking");
+              return;
+            }
             mimiTypingArmed = true;
             speechText.textContent = "";
             speechBubble.classList.remove("speaking");
