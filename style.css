@@ -2702,7 +2702,13 @@ body:not(.world-page) .footer {
     left: 0;
     right: 0;
     border-radius: 0 0 18px 18px;
-    background: var(--nav-header-gradient);
+    background: linear-gradient(
+      138deg,
+      rgba(9, 16, 38, 0.96) 0%,
+      rgba(16, 34, 74, 0.92) 46%,
+      rgba(46, 20, 76, 0.9) 78%,
+      rgba(11, 20, 46, 0.94) 100%
+    );
     flex-wrap: wrap;
   }
 
@@ -2738,7 +2744,7 @@ body:not(.world-page) .footer {
     font-size: 9.5px;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    filter: brightness(1.1);
+    filter: brightness(1.05);
   }
 
   body:not(.world-page) .nav-links {
@@ -3075,7 +3081,13 @@ body:not(.world-page) .footer {
   body.world-page .nav {
     padding: 16px 4vw;
     border-radius: 0 0 18px 18px;
-    background: var(--nav-header-gradient);
+    background: linear-gradient(
+      138deg,
+      rgba(9, 16, 38, 0.96) 0%,
+      rgba(16, 34, 74, 0.92) 46%,
+      rgba(46, 20, 76, 0.9) 78%,
+      rgba(11, 20, 46, 0.94) 100%
+    );
   }
 
   body.world-page .brand-mark {

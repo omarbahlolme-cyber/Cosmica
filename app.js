@@ -190,8 +190,8 @@ const MIMI_CONFIG = {
   mode: "api",
   endpoint: "/api/chat",
   timeoutMs: 15000,
-  mobileTimeoutMs: 42000,
-  retryLimit: 5,
+  mobileTimeoutMs: 15000,
+  retryLimit: 2,
   historyLimit: 10,
 };
 const WORLD_START_LESSON_DESKTOP_DOWN_SHIFT = 34;
@@ -783,35 +783,31 @@ const getApiEndpointCandidates = () => {
     return candidates;
   }
 
-  // Primary: same-origin relative API route.
-  addCandidate(endpoint);
-  addCandidate(`${protocol}//${hostname}${port ? `:${port}` : ""}${endpoint}`);
-
-  // Local/mobile dev fallback: when UI runs on a dev port, API usually runs on :3000.
-  if (port && port !== "3000" && isLocalDevHost(hostname)) {
-    addCandidate(`${protocol}//${hostname}:3000${endpoint}`);
-  }
-
-  // Production fallback chain for mobile sessions that open a host without a live API route.
+  // Public production hosts: always prefer canonical API origin first.
   const isCosmicaPublicHost =
     normalizedHost === "cosmicalearn.com" ||
     normalizedHost === "www.cosmicalearn.com" ||
     normalizedHost === "cosmica-03wo.onrender.com";
   if (isCosmicaPublicHost) {
     addCandidate(`https://www.cosmicalearn.com${endpoint}`);
-    addCandidate(`https://cosmicalearn.com${endpoint}`);
-    addCandidate(`https://cosmica-03wo.onrender.com${endpoint}`);
+    addCandidate(endpoint);
+    return candidates;
   }
 
+  // Local/mobile dev fallback: when UI runs on a non-3000 dev port, API usually runs on :3000.
+  if (port && port !== "3000" && isLocalDevHost(hostname)) {
+    addCandidate(`${protocol}//${hostname}:3000${endpoint}`);
+    addCandidate(endpoint);
+    return candidates;
+  }
+
+  // Default: same-origin route.
+  addCandidate(endpoint);
   return candidates;
 };
 
 const getChatRequestTimeoutMs = () => {
-  const isMobileViewport = window.matchMedia("(max-width: 960px)").matches;
-  if (!isMobileViewport) {
-    return MIMI_CONFIG.timeoutMs;
-  }
-  return Math.max(MIMI_CONFIG.timeoutMs, MIMI_CONFIG.mobileTimeoutMs || MIMI_CONFIG.timeoutMs);
+  return MIMI_CONFIG.timeoutMs;
 };
 
 const buildChatMessages = (message) => {
@@ -926,22 +922,55 @@ const getMimiReply = async (message) => {
     }
   };
 
+  const runEndpointRace = async () => {
+    const runners = endpointCandidates.map((endpoint, index) =>
+      new Promise((resolve, reject) => {
+        const delayMs = index * 160;
+        window.setTimeout(() => {
+          requestChatReply(endpoint)
+            .then((content) => resolve({ content, endpoint }))
+            .catch((error) => {
+              reject(error);
+            });
+        }, delayMs);
+      })
+    );
+
+    if (typeof Promise.any === "function") {
+      return Promise.any(runners);
+    }
+
+    return new Promise((resolve, reject) => {
+      let pending = runners.length;
+      let lastFailure = null;
+      runners.forEach((runner) => {
+        runner
+          .then(resolve)
+          .catch((error) => {
+            lastFailure = error;
+            pending -= 1;
+            if (pending === 0) {
+              reject(lastFailure || new Error("All endpoint attempts failed"));
+            }
+          });
+      });
+    });
+  };
+
   const attempts = navigator.onLine ? Math.max(1, MIMI_CONFIG.retryLimit || 1) : 1;
   let lastError = null;
-  for (const endpoint of endpointCandidates) {
-    for (let attemptIndex = 0; attemptIndex < attempts; attemptIndex += 1) {
-      try {
-        const content = await requestChatReply(endpoint);
-        return { content, source: "api" };
-      } catch (error) {
-        lastError = error;
-        const isLastAttempt = attemptIndex === attempts - 1;
-        if (isLastAttempt || !navigator.onLine) {
-          break;
-        }
-        const retryDelayMs = 240 + attemptIndex * 320;
-        await new Promise((resolve) => window.setTimeout(resolve, retryDelayMs));
+  for (let attemptIndex = 0; attemptIndex < attempts; attemptIndex += 1) {
+    try {
+      const result = await runEndpointRace();
+      return { content: result.content, source: "api" };
+    } catch (error) {
+      lastError = error;
+      const isLastAttempt = attemptIndex === attempts - 1;
+      if (isLastAttempt || !navigator.onLine) {
+        break;
       }
+      const retryDelayMs = 220 + attemptIndex * 260;
+      await new Promise((resolve) => window.setTimeout(resolve, retryDelayMs));
     }
   }
 
