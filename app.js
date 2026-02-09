@@ -204,6 +204,9 @@ const MIMI_SYSTEM_PROMPT = [
   "You are Mimi, the alien guide for the Cosmica language academy.",
   "Keep replies concise and helpful (1-3 sentences).",
   "Maintain a cosmic discovery vibe without sounding overly emotional.",
+  "Stay on Cosmica language-learning topics only. If the user asks unrelated general-knowledge questions, briefly redirect back to language learning.",
+  "Do not provide external statistics, demographic claims, or factual claims outside Cosmica learning guidance.",
+  "Only English world is available now. Mention other worlds as upcoming only.",
   "Ask for the user's target language, goal, and time available when needed.",
   "Give one concrete next step (a quick quest, a phrase to practice, or a world to enter).",
   "If asked about features beyond the current site, call them planned or upcoming.",
@@ -212,16 +215,6 @@ const MIMI_SYSTEM_PROMPT = [
 ].join(" ");
 const worldLines = {
   English: "English world online. Neon cities are ready for your hello.",
-  Dutch: "Dutch world steady. Quick missions and clear sounds ahead.",
-  Swedish: "Swedish world glowing. Breathe with the aurora and speak.",
-  Korean: "Korean world pulsing. Follow the beat of the script.",
-  Arabic: "Arabic world shimmering. Let calligraphy guide your voice.",
-  Spanish: "Spanish world alive. Follow the rhythm and bright story trails.",
-  German: "German world precise. Clear routes and strong signals ahead.",
-  Japanese: "Japanese world serene. Lantern paths and gentle honor cues.",
-  Chinese: "Chinese world radiant. Trace calligraphy rivers of light.",
-  Portuguese: "Portuguese world tidal. Sail the melody routes together.",
-  Hindi: "Hindi world festive. Follow the cadence through starlit arcs.",
 };
 
 const worldPages = {
@@ -719,9 +712,15 @@ const getApiEndpoint = () => {
 };
 
 const buildChatMessages = (message) => {
+  const recentHistory = chatHistory.slice(-Math.max(0, MIMI_CONFIG.historyLimit || 0));
+  const lastMessage = recentHistory[recentHistory.length - 1];
+  const shouldAppendCurrentUserMessage =
+    !lastMessage || lastMessage.role !== "user" || lastMessage.content !== message;
+
   return [
     { role: "system", content: MIMI_SYSTEM_PROMPT },
-    { role: "user", content: message },
+    ...recentHistory,
+    ...(shouldAppendCurrentUserMessage ? [{ role: "user", content: message }] : []),
   ];
 };
 
@@ -848,7 +847,6 @@ const sendChatMessage = async (message) => {
   chatRequestInFlight = true;
   chatInput.disabled = true;
   try {
-    appendChatMessage("user", text);
     chatHistory.push({ role: "user", content: text });
     if (chatHistory.length > MIMI_CONFIG.historyLimit) {
       chatHistory.splice(0, chatHistory.length - MIMI_CONFIG.historyLimit);
@@ -857,11 +855,8 @@ const sendChatMessage = async (message) => {
       chatInput.value = "";
     }
 
-    appendChatMessage("mimi", "", { typing: true });
     setChatStatus("Mimi is charting a reply");
     const reply = await getMimiReply(text);
-    appendChatMessage("mimi", "", { typing: false });
-    appendChatMessage("mimi", reply.content);
     chatHistory.push({ role: "assistant", content: reply.content });
     if (chatHistory.length > MIMI_CONFIG.historyLimit) {
       chatHistory.splice(0, chatHistory.length - MIMI_CONFIG.historyLimit);
@@ -895,6 +890,9 @@ chatChips.forEach((chip) => {
 
 if (chatLog) {
   chatLog.innerHTML = "";
+  // Bubble-only mode: keep replies in Mimi's speech bubble, not in a scrolling chat history list.
+  chatLog.setAttribute("aria-hidden", "true");
+  chatLog.style.display = "none";
 }
 
 const createStars = (layer, count, sizeRange) => {
