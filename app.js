@@ -52,7 +52,38 @@ const WORLD_NAME = isWorldLandingPage
   : urlParams.get("world") || document.body.dataset.world || "English";
 const WORLD_KEY = WORLD_NAME.toLowerCase();
 const WORLD_TRANSLATION_FILE = "translations.json";
-const ASSET_VERSION = "20260214";
+const readAssetVersionParam = (rawUrl) => {
+  if (!rawUrl) {
+    return "";
+  }
+  try {
+    const parsed = new URL(rawUrl, window.location.href);
+    return parsed.searchParams.get("v") || "";
+  } catch {
+    return "";
+  }
+};
+const resolveAssetVersion = () => {
+  const candidates = [];
+  if (document.currentScript?.src) {
+    candidates.push(document.currentScript.src);
+  }
+  document.querySelectorAll('script[src*="app.js"]').forEach((script) => {
+    if (script.src) {
+      candidates.push(script.src);
+    }
+  });
+  for (const sourceUrl of candidates) {
+    const version = readAssetVersionParam(sourceUrl);
+    if (version) {
+      return version;
+    }
+  }
+  return "";
+};
+const ASSET_VERSION = resolveAssetVersion();
+const withAssetVersion = (assetPath) =>
+  ASSET_VERSION ? `${assetPath}?v=${encodeURIComponent(ASSET_VERSION)}` : assetPath;
 let WORLD_TRANSLATIONS = null;
 let WORLD_GRAMMAR_TITLE_MAP = null;
 let WORLD_GRAMMAR_EXAMPLE_MAP = null;
@@ -1553,7 +1584,17 @@ if (speechText && speechBubble) {
   }
 }
 
-  const scrollToAnchor = (hash) => {
+const MOBILE_HOME_ANCHOR_DOWN_SHIFT = Object.freeze({
+  default: 16,
+  "#worlds": 20,
+  "#guide": 28,
+  "#join": 36,
+  "#support": 44,
+});
+const getMobileHomeAnchorDownShift = (hash) =>
+  MOBILE_HOME_ANCHOR_DOWN_SHIFT[hash] ?? MOBILE_HOME_ANCHOR_DOWN_SHIFT.default;
+
+const scrollToAnchor = (hash) => {
     const targetId = hash.slice(1);
     const target = document.getElementById(targetId);
     if (!target) {
@@ -1561,19 +1602,7 @@ if (speechText && speechBubble) {
     }
     const isHomeMobile = !document.body.classList.contains("world-page")
       && window.matchMedia("(max-width: 960px)").matches;
-    const navEl = document.querySelector(".nav");
-    const navHeight = navEl ? navEl.getBoundingClientRect().height : 0;
-    const mobileDownShift = isHomeMobile
-      ? (hash === "#support"
-        ? 44
-        : hash === "#join"
-          ? 36
-          : hash === "#guide"
-            ? 28
-            : hash === "#worlds"
-              ? 20
-              : 16)
-      : 0;
+    const mobileDownShift = isHomeMobile ? getMobileHomeAnchorDownShift(hash) : 0;
     const baseOffset =
       Number.parseFloat(window.getComputedStyle(target).scrollMarginTop) || 0;
     const top = hash === "#home"
@@ -1585,7 +1614,7 @@ if (speechText && speechBubble) {
     history.replaceState(null, "", `${baseUrl}${hash}`);
     window.scrollTo({ top, behavior: "smooth" });
     return true;
-  };
+};
 
   if (talkButton) {
     talkButton.addEventListener("click", () => {
