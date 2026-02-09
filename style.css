@@ -7,6 +7,8 @@
    ========================================================================== */
 :root {
   color-scheme: dark;
+  --vh: 1vh;
+  --app-height: 100vh;
   --bg: #05050b;
   --bg-deep: #060617;
   --panel: rgba(14, 19, 40, 0.7);
@@ -29,6 +31,12 @@
   --font-body: "Rajdhani", sans-serif;
 }
 
+@supports (height: 100dvh) {
+  :root {
+    --app-height: 100dvh;
+  }
+}
+
 /* --------------------------------------------------------------------------
    GLOBAL RESET + BASE ELEMENTS
    -------------------------------------------------------------------------- */
@@ -43,10 +51,14 @@ body {
   color: var(--text);
   overflow-x: hidden;
   line-height: 1.6;
+  min-height: var(--app-height);
+  min-height: calc(var(--vh) * 100);
 }
 
 html {
   overflow-y: scroll;
+  min-height: var(--app-height);
+  min-height: calc(var(--vh) * 100);
 }
 
 
@@ -407,6 +419,7 @@ body:not(.world-page) main {
   gap: 40px;
   align-items: center;
   min-height: 85vh;
+  min-height: calc(var(--vh) * 85);
 }
 
 @media (min-width: 721px) {
@@ -1351,6 +1364,7 @@ body.hide-worlds-overlap .worlds {
 
 body.world-page .nav {
   padding: 24px 6vw;
+  overflow: visible;
 }
 
 body.world-page main {
@@ -2698,7 +2712,8 @@ body:not(.world-page) .footer {
     flex-direction: row;
     justify-content: space-between;
     gap: 12px;
-    padding: 16px 4vw;
+    top: 0;
+    padding: calc(env(safe-area-inset-top) + 12px) 4vw 16px;
     left: 0;
     right: 0;
     border-radius: 0 0 18px 18px;
@@ -2710,6 +2725,7 @@ body:not(.world-page) .footer {
       rgba(11, 20, 46, 0.94) 100%
     );
     flex-wrap: wrap;
+    overflow: visible;
   }
 
   .brand-mark {
@@ -2721,11 +2737,13 @@ body:not(.world-page) .footer {
   .brand-title {
     font-size: 14px;
     letter-spacing: 0.16em;
+    line-height: 1.15;
   }
 
   .brand-sub {
     font-size: 10px;
     letter-spacing: 0.16em;
+    line-height: 1.15;
   }
 
   .nav-links {
@@ -2978,7 +2996,7 @@ body:not(.world-page) .footer {
   .grammar-modal {
     width: min(560px, calc(100vw - 24px));
     border-radius: 22px;
-    max-height: calc(100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 24px);
+    max-height: calc((var(--vh) * 100) - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 24px);
     overflow-y: auto;
     overflow-x: hidden;
     margin: 0 auto;
@@ -3077,7 +3095,14 @@ body:not(.world-page) .footer {
   }
 
   body.world-page .nav {
-    padding: 16px 4vw;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "brand sound"
+      "links links";
+    align-items: center;
+    gap: 10px;
+    padding: calc(env(safe-area-inset-top) + 12px) 4vw 16px;
     border-radius: 0 0 18px 18px;
     background: linear-gradient(
       138deg,
@@ -3086,6 +3111,7 @@ body:not(.world-page) .footer {
       rgba(46, 20, 76, 0.9) 78%,
       rgba(11, 20, 46, 0.94) 100%
     );
+    overflow: visible;
   }
 
   body.world-page .brand-mark {
@@ -3094,12 +3120,41 @@ body:not(.world-page) .footer {
     font-size: 24px;
   }
 
+  body.world-page .brand {
+    grid-area: brand;
+    min-width: 0;
+    overflow: visible;
+  }
+
+  body.world-page .brand > div {
+    min-width: max-content;
+  }
+
   body.world-page .brand-title {
     font-size: 14px;
+    white-space: nowrap;
   }
 
   body.world-page .brand-sub {
     font-size: 10px;
+    white-space: nowrap;
+  }
+
+  body.world-page .nav-links {
+    grid-area: links;
+    margin-top: 10px;
+    width: 100%;
+    justify-content: center;
+    overflow: visible;
+  }
+
+  body.world-page .nav-links a {
+    overflow: visible;
+  }
+
+  body.world-page .sound-toggle {
+    grid-area: sound;
+    margin-left: 0;
   }
 
   input,

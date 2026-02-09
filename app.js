@@ -23,6 +23,47 @@ const worldCards = document.querySelectorAll(".world-card");
 const urlParams = new URLSearchParams(window.location.search);
 const currentPath = window.location.pathname.toLowerCase();
 
+// Keep viewport-height based layout stable on mobile when browser UI bars expand/collapse.
+const setupDynamicViewportHeight = () => {
+  const root = document.documentElement;
+  let rafId = 0;
+
+  const applyViewportHeight = () => {
+    rafId = 0;
+    const innerHeight = window.innerHeight || root.clientHeight || 0;
+    if (!innerHeight) {
+      return;
+    }
+    root.style.setProperty("--vh", `${innerHeight * 0.01}px`);
+    root.style.setProperty("--app-height", `${innerHeight}px`);
+  };
+
+  const scheduleViewportHeightUpdate = () => {
+    if (rafId) {
+      return;
+    }
+    rafId = window.requestAnimationFrame(applyViewportHeight);
+  };
+
+  applyViewportHeight();
+  window.addEventListener("resize", scheduleViewportHeightUpdate, { passive: true });
+  window.addEventListener("orientationchange", scheduleViewportHeightUpdate, {
+    passive: true,
+  });
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener("resize", scheduleViewportHeightUpdate, {
+      passive: true,
+    });
+  }
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) {
+      scheduleViewportHeightUpdate();
+    }
+  });
+};
+
+setupDynamicViewportHeight();
+
 // Force the canonical secure origin for public traffic (extra safety layer on top of server/CDN redirects).
 const enforceProductionCanonicalOrigin = () => {
   const host = String(window.location.hostname || "").toLowerCase();
@@ -2590,13 +2631,36 @@ const setupSpeechCards = () => {
   const MALE_HINT =
     /male|man|david|mark|alex|george|fred|daniel|ryan|tom|google uk english male|microsoft david/i;
   const LOW_QUALITY_HINT =
-    /espeak|festival|compact|robot|offline|basic|legacy/i;
+    /espeak|festival|compact|robot|offline|basic|legacy|eloquence|embedded|local|svox/i;
   const HIGH_QUALITY_HINT =
-    /neural|natural|premium|enhanced|wavenet|online|studio/i;
+    /neural|natural|premium|enhanced|wavenet|online|studio|siri|google us english|google uk english female|microsoft aria|microsoft jenny|samantha/i;
   const IOS_FEMALE_HINT = /samantha|karen|moira|ava|allison|serena/i;
   const ANDROID_FEMALE_HINT =
-    /google.*female|wavenet.*(f|a)|neural2.*(f|a)|en-us-studio-o|en-gb-studio-a/i;
+    /google.*female|google us english|google uk english female|wavenet.*(f|a)|neural2.*(f|a)|en-us-studio-o|en-gb-studio-a/i;
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent || "");
+  const isAndroid = /android/i.test(navigator.userAgent || "");
+
+  const waitForVoicesReady = (timeoutMs = 1400) =>
+    new Promise((resolve) => {
+      if (!("speechSynthesis" in window)) {
+        resolve();
+        return;
+      }
+      const existing = window.speechSynthesis.getVoices();
+      if (existing && existing.length) {
+        resolve();
+        return;
+      }
+      const finish = () => {
+        window.clearTimeout(timeoutId);
+        window.speechSynthesis.removeEventListener("voiceschanged", finish);
+        resolve();
+      };
+      const timeoutId = window.setTimeout(finish, timeoutMs);
+      window.speechSynthesis.addEventListener("voiceschanged", finish, {
+        once: true,
+      });
+    });
 
   const pickVoice = () => {
     if (!availableVoices.length) {
@@ -2622,19 +2686,19 @@ const setupSpeechCards = () => {
         score += 14;
       }
       if (HIGH_QUALITY_HINT.test(name)) {
-        score += 6;
-      }
-      if (isIOS && IOS_FEMALE_HINT.test(name)) {
         score += 10;
       }
-      if (!isIOS && ANDROID_FEMALE_HINT.test(name)) {
-        score += 8;
+      if (isIOS && IOS_FEMALE_HINT.test(name)) {
+        score += 18;
+      }
+      if (isAndroid && ANDROID_FEMALE_HINT.test(name)) {
+        score += 18;
       }
       if (MALE_HINT.test(name)) {
         score -= 9;
       }
       if (LOW_QUALITY_HINT.test(name)) {
-        score -= 12;
+        score -= 28;
       }
       return score;
     };
@@ -2662,12 +2726,15 @@ const setupSpeechCards = () => {
   loadVoices();
   window.speechSynthesis.onvoiceschanged = loadVoices;
 
-  const playSpeech = (text, { rate = 0.92, pitch = 1.12 } = {}) => {
+  const playSpeech = async (text, { rate = 0.94, pitch = 1.02 } = {}) => {
     if (!text) {
       return;
     }
-    if (!selectedVoice) {
+    if (!availableVoices.length) {
+      await waitForVoicesReady();
       loadVoices();
+    }
+    if (!selectedVoice) {
       selectedVoice = pickVoice();
     }
     const utterance = new SpeechSynthesisUtterance(text);
@@ -2683,11 +2750,33 @@ const setupSpeechCards = () => {
     }, 60);
   };
 
-  const setupCards = (cards, labelSelector, datasetKey, ariaPrefix, rate, pitch) => {
+  const normalizeLetterSpeechText = (rawText) => {
+    const text = String(rawText || "").trim();
+    if (!text) {
+      return "";
+    }
+    const match = text.match(/[A-Za-z\u026A]/);
+    if (!match) {
+      return text.toLowerCase();
+    }
+    const first = match[0] === "ɪ" ? "i" : match[0];
+    return first.toLowerCase();
+  };
+
+  const setupCards = (
+    cards,
+    labelSelector,
+    datasetKey,
+    ariaPrefix,
+    rate,
+    pitch,
+    normalizeText
+  ) => {
     cards.forEach((card) => {
       const label = card.querySelector(labelSelector);
       if (label && !card.dataset[datasetKey]) {
-        card.dataset[datasetKey] = label.textContent.trim();
+        const sourceText = label.textContent.trim();
+        card.dataset[datasetKey] = normalizeText ? normalizeText(sourceText) : sourceText;
       }
       card.setAttribute("role", "button");
       card.setAttribute("tabindex", "0");
@@ -2717,9 +2806,17 @@ const setupSpeechCards = () => {
     });
   };
 
-  setupCards(letterCards, ".letter", "letter", "Play letter", 0.92, 1.12);
-  setupCards(wordCards, ".word", "word", "Play word", 0.95, 1.05);
-  setupCards(phraseCards, ".phrase-text", "phrase", "Play phrase", 0.95, 1.02);
+  setupCards(
+    letterCards,
+    ".letter",
+    "letter",
+    "Play letter",
+    0.9,
+    1,
+    normalizeLetterSpeechText
+  );
+  setupCards(wordCards, ".word", "word", "Play word", 0.95, 1.01);
+  setupCards(phraseCards, ".phrase-text", "phrase", "Play phrase", 0.95, 1);
 
   [...letterButtons, ...wordButtons].forEach((button) => {
     button.setAttribute("aria-hidden", "true");
