@@ -22,6 +22,25 @@ const warpText = document.getElementById("warpText");
 const worldCards = document.querySelectorAll(".world-card");
 const urlParams = new URLSearchParams(window.location.search);
 const currentPath = window.location.pathname.toLowerCase();
+
+// Force the canonical secure origin for public traffic (extra safety layer on top of server/CDN redirects).
+const enforceProductionCanonicalOrigin = () => {
+  const host = String(window.location.hostname || "").toLowerCase();
+  const isPublicCosmicaHost = host === "cosmicalearn.com" || host === "www.cosmicalearn.com";
+  if (!isPublicCosmicaHost) {
+    return;
+  }
+  const needsHttps = window.location.protocol !== "https:";
+  const needsWww = host !== "www.cosmicalearn.com";
+  if (!needsHttps && !needsWww) {
+    return;
+  }
+  const targetUrl = `https://www.cosmicalearn.com${window.location.pathname}${window.location.search}${window.location.hash}`;
+  window.location.replace(targetUrl);
+};
+
+enforceProductionCanonicalOrigin();
+
 const isWorldLandingPage = currentPath.endsWith("/world.html");
 if (urlParams.has("skipIntro")) {
   const cleanUrl = new URL(window.location.href);
