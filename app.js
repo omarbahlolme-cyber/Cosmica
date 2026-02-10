@@ -31,7 +31,6 @@ const setupDynamicViewportHeight = () => {
   let lastAppliedHeight = 0;
   let orientationKey = "";
   let rafId = 0;
-  const TOOLBAR_RESIZE_TOLERANCE_PX = 120;
 
   const getOrientationKey = () => {
     const landscape = window.matchMedia("(orientation: landscape)").matches;
@@ -48,8 +47,9 @@ const setupDynamicViewportHeight = () => {
     if (forceReset || !stableHeight || orientationChanged) {
       orientationKey = nextOrientation;
       stableHeight = innerHeight;
-    } else if (Math.abs(innerHeight - stableHeight) >= TOOLBAR_RESIZE_TOLERANCE_PX) {
-      // Ignore small viewport deltas from mobile browser toolbar show/hide.
+    } else if (innerHeight > stableHeight) {
+      // Keep the maximum visible viewport height so toolbar collapse/expand
+      // does not shrink layout while scrolling.
       stableHeight = innerHeight;
     } else {
       return;
@@ -933,9 +933,10 @@ const getApiEndpointCandidates = () => {
     normalizedHost === "www.cosmicalearn.com" ||
     normalizedHost === "cosmica-03wo.onrender.com";
   if (isCosmicaPublicHost) {
+    // Always prefer canonical host first to keep mobile/public behavior consistent.
+    addCandidate(`https://www.cosmicalearn.com${endpoint}`);
     addCandidate(`${protocol}//${hostname}${endpoint}`);
     addCandidate(endpoint);
-    addCandidate(`https://www.cosmicalearn.com${endpoint}`);
     return candidates;
   }
 
@@ -1100,9 +1101,8 @@ const getMimiReply = async (message) => {
     endpointCandidates,
   });
   return {
-    content:
-      "AI link is unstable right now. Please try again in a moment and I will answer with full live intelligence.",
-    source: "error",
+    content: getPresetReply(message),
+    source: "fallback",
   };
 };
 
@@ -2740,10 +2740,10 @@ const setupSpeechCards = () => {
         score += 18;
       }
       if (MALE_HINT.test(name)) {
-        score -= 9;
+        score -= 24;
       }
       if (LOW_QUALITY_HINT.test(name)) {
-        score -= 28;
+        score -= 40;
       }
       return score;
     };
@@ -2762,11 +2762,15 @@ const setupSpeechCards = () => {
         (voice.name || "").toLowerCase().includes(hint)
       )
     );
+    const femaleEnglishVoices = englishVoices.filter((voice) =>
+      FEMALE_HINT.test(voice.name || "")
+    );
     const preferredEnglishVoices = englishVoices.filter((voice) =>
       FEMALE_HINT.test(voice.name || "") || HIGH_QUALITY_HINT.test(voice.name || "")
     );
     return (
       pickFrom(prioritizedEnglishVoices) ||
+      pickFrom(femaleEnglishVoices) ||
       pickFrom(preferredEnglishVoices) ||
       pickFrom(englishVoices) ||
       pickFrom(availableVoices)
@@ -2875,6 +2879,9 @@ const setupSpeechCards = () => {
         card.setAttribute("aria-label", `${ariaPrefix} ${card.dataset[datasetKey]}`);
       }
       card.addEventListener("pointerup", (event) => {
+        if (event.target?.closest?.(".letter-audio, .word-audio")) {
+          return;
+        }
         if (event.pointerType !== "touch") {
           return;
         }
@@ -2882,7 +2889,10 @@ const setupSpeechCards = () => {
         markTouchActivation(card);
         playSpeech(card.dataset[datasetKey], { rate, pitch });
       });
-      card.addEventListener("click", () => {
+      card.addEventListener("click", (event) => {
+        if (event.target?.closest?.(".letter-audio, .word-audio")) {
+          return;
+        }
         if (isRecentTouchActivation(card)) {
           return;
         }
@@ -2917,7 +2927,11 @@ const setupSpeechCards = () => {
     normalizeText
   ) => {
     buttons.forEach((button) => {
-      const sourceText = String(button.dataset[datasetKey] || "").trim();
+      const datasetValue = String(button.dataset[datasetKey] || "").trim();
+      const ariaValue = String(button.getAttribute("aria-label") || "")
+        .replace(/^\s*play\s+(letter|word)\s+/i, "")
+        .trim();
+      const sourceText = datasetValue || ariaValue;
       if (sourceText) {
         button.dataset[datasetKey] = normalizeText
           ? normalizeText(sourceText)
@@ -2934,10 +2948,12 @@ const setupSpeechCards = () => {
           return;
         }
         event.preventDefault();
+        event.stopPropagation();
         markTouchActivation(button);
         speakFromButton();
       });
-      button.addEventListener("click", () => {
+      button.addEventListener("click", (event) => {
+        event.stopPropagation();
         if (isRecentTouchActivation(button)) {
           return;
         }
