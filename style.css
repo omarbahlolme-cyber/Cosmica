@@ -1511,6 +1511,14 @@ body.world-page .world-card {
   gap: 6px;
 }
 
+.chat-health {
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: rgba(200, 222, 255, 0.7);
+  text-transform: uppercase;
+  margin-left: auto;
+}
+
 .chat-dot {
   width: 6px;
   height: 6px;

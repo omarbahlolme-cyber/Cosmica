@@ -884,6 +884,72 @@ const getApiEndpoint = () => {
   return getApiEndpointCandidates()[0];
 };
 
+const createAbortController = () => {
+  if (typeof AbortController === "undefined") {
+    return null;
+  }
+  return new AbortController();
+};
+
+const ensureChatHealthIndicator = () => {
+  if (!chatStatus) {
+    return null;
+  }
+  const header = chatStatus.closest(".chat-header") || chatStatus.parentElement;
+  if (!header) {
+    return null;
+  }
+  let indicator = header.querySelector(".chat-health");
+  if (!indicator) {
+    indicator = document.createElement("span");
+    indicator.className = "chat-health";
+    indicator.textContent = "API: checking";
+    header.appendChild(indicator);
+  }
+  return indicator;
+};
+
+const checkApiHealth = async () => {
+  const indicator = ensureChatHealthIndicator();
+  if (!indicator) {
+    return;
+  }
+  indicator.textContent = "API: checking";
+  const controller = createAbortController();
+  const timeoutId = controller
+    ? window.setTimeout(() => controller.abort(), 6000)
+    : null;
+  try {
+    const requestOptions = {
+      cache: "no-store",
+      credentials: "same-origin",
+    };
+    if (controller) {
+      requestOptions.signal = controller.signal;
+    }
+    const response = await fetch("/api/health", requestOptions);
+    if (!response.ok) {
+      throw new Error("Health check failed");
+    }
+    const data = await response.json().catch(() => null);
+    indicator.textContent = data?.status === "ok" ? "API: ok" : "API: unavailable";
+  } catch {
+    indicator.textContent = "API: offline";
+  } finally {
+    if (timeoutId) {
+      window.clearTimeout(timeoutId);
+    }
+  }
+};
+
+const setupApiHealthIndicator = () => {
+  if (!chatStatus) {
+    return;
+  }
+  checkApiHealth();
+  window.setInterval(checkApiHealth, 60000);
+};
+
 const isLocalDevHost = (hostname) => {
   const value = String(hostname || "").toLowerCase();
   if (!value) {
@@ -1038,17 +1104,22 @@ const getMimiReply = async (message) => {
 
   const endpointCandidates = getApiEndpointCandidates();
   const requestChatReply = async (endpoint) => {
-    const controller = new AbortController();
-    const timeout = window.setTimeout(() => controller.abort(), getChatRequestTimeoutMs());
+    const controller = createAbortController();
+    const timeout = controller
+      ? window.setTimeout(() => controller.abort(), getChatRequestTimeoutMs())
+      : null;
     try {
-      const response = await fetch(endpoint, {
+      const requestOptions = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: buildChatMessages(message) }),
         cache: "no-store",
         credentials: "same-origin",
-        signal: controller.signal,
-      });
+      };
+      if (controller) {
+        requestOptions.signal = controller.signal;
+      }
+      const response = await fetch(endpoint, requestOptions);
 
       if (!response.ok) {
         let detail = "";
@@ -1068,7 +1139,9 @@ const getMimiReply = async (message) => {
 
       throw new Error("Empty response");
     } finally {
-      window.clearTimeout(timeout);
+      if (timeout) {
+        window.clearTimeout(timeout);
+      }
     }
   };
 
@@ -1191,6 +1264,8 @@ if (chatLog) {
   chatLog.removeAttribute("aria-hidden");
   chatLog.style.removeProperty("display");
 }
+
+setupApiHealthIndicator();
 
 const createStars = (layer, count, sizeRange) => {
   for (let i = 0; i < count; i += 1) {
@@ -2286,17 +2361,22 @@ if (joinForm) {
 
       for (let i = 0; i < endpointCandidates.length; i += 1) {
         const endpoint = endpointCandidates[i];
-        const controller = new AbortController();
-        const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs);
+        const controller = createAbortController();
+        const timeoutId = controller
+          ? window.setTimeout(() => controller.abort(), timeoutMs)
+          : null;
         try {
-          response = await fetch(endpoint, {
+          const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload),
             cache: "no-store",
             credentials: "same-origin",
-            signal: controller.signal,
-          });
+          };
+          if (controller) {
+            requestOptions.signal = controller.signal;
+          }
+          response = await fetch(endpoint, requestOptions);
           if (response.ok) {
             break;
           }
@@ -2308,14 +2388,22 @@ if (joinForm) {
         } catch (error) {
           lastError = error;
         } finally {
-          window.clearTimeout(timeoutId);
+          if (timeoutId) {
+            window.clearTimeout(timeoutId);
+          }
         }
       }
 
       if (!response || !response.ok) {
         if (response) {
           const data = await response.json().catch(() => ({}));
-          throw new Error(data.error || "Unable to send feedback.");
+          const status = response.status;
+          const detail = data.error || data.message || "";
+          throw new Error(
+            detail
+              ? `Unable to send feedback (${status}): ${detail}`
+              : `Unable to send feedback (${status}).`
+          );
         }
         throw lastError || new Error("Unable to send feedback.");
       }
@@ -2717,6 +2805,24 @@ const setupSpeechCards = () => {
   let availableVoices = [];
   let selectedVoice = null;
 
+  const markSpeechActivation = (element) => {
+    if (!element) {
+      return;
+    }
+    element.dataset.speechActivatedAt = String(Date.now());
+  };
+
+  const isRecentSpeechActivation = (element, windowMs = 450) => {
+    if (!element) {
+      return false;
+    }
+    const last = Number(element.dataset.speechActivatedAt || "0");
+    if (!Number.isFinite(last) || last <= 0) {
+      return false;
+    }
+    return Date.now() - last < windowMs;
+  };
+
   const FEMALE_HINT =
     /female|woman|girl|samantha|karen|moira|ava|allison|serena|zira|jenny|aria|joanna|emma|lily|lucy|zoe|google uk english female|google us english female|microsoft aria|microsoft jenny/i;
   const MALE_HINT =
@@ -2951,6 +3057,10 @@ const setupSpeechCards = () => {
         }
         event.preventDefault();
         markTouchActivation(card);
+        if (isRecentSpeechActivation(card)) {
+          return;
+        }
+        markSpeechActivation(card);
         playSpeech(card.dataset[datasetKey], { rate, pitch });
       });
       card.addEventListener("click", (event) => {
@@ -2960,11 +3070,19 @@ const setupSpeechCards = () => {
         if (isRecentTouchActivation(card)) {
           return;
         }
+        if (isRecentSpeechActivation(card)) {
+          return;
+        }
+        markSpeechActivation(card);
         playSpeech(card.dataset[datasetKey], { rate, pitch });
       });
       card.addEventListener("keydown", (event) => {
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
+          if (isRecentSpeechActivation(card)) {
+            return;
+          }
+          markSpeechActivation(card);
           playSpeech(card.dataset[datasetKey], { rate, pitch });
         }
       });
@@ -3004,6 +3122,10 @@ const setupSpeechCards = () => {
       const speakFromButton = () => {
         const value = String(button.dataset[datasetKey] || "").trim();
         if (value) {
+          if (isRecentSpeechActivation(button)) {
+            return;
+          }
+          markSpeechActivation(button);
           playSpeech(value, { rate, pitch });
         }
       };

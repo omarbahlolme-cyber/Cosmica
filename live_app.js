@@ -103,8 +103,10 @@ const lineMoods = ["happy", "curious", "thinking", "happy", "curious"];
 const MIMI_CONFIG = {
   mode: "api",
   endpoint: "/api/chat",
-  timeoutMs: 8000,
-  historyLimit: 10,
+  timeoutMs: 12000,
+  mobileTimeoutMs: 55000,
+  retryLimit: 5,
+  historyLimit: 12,
 };
 const MIMI_SITE_CONTEXT = [
   "Cosmica is a space-universe language learning site where each language is a world.",
@@ -590,19 +592,142 @@ const setChatStatus = (text) => {
   }
 };
 
-const getApiEndpoint = () => {
+const createAbortController = () => {
+  if (typeof AbortController === "undefined") {
+    return null;
+  }
+  return new AbortController();
+};
+
+const ensureChatHealthIndicator = () => {
+  if (!chatStatus) {
+    return null;
+  }
+  const header = chatStatus.closest(".chat-header") || chatStatus.parentElement;
+  if (!header) {
+    return null;
+  }
+  let indicator = header.querySelector(".chat-health");
+  if (!indicator) {
+    indicator = document.createElement("span");
+    indicator.className = "chat-health";
+    indicator.textContent = "API: checking";
+    header.appendChild(indicator);
+  }
+  return indicator;
+};
+
+const checkApiHealth = async () => {
+  const indicator = ensureChatHealthIndicator();
+  if (!indicator) {
+    return;
+  }
+  indicator.textContent = "API: checking";
+  const controller = createAbortController();
+  const timeoutId = controller
+    ? window.setTimeout(() => controller.abort(), 6000)
+    : null;
+  try {
+    const requestOptions = {
+      cache: "no-store",
+      credentials: "same-origin",
+    };
+    if (controller) {
+      requestOptions.signal = controller.signal;
+    }
+    const response = await fetch("/api/health", requestOptions);
+    if (!response.ok) {
+      throw new Error("Health check failed");
+    }
+    const data = await response.json().catch(() => null);
+    indicator.textContent = data?.status === "ok" ? "API: ok" : "API: unavailable";
+  } catch {
+    indicator.textContent = "API: offline";
+  } finally {
+    if (timeoutId) {
+      window.clearTimeout(timeoutId);
+    }
+  }
+};
+
+const setupApiHealthIndicator = () => {
+  if (!chatStatus) {
+    return;
+  }
+  checkApiHealth();
+  window.setInterval(checkApiHealth, 60000);
+};
+
+const isLocalDevHost = (hostname) => {
+  const value = String(hostname || "").toLowerCase();
+  if (!value) {
+    return false;
+  }
+  if (value === "localhost" || value === "127.0.0.1" || value === "::1") {
+    return true;
+  }
+  if (/^10\./.test(value) || /^192\.168\./.test(value)) {
+    return true;
+  }
+  if (/^172\.(1[6-9]|2\d|3[0-1])\./.test(value)) {
+    return true;
+  }
+  if (value.endsWith(".local")) {
+    return true;
+  }
+  return false;
+};
+
+const getApiEndpointCandidates = () => {
   const endpoint = MIMI_CONFIG.endpoint || "/api/chat";
   if (endpoint.startsWith("http")) {
-    return endpoint;
+    return [endpoint];
   }
+
   const { protocol, hostname, port } = window.location;
+  const normalizedHost = String(hostname || "").toLowerCase();
+  const candidates = [];
+  const addCandidate = (url) => {
+    if (!url) {
+      return;
+    }
+    if (!candidates.includes(url)) {
+      candidates.push(url);
+    }
+  };
+
   if (!hostname || protocol === "file:") {
-    return `http://localhost:3000${endpoint}`;
+    addCandidate(`http://localhost:3000${endpoint}`);
+    return candidates;
   }
-  if ((hostname === "localhost" || hostname === "127.0.0.1") && port && port !== "3000") {
-    return `http://${hostname}:3000${endpoint}`;
+
+  const isCosmicaPublicHost =
+    normalizedHost === "cosmicalearn.com" ||
+    normalizedHost === "www.cosmicalearn.com" ||
+    normalizedHost === "cosmica-03wo.onrender.com";
+  if (isCosmicaPublicHost) {
+    addCandidate(endpoint);
+    addCandidate(`${protocol}//${hostname}${endpoint}`);
+    addCandidate(`https://www.cosmicalearn.com${endpoint}`);
+    return candidates;
   }
-  return endpoint;
+
+  if (port && port !== "3000" && isLocalDevHost(hostname)) {
+    addCandidate(`${protocol}//${hostname}:3000${endpoint}`);
+    addCandidate(endpoint);
+    return candidates;
+  }
+
+  addCandidate(endpoint);
+  return candidates;
+};
+
+const getChatRequestTimeoutMs = () => {
+  const isMobileViewport = window.matchMedia("(max-width: 960px)").matches;
+  if (isMobileViewport) {
+    return Math.max(1000, Number(MIMI_CONFIG.mobileTimeoutMs || MIMI_CONFIG.timeoutMs || 12000));
+  }
+  return Math.max(1000, Number(MIMI_CONFIG.timeoutMs || 12000));
 };
 
 const buildChatMessages = (message) => {
@@ -675,36 +800,68 @@ const getMimiReply = async (message) => {
     return { content: getPresetReply(message), source: "preset" };
   }
 
-  const endpoint = getApiEndpoint();
-  const controller = new AbortController();
-  const timeout = window.setTimeout(() => controller.abort(), MIMI_CONFIG.timeoutMs);
+  const endpointCandidates = getApiEndpointCandidates();
+  const requestChatReply = async (endpoint) => {
+    const controller = createAbortController();
+    const timeout = controller
+      ? window.setTimeout(() => controller.abort(), getChatRequestTimeoutMs())
+      : null;
+    try {
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: buildChatMessages(message) }),
+        cache: "no-store",
+        credentials: "same-origin",
+      };
+      if (controller) {
+        requestOptions.signal = controller.signal;
+      }
+      const response = await fetch(endpoint, requestOptions);
 
-  try {
-    const response = await fetch(endpoint, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ messages: buildChatMessages(message) }),
-      signal: controller.signal,
-    });
+      if (!response.ok) {
+        throw new Error("Chat request failed");
+      }
 
-    if (!response.ok) {
-      throw new Error("Chat request failed");
+      const data = await response.json();
+      if (data && typeof data.content === "string" && data.content.trim()) {
+        return data.content.trim();
+      }
+
+      throw new Error("Empty response");
+    } finally {
+      if (timeout) {
+        window.clearTimeout(timeout);
+      }
     }
+  };
 
-    const data = await response.json();
-    if (data && typeof data.content === "string" && data.content.trim()) {
-      return { content: data.content.trim(), source: "api" };
+  const attempts = Math.max(1, MIMI_CONFIG.retryLimit || 1);
+  let lastError = null;
+  for (let attemptIndex = 0; attemptIndex < attempts; attemptIndex += 1) {
+    for (let endpointIndex = 0; endpointIndex < endpointCandidates.length; endpointIndex += 1) {
+      const endpoint = endpointCandidates[endpointIndex];
+      try {
+        const content = await requestChatReply(endpoint);
+        return { content, source: "api" };
+      } catch (error) {
+        lastError = error;
+      }
     }
-
-    throw new Error("Empty response");
-  } catch (error) {
-    if (MIMI_CONFIG.mode === "hybrid") {
-      return { content: getPresetReply(message), source: "preset" };
+    if (attemptIndex < attempts - 1) {
+      const retryDelayMs = 220 + attemptIndex * 260;
+      await new Promise((resolve) => window.setTimeout(resolve, retryDelayMs));
     }
-    return { content: "AI link is offline right now. Check the server and key.", source: "error" };
-  } finally {
-    window.clearTimeout(timeout);
   }
+
+  if (!navigator.onLine) {
+    return { content: getPresetReply(message), source: "offline" };
+  }
+
+  if (MIMI_CONFIG.mode === "hybrid") {
+    return { content: getPresetReply(message), source: "preset" };
+  }
+  return { content: "AI link is offline right now. Check the server and key.", source: "error" };
 };
 
 const sendChatMessage = async (message) => {
@@ -738,6 +895,8 @@ const sendChatMessage = async (message) => {
   }
   if (reply.source === "api") {
     setChatStatus("AI live");
+  } else if (reply.source === "offline") {
+    setChatStatus("Offline mode");
   } else if (reply.source === "preset") {
     setChatStatus("Offline - preset");
   } else {
@@ -763,6 +922,8 @@ chatChips.forEach((chip) => {
 if (chatLog) {
   chatLog.innerHTML = "";
 }
+
+setupApiHealthIndicator();
 
 const createStars = (layer, count, sizeRange) => {
   for (let i = 0; i < count; i += 1) {
@@ -1683,6 +1844,28 @@ if (joinForm) {
   const isValidEmail = (value) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
   };
+  const getFeedbackEndpointCandidates = () => {
+    const endpoints = [];
+    const addEndpoint = (value) => {
+      const normalized = String(value || "").trim();
+      if (!normalized || endpoints.includes(normalized)) {
+        return;
+      }
+      endpoints.push(normalized);
+    };
+    addEndpoint("/api/feedback");
+    if (typeof getApiEndpointCandidates === "function") {
+      getApiEndpointCandidates().forEach((candidate) => {
+        addEndpoint(
+          String(candidate || "").replace(
+            /\/api\/chat(?=$|[?#])/i,
+            "/api/feedback"
+          )
+        );
+      });
+    }
+    return endpoints;
+  };
 
   const updateJoinErrors = () => {
     if (!joinName || !joinEmail || !joinFeedback) {
@@ -1738,22 +1921,63 @@ if (joinForm) {
       joinStatus.textContent = "Sending feedback...";
     }
     try {
-      const controller = new AbortController();
-      const timeoutId = window.setTimeout(() => controller.abort(), 12000);
-      const response = await fetch("/api/feedback", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: joinName.value.trim(),
-          email: joinEmail.value.trim(),
-          message: joinFeedback.value.trim(),
-        }),
-        signal: controller.signal,
-      }).finally(() => window.clearTimeout(timeoutId));
+      const isMobileViewport = window.matchMedia("(max-width: 960px)").matches;
+      const timeoutMs = isMobileViewport ? 22000 : 12000;
+      const payload = {
+        name: joinName.value.trim(),
+        email: joinEmail.value.trim(),
+        message: joinFeedback.value.trim(),
+      };
+      const endpointCandidates = getFeedbackEndpointCandidates();
+      let response = null;
+      let lastError = null;
 
-      if (!response.ok) {
-        const data = await response.json().catch(() => ({}));
-        throw new Error(data.error || "Unable to send feedback.");
+      for (let i = 0; i < endpointCandidates.length; i += 1) {
+        const endpoint = endpointCandidates[i];
+        const controller = createAbortController();
+        const timeoutId = controller
+          ? window.setTimeout(() => controller.abort(), timeoutMs)
+          : null;
+        try {
+          const requestOptions = {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+            cache: "no-store",
+            credentials: "same-origin",
+          };
+          if (controller) {
+            requestOptions.signal = controller.signal;
+          }
+          response = await fetch(endpoint, requestOptions);
+          if (response.ok) {
+            break;
+          }
+          if ([401, 403, 404, 405, 429, 500, 502, 503, 504].includes(response.status)) {
+            continue;
+          }
+          break;
+        } catch (error) {
+          lastError = error;
+        } finally {
+          if (timeoutId) {
+            window.clearTimeout(timeoutId);
+          }
+        }
+      }
+
+      if (!response || !response.ok) {
+        if (response) {
+          const data = await response.json().catch(() => ({}));
+          const status = response.status;
+          const detail = data.error || data.message || "";
+          throw new Error(
+            detail
+              ? `Unable to send feedback (${status}): ${detail}`
+              : `Unable to send feedback (${status}).`
+          );
+        }
+        throw lastError || new Error("Unable to send feedback.");
       }
 
       joinForm.reset();
@@ -2110,34 +2334,103 @@ const setupSpeechCards = () => {
   let availableVoices = [];
   let selectedVoice = null;
 
+  const markSpeechActivation = (element) => {
+    if (!element) {
+      return;
+    }
+    element.dataset.speechActivatedAt = String(Date.now());
+  };
+
+  const isRecentSpeechActivation = (element, windowMs = 450) => {
+    if (!element) {
+      return false;
+    }
+    const last = Number(element.dataset.speechActivatedAt || "0");
+    if (!Number.isFinite(last) || last <= 0) {
+      return false;
+    }
+    return Date.now() - last < windowMs;
+  };
+
+  const FEMALE_HINT =
+    /female|woman|girl|samantha|karen|moira|ava|allison|serena|zira|jenny|aria|joanna|emma|lily|lucy|zoe|google uk english female|google us english female|microsoft aria|microsoft jenny/i;
+  const MALE_HINT =
+    /male|man|david|mark|alex|george|fred|daniel|ryan|tom|google uk english male|microsoft david/i;
+  const LOW_QUALITY_HINT =
+    /espeak|festival|robot|offline|basic|legacy|eloquence|embedded|svox/i;
+  const HIGH_QUALITY_HINT =
+    /neural|natural|premium|enhanced|wavenet|online|studio|siri|google us english|google uk english female|microsoft aria|microsoft jenny|samantha/i;
+  const IOS_FEMALE_HINT = /samantha|karen|moira|ava|allison|serena/i;
+  const ANDROID_FEMALE_HINT =
+    /google.*female|google us english|google uk english female|wavenet.*(f|a)|neural2.*(f|a)|en-us-studio-o|en-gb-studio-a/i;
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent || "");
+  const isAndroid = /android/i.test(navigator.userAgent || "");
+
+  const waitForVoicesReady = (timeoutMs = 3600) =>
+    new Promise((resolve) => {
+      if (!("speechSynthesis" in window)) {
+        resolve();
+        return;
+      }
+      const existing = window.speechSynthesis.getVoices();
+      if (existing && existing.length) {
+        resolve();
+        return;
+      }
+      const finish = () => {
+        window.clearTimeout(timeoutId);
+        window.speechSynthesis.removeEventListener("voiceschanged", finish);
+        resolve();
+      };
+      const timeoutId = window.setTimeout(finish, timeoutMs);
+      window.speechSynthesis.addEventListener("voiceschanged", finish, {
+        once: true,
+      });
+    });
+
   const pickVoice = () => {
     if (!availableVoices.length) {
       return null;
     }
     const voiceScore = (voice) => {
       const name = (voice.name || "").toLowerCase();
+      const lang = (voice.lang || "").toLowerCase();
       let score = 0;
-      if (voice.lang && voice.lang.toLowerCase().startsWith("en-gb")) {
+      if (lang.startsWith("en-gb")) {
+        score += 12;
+      }
+      if (lang.startsWith("en-us")) {
         score += 8;
       }
-      if (voice.lang && voice.lang.toLowerCase().startsWith("en")) {
-        score += 1.5;
+      if (lang.startsWith("en")) {
+        score += 3;
       }
-      if (voice.localService) {
-        score += 1.5;
-      }
-      if (
-        /female|woman|girl|zira|jenny|samantha|aria|ava|allison|amber|serena|michelle|joanna|lucy|zoe|lily|emma/.test(
-          name
-        )
-      ) {
-        score += 4;
-      }
-      if (/male|man|david|mark|alex|daniel|ryan|tom|george/.test(name)) {
-        score -= 3;
-      }
-      if (/natural|neural|premium|enhanced/.test(name)) {
+      if (voice.default) {
         score += 2;
+      }
+      if (voice.localService === false) {
+        score += 12;
+      }
+      if (voice.localService === true) {
+        score -= 2;
+      }
+      if (FEMALE_HINT.test(name)) {
+        score += 14;
+      }
+      if (HIGH_QUALITY_HINT.test(name)) {
+        score += 10;
+      }
+      if (isIOS && IOS_FEMALE_HINT.test(name)) {
+        score += 18;
+      }
+      if (isAndroid && ANDROID_FEMALE_HINT.test(name)) {
+        score += 18;
+      }
+      if (MALE_HINT.test(name)) {
+        score -= 24;
+      }
+      if (LOW_QUALITY_HINT.test(name)) {
+        score -= 40;
       }
       return score;
     };
@@ -2145,10 +2438,30 @@ const setupSpeechCards = () => {
     const pickFrom = (voices) =>
       [...voices].sort((a, b) => voiceScore(b) - voiceScore(a))[0] || null;
 
-    const enGbVoices = availableVoices.filter((voice) =>
-      (voice.lang || "").toLowerCase().startsWith("en-gb")
+    const englishVoices = availableVoices.filter((voice) =>
+      (voice.lang || "").toLowerCase().startsWith("en")
     );
-    return pickFrom(enGbVoices) || pickFrom(availableVoices);
+    const prioritizedVoiceHints = isIOS
+      ? ["samantha", "ava", "allison", "serena", "karen", "moira"]
+      : ["google us english", "google uk english female", "microsoft aria", "microsoft jenny"];
+    const prioritizedEnglishVoices = englishVoices.filter((voice) =>
+      prioritizedVoiceHints.some((hint) =>
+        (voice.name || "").toLowerCase().includes(hint)
+      )
+    );
+    const femaleEnglishVoices = englishVoices.filter((voice) =>
+      FEMALE_HINT.test(voice.name || "")
+    );
+    const preferredEnglishVoices = englishVoices.filter((voice) =>
+      FEMALE_HINT.test(voice.name || "") || HIGH_QUALITY_HINT.test(voice.name || "")
+    );
+    return (
+      pickFrom(prioritizedEnglishVoices) ||
+      pickFrom(femaleEnglishVoices) ||
+      pickFrom(preferredEnglishVoices) ||
+      pickFrom(englishVoices) ||
+      pickFrom(availableVoices)
+    );
   };
 
   const loadVoices = () => {
@@ -2158,16 +2471,19 @@ const setupSpeechCards = () => {
   loadVoices();
   window.speechSynthesis.onvoiceschanged = loadVoices;
 
-  const playSpeech = (text, { rate = 0.92, pitch = 1.12 } = {}) => {
+  const playSpeech = async (text, { rate = 0.94, pitch = 1.02 } = {}) => {
     if (!text) {
       return;
     }
-    if (!selectedVoice) {
+    if (!availableVoices.length) {
+      await waitForVoicesReady();
       loadVoices();
+    }
+    if (!selectedVoice) {
       selectedVoice = pickVoice();
     }
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = selectedVoice?.lang || "en-GB";
+    utterance.lang = selectedVoice?.lang || "en-US";
     utterance.rate = rate;
     utterance.pitch = pitch;
     if (selectedVoice) {
@@ -2175,15 +2491,85 @@ const setupSpeechCards = () => {
     }
     window.speechSynthesis.cancel();
     window.setTimeout(() => {
+      window.speechSynthesis.resume();
       window.speechSynthesis.speak(utterance);
     }, 60);
   };
 
-  const setupCards = (cards, labelSelector, datasetKey, ariaPrefix, rate, pitch) => {
+  const LETTER_SPEECH_MAP = Object.freeze({
+    A: "ay",
+    B: "bee",
+    C: "see",
+    D: "dee",
+    E: "ee",
+    F: "ef",
+    G: "jee",
+    H: "aitch",
+    I: "eye",
+    J: "jay",
+    K: "kay",
+    L: "el",
+    M: "em",
+    N: "en",
+    O: "oh",
+    P: "pee",
+    Q: "cue",
+    R: "ar",
+    S: "ess",
+    T: "tee",
+    U: "you",
+    V: "vee",
+    W: "double you",
+    X: "ex",
+    Y: "why",
+    Z: "zed",
+    "ɪ": "ih",
+  });
+
+  const normalizeLetterSpeechText = (rawText) => {
+    const text = String(rawText || "")
+      .replace(/\b(play|say|pronounce)\b/gi, "")
+      .replace(/\b(capital|uppercase|lowercase)\s+letter\b/gi, "")
+      .replace(/\b(capital|uppercase|lowercase)\b/gi, "")
+      .replace(/\bletter\b/gi, "")
+      .trim();
+    if (!text) {
+      return "";
+    }
+    const exactLetterTokens = text.match(/\b([A-Za-z])\b/g);
+    if (exactLetterTokens && exactLetterTokens.length) {
+      const token = exactLetterTokens[exactLetterTokens.length - 1].toUpperCase();
+      return LETTER_SPEECH_MAP[token] || token;
+    }
+    const match = text.match(/[A-Za-z\u026A](?!.*[A-Za-z\u026A])/);
+    if (!match) {
+      return text;
+    }
+    const first = match[0] === "ɪ" ? "ɪ" : match[0].toUpperCase();
+    if (first === "ɪ") {
+      return LETTER_SPEECH_MAP[first];
+    }
+    return LETTER_SPEECH_MAP[first] || first;
+  };
+
+  const setupCards = (
+    cards,
+    labelSelector,
+    datasetKey,
+    ariaPrefix,
+    rate,
+    pitch,
+    normalizeText
+  ) => {
     cards.forEach((card) => {
       const label = card.querySelector(labelSelector);
-      if (label && !card.dataset[datasetKey]) {
-        card.dataset[datasetKey] = label.textContent.trim();
+      const sourceText = String(
+        label?.textContent?.trim() || card.dataset[datasetKey] || ""
+      ).trim();
+      if (sourceText) {
+        card.dataset[datasetKey] = normalizeText
+          ? normalizeText(sourceText)
+          : sourceText;
       }
       card.setAttribute("role", "button");
       card.setAttribute("tabindex", "0");
@@ -2191,31 +2577,113 @@ const setupSpeechCards = () => {
         card.setAttribute("aria-label", `${ariaPrefix} ${card.dataset[datasetKey]}`);
       }
       card.addEventListener("pointerup", (event) => {
+        if (event.target?.closest?.(".letter-audio, .word-audio")) {
+          return;
+        }
         if (event.pointerType !== "touch") {
           return;
         }
         event.preventDefault();
         markTouchActivation(card);
+        if (isRecentSpeechActivation(card)) {
+          return;
+        }
+        markSpeechActivation(card);
         playSpeech(card.dataset[datasetKey], { rate, pitch });
       });
-      card.addEventListener("click", () => {
+      card.addEventListener("click", (event) => {
+        if (event.target?.closest?.(".letter-audio, .word-audio")) {
+          return;
+        }
         if (isRecentTouchActivation(card)) {
           return;
         }
+        if (isRecentSpeechActivation(card)) {
+          return;
+        }
+        markSpeechActivation(card);
         playSpeech(card.dataset[datasetKey], { rate, pitch });
       });
       card.addEventListener("keydown", (event) => {
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
+          if (isRecentSpeechActivation(card)) {
+            return;
+          }
+          markSpeechActivation(card);
           playSpeech(card.dataset[datasetKey], { rate, pitch });
         }
       });
     });
   };
 
-  setupCards(letterCards, ".letter", "letter", "Play letter", 0.92, 1.12);
-  setupCards(wordCards, ".word", "word", "Play word", 0.95, 1.05);
-  setupCards(phraseCards, ".phrase-text", "phrase", "Play phrase", 0.95, 1.02);
+  setupCards(
+    letterCards,
+    ".letter",
+    "letter",
+    "Play letter",
+    0.9,
+    1,
+    normalizeLetterSpeechText
+  );
+  setupCards(wordCards, ".word", "word", "Play word", 0.95, 1.01);
+  setupCards(phraseCards, ".phrase-text", "phrase", "Play phrase", 0.95, 1);
+
+  const setupAudioButtons = (
+    buttons,
+    datasetKey,
+    rate,
+    pitch,
+    normalizeText
+  ) => {
+    buttons.forEach((button) => {
+      const datasetValue = String(button.dataset[datasetKey] || "").trim();
+      const ariaValue = String(button.getAttribute("aria-label") || "")
+        .replace(/^\s*play\s+(letter|word)\s+/i, "")
+        .trim();
+      const sourceText = datasetValue || ariaValue;
+      if (sourceText) {
+        button.dataset[datasetKey] = normalizeText
+          ? normalizeText(sourceText)
+          : sourceText;
+      }
+      const speakFromButton = () => {
+        const value = String(button.dataset[datasetKey] || "").trim();
+        if (value) {
+          if (isRecentSpeechActivation(button)) {
+            return;
+          }
+          markSpeechActivation(button);
+          playSpeech(value, { rate, pitch });
+        }
+      };
+      button.addEventListener("pointerup", (event) => {
+        if (event.pointerType !== "touch") {
+          return;
+        }
+        event.preventDefault();
+        event.stopPropagation();
+        markTouchActivation(button);
+        speakFromButton();
+      });
+      button.addEventListener("click", (event) => {
+        event.stopPropagation();
+        if (isRecentTouchActivation(button)) {
+          return;
+        }
+        speakFromButton();
+      });
+    });
+  };
+
+  setupAudioButtons(
+    letterButtons,
+    "letter",
+    0.9,
+    1,
+    normalizeLetterSpeechText
+  );
+  setupAudioButtons(wordButtons, "word", 0.95, 1.01);
 
   [...letterButtons, ...wordButtons].forEach((button) => {
     button.setAttribute("aria-hidden", "true");

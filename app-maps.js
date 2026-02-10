@@ -3360,13 +3360,22 @@ const requestRuntimeGrammarExplanationTranslation = async (
     return candidates;
   })();
 
+  const createAbortController = () => {
+    if (typeof AbortController === "undefined") {
+      return null;
+    }
+    return new AbortController();
+  };
+
   const getTimeoutMs = () => {
     return window.matchMedia("(max-width: 960px)").matches ? 12000 : 10000;
   };
 
   const translateOnce = async (endpoint) => {
-    const controller = new AbortController();
-    const timeout = window.setTimeout(() => controller.abort(), getTimeoutMs());
+    const controller = createAbortController();
+    const timeout = controller
+      ? window.setTimeout(() => controller.abort(), getTimeoutMs())
+      : null;
     try {
       const useChatEndpoint = isChatEndpoint(endpoint);
       const body = useChatEndpoint
@@ -3387,14 +3396,17 @@ const requestRuntimeGrammarExplanationTranslation = async (
             text: explanationText,
             targetLanguage: langKey,
           };
-      const response = await fetch(endpoint, {
+      const requestOptions = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
         cache: "no-store",
         credentials: "same-origin",
-        signal: controller.signal,
-      });
+      };
+      if (controller) {
+        requestOptions.signal = controller.signal;
+      }
+      const response = await fetch(endpoint, requestOptions);
       if (!response.ok) {
         throw new Error(`Translation request failed with status ${response.status}`);
       }
@@ -3407,14 +3419,16 @@ const requestRuntimeGrammarExplanationTranslation = async (
       }
       return translated;
     } finally {
-      window.clearTimeout(timeout);
+      if (timeout) {
+        window.clearTimeout(timeout);
+      }
     }
   };
 
   const request = (async () => {
     try {
       const isMobileViewport = window.matchMedia("(max-width: 960px)").matches;
-      const attemptLimit = navigator.onLine ? (isMobileViewport ? 2 : 2) : 1;
+      const attemptLimit = navigator.onLine ? (isMobileViewport ? 4 : 3) : 1;
       for (let attemptIndex = 0; attemptIndex < attemptLimit; attemptIndex += 1) {
         for (let endpointIndex = 0; endpointIndex < endpointCandidates.length; endpointIndex += 1) {
           try {
