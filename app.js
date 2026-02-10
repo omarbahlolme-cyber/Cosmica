@@ -282,8 +282,8 @@ const MIMI_CONFIG = {
   mode: "api",
   endpoint: "/api/chat",
   timeoutMs: 12000,
-  mobileTimeoutMs: 55000,
-  retryLimit: 5,
+  mobileTimeoutMs: 18000,
+  retryLimit: 2,
   historyLimit: 12,
 };
 const WORLD_START_LESSON_DESKTOP_DOWN_SHIFT = 34;
@@ -927,16 +927,16 @@ const getApiEndpointCandidates = () => {
     return candidates;
   }
 
-  // Public production hosts: always prefer canonical API origin first.
+  // Public production hosts.
   const isCosmicaPublicHost =
     normalizedHost === "cosmicalearn.com" ||
     normalizedHost === "www.cosmicalearn.com" ||
     normalizedHost === "cosmica-03wo.onrender.com";
   if (isCosmicaPublicHost) {
-    // Always prefer canonical host first to keep mobile/public behavior consistent.
-    addCandidate(`https://www.cosmicalearn.com${endpoint}`);
-    addCandidate(`${protocol}//${hostname}${endpoint}`);
+    // Prefer same-origin route first on mobile/public to avoid cross-origin/WAF edge cases.
     addCandidate(endpoint);
+    addCandidate(`${protocol}//${hostname}${endpoint}`);
+    addCandidate(`https://www.cosmicalearn.com${endpoint}`);
     return candidates;
   }
 
@@ -2204,6 +2204,8 @@ if (joinForm) {
       }
       endpoints.push(normalized);
     };
+    // Keep same-origin feedback first to reduce mobile cross-origin failures.
+    addEndpoint("/api/feedback");
     if (typeof getApiEndpointCandidates === "function") {
       getApiEndpointCandidates().forEach((candidate) => {
         addEndpoint(
@@ -2214,7 +2216,6 @@ if (joinForm) {
         );
       });
     }
-    addEndpoint("/api/feedback");
     return endpoints;
   };
 
@@ -2300,7 +2301,7 @@ if (joinForm) {
             break;
           }
           // Keep trying alternate endpoints only for transport-level/API host issues.
-          if ([404, 405, 429, 500, 502, 503, 504].includes(response.status)) {
+          if ([401, 403, 404, 405, 429, 500, 502, 503, 504].includes(response.status)) {
             continue;
           }
           break;
@@ -2861,19 +2862,51 @@ const setupSpeechCards = () => {
   };
 
   const LETTER_SPEECH_MAP = Object.freeze({
-    // Keep explicit handling for special symbols/variants only.
+    A: "ay",
+    B: "bee",
+    C: "see",
+    D: "dee",
+    E: "ee",
+    F: "ef",
+    G: "jee",
+    H: "aitch",
+    I: "eye",
+    J: "jay",
+    K: "kay",
+    L: "el",
+    M: "em",
+    N: "en",
+    O: "oh",
+    P: "pee",
+    Q: "cue",
+    R: "ar",
+    S: "ess",
+    T: "tee",
+    U: "you",
+    V: "vee",
+    W: "double you",
+    X: "ex",
+    Y: "why",
     Z: "zed",
     "ɪ": "ih",
   });
 
   const normalizeLetterSpeechText = (rawText) => {
     const text = String(rawText || "")
+      .replace(/\b(play|say|pronounce)\b/gi, "")
       .replace(/\b(capital|uppercase|lowercase)\s+letter\b/gi, "")
+      .replace(/\b(capital|uppercase|lowercase)\b/gi, "")
+      .replace(/\bletter\b/gi, "")
       .trim();
     if (!text) {
       return "";
     }
-    const match = text.match(/[A-Za-z\u026A]/);
+    const exactLetterTokens = text.match(/\b([A-Za-z])\b/g);
+    if (exactLetterTokens && exactLetterTokens.length) {
+      const token = exactLetterTokens[exactLetterTokens.length - 1].toUpperCase();
+      return LETTER_SPEECH_MAP[token] || token;
+    }
+    const match = text.match(/[A-Za-z\u026A](?!.*[A-Za-z\u026A])/);
     if (!match) {
       return text;
     }

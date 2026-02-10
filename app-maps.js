@@ -3296,6 +3296,8 @@ const requestRuntimeGrammarExplanationTranslation = async (
           }
           candidates.push(normalized);
         };
+        // Prefer same-origin translate route first for mobile stability.
+        addCandidate("/api/translate");
         sharedCandidates.forEach((candidate) =>
           addEndpointPair(candidates, addCandidate, candidate)
         );
@@ -3359,7 +3361,7 @@ const requestRuntimeGrammarExplanationTranslation = async (
   })();
 
   const getTimeoutMs = () => {
-    return window.matchMedia("(max-width: 960px)").matches ? 30000 : 18000;
+    return window.matchMedia("(max-width: 960px)").matches ? 12000 : 10000;
   };
 
   const translateOnce = async (endpoint) => {
@@ -3412,7 +3414,7 @@ const requestRuntimeGrammarExplanationTranslation = async (
   const request = (async () => {
     try {
       const isMobileViewport = window.matchMedia("(max-width: 960px)").matches;
-      const attemptLimit = navigator.onLine ? (isMobileViewport ? 5 : 3) : 1;
+      const attemptLimit = navigator.onLine ? (isMobileViewport ? 2 : 2) : 1;
       for (let attemptIndex = 0; attemptIndex < attemptLimit; attemptIndex += 1) {
         for (let endpointIndex = 0; endpointIndex < endpointCandidates.length; endpointIndex += 1) {
           try {

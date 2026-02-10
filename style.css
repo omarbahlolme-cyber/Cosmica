@@ -2766,6 +2766,16 @@ body:not(.world-page) .footer {
     overflow: visible;
   }
 
+  body.world-page .nav-links {
+    overflow: visible;
+    padding-top: 2px;
+    padding-bottom: 2px;
+  }
+
+  body.world-page .nav-links a {
+    min-height: 42px;
+  }
+
   body:not(.world-page) .nav-links {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -2892,7 +2902,7 @@ body:not(.world-page) .footer {
     display: inline-flex;
     flex-wrap: wrap;
     margin: 0;
-    width: 100%;
+    width: auto;
     gap: 8px;
     align-items: center;
     justify-content: center;
@@ -2902,7 +2912,7 @@ body:not(.world-page) .footer {
   }
 
   .footer-legal-links a {
-    font-size: 10px;
+    font-size: 11px;
     line-height: 1;
     color: rgba(104, 225, 255, 0.95);
   }
