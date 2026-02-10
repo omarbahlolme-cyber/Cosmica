@@ -3275,6 +3275,14 @@ const requestRuntimeGrammarExplanationTranslation = async (
 
   const toTranslateEndpoint = (candidate) =>
     String(candidate || "").replace(/\/api\/chat(?=$|[?#])/i, "/api/translate");
+  const toChatEndpoint = (candidate) =>
+    String(candidate || "").replace(/\/api\/translate(?=$|[?#])/i, "/api/chat");
+  const isChatEndpoint = (endpoint) =>
+    /\/api\/chat(?=$|[?#])/i.test(String(endpoint || ""));
+  const addEndpointPair = (candidates, addCandidate, candidate) => {
+    addCandidate(toTranslateEndpoint(candidate));
+    addCandidate(toChatEndpoint(candidate));
+  };
 
   const endpointCandidates = (() => {
     if (typeof getApiEndpointCandidates === "function") {
@@ -3289,7 +3297,7 @@ const requestRuntimeGrammarExplanationTranslation = async (
           candidates.push(normalized);
         };
         sharedCandidates.forEach((candidate) =>
-          addCandidate(toTranslateEndpoint(candidate))
+          addEndpointPair(candidates, addCandidate, candidate)
         );
         return candidates;
       }
@@ -3320,36 +3328,55 @@ const requestRuntimeGrammarExplanationTranslation = async (
       normalizedHost === "cosmica-03wo.onrender.com";
 
     if (!hostname || protocol === "file:") {
-      addCandidate(`http://localhost:3000${endpoint}`);
-      addCandidate(endpoint);
+      addEndpointPair(candidates, addCandidate, `http://localhost:3000${endpoint}`);
+      addEndpointPair(candidates, addCandidate, endpoint);
       return candidates;
     }
 
     if (isCosmicaPublicHost) {
-      addCandidate(`https://www.cosmicalearn.com${endpoint}`);
-      addCandidate(endpoint);
+      addEndpointPair(candidates, addCandidate, `https://www.cosmicalearn.com${endpoint}`);
+      addEndpointPair(candidates, addCandidate, endpoint);
       return candidates;
     }
 
     if (port && port !== "3000" && isLocalDevHost) {
-      addCandidate(`${protocol}//${hostname}:3000${endpoint}`);
+      addEndpointPair(
+        candidates,
+        addCandidate,
+        `${protocol}//${hostname}:3000${endpoint}`
+      );
     }
-    addCandidate(endpoint);
+    addEndpointPair(candidates, addCandidate, endpoint);
     return candidates;
   })();
 
   const getTimeoutMs = () => {
-    return window.matchMedia("(max-width: 960px)").matches ? 16000 : 12000;
+    return window.matchMedia("(max-width: 960px)").matches ? 26000 : 18000;
   };
 
   const translateOnce = async (endpoint) => {
     const controller = new AbortController();
     const timeout = window.setTimeout(() => controller.abort(), getTimeoutMs());
     try {
-      const body = {
-        text: explanationText,
-        targetLanguage: langKey,
-      };
+      const useChatEndpoint = isChatEndpoint(endpoint);
+      const body = useChatEndpoint
+        ? {
+            messages: [
+              {
+                role: "system",
+                content:
+                  "Translate the text to the requested target language. Return only the translated text without commentary.",
+              },
+              {
+                role: "user",
+                content: `Target language: ${langKey}\nText: ${explanationText}`,
+              },
+            ],
+          }
+        : {
+            text: explanationText,
+            targetLanguage: langKey,
+          };
       const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -3377,7 +3404,7 @@ const requestRuntimeGrammarExplanationTranslation = async (
   const request = (async () => {
     try {
       const isMobileViewport = window.matchMedia("(max-width: 960px)").matches;
-      const attemptLimit = navigator.onLine ? (isMobileViewport ? 2 : 2) : 1;
+      const attemptLimit = navigator.onLine ? (isMobileViewport ? 4 : 3) : 1;
       for (let attemptIndex = 0; attemptIndex < attemptLimit; attemptIndex += 1) {
         for (let endpointIndex = 0; endpointIndex < endpointCandidates.length; endpointIndex += 1) {
           try {
@@ -3392,7 +3419,7 @@ const requestRuntimeGrammarExplanationTranslation = async (
           } catch {}
         }
         if (attemptIndex < attemptLimit - 1) {
-          await new Promise((resolve) => window.setTimeout(resolve, 220 + attemptIndex * 260));
+          await new Promise((resolve) => window.setTimeout(resolve, 260 + attemptIndex * 320));
         }
       }
       return "";
@@ -3428,7 +3455,7 @@ const prewarmGrammarExplanationTranslations = () => {
 
   const tasks = [];
   cards.forEach((card) => {
-    if (tasks.length >= 6) {
+    if (tasks.length >= 3) {
       return;
     }
     const section = card.dataset.section || "";
@@ -3450,7 +3477,7 @@ const prewarmGrammarExplanationTranslations = () => {
     if (typeof window.requestIdleCallback === "function") {
       window.requestIdleCallback(() => {
         void task();
-      }, { timeout: 500 });
+      }, { timeout: 800 });
       return;
     }
     window.setTimeout(() => {
@@ -3459,7 +3486,7 @@ const prewarmGrammarExplanationTranslations = () => {
   };
 
   tasks.forEach((task, index) => {
-    scheduleTask(task, 140 + index * 160);
+    scheduleTask(task, 200 + index * 220);
   });
 };
 
@@ -6079,14 +6106,18 @@ const openGrammarModal = (section, index) => {
     );
   };
 
-  if (shouldWaitForTranslations) {
-    ensureTranslationsLoaded({ awaitNetwork: true })
-      .then(preloadActiveExplanationTranslation)
-      .finally(showModal);
+  showModal();
+  if (!shouldWaitForTranslations) {
     return;
   }
-
-  showModal();
+  ensureTranslationsLoaded({ awaitNetwork: true })
+    .then(preloadActiveExplanationTranslation)
+    .then(() => {
+      if (overlay.classList.contains("is-visible") && typeof overlay.__refresh === "function") {
+        overlay.__refresh();
+      }
+    })
+    .catch(() => {});
 };
 
 let modalScrollLockY = 0;
