@@ -11,7 +11,10 @@ const path = require("path");
    -------------------------------------------------------------------------- */
 const ROOT = path.resolve(__dirname, "..");
 const ALLOWLIST_PATH = path.join(__dirname, "bloat-allowlist.json");
-const ROOT_FILES = fs.readdirSync(ROOT);
+const ROOT_FILES = fs
+  .readdirSync(ROOT, { withFileTypes: true })
+  .filter((entry) => entry.isFile())
+  .map((entry) => entry.name);
 const IGNORE_ROOT_FILE_REGEX = /^live_.*\.(?:html|js|css)$/i;
 const LOCAL_REF_REGEX = /\b(?:href|src)\s*=\s*["']([^"']+)["']/gi;
 const JS_FILE_REF_REGEX = /["']([A-Za-z0-9._/-]+\.(?:js|css|json|html))["']/g;

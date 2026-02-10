@@ -50,7 +50,9 @@ const fetchWithTimeout = async (url, timeoutMs = REQUEST_TIMEOUT_MS) => {
 
 const getHtmlFiles = () =>
   fs
-    .readdirSync(ROOT)
+    .readdirSync(ROOT, { withFileTypes: true })
+    .filter((entry) => entry.isFile())
+    .map((entry) => entry.name)
     .filter((file) => file.endsWith(".html"))
     .filter((file) => !file.toLowerCase().startsWith("live_"))
     .sort();
