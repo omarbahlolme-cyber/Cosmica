@@ -11,7 +11,9 @@ const path = require("path");
    -------------------------------------------------------------------------- */
 const ROOT = path.resolve(__dirname, "..");
 const htmlFiles = fs
-  .readdirSync(ROOT)
+  .readdirSync(ROOT, { withFileTypes: true })
+  .filter((entry) => entry.isFile())
+  .map((entry) => entry.name)
   .filter((name) => name.toLowerCase().endsWith(".html"))
   .filter((name) => !name.toLowerCase().startsWith("live_"))
   .sort();

@@ -13,7 +13,9 @@ const ROOT = path.resolve(__dirname, "..");
 const SITE_ORIGIN = "https://www.cosmicalearn.com";
 const SITEMAP_PATH = path.join(ROOT, "sitemap.xml");
 const htmlFiles = fs
-  .readdirSync(ROOT)
+  .readdirSync(ROOT, { withFileTypes: true })
+  .filter((entry) => entry.isFile())
+  .map((entry) => entry.name)
   .filter((name) => name.toLowerCase().endsWith(".html"))
   .filter((name) => !name.toLowerCase().startsWith("live_"))
   .sort();
