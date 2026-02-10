@@ -3275,13 +3275,8 @@ const requestRuntimeGrammarExplanationTranslation = async (
 
   const toTranslateEndpoint = (candidate) =>
     String(candidate || "").replace(/\/api\/chat(?=$|[?#])/i, "/api/translate");
-  const toChatEndpoint = (candidate) =>
-    String(candidate || "").replace(/\/api\/translate(?=$|[?#])/i, "/api/chat");
-  const isChatEndpoint = (endpoint) =>
-    /\/api\/chat(?=$|[?#])/i.test(String(endpoint || ""));
-  const addEndpointPair = (candidates, addCandidate, candidate) => {
+  const addTranslateEndpoint = (candidates, addCandidate, candidate) => {
     addCandidate(toTranslateEndpoint(candidate));
-    addCandidate(toChatEndpoint(candidate));
   };
 
   const endpointCandidates = (() => {
@@ -3297,7 +3292,7 @@ const requestRuntimeGrammarExplanationTranslation = async (
           candidates.push(normalized);
         };
         sharedCandidates.forEach((candidate) =>
-          addEndpointPair(candidates, addCandidate, candidate)
+          addTranslateEndpoint(candidates, addCandidate, candidate)
         );
         return candidates;
       }
@@ -3328,55 +3323,48 @@ const requestRuntimeGrammarExplanationTranslation = async (
       normalizedHost === "cosmica-03wo.onrender.com";
 
     if (!hostname || protocol === "file:") {
-      addEndpointPair(candidates, addCandidate, `http://localhost:3000${endpoint}`);
-      addEndpointPair(candidates, addCandidate, endpoint);
+      addTranslateEndpoint(
+        candidates,
+        addCandidate,
+        `http://localhost:3000${endpoint}`
+      );
+      addTranslateEndpoint(candidates, addCandidate, endpoint);
       return candidates;
     }
 
     if (isCosmicaPublicHost) {
-      addEndpointPair(candidates, addCandidate, `https://www.cosmicalearn.com${endpoint}`);
-      addEndpointPair(candidates, addCandidate, endpoint);
+      addTranslateEndpoint(
+        candidates,
+        addCandidate,
+        `https://www.cosmicalearn.com${endpoint}`
+      );
+      addTranslateEndpoint(candidates, addCandidate, endpoint);
       return candidates;
     }
 
     if (port && port !== "3000" && isLocalDevHost) {
-      addEndpointPair(
+      addTranslateEndpoint(
         candidates,
         addCandidate,
         `${protocol}//${hostname}:3000${endpoint}`
       );
     }
-    addEndpointPair(candidates, addCandidate, endpoint);
+    addTranslateEndpoint(candidates, addCandidate, endpoint);
     return candidates;
   })();
 
   const getTimeoutMs = () => {
-    return window.matchMedia("(max-width: 960px)").matches ? 26000 : 18000;
+    return window.matchMedia("(max-width: 960px)").matches ? 30000 : 18000;
   };
 
   const translateOnce = async (endpoint) => {
     const controller = new AbortController();
     const timeout = window.setTimeout(() => controller.abort(), getTimeoutMs());
     try {
-      const useChatEndpoint = isChatEndpoint(endpoint);
-      const body = useChatEndpoint
-        ? {
-            messages: [
-              {
-                role: "system",
-                content:
-                  "Translate the text to the requested target language. Return only the translated text without commentary.",
-              },
-              {
-                role: "user",
-                content: `Target language: ${langKey}\nText: ${explanationText}`,
-              },
-            ],
-          }
-        : {
-            text: explanationText,
-            targetLanguage: langKey,
-          };
+      const body = {
+        text: explanationText,
+        targetLanguage: langKey,
+      };
       const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -3404,7 +3392,7 @@ const requestRuntimeGrammarExplanationTranslation = async (
   const request = (async () => {
     try {
       const isMobileViewport = window.matchMedia("(max-width: 960px)").matches;
-      const attemptLimit = navigator.onLine ? (isMobileViewport ? 4 : 3) : 1;
+      const attemptLimit = navigator.onLine ? (isMobileViewport ? 5 : 3) : 1;
       for (let attemptIndex = 0; attemptIndex < attemptLimit; attemptIndex += 1) {
         for (let endpointIndex = 0; endpointIndex < endpointCandidates.length; endpointIndex += 1) {
           try {
@@ -3419,7 +3407,9 @@ const requestRuntimeGrammarExplanationTranslation = async (
           } catch {}
         }
         if (attemptIndex < attemptLimit - 1) {
-          await new Promise((resolve) => window.setTimeout(resolve, 260 + attemptIndex * 320));
+          await new Promise((resolve) =>
+            window.setTimeout(resolve, 340 + attemptIndex * 360)
+          );
         }
       }
       return "";
