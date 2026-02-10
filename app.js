@@ -145,6 +145,8 @@ const WORLD_NAME = isWorldLandingPage
 const WORLD_KEY = WORLD_NAME.toLowerCase();
 const WORLD_TRANSLATION_FILE = "translations.json";
 const MAP_TRANSLATIONS_CACHE_KEY = "cosmicaMapTranslationsCache:v2";
+const MAP_TRANSLATIONS_CACHE_MAX_AGE_MS = 24 * 60 * 60 * 1000;
+let mapTranslationsWarmPromise = null;
 const readAssetVersionParam = (rawUrl) => {
   if (!rawUrl) {
     return "";
@@ -187,6 +189,33 @@ const isGrammarPage = document.body.classList.contains("grammar-page");
 const needsMapTranslations = isWordsPage || isPhrasesPage || isGrammarPage;
 const needsGrammarDetails = isGrammarPage;
 
+const readMapTranslationsCache = () => {
+  try {
+    const raw = localStorage.getItem(MAP_TRANSLATIONS_CACHE_KEY);
+    if (!raw) {
+      return null;
+    }
+    const parsed = JSON.parse(raw);
+    const savedAt = Number(parsed?.savedAt || 0);
+    if (!Number.isFinite(savedAt) || savedAt <= 0) {
+      return null;
+    }
+    if (Date.now() - savedAt > MAP_TRANSLATIONS_CACHE_MAX_AGE_MS) {
+      return null;
+    }
+    const payload = parsed?.payload;
+    if (!payload || typeof payload !== "object") {
+      return null;
+    }
+    if (!payload.words && !payload.phrases && !payload.grammar) {
+      return null;
+    }
+    return payload;
+  } catch {
+    return null;
+  }
+};
+
 const writeMapTranslationsCache = (payload) => {
   if (!payload || typeof payload !== "object") {
     return;
@@ -205,18 +234,33 @@ const writeMapTranslationsCache = (payload) => {
   } catch {}
 };
 
-const warmMapTranslationsCache = async () => {
+const warmMapTranslationsCache = async ({ force = false } = {}) => {
   if (!document.body.classList.contains("world-page")) {
-    return;
+    return null;
   }
-  try {
-    const response = await fetch(WORLD_TRANSLATION_FILE, { cache: "no-store" });
-    if (!response.ok) {
-      return;
+  const cached = readMapTranslationsCache();
+  if (cached && !force) {
+    return cached;
+  }
+  if (mapTranslationsWarmPromise && !force) {
+    return mapTranslationsWarmPromise;
+  }
+  mapTranslationsWarmPromise = (async () => {
+    try {
+      const response = await fetch(WORLD_TRANSLATION_FILE, { cache: "no-store" });
+      if (!response.ok) {
+        return cached;
+      }
+      const payload = await response.json();
+      writeMapTranslationsCache(payload);
+      return payload;
+    } catch {
+      return cached;
+    } finally {
+      mapTranslationsWarmPromise = null;
     }
-    const payload = await response.json();
-    writeMapTranslationsCache(payload);
-  } catch {}
+  })();
+  return mapTranslationsWarmPromise;
 };
 
 const preloadMapsBundleAsset = () => {
@@ -2665,7 +2709,7 @@ const navigateToMapLink = (href) => {
     navigated = true;
     window.location.href = href;
   };
-  const deadline = window.setTimeout(finalize, 350);
+  const deadline = window.setTimeout(finalize, 1800);
   Promise.resolve(warmMapTranslationsCache())
     .catch(() => {})
     .finally(() => {
@@ -2696,6 +2740,14 @@ mapLinks.forEach((link) => {
 
 const languagePills = document.querySelectorAll(".language-pill");
 if (languagePills.length) {
+  const prefetchWorldMapRoutes = () => {
+    if (!document.body.classList.contains("world-page")) {
+      return;
+    }
+    ["letters.html", "words.html", "phrases.html", "grammar.html"].forEach((href) =>
+      prefetchDocument(href)
+    );
+  };
   const mapsSection = document.querySelector("#maps");
   const storedLanguage = localStorage.getItem("cosmicaBaseLanguage");
   if (storedLanguage) {
@@ -2716,6 +2768,7 @@ if (languagePills.length) {
     if (selected) {
       localStorage.setItem("cosmicaBaseLanguage", selected);
       void warmMapTranslationsCache();
+      prefetchWorldMapRoutes();
     }
     document.body.classList.add("language-picked");
     languageSection?.classList.remove("is-visible");
@@ -2753,6 +2806,9 @@ if (languagePills.length) {
     });
   });
 
+  if (storedLanguage) {
+    prefetchWorldMapRoutes();
+  }
   void warmMapTranslationsCache();
 }
 
@@ -2973,7 +3029,7 @@ const setupSpeechCards = () => {
     C: "see",
     D: "dee",
     E: "ee",
-    F: "ef",
+    F: "eff",
     G: "jee",
     H: "aitch",
     I: "eye",

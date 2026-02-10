@@ -6443,6 +6443,7 @@ const resolveGrammarTranslation = (section, exampleSentence, baseLanguage) => {
 };
 
 refreshMapsForBaseLanguage = () => {
+  const hasCachedBaseTranslations = Boolean(readMapsBundleTranslationsCache());
   const selectedBaseLanguage = String(
     localStorage.getItem("cosmicaBaseLanguage") || ""
   )
@@ -6450,6 +6451,8 @@ refreshMapsForBaseLanguage = () => {
     .toLowerCase();
   const shouldPrioritizeTranslations =
     !!selectedBaseLanguage && selectedBaseLanguage !== "english";
+  const shouldAwaitNetworkHydration =
+    shouldPrioritizeTranslations && !hasCachedBaseTranslations;
 
   const refreshRenderedMaps = () => {
     if (document.querySelector(".word-card")) {
@@ -6473,7 +6476,7 @@ refreshMapsForBaseLanguage = () => {
     return;
   }
 
-  ensureTranslationsLoaded({ awaitNetwork: isGrammarPage }).finally(
+  ensureTranslationsLoaded({ awaitNetwork: shouldAwaitNetworkHydration }).finally(
     refreshRenderedMaps
   );
 };
@@ -6561,6 +6564,7 @@ if (isGrammarPage) {
 }
 
 if (needsMapTranslations) {
+  const hasCachedBaseTranslations = Boolean(cachedBaseTranslations);
   const selectedBaseLanguage = String(
     localStorage.getItem("cosmicaBaseLanguage") || ""
   )
@@ -6569,7 +6573,7 @@ if (needsMapTranslations) {
   const shouldPrioritizeTranslations =
     !!selectedBaseLanguage && selectedBaseLanguage !== "english";
   const shouldAwaitNetworkHydration =
-    shouldPrioritizeTranslations && isGrammarPage;
+    shouldPrioritizeTranslations && !hasCachedBaseTranslations;
 
   const refreshAfterTranslations = () => {
     ensureTranslationsLoaded({ awaitNetwork: shouldAwaitNetworkHydration }).then(() => {
@@ -6595,15 +6599,3 @@ if (needsMapTranslations) {
     runWhenBrowserIdle(refreshAfterTranslations);
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
