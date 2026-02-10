@@ -2861,7 +2861,31 @@ const setupSpeechCards = () => {
   };
 
   const LETTER_SPEECH_MAP = Object.freeze({
-    // Keep explicit handling for special symbols/variants only.
+    A: "ay",
+    B: "bee",
+    C: "see",
+    D: "dee",
+    E: "ee",
+    F: "ef",
+    G: "jee",
+    H: "aitch",
+    I: "eye",
+    J: "jay",
+    K: "kay",
+    L: "el",
+    M: "em",
+    N: "en",
+    O: "oh",
+    P: "pee",
+    Q: "cue",
+    R: "ar",
+    S: "ess",
+    T: "tee",
+    U: "you",
+    V: "vee",
+    W: "double u",
+    X: "ex",
+    Y: "why",
     Z: "zed",
     "ɪ": "ih",
   });
@@ -2875,14 +2899,10 @@ const setupSpeechCards = () => {
     }
     const match = text.match(/[A-Za-z\u026A]/);
     if (!match) {
-      return text;
+      return text.toLowerCase();
     }
     const first = match[0] === "ɪ" ? "ɪ" : match[0].toUpperCase();
-    if (first === "ɪ") {
-      return LETTER_SPEECH_MAP[first];
-    }
-    // Let the speech engine pronounce natural letter names directly.
-    return LETTER_SPEECH_MAP[first] || first;
+    return LETTER_SPEECH_MAP[first] || match[0].toLowerCase();
   };
 
   const setupCards = (
