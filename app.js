@@ -2036,7 +2036,7 @@ const MOBILE_HOME_ANCHOR_DOWN_SHIFT = Object.freeze({
   "#how": 110,
   "#worlds": 126,
   "#guide": 158,
-  "#join": 174,
+  "#join": 169,
   "#support": 220,
 });
 const getMobileHomeAnchorDownShift = (hash) =>
