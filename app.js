@@ -2195,6 +2195,28 @@ if (joinForm) {
   const isValidEmail = (value) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
   };
+  const getFeedbackEndpointCandidates = () => {
+    const endpoints = [];
+    const addEndpoint = (value) => {
+      const normalized = String(value || "").trim();
+      if (!normalized || endpoints.includes(normalized)) {
+        return;
+      }
+      endpoints.push(normalized);
+    };
+    if (typeof getApiEndpointCandidates === "function") {
+      getApiEndpointCandidates().forEach((candidate) => {
+        addEndpoint(
+          String(candidate || "").replace(
+            /\/api\/chat(?=$|[?#])/i,
+            "/api/feedback"
+          )
+        );
+      });
+    }
+    addEndpoint("/api/feedback");
+    return endpoints;
+  };
 
   const updateJoinErrors = () => {
     if (!joinName || !joinEmail || !joinFeedback) {
@@ -2250,22 +2272,51 @@ if (joinForm) {
       joinStatus.textContent = "Sending feedback...";
     }
     try {
-      const controller = new AbortController();
-      const timeoutId = window.setTimeout(() => controller.abort(), 12000);
-      const response = await fetch("/api/feedback", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: joinName.value.trim(),
-          email: joinEmail.value.trim(),
-          message: joinFeedback.value.trim(),
-        }),
-        signal: controller.signal,
-      }).finally(() => window.clearTimeout(timeoutId));
+      const isMobileViewport = window.matchMedia("(max-width: 960px)").matches;
+      const timeoutMs = isMobileViewport ? 22000 : 12000;
+      const payload = {
+        name: joinName.value.trim(),
+        email: joinEmail.value.trim(),
+        message: joinFeedback.value.trim(),
+      };
+      const endpointCandidates = getFeedbackEndpointCandidates();
+      let response = null;
+      let lastError = null;
 
-      if (!response.ok) {
-        const data = await response.json().catch(() => ({}));
-        throw new Error(data.error || "Unable to send feedback.");
+      for (let i = 0; i < endpointCandidates.length; i += 1) {
+        const endpoint = endpointCandidates[i];
+        const controller = new AbortController();
+        const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs);
+        try {
+          response = await fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+            cache: "no-store",
+            credentials: "same-origin",
+            signal: controller.signal,
+          });
+          if (response.ok) {
+            break;
+          }
+          // Keep trying alternate endpoints only for transport-level/API host issues.
+          if ([404, 405, 429, 500, 502, 503, 504].includes(response.status)) {
+            continue;
+          }
+          break;
+        } catch (error) {
+          lastError = error;
+        } finally {
+          window.clearTimeout(timeoutId);
+        }
+      }
+
+      if (!response || !response.ok) {
+        if (response) {
+          const data = await response.json().catch(() => ({}));
+          throw new Error(data.error || "Unable to send feedback.");
+        }
+        throw lastError || new Error("Unable to send feedback.");
       }
 
       joinForm.reset();
@@ -2810,31 +2861,7 @@ const setupSpeechCards = () => {
   };
 
   const LETTER_SPEECH_MAP = Object.freeze({
-    A: "ay",
-    B: "bee",
-    C: "see",
-    D: "dee",
-    E: "ee",
-    F: "ef",
-    G: "jee",
-    H: "aitch",
-    I: "eye",
-    J: "jay",
-    K: "kay",
-    L: "el",
-    M: "em",
-    N: "en",
-    O: "oh",
-    P: "pee",
-    Q: "cue",
-    R: "ar",
-    S: "ess",
-    T: "tee",
-    U: "you",
-    V: "vee",
-    W: "double u",
-    X: "ex",
-    Y: "why",
+    // Keep explicit handling for special symbols/variants only.
     Z: "zed",
     "ɪ": "ih",
   });
@@ -2848,10 +2875,14 @@ const setupSpeechCards = () => {
     }
     const match = text.match(/[A-Za-z\u026A]/);
     if (!match) {
-      return text.toLowerCase();
+      return text;
     }
     const first = match[0] === "ɪ" ? "ɪ" : match[0].toUpperCase();
-    return LETTER_SPEECH_MAP[first] || match[0].toLowerCase();
+    if (first === "ɪ") {
+      return LETTER_SPEECH_MAP[first];
+    }
+    // Let the speech engine pronounce natural letter names directly.
+    return LETTER_SPEECH_MAP[first] || first;
   };
 
   const setupCards = (
