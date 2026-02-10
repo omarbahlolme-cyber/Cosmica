@@ -890,63 +890,8 @@ const createAbortController = () => {
   return new AbortController();
 };
 
-const ensureChatHealthIndicator = () => {
-  if (!chatStatus) {
-    return null;
-  }
-  const header = chatStatus.closest(".chat-header") || chatStatus.parentElement;
-  if (!header) {
-    return null;
-  }
-  let indicator = header.querySelector(".chat-health");
-  if (!indicator) {
-    indicator = document.createElement("span");
-    indicator.className = "chat-health";
-    indicator.textContent = "API: checking";
-    header.appendChild(indicator);
-  }
-  return indicator;
-};
-
-const checkApiHealth = async () => {
-  const indicator = ensureChatHealthIndicator();
-  if (!indicator) {
-    return;
-  }
-  indicator.textContent = "API: checking";
-  const controller = createAbortController();
-  const timeoutId = controller
-    ? window.setTimeout(() => controller.abort(), 6000)
-    : null;
-  try {
-    const requestOptions = {
-      cache: "no-store",
-      credentials: "same-origin",
-    };
-    if (controller) {
-      requestOptions.signal = controller.signal;
-    }
-    const response = await fetch("/api/health", requestOptions);
-    if (!response.ok) {
-      throw new Error("Health check failed");
-    }
-    const data = await response.json().catch(() => null);
-    indicator.textContent = data?.status === "ok" ? "API: ok" : "API: unavailable";
-  } catch {
-    indicator.textContent = "API: offline";
-  } finally {
-    if (timeoutId) {
-      window.clearTimeout(timeoutId);
-    }
-  }
-};
-
 const setupApiHealthIndicator = () => {
-  if (!chatStatus) {
-    return;
-  }
-  checkApiHealth();
-  window.setInterval(checkApiHealth, 60000);
+  // Intentionally no-op: keep chat status text, remove separate API health badge.
 };
 
 const isLocalDevHost = (hostname) => {
