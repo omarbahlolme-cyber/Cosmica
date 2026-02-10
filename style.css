@@ -2949,6 +2949,15 @@ body:not(.world-page) .footer {
     align-items: stretch;
   }
 
+  .join-status {
+    bottom: -4px !important;
+  }
+
+  .mimi-chat .chat-status {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
   .join-actions input,
   .join-actions textarea {
     min-width: 100%;
