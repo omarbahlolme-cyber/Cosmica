@@ -3368,7 +3368,7 @@ const requestRuntimeGrammarExplanationTranslation = async (
   };
 
   const getTimeoutMs = () => {
-    return window.matchMedia("(max-width: 960px)").matches ? 30000 : 18000;
+    return window.matchMedia("(max-width: 960px)").matches ? 12000 : 10000;
   };
 
   const translateOnce = async (endpoint) => {
