@@ -24,6 +24,8 @@ const worldCards = document.querySelectorAll(".world-card");
 const urlParams = new URLSearchParams(window.location.search);
 const currentPath = window.location.pathname.toLowerCase();
 
+<<<<<<< HEAD
+=======
 // Keep viewport-height based layout stable on mobile when browser UI bars expand/collapse.
 const setupDynamicViewportHeight = () => {
   const root = document.documentElement;
@@ -91,6 +93,7 @@ const setupDynamicViewportHeight = () => {
 
 setupDynamicViewportHeight();
 
+>>>>>>> ee6a8e06d1031e0bc422f67f1ea38c4f8206d9ea
 // Force the canonical secure origin for public traffic (extra safety layer on top of server/CDN redirects).
 const enforceProductionCanonicalOrigin = () => {
   const host = String(window.location.hostname || "").toLowerCase();
