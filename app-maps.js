@@ -3291,8 +3291,6 @@ const requestRuntimeGrammarExplanationTranslation = async (
         sharedCandidates.forEach((candidate) =>
           addCandidate(toTranslateEndpoint(candidate))
         );
-        // Keep a chat-endpoint fallback for environments that have not yet deployed /api/translate.
-        sharedCandidates.forEach((candidate) => addCandidate(candidate));
         return candidates;
       }
     }
@@ -3330,56 +3328,28 @@ const requestRuntimeGrammarExplanationTranslation = async (
     if (isCosmicaPublicHost) {
       addCandidate(`https://www.cosmicalearn.com${endpoint}`);
       addCandidate(endpoint);
-      addCandidate("/api/chat");
       return candidates;
     }
 
     if (port && port !== "3000" && isLocalDevHost) {
       addCandidate(`${protocol}//${hostname}:3000${endpoint}`);
-      addCandidate(`${protocol}//${hostname}:3000/api/chat`);
     }
     addCandidate(endpoint);
-    addCandidate("/api/chat");
     return candidates;
   })();
 
   const getTimeoutMs = () => {
-    const fallbackTimeout = window.matchMedia("(max-width: 960px)").matches
-      ? 24000
-      : 14000;
-    if (
-      typeof MIMI_CONFIG === "object" &&
-      MIMI_CONFIG &&
-      Number.isFinite(Number(MIMI_CONFIG.timeoutMs))
-    ) {
-      return Math.max(fallbackTimeout, Number(MIMI_CONFIG.timeoutMs));
-    }
-    return fallbackTimeout;
+    return window.matchMedia("(max-width: 960px)").matches ? 16000 : 12000;
   };
 
   const translateOnce = async (endpoint) => {
     const controller = new AbortController();
     const timeout = window.setTimeout(() => controller.abort(), getTimeoutMs());
     try {
-      const isChatFallback = /\/api\/chat(?=$|[?#])/i.test(String(endpoint || ""));
-      const body = isChatFallback
-        ? {
-            messages: [
-              {
-                role: "system",
-                content:
-                  "Translate the provided educational sentence exactly into the target language. Return only the translated sentence.",
-              },
-              {
-                role: "user",
-                content: `Target language: ${langKey}\nText: ${explanationText}`,
-              },
-            ],
-          }
-        : {
-            text: explanationText,
-            targetLanguage: langKey,
-          };
+      const body = {
+        text: explanationText,
+        targetLanguage: langKey,
+      };
       const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -3407,7 +3377,7 @@ const requestRuntimeGrammarExplanationTranslation = async (
   const request = (async () => {
     try {
       const isMobileViewport = window.matchMedia("(max-width: 960px)").matches;
-      const attemptLimit = navigator.onLine ? (isMobileViewport ? 3 : 2) : 1;
+      const attemptLimit = navigator.onLine ? (isMobileViewport ? 2 : 2) : 1;
       for (let attemptIndex = 0; attemptIndex < attemptLimit; attemptIndex += 1) {
         for (let endpointIndex = 0; endpointIndex < endpointCandidates.length; endpointIndex += 1) {
           try {
@@ -3458,7 +3428,7 @@ const prewarmGrammarExplanationTranslations = () => {
 
   const tasks = [];
   cards.forEach((card) => {
-    if (tasks.length >= 20) {
+    if (tasks.length >= 6) {
       return;
     }
     const section = card.dataset.section || "";
@@ -3489,7 +3459,7 @@ const prewarmGrammarExplanationTranslations = () => {
   };
 
   tasks.forEach((task, index) => {
-    scheduleTask(task, 90 + index * 85);
+    scheduleTask(task, 140 + index * 160);
   });
 };
 

@@ -2651,6 +2651,10 @@ body:not(.world-page) .footer {
    RESPONSIVE OVERRIDES
    -------------------------------------------------------------------------- */
 @media (max-width: 960px) {
+  .nav {
+    overflow: visible;
+  }
+
   .aurora {
     animation: none;
     transform: none;
@@ -2787,7 +2791,7 @@ body:not(.world-page) .footer {
 
   .nav.nav-single-link .nav-links {
     justify-content: center;
-    overflow: hidden;
+    overflow: visible;
     padding-left: 2px;
     padding-right: 2px;
   }
@@ -2795,8 +2799,8 @@ body:not(.world-page) .footer {
   .nav.nav-single-link .nav-links a {
     width: min(92vw, 360px);
     max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    overflow: visible;
+    text-overflow: clip;
     white-space: nowrap;
   }
 
@@ -2885,6 +2889,7 @@ body:not(.world-page) .footer {
     display: inline-flex;
     flex-wrap: wrap;
     margin: 0;
+    width: 100%;
     gap: 8px;
     align-items: center;
     justify-content: center;

@@ -282,8 +282,8 @@ const MIMI_CONFIG = {
   mode: "api",
   endpoint: "/api/chat",
   timeoutMs: 12000,
-  mobileTimeoutMs: 40000,
-  retryLimit: 4,
+  mobileTimeoutMs: 55000,
+  retryLimit: 5,
   historyLimit: 12,
 };
 const WORLD_START_LESSON_DESKTOP_DOWN_SHIFT = 34;
@@ -1100,8 +1100,9 @@ const getMimiReply = async (message) => {
     endpointCandidates,
   });
   return {
-    content: getPresetReply(message),
-    source: "fallback",
+    content:
+      "AI link is unstable right now. Please try again in a moment and I will answer with full live intelligence.",
+    source: "error",
   };
 };
 
@@ -2669,7 +2670,7 @@ const setupSpeechCards = () => {
   const MALE_HINT =
     /male|man|david|mark|alex|george|fred|daniel|ryan|tom|google uk english male|microsoft david/i;
   const LOW_QUALITY_HINT =
-    /espeak|festival|compact|robot|offline|basic|legacy|eloquence|embedded|local|svox/i;
+    /espeak|festival|robot|offline|basic|legacy|eloquence|embedded|svox/i;
   const HIGH_QUALITY_HINT =
     /neural|natural|premium|enhanced|wavenet|online|studio|siri|google us english|google uk english female|microsoft aria|microsoft jenny|samantha/i;
   const IOS_FEMALE_HINT = /samantha|karen|moira|ava|allison|serena/i;
@@ -2678,7 +2679,7 @@ const setupSpeechCards = () => {
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent || "");
   const isAndroid = /android/i.test(navigator.userAgent || "");
 
-  const waitForVoicesReady = (timeoutMs = 1400) =>
+  const waitForVoicesReady = (timeoutMs = 3600) =>
     new Promise((resolve) => {
       if (!("speechSynthesis" in window)) {
         resolve();
@@ -2708,11 +2709,11 @@ const setupSpeechCards = () => {
       const name = (voice.name || "").toLowerCase();
       const lang = (voice.lang || "").toLowerCase();
       let score = 0;
+      if (lang.startsWith("en-gb")) {
+        score += 12;
+      }
       if (lang.startsWith("en-us")) {
         score += 8;
-      }
-      if (lang.startsWith("en-gb")) {
-        score += 7;
       }
       if (lang.startsWith("en")) {
         score += 3;
@@ -2721,7 +2722,7 @@ const setupSpeechCards = () => {
         score += 2;
       }
       if (voice.localService === false) {
-        score += 10;
+        score += 12;
       }
       if (voice.localService === true) {
         score -= 2;
@@ -2792,10 +2793,7 @@ const setupSpeechCards = () => {
     }
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = selectedVoice?.lang || "en-US";
-    const adjustedRate = window.matchMedia("(max-width: 960px)").matches
-      ? Math.max(0.86, rate - 0.04)
-      : rate;
-    utterance.rate = adjustedRate;
+    utterance.rate = rate;
     utterance.pitch = pitch;
     if (selectedVoice) {
       utterance.voice = selectedVoice;
@@ -2833,7 +2831,7 @@ const setupSpeechCards = () => {
     W: "double u",
     X: "ex",
     Y: "why",
-    Z: "zee",
+    Z: "zed",
     "ɪ": "ih",
   });
 
@@ -2910,6 +2908,52 @@ const setupSpeechCards = () => {
   );
   setupCards(wordCards, ".word", "word", "Play word", 0.95, 1.01);
   setupCards(phraseCards, ".phrase-text", "phrase", "Play phrase", 0.95, 1);
+
+  const setupAudioButtons = (
+    buttons,
+    datasetKey,
+    rate,
+    pitch,
+    normalizeText
+  ) => {
+    buttons.forEach((button) => {
+      const sourceText = String(button.dataset[datasetKey] || "").trim();
+      if (sourceText) {
+        button.dataset[datasetKey] = normalizeText
+          ? normalizeText(sourceText)
+          : sourceText;
+      }
+      const speakFromButton = () => {
+        const value = String(button.dataset[datasetKey] || "").trim();
+        if (value) {
+          playSpeech(value, { rate, pitch });
+        }
+      };
+      button.addEventListener("pointerup", (event) => {
+        if (event.pointerType !== "touch") {
+          return;
+        }
+        event.preventDefault();
+        markTouchActivation(button);
+        speakFromButton();
+      });
+      button.addEventListener("click", () => {
+        if (isRecentTouchActivation(button)) {
+          return;
+        }
+        speakFromButton();
+      });
+    });
+  };
+
+  setupAudioButtons(
+    letterButtons,
+    "letter",
+    0.9,
+    1,
+    normalizeLetterSpeechText
+  );
+  setupAudioButtons(wordButtons, "word", 0.95, 1.01);
 
   [...letterButtons, ...wordButtons].forEach((button) => {
     button.setAttribute("aria-hidden", "true");
