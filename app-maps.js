@@ -3275,8 +3275,13 @@ const requestRuntimeGrammarExplanationTranslation = async (
 
   const toTranslateEndpoint = (candidate) =>
     String(candidate || "").replace(/\/api\/chat(?=$|[?#])/i, "/api/translate");
-  const addTranslateEndpoint = (candidates, addCandidate, candidate) => {
+  const toChatEndpoint = (candidate) =>
+    String(candidate || "").replace(/\/api\/translate(?=$|[?#])/i, "/api/chat");
+  const isChatEndpoint = (endpoint) =>
+    /\/api\/chat(?=$|[?#])/i.test(String(endpoint || ""));
+  const addEndpointPair = (candidates, addCandidate, candidate) => {
     addCandidate(toTranslateEndpoint(candidate));
+    addCandidate(toChatEndpoint(candidate));
   };
 
   const endpointCandidates = (() => {
@@ -3292,7 +3297,7 @@ const requestRuntimeGrammarExplanationTranslation = async (
           candidates.push(normalized);
         };
         sharedCandidates.forEach((candidate) =>
-          addTranslateEndpoint(candidates, addCandidate, candidate)
+          addEndpointPair(candidates, addCandidate, candidate)
         );
         return candidates;
       }
@@ -3323,33 +3328,33 @@ const requestRuntimeGrammarExplanationTranslation = async (
       normalizedHost === "cosmica-03wo.onrender.com";
 
     if (!hostname || protocol === "file:") {
-      addTranslateEndpoint(
+      addEndpointPair(
         candidates,
         addCandidate,
         `http://localhost:3000${endpoint}`
       );
-      addTranslateEndpoint(candidates, addCandidate, endpoint);
+      addEndpointPair(candidates, addCandidate, endpoint);
       return candidates;
     }
 
     if (isCosmicaPublicHost) {
-      addTranslateEndpoint(
+      addEndpointPair(
         candidates,
         addCandidate,
         `https://www.cosmicalearn.com${endpoint}`
       );
-      addTranslateEndpoint(candidates, addCandidate, endpoint);
+      addEndpointPair(candidates, addCandidate, endpoint);
       return candidates;
     }
 
     if (port && port !== "3000" && isLocalDevHost) {
-      addTranslateEndpoint(
+      addEndpointPair(
         candidates,
         addCandidate,
         `${protocol}//${hostname}:3000${endpoint}`
       );
     }
-    addTranslateEndpoint(candidates, addCandidate, endpoint);
+    addEndpointPair(candidates, addCandidate, endpoint);
     return candidates;
   })();
 
@@ -3361,10 +3366,25 @@ const requestRuntimeGrammarExplanationTranslation = async (
     const controller = new AbortController();
     const timeout = window.setTimeout(() => controller.abort(), getTimeoutMs());
     try {
-      const body = {
-        text: explanationText,
-        targetLanguage: langKey,
-      };
+      const useChatEndpoint = isChatEndpoint(endpoint);
+      const body = useChatEndpoint
+        ? {
+            messages: [
+              {
+                role: "system",
+                content:
+                  "Translate the text to the requested target language. Return only the translated text without commentary.",
+              },
+              {
+                role: "user",
+                content: `Target language: ${langKey}\nText: ${explanationText}`,
+              },
+            ],
+          }
+        : {
+            text: explanationText,
+            targetLanguage: langKey,
+          };
       const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
