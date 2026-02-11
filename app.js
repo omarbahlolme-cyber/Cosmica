@@ -2886,10 +2886,78 @@ const setupSpeechCards = () => {
   loadVoices();
   window.speechSynthesis.onvoiceschanged = loadVoices;
 
+  const ttsAudioCache = new Map();
+  let activeTtsAudio = null;
+
+  const stopActiveTtsAudio = () => {
+    if (!activeTtsAudio) {
+      return;
+    }
+    try {
+      activeTtsAudio.pause();
+      activeTtsAudio.currentTime = 0;
+    } catch {}
+    activeTtsAudio = null;
+  };
+
+  const buildTtsCacheKey = (text, rate, pitch) =>
+    `${text}::${Number(rate).toFixed(2)}::${Number(pitch).toFixed(2)}`;
+
+  const requestServerTtsAudioUrl = async (text, { rate = 0.94, pitch = 1.02 } = {}) => {
+    const cacheKey = buildTtsCacheKey(text, rate, pitch);
+    if (ttsAudioCache.has(cacheKey)) {
+      return ttsAudioCache.get(cacheKey);
+    }
+
+    const response = await fetch("/api/tts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      cache: "no-store",
+      body: JSON.stringify({
+        text,
+        languageCode: "en-GB",
+        voice: "en-GB-Neural2-F",
+        speakingRate: Number(rate.toFixed(2)),
+        pitch: Number(((pitch - 1) * 4).toFixed(2)),
+      }),
+    });
+    if (!response.ok) {
+      throw new Error(`TTS HTTP ${response.status}`);
+    }
+
+    const blob = await response.blob();
+    if (!blob || blob.size <= 0) {
+      throw new Error("Empty TTS audio blob");
+    }
+
+    const objectUrl = URL.createObjectURL(blob);
+    ttsAudioCache.set(cacheKey, objectUrl);
+    return objectUrl;
+  };
+
   const playSpeech = async (text, { rate = 0.94, pitch = 1.02 } = {}) => {
     if (!text) {
       return;
     }
+    const normalizedText = String(text || "").trim();
+    if (!normalizedText) {
+      return;
+    }
+
+    try {
+      const sourceUrl = await requestServerTtsAudioUrl(normalizedText, { rate, pitch });
+      stopActiveTtsAudio();
+      const audio = new Audio(sourceUrl);
+      activeTtsAudio = audio;
+      await audio.play();
+      return;
+    } catch (error) {
+      if (!window.__cosmicaTtsFallbackWarned) {
+        window.__cosmicaTtsFallbackWarned = true;
+        console.warn("Server TTS unavailable, falling back to browser speech.", error);
+      }
+    }
+
     if (!availableVoices.length) {
       await waitForVoicesReady();
       loadVoices();
@@ -2897,7 +2965,7 @@ const setupSpeechCards = () => {
     if (!selectedVoice) {
       selectedVoice = pickVoice();
     }
-    const utterance = new SpeechSynthesisUtterance(text);
+    const utterance = new SpeechSynthesisUtterance(normalizedText);
     utterance.lang = selectedVoice?.lang || "en-US";
     utterance.rate = rate;
     utterance.pitch = pitch;

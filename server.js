@@ -210,6 +210,11 @@ const webVitalsLimiter = createLimiter({
   max: 240,
   scope: "web-vitals",
 });
+const ttsLimiter = createLimiter({
+  windowMs: 5 * 60 * 1000,
+  max: 180,
+  scope: "tts",
+});
 
 /* --------------------------------------------------------------------------
    STATIC ASSET HOSTING
@@ -305,6 +310,46 @@ const createClient = (apiKey) => new OpenAI({ apiKey });
 const getChatClient = () => createClient(process.env.OPENAI_CHAT_KEY || process.env.OPENAI_API_KEY);
 const ERROR_WEBHOOK_URL = process.env.ERROR_WEBHOOK_URL || "";
 const RUM_WEBHOOK_URL = process.env.RUM_WEBHOOK_URL || "";
+const isTruthyEnvValue = (value) =>
+  ["1", "true", "yes", "on"].includes(String(value || "").trim().toLowerCase());
+const GOOGLE_TTS_ENABLED = isTruthyEnvValue(process.env.GOOGLE_TTS_ENABLED);
+const GOOGLE_TTS_DEFAULT_LANGUAGE = process.env.GOOGLE_TTS_LANGUAGE_CODE || "en-GB";
+const GOOGLE_TTS_DEFAULT_VOICE = process.env.GOOGLE_TTS_VOICE || "en-GB-Neural2-F";
+
+const getGoogleTtsClient = (() => {
+  let cachedClient = null;
+  return () => {
+    if (!GOOGLE_TTS_ENABLED) {
+      return null;
+    }
+    if (cachedClient) {
+      return cachedClient;
+    }
+
+    const credentialsB64 = String(process.env.GOOGLE_TTS_CREDENTIALS_B64 || "").trim();
+    if (!credentialsB64) {
+      throw new Error("Missing GOOGLE_TTS_CREDENTIALS_B64");
+    }
+
+    let TextToSpeechClient = null;
+    try {
+      ({ TextToSpeechClient } = require("@google-cloud/text-to-speech"));
+    } catch (error) {
+      throw new Error(`Google TTS package missing: ${error.message || error}`);
+    }
+
+    let credentials = null;
+    try {
+      const json = Buffer.from(credentialsB64, "base64").toString("utf8");
+      credentials = JSON.parse(json);
+    } catch (error) {
+      throw new Error(`Invalid GOOGLE_TTS_CREDENTIALS_B64: ${error.message || error}`);
+    }
+
+    cachedClient = new TextToSpeechClient({ credentials });
+    return cachedClient;
+  };
+})();
 
 const postErrorWebhook = async (payload) => {
   if (!ERROR_WEBHOOK_URL) {
@@ -542,6 +587,72 @@ app.post("/api/translate", translateLimiter, async (req, res) => {
       path: req.originalUrl,
     });
     return res.status(500).json({ error: "Translation request failed" });
+  }
+});
+
+/* --------------------------------------------------------------------------
+   ROUTE: GOOGLE TTS PROXY
+   Generates deterministic MP3 speech so mobile/desktop use the same voice.
+   -------------------------------------------------------------------------- */
+app.post("/api/tts", ttsLimiter, async (req, res) => {
+  if (!GOOGLE_TTS_ENABLED) {
+    return res.status(503).json({ error: "TTS is disabled" });
+  }
+
+  const text = String(req.body?.text || "").trim();
+  const languageCode = String(req.body?.languageCode || GOOGLE_TTS_DEFAULT_LANGUAGE).trim();
+  const voice = String(req.body?.voice || GOOGLE_TTS_DEFAULT_VOICE).trim();
+  const speakingRate = Number(req.body?.speakingRate);
+  const pitch = Number(req.body?.pitch);
+
+  if (!text) {
+    return res.status(400).json({ error: "Missing text" });
+  }
+  if (text.length > 240) {
+    return res.status(400).json({ error: "Text is too long" });
+  }
+
+  try {
+    const client = getGoogleTtsClient();
+    if (!client) {
+      return res.status(503).json({ error: "TTS unavailable" });
+    }
+
+    const [response] = await client.synthesizeSpeech({
+      input: { text },
+      voice: {
+        languageCode,
+        name: voice || undefined,
+      },
+      audioConfig: {
+        audioEncoding: "MP3",
+        speakingRate:
+          Number.isFinite(speakingRate) && speakingRate >= 0.25 && speakingRate <= 4
+            ? speakingRate
+            : 1,
+        pitch: Number.isFinite(pitch) && pitch >= -20 && pitch <= 20 ? pitch : 0,
+      },
+    });
+
+    if (!response?.audioContent) {
+      return res.status(502).json({ error: "Empty TTS audio response" });
+    }
+
+    const audioBuffer = Buffer.isBuffer(response.audioContent)
+      ? response.audioContent
+      : Buffer.from(response.audioContent, "base64");
+
+    res.setHeader("Content-Type", "audio/mpeg");
+    res.setHeader("Content-Length", String(audioBuffer.length));
+    res.setHeader("Cache-Control", "no-store");
+    return res.status(200).send(audioBuffer);
+  } catch (error) {
+    reportServerError("tts", error, {
+      requestId: req.requestId,
+      method: req.method,
+      path: req.originalUrl,
+    });
+    return res.status(500).json({ error: "TTS request failed" });
   }
 });
 
