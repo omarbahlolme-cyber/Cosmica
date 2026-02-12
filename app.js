@@ -24,6 +24,32 @@ const worldCards = document.querySelectorAll(".world-card");
 const urlParams = new URLSearchParams(window.location.search);
 const currentPath = window.location.pathname.toLowerCase();
 
+// Load Cloudflare Web Analytics only on production domains, not localhost/dev.
+const setupCloudflareBeacon = () => {
+  const host = String(window.location.hostname || "").toLowerCase();
+  const isProductionHost =
+    host === "cosmicalearn.com" ||
+    host === "www.cosmicalearn.com";
+  if (!isProductionHost) {
+    return;
+  }
+  if (document.querySelector('script[src*="static.cloudflareinsights.com/beacon.min.js"]')) {
+    return;
+  }
+
+  const script = document.createElement("script");
+  script.defer = true;
+  script.src = "https://static.cloudflareinsights.com/beacon.min.js";
+  script.crossOrigin = "anonymous";
+  script.setAttribute(
+    "data-cf-beacon",
+    '{"token":"041d74ecd7df4a418564fff0b1d1f030"}'
+  );
+  script.setAttribute("data-sri-exempt", "cloudflare-beacon-dynamic-script");
+  document.head.appendChild(script);
+};
+setupCloudflareBeacon();
+
 // Keep viewport-height based layout stable on mobile when browser UI bars expand/collapse.
 const setupDynamicViewportHeight = () => {
   const root = document.documentElement;
