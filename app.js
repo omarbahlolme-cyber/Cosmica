@@ -2741,8 +2741,10 @@ const setupSpeechCards = () => {
     letterCards.length ||
     wordCards.length ||
     phraseCards.length;
+  const hasBrowserSpeech =
+    "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
 
-  if (!hasSpeechCards || !("speechSynthesis" in window)) {
+  if (!hasSpeechCards) {
     return;
   }
 
@@ -2783,7 +2785,7 @@ const setupSpeechCards = () => {
 
   const waitForVoicesReady = (timeoutMs = 3600) =>
     new Promise((resolve) => {
-      if (!("speechSynthesis" in window)) {
+      if (!hasBrowserSpeech) {
         resolve();
         return;
       }
@@ -2880,11 +2882,18 @@ const setupSpeechCards = () => {
   };
 
   const loadVoices = () => {
+    if (!hasBrowserSpeech) {
+      availableVoices = [];
+      selectedVoice = null;
+      return;
+    }
     availableVoices = window.speechSynthesis.getVoices();
     selectedVoice = pickVoice();
   };
   loadVoices();
-  window.speechSynthesis.onvoiceschanged = loadVoices;
+  if (hasBrowserSpeech) {
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+  }
 
   const ttsAudioCache = new Map();
   let activeTtsAudio = null;
@@ -2956,6 +2965,10 @@ const setupSpeechCards = () => {
         window.__cosmicaTtsFallbackWarned = true;
         console.warn("Server TTS unavailable, falling back to browser speech.", error);
       }
+    }
+
+    if (!hasBrowserSpeech) {
+      return;
     }
 
     if (!availableVoices.length) {
