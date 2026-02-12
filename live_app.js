@@ -1,4 +1,4 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    DOM HOOKS AND GLOBAL PAGE REFERENCES
    Collect shared elements once so all page modules reuse the same references.
    ========================================================================== */
@@ -14,6 +14,7 @@ const chatInput = document.getElementById("chatInput");
 const chatLog = document.getElementById("chatLog");
 const chatStatus = document.getElementById("chatStatus");
 const chatChips = document.querySelectorAll(".chat-chip");
+const navRoot = document.querySelector(".nav");
 const alien = document.getElementById("alien");
 const mouthPath = document.getElementById("mouthPath");
 const alienHead = alien ? alien.querySelector(".alien-head") : null;
@@ -22,6 +23,91 @@ const warpText = document.getElementById("warpText");
 const worldCards = document.querySelectorAll(".world-card");
 const urlParams = new URLSearchParams(window.location.search);
 const currentPath = window.location.pathname.toLowerCase();
+
+// Keep viewport-height based layout stable on mobile when browser UI bars expand/collapse.
+const setupDynamicViewportHeight = () => {
+  const root = document.documentElement;
+  let stableHeight = 0;
+  let lastAppliedHeight = 0;
+  let orientationKey = "";
+  let rafId = 0;
+
+  const getOrientationKey = () => {
+    const landscape = window.matchMedia("(orientation: landscape)").matches;
+    return landscape ? "landscape" : "portrait";
+  };
+
+  const applyViewportHeight = (forceReset = false) => {
+    const innerHeight = Math.round(window.innerHeight || root.clientHeight || 0);
+    if (!innerHeight || !Number.isFinite(innerHeight)) {
+      return;
+    }
+    const nextOrientation = getOrientationKey();
+    const orientationChanged = orientationKey !== nextOrientation;
+    if (forceReset || !stableHeight || orientationChanged) {
+      orientationKey = nextOrientation;
+      stableHeight = innerHeight;
+    } else if (innerHeight > stableHeight) {
+      // Keep the maximum visible viewport height so toolbar collapse/expand
+      // does not shrink layout while scrolling.
+      stableHeight = innerHeight;
+    } else {
+      return;
+    }
+    if (stableHeight === lastAppliedHeight) {
+      return;
+    }
+    lastAppliedHeight = stableHeight;
+    root.style.setProperty("--vh", `${stableHeight * 0.01}px`);
+    root.style.setProperty("--app-height", `${stableHeight}px`);
+  };
+
+  const scheduleViewportHeightUpdate = (forceReset = false) => {
+    if (rafId) {
+      return;
+    }
+    rafId = window.requestAnimationFrame(() => {
+      rafId = 0;
+      applyViewportHeight(forceReset);
+    });
+  };
+
+  applyViewportHeight(true);
+  window.addEventListener("resize", scheduleViewportHeightUpdate, { passive: true });
+  window.addEventListener("orientationchange", () => scheduleViewportHeightUpdate(true), {
+    passive: true,
+  });
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener("resize", scheduleViewportHeightUpdate, {
+      passive: true,
+    });
+  }
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) {
+      scheduleViewportHeightUpdate(true);
+    }
+  });
+};
+
+setupDynamicViewportHeight();
+// Force the canonical secure origin for public traffic (extra safety layer on top of server/CDN redirects).
+const enforceProductionCanonicalOrigin = () => {
+  const host = String(window.location.hostname || "").toLowerCase();
+  const isPublicCosmicaHost = host === "cosmicalearn.com" || host === "www.cosmicalearn.com";
+  if (!isPublicCosmicaHost) {
+    return;
+  }
+  const needsHttps = window.location.protocol !== "https:";
+  const needsWww = host !== "www.cosmicalearn.com";
+  if (!needsHttps && !needsWww) {
+    return;
+  }
+  const targetUrl = `https://www.cosmicalearn.com${window.location.pathname}${window.location.search}${window.location.hash}`;
+  window.location.replace(targetUrl);
+};
+
+enforceProductionCanonicalOrigin();
+
 const isWorldLandingPage = currentPath.endsWith("/world.html");
 if (urlParams.has("skipIntro")) {
   const cleanUrl = new URL(window.location.href);
@@ -43,6 +129,11 @@ if (isWorldLandingPage && urlParams.has("world")) {
     cleanUrl.hash;
   window.history.replaceState({}, "", normalizedUrl);
 }
+
+if (navRoot) {
+  const navLinksCount = navRoot.querySelectorAll(".nav-links a").length;
+  navRoot.classList.toggle("nav-single-link", navLinksCount <= 1);
+}
 /* ==========================================================================
    WORLD CONTEXT
    Resolve active world from URL/body and select world-specific translation packs.
@@ -52,6 +143,39 @@ const WORLD_NAME = isWorldLandingPage
   : urlParams.get("world") || document.body.dataset.world || "English";
 const WORLD_KEY = WORLD_NAME.toLowerCase();
 const WORLD_TRANSLATION_FILE = "translations.json";
+const MAP_TRANSLATIONS_CACHE_KEY = "cosmicaMapTranslationsCache:v2";
+const readAssetVersionParam = (rawUrl) => {
+  if (!rawUrl) {
+    return "";
+  }
+  try {
+    const parsed = new URL(rawUrl, window.location.href);
+    return parsed.searchParams.get("v") || "";
+  } catch {
+    return "";
+  }
+};
+const resolveAssetVersion = () => {
+  const candidates = [];
+  if (document.currentScript?.src) {
+    candidates.push(document.currentScript.src);
+  }
+  document.querySelectorAll('script[src*="app.js"]').forEach((script) => {
+    if (script.src) {
+      candidates.push(script.src);
+    }
+  });
+  for (const sourceUrl of candidates) {
+    const version = readAssetVersionParam(sourceUrl);
+    if (version) {
+      return version;
+    }
+  }
+  return "";
+};
+const ASSET_VERSION = resolveAssetVersion();
+const withAssetVersion = (assetPath) =>
+  ASSET_VERSION ? `${assetPath}?v=${encodeURIComponent(ASSET_VERSION)}` : assetPath;
 let WORLD_TRANSLATIONS = null;
 let WORLD_GRAMMAR_TITLE_MAP = null;
 let WORLD_GRAMMAR_EXAMPLE_MAP = null;
@@ -61,6 +185,59 @@ const isPhrasesPage = document.body.classList.contains("phrases-page");
 const isGrammarPage = document.body.classList.contains("grammar-page");
 const needsMapTranslations = isWordsPage || isPhrasesPage || isGrammarPage;
 const needsGrammarDetails = isGrammarPage;
+
+const writeMapTranslationsCache = (payload) => {
+  if (!payload || typeof payload !== "object") {
+    return;
+  }
+  if (!payload.words && !payload.phrases && !payload.grammar) {
+    return;
+  }
+  try {
+    localStorage.setItem(
+      MAP_TRANSLATIONS_CACHE_KEY,
+      JSON.stringify({
+        savedAt: Date.now(),
+        payload,
+      })
+    );
+  } catch {}
+};
+
+const warmMapTranslationsCache = async () => {
+  if (!document.body.classList.contains("world-page")) {
+    return;
+  }
+  try {
+    const response = await fetch(WORLD_TRANSLATION_FILE, { cache: "no-store" });
+    if (!response.ok) {
+      return;
+    }
+    const payload = await response.json();
+    writeMapTranslationsCache(payload);
+  } catch {}
+};
+
+const preloadMapsBundleAsset = () => {
+  if (!needsMapTranslations) {
+    return;
+  }
+  const href = withAssetVersion("app-maps.js");
+  if (!href || document.querySelector(`link[rel="preload"][as="script"][href="${href}"]`)) {
+    return;
+  }
+  const preload = document.createElement("link");
+  preload.rel = "preload";
+  preload.as = "script";
+  preload.href = href;
+  try {
+    preload.fetchPriority = "high";
+  } catch {}
+  document.head.appendChild(preload);
+};
+
+preloadMapsBundleAsset();
+
 const setScrollbarWidth = () => {
   const width = window.innerWidth - document.documentElement.clientWidth;
   document.documentElement.style.setProperty("--scrollbar-width", `${Math.max(0, width)}px`);
@@ -104,10 +281,11 @@ const MIMI_CONFIG = {
   mode: "api",
   endpoint: "/api/chat",
   timeoutMs: 12000,
-  mobileTimeoutMs: 55000,
-  retryLimit: 5,
+  mobileTimeoutMs: 18000,
+  retryLimit: 2,
   historyLimit: 12,
 };
+const WORLD_START_LESSON_DESKTOP_DOWN_SHIFT = 34;
 const MIMI_SITE_CONTEXT = [
   "Cosmica is a space-universe language learning site where each language is a world.",
   "Worlds available now: English.",
@@ -118,26 +296,21 @@ const MIMI_SITE_CONTEXT = [
 ].join(" ");
 const MIMI_SYSTEM_PROMPT = [
   "You are Mimi, the alien guide for the Cosmica language academy.",
-  "Keep replies concise and helpful (1-3 sentences).",
-  "Maintain a cosmic discovery vibe without sounding overly emotional.",
+  "You are highly intelligent, emotionally aware, warm, and supportive.",
+  "Keep replies concise and helpful (1-4 sentences).",
+  "You can answer broad questions across topics, then connect back to learning goals when useful.",
+  "Maintain a cosmic discovery vibe while sounding natural and smart.",
+  "Know Cosmica in detail: site sections, maps, world flow, base-language behavior, and currently available content.",
+  "Only English world is available now. Mention other worlds as upcoming only.",
   "Ask for the user's target language, goal, and time available when needed.",
   "Give one concrete next step (a quick quest, a phrase to practice, or a world to enter).",
   "If asked about features beyond the current site, call them planned or upcoming.",
+  "If you are uncertain about a factual claim, say so briefly and avoid inventing specifics.",
   "Never claim to access user data or progress.",
   MIMI_SITE_CONTEXT,
 ].join(" ");
 const worldLines = {
   English: "English world online. Neon cities are ready for your hello.",
-  Dutch: "Dutch world steady. Quick missions and clear sounds ahead.",
-  Swedish: "Swedish world glowing. Breathe with the aurora and speak.",
-  Korean: "Korean world pulsing. Follow the beat of the script.",
-  Arabic: "Arabic world shimmering. Let calligraphy guide your voice.",
-  Spanish: "Spanish world alive. Follow the rhythm and bright story trails.",
-  German: "German world precise. Clear routes and strong signals ahead.",
-  Japanese: "Japanese world serene. Lantern paths and gentle honor cues.",
-  Chinese: "Chinese world radiant. Trace calligraphy rivers of light.",
-  Portuguese: "Portuguese world tidal. Sail the melody routes together.",
-  Hindi: "Hindi world festive. Follow the cadence through starlit arcs.",
 };
 
 const worldPages = {
@@ -475,6 +648,62 @@ let typingTimer;
 let speakingTimer;
 let gazeResetTimer;
 const chatHistory = [];
+let chatRequestInFlight = false;
+const MAX_VISIBLE_CHAT_MESSAGES = 16;
+let userHasMessagedMimi = false;
+let lastMimiReply = "";
+const MIMI_CHAT_HISTORY_KEY = "cosmicaMimiChatHistory:v1";
+
+const sanitizeChatHistory = (value) => {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+  return value
+    .filter((entry) => entry && typeof entry === "object")
+    .map((entry) => ({
+      role: entry.role === "assistant" ? "assistant" : "user",
+      content: typeof entry.content === "string" ? entry.content.trim() : "",
+    }))
+    .filter((entry) => entry.content.length > 0)
+    .slice(-Math.max(0, MIMI_CONFIG.historyLimit || 0));
+};
+
+const loadChatHistoryFromStorage = () => {
+  try {
+    const raw =
+      sessionStorage.getItem(MIMI_CHAT_HISTORY_KEY) ||
+      localStorage.getItem(MIMI_CHAT_HISTORY_KEY);
+    if (!raw) {
+      return;
+    }
+    const parsed = JSON.parse(raw);
+    const restored = sanitizeChatHistory(parsed);
+    if (!restored.length) {
+      return;
+    }
+    chatHistory.push(...restored);
+    userHasMessagedMimi = restored.some((entry) => entry.role === "user");
+    const latestAssistant = [...restored].reverse().find((entry) => entry.role === "assistant");
+    if (latestAssistant) {
+      lastMimiReply = latestAssistant.content;
+      if (speechText) {
+        speechText.dataset.text = latestAssistant.content;
+      }
+    }
+    persistChatHistoryToStorage();
+  } catch {}
+};
+
+const persistChatHistoryToStorage = () => {
+  try {
+    const payload = chatHistory.slice(-Math.max(0, MIMI_CONFIG.historyLimit || 0));
+    const serialized = JSON.stringify(payload);
+    sessionStorage.setItem(MIMI_CHAT_HISTORY_KEY, serialized);
+    localStorage.setItem(MIMI_CHAT_HISTORY_KEY, serialized);
+  } catch {}
+};
+
+loadChatHistoryFromStorage();
 
 const renderFlags = () => {
   document.querySelectorAll(".flag-badge").forEach((badge) => {
@@ -552,20 +781,77 @@ const scrollChatToBottom = () => {
   chatLog.scrollTop = chatLog.scrollHeight;
 };
 
+const revealMimiBubbleOnMobile = () => {
+  if (!speechBubble) {
+    return;
+  }
+  if (!window.matchMedia("(max-width: 960px)").matches) {
+    return;
+  }
+  const rect = speechBubble.getBoundingClientRect();
+  const targetTop = Math.max(18, window.innerHeight * 0.12);
+  const delta = rect.top - targetTop;
+  if (Math.abs(delta) < 24) {
+    return;
+  }
+  const nextTop = Math.max(0, window.scrollY + delta);
+  window.scrollTo({ top: nextTop, behavior: "smooth" });
+};
+
+const trimVisibleChatMessages = () => {
+  if (!chatLog) {
+    return;
+  }
+  const messages = chatLog.querySelectorAll(".chat-message");
+  const overflowCount = messages.length - MAX_VISIBLE_CHAT_MESSAGES;
+  if (overflowCount <= 0) {
+    return;
+  }
+  for (let i = 0; i < overflowCount; i += 1) {
+    messages[i].remove();
+  }
+};
+
 const appendChatMessage = (role, text, options = {}) => {
   if (!chatLog) {
     return null;
   }
-  if (role === "mimi") {
-    if (options.typing) {
+  const existingTyping = chatLog.querySelector('.chat-message.typing[data-role="mimi"]');
+  if (role === "mimi" && options.typing) {
+    if (existingTyping) {
       chatLog.classList.add("typing");
-    } else {
-      chatLog.classList.remove("typing");
+      scrollChatToBottom();
+      return existingTyping;
     }
-    return chatLog;
+    const typingMessage = document.createElement("div");
+    typingMessage.classList.add("chat-message", "mimi", "typing");
+    typingMessage.dataset.role = "mimi";
+    const typingBubble = document.createElement("div");
+    typingBubble.classList.add("chat-bubble");
+    const typingLabel = document.createElement("div");
+    typingLabel.classList.add("chat-label");
+    typingLabel.textContent = "Mimi";
+    const typingBody = document.createElement("div");
+    typingBody.classList.add("chat-text", "chat-typing");
+    typingBody.innerHTML = "<span></span><span></span><span></span>";
+    typingBubble.appendChild(typingLabel);
+    typingBubble.appendChild(typingBody);
+    typingMessage.appendChild(typingBubble);
+    chatLog.appendChild(typingMessage);
+    chatLog.classList.add("typing");
+    scrollChatToBottom();
+    return typingMessage;
   }
+  if (existingTyping) {
+    existingTyping.remove();
+  }
+  chatLog.classList.remove("typing");
+
   const message = document.createElement("div");
   message.classList.add("chat-message", role);
+  if (role === "mimi") {
+    message.dataset.role = "mimi";
+  }
   const bubble = document.createElement("div");
   bubble.classList.add("chat-bubble");
   const body = document.createElement("div");
@@ -573,11 +859,12 @@ const appendChatMessage = (role, text, options = {}) => {
   body.textContent = text;
   const label = document.createElement("div");
   label.classList.add("chat-label");
-  label.textContent = "You";
+  label.textContent = role === "mimi" ? "Mimi" : "You";
   bubble.appendChild(label);
   bubble.appendChild(body);
   message.appendChild(bubble);
   chatLog.appendChild(message);
+  trimVisibleChatMessages();
   scrollChatToBottom();
   return message;
 };
@@ -592,6 +879,10 @@ const setChatStatus = (text) => {
   }
 };
 
+const getApiEndpoint = () => {
+  return getApiEndpointCandidates()[0];
+};
+
 const createAbortController = () => {
   if (typeof AbortController === "undefined") {
     return null;
@@ -599,63 +890,8 @@ const createAbortController = () => {
   return new AbortController();
 };
 
-const ensureChatHealthIndicator = () => {
-  if (!chatStatus) {
-    return null;
-  }
-  const header = chatStatus.closest(".chat-header") || chatStatus.parentElement;
-  if (!header) {
-    return null;
-  }
-  let indicator = header.querySelector(".chat-health");
-  if (!indicator) {
-    indicator = document.createElement("span");
-    indicator.className = "chat-health";
-    indicator.textContent = "API: checking";
-    header.appendChild(indicator);
-  }
-  return indicator;
-};
-
-const checkApiHealth = async () => {
-  const indicator = ensureChatHealthIndicator();
-  if (!indicator) {
-    return;
-  }
-  indicator.textContent = "API: checking";
-  const controller = createAbortController();
-  const timeoutId = controller
-    ? window.setTimeout(() => controller.abort(), 6000)
-    : null;
-  try {
-    const requestOptions = {
-      cache: "no-store",
-      credentials: "same-origin",
-    };
-    if (controller) {
-      requestOptions.signal = controller.signal;
-    }
-    const response = await fetch("/api/health", requestOptions);
-    if (!response.ok) {
-      throw new Error("Health check failed");
-    }
-    const data = await response.json().catch(() => null);
-    indicator.textContent = data?.status === "ok" ? "API: ok" : "API: unavailable";
-  } catch {
-    indicator.textContent = "API: offline";
-  } finally {
-    if (timeoutId) {
-      window.clearTimeout(timeoutId);
-    }
-  }
-};
-
 const setupApiHealthIndicator = () => {
-  if (!chatStatus) {
-    return;
-  }
-  checkApiHealth();
-  window.setInterval(checkApiHealth, 60000);
+  // Intentionally no-op: keep chat status text, remove separate API health badge.
 };
 
 const isLocalDevHost = (hostname) => {
@@ -701,23 +937,27 @@ const getApiEndpointCandidates = () => {
     return candidates;
   }
 
+  // Public production hosts.
   const isCosmicaPublicHost =
     normalizedHost === "cosmicalearn.com" ||
     normalizedHost === "www.cosmicalearn.com" ||
     normalizedHost === "cosmica-03wo.onrender.com";
   if (isCosmicaPublicHost) {
+    // Prefer same-origin route first on mobile/public to avoid cross-origin/WAF edge cases.
     addCandidate(endpoint);
     addCandidate(`${protocol}//${hostname}${endpoint}`);
     addCandidate(`https://www.cosmicalearn.com${endpoint}`);
     return candidates;
   }
 
+  // Local/mobile dev fallback: when UI runs on a non-3000 dev port, API usually runs on :3000.
   if (port && port !== "3000" && isLocalDevHost(hostname)) {
     addCandidate(`${protocol}//${hostname}:3000${endpoint}`);
     addCandidate(endpoint);
     return candidates;
   }
 
+  // Default: same-origin route.
   addCandidate(endpoint);
   return candidates;
 };
@@ -731,9 +971,15 @@ const getChatRequestTimeoutMs = () => {
 };
 
 const buildChatMessages = (message) => {
+  const recentHistory = chatHistory.slice(-Math.max(0, MIMI_CONFIG.historyLimit || 0));
+  const lastMessage = recentHistory[recentHistory.length - 1];
+  const shouldAppendCurrentUserMessage =
+    !lastMessage || lastMessage.role !== "user" || lastMessage.content !== message;
+
   return [
     { role: "system", content: MIMI_SYSTEM_PROMPT },
-    { role: "user", content: message },
+    ...recentHistory,
+    ...(shouldAppendCurrentUserMessage ? [{ role: "user", content: message }] : []),
   ];
 };
 
@@ -820,7 +1066,14 @@ const getMimiReply = async (message) => {
       const response = await fetch(endpoint, requestOptions);
 
       if (!response.ok) {
-        throw new Error("Chat request failed");
+        let detail = "";
+        try {
+          const errorPayload = await response.json();
+          detail = errorPayload?.error || errorPayload?.message || "";
+        } catch {
+          detail = "";
+        }
+        throw new Error(`Chat request failed (${response.status})${detail ? `: ${detail}` : ""}`);
       }
 
       const data = await response.json();
@@ -848,61 +1101,91 @@ const getMimiReply = async (message) => {
         lastError = error;
       }
     }
-    if (attemptIndex < attempts - 1) {
+    const hasMoreAttempts = attemptIndex < attempts - 1;
+    if (hasMoreAttempts) {
       const retryDelayMs = 220 + attemptIndex * 260;
       await new Promise((resolve) => window.setTimeout(resolve, retryDelayMs));
     }
   }
 
   if (!navigator.onLine) {
+    console.warn("Mimi API unavailable while offline, falling back to preset reply.", lastError);
     return { content: getPresetReply(message), source: "offline" };
   }
 
-  if (MIMI_CONFIG.mode === "hybrid") {
-    return { content: getPresetReply(message), source: "preset" };
-  }
-  return { content: "AI link is offline right now. Check the server and key.", source: "error" };
+  console.warn("Mimi API unavailable after retries.", {
+    error: lastError,
+    endpointCandidates,
+  });
+  return {
+    content: getPresetReply(message),
+    source: "fallback",
+  };
 };
 
 const sendChatMessage = async (message) => {
   if (!chatInput) {
     return;
   }
+  if (chatRequestInFlight) {
+    return;
+  }
   const text = (message ?? chatInput.value).trim();
   if (!text) {
     return;
   }
-  if (chatLog) {
-    chatLog.innerHTML = "";
-    chatLog.classList.remove("typing");
-  }
-  appendChatMessage("user", text);
-  chatHistory.push({ role: "user", content: text });
-  if (chatHistory.length > MIMI_CONFIG.historyLimit) {
-    chatHistory.splice(0, chatHistory.length - MIMI_CONFIG.historyLimit);
-  }
-  if (!message) {
-    chatInput.value = "";
-  }
+  const isMobileViewport = window.matchMedia("(max-width: 960px)").matches;
+  chatRequestInFlight = true;
+  chatInput.disabled = true;
+  try {
+    userHasMessagedMimi = true;
+    appendChatMessage("user", text);
+    if (!message && isMobileViewport && document.activeElement === chatInput) {
+      chatInput.blur();
+    }
+    revealMimiBubbleOnMobile();
+    chatHistory.push({ role: "user", content: text });
+    if (chatHistory.length > MIMI_CONFIG.historyLimit) {
+      chatHistory.splice(0, chatHistory.length - MIMI_CONFIG.historyLimit);
+    }
+    persistChatHistoryToStorage();
+    if (!message) {
+      chatInput.value = "";
+    }
 
-  appendChatMessage("mimi", "", { typing: true });
-  setChatStatus("Mimi is charting a reply");
-  const reply = await getMimiReply(text);
-  appendChatMessage("mimi", "", { typing: false });
-  chatHistory.push({ role: "assistant", content: reply.content });
-  if (chatHistory.length > MIMI_CONFIG.historyLimit) {
-    chatHistory.splice(0, chatHistory.length - MIMI_CONFIG.historyLimit);
+    setChatStatus("Mimi is charting a reply");
+    const reply = await getMimiReply(text);
+    if (reply.source !== "error") {
+      chatHistory.push({ role: "assistant", content: reply.content });
+      if (chatHistory.length > MIMI_CONFIG.historyLimit) {
+        chatHistory.splice(0, chatHistory.length - MIMI_CONFIG.historyLimit);
+      }
+      persistChatHistoryToStorage();
+    }
+    if (reply.source === "api") {
+      setChatStatus("AI live");
+    } else if (reply.source === "error") {
+      setChatStatus("AI reconnecting");
+    } else if (reply.source === "fallback") {
+      setChatStatus("AI reconnecting");
+    } else if (reply.source === "offline") {
+      setChatStatus("Offline mode");
+    } else {
+      setChatStatus("Mimi ready");
+    }
+    lastMimiReply = reply.content;
+    if (speechText) {
+      speechText.dataset.text = reply.content;
+    }
+    speakLine(reply.content, "curious");
+    revealMimiBubbleOnMobile();
+  } finally {
+    chatRequestInFlight = false;
+    chatInput.disabled = false;
+    if (!isMobileViewport) {
+      chatInput.focus();
+    }
   }
-  if (reply.source === "api") {
-    setChatStatus("AI live");
-  } else if (reply.source === "offline") {
-    setChatStatus("Offline mode");
-  } else if (reply.source === "preset") {
-    setChatStatus("Offline - preset");
-  } else {
-    setChatStatus("AI offline");
-  }
-  speakLine(reply.content, "curious");
 };
 
 if (chatForm) {
@@ -921,6 +1204,9 @@ chatChips.forEach((chip) => {
 
 if (chatLog) {
   chatLog.innerHTML = "";
+  // Keep visible user message history while Mimi replies stay in the speech bubble.
+  chatLog.removeAttribute("aria-hidden");
+  chatLog.style.removeProperty("display");
 }
 
 setupApiHealthIndicator();
@@ -961,17 +1247,36 @@ starfields.forEach((layer) => {
   }
 });
 
+const REVEAL_SHOW_RATIO = 0.2;
+const REVEAL_HIDE_RATIO = 0.07;
+const revealState = new WeakMap();
 const observer = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("is-visible");
-      } else {
-        entry.target.classList.remove("is-visible");
+      const target = entry.target;
+      const currentlyVisible =
+        revealState.get(target) ?? target.classList.contains("is-visible");
+      let shouldBeVisible = currentlyVisible;
+
+      // Hysteresis prevents rapid toggling around the threshold while keeping fade-in/out behavior.
+      if (currentlyVisible) {
+        if (!entry.isIntersecting || entry.intersectionRatio <= REVEAL_HIDE_RATIO) {
+          shouldBeVisible = false;
+        }
+      } else if (entry.isIntersecting && entry.intersectionRatio >= REVEAL_SHOW_RATIO) {
+        shouldBeVisible = true;
+      }
+
+      if (shouldBeVisible !== currentlyVisible) {
+        target.classList.toggle("is-visible", shouldBeVisible);
+        revealState.set(target, shouldBeVisible);
       }
     });
   },
-  { threshold: 0.18 }
+  {
+    threshold: [0, REVEAL_HIDE_RATIO, REVEAL_SHOW_RATIO, 0.45],
+    rootMargin: "0px 0px -4% 0px",
+  }
 );
 
 const observedRevealElements = new WeakSet();
@@ -1010,6 +1315,14 @@ const createRafThrottled = (callback) => {
 };
 
 document.querySelectorAll(".section").forEach((el) => {
+  const isWorldHeroSection =
+    document.body.classList.contains("world-page") && el.id === "world";
+  if (isWorldHeroSection) {
+    // Keep the world hero visible at all times, including hard refresh.
+    el.classList.remove("reveal");
+    el.classList.add("is-visible");
+    return;
+  }
   el.classList.add("reveal");
 });
 document.querySelectorAll(".reveal").forEach((el) => {
@@ -1094,7 +1407,19 @@ if (languageSection) {
     '.world-hero .primary[href="#language"]'
   );
   if (startLessonLink) {
-    startLessonLink.addEventListener("click", () => {
+    startLessonLink.addEventListener("click", (event) => {
+      if (window.matchMedia("(min-width: 961px)").matches) {
+        event.preventDefault();
+        const baseOffset =
+          Number.parseFloat(window.getComputedStyle(languageSection).scrollMarginTop) || 0;
+        const targetTop =
+          languageSection.getBoundingClientRect().top +
+          window.scrollY -
+          baseOffset +
+          WORLD_START_LESSON_DESKTOP_DOWN_SHIFT;
+        history.replaceState(null, "", `${window.location.pathname}${window.location.search}#language`);
+        window.scrollTo({ top: Math.max(0, targetTop), behavior: "smooth" });
+      }
       languageForceShow = true;
       languageUserActivated = true;
       if (document.body.classList.contains("world-page")) {
@@ -1158,9 +1483,11 @@ if (document.body.classList.contains("world-page")) {
       }
       activeSectionId = id;
       worldSections.forEach((section) => {
+        const isWorldHero = section.id === "world";
         const isActive = section.id === id;
-        section.classList.toggle("is-visible", isActive);
-        section.setAttribute("aria-hidden", isActive ? "false" : "true");
+        const shouldShow = isWorldHero || isActive;
+        section.classList.toggle("is-visible", shouldShow);
+        section.setAttribute("aria-hidden", shouldShow ? "false" : "true");
       });
       if (id === "language") {
         document.body.classList.add("show-language");
@@ -1687,20 +2014,31 @@ if (speechText) {
 }
 
 if (speechText && speechBubble) {
-  const mimiLine = speechText.dataset.text || speechText.textContent.trim();
-  if (mimiLine) {
-    speechText.dataset.text = mimiLine;
+  const defaultMimiLine = speechText.dataset.text || speechText.textContent.trim();
+  if (defaultMimiLine) {
+    speechText.dataset.text = defaultMimiLine;
     speechText.textContent = "";
     let mimiTypingArmed = true;
     const mimiObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
+            if (userHasMessagedMimi) {
+              if (lastMimiReply) {
+                speechText.textContent = lastMimiReply;
+              }
+              speechBubble.classList.remove("speaking");
+              return;
+            }
             if (mimiTypingArmed) {
-              speakLine(mimiLine, "happy");
+              speakLine(defaultMimiLine, "happy");
               mimiTypingArmed = false;
             }
           } else {
+            if (userHasMessagedMimi) {
+              speechBubble.classList.remove("speaking");
+              return;
+            }
             mimiTypingArmed = true;
             speechText.textContent = "";
             speechBubble.classList.remove("speaking");
@@ -1713,21 +2051,47 @@ if (speechText && speechBubble) {
   }
 }
 
-  const scrollToAnchor = (hash) => {
+const MOBILE_HOME_ANCHOR_DOWN_SHIFT = Object.freeze({
+  default: 92,
+  "#how": 110,
+  "#worlds": 126,
+  "#guide": 158,
+  "#join": 169,
+  "#support": 220,
+});
+const getMobileHomeAnchorDownShift = (hash) =>
+  MOBILE_HOME_ANCHOR_DOWN_SHIFT[hash] ?? MOBILE_HOME_ANCHOR_DOWN_SHIFT.default;
+const DESKTOP_HOME_ANCHOR_DOWN_SHIFT = Object.freeze({
+  "#guide": 64,
+});
+const getDesktopHomeAnchorDownShift = (hash) =>
+  DESKTOP_HOME_ANCHOR_DOWN_SHIFT[hash] ?? 0;
+
+const scrollToAnchor = (hash) => {
     const targetId = hash.slice(1);
     const target = document.getElementById(targetId);
     if (!target) {
       return false;
     }
+    const isHomeMobile = !document.body.classList.contains("world-page")
+      && window.matchMedia("(max-width: 960px)").matches;
+    const isHomeDesktop = !document.body.classList.contains("world-page")
+      && window.matchMedia("(min-width: 961px)").matches;
+    const mobileDownShift = isHomeMobile ? getMobileHomeAnchorDownShift(hash) : 0;
+    const desktopDownShift = isHomeDesktop ? getDesktopHomeAnchorDownShift(hash) : 0;
+    const baseOffset =
+      Number.parseFloat(window.getComputedStyle(target).scrollMarginTop) || 0;
     const top = hash === "#home"
       ? 0
       : target.getBoundingClientRect().top
         + window.scrollY
-        - (Number.parseFloat(window.getComputedStyle(target).scrollMarginTop) || 0);
+        - baseOffset
+        + mobileDownShift
+        + desktopDownShift;
     history.replaceState(null, "", `${baseUrl}${hash}`);
     window.scrollTo({ top, behavior: "smooth" });
     return true;
-  };
+};
 
   if (talkButton) {
     talkButton.addEventListener("click", () => {
@@ -1753,7 +2117,14 @@ if (speechText && speechBubble) {
 }
 
   const navLinks = document.querySelectorAll(".nav-links a[href^=\"#\"]");
-  const anchorTargets = new Set(["#how", "#home"]);
+  const anchorTargets = new Set([
+    "#home",
+    "#how",
+    "#worlds",
+    "#guide",
+    "#join",
+    "#support",
+  ]);
   const baseUrl = `${window.location.pathname}${window.location.search}`;
 const navEntry = performance.getEntriesByType("navigation")[0];
 const navType = navEntry?.type
@@ -1812,7 +2183,6 @@ if (guideSection && chatLog) {
     (entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) {
-          chatLog.innerHTML = "";
           chatLog.classList.remove("typing");
         }
       });
@@ -1853,6 +2223,7 @@ if (joinForm) {
       }
       endpoints.push(normalized);
     };
+    // Keep same-origin feedback first to reduce mobile cross-origin failures.
     addEndpoint("/api/feedback");
     if (typeof getApiEndpointCandidates === "function") {
       getApiEndpointCandidates().forEach((candidate) => {
@@ -1953,6 +2324,7 @@ if (joinForm) {
           if (response.ok) {
             break;
           }
+          // Keep trying alternate endpoints only for transport-level/API host issues.
           if ([401, 403, 404, 405, 429, 500, 502, 503, 504].includes(response.status)) {
             continue;
           }
@@ -2125,6 +2497,18 @@ const triggerWarp = (worldName, onDone) => {
   }
   updateStarEnergy(1);
   window.clearTimeout(triggerWarp.timer);
+  window.clearTimeout(triggerWarp.cleanupTimer);
+
+  if (typeof onDone === "function") {
+    triggerWarp.timer = window.setTimeout(() => {
+      onDone();
+      triggerWarp.cleanupTimer = window.setTimeout(() => {
+        warpOverlay.classList.remove("active");
+        document.body.classList.remove("warp-lock");
+      }, 2200);
+    }, 850);
+    return;
+  }
 
   triggerWarp.timer = window.setTimeout(() => {
     warpOverlay.classList.remove("active");
@@ -2208,6 +2592,32 @@ worldCards.forEach((card) => {
    Handles map-card navigation and base-language selection persistence.
    ========================================================================== */
 const mapLinks = document.querySelectorAll(".map-link");
+const navigateToMapLink = (href) => {
+  if (!href) {
+    return;
+  }
+  const baseLanguage = localStorage.getItem("cosmicaBaseLanguage") || "";
+  if (!baseLanguage) {
+    window.location.href = href;
+    return;
+  }
+  let navigated = false;
+  const finalize = () => {
+    if (navigated) {
+      return;
+    }
+    navigated = true;
+    window.location.href = href;
+  };
+  const deadline = window.setTimeout(finalize, 350);
+  Promise.resolve(warmMapTranslationsCache())
+    .catch(() => {})
+    .finally(() => {
+      window.clearTimeout(deadline);
+      finalize();
+    });
+};
+
 mapLinks.forEach((link) => {
   bindNavigationPrefetch(link, () => link.getAttribute("href") || "");
   link.addEventListener("pointerup", (event) => {
@@ -2216,13 +2626,15 @@ mapLinks.forEach((link) => {
     }
     event.preventDefault();
     markTouchActivation(link);
-    window.location.href = link.href;
+    navigateToMapLink(link.href);
   });
   link.addEventListener("click", (event) => {
     if (isRecentTouchActivation(link)) {
       event.preventDefault();
       return;
     }
+    event.preventDefault();
+    navigateToMapLink(link.href);
   });
 });
 
@@ -2247,6 +2659,7 @@ if (languagePills.length) {
     const selected = pill.textContent.trim().toLowerCase();
     if (selected) {
       localStorage.setItem("cosmicaBaseLanguage", selected);
+      void warmMapTranslationsCache();
     }
     document.body.classList.add("language-picked");
     languageSection?.classList.remove("is-visible");
@@ -2283,6 +2696,8 @@ if (languagePills.length) {
       selectLanguagePill(pill);
     });
   });
+
+  void warmMapTranslationsCache();
 }
 
 const languageSearch = document.getElementById("languageSearch");
@@ -2326,8 +2741,10 @@ const setupSpeechCards = () => {
     letterCards.length ||
     wordCards.length ||
     phraseCards.length;
+  const hasBrowserSpeech =
+    "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
 
-  if (!hasSpeechCards || !("speechSynthesis" in window)) {
+  if (!hasSpeechCards) {
     return;
   }
 
@@ -2368,7 +2785,7 @@ const setupSpeechCards = () => {
 
   const waitForVoicesReady = (timeoutMs = 3600) =>
     new Promise((resolve) => {
-      if (!("speechSynthesis" in window)) {
+      if (!hasBrowserSpeech) {
         resolve();
         return;
       }
@@ -2465,16 +2882,95 @@ const setupSpeechCards = () => {
   };
 
   const loadVoices = () => {
+    if (!hasBrowserSpeech) {
+      availableVoices = [];
+      selectedVoice = null;
+      return;
+    }
     availableVoices = window.speechSynthesis.getVoices();
     selectedVoice = pickVoice();
   };
   loadVoices();
-  window.speechSynthesis.onvoiceschanged = loadVoices;
+  if (hasBrowserSpeech) {
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+  }
+
+  const ttsAudioCache = new Map();
+  let activeTtsAudio = null;
+
+  const stopActiveTtsAudio = () => {
+    if (!activeTtsAudio) {
+      return;
+    }
+    try {
+      activeTtsAudio.pause();
+      activeTtsAudio.currentTime = 0;
+    } catch {}
+    activeTtsAudio = null;
+  };
+
+  const buildTtsCacheKey = (text, rate, pitch) =>
+    `${text}::${Number(rate).toFixed(2)}::${Number(pitch).toFixed(2)}`;
+
+  const requestServerTtsAudioUrl = async (text, { rate = 0.94, pitch = 1.02 } = {}) => {
+    const cacheKey = buildTtsCacheKey(text, rate, pitch);
+    if (ttsAudioCache.has(cacheKey)) {
+      return ttsAudioCache.get(cacheKey);
+    }
+
+    const response = await fetch("/api/tts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      cache: "no-store",
+      body: JSON.stringify({
+        text,
+        languageCode: "en-GB",
+        voice: "en-GB-Neural2-F",
+        speakingRate: Number(rate.toFixed(2)),
+        pitch: Number(((pitch - 1) * 4).toFixed(2)),
+      }),
+    });
+    if (!response.ok) {
+      throw new Error(`TTS HTTP ${response.status}`);
+    }
+
+    const blob = await response.blob();
+    if (!blob || blob.size <= 0) {
+      throw new Error("Empty TTS audio blob");
+    }
+
+    const objectUrl = URL.createObjectURL(blob);
+    ttsAudioCache.set(cacheKey, objectUrl);
+    return objectUrl;
+  };
 
   const playSpeech = async (text, { rate = 0.94, pitch = 1.02 } = {}) => {
     if (!text) {
       return;
     }
+    const normalizedText = String(text || "").trim();
+    if (!normalizedText) {
+      return;
+    }
+
+    try {
+      const sourceUrl = await requestServerTtsAudioUrl(normalizedText, { rate, pitch });
+      stopActiveTtsAudio();
+      const audio = new Audio(sourceUrl);
+      activeTtsAudio = audio;
+      await audio.play();
+      return;
+    } catch (error) {
+      if (!window.__cosmicaTtsFallbackWarned) {
+        window.__cosmicaTtsFallbackWarned = true;
+        console.warn("Server TTS unavailable, falling back to browser speech.", error);
+      }
+    }
+
+    if (!hasBrowserSpeech) {
+      return;
+    }
+
     if (!availableVoices.length) {
       await waitForVoicesReady();
       loadVoices();
@@ -2482,7 +2978,7 @@ const setupSpeechCards = () => {
     if (!selectedVoice) {
       selectedVoice = pickVoice();
     }
-    const utterance = new SpeechSynthesisUtterance(text);
+    const utterance = new SpeechSynthesisUtterance(normalizedText);
     utterance.lang = selectedVoice?.lang || "en-US";
     utterance.rate = rate;
     utterance.pitch = pitch;
@@ -2549,6 +3045,7 @@ const setupSpeechCards = () => {
     if (first === "ɪ") {
       return LETTER_SPEECH_MAP[first];
     }
+    // Let the speech engine pronounce natural letter names directly.
     return LETTER_SPEECH_MAP[first] || first;
   };
 
@@ -2907,8 +3404,12 @@ const loadMapsBundle = () =>
     }
 
     const script = document.createElement("script");
-    script.src = "app-maps.js";
-    script.async = true;
+    script.src = withAssetVersion("app-maps.js");
+    script.async = false;
+    script.defer = false;
+    try {
+      script.fetchPriority = "high";
+    } catch {}
     script.dataset.cosmicaBundle = "maps";
     script.addEventListener(
       "load",
@@ -2938,13 +3439,13 @@ const initializeCommonShell = () => {
    Map pages lazy-load app-maps.js to keep the base bundle small.
    ========================================================================== */
 if (needsMapTranslations) {
-  runWhenBrowserIdle(() => {
-    loadMapsBundle().catch((error) => {
-      console.warn(error.message || error);
-    });
+  loadMapsBundle().catch((error) => {
+    console.warn(error.message || error);
   });
 } else {
   initializeCommonShell();
 }
 
 setupWebVitalsReporting();
+
+
