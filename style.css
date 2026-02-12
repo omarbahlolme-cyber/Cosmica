@@ -2949,13 +2949,17 @@ body:not(.world-page) .footer {
     align-items: stretch;
   }
 
+  .join-panel {
+    padding-bottom: 92px;
+  }
+
   .join-status {
-    position: static;
-    left: auto;
-    bottom: auto !important;
-    transform: none;
-    width: 100%;
-    margin-top: 12px;
+    position: absolute;
+    left: 50%;
+    bottom: 34px !important;
+    transform: translateX(-50%);
+    width: min(680px, 90%);
+    margin-top: 0;
     text-align: center;
   }
 
