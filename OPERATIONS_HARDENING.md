@@ -91,13 +91,23 @@ The workflow `.github/workflows/backup-restore-drill.yml` runs monthly and:
    - `npm install`
    - `npm run quality`
 
+### 3.5 Production rollback routine
+
+1. Print latest release tags and rollback helper commands:
+   - `npm run rollback:info`
+2. Follow exact rollback procedure in:
+   - `ROLLBACK_RUNBOOK.md`
+3. Always rollback via PR (do not force-push/rewrite `main` history).
+
 ## 4) Ongoing Security Monitoring
 
 1. `Live Security Check` workflow validates:
    - canonical redirects
    - production security headers
    - API health
+   - deep API checks (`/api/chat`, `/api/translate`, `/api/tts`, monitor-safe `/api/feedback`)
 2. `Security Audit` workflow checks dependency vulnerabilities.
-3. `Uptime Monitor` workflow creates incident issues on failures.
-4. Optional real-user performance forwarding:
+3. `Uptime Monitor` workflow creates incident issues on failures and validates core API contracts.
+4. `Indexing Follow-up` workflow checks robots/sitemap/canonical/JSON-LD and raises SEO incident issues.
+5. Optional real-user performance forwarding:
    - Configure `RUM_WEBHOOK_URL` to receive sampled `/api/web-vitals` metrics (LCP, INP, CLS, FCP, TTFB).

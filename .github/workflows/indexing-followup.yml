@@ -1,0 +1,111 @@
+name: Indexing Follow-up
+
+on:
+  schedule:
+    - cron: "35 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  indexing:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run indexing follow-up checks
+        id: check
+        run: npm run indexing:check
+
+      - name: Create or update SEO/indexing incident issue on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = "[Indexing] Follow-up check failed";
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const runUrl = `https://github.com/${owner}/${repo}/actions/runs/${context.runId}`;
+            const body = [
+              "Automated indexing follow-up checks failed.",
+              "",
+              `- Workflow run: ${runUrl}`,
+              `- Timestamp (UTC): ${new Date().toISOString()}`,
+              "",
+              "Checklist:",
+              "- Verify robots.txt is reachable and contains sitemap pointer.",
+              "- Verify sitemap.xml contains all key production pages.",
+              "- Verify canonical tags and JSON-LD on key URLs.",
+              "- In Google Search Console: validate fixes for indexing issues.",
+              "- In Bing Webmaster Tools: resubmit sitemap and inspect crawl status."
+            ].join("\n");
+
+            const existing = await github.rest.issues.listForRepo({
+              owner,
+              repo,
+              state: "open",
+              labels: "seo,indexing,monitoring",
+              per_page: 100,
+            });
+            const found = existing.data.find((issue) => issue.title === title);
+
+            if (found) {
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: found.number,
+                body,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner,
+                repo,
+                title,
+                body,
+                labels: ["seo", "indexing", "monitoring"],
+              });
+            }
+
+      - name: Close open SEO/indexing issue on recovery
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = "[Indexing] Follow-up check failed";
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+
+            const existing = await github.rest.issues.listForRepo({
+              owner,
+              repo,
+              state: "open",
+              labels: "seo,indexing,monitoring",
+              per_page: 100,
+            });
+            const found = existing.data.find((issue) => issue.title === title);
+            if (!found) {
+              return;
+            }
+
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: found.number,
+              body: `Indexing checks recovered at ${new Date().toISOString()} (UTC). Closing issue.`,
+            });
+            await github.rest.issues.update({
+              owner,
+              repo,
+              issue_number: found.number,
+              state: "closed",
+            });

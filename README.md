@@ -85,12 +85,33 @@ npm run backup:create
 npm run backup:verify
 ```
 
+## Rollback routine
+
+Preview latest release tags and safe rollback commands:
+
+```bash
+npm run rollback:info
+```
+
+Detailed incident procedure: `ROLLBACK_RUNBOOK.md`
+
+## Indexing follow-up checks
+
+Run production indexing prerequisite checks locally/on CI:
+
+```bash
+npm run indexing:check
+```
+
+This verifies `robots.txt`, `sitemap.xml`, canonical tags, and JSON-LD on key pages.
+
 ## Monitoring + releases
 
 - Uptime monitor runs every 15 minutes via `.github/workflows/uptime-monitor.yml`.
 - Release publishing is automated for `v*` tags via `.github/workflows/release.yml`.
 - Security dependency audit runs on schedule via `.github/workflows/security-audit.yml`.
 - Live production security checks run every 6 hours via `.github/workflows/live-security-check.yml`.
+- Weekly indexing follow-up checks run via `.github/workflows/indexing-followup.yml`.
 - Weekly backup snapshots run via `.github/workflows/backup-weekly.yml`.
 - Monthly backup restore drill runs via `.github/workflows/backup-restore-drill.yml`.
 - Manual GitHub protection automation is available via `.github/workflows/github-hardening.yml`.

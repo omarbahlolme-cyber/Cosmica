@@ -8,6 +8,8 @@
     "generate:translations": "node scripts/generate-translations.js",
     "html:baseline": "node scripts/apply-html-baseline.js",
     "smoke": "node scripts/smoke.js",
+    "indexing:check": "node scripts/indexing-followup.js",
+    "rollback:info": "node scripts/rollback-info.js",
     "check:syntax": "node --check server.js && node --check app.js && node --check app-maps.js",
     "check:a11y": "node scripts/check-accessibility-baseline.js",
     "check:seo": "node scripts/check-seo-baseline.js",
