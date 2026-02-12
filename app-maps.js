@@ -2467,7 +2467,7 @@ const GRAMMAR_EXPLANATION_TRANSLATIONS = Object.fromEntries(
 
 let translationPayloadReady = false;
 let translationsLoadPromise = null;
-const MAPS_BUNDLE_TRANSLATIONS_CACHE_KEY = "cosmicaMapTranslationsCache:v2";
+const MAPS_BUNDLE_TRANSLATIONS_CACHE_KEY = "cosmicaMapTranslationsCache:v3";
 const MAPS_BUNDLE_TRANSLATIONS_CACHE_MAX_AGE_MS = 24 * 60 * 60 * 1000;
 
 const normalizeGrammarSectionLookup = (value) =>
@@ -6299,6 +6299,12 @@ const normalizeWordLookupKey = (value) =>
     .replace(/\s+/g, " ")
     .trim();
 
+const WORD_TRANSLATION_ALIASES = {
+  fiance: "fianc\u00e9",
+  fiancee: "fianc\u00e9e",
+  "cote d'ivoire": "c\u00f4te d\u2019ivoire",
+};
+
 const resolveEntryByNormalizedKey = (entries, rawValue) => {
   if (!entries || typeof entries !== "object") {
     return null;
@@ -6322,18 +6328,36 @@ const resolveWordTranslation = (section, englishWord, baseLanguage) => {
   const sectionKey = section || WORD_SECTION_ORDER[0];
   const wordKey = (englishWord || "").toLowerCase();
   const langKey = String(baseLanguage || "").trim().toLowerCase();
+  const aliasSource =
+    WORD_TRANSLATION_ALIASES[normalizeWordLookupKey(englishWord)] || "";
   let translation = "";
+
   const worldSection = WORLD_TRANSLATIONS?.words?.[sectionKey] || {};
   const worldEntry =
     worldSection?.[wordKey] || resolveEntryByNormalizedKey(worldSection, englishWord);
+  const worldAliasEntry = aliasSource
+    ? worldSection?.[aliasSource.toLowerCase()] ||
+      resolveEntryByNormalizedKey(worldSection, aliasSource)
+    : null;
   if (worldEntry && worldEntry.translations) {
     translation = worldEntry.translations?.[langKey] || "";
   }
+  if (!translation && worldAliasEntry && worldAliasEntry.translations) {
+    translation = worldAliasEntry.translations?.[langKey] || "";
+  }
+
   if (!translation) {
     const sectionEntries = WORD_TRANSLATIONS?.[sectionKey] || {};
     const sectionEntry =
       sectionEntries?.[wordKey] || resolveEntryByNormalizedKey(sectionEntries, englishWord);
+    const aliasEntry = aliasSource
+      ? sectionEntries?.[aliasSource.toLowerCase()] ||
+        resolveEntryByNormalizedKey(sectionEntries, aliasSource)
+      : null;
     translation = sectionEntry?.[langKey] || "";
+    if (!translation) {
+      translation = aliasEntry?.[langKey] || "";
+    }
   }
   if (!translation) {
     if (englishWord && baseLanguage) {
