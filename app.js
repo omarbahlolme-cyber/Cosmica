@@ -2900,6 +2900,7 @@ const setupSpeechCards = () => {
     window.AudioContext || window.webkitAudioContext || null;
   let speechPlaybackContext = null;
   let activeTtsSource = null;
+  let serverTtsState = "unknown"; // unknown | available | unavailable
 
   const ensureSpeechPlaybackContext = async () => {
     if (!SpeechAudioContext) {
@@ -2951,7 +2952,9 @@ const setupSpeechCards = () => {
       }),
     });
     if (!response.ok) {
-      throw new Error(`TTS HTTP ${response.status}`);
+      const error = new Error(`TTS HTTP ${response.status}`);
+      error.httpStatus = response.status;
+      throw error;
     }
     const contentType = String(response.headers.get("content-type") || "").toLowerCase();
     if (contentType && !contentType.includes("audio")) {
@@ -2962,6 +2965,7 @@ const setupSpeechCards = () => {
       throw new Error("Empty TTS audio payload");
     }
     ttsAudioCache.set(cacheKey, buffer);
+    serverTtsState = "available";
     return buffer;
   };
 
@@ -2993,20 +2997,35 @@ const setupSpeechCards = () => {
       return;
     }
 
-    try {
-      await ensureSpeechPlaybackContext();
-      const sourceBuffer = await requestServerTtsAudioBuffer(normalizedText, { rate, pitch });
-      await playServerTtsAudio(sourceBuffer);
-      return;
-    } catch (error) {
-      if (!window.__cosmicaTtsFallbackWarned) {
-        window.__cosmicaTtsFallbackWarned = true;
-        console.warn("Server TTS unavailable, falling back to browser speech.", error);
+    let serverTtsError = null;
+    if (serverTtsState !== "unavailable") {
+      try {
+        await ensureSpeechPlaybackContext();
+        const sourceBuffer = await requestServerTtsAudioBuffer(normalizedText, { rate, pitch });
+        await playServerTtsAudio(sourceBuffer);
+        return;
+      } catch (error) {
+        serverTtsError = error;
+        const status = Number(error?.httpStatus || 0);
+        if (
+          !status ||
+          status === 404 ||
+          status === 429 ||
+          (status >= 500 && status <= 599)
+        ) {
+          // Google TTS proxy is unavailable right now, allow browser fallback.
+          serverTtsState = "unavailable";
+        }
       }
     }
 
     if (!hasBrowserSpeech) {
       return;
+    }
+
+    if (serverTtsError && !window.__cosmicaTtsFallbackWarned) {
+      window.__cosmicaTtsFallbackWarned = true;
+      console.warn("Server TTS unavailable, falling back to browser speech.", serverTtsError);
     }
 
     if (!availableVoices.length) {
