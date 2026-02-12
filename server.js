@@ -303,6 +303,10 @@ app.get("/.well-known/security.txt", (req, res) => {
   return res.sendFile(path.join(__dirname, "security.txt"));
 });
 
+app.get("/favicon.ico", (req, res) => {
+  return res.redirect(302, "/favicon.svg");
+});
+
 /* --------------------------------------------------------------------------
    SERVICE CLIENT HELPERS (OPENAI + EMAIL)
    -------------------------------------------------------------------------- */
