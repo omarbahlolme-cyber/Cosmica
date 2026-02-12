@@ -2950,13 +2950,13 @@ body:not(.world-page) .footer {
   }
 
   .join-panel {
-    padding-bottom: 92px;
+    padding-bottom: 122px;
   }
 
   .join-status {
     position: absolute;
     left: 50%;
-    bottom: 34px !important;
+    bottom: 56px !important;
     transform: translateX(-50%);
     width: min(680px, 90%);
     margin-top: 0;
