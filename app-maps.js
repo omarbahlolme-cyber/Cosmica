@@ -6289,6 +6289,32 @@ const writeMapsBundleTranslationsCache = (payload) => {
   } catch {}
 };
 
+const normalizeWordLookupKey = (value) =>
+  String(value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[\u2018\u2019`]/g, "'")
+    .replace(/â€™|â€˜/g, "'")
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim();
+
+const resolveEntryByNormalizedKey = (entries, rawValue) => {
+  if (!entries || typeof entries !== "object") {
+    return null;
+  }
+  const target = normalizeWordLookupKey(rawValue);
+  if (!target) {
+    return null;
+  }
+  for (const [key, value] of Object.entries(entries)) {
+    if (normalizeWordLookupKey(key) === target) {
+      return value || null;
+    }
+  }
+  return null;
+};
+
 const resolveWordTranslation = (section, englishWord, baseLanguage) => {
   if (!baseLanguage || !translationPayloadReady) {
     return "";
@@ -6297,12 +6323,17 @@ const resolveWordTranslation = (section, englishWord, baseLanguage) => {
   const wordKey = (englishWord || "").toLowerCase();
   const langKey = String(baseLanguage || "").trim().toLowerCase();
   let translation = "";
-  const worldEntry = WORLD_TRANSLATIONS?.words?.[sectionKey]?.[wordKey];
+  const worldSection = WORLD_TRANSLATIONS?.words?.[sectionKey] || {};
+  const worldEntry =
+    worldSection?.[wordKey] || resolveEntryByNormalizedKey(worldSection, englishWord);
   if (worldEntry && worldEntry.translations) {
     translation = worldEntry.translations?.[langKey] || "";
   }
   if (!translation) {
-    translation = WORD_TRANSLATIONS[sectionKey]?.[wordKey]?.[langKey] || "";
+    const sectionEntries = WORD_TRANSLATIONS?.[sectionKey] || {};
+    const sectionEntry =
+      sectionEntries?.[wordKey] || resolveEntryByNormalizedKey(sectionEntries, englishWord);
+    translation = sectionEntry?.[langKey] || "";
   }
   if (!translation) {
     if (englishWord && baseLanguage) {
