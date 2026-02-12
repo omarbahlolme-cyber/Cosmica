@@ -2896,23 +2896,43 @@ const setupSpeechCards = () => {
   }
 
   const ttsAudioCache = new Map();
-  let activeTtsAudio = null;
+  const SpeechAudioContext =
+    window.AudioContext || window.webkitAudioContext || null;
+  let speechPlaybackContext = null;
+  let activeTtsSource = null;
+
+  const ensureSpeechPlaybackContext = async () => {
+    if (!SpeechAudioContext) {
+      return null;
+    }
+    if (!speechPlaybackContext) {
+      speechPlaybackContext = new SpeechAudioContext();
+    }
+    if (speechPlaybackContext.state === "suspended") {
+      try {
+        await speechPlaybackContext.resume();
+      } catch {}
+    }
+    return speechPlaybackContext;
+  };
 
   const stopActiveTtsAudio = () => {
-    if (!activeTtsAudio) {
+    if (!activeTtsSource) {
       return;
     }
     try {
-      activeTtsAudio.pause();
-      activeTtsAudio.currentTime = 0;
+      activeTtsSource.stop(0);
     } catch {}
-    activeTtsAudio = null;
+    try {
+      activeTtsSource.disconnect();
+    } catch {}
+    activeTtsSource = null;
   };
 
   const buildTtsCacheKey = (text, rate, pitch) =>
     `${text}::${Number(rate).toFixed(2)}::${Number(pitch).toFixed(2)}`;
 
-  const requestServerTtsAudioUrl = async (text, { rate = 0.94, pitch = 1.02 } = {}) => {
+  const requestServerTtsAudioBuffer = async (text, { rate = 0.94, pitch = 1.02 } = {}) => {
     const cacheKey = buildTtsCacheKey(text, rate, pitch);
     if (ttsAudioCache.has(cacheKey)) {
       return ttsAudioCache.get(cacheKey);
@@ -2933,15 +2953,35 @@ const setupSpeechCards = () => {
     if (!response.ok) {
       throw new Error(`TTS HTTP ${response.status}`);
     }
-
-    const blob = await response.blob();
-    if (!blob || blob.size <= 0) {
-      throw new Error("Empty TTS audio blob");
+    const contentType = String(response.headers.get("content-type") || "").toLowerCase();
+    if (contentType && !contentType.includes("audio")) {
+      throw new Error(`Unexpected TTS content-type: ${contentType}`);
     }
+    const buffer = await response.arrayBuffer();
+    if (!buffer || buffer.byteLength <= 0) {
+      throw new Error("Empty TTS audio payload");
+    }
+    ttsAudioCache.set(cacheKey, buffer);
+    return buffer;
+  };
 
-    const objectUrl = URL.createObjectURL(blob);
-    ttsAudioCache.set(cacheKey, objectUrl);
-    return objectUrl;
+  const playServerTtsAudio = async (buffer) => {
+    const playbackContext = await ensureSpeechPlaybackContext();
+    if (!playbackContext) {
+      throw new Error("AudioContext unavailable for TTS");
+    }
+    const decodedAudio = await playbackContext.decodeAudioData(buffer.slice(0));
+    stopActiveTtsAudio();
+    const source = playbackContext.createBufferSource();
+    source.buffer = decodedAudio;
+    source.connect(playbackContext.destination);
+    source.onended = () => {
+      if (activeTtsSource === source) {
+        activeTtsSource = null;
+      }
+    };
+    activeTtsSource = source;
+    source.start(0);
   };
 
   const playSpeech = async (text, { rate = 0.94, pitch = 1.02 } = {}) => {
@@ -2954,11 +2994,9 @@ const setupSpeechCards = () => {
     }
 
     try {
-      const sourceUrl = await requestServerTtsAudioUrl(normalizedText, { rate, pitch });
-      stopActiveTtsAudio();
-      const audio = new Audio(sourceUrl);
-      activeTtsAudio = audio;
-      await audio.play();
+      await ensureSpeechPlaybackContext();
+      const sourceBuffer = await requestServerTtsAudioBuffer(normalizedText, { rate, pitch });
+      await playServerTtsAudio(sourceBuffer);
       return;
     } catch (error) {
       if (!window.__cosmicaTtsFallbackWarned) {
