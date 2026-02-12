@@ -464,6 +464,7 @@ app.post("/api/feedback", feedbackLimiter, async (req, res) => {
   const safeName = typeof name === "string" ? name.trim() : "";
   const safeEmail = typeof email === "string" ? email.trim() : "";
   const safeMessage = typeof message === "string" ? message.trim() : "";
+  const isMonitorCheck = String(req.get("x-monitor-check") || "").trim() === "1";
 
   if (!safeName || !safeEmail || !safeMessage) {
     return res.status(400).json({ error: "Missing required fields" });
@@ -481,6 +482,10 @@ app.post("/api/feedback", feedbackLimiter, async (req, res) => {
   }
   if (!hasResend && !hasSmtp) {
     return res.status(500).json({ error: "Missing email configuration" });
+  }
+
+  if (isMonitorCheck) {
+    return res.json({ ok: true, monitor: true });
   }
 
   try {

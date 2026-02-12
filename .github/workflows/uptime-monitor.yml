@@ -22,11 +22,48 @@ jobs:
           set -euo pipefail
           HOME_URL="https://www.cosmicalearn.com/"
           HEALTH_URL="https://www.cosmicalearn.com/api/health"
+          CHAT_URL="https://www.cosmicalearn.com/api/chat"
+          TRANSLATE_URL="https://www.cosmicalearn.com/api/translate"
+          FEEDBACK_URL="https://www.cosmicalearn.com/api/feedback"
+          TTS_URL="https://www.cosmicalearn.com/api/tts"
 
           curl -fsSIL --max-time 20 "$HOME_URL" > home_headers.txt
           curl -fsS --max-time 20 "$HEALTH_URL" > health.json
 
           node -e "const fs=require('fs'); const h=JSON.parse(fs.readFileSync('health.json','utf8')); if(h.status!=='ok'){throw new Error('health status not ok')} if(!h.version){throw new Error('missing health version')}"
+
+          check_status () {
+            local url="$1"
+            local body="$2"
+            local expected="$3"
+            local out_file="$4"
+            local code
+            code=$(curl -sS --max-time 20 -o "$out_file" -w "%{http_code}" \
+              -H "Content-Type: application/json" \
+              -X POST "$url" \
+              --data "$body")
+            if [[ "$code" != "$expected" ]]; then
+              echo "Unexpected status for $url (expected $expected got $code)"
+              cat "$out_file" || true
+              exit 1
+            fi
+          }
+
+          # Contract checks (fast/no external token spend): expect validation errors.
+          check_status "$CHAT_URL" '{}' "400" chat_contract.json
+          check_status "$TRANSLATE_URL" '{}' "400" translate_contract.json
+          check_status "$FEEDBACK_URL" '{}' "400" feedback_contract.json
+
+          # Deep TTS availability check: expect real audio payload.
+          tts_code=$(curl -sS --max-time 30 -o tts.bin -w "%{http_code}" \
+            -H "Content-Type: application/json" \
+            -X POST "$TTS_URL" \
+            --data '{"text":"A","languageCode":"en-GB","voice":"en-GB-Neural2-F"}')
+          if [[ "$tts_code" != "200" ]]; then
+            echo "Unexpected status for $TTS_URL (expected 200 got $tts_code)"
+            exit 1
+          fi
+          test -s tts.bin || (echo "TTS payload empty" && exit 1)
 
       - name: Create or update incident issue on failure
         if: failure()
