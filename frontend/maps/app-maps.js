@@ -1,4 +1,4 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    MAPS BUNDLE
    Loaded only on words/phrases/grammar pages. Contains heavy datasets,
    translation hydration, map rendering, and grammar modal behavior.
@@ -907,8 +907,8 @@ const WORD_SECTION_LISTS = {
     "stepdaughter",
     "boyfriend",
     "girlfriend",
-    "Fiancé",
-    "Fiancée",
+    "FiancÃ©",
+    "FiancÃ©e",
     "spouse",
     "relative",
     "roommate",
@@ -2597,13 +2597,13 @@ const hydrateTranslations = (target, source) => {
    ========================================================================== */
 const loadTranslations = async () => {
   try {
-    const baseResponse = await fetch("translations.json", { cache: "no-store" });
+    const baseResponse = await fetch("maps/translations.json", { cache: "no-store" });
     if (baseResponse.ok) {
       const baseData = await baseResponse.json();
       hydrateBaseTranslationsPayload(baseData);
       writeMapsBundleTranslationsCache(baseData);
     }
-    if (isNonEnglishWorld && WORLD_TRANSLATION_FILE !== "translations.json") {
+    if (isNonEnglishWorld && WORLD_TRANSLATION_FILE !== "maps/translations.json") {
       const response = await fetch(WORLD_TRANSLATION_FILE, { cache: "no-store" });
       if (!response.ok) {
         return;
@@ -2618,7 +2618,7 @@ const loadTranslations = async () => {
       }
     }
   } catch (error) {
-    console.warn("Failed to load translations.json", error);
+    console.warn("Failed to load maps/translations.json", error);
   } finally {
     translationPayloadReady = true;
   }
@@ -3126,7 +3126,7 @@ const buildGrammarExplanation = (card) => {
 const normalizeTranslationLookupKey = (value) =>
   String(value || "")
     .toLowerCase()
-    .replace(/’/g, "'")
+    .replace(/â€™/g, "'")
     .replace(/\s+/g, " ")
     .trim();
 
@@ -3135,7 +3135,7 @@ const buildTranslationLookupVariants = (value) => {
   if (!normalized) {
     return [];
   }
-  const stripped = normalized.replace(/[.!?…]+$/g, "").trim();
+  const stripped = normalized.replace(/[.!?â€¦]+$/g, "").trim();
   const variants = [normalized];
   if (stripped && stripped !== normalized) {
     variants.push(stripped);
@@ -6401,7 +6401,7 @@ const normalizeWordLookupKey = (value) =>
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/[\u2018\u2019`]/g, "'")
-    .replace(/â€™|â€˜/g, "'")
+    .replace(/Ã¢â‚¬â„¢|Ã¢â‚¬Ëœ/g, "'")
     .toLowerCase()
     .replace(/\s+/g, " ")
     .trim();
@@ -6757,6 +6757,7 @@ if (needsMapTranslations) {
     runWhenBrowserIdle(refreshAfterTranslations);
   }
 }
+
 
 
 

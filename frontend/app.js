@@ -168,7 +168,7 @@ const WORLD_NAME = isWorldLandingPage
   ? document.body.dataset.world || "English"
   : urlParams.get("world") || document.body.dataset.world || "English";
 const WORLD_KEY = WORLD_NAME.toLowerCase();
-const WORLD_TRANSLATION_FILE = "translations.json";
+const WORLD_TRANSLATION_FILE = "maps/translations.json";
 const MAP_TRANSLATIONS_CACHE_KEY = "cosmicaMapTranslationsCache:v2";
 const readAssetVersionParam = (rawUrl) => {
   if (!rawUrl) {
@@ -248,7 +248,7 @@ const preloadMapsBundleAsset = () => {
   if (!needsMapTranslations) {
     return;
   }
-  const href = withAssetVersion("app-maps.js");
+  const href = withAssetVersion("maps/app-maps.js");
   if (!href || document.querySelector(`link[rel="preload"][as="script"][href="${href}"]`)) {
     return;
   }
@@ -3580,14 +3580,14 @@ const loadMapsBundle = () =>
         return;
       }
       existing.addEventListener("load", () => resolve(), { once: true });
-      existing.addEventListener("error", () => reject(new Error("Failed to load app-maps.js")), {
+      existing.addEventListener("error", () => reject(new Error("Failed to load maps/app-maps.js")), {
         once: true,
       });
       return;
     }
 
     const script = document.createElement("script");
-    script.src = withAssetVersion("app-maps.js");
+    script.src = withAssetVersion("maps/app-maps.js");
     script.async = false;
     script.defer = false;
     try {
@@ -3604,7 +3604,7 @@ const loadMapsBundle = () =>
     );
     script.addEventListener(
       "error",
-      () => reject(new Error("Failed to load app-maps.js")),
+      () => reject(new Error("Failed to load maps/app-maps.js")),
       { once: true }
     );
     document.head.appendChild(script);
@@ -3619,7 +3619,7 @@ const initializeCommonShell = () => {
 /* ==========================================================================
    APPLICATION BOOTSTRAP (BASE)
    Non-map pages run from app.js directly.
-   Map pages lazy-load app-maps.js to keep the base bundle small.
+   Map pages lazy-load maps/app-maps.js to keep the base bundle small.
    ========================================================================== */
 if (needsMapTranslations) {
   loadMapsBundle().catch((error) => {
@@ -3630,5 +3630,6 @@ if (needsMapTranslations) {
 }
 
 setupWebVitalsReporting();
+
 
 
