@@ -111,3 +111,9 @@ The workflow `.github/workflows/backup-restore-drill.yml` runs monthly and:
 4. `Indexing Follow-up` workflow checks robots/sitemap/canonical/JSON-LD and raises SEO incident issues.
 5. Optional real-user performance forwarding:
    - Configure `RUM_WEBHOOK_URL` to receive sampled `/api/web-vitals` metrics (LCP, INP, CLS, FCP, TTFB).
+
+## 5) Policy Enforcement Process
+
+For privacy/terms/license violations and response steps, use:
+
+- `ENFORCEMENT_RUNBOOK.md`
