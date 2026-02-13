@@ -1990,7 +1990,7 @@ const GRAMMAR_SECTION_LISTS = {
     },
     {
       title: "negative short forms",
-      points: ["subject + aux + base verb"],
+      points: ["subject + aux + not + base verb"],
       example: "I don't know.",
     },
     {
@@ -2000,7 +2000,7 @@ const GRAMMAR_SECTION_LISTS = {
     },
     {
       title: "negative questions",
-      points: ["aux + subject + base verb + object"],
+      points: ["aux + not + subject + base verb + object"],
       example: "Don't you want coffee?",
     },
     {
@@ -2151,9 +2151,9 @@ const GRAMMAR_SECTION_LISTS = {
     {
       title: "reporting statements",
       points: [
-        "say with that clause",
-        "tell with object",
-        "reporting verbs set",
+        "say with (that) clause",
+        "that often omitted",
+        "reporting verb + clause",
       ],
       example: "She said she was ready.",
     },
@@ -2276,7 +2276,7 @@ const GRAMMAR_SECTION_LISTS = {
         "end a talk",
         "closing signal words",
       ],
-      example: "Anyway, that is all.",
+      example: "Hi everyone, anyway, that is all for today.",
     },
     {
       title: "topic shifts",
@@ -5839,7 +5839,7 @@ const GRAMMAR_MISTAKES = {
     fix: "He will probably arrive late.",
   },
   "polite requests": {
-    wrong: "Could you open the door?",
+    wrong: "Could you opens the door?",
     fix: "Could you open the door, please?",
   },
   "offers and invitations": {
@@ -5883,8 +5883,8 @@ const GRAMMAR_MISTAKES = {
     fix: "Could you send me the file?",
   },
   "spoken vs written": {
-    wrong: "I would like to inform you I arrived.",
-    fix: "I arrived.",
+    wrong: "In formal writing: I arrived lol.",
+    fix: "In formal writing: I have arrived.",
   },
   "professional style": {
     wrong: "Hey, I need this ASAP.",
@@ -5927,7 +5927,7 @@ const GRAMMAR_MISTAKES = {
     fix: "I do want to go.",
   },
   "conversation flow": {
-    wrong: "Me too. You?",
+    wrong: "Me too. And you is?",
     fix: "Me too. And you?",
   },
   "giving examples": {
