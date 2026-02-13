@@ -6,13 +6,13 @@ Cosmica is a static language-learning site with a small Node/Express backend for
 
 - Full file-by-file map: `PROJECT_STRUCTURE.md`
 - Ops/security runbook: `OPERATIONS_HARDENING.md`
-- Front-end entry points: `index.html`, `world.html`, `letters.html`, `words.html`, `phrases.html`, `grammar.html`
-- Base front-end logic: `app.js`
-- Map-only front-end bundle: `app-maps.js`
-- Shared styling: `style.css`
-- Map-only styling: `style-maps.css`
-- Backend/API: `server.js`
-- Translation data: `translations.json`
+- Front-end entry points: `frontend/index.html`, `frontend/world.html`, `frontend/letters.html`, `frontend/words.html`, `frontend/phrases.html`, `frontend/grammar.html`
+- Base front-end logic: `frontend/app.js`
+- Map-only front-end bundle: `frontend/app-maps.js`
+- Shared styling: `frontend/style.css`
+- Map-only styling: `frontend/style-maps.css`
+- Backend/API: `backend/server.js` (root `server.js` is a compatibility bootstrap)
+- Translation data: `frontend/translations.json`
 - Translation generators: `scripts/`
 
 ## Organization standards
@@ -138,3 +138,4 @@ Recommended external platform settings:
 5. DNSSEC enabled for domain integrity.
 
 For exact step-by-step platform setup, use `OPERATIONS_HARDENING.md`.
+

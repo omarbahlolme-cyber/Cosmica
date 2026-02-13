@@ -1,4 +1,4 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    BLOAT GUARD
    - Fails on orphaned root assets that are no longer referenced.
    - Enforces an allowlist for known-unused selectors.
@@ -10,9 +10,10 @@ const path = require("path");
    PATHS + CONSTANTS
    -------------------------------------------------------------------------- */
 const ROOT = path.resolve(__dirname, "..");
+const FRONTEND_ROOT = path.join(ROOT, "frontend");
 const ALLOWLIST_PATH = path.join(__dirname, "bloat-allowlist.json");
-const ROOT_FILES = fs
-  .readdirSync(ROOT, { withFileTypes: true })
+const FRONTEND_FILES = fs
+  .readdirSync(FRONTEND_ROOT, { withFileTypes: true })
   .filter((entry) => entry.isFile())
   .map((entry) => entry.name);
 const IGNORE_ROOT_FILE_REGEX = /^live_.*\.(?:html|js|css)$/i;
@@ -21,9 +22,6 @@ const JS_FILE_REF_REGEX = /["']([A-Za-z0-9._/-]+\.(?:js|css|json|html))["']/g;
 
 const ORPHAN_ASSET_EXTENSIONS = new Set([".js", ".css"]);
 const ORPHAN_ASSET_EXCLUDE = new Set([
-  "server.js",
-  "package-lock.json",
-  "package.json",
   "style.css",
   "style-maps.css",
   "app.js",
@@ -42,7 +40,7 @@ const WRITE_ALLOWLIST = process.argv.includes("--write-allowlist");
    HELPERS
    -------------------------------------------------------------------------- */
 const getRootFilesByExtension = (extensions) =>
-  ROOT_FILES
+  FRONTEND_FILES
     .filter((name) => !IGNORE_ROOT_FILE_REGEX.test(name))
     .filter((name) => extensions.has(path.extname(name).toLowerCase()))
     .sort();
@@ -65,11 +63,11 @@ const normalizeRef = (ref) => {
 
 const collectLocalReferences = () => {
   const referenced = new Set();
-  const htmlFiles = ROOT_FILES.filter((name) => name.endsWith(".html"));
-  const jsFiles = ROOT_FILES.filter((name) => name.endsWith(".js"));
+  const htmlFiles = FRONTEND_FILES.filter((name) => name.endsWith(".html"));
+  const jsFiles = FRONTEND_FILES.filter((name) => name.endsWith(".js"));
 
   for (const htmlFile of htmlFiles.filter((name) => !IGNORE_ROOT_FILE_REGEX.test(name))) {
-    const content = readText(path.join(ROOT, htmlFile));
+    const content = readText(path.join(FRONTEND_ROOT, htmlFile));
     let match;
     while ((match = LOCAL_REF_REGEX.exec(content)) !== null) {
       const normalized = normalizeRef(match[1]);
@@ -80,7 +78,7 @@ const collectLocalReferences = () => {
   }
 
   for (const jsFile of jsFiles.filter((name) => !IGNORE_ROOT_FILE_REGEX.test(name))) {
-    const content = readText(path.join(ROOT, jsFile));
+    const content = readText(path.join(FRONTEND_ROOT, jsFile));
     let match;
     while ((match = JS_FILE_REF_REGEX.exec(content)) !== null) {
       const normalized = normalizeRef(match[1]);
@@ -96,10 +94,10 @@ const collectLocalReferences = () => {
 const collectCssTokens = () => {
   const classes = new Set();
   const ids = new Set();
-  const cssFiles = ROOT_FILES.filter((name) => name.endsWith(".css"));
+  const cssFiles = FRONTEND_FILES.filter((name) => name.endsWith(".css"));
 
   for (const cssFile of cssFiles) {
-    const content = readText(path.join(ROOT, cssFile));
+    const content = readText(path.join(FRONTEND_ROOT, cssFile));
     let classMatch;
     while ((classMatch = CSS_CLASS_REGEX.exec(content)) !== null) {
       classes.add(classMatch[2]);
@@ -118,15 +116,15 @@ const collectCssTokens = () => {
 const collectUsedTokens = () => {
   const classes = new Set();
   const ids = new Set();
-  const htmlFiles = ROOT_FILES
+  const htmlFiles = FRONTEND_FILES
     .filter((name) => name.endsWith(".html"))
     .filter((name) => !IGNORE_ROOT_FILE_REGEX.test(name));
-  const jsFiles = ROOT_FILES
+  const jsFiles = FRONTEND_FILES
     .filter((name) => name.endsWith(".js"))
     .filter((name) => !IGNORE_ROOT_FILE_REGEX.test(name));
 
   for (const htmlFile of htmlFiles) {
-    const content = readText(path.join(ROOT, htmlFile));
+    const content = readText(path.join(FRONTEND_ROOT, htmlFile));
     let classAttr;
     while ((classAttr = HTML_CLASS_ATTR_REGEX.exec(content)) !== null) {
       classAttr[1]
@@ -143,7 +141,7 @@ const collectUsedTokens = () => {
   }
 
   for (const jsFile of jsFiles) {
-    const content = readText(path.join(ROOT, jsFile));
+    const content = readText(path.join(FRONTEND_ROOT, jsFile));
     let selector;
     while ((selector = JS_SELECTOR_REGEX.exec(content)) !== null) {
       const value = selector[1];
@@ -208,7 +206,7 @@ const failures = [];
 
 if (orphanAssets.length) {
   failures.push(
-    `Orphan root assets (not referenced by HTML/JS): ${orphanAssets.join(", ")}`
+    `Orphan frontend assets (not referenced by HTML/JS): ${orphanAssets.join(", ")}`
   );
 }
 
@@ -243,7 +241,8 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log("PASS [bloat] no orphan root JS/CSS assets");
+console.log("PASS [bloat] no orphan frontend JS/CSS assets");
 console.log(
   `PASS [bloat] allowlisted unused selectors classes=${unusedTokens.classes.length}, ids=${unusedTokens.ids.length}`
 );
+

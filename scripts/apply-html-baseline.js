@@ -1,4 +1,4 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    HTML BASELINE APPLIER
    - Ensures accessibility and SEO baseline tags across all root HTML pages.
    - Adds explicit third-party integrity exemptions for dynamic upstream assets.
@@ -10,6 +10,7 @@ const path = require("path");
    CONFIG
    -------------------------------------------------------------------------- */
 const ROOT = path.resolve(__dirname, "..");
+const FRONTEND_ROOT = path.join(ROOT, "frontend");
 const SITE_ORIGIN = "https://www.cosmicalearn.com";
 
 /* --------------------------------------------------------------------------
@@ -85,7 +86,7 @@ const buildWebPageSchemaBlock = ({ title, description, canonicalUrl }) => {
 };
 
 const applyPageBaseline = (fileName) => {
-  const filePath = path.join(ROOT, fileName);
+  const filePath = path.join(FRONTEND_ROOT, fileName);
   let html = fs.readFileSync(filePath, "utf8");
   const original = html;
 
@@ -142,7 +143,7 @@ const applyPageBaseline = (fileName) => {
    MAIN
    -------------------------------------------------------------------------- */
 const htmlFiles = fs
-  .readdirSync(ROOT)
+  .readdirSync(FRONTEND_ROOT)
   .filter((fileName) => fileName.toLowerCase().endsWith(".html"))
   .filter((fileName) => !fileName.toLowerCase().startsWith("live_"))
   .sort();
@@ -155,3 +156,7 @@ for (const fileName of htmlFiles) {
 }
 
 console.log(`PASS [html-baseline] processed ${htmlFiles.length} pages, updated ${updatedCount}`);
+
+
+
+

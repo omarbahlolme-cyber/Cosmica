@@ -1,4 +1,4 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    ASSET VERSION CONSISTENCY CHECK
    - Enforces versioned CSS/JS query params in HTML asset tags.
    - Ensures each shared asset uses one consistent version value site-wide.
@@ -10,6 +10,7 @@ const path = require("path");
    PATHS + CONFIG
    -------------------------------------------------------------------------- */
 const ROOT = path.resolve(__dirname, "..");
+const FRONTEND_ROOT = path.join(ROOT, "frontend");
 const shouldSkipHtmlFile = (name) => {
   const lower = String(name || "").toLowerCase();
   return (
@@ -21,7 +22,7 @@ const shouldSkipHtmlFile = (name) => {
   );
 };
 const htmlFiles = fs
-  .readdirSync(ROOT, { withFileTypes: true })
+  .readdirSync(FRONTEND_ROOT, { withFileTypes: true })
   .filter((entry) => entry.isFile())
   .map((entry) => entry.name)
   .filter((name) => name.toLowerCase().endsWith(".html"))
@@ -63,7 +64,7 @@ for (const rule of ASSET_RULES) {
   let totalMatches = 0;
 
   for (const htmlFile of htmlFiles) {
-    const htmlPath = path.join(ROOT, htmlFile);
+    const htmlPath = path.join(FRONTEND_ROOT, htmlFile);
     const content = fs.readFileSync(htmlPath, "utf8");
     const matchedVersions = collectAssetMatches(content, rule.file, rule.attr);
     if (!matchedVersions.length) {
@@ -108,3 +109,4 @@ if (failures.length) {
 console.log(
   `PASS [assets] consistent versioned style/app references across ${htmlFiles.length} pages`
 );
+

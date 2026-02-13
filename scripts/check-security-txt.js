@@ -1,4 +1,4 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    SECURITY.TXT POLICY CHECK
    - Validates required fields and expiry freshness.
    ========================================================================== */
@@ -9,7 +9,8 @@ const path = require("path");
    PATHS + CONFIG
    -------------------------------------------------------------------------- */
 const ROOT = path.resolve(__dirname, "..");
-const SECURITY_TXT_PATH = path.join(ROOT, "security.txt");
+const FRONTEND_ROOT = path.join(ROOT, "frontend");
+const SECURITY_TXT_PATH = path.join(FRONTEND_ROOT, "security.txt");
 const MIN_VALIDITY_DAYS = 30;
 
 /* --------------------------------------------------------------------------
@@ -77,3 +78,7 @@ if (failures.length) {
 }
 
 console.log("PASS [security-txt] policy + expiry checks");
+
+
+
+

@@ -1,4 +1,4 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    EXTERNAL RESOURCE INTEGRITY POLICY CHECK
    - Requires integrity+crossorigin on external scripts/styles OR an explicit
      data-sri-exempt reason for approved dynamic providers.
@@ -10,8 +10,9 @@ const path = require("path");
    PATHS + POLICY
    -------------------------------------------------------------------------- */
 const ROOT = path.resolve(__dirname, "..");
+const FRONTEND_ROOT = path.join(ROOT, "frontend");
 const htmlFiles = fs
-  .readdirSync(ROOT, { withFileTypes: true })
+  .readdirSync(FRONTEND_ROOT, { withFileTypes: true })
   .filter((entry) => entry.isFile())
   .map((entry) => entry.name)
   .filter((name) => name.toLowerCase().endsWith(".html"))
@@ -45,7 +46,7 @@ const isExternalUrl = (value) => /^https?:\/\//i.test(value || "");
 const failures = [];
 
 for (const fileName of htmlFiles) {
-  const content = fs.readFileSync(path.join(ROOT, fileName), "utf8");
+  const content = fs.readFileSync(path.join(FRONTEND_ROOT, fileName), "utf8");
 
   const scriptTags = content.match(/<script\b[^>]*\bsrc=["'][^"']+["'][^>]*>/gi) || [];
   const stylesheetTags =
@@ -88,3 +89,4 @@ if (failures.length) {
 }
 
 console.log(`PASS [integrity] external script/style policy across ${htmlFiles.length} pages`);
+

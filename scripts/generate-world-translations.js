@@ -1,4 +1,4 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    TRANSLATION GENERATOR (WORLD-SPECIFIC PACK)
    Builds translations.<world>.json with source + multilingual translation maps.
    ========================================================================== */
@@ -11,10 +11,10 @@ require("dotenv").config();
 /* --------------------------------------------------------------------------
    INPUT/OUTPUT PATHS
    -------------------------------------------------------------------------- */
-const mapsPath = path.join(__dirname, "..", "app-maps.js");
+const mapsPath = path.join(__dirname, "..", "frontend", "app-maps.js");
 const WORLD_LANGUAGE = process.env.WORLD_LANGUAGE || "Spanish";
 const WORLD_LANG_KEY = WORLD_LANGUAGE.toLowerCase();
-const outputPath = path.join(__dirname, "..", `translations.${WORLD_LANG_KEY}.json`);
+const outputPath = path.join(__dirname, "..", "frontend", `translations.${WORLD_LANG_KEY}.json`);
 
 /* --------------------------------------------------------------------------
    API CLIENT BOOTSTRAP
@@ -325,3 +325,4 @@ run().catch((error) => {
   console.error("World translation generation failed:", error);
   process.exit(1);
 });
+

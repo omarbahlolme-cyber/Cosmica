@@ -1,4 +1,4 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    SEO BASELINE CHECK
    - Enforces canonical metadata and structured-data baseline.
    - Ensures sitemap covers all root HTML pages.
@@ -10,8 +10,9 @@ const path = require("path");
    PATHS + CONFIG
    -------------------------------------------------------------------------- */
 const ROOT = path.resolve(__dirname, "..");
+const FRONTEND_ROOT = path.join(ROOT, "frontend");
 const SITE_ORIGIN = "https://www.cosmicalearn.com";
-const SITEMAP_PATH = path.join(ROOT, "sitemap.xml");
+const SITEMAP_PATH = path.join(FRONTEND_ROOT, "sitemap.xml");
 const shouldSkipHtmlFile = (name) => {
   const lower = String(name || "").toLowerCase();
   return (
@@ -23,7 +24,7 @@ const shouldSkipHtmlFile = (name) => {
   );
 };
 const htmlFiles = fs
-  .readdirSync(ROOT, { withFileTypes: true })
+  .readdirSync(FRONTEND_ROOT, { withFileTypes: true })
   .filter((entry) => entry.isFile())
   .map((entry) => entry.name)
   .filter((name) => name.toLowerCase().endsWith(".html"))
@@ -33,7 +34,7 @@ const htmlFiles = fs
 /* --------------------------------------------------------------------------
    HELPERS
    -------------------------------------------------------------------------- */
-const readFile = (fileName) => fs.readFileSync(path.join(ROOT, fileName), "utf8");
+const readFile = (fileName) => fs.readFileSync(path.join(FRONTEND_ROOT, fileName), "utf8");
 
 const expectedCanonicalForFile = (fileName) =>
   fileName === "index.html" ? `${SITE_ORIGIN}/` : `${SITE_ORIGIN}/${fileName}`;
@@ -111,3 +112,7 @@ if (failures.length) {
 }
 
 console.log(`PASS [seo] metadata + structured-data baseline across ${htmlFiles.length} pages`);
+
+
+
+

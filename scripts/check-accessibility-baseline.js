@@ -1,4 +1,4 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    ACCESSIBILITY BASELINE CHECK
    - Enforces foundational accessibility structure across static HTML pages.
    ========================================================================== */
@@ -9,6 +9,7 @@ const path = require("path");
    PATHS
    -------------------------------------------------------------------------- */
 const ROOT = path.resolve(__dirname, "..");
+const FRONTEND_ROOT = path.join(ROOT, "frontend");
 const shouldSkipHtmlFile = (name) => {
   const lower = String(name || "").toLowerCase();
   return (
@@ -20,7 +21,7 @@ const shouldSkipHtmlFile = (name) => {
   );
 };
 const htmlFiles = fs
-  .readdirSync(ROOT, { withFileTypes: true })
+  .readdirSync(FRONTEND_ROOT, { withFileTypes: true })
   .filter((entry) => entry.isFile())
   .map((entry) => entry.name)
   .filter((name) => name.toLowerCase().endsWith(".html"))
@@ -41,7 +42,7 @@ const countMatches = (content, regex) => {
 const failures = [];
 
 for (const fileName of htmlFiles) {
-  const content = fs.readFileSync(path.join(ROOT, fileName), "utf8");
+  const content = fs.readFileSync(path.join(FRONTEND_ROOT, fileName), "utf8");
 
   if (!/<html[^>]*\blang=["'][^"']+["']/i.test(content)) {
     failures.push(`${fileName}: missing <html lang="...">`);
@@ -75,3 +76,4 @@ if (failures.length) {
 }
 
 console.log(`PASS [a11y] baseline checks across ${htmlFiles.length} pages`);
+

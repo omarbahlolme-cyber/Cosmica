@@ -1,4 +1,4 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    TRANSLATION GENERATOR (BASE ENGLISH MAPS)
    Builds translations.json from WORD_SECTION_LISTS and PHRASE_SECTION_LISTS.
    ========================================================================== */
@@ -11,8 +11,8 @@ require("dotenv").config();
 /* --------------------------------------------------------------------------
    INPUT/OUTPUT PATHS
    -------------------------------------------------------------------------- */
-const mapsPath = path.join(__dirname, "..", "app-maps.js");
-const outputPath = path.join(__dirname, "..", "translations.json");
+const mapsPath = path.join(__dirname, "..", "frontend", "app-maps.js");
+const outputPath = path.join(__dirname, "..", "frontend", "translations.json");
 
 /* --------------------------------------------------------------------------
    API CLIENT BOOTSTRAP
@@ -198,3 +198,4 @@ run().catch((error) => {
   console.error("Translation generation failed:", error);
   process.exit(1);
 });
+

@@ -1,4 +1,4 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    SMOKE TESTS
    - Validates local HTML file references (href/src) resolve to real files.
    - Boots the local server on an isolated port and checks core routes.
@@ -8,6 +8,7 @@ const path = require("path");
 const { spawn } = require("child_process");
 
 const ROOT = path.resolve(__dirname, "..");
+const FRONTEND_ROOT = path.join(ROOT, "frontend");
 const PORT = Number(process.env.SMOKE_PORT || 4173);
 const BASE_URL = `http://127.0.0.1:${PORT}`;
 const STARTUP_TIMEOUT_MS = 20000;
@@ -50,7 +51,7 @@ const fetchWithTimeout = async (url, timeoutMs = REQUEST_TIMEOUT_MS) => {
 
 const getHtmlFiles = () =>
   fs
-    .readdirSync(ROOT, { withFileTypes: true })
+    .readdirSync(FRONTEND_ROOT, { withFileTypes: true })
     .filter((entry) => entry.isFile())
     .map((entry) => entry.name)
     .filter((file) => file.endsWith(".html"))
@@ -77,10 +78,10 @@ const normalizeLocalRef = (ref, htmlFile) => {
 
   if (clean.startsWith("/")) {
     const rel = clean === "/" ? "index.html" : clean.slice(1);
-    return path.resolve(ROOT, rel);
+    return path.resolve(FRONTEND_ROOT, rel);
   }
 
-  return path.resolve(ROOT, path.dirname(htmlFile), clean);
+  return path.resolve(FRONTEND_ROOT, path.dirname(htmlFile), clean);
 };
 
 const checkHtmlLocalReferences = () => {
@@ -88,7 +89,7 @@ const checkHtmlLocalReferences = () => {
   const htmlFiles = getHtmlFiles();
 
   for (const htmlFile of htmlFiles) {
-    const absolute = path.join(ROOT, htmlFile);
+    const absolute = path.join(FRONTEND_ROOT, htmlFile);
     const content = fs.readFileSync(absolute, "utf8");
     const regex = /\b(?:href|src)\s*=\s*["']([^"']+)["']/gi;
     let match;
@@ -100,16 +101,16 @@ const checkHtmlLocalReferences = () => {
         continue;
       }
 
-      if (!target.startsWith(ROOT)) {
+      if (!target.startsWith(FRONTEND_ROOT)) {
         failures.push(
-          `${htmlFile}: reference "${ref}" resolves outside project root (${target})`
+          `${htmlFile}: reference "${ref}" resolves outside frontend root (${target})`
         );
         continue;
       }
 
       if (!fs.existsSync(target)) {
         failures.push(
-          `${htmlFile}: missing local target for "${ref}" -> ${path.relative(ROOT, target)}`
+          `${htmlFile}: missing local target for "${ref}" -> ${path.relative(FRONTEND_ROOT, target)}`
         );
       }
     }
@@ -254,3 +255,4 @@ main().catch((error) => {
   console.error(`- ${error.message || error}`);
   process.exit(1);
 });
+
