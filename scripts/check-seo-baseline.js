@@ -12,12 +12,22 @@ const path = require("path");
 const ROOT = path.resolve(__dirname, "..");
 const SITE_ORIGIN = "https://www.cosmicalearn.com";
 const SITEMAP_PATH = path.join(ROOT, "sitemap.xml");
+const shouldSkipHtmlFile = (name) => {
+  const lower = String(name || "").toLowerCase();
+  return (
+    lower.startsWith("live_") ||
+    /^naver[a-z0-9]+\.html$/i.test(lower) ||
+    /^google[a-z0-9]+\.html$/i.test(lower) ||
+    /^bing[a-z0-9]+\.html$/i.test(lower) ||
+    /^baidu_verify_[a-z0-9]+\.html$/i.test(lower)
+  );
+};
 const htmlFiles = fs
   .readdirSync(ROOT, { withFileTypes: true })
   .filter((entry) => entry.isFile())
   .map((entry) => entry.name)
   .filter((name) => name.toLowerCase().endsWith(".html"))
-  .filter((name) => !name.toLowerCase().startsWith("live_"))
+  .filter((name) => !shouldSkipHtmlFile(name))
   .sort();
 
 /* --------------------------------------------------------------------------
