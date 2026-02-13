@@ -127,10 +127,31 @@ npm run backup:create
 npm run backup:verify
 ```
 
+Backup scope note:
+1. `npm run backup:create` uses `git archive HEAD` + `git bundle --all`.
+2. That means backups include committed/tracked repository content at `HEAD`.
+3. Local scratch files (for example `tmp/`) are not included unless tracked/committed.
+
 List latest backup files:
 
 ```bash
 ls backups
+```
+
+Inspect latest backup manifest quickly:
+
+```bash
+ls backups/*.json
+cat backups/<latest-manifest>.json
+```
+
+Restore from bundle into a clean folder:
+
+```bash
+git clone backups/<backup>.bundle restored-site
+cd restored-site
+npm install
+npm run quality
 ```
 
 ## Post-incident notes template

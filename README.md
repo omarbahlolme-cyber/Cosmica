@@ -86,6 +86,8 @@ npm run backup:create
 npm run backup:verify
 ```
 
+Note: backup snapshots are created from committed `HEAD` content (tracked files). Local scratch files in `tmp/` are intentionally excluded.
+
 ## Rollback routine
 
 Preview latest release tags and safe rollback commands:

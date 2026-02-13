@@ -66,6 +66,10 @@ Artifacts are written to `backups/`:
 - `*.bundle` full git-history bundle
 - `*.json` backup manifest
 
+Backup scope note:
+1. Archive contents come from `HEAD` (tracked/committed files).
+2. Local scratch folders such as `tmp/` are excluded unless tracked.
+
 ### 3.2 Automated weekly backup
 
 The workflow `.github/workflows/backup-weekly.yml` runs weekly and:
