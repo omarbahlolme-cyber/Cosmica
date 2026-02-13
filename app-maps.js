@@ -5109,6 +5109,46 @@ const splitByConnector = (sentence) => {
   return null;
 };
 
+const splitReportedStructure = (sentence) => {
+  const clean = String(sentence || "").replace(/[.!?]+$/, "").trim();
+  if (!clean) return null;
+
+  const reportClauseMatch = clean.match(
+    /^(.*?\b(?:said|asked|told)\b)\s+(that|if|who|what|where|when|why|how)\s+(.+)$/i
+  );
+  if (reportClauseMatch) {
+    return {
+      main: reportClauseMatch[1].trim(),
+      connector: reportClauseMatch[2].trim(),
+      clause: reportClauseMatch[3].trim(),
+    };
+  }
+
+  const reportToMatch = clean.match(
+    /^(.*?\b(?:asked|told|ordered)\b)\s+(to)\s+(.+)$/i
+  );
+  if (reportToMatch) {
+    return {
+      main: reportToMatch[1].trim(),
+      connector: reportToMatch[2].trim(),
+      clause: reportToMatch[3].trim(),
+    };
+  }
+
+  const reportBareClauseMatch = clean.match(
+    /^(.*?\b(?:said|asked|told)\b)\s+(.+)$/i
+  );
+  if (reportBareClauseMatch) {
+    return {
+      main: reportBareClauseMatch[1].trim(),
+      connector: "",
+      clause: reportBareClauseMatch[2].trim(),
+    };
+  }
+
+  return null;
+};
+
 const parseSVO = (sentence) => {
   const clean = sentence.replace(/[.!?]$/, "").trim();
   const words = clean.split(/\s+/);
@@ -5188,6 +5228,60 @@ const buildLabelsForCard = (card, sentence) => {
     const label = `${type}: ${phrase}`;
     if (!labels.includes(label)) labels.push(label);
   };
+
+  if (
+    section.includes("reported") ||
+    title.includes("reporting ") ||
+    title.includes("backshift") ||
+    title.includes("time place")
+  ) {
+    const reported = splitReportedStructure(sentence);
+    if (reported) {
+      addLabel("Main clause", reported.main);
+      if (reported.connector) {
+        addLabel("Connector", reported.connector);
+      }
+      addLabel("Clause", reported.clause);
+      return labels;
+    }
+  }
+
+  if (section.includes("formality") || section.includes("discourse")) {
+    const split = splitByConnector(sentence);
+    if (split) {
+      addLabel("Main clause", split.left);
+      addLabel("Connector", split.connector);
+      addLabel("Clause", split.right);
+      return labels;
+    }
+
+    const commaMatch = String(sentence || "")
+      .replace(/[.!?]+$/, "")
+      .match(/^\s*([^,]+),\s+(.+)\s*$/);
+    if (commaMatch) {
+      const lead = commaMatch[1].trim();
+      const rest = commaMatch[2].trim();
+      const leadLower = lead.toLowerCase();
+      if (
+        leadLower.startsWith("for example") ||
+        leadLower.startsWith("for instance") ||
+        leadLower.startsWith("in short") ||
+        leadLower.startsWith("anyway") ||
+        leadLower.startsWith("by the way") ||
+        leadLower.startsWith("sorry")
+      ) {
+        addLabel("Connector", lead);
+        addLabel("Clause", rest);
+      } else {
+        addLabel("Clause 1", lead);
+        addLabel("Clause 2", rest);
+      }
+      return labels;
+    }
+
+    addLabel("Sentence", String(sentence || "").replace(/[.!?]+$/, "").trim());
+    return labels;
+  }
 
   if (title.includes("linking clauses") || section.includes("connections") || section.includes("conditions")) {
     const split = splitByConnector(sentence);
@@ -5375,11 +5469,17 @@ const stripLabelPhrases = (sentence, labels) => {
   return output;
 };
 
-const buildGenericExamplePairs = (cardData, index) => {
+const buildGenericExamplePairs = (cardData, index, sectionName = "") => {
   const exampleA = cardData.example || buildAltGrammarExample(cardData, index);
   const examples = [exampleA];
   return examples.map((expanded) => {
-    const labels = buildLabelsForCard(cardData, expanded);
+    const labels = buildLabelsForCard(
+      {
+        ...cardData,
+        section: sectionName || cardData.section || "",
+      },
+      expanded
+    );
     let base = stripLabelPhrases(expanded, labels);
     if (!base || base.trim().length < 2) {
       base = expanded;
@@ -5977,7 +6077,7 @@ const renderGrammarModal = (section, index) => {
       </div>
     `;
   } else {
-    const genericPairs = buildGenericExamplePairs(cardData, index);
+    const genericPairs = buildGenericExamplePairs(cardData, index, section);
     renderedExamples = genericPairs
       .map((item) => {
         const expandedText =
