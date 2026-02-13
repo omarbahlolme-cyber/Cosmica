@@ -679,6 +679,9 @@ const MAX_VISIBLE_CHAT_MESSAGES = 16;
 let userHasMessagedMimi = false;
 let lastMimiReply = "";
 const MIMI_CHAT_HISTORY_KEY = "cosmicaMimiChatHistory:v1";
+const MIMI_CHAT_STORAGE_SCHEMA_KEY = "cosmicaMimiChatSchema";
+const MIMI_CHAT_STORAGE_SCHEMA_VERSION = "v2";
+let defaultMimiPrompt = "";
 
 const sanitizeChatHistory = (value) => {
   if (!Array.isArray(value)) {
@@ -712,9 +715,6 @@ const loadChatHistoryFromStorage = () => {
     const latestAssistant = [...restored].reverse().find((entry) => entry.role === "assistant");
     if (latestAssistant) {
       lastMimiReply = latestAssistant.content;
-      if (speechText) {
-        speechText.dataset.text = latestAssistant.content;
-      }
     }
     persistChatHistoryToStorage();
   } catch {}
@@ -729,6 +729,28 @@ const persistChatHistoryToStorage = () => {
   } catch {}
 };
 
+const clearChatHistoryFromStorage = () => {
+  try {
+    sessionStorage.removeItem(MIMI_CHAT_HISTORY_KEY);
+    localStorage.removeItem(MIMI_CHAT_HISTORY_KEY);
+  } catch {}
+};
+
+const ensureMimiChatStorageSchema = () => {
+  try {
+    const current = localStorage.getItem(MIMI_CHAT_STORAGE_SCHEMA_KEY);
+    if (current === MIMI_CHAT_STORAGE_SCHEMA_VERSION) {
+      return;
+    }
+    clearChatHistoryFromStorage();
+    localStorage.setItem(
+      MIMI_CHAT_STORAGE_SCHEMA_KEY,
+      MIMI_CHAT_STORAGE_SCHEMA_VERSION
+    );
+  } catch {}
+};
+
+ensureMimiChatStorageSchema();
 loadChatHistoryFromStorage();
 
 const renderFlags = () => {
@@ -903,6 +925,33 @@ const setChatStatus = (text) => {
   if (statusText) {
     statusText.textContent = text;
   }
+};
+
+const resetMimiConversationState = ({ resetPromptText = false } = {}) => {
+  chatHistory.length = 0;
+  userHasMessagedMimi = false;
+  lastMimiReply = "";
+  clearChatHistoryFromStorage();
+  if (chatLog) {
+    chatLog.innerHTML = "";
+    chatLog.classList.remove("typing");
+  }
+  if (chatInput) {
+    chatInput.value = "";
+  }
+  if (resetPromptText && speechText) {
+    const fallbackPrompt =
+      defaultMimiPrompt ||
+      speechText.dataset.defaultMimiPrompt ||
+      speechText.dataset.text ||
+      lines[0];
+    speechText.textContent = fallbackPrompt;
+    speechText.dataset.text = fallbackPrompt;
+  }
+  if (speechBubble) {
+    speechBubble.classList.remove("speaking");
+  }
+  setChatStatus("Mimi ready");
 };
 
 const getApiEndpoint = () => {
@@ -1200,9 +1249,6 @@ const sendChatMessage = async (message) => {
       setChatStatus("Mimi ready");
     }
     lastMimiReply = reply.content;
-    if (speechText) {
-      speechText.dataset.text = reply.content;
-    }
     speakLine(reply.content, "curious");
     revealMimiBubbleOnMobile();
   } finally {
@@ -2040,8 +2086,13 @@ if (speechText) {
 }
 
 if (speechText && speechBubble) {
-  const defaultMimiLine = speechText.dataset.text || speechText.textContent.trim();
+  const defaultMimiLine =
+    speechText.dataset.defaultMimiPrompt ||
+    speechText.dataset.text ||
+    speechText.textContent.trim();
   if (defaultMimiLine) {
+    defaultMimiPrompt = defaultMimiLine;
+    speechText.dataset.defaultMimiPrompt = defaultMimiLine;
     speechText.dataset.text = defaultMimiLine;
     speechText.textContent = "";
     let mimiTypingArmed = true;
@@ -2075,6 +2126,14 @@ if (speechText && speechBubble) {
     );
     mimiObserver.observe(speechBubble);
   }
+}
+
+if (chatForm && speechText) {
+  const clearMimiOnHomeLeave = () => {
+    resetMimiConversationState({ resetPromptText: true });
+  };
+  window.addEventListener("beforeunload", clearMimiOnHomeLeave);
+  window.addEventListener("pagehide", clearMimiOnHomeLeave);
 }
 
 const MOBILE_HOME_ANCHOR_DOWN_SHIFT = Object.freeze({
