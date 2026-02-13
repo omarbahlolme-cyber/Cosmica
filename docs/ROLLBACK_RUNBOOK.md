@@ -73,8 +73,8 @@ Use this when one area is broken (for example only `frontend/` styles).
 git checkout main
 git pull origin main
 git checkout -b rollback/partial-hotfix
-git restore --source v1.1.0 -- frontend/style.css frontend/style-maps.css
-git add frontend/style.css frontend/style-maps.css
+git restore --source v1.1.0 -- frontend/style.css frontend/maps/style-maps.css
+git add frontend/style.css frontend/maps/style-maps.css
 git commit -m "rollback(partial): restore stable styles from v1.1.0"
 npm run quality
 git push -u origin rollback/partial-hotfix

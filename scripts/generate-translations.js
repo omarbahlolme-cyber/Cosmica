@@ -11,8 +11,8 @@ require("dotenv").config();
 /* --------------------------------------------------------------------------
    INPUT/OUTPUT PATHS
    -------------------------------------------------------------------------- */
-const mapsPath = path.join(__dirname, "..", "frontend", "app-maps.js");
-const outputPath = path.join(__dirname, "..", "frontend", "translations.json");
+const mapsPath = path.join(__dirname, "..", "frontend", "maps", "app-maps.js");
+const outputPath = path.join(__dirname, "..", "frontend", "maps", "translations.json");
 
 /* --------------------------------------------------------------------------
    API CLIENT BOOTSTRAP

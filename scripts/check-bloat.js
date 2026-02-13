@@ -12,10 +12,22 @@ const path = require("path");
 const ROOT = path.resolve(__dirname, "..");
 const FRONTEND_ROOT = path.join(ROOT, "frontend");
 const ALLOWLIST_PATH = path.join(__dirname, "bloat-allowlist.json");
-const FRONTEND_FILES = fs
-  .readdirSync(FRONTEND_ROOT, { withFileTypes: true })
-  .filter((entry) => entry.isFile())
-  .map((entry) => entry.name);
+const collectFrontendFiles = (dir, base = "") => {
+  const files = [];
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    const relativePath = base ? `${base}/${entry.name}` : entry.name;
+    const absolutePath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      files.push(...collectFrontendFiles(absolutePath, relativePath));
+    } else if (entry.isFile()) {
+      files.push(relativePath);
+    }
+  }
+  return files;
+};
+const FRONTEND_FILES = collectFrontendFiles(FRONTEND_ROOT);
+const FRONTEND_ROOT_FILES = FRONTEND_FILES.filter((file) => !file.includes("/"));
 const IGNORE_ROOT_FILE_REGEX = /^live_.*\.(?:html|js|css)$/i;
 const LOCAL_REF_REGEX = /\b(?:href|src)\s*=\s*["']([^"']+)["']/gi;
 const JS_FILE_REF_REGEX = /["']([A-Za-z0-9._/-]+\.(?:js|css|json|html))["']/g;
@@ -40,7 +52,7 @@ const WRITE_ALLOWLIST = process.argv.includes("--write-allowlist");
    HELPERS
    -------------------------------------------------------------------------- */
 const getRootFilesByExtension = (extensions) =>
-  FRONTEND_FILES
+  FRONTEND_ROOT_FILES
     .filter((name) => !IGNORE_ROOT_FILE_REGEX.test(name))
     .filter((name) => extensions.has(path.extname(name).toLowerCase()))
     .sort();

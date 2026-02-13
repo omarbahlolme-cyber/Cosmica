@@ -32,7 +32,7 @@ const htmlFiles = fs
 const ASSET_RULES = [
   { file: "style.css", attr: "href", required: true },
   { file: "app.js", attr: "src", required: true },
-  { file: "style-maps.css", attr: "href", required: false },
+  { file: "maps/style-maps.css", attr: "href", required: false },
 ];
 
 /* --------------------------------------------------------------------------

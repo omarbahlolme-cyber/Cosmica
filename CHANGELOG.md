@@ -9,13 +9,13 @@ All notable changes to this project are documented in this file.
 - Automated release workflow for `v*` tags plus manual backfill trigger.
 - Enforced bloat allowlist baseline (`scripts/bloat-allowlist.json`).
 - Security dependency audit workflow.
-- Legal/security pages (`privacy.html`, `terms.html`, `license.html`), `LICENSE`, and `SECURITY.md`.
+- Legal/security pages (`privacy.html`, `terms.html`, `license.html`), `LICENSE`, and `docs/SECURITY.md`.
 - Security contact file served at `/.well-known/security.txt`.
 - Weekly backup workflow and backup scripts (`create-backup`, `verify-backup`).
 - Live production security monitoring workflow (redirect/header/health checks).
 - Manual GitHub hardening workflow + API automation script for branch protection/security features.
 - Dependabot configuration for weekly dependency/security update PRs.
-- Operations hardening runbook (`OPERATIONS_HARDENING.md`).
+- Operations hardening runbook (`docs/OPERATIONS_HARDENING.md`).
 - Monthly backup restore drill workflow.
 - Accessibility/SEO/integrity/security.txt baseline check scripts added to quality pipeline.
 - HTML baseline updater script for consistent skip links, main landmarks, semantic h1, and JSON-LD.
@@ -33,13 +33,13 @@ All notable changes to this project are documented in this file.
 
 ### Added
 - CI quality workflow with syntax, bloat, perf, release, and smoke checks.
-- Dedicated map bundle (`app-maps.js`) and map stylesheet (`style-maps.css`).
+- Dedicated map bundle (`frontend/maps/app-maps.js`) and map stylesheet (`frontend/maps/style-maps.css`).
 - Performance baseline and regression scripts under `scripts/`.
 - Release hygiene check script and changelog policy.
 
 ### Changed
 - Global static caching strategy in `server.js` for smoother loading across all pages.
-- Translation generators now read datasets from `app-maps.js`.
+- Translation generators now read datasets from `frontend/maps/app-maps.js`.
 
 ## [1.0.0] - 2026-02-08
 

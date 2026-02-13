@@ -11,10 +11,10 @@ require("dotenv").config();
 /* --------------------------------------------------------------------------
    INPUT/OUTPUT PATHS
    -------------------------------------------------------------------------- */
-const mapsPath = path.join(__dirname, "..", "frontend", "app-maps.js");
+const mapsPath = path.join(__dirname, "..", "frontend", "maps", "app-maps.js");
 const WORLD_LANGUAGE = process.env.WORLD_LANGUAGE || "Spanish";
 const WORLD_LANG_KEY = WORLD_LANGUAGE.toLowerCase();
-const outputPath = path.join(__dirname, "..", "frontend", `translations.${WORLD_LANG_KEY}.json`);
+const outputPath = path.join(__dirname, "..", "frontend", "maps", `translations.${WORLD_LANG_KEY}.json`);
 
 /* --------------------------------------------------------------------------
    API CLIENT BOOTSTRAP

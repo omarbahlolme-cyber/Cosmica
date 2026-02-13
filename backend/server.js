@@ -29,6 +29,7 @@ const APP_VERSION = (() => {
 const isProduction = process.env.NODE_ENV === "production";
 const PROJECT_ROOT = path.resolve(__dirname, "..");
 const FRONTEND_ROOT = path.join(PROJECT_ROOT, "frontend");
+const FRONTEND_MAPS_ROOT = path.join(FRONTEND_ROOT, "maps");
 
 app.use(express.json({ limit: "1mb" }));
 app.use((req, res, next) => {
@@ -257,6 +258,14 @@ app.use((req, res, next) => {
   res.setHeader("X-Robots-Tag", "noindex, nofollow");
   return res.status(410).type("text/plain").send("This page has been removed.");
 });
+
+const sendMapAssetAlias = (fileName) => (req, res) => {
+  return res.sendFile(path.join(FRONTEND_MAPS_ROOT, fileName));
+};
+
+app.get("/app-maps.js", sendMapAssetAlias("app-maps.js"));
+app.get("/style-maps.css", sendMapAssetAlias("style-maps.css"));
+app.get("/translations.json", sendMapAssetAlias("translations.json"));
 
 app.use(
   express.static(FRONTEND_ROOT, {

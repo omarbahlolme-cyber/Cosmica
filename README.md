@@ -4,15 +4,15 @@ Cosmica is a static language-learning site with a small Node/Express backend for
 
 ## Developer map
 
-- Full file-by-file map: `PROJECT_STRUCTURE.md`
-- Ops/security runbook: `OPERATIONS_HARDENING.md`
+- Full file-by-file map: `docs/PROJECT_STRUCTURE.md`
+- Ops/security runbook: `docs/OPERATIONS_HARDENING.md`
 - Front-end entry points: `frontend/index.html`, `frontend/world.html`, `frontend/letters.html`, `frontend/words.html`, `frontend/phrases.html`, `frontend/grammar.html`
 - Base front-end logic: `frontend/app.js`
-- Map-only front-end bundle: `frontend/app-maps.js`
+- Map-only front-end bundle: `frontend/maps/app-maps.js`
 - Shared styling: `frontend/style.css`
-- Map-only styling: `frontend/style-maps.css`
+- Map-only styling: `frontend/maps/style-maps.css`
 - Backend/API: `backend/server.js` (root `server.js` is a compatibility bootstrap)
-- Translation data: `frontend/translations.json`
+- Translation data: `frontend/maps/translations.json`
 - Translation generators: `scripts/`
 
 ## Organization standards
@@ -93,7 +93,7 @@ Preview latest release tags and safe rollback commands:
 npm run rollback:info
 ```
 
-Detailed incident procedure: `ROLLBACK_RUNBOOK.md`
+Detailed incident procedure: `docs/ROLLBACK_RUNBOOK.md`
 
 ## Indexing follow-up checks
 
@@ -137,5 +137,5 @@ Recommended external platform settings:
 4. Always Use HTTPS + automatic HTTP->HTTPS redirect.
 5. DNSSEC enabled for domain integrity.
 
-For exact step-by-step platform setup, use `OPERATIONS_HARDENING.md`.
+For exact step-by-step platform setup, use `docs/OPERATIONS_HARDENING.md`.
 
