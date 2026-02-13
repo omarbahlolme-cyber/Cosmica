@@ -2680,15 +2680,57 @@ if (languagePills.length) {
       setActiveWorldSection("maps");
     }
   };
+  const touchTapMaxMovePx = 10;
+  const touchPillState = new WeakMap();
+
   languagePills.forEach((pill) => {
+    pill.addEventListener("pointerdown", (event) => {
+      if (event.pointerType !== "touch") {
+        return;
+      }
+      touchPillState.set(pill, {
+        startX: event.clientX,
+        startY: event.clientY,
+        moved: false,
+      });
+    });
+
+    pill.addEventListener("pointermove", (event) => {
+      if (event.pointerType !== "touch") {
+        return;
+      }
+      const state = touchPillState.get(pill);
+      if (!state) {
+        return;
+      }
+      if (
+        Math.abs(event.clientX - state.startX) > touchTapMaxMovePx ||
+        Math.abs(event.clientY - state.startY) > touchTapMaxMovePx
+      ) {
+        state.moved = true;
+      }
+    });
+
+    pill.addEventListener("pointercancel", () => {
+      touchPillState.delete(pill);
+    });
+
     pill.addEventListener("pointerup", (event) => {
       if (event.pointerType !== "touch") {
+        return;
+      }
+      const state = touchPillState.get(pill);
+      touchPillState.delete(pill);
+      if (state?.moved) {
+        // Treat swipe/scroll as navigation intent, not selection.
+        markTouchActivation(pill);
         return;
       }
       event.preventDefault();
       markTouchActivation(pill);
       selectLanguagePill(pill);
     });
+
     pill.addEventListener("click", () => {
       if (isRecentTouchActivation(pill)) {
         return;
@@ -3447,5 +3489,4 @@ if (needsMapTranslations) {
 }
 
 setupWebVitalsReporting();
-
 
