@@ -1688,7 +1688,7 @@ const GRAMMAR_SECTION_LISTS = {
         "going to for plans",
         "present continuous for plans",
       ],
-      example: "We are meeting tomorrow.",
+      example: "We will meet tomorrow.",
     },
     {
       title: "future continuous",
@@ -1715,7 +1715,7 @@ const GRAMMAR_SECTION_LISTS = {
         "perfect vs simple contrast",
         "duration focus contrast",
       ],
-      example: "I have been waiting all day.",
+      example: "I work every day, I am working now, and I have worked here for years.",
     },
   ],
   "Nouns & Articles": [
@@ -2069,8 +2069,8 @@ const GRAMMAR_SECTION_LISTS = {
     },
     {
       title: "mixed conditions",
-      points: ["if clause + result clause"],
-      example: "If she studied, she would be calm.",
+      points: ["if clause (past perfect) + present result (would + base verb)"],
+      example: "If she had studied, she would be calm now.",
     },
     {
       title: "unless and otherwise",
@@ -3534,7 +3534,7 @@ const GRAMMAR_TEMPLATES = {
   "past continuous": "subject + was/were + verb-ing",
   "present perfect": "subject + have/has + past participle",
   "past perfect": "subject + had + past participle",
-  "future forms": "will + base verb | be going to + base verb",
+  "future forms": "will + base verb | be going to + base verb | present continuous + future time",
   "future continuous": "will be + verb-ing",
   "future perfect": "will have + past participle",
   "aspect contrasts": "simple = whole; continuous = in progress; perfect = result",
@@ -3587,7 +3587,7 @@ const GRAMMAR_TEMPLATES = {
   "unreal present": "if + past, would + verb",
   "unreal past": "if + had, would have + past participle",
   "mixed conditions": "if + past perfect, would + base verb",
-  "unless and otherwise": "unless + clause, result",
+  "unless and otherwise": "result + unless + clause | otherwise + result",
   "active voice": "subject + verb + object",
   "passive voice": "object + be + past participle",
   "focus shifts": "fronted phrase + sentence",
@@ -3600,7 +3600,7 @@ const GRAMMAR_TEMPLATES = {
   "possibility": "may/might + base verb",
   "probability": "will/probably + verb",
   "polite requests": "could you + base verb",
-  "offers and invitations": "would you like to + verb",
+  "offers and invitations": "would you like + noun | would you like to + verb",
   "reporting statements": "said (that) + clause",
   "reporting questions": "asked + if/wh-word + clause",
   "reporting requests": "asked + to + verb",
@@ -3971,9 +3971,13 @@ const buildTenseExamples = (card) => {
   if (title.includes("aspect contrasts")) {
     return [
       {
-        labels: ["Simple form: work", "Continuous form: am working"],
-        base: "I work. I am working now.",
-        expanded: "I work. I am working now.",
+        labels: [
+          "Simple form: work",
+          "Continuous form: am working",
+          "Past participle: worked",
+        ],
+        base: "I work every day. I am working now.",
+        expanded: "I work every day, I am working now, and I have worked here for years.",
       },
     ];
   }
@@ -4261,9 +4265,12 @@ const buildConditionExamples = (card) => {
   if (title.includes("mixed conditions")) {
     return [
       {
-        labels: ["If clause: if she studied", "Result clause: she would be calm"],
-        base: "if she studied, she would be calm",
-        expanded: "If she studied, she would be calm.",
+        labels: [
+          "If clause: if she had studied",
+          "Would clause: she would be calm now",
+        ],
+        base: "if she had studied, she would be calm now",
+        expanded: "If she had studied, she would be calm now.",
       },
     ];
   }
@@ -5743,7 +5750,7 @@ const GRAMMAR_MISTAKES = {
     fix: "She hardly sleeps.",
   },
   "basic connectors": {
-    wrong: "I went but stayed.",
+    wrong: "I went and but stayed.",
     fix: "I went and stayed.",
   },
   "reason and result": {
@@ -5751,7 +5758,7 @@ const GRAMMAR_MISTAKES = {
     fix: "I was late because the bus was late.",
   },
   "contrast and choice": {
-    wrong: "I like tea but I also like coffee.",
+    wrong: "I like tea but also or coffee.",
     fix: "I like tea, but I also like coffee.",
   },
   "time connectors": {
@@ -5903,7 +5910,7 @@ const GRAMMAR_MISTAKES = {
     fix: "Hi, I wanted to talk. Thanks, goodbye.",
   },
   "topic shifts": {
-    wrong: "Anyway, back to something else.",
+    wrong: "By the way because schedule.",
     fix: "By the way, can we talk about the schedule?",
   },
   "cohesion tools": {
