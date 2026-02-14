@@ -2425,6 +2425,26 @@ const getWorldGrammarTitle = (section, title) => {
   return map?.[key] || title;
 };
 
+const getGrammarCardsForSection = (section) => {
+  const worldCards = WORLD_TRANSLATIONS?.grammar?.cards?.[section];
+  if (Array.isArray(worldCards) && worldCards.length) {
+    return worldCards;
+  }
+  return GRAMMAR_SECTION_LISTS[section] || [];
+};
+
+const getGrammarCardData = (section, index) => {
+  const cards = getGrammarCardsForSection(section);
+  if (!Array.isArray(cards)) {
+    return null;
+  }
+  const numericIndex = Number(index);
+  if (!Number.isFinite(numericIndex) || numericIndex < 0) {
+    return null;
+  }
+  return cards[numericIndex] || null;
+};
+
 const WORD_TRANSLATIONS = Object.fromEntries(
   WORD_SECTION_ORDER.map((section) => [
     section,
@@ -2530,7 +2550,7 @@ const normalizeGrammarSectionLookup = (value) =>
 
 const resolveGrammarSectionName = (rawSection) => {
   const section = String(rawSection || "").trim();
-  if (section && GRAMMAR_SECTION_LISTS[section]) {
+  if (section && (GRAMMAR_SECTION_LISTS[section] || WORLD_TRANSLATIONS?.grammar?.cards?.[section])) {
     return section;
   }
   const normalized = normalizeGrammarSectionLookup(section);
@@ -2978,7 +2998,7 @@ const renderGrammarSections = () => {
 
   const sections = [];
   GRAMMAR_SECTION_ORDER.forEach((sectionName) => {
-    const concepts = GRAMMAR_SECTION_LISTS[sectionName];
+    const concepts = getGrammarCardsForSection(sectionName);
     if (!concepts) {
       return;
     }
@@ -2996,7 +3016,11 @@ const renderGrammarSections = () => {
       card.dataset.concept = concept.title;
       card.dataset.section = sectionName;
       card.dataset.index = String(conceptIndex);
-      const displayTitle = getWorldGrammarTitle(sectionName, concept.title);
+      const hasWorldCards =
+        !!WORLD_TRANSLATIONS?.grammar?.cards?.[sectionName]?.length;
+      const displayTitle = hasWorldCards
+        ? concept.title
+        : getWorldGrammarTitle(sectionName, concept.title);
       card.innerHTML = `<div class="grammar-text">${displayTitle}</div>`;
       grid.appendChild(card);
     });
@@ -3262,15 +3286,8 @@ const buildTranslationLookupVariants = (value) => {
   return [...new Set(variants.filter(Boolean))];
 };
 
-const resolveGrammarExplanation = (section, explanationText, baseLanguage) => {
-  const sectionKey =
-    resolveGrammarSectionName(section) || GRAMMAR_SECTION_ORDER[0];
-  const keyVariants = buildTranslationLookupVariants(explanationText);
+const lookupGrammarExplanationCache = (sectionKey, keyVariants, langKey) => {
   const variantSet = new Set(keyVariants);
-  const langKey = String(baseLanguage || "").trim().toLowerCase();
-  if (!langKey) {
-    return "";
-  }
   const bySection = GRAMMAR_EXPLANATION_TRANSLATIONS || {};
   const sectionOrder = [
     sectionKey,
@@ -3294,6 +3311,55 @@ const resolveGrammarExplanation = (section, explanationText, baseLanguage) => {
       const value = translations?.[langKey];
       if (value) {
         return value;
+      }
+    }
+  }
+  return "";
+};
+
+const resolveGrammarExplanation = (section, explanationText, baseLanguage) => {
+  const sectionKey =
+    resolveGrammarSectionName(section) || GRAMMAR_SECTION_ORDER[0];
+  const keyVariants = buildTranslationLookupVariants(explanationText);
+  const langKey = String(baseLanguage || "").trim().toLowerCase();
+  if (!langKey) {
+    return "";
+  }
+  const direct = lookupGrammarExplanationCache(sectionKey, keyVariants, langKey);
+  if (direct) {
+    return direct;
+  }
+
+  const worldExplanations = WORLD_TRANSLATIONS?.grammar?.explanations;
+  if (!worldExplanations || typeof worldExplanations !== "object") {
+    return "";
+  }
+  const variantSet = new Set(keyVariants);
+  const worldSections = [
+    sectionKey,
+    ...Object.keys(worldExplanations).filter((name) => name !== sectionKey),
+  ];
+  for (const worldSection of worldSections) {
+    const entries = worldExplanations?.[worldSection];
+    if (!entries || typeof entries !== "object") {
+      continue;
+    }
+    for (const [rawWorldExplanation, payload] of Object.entries(entries)) {
+      if (!variantSet.has(normalizeTranslationLookupKey(rawWorldExplanation))) {
+        continue;
+      }
+      const sourceExplanation = String(payload?.source || "").trim();
+      if (!sourceExplanation) {
+        continue;
+      }
+      const sourceVariants = buildTranslationLookupVariants(sourceExplanation);
+      const sourceHit = lookupGrammarExplanationCache(
+        resolveGrammarSectionName(worldSection) || sectionKey,
+        sourceVariants,
+        langKey
+      );
+      if (sourceHit) {
+        return sourceHit;
       }
     }
   }
@@ -3603,7 +3669,7 @@ const prewarmGrammarExplanationTranslations = () => {
     }
     const section = card.dataset.section || "";
     const index = Number(card.dataset.index || "-1");
-    const cardData = GRAMMAR_SECTION_LISTS[section]?.[index];
+    const cardData = getGrammarCardData(section, index);
     if (!cardData) {
       return;
     }
@@ -5614,7 +5680,8 @@ const buildGenericExamplePairs = (cardData, index, sectionName = "") => {
 
 
 const buildGrammarHowItWorks = (card) => {
-  const title = card.title.toLowerCase();
+  const sourceTitle = String(card.sourceTitle || card.title || "");
+  const title = sourceTitle.toLowerCase();
   if (title.includes("adding details")) {
     return {
       order: "(time) + (place)",
@@ -5626,7 +5693,7 @@ const buildGrammarHowItWorks = (card) => {
     };
   }
   const expandedPoints = (card.points || []).map(expandGrammarPoint);
-  const template = GRAMMAR_TEMPLATES[card.title] || null;
+  const template = GRAMMAR_TEMPLATES[sourceTitle] || null;
   return {
     bullets: expandedPoints,
     template,
@@ -6065,7 +6132,11 @@ const GRAMMAR_MISTAKES = {
 };
 
 const buildGrammarMistakes = (card) => {
-  const title = card.title.toLowerCase();
+  if (Array.isArray(card.mistakes) && card.mistakes.length) {
+    return card.mistakes;
+  }
+  const sourceTitle = String(card.sourceTitle || card.title || "");
+  const title = sourceTitle.toLowerCase();
   const pair = GRAMMAR_MISTAKES[title];
   if (pair) {
     return [pair];
@@ -6076,6 +6147,29 @@ const buildGrammarMistakes = (card) => {
       fix: "She did not explain well.",
     },
   ];
+};
+
+const getGrammarUiLabels = () => {
+  if (WORLD_KEY === "french") {
+    return {
+      rules: "Règles",
+      examples: "Exemples",
+      commonMistakes: "Erreurs courantes",
+      wrong: "Incorrect :",
+      fix: "Correction :",
+      phrase: "Phrase :",
+      order: "Ordre :",
+    };
+  }
+  return {
+    rules: "Rules",
+    examples: "Examples",
+    commonMistakes: "Common mistakes",
+    wrong: "Wrong:",
+    fix: "Fix:",
+    phrase: "Phrase:",
+    order: "Order:",
+  };
 };
 
 /* ==========================================================================
@@ -6115,7 +6209,7 @@ const renderGrammarModal = (section, index) => {
   }
   overlay.dataset.section = section || "";
   overlay.dataset.index = String(index ?? "0");
-  const cardData = GRAMMAR_SECTION_LISTS[section]?.[index];
+  const cardData = getGrammarCardData(section, index);
   if (!cardData) {
     modalBody.innerHTML = "";
     overlay.classList.remove("is-visible");
@@ -6136,6 +6230,7 @@ const renderGrammarModal = (section, index) => {
   const howItWorks = buildGrammarHowItWorks(cardData);
   const examples = [cardData.example, buildAltGrammarExample(cardData, index)];
   const shouldCapPhrase = true;
+  const grammarUi = getGrammarUiLabels();
 
   let renderedExamples = "";
   const structureExamples =
@@ -6201,7 +6296,7 @@ const renderGrammarModal = (section, index) => {
             .map((label) => `<span class="grammar-label ${getExampleLabelClass(label)}">${getExampleLabelText(label)}</span>`)
             .join("")}
         </div>
-        <div class="grammar-example-expanded">Phrase: ${applyGrammarHighlights(expandedText, item.labels)}</div>
+        <div class="grammar-example-expanded">${grammarUi.phrase} ${applyGrammarHighlights(expandedText, item.labels)}</div>
         ${exampleTranslation ? `<div class="grammar-translation">${exampleTranslation}</div>` : ""}
       </div>
     `;
@@ -6234,7 +6329,7 @@ const renderGrammarModal = (section, index) => {
                 .map((label) => `<span class="grammar-label ${getExampleLabelClass(label)}">${getExampleLabelText(label)}</span>`)
                 .join("")}
             </div>
-            <div class="grammar-example-expanded">Phrase: ${applyGrammarHighlights(expandedText, item.labels)}</div>
+            <div class="grammar-example-expanded">${grammarUi.phrase} ${applyGrammarHighlights(expandedText, item.labels)}</div>
             ${exampleTranslation ? `<div class="grammar-translation">${exampleTranslation}</div>` : ""}
           </div>
         `;
@@ -6250,25 +6345,25 @@ const renderGrammarModal = (section, index) => {
     </div>
     <div class="grammar-modal-grid">
       <div class="grammar-block">
-        <h4>Rules</h4>
-        ${howItWorks.order ? `<div class="grammar-order">Order: ${howItWorks.order}</div>` : ""}
+        <h4>${grammarUi.rules}</h4>
+        ${howItWorks.order ? `<div class="grammar-order">${grammarUi.order} ${howItWorks.order}</div>` : ""}
         <ul>
           ${(howItWorks.bullets || []).map((item) => `<li>${item}</li>`).join("")}
         </ul>
         ${howItWorks.template ? `<div class="grammar-template">${howItWorks.template}</div>` : ""}
       </div>
       <div class="grammar-block">
-        <h4>Examples</h4>
+        <h4>${grammarUi.examples}</h4>
         ${renderedExamples}
       </div>
       <div class="grammar-block">
-        <h4>Common mistakes</h4>
+        <h4>${grammarUi.commonMistakes}</h4>
         <ul>
           ${mistakes
             .map(
               (mistake) =>
-                `<li><span class="mistake-wrong">Wrong:</span> ${mistake.wrong}</li>
-                 <li><span class="mistake-fix">Fix:</span> ${mistake.fix}</li>`
+                `<li><span class="mistake-wrong">${grammarUi.wrong}</span> ${mistake.wrong}</li>
+                 <li><span class="mistake-fix">${grammarUi.fix}</span> ${mistake.fix}</li>`
             )
             .join("")}
         </ul>
@@ -6349,7 +6444,7 @@ const openGrammarModal = (section, index) => {
   const shouldWaitForTranslations =
     getGrammarLanguageMode() === "base" && canUseBaseGrammarLanguage();
   const preloadActiveExplanationTranslation = async () => {
-    const cardData = GRAMMAR_SECTION_LISTS[section]?.[index];
+    const cardData = getGrammarCardData(section, index);
     if (!cardData) {
       return;
     }
