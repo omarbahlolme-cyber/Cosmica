@@ -7042,6 +7042,18 @@ if (needsMapTranslations) {
 
   const refreshAfterTranslations = () => {
     ensureTranslationsLoaded({ awaitNetwork: shouldAwaitNetworkHydration }).then(() => {
+      if (isNonEnglishWorld) {
+        if (isWordsPage) {
+          renderWordsSections();
+        }
+        if (isPhrasesPage) {
+          renderPhrasesSections();
+        }
+        if (isGrammarPage) {
+          renderGrammarSections();
+          setupGrammarModal();
+        }
+      }
       if (isWordsPage && document.querySelector(".word-card")) {
         applyWordTranslations();
       }
