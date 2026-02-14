@@ -6233,29 +6233,53 @@ const renderGrammarModal = (section, index) => {
   const grammarUi = getGrammarUiLabels();
 
   let renderedExamples = "";
+  const shouldUseTemplateExamples = WORLD_KEY === "english";
   const structureExamples =
-    section === "Sentence Structure" ? buildStructureExamples(cardData) : null;
-  const verbExamples = section === "Verbs" ? buildVerbExamples(cardData) : null;
+    shouldUseTemplateExamples && section === "Sentence Structure"
+      ? buildStructureExamples(cardData)
+      : null;
+  const verbExamples =
+    shouldUseTemplateExamples && section === "Verbs" ? buildVerbExamples(cardData) : null;
   const tenseExamples =
-    section === "Tenses & Aspect" ? buildTenseExamples(cardData) : null;
+    shouldUseTemplateExamples && section === "Tenses & Aspect"
+      ? buildTenseExamples(cardData)
+      : null;
   const nounExamples =
-    section === "Nouns & Articles" ? buildNounExamples(cardData) : null;
+    shouldUseTemplateExamples && section === "Nouns & Articles"
+      ? buildNounExamples(cardData)
+      : null;
   const pronounExamples =
-    section === "Pronouns & Reference" ? buildPronounExamples(cardData) : null;
+    shouldUseTemplateExamples && section === "Pronouns & Reference"
+      ? buildPronounExamples(cardData)
+      : null;
   const modifierExamples =
-    section === "Modifiers" ? buildModifierExamples(cardData) : null;
+    shouldUseTemplateExamples && section === "Modifiers"
+      ? buildModifierExamples(cardData)
+      : null;
   const questionExamples =
-    section === "Questions" ? buildQuestionExamples(cardData) : null;
+    shouldUseTemplateExamples && section === "Questions"
+      ? buildQuestionExamples(cardData)
+      : null;
   const negationExamples =
-    section === "Negation" ? buildNegationExamples(cardData) : null;
+    shouldUseTemplateExamples && section === "Negation"
+      ? buildNegationExamples(cardData)
+      : null;
   const connectionExamples =
-    section === "Connections" ? buildConnectionExamples(cardData) : null;
+    shouldUseTemplateExamples && section === "Connections"
+      ? buildConnectionExamples(cardData)
+      : null;
   const conditionExamples =
-    section === "Conditions" ? buildConditionExamples(cardData) : null;
+    shouldUseTemplateExamples && section === "Conditions"
+      ? buildConditionExamples(cardData)
+      : null;
   const voiceExamples =
-    section === "Voice & Focus" ? buildVoiceExamples(cardData) : null;
+    shouldUseTemplateExamples && section === "Voice & Focus"
+      ? buildVoiceExamples(cardData)
+      : null;
   const modalityExamples =
-    section === "Modality" ? buildModalityExamples(cardData) : null;
+    shouldUseTemplateExamples && section === "Modality"
+      ? buildModalityExamples(cardData)
+      : null;
   const activeExamples =
     structureExamples ||
     verbExamples ||
