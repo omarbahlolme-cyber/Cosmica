@@ -907,8 +907,8 @@ const WORD_SECTION_LISTS = {
     "stepdaughter",
     "boyfriend",
     "girlfriend",
-    "FiancÃ©",
-    "FiancÃ©e",
+    "fiancé",
+    "fiancée",
     "spouse",
     "relative",
     "roommate",
@@ -7040,6 +7040,7 @@ if (needsMapTranslations) {
     runWhenBrowserIdle(refreshAfterTranslations);
   }
 }
+
 
 
 

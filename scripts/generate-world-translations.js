@@ -189,6 +189,68 @@ const run = async () => {
     },
   };
 
+  if (!result.grammar || typeof result.grammar !== "object") {
+    result.grammar = {};
+  }
+  if (!result.grammar.titles || typeof result.grammar.titles !== "object") {
+    result.grammar.titles = {};
+  }
+  if (!result.grammar.examples || typeof result.grammar.examples !== "object") {
+    result.grammar.examples = {};
+  }
+  if (!result.grammar.explanations || typeof result.grammar.explanations !== "object") {
+    result.grammar.explanations = {};
+  }
+  if (!result.grammar.cards || typeof result.grammar.cards !== "object") {
+    result.grammar.cards = {};
+  }
+
+  if (!result.worldSource || typeof result.worldSource !== "object") {
+    result.worldSource = {};
+  }
+  if (!result.worldSource.words || typeof result.worldSource.words !== "object") {
+    result.worldSource.words = {};
+  }
+  if (!result.worldSource.phrases || typeof result.worldSource.phrases !== "object") {
+    result.worldSource.phrases = {};
+  }
+  if (
+    !result.worldSource.grammarTitles ||
+    typeof result.worldSource.grammarTitles !== "object"
+  ) {
+    result.worldSource.grammarTitles = {};
+  }
+  if (
+    !result.worldSource.grammarExamples ||
+    typeof result.worldSource.grammarExamples !== "object"
+  ) {
+    result.worldSource.grammarExamples = {};
+  }
+  if (
+    !result.worldSource.grammarExplanations ||
+    typeof result.worldSource.grammarExplanations !== "object"
+  ) {
+    result.worldSource.grammarExplanations = {};
+  }
+  if (
+    !result.worldSource.grammarPoints ||
+    typeof result.worldSource.grammarPoints !== "object"
+  ) {
+    result.worldSource.grammarPoints = {};
+  }
+  if (
+    !result.worldSource.grammarMistakeWrong ||
+    typeof result.worldSource.grammarMistakeWrong !== "object"
+  ) {
+    result.worldSource.grammarMistakeWrong = {};
+  }
+  if (
+    !result.worldSource.grammarMistakeFix ||
+    typeof result.worldSource.grammarMistakeFix !== "object"
+  ) {
+    result.worldSource.grammarMistakeFix = {};
+  }
+
   for (const section of Object.keys(WORD_SECTION_LISTS)) {
     ensureSection(result.words, section);
     ensureSection(result.worldSource.words, section);
