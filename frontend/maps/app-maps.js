@@ -2500,6 +2500,27 @@ const setGrammarLanguageMode = (nextMode) => {
   localStorage.setItem(GRAMMAR_LANGUAGE_MODE_STORAGE_KEY, normalizedMode);
 };
 
+const getSelectedBaseLanguageKey = () =>
+  String(localStorage.getItem("cosmicaBaseLanguage") || "")
+    .trim()
+    .toLowerCase();
+
+const canUseBaseGrammarLanguage = () => {
+  const baseLanguage = getSelectedBaseLanguageKey();
+  return !!baseLanguage && baseLanguage !== "english";
+};
+
+const getBaseGrammarButtonLabel = () => {
+  const baseLanguage = getSelectedBaseLanguageKey();
+  if (!baseLanguage || baseLanguage === "english") {
+    return "Base language";
+  }
+  const title = baseLanguage.charAt(0).toUpperCase() + baseLanguage.slice(1);
+  return `Base (${title})`;
+};
+
+let refreshGrammarLanguageToggleUI = () => {};
+
 const normalizeGrammarSectionLookup = (value) =>
   String(value || "")
     .toLowerCase()
@@ -3071,6 +3092,69 @@ const renderGrammarSections = () => {
     controls.appendChild(eyebrow);
     controls.appendChild(label);
     controls.appendChild(list);
+
+    if (isNonEnglishWorld) {
+      const modeWrap = document.createElement("div");
+      modeWrap.className = "grammar-language-toggle";
+
+      const modeLabel = document.createElement("div");
+      modeLabel.className = "grammar-language-label";
+      modeLabel.textContent = "Grammar language";
+
+      const modeButtons = document.createElement("div");
+      modeButtons.className = "grammar-language-buttons";
+
+      const englishBtn = document.createElement("button");
+      englishBtn.type = "button";
+      englishBtn.className = "grammar-language-btn";
+      englishBtn.dataset.mode = "english";
+      englishBtn.textContent = "English";
+
+      const baseBtn = document.createElement("button");
+      baseBtn.type = "button";
+      baseBtn.className = "grammar-language-btn";
+      baseBtn.dataset.mode = "base";
+
+      const applyModeVisualState = () => {
+        const selectedMode = getGrammarLanguageMode();
+        const baseAllowed = canUseBaseGrammarLanguage();
+
+        baseBtn.disabled = !baseAllowed;
+        baseBtn.textContent = getBaseGrammarButtonLabel();
+
+        englishBtn.classList.toggle("is-active", selectedMode !== "base");
+        baseBtn.classList.toggle("is-active", selectedMode === "base" && baseAllowed);
+      };
+
+      modeButtons.addEventListener("click", (event) => {
+        const button = event.target.closest(".grammar-language-btn");
+        if (!button || button.disabled) {
+          return;
+        }
+        const nextMode = button.dataset.mode === "base" ? "base" : "english";
+        setGrammarLanguageMode(nextMode);
+        prewarmedGrammarExplanationLanguage = "";
+        applyModeVisualState();
+
+        const overlay = ensureGrammarOverlay();
+        if (overlay && typeof overlay.__refresh === "function") {
+          overlay.__refresh();
+        }
+      });
+
+      modeButtons.appendChild(englishBtn);
+      modeButtons.appendChild(baseBtn);
+      modeWrap.appendChild(modeLabel);
+      modeWrap.appendChild(modeButtons);
+      controls.appendChild(modeWrap);
+
+      refreshGrammarLanguageToggleUI = () => {
+        applyModeVisualState();
+      };
+      applyModeVisualState();
+    } else {
+      refreshGrammarLanguageToggleUI = () => {};
+    }
   }
 };
 
@@ -6040,11 +6124,13 @@ const renderGrammarModal = (section, index) => {
   }
 
   const baseLanguage = String(localStorage.getItem("cosmicaBaseLanguage") || "").trim();
-  const baseLanguageKey = String(baseLanguage || "").toLowerCase();
-  const shouldTranslateExplanation = !!baseLanguage && baseLanguageKey !== "english";
+  const grammarLanguageMode = getGrammarLanguageMode();
+  const shouldTranslateExplanation =
+    grammarLanguageMode === "base" && canUseBaseGrammarLanguage();
+  const grammarTranslationLanguage = shouldTranslateExplanation ? baseLanguage : "";
   const explanation = buildGrammarExplanation(cardData);
   const explanationTranslation = shouldTranslateExplanation
-    ? resolveGrammarExplanation(section, explanation, baseLanguage)
+    ? resolveGrammarExplanation(section, explanation, grammarTranslationLanguage)
     : "";
   const mistakes = buildGrammarMistakes(cardData);
   const howItWorks = buildGrammarHowItWorks(cardData);
@@ -6094,17 +6180,20 @@ const renderGrammarModal = (section, index) => {
       shouldCapPhrase && item.expanded
         ? item.expanded.charAt(0).toUpperCase() + item.expanded.slice(1)
         : item.expanded;
-    const baseTranslation = resolveGrammarTranslation(
-      section,
-      item.base,
-      baseLanguage
-    );
-    const expandedTranslation = resolveGrammarTranslation(
-      section,
-      item.expanded,
-      baseLanguage
-    );
-    const exampleTranslation = expandedTranslation || baseTranslation;
+    let exampleTranslation = "";
+    if (shouldTranslateExplanation) {
+      const baseTranslation = resolveGrammarTranslation(
+        section,
+        item.base,
+        grammarTranslationLanguage
+      );
+      const expandedTranslation = resolveGrammarTranslation(
+        section,
+        item.expanded,
+        grammarTranslationLanguage
+      );
+      exampleTranslation = expandedTranslation || baseTranslation;
+    }
     renderedExamples = `
       <div class="grammar-example">
         <div class="grammar-example-labels">
@@ -6124,17 +6213,20 @@ const renderGrammarModal = (section, index) => {
           shouldCapPhrase && item.expanded
             ? item.expanded.charAt(0).toUpperCase() + item.expanded.slice(1)
             : item.expanded;
-        const baseTranslation = resolveGrammarTranslation(
-          section,
-          item.base,
-          baseLanguage
-        );
-        const expandedTranslation = resolveGrammarTranslation(
-          section,
-          item.expanded,
-          baseLanguage
-        );
-        const exampleTranslation = expandedTranslation || baseTranslation;
+        let exampleTranslation = "";
+        if (shouldTranslateExplanation) {
+          const baseTranslation = resolveGrammarTranslation(
+            section,
+            item.base,
+            grammarTranslationLanguage
+          );
+          const expandedTranslation = resolveGrammarTranslation(
+            section,
+            item.expanded,
+            grammarTranslationLanguage
+          );
+          exampleTranslation = expandedTranslation || baseTranslation;
+        }
         return `
           <div class="grammar-example">
             <div class="grammar-example-labels">
@@ -6190,7 +6282,7 @@ const renderGrammarModal = (section, index) => {
     void requestRuntimeGrammarExplanationTranslation(
       section,
       explanation,
-      baseLanguage
+      grammarTranslationLanguage
     ).then((translated) => {
       const expectedSection = String(section || "");
       const expectedIndex = String(index ?? "0");
@@ -6255,7 +6347,7 @@ const openGrammarModal = (section, index) => {
 
   const baseLanguage = String(localStorage.getItem("cosmicaBaseLanguage") || "").trim();
   const shouldWaitForTranslations =
-    !!baseLanguage && baseLanguage.toLowerCase() !== "english";
+    getGrammarLanguageMode() === "base" && canUseBaseGrammarLanguage();
   const preloadActiveExplanationTranslation = async () => {
     const cardData = GRAMMAR_SECTION_LISTS[section]?.[index];
     if (!cardData) {
@@ -6707,6 +6799,9 @@ refreshMapsForBaseLanguage = () => {
     !!selectedBaseLanguage && selectedBaseLanguage !== "english";
 
   const refreshRenderedMaps = () => {
+    if (isGrammarPage) {
+      refreshGrammarLanguageToggleUI();
+    }
     if (document.querySelector(".word-card")) {
       applyWordTranslations();
     }
