@@ -20,11 +20,11 @@ const REQUEST_TIMEOUT_MS = 10000;
 
 const ROUTES = [
   "/index.html",
-  "/world.html",
-  "/letters.html",
-  "/words.html",
-  "/phrases.html",
-  "/grammar.html",
+  "/english-world.html",
+  "/english-letters.html",
+  "/english-words.html",
+  "/english-phrases.html",
+  "/english-grammar.html",
   "/style.css",
   "/style-maps.css",
   "/app.js",

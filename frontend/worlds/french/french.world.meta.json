@@ -1,0 +1,13 @@
+{
+  "worldKey": "french",
+  "nativeName": "Français",
+  "tts": {
+    "languageCode": "fr-FR",
+    "voice": "fr-FR-Neural2-C"
+  },
+  "grammarDisplayModes": [
+    "english",
+    "base"
+  ],
+  "translationPack": "frontend/worlds/french/translations.json"
+}

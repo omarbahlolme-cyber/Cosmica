@@ -134,7 +134,8 @@ const enforceProductionCanonicalOrigin = () => {
 
 enforceProductionCanonicalOrigin();
 
-const isWorldLandingPage = currentPath.endsWith("/world.html");
+const isWorldLandingPage =
+  currentPath.endsWith("/english-world.html") || currentPath.endsWith("/world.html");
 if (urlParams.has("skipIntro")) {
   const cleanUrl = new URL(window.location.href);
   cleanUrl.searchParams.delete("skipIntro");
@@ -168,7 +169,26 @@ const WORLD_NAME = isWorldLandingPage
   ? document.body.dataset.world || "English"
   : urlParams.get("world") || document.body.dataset.world || "English";
 const WORLD_KEY = WORLD_NAME.toLowerCase();
-const WORLD_TRANSLATION_FILE = "maps/translations.json";
+const BASE_MAP_TRANSLATION_FILE = "maps/translations.json";
+const WORLD_TRANSLATION_FILES = {
+  english: BASE_MAP_TRANSLATION_FILE,
+  french: "worlds/french/translations.json",
+};
+const WORLD_TTS_CONFIG = {
+  english: {
+    languageCode: "en-GB",
+    voice: "en-GB-Neural2-F",
+  },
+  french: {
+    languageCode: "fr-FR",
+    voice: "fr-FR-Neural2-C",
+  },
+};
+const WORLD_TRANSLATION_FILE =
+  WORLD_TRANSLATION_FILES[WORLD_KEY] || BASE_MAP_TRANSLATION_FILE;
+const WORLD_TTS_LANGUAGE_CODE =
+  WORLD_TTS_CONFIG[WORLD_KEY]?.languageCode || WORLD_TTS_CONFIG.english.languageCode;
+const WORLD_TTS_VOICE = WORLD_TTS_CONFIG[WORLD_KEY]?.voice || WORLD_TTS_CONFIG.english.voice;
 const MAP_TRANSLATIONS_CACHE_KEY = "cosmicaMapTranslationsCache:v2";
 const readAssetVersionParam = (rawUrl) => {
   if (!rawUrl) {
@@ -235,7 +255,8 @@ const warmMapTranslationsCache = async () => {
     return;
   }
   try {
-    const response = await fetch(WORLD_TRANSLATION_FILE, { cache: "no-store" });
+    // Keep map cache normalized to the base English->base-language table.
+    const response = await fetch(BASE_MAP_TRANSLATION_FILE, { cache: "no-store" });
     if (!response.ok) {
       return;
     }
@@ -337,10 +358,12 @@ const MIMI_SYSTEM_PROMPT = [
 ].join(" ");
 const worldLines = {
   English: "English world online. Neon cities are ready for your hello.",
+  French: "French world online. Parisian constellations are now in orbit.",
 };
 
 const worldPages = {
-  English: "world.html",
+  English: "english-world.html",
+  French: "world-french.html",
 };
 
 /* ==========================================================================
@@ -421,11 +444,11 @@ const scheduleCoreRoutePrefetch = () => {
   }
   const warmRoutes = [
     "/",
-    "/world.html",
-    "/letters.html",
-    "/words.html",
-    "/phrases.html",
-    "/grammar.html",
+    "/english-world.html",
+    "/english-letters.html",
+    "/english-words.html",
+    "/english-phrases.html",
+    "/english-grammar.html",
   ];
   const runPrefetch = () => {
     warmRoutes.forEach((route) => prefetchDocument(route));
@@ -3072,8 +3095,8 @@ const setupSpeechCards = () => {
       cache: "no-store",
       body: JSON.stringify({
         text,
-        languageCode: "en-GB",
-        voice: "en-GB-Neural2-F",
+        languageCode: WORLD_TTS_LANGUAGE_CODE,
+        voice: WORLD_TTS_VOICE,
         speakingRate: Number(rate.toFixed(2)),
         pitch: Number(((pitch - 1) * 4).toFixed(2)),
       }),

@@ -1,0 +1,12 @@
+{
+  "worldKey": "english",
+  "nativeName": "English",
+  "tts": {
+    "languageCode": "en-GB",
+    "voice": "en-GB-Neural2-F"
+  },
+  "grammarDisplayModes": [
+    "english"
+  ],
+  "translationPack": "frontend/maps/translations.json"
+}

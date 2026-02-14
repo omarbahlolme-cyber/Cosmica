@@ -2469,6 +2469,36 @@ let translationPayloadReady = false;
 let translationsLoadPromise = null;
 const MAPS_BUNDLE_TRANSLATIONS_CACHE_KEY = "cosmicaMapTranslationsCache:v3";
 const MAPS_BUNDLE_TRANSLATIONS_CACHE_MAX_AGE_MS = 24 * 60 * 60 * 1000;
+const GRAMMAR_LANGUAGE_MODE_STORAGE_KEY = `cosmicaGrammarLanguageMode:${WORLD_KEY}`;
+
+const getGrammarLanguageMode = () => {
+  if (!isNonEnglishWorld) {
+    return "english";
+  }
+  const requestedMode = String(
+    localStorage.getItem(GRAMMAR_LANGUAGE_MODE_STORAGE_KEY) || "english"
+  )
+    .trim()
+    .toLowerCase();
+  if (requestedMode !== "base") {
+    return "english";
+  }
+  const baseLanguage = String(localStorage.getItem("cosmicaBaseLanguage") || "")
+    .trim()
+    .toLowerCase();
+  if (!baseLanguage || baseLanguage === "english") {
+    return "english";
+  }
+  return "base";
+};
+
+const setGrammarLanguageMode = (nextMode) => {
+  if (!isNonEnglishWorld) {
+    return;
+  }
+  const normalizedMode = String(nextMode || "").toLowerCase() === "base" ? "base" : "english";
+  localStorage.setItem(GRAMMAR_LANGUAGE_MODE_STORAGE_KEY, normalizedMode);
+};
 
 const normalizeGrammarSectionLookup = (value) =>
   String(value || "")
@@ -3461,6 +3491,9 @@ const requestRuntimeGrammarExplanationTranslation = async (
 let prewarmedGrammarExplanationLanguage = "";
 const prewarmGrammarExplanationTranslations = () => {
   if (!isGrammarPage) {
+    return;
+  }
+  if (getGrammarLanguageMode() !== "base") {
     return;
   }
   const baseLanguage = String(localStorage.getItem("cosmicaBaseLanguage") || "")
@@ -6446,11 +6479,24 @@ const resolveWordTranslation = (section, englishWord, baseLanguage) => {
     ? worldSection?.[aliasSource.toLowerCase()] ||
       resolveEntryByNormalizedKey(worldSection, aliasSource)
     : null;
+  const worldSourceWord = String(
+    worldEntry?.source || worldAliasEntry?.source || ""
+  ).trim();
   if (worldEntry && worldEntry.translations) {
     translation = worldEntry.translations?.[langKey] || "";
   }
   if (!translation && worldAliasEntry && worldAliasEntry.translations) {
     translation = worldAliasEntry.translations?.[langKey] || "";
+  }
+  if (!translation && langKey === "english" && worldSourceWord) {
+    translation = worldSourceWord;
+  }
+  if (!translation && worldSourceWord) {
+    const sectionEntries = WORD_TRANSLATIONS?.[sectionKey] || {};
+    const sourceEntry =
+      sectionEntries?.[worldSourceWord.toLowerCase()] ||
+      resolveEntryByNormalizedKey(sectionEntries, worldSourceWord);
+    translation = sourceEntry?.[langKey] || "";
   }
 
   if (!translation) {
@@ -6502,8 +6548,16 @@ const resolvePhraseTranslation = (section, englishPhrase, baseLanguage) => {
   const langKey = String(baseLanguage || "").trim().toLowerCase();
   let translation = "";
   const worldEntry = WORLD_TRANSLATIONS?.phrases?.[sectionKey]?.[phraseKey];
+  const worldSourcePhrase = String(worldEntry?.source || "").trim();
   if (worldEntry && worldEntry.translations) {
     translation = worldEntry.translations?.[langKey] || "";
+  }
+  if (!translation && langKey === "english" && worldSourcePhrase) {
+    translation = worldSourcePhrase;
+  }
+  if (!translation && worldSourcePhrase) {
+    translation =
+      PHRASE_TRANSLATIONS?.[sectionKey]?.[worldSourcePhrase.toLowerCase()]?.[langKey] || "";
   }
   if (!translation) {
     translation = PHRASE_TRANSLATIONS[sectionKey]?.[phraseKey]?.[langKey] || "";
@@ -6536,6 +6590,28 @@ const applyPhraseTranslations = () => {
   });
 };
 
+const resolveGrammarTranslationFromSource = (sourceSentence, langKey, preferredSection = "") => {
+  const source = String(sourceSentence || "").trim();
+  if (!source) {
+    return "";
+  }
+  if (langKey === "english") {
+    return source;
+  }
+  const sourceKey = source.toLowerCase();
+  const candidateSections = [
+    preferredSection,
+    ...Object.keys(GRAMMAR_TRANSLATIONS).filter((sectionName) => sectionName !== preferredSection),
+  ].filter(Boolean);
+  for (const sectionName of candidateSections) {
+    const value = GRAMMAR_TRANSLATIONS?.[sectionName]?.[sourceKey]?.[langKey];
+    if (value) {
+      return value;
+    }
+  }
+  return "";
+};
+
 const resolveGrammarTranslation = (section, exampleSentence, baseLanguage) => {
   const sectionKey = section || GRAMMAR_SECTION_ORDER[0];
   const keyVariants = buildTranslationLookupVariants(exampleSentence);
@@ -6554,9 +6630,18 @@ const resolveGrammarTranslation = (section, exampleSentence, baseLanguage) => {
       continue;
     }
     for (const variant of keyVariants) {
-      const direct = sectionEntries?.[variant]?.translations?.[langKey];
+      const entry = sectionEntries?.[variant];
+      const direct = entry?.translations?.[langKey];
       if (direct) {
         return direct;
+      }
+      const bySource = resolveGrammarTranslationFromSource(
+        entry?.source,
+        langKey,
+        sectionName
+      );
+      if (bySource) {
+        return bySource;
       }
     }
     for (const [rawKey, payload] of Object.entries(sectionEntries)) {
@@ -6566,6 +6651,14 @@ const resolveGrammarTranslation = (section, exampleSentence, baseLanguage) => {
       const value = payload?.translations?.[langKey];
       if (value) {
         return value;
+      }
+      const bySource = resolveGrammarTranslationFromSource(
+        payload?.source,
+        langKey,
+        sectionName
+      );
+      if (bySource) {
+        return bySource;
       }
     }
   }

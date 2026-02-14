@@ -242,11 +242,14 @@ const CACHEABLE_MEDIA_EXTENSIONS = new Set([
 ]);
 
 const RETIRED_WORLD_PATHS = new Set([
-  "/world-french.html",
-  "/letters-french.html",
-  "/words-french.html",
-  "/phrases-french.html",
-  "/grammar-french.html",
+]);
+
+const LEGACY_WORLD_ROUTE_REDIRECTS = new Map([
+  ["/world.html", "/english-world.html"],
+  ["/letters.html", "/english-letters.html"],
+  ["/words.html", "/english-words.html"],
+  ["/phrases.html", "/english-phrases.html"],
+  ["/grammar.html", "/english-grammar.html"],
 ]);
 
 app.use((req, res, next) => {
@@ -257,6 +260,16 @@ app.use((req, res, next) => {
   res.setHeader("Cache-Control", "no-store");
   res.setHeader("X-Robots-Tag", "noindex, nofollow");
   return res.status(410).type("text/plain").send("This page has been removed.");
+});
+
+app.use((req, res, next) => {
+  const requestPath = String(req.path || "").toLowerCase();
+  const targetPath = LEGACY_WORLD_ROUTE_REDIRECTS.get(requestPath);
+  if (!targetPath) {
+    return next();
+  }
+  const redirectTarget = `${targetPath}${req.url.includes("?") ? req.url.slice(req.url.indexOf("?")) : ""}`;
+  return res.redirect(308, redirectTarget);
 });
 
 const sendMapAssetAlias = (fileName) => (req, res) => {

@@ -1,0 +1,11 @@
+{
+  "worldKey": "english",
+  "displayName": "English",
+  "routes": {
+    "world": "english-world.html",
+    "letters": "english-letters.html",
+    "words": "english-words.html",
+    "phrases": "english-phrases.html",
+    "grammar": "english-grammar.html"
+  }
+}

@@ -8,11 +8,16 @@
 |   `-- server.js                     # API server (Express): chat, translate, feedback, health, tts
 |-- frontend/
 |   |-- index.html                    # Home/landing page
-|   |-- world.html                    # English world entry page
-|   |-- letters.html                  # English letters map
-|   |-- words.html                    # English words map
-|   |-- phrases.html                  # English phrases map
-|   |-- grammar.html                  # English grammar map
+|   |-- english-world.html            # English world entry page
+|   |-- english-letters.html          # English letters map
+|   |-- english-words.html            # English words map
+|   |-- english-phrases.html          # English phrases map
+|   |-- english-grammar.html          # English grammar map
+|   |-- world-french.html             # French world entry page
+|   |-- letters-french.html           # French letters map
+|   |-- words-french.html             # French words map
+|   |-- phrases-french.html           # French phrases map
+|   |-- grammar-french.html           # French grammar map
 |   |-- privacy.html                  # Privacy policy
 |   |-- terms.html                    # Terms of use
 |   |-- license.html                  # License page
@@ -25,7 +30,18 @@
 |   |-- maps/
 |   |   |-- app-maps.js               # Map bundle (datasets/renderers/translations)
 |   |   |-- style-maps.css            # Map-only stylesheet
-|   |   `-- translations.json         # Base translation pack
+|   |   `-- translations.json         # Base translation pack (English/shared fallback)
+|   |-- worlds/
+|   |   |-- README.md                 # World folder convention
+|   |   |-- english/
+|   |   |   |-- english.map-routes.json
+|   |   |   |-- english.world.meta.json
+|   |   |   `-- README.md
+|   |   `-- french/
+|   |       |-- french.map-routes.json
+|   |       |-- french.world.meta.json
+|   |       |-- translations.json     # French world pack (world-specific)
+|   |       `-- README.md
 |   `-- naverc3bcca6a08043c716e45b0c95a298a16.html  # Naver ownership verification
 |-- docs/
 |   |-- PROJECT_STRUCTURE.md          # This file
@@ -75,7 +91,8 @@
 1. Keep URL-facing HTML files under `frontend/` unless route behavior is intentionally changed.
 2. Keep shared behavior in `frontend/app.js`; keep map-heavy code in `frontend/maps/app-maps.js`.
 3. Keep global styles in `frontend/style.css`; keep map styles in `frontend/maps/style-maps.css`.
-4. Keep operational/reference docs in `docs/`.
-5. Keep utility scripts under `scripts/` with clear section headers and scoped purpose.
-6. Update `perf/baseline.json` intentionally (`npm run perf:baseline`) after verified performance changes.
-7. Update bloat allowlist intentionally (`npm run check:bloat:refresh`) only after verified cleanup.
+4. Keep world-specific route/meta/pack files in `frontend/worlds/<world-key>/`.
+5. Keep operational/reference docs in `docs/`.
+6. Keep utility scripts under `scripts/` with clear section headers and scoped purpose.
+7. Update `perf/baseline.json` intentionally (`npm run perf:baseline`) after verified performance changes.
+8. Update bloat allowlist intentionally (`npm run check:bloat:refresh`) only after verified cleanup.
