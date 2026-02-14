@@ -11,6 +11,7 @@
     "indexing:check": "node scripts/indexing-followup.js",
     "rollback:info": "node scripts/rollback-info.js",
     "check:syntax": "node --check server.js && node --check backend/server.js && node --check frontend/app.js && node --check frontend/maps/app-maps.js",
+    "check:literal-escapes": "node scripts/check-literal-escapes.js",
     "check:a11y": "node scripts/check-accessibility-baseline.js",
     "check:seo": "node scripts/check-seo-baseline.js",
     "check:assets": "node scripts/check-asset-version-consistency.js",
@@ -26,7 +27,7 @@
     "backup:create": "node scripts/create-backup.js",
     "backup:verify": "node scripts/verify-backup.js",
     "release:check": "node scripts/check-release.js",
-    "quality": "npm run check:syntax && npm run check:a11y && npm run check:seo && npm run check:assets && npm run check:integrity && npm run check:securitytxt && npm run check:bloat && npm run perf:check && npm run security:audit && npm run release:check && npm run smoke",
+    "quality": "npm run check:syntax && npm run check:literal-escapes && npm run check:a11y && npm run check:seo && npm run check:assets && npm run check:integrity && npm run check:securitytxt && npm run check:bloat && npm run perf:check && npm run security:audit && npm run release:check && npm run smoke",
     "format": "prettier --write \"**/*.{html,css,js,json,md}\""
   },
   "devDependencies": {
@@ -43,4 +44,6 @@
     "openai": "^4.62.0"
   }
 }
+
+
 
