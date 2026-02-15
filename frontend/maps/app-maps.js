@@ -2425,6 +2425,16 @@ const getWorldGrammarTitle = (section, title) => {
   return map?.[key] || title;
 };
 
+const getWorldGrammarSectionLabel = (section) => {
+  if (WORLD_KEY === "french") {
+    const worldLabel = WORLD_TRANSLATIONS?.grammar?.sectionLabels?.[section];
+    if (typeof worldLabel === "string" && worldLabel.trim()) {
+      return worldLabel.trim();
+    }
+  }
+  return section;
+};
+
 const getGrammarCardsForSection = (section) => {
   const worldCards = WORLD_TRANSLATIONS?.grammar?.cards?.[section];
   if (Array.isArray(worldCards) && worldCards.length) {
@@ -3007,7 +3017,7 @@ const renderGrammarSections = () => {
     section.dataset.section = sectionName;
     const title = document.createElement("div");
     title.className = "section-title";
-    title.innerHTML = `<h2>${sectionName}</h2>`;
+    title.innerHTML = `<h2>${getWorldGrammarSectionLabel(sectionName)}</h2>`;
     const grid = document.createElement("div");
     grid.className = "words-grid";
     concepts.forEach((concept, conceptIndex) => {
@@ -3031,12 +3041,13 @@ const renderGrammarSections = () => {
   });
 
   if (controls) {
+    const grammarUi = getGrammarUiLabels();
     const eyebrow = document.createElement("div");
     eyebrow.className = "words-controls-eyebrow";
-    eyebrow.textContent = "Grammar";
+    eyebrow.textContent = grammarUi.grammar;
     const label = document.createElement("div");
     label.className = "words-controls-label";
-    label.textContent = "Choose a section";
+    label.textContent = grammarUi.chooseSection;
     const list = document.createElement("div");
     list.className = "words-controls-list";
 
@@ -3049,7 +3060,7 @@ const renderGrammarSections = () => {
       return button;
     };
 
-    const allButton = makeButton("All sections", "all");
+    const allButton = makeButton(grammarUi.allSections, "all");
     allButton.classList.add("is-all");
     allButton.classList.add("is-active");
     list.appendChild(allButton);
@@ -3058,7 +3069,7 @@ const renderGrammarSections = () => {
     }
 
     GRAMMAR_SECTION_ORDER.forEach((sectionName) => {
-      list.appendChild(makeButton(sectionName, sectionName));
+      list.appendChild(makeButton(getWorldGrammarSectionLabel(sectionName), sectionName));
     });
 
     const applyFilter = (filter) => {
@@ -3123,7 +3134,7 @@ const renderGrammarSections = () => {
 
       const modeLabel = document.createElement("div");
       modeLabel.className = "grammar-language-label";
-      modeLabel.textContent = "Grammar language";
+      modeLabel.textContent = grammarUi.grammarLanguage;
 
       const modeButtons = document.createElement("div");
       modeButtons.className = "grammar-language-buttons";
@@ -3132,7 +3143,7 @@ const renderGrammarSections = () => {
       englishBtn.type = "button";
       englishBtn.className = "grammar-language-btn";
       englishBtn.dataset.mode = "english";
-      englishBtn.textContent = "English";
+      englishBtn.textContent = grammarUi.englishOption;
 
       const baseBtn = document.createElement("button");
       baseBtn.type = "button";
@@ -3258,6 +3269,9 @@ const buildAltGrammarExample = (() => {
 })();
 
 const buildGrammarExplanation = (card) => {
+  if (WORLD_KEY === "french") {
+    return `Cette carte explique ${card.title} et son usage correct dans des phrases réelles.`;
+  }
   return `This card explains ${card.title} and how to form it clearly in real sentences.`;
 };
 
@@ -5128,6 +5142,105 @@ const getExampleLabelText = (label) => {
   return raw;
 };
 
+const localizeGrammarChipLabel = (labelText) => {
+  const text = String(labelText || "").trim();
+  if (!text || WORLD_KEY !== "french") {
+    return text;
+  }
+  const map = {
+    "Sentence 1": "Phrase 1",
+    "Sentence 2": "Phrase 2",
+    "Short sentence": "Phrase courte",
+    "Long sentence": "Phrase longue",
+    "Main clause": "Proposition principale",
+    Sentence: "Phrase",
+    "Time connector": "Connecteur de temps",
+    "Contrast connector": "Connecteur d'opposition",
+    "Addition marker": "Marqueur d'ajout",
+    "Reason clause": "Proposition de cause",
+    "Result clause": "Proposition de conséquence",
+    "Would have clause": "Proposition au conditionnel passé",
+    "Would clause": "Proposition au conditionnel",
+    "If clause": "Proposition avec si",
+    "Unless clause": "Proposition avec sauf si",
+    "Negative word": "Mot négatif",
+    "Negative adverb": "Adverbe négatif",
+    Not: "Négation",
+    "Wh word": "Mot interrogatif",
+    "Wh clause": "Proposition interrogative",
+    Intro: "Introduction",
+    Modal: "Modal",
+    Aux: "Auxiliaire",
+    Tag: "Question-tag",
+    Statement: "Énoncé",
+    Comparison: "Comparaison",
+    Sequence: "Séquence",
+    "Clause 1": "Proposition 1",
+    "Clause 2": "Proposition 2",
+    Doer: "Agent",
+    "Focus phrase": "Mise en relief",
+    "It subject": "Sujet it",
+    "There subject": "Sujet there",
+    "Probability word": "Marqueur de probabilité",
+    "Modal phrase": "Expression modale",
+    "Action verb": "Verbe d'action",
+    "State verb": "Verbe d'état",
+    "Linking verb": "Verbe copule",
+    "Subject pronoun": "Pronom sujet",
+    "Object pronoun": "Pronom objet",
+    "Be verb": "Verbe être",
+    "Verb-ing": "Participe présent",
+    "Past verb": "Verbe au passé",
+    "Past participle": "Participe passé",
+    Auxiliary: "Auxiliaire",
+    "Future marker": "Marqueur du futur",
+    "Base verb": "Verbe à l'infinitif",
+    "Simple form": "Forme simple",
+    "Continuous form": "Forme continue",
+    Particle: "Particule",
+    Determiner: "Déterminant",
+    Adjective: "Adjectif",
+    "Frequency adverb": "Adverbe de fréquence",
+    "Time adverb": "Adverbe de temps",
+    "Place adverb": "Adverbe de lieu",
+    "Degree word": "Marqueur d'intensité",
+    Adverb: "Adverbe",
+    Opinion: "Opinion",
+    Size: "Taille",
+    Age: "Âge",
+    Color: "Couleur",
+    Comparative: "Comparatif",
+    Than: "Comparant",
+    Superlative: "Superlatif",
+    Participle: "Participe",
+    Number: "Nombre",
+    Quantifier: "Quantifieur",
+    "Plural noun": "Nom au pluriel",
+    Possessive: "Possessif",
+    Noun: "Nom",
+    Reflexive: "Réfléchi",
+    Demonstrative: "Démonstratif",
+    Relative: "Relatif",
+    Indefinite: "Indéfini",
+    Subject: "Sujet",
+    Verb: "Verbe",
+    Article: "Article",
+    Preposition: "Préposition",
+    Infinitive: "Infinitif",
+    Gerund: "Gérondif",
+    "That clause": "Proposition complétive",
+    Object: "Complément",
+    Contrast: "Opposition",
+    Connector: "Connecteur",
+    Time: "Temps",
+    Place: "Lieu",
+    Reason: "Cause",
+    Manner: "Manière",
+    Clause: "Proposition",
+  };
+  return map[text] || text;
+};
+
 const normalizeLabelType = (label) => {
   const key = label.split(":")[0]?.trim().toLowerCase();
   if (key.includes("sentence 1")) return "sentence-1";
@@ -6152,6 +6265,11 @@ const buildGrammarMistakes = (card) => {
 const getGrammarUiLabels = () => {
   if (WORLD_KEY === "french") {
     return {
+      grammar: "Grammaire",
+      chooseSection: "Choisissez une section",
+      allSections: "Toutes les sections",
+      grammarLanguage: "Langue de la grammaire",
+      englishOption: "Anglais",
       rules: "Règles",
       examples: "Exemples",
       commonMistakes: "Erreurs courantes",
@@ -6162,6 +6280,11 @@ const getGrammarUiLabels = () => {
     };
   }
   return {
+    grammar: "Grammar",
+    chooseSection: "Choose a section",
+    allSections: "All sections",
+    grammarLanguage: "Grammar language",
+    englishOption: "English",
     rules: "Rules",
     examples: "Examples",
     commonMistakes: "Common mistakes",
@@ -6317,7 +6440,7 @@ const renderGrammarModal = (section, index) => {
       <div class="grammar-example">
         <div class="grammar-example-labels">
           ${item.labels
-            .map((label) => `<span class="grammar-label ${getExampleLabelClass(label)}">${getExampleLabelText(label)}</span>`)
+            .map((label) => `<span class="grammar-label ${getExampleLabelClass(label)}">${localizeGrammarChipLabel(getExampleLabelText(label))}</span>`)
             .join("")}
         </div>
         <div class="grammar-example-expanded">${grammarUi.phrase} ${applyGrammarHighlights(expandedText, item.labels)}</div>
@@ -6350,7 +6473,7 @@ const renderGrammarModal = (section, index) => {
           <div class="grammar-example">
             <div class="grammar-example-labels">
               ${item.labels
-                .map((label) => `<span class="grammar-label ${getExampleLabelClass(label)}">${getExampleLabelText(label)}</span>`)
+                .map((label) => `<span class="grammar-label ${getExampleLabelClass(label)}">${localizeGrammarChipLabel(getExampleLabelText(label))}</span>`)
                 .join("")}
             </div>
             <div class="grammar-example-expanded">${grammarUi.phrase} ${applyGrammarHighlights(expandedText, item.labels)}</div>
