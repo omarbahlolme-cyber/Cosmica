@@ -7053,6 +7053,9 @@ if (needsMapTranslations) {
           renderGrammarSections();
           setupGrammarModal();
         }
+        if (typeof setupSpeechCards === "function") {
+          setupSpeechCards();
+        }
       }
       if (isWordsPage && document.querySelector(".word-card")) {
         applyWordTranslations();
