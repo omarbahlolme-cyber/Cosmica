@@ -2499,57 +2499,6 @@ let translationPayloadReady = false;
 let translationsLoadPromise = null;
 const MAPS_BUNDLE_TRANSLATIONS_CACHE_KEY = "cosmicaMapTranslationsCache:v3";
 const MAPS_BUNDLE_TRANSLATIONS_CACHE_MAX_AGE_MS = 24 * 60 * 60 * 1000;
-const GRAMMAR_LANGUAGE_MODE_STORAGE_KEY = `cosmicaGrammarLanguageMode:${WORLD_KEY}`;
-
-const getGrammarLanguageMode = () => {
-  if (!isNonEnglishWorld) {
-    return "english";
-  }
-  const requestedMode = String(
-    localStorage.getItem(GRAMMAR_LANGUAGE_MODE_STORAGE_KEY) || "english"
-  )
-    .trim()
-    .toLowerCase();
-  if (requestedMode !== "base") {
-    return "english";
-  }
-  const baseLanguage = String(localStorage.getItem("cosmicaBaseLanguage") || "")
-    .trim()
-    .toLowerCase();
-  if (!baseLanguage || baseLanguage === "english") {
-    return "english";
-  }
-  return "base";
-};
-
-const setGrammarLanguageMode = (nextMode) => {
-  if (!isNonEnglishWorld) {
-    return;
-  }
-  const normalizedMode = String(nextMode || "").toLowerCase() === "base" ? "base" : "english";
-  localStorage.setItem(GRAMMAR_LANGUAGE_MODE_STORAGE_KEY, normalizedMode);
-};
-
-const getSelectedBaseLanguageKey = () =>
-  String(localStorage.getItem("cosmicaBaseLanguage") || "")
-    .trim()
-    .toLowerCase();
-
-const canUseBaseGrammarLanguage = () => {
-  const baseLanguage = getSelectedBaseLanguageKey();
-  return !!baseLanguage && baseLanguage !== "english";
-};
-
-const getBaseGrammarButtonLabel = () => {
-  const baseLanguage = getSelectedBaseLanguageKey();
-  if (!baseLanguage || baseLanguage === "english") {
-    return "Base language";
-  }
-  const title = baseLanguage.charAt(0).toUpperCase() + baseLanguage.slice(1);
-  return `Base (${title})`;
-};
-
-let refreshGrammarLanguageToggleUI = () => {};
 
 const normalizeGrammarSectionLookup = (value) =>
   String(value || "")
@@ -3127,69 +3076,6 @@ const renderGrammarSections = () => {
     controls.appendChild(eyebrow);
     controls.appendChild(label);
     controls.appendChild(list);
-
-    if (isNonEnglishWorld) {
-      const modeWrap = document.createElement("div");
-      modeWrap.className = "grammar-language-toggle";
-
-      const modeLabel = document.createElement("div");
-      modeLabel.className = "grammar-language-label";
-      modeLabel.textContent = grammarUi.grammarLanguage;
-
-      const modeButtons = document.createElement("div");
-      modeButtons.className = "grammar-language-buttons";
-
-      const englishBtn = document.createElement("button");
-      englishBtn.type = "button";
-      englishBtn.className = "grammar-language-btn";
-      englishBtn.dataset.mode = "english";
-      englishBtn.textContent = grammarUi.englishOption;
-
-      const baseBtn = document.createElement("button");
-      baseBtn.type = "button";
-      baseBtn.className = "grammar-language-btn";
-      baseBtn.dataset.mode = "base";
-
-      const applyModeVisualState = () => {
-        const selectedMode = getGrammarLanguageMode();
-        const baseAllowed = canUseBaseGrammarLanguage();
-
-        baseBtn.disabled = !baseAllowed;
-        baseBtn.textContent = getBaseGrammarButtonLabel();
-
-        englishBtn.classList.toggle("is-active", selectedMode !== "base");
-        baseBtn.classList.toggle("is-active", selectedMode === "base" && baseAllowed);
-      };
-
-      modeButtons.addEventListener("click", (event) => {
-        const button = event.target.closest(".grammar-language-btn");
-        if (!button || button.disabled) {
-          return;
-        }
-        const nextMode = button.dataset.mode === "base" ? "base" : "english";
-        setGrammarLanguageMode(nextMode);
-        prewarmedGrammarExplanationLanguage = "";
-        applyModeVisualState();
-
-        const overlay = ensureGrammarOverlay();
-        if (overlay && typeof overlay.__refresh === "function") {
-          overlay.__refresh();
-        }
-      });
-
-      modeButtons.appendChild(englishBtn);
-      modeButtons.appendChild(baseBtn);
-      modeWrap.appendChild(modeLabel);
-      modeWrap.appendChild(modeButtons);
-      controls.appendChild(modeWrap);
-
-      refreshGrammarLanguageToggleUI = () => {
-        applyModeVisualState();
-      };
-      applyModeVisualState();
-    } else {
-      refreshGrammarLanguageToggleUI = () => {};
-    }
   }
 };
 
@@ -3654,63 +3540,7 @@ const requestRuntimeGrammarExplanationTranslation = async (
 
 let prewarmedGrammarExplanationLanguage = "";
 const prewarmGrammarExplanationTranslations = () => {
-  if (!isGrammarPage) {
-    return;
-  }
-  if (getGrammarLanguageMode() !== "base") {
-    return;
-  }
-  const baseLanguage = String(localStorage.getItem("cosmicaBaseLanguage") || "")
-    .trim()
-    .toLowerCase();
-  if (!baseLanguage || baseLanguage === "english") {
-    return;
-  }
-  if (prewarmedGrammarExplanationLanguage === baseLanguage) {
-    return;
-  }
-  prewarmedGrammarExplanationLanguage = baseLanguage;
-
-  const cards = document.querySelectorAll(".grammar-card");
-  if (!cards.length) {
-    return;
-  }
-
-  const tasks = [];
-  cards.forEach((card) => {
-    if (tasks.length >= 3) {
-      return;
-    }
-    const section = card.dataset.section || "";
-    const index = Number(card.dataset.index || "-1");
-    const cardData = getGrammarCardData(section, index);
-    if (!cardData) {
-      return;
-    }
-    const explanation = buildGrammarExplanation(cardData);
-    if (resolveGrammarExplanation(section, explanation, baseLanguage)) {
-      return;
-    }
-    tasks.push(() =>
-      requestRuntimeGrammarExplanationTranslation(section, explanation, baseLanguage)
-    );
-  });
-
-  const scheduleTask = (task, delayMs) => {
-    if (typeof window.requestIdleCallback === "function") {
-      window.requestIdleCallback(() => {
-        void task();
-      }, { timeout: 800 });
-      return;
-    }
-    window.setTimeout(() => {
-      void task();
-    }, delayMs);
-  };
-
-  tasks.forEach((task, index) => {
-    scheduleTask(task, 200 + index * 220);
-  });
+  return;
 };
 
 const GRAMMAR_TEMPLATES = {
@@ -6268,8 +6098,6 @@ const getGrammarUiLabels = () => {
       grammar: "Grammaire",
       chooseSection: "Choisissez une section",
       allSections: "Toutes les sections",
-      grammarLanguage: "Langue de la grammaire",
-      englishOption: "Anglais",
       rules: "Règles",
       examples: "Exemples",
       commonMistakes: "Erreurs courantes",
@@ -6283,8 +6111,6 @@ const getGrammarUiLabels = () => {
     grammar: "Grammar",
     chooseSection: "Choose a section",
     allSections: "All sections",
-    grammarLanguage: "Grammar language",
-    englishOption: "English",
     rules: "Rules",
     examples: "Examples",
     commonMistakes: "Common mistakes",
@@ -6340,15 +6166,10 @@ const renderGrammarModal = (section, index) => {
     return;
   }
 
-  const baseLanguage = String(localStorage.getItem("cosmicaBaseLanguage") || "").trim();
-  const grammarLanguageMode = getGrammarLanguageMode();
-  const shouldTranslateExplanation =
-    grammarLanguageMode === "base" && canUseBaseGrammarLanguage();
-  const grammarTranslationLanguage = shouldTranslateExplanation ? baseLanguage : "";
+  const shouldTranslateExplanation = false;
+  const grammarTranslationLanguage = "";
   const explanation = buildGrammarExplanation(cardData);
-  const explanationTranslation = shouldTranslateExplanation
-    ? resolveGrammarExplanation(section, explanation, grammarTranslationLanguage)
-    : "";
+  const explanationTranslation = "";
   const mistakes = buildGrammarMistakes(cardData);
   const howItWorks = buildGrammarHowItWorks(cardData);
   const examples = [cardData.example, buildAltGrammarExample(cardData, index)];
@@ -6587,37 +6408,7 @@ const openGrammarModal = (section, index) => {
     overlay.querySelector(".grammar-modal")?.focus?.();
   };
 
-  const baseLanguage = String(localStorage.getItem("cosmicaBaseLanguage") || "").trim();
-  const shouldWaitForTranslations =
-    getGrammarLanguageMode() === "base" && canUseBaseGrammarLanguage();
-  const preloadActiveExplanationTranslation = async () => {
-    const cardData = getGrammarCardData(section, index);
-    if (!cardData) {
-      return;
-    }
-    const explanation = buildGrammarExplanation(cardData);
-    if (resolveGrammarExplanation(section, explanation, baseLanguage)) {
-      return;
-    }
-    await requestRuntimeGrammarExplanationTranslation(
-      section,
-      explanation,
-      baseLanguage
-    );
-  };
-
   showModal();
-  if (!shouldWaitForTranslations) {
-    return;
-  }
-  ensureTranslationsLoaded({ awaitNetwork: true })
-    .then(preloadActiveExplanationTranslation)
-    .then(() => {
-      if (overlay.classList.contains("is-visible") && typeof overlay.__refresh === "function") {
-        overlay.__refresh();
-      }
-    })
-    .catch(() => {});
 };
 
 let modalScrollLockY = 0;
