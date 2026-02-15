@@ -6942,7 +6942,7 @@ refreshMapsForBaseLanguage = () => {
     return;
   }
 
-  ensureTranslationsLoaded({ awaitNetwork: isGrammarPage }).finally(
+  ensureTranslationsLoaded({ awaitNetwork: isNonEnglishWorld || isGrammarPage }).finally(
     refreshRenderedMaps
   );
 };
@@ -7038,7 +7038,7 @@ if (needsMapTranslations) {
   const shouldPrioritizeTranslations =
     !!selectedBaseLanguage && selectedBaseLanguage !== "english";
   const shouldAwaitNetworkHydration =
-    shouldPrioritizeTranslations && isGrammarPage;
+    isNonEnglishWorld || (shouldPrioritizeTranslations && isGrammarPage);
 
   const refreshAfterTranslations = () => {
     ensureTranslationsLoaded({ awaitNetwork: shouldAwaitNetworkHydration }).then(() => {
