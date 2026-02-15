@@ -1067,6 +1067,31 @@ body.world-page .section-title {
     inset 0 1px 0 rgba(255, 255, 255, 0.16);
 }
 
+.map-card.coming-soon {
+  opacity: 0.65;
+  cursor: not-allowed;
+  filter: saturate(0.65);
+}
+
+.map-card.coming-soon:hover {
+  transform: none;
+  box-shadow: 0 22px 52px rgba(2, 6, 20, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 -12px 28px rgba(0, 0, 0, 0.25);
+}
+
+.map-card.coming-soon h3,
+.map-card.coming-soon .map-icon,
+.map-card.coming-soon .map-stamp {
+  opacity: 0.9;
+}
+
+.map-card.coming-soon .coming-soon-badge {
+  top: 10px;
+  right: 12px;
+  font-size: 0.66rem;
+}
+
 
 .card-number {
   color: var(--accent);

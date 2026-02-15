@@ -2699,6 +2699,36 @@ worldCards.forEach((card) => {
    WORLD PAGE NAVIGATION + LANGUAGE PICKER
    Handles map-card navigation and base-language selection persistence.
    ========================================================================== */
+const applyMapComingSoonRules = () => {
+  if (!document.body.classList.contains("world-page")) {
+    return;
+  }
+  if (WORLD_KEY === "english") {
+    return;
+  }
+
+  const grammarCard = document.querySelector(".map-card.map-grammar");
+  if (!grammarCard) {
+    return;
+  }
+
+  grammarCard.classList.add("coming-soon");
+  grammarCard.classList.remove("map-link");
+  grammarCard.dataset.comingSoon = "true";
+  grammarCard.setAttribute("aria-disabled", "true");
+  grammarCard.setAttribute("title", "Coming soon");
+  grammarCard.removeAttribute("href");
+
+  if (!grammarCard.querySelector(".coming-soon-badge")) {
+    const badge = document.createElement("span");
+    badge.className = "coming-soon-badge";
+    badge.textContent = "Coming soon";
+    grammarCard.appendChild(badge);
+  }
+};
+
+applyMapComingSoonRules();
+
 const mapLinks = document.querySelectorAll(".map-link");
 const navigateToMapLink = (href) => {
   if (!href) {

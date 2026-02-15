@@ -3538,7 +3538,6 @@ const requestRuntimeGrammarExplanationTranslation = async (
   return request;
 };
 
-let prewarmedGrammarExplanationLanguage = "";
 const prewarmGrammarExplanationTranslations = () => {
   return;
 };
@@ -6832,9 +6831,6 @@ refreshMapsForBaseLanguage = () => {
     !!selectedBaseLanguage && selectedBaseLanguage !== "english";
 
   const refreshRenderedMaps = () => {
-    if (isGrammarPage) {
-      refreshGrammarLanguageToggleUI();
-    }
     if (document.querySelector(".word-card")) {
       applyWordTranslations();
     }
@@ -6842,7 +6838,6 @@ refreshMapsForBaseLanguage = () => {
       applyPhraseTranslations();
     }
     if (isGrammarPage) {
-      prewarmedGrammarExplanationLanguage = "";
       prewarmGrammarExplanationTranslations();
     }
     const overlay = ensureGrammarOverlay();
