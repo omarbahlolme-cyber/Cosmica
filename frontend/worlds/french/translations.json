@@ -6480,22 +6480,22 @@
           "english": "pleased to meet you"
         }
       },
-      "j'apprends l'anglais": {
-        "source": "i am learning english",
+      "j'apprends le fran\u00e7ais": {
+        "source": "i am learning french",
         "translations": {
-          "english": "i am learning english"
+          "english": "i am learning french"
         }
       },
-      "je parle anglais": {
-        "source": "i speak english",
+      "je parle fran\u00e7ais": {
+        "source": "i speak french",
         "translations": {
-          "english": "i speak english"
+          "english": "i speak french"
         }
       },
-      "je ne parle pas anglais": {
-        "source": "i do not speak english",
+      "je ne parle pas fran\u00e7ais": {
+        "source": "i do not speak french",
         "translations": {
-          "english": "i do not speak english"
+          "english": "i do not speak french"
         }
       }
     },
@@ -13568,9 +13568,9 @@
         "this is my sister": "c'est ma sœur",
         "nice to meet you": "enchanté(e) de vous rencontrer",
         "pleased to meet you": "heureux/heureuse de vous rencontrer",
-        "i am learning english": "j'apprends l'anglais",
-        "i speak english": "je parle anglais",
-        "i do not speak english": "je ne parle pas anglais"
+        "i am learning french": "j'apprends le fran\u00e7ais",
+        "i speak french": "je parle fran\u00e7ais",
+        "i do not speak french": "je ne parle pas fran\u00e7ais"
       },
       "Conversation": {
         "can you repeat that": "peux-tu répéter ça",
