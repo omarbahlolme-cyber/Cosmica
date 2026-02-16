@@ -43,6 +43,13 @@ For all non-English worlds:
 2. Keep source content in world language.
 3. Show translation to selected base language.
 
+## Letters Modeling Rule (All non-English worlds)
+
+1. Keep the page title focused on the core alphabet for that language (for many Latin-script worlds this is `A-Z`).
+2. If the language uses accented forms, ligatures, or additional letters, list them as supplemental forms.
+3. Include pronunciation cards for supplemental forms that are pedagogically useful.
+4. Apply the same policy consistently across every new world to avoid alphabet-logic confusion.
+
 ## Grammar Display Rule (Non-English Worlds)
 
 Enable both display modes:
