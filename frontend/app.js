@@ -173,6 +173,7 @@ const BASE_MAP_TRANSLATION_FILE = "maps/translations.json";
 const WORLD_TRANSLATION_FILES = {
   english: BASE_MAP_TRANSLATION_FILE,
   french: "worlds/french/translations.json",
+  german: "worlds/german/translations.json",
 };
 const WORLD_TTS_CONFIG = {
   english: {
@@ -182,6 +183,10 @@ const WORLD_TTS_CONFIG = {
   french: {
     languageCode: "fr-FR",
     voice: "fr-FR-Neural2-C",
+  },
+  german: {
+    languageCode: "de-DE",
+    voice: "de-DE-Neural2-F",
   },
 };
 const WORLD_TRANSLATION_FILE =
@@ -335,7 +340,7 @@ const MIMI_CONFIG = {
 const WORLD_START_LESSON_DESKTOP_DOWN_SHIFT = 34;
 const MIMI_SITE_CONTEXT = [
   "Cosmica is a space-universe language learning site where each language is a world.",
-  "Worlds available now: English.",
+  "Worlds available now: English, French, German.",
   "User actions: click a world to trigger a warp transition that says 'Entering {World} World'.",
   "Tone: cinematic, exploratory, playful, focused on discovery and learning by missions.",
   "Mimi can suggest worlds, give short quests, and teach greetings.",
@@ -348,7 +353,7 @@ const MIMI_SYSTEM_PROMPT = [
   "You can answer broad questions across topics, then connect back to learning goals when useful.",
   "Maintain a cosmic discovery vibe while sounding natural and smart.",
   "Know Cosmica in detail: site sections, maps, world flow, base-language behavior, and currently available content.",
-  "Only English world is available now. Mention other worlds as upcoming only.",
+  "Treat English, French, and German worlds as live. Mention other worlds as upcoming only.",
   "Ask for the user's target language, goal, and time available when needed.",
   "Give one concrete next step (a quick quest, a phrase to practice, or a world to enter).",
   "If asked about features beyond the current site, call them planned or upcoming.",
@@ -359,11 +364,13 @@ const MIMI_SYSTEM_PROMPT = [
 const worldLines = {
   English: "English world online. Neon cities are ready for your hello.",
   French: "French world online. Parisian constellations are now in orbit.",
+  German: "German world online. Precision constellations are now in orbit.",
 };
 
 const worldPages = {
   English: "english-world.html",
   French: "world-french.html",
+  German: "world-german.html",
 };
 
 /* ==========================================================================
@@ -449,6 +456,14 @@ const scheduleCoreRoutePrefetch = () => {
     "/english-words.html",
     "/english-phrases.html",
     "/english-grammar.html",
+    "/world-french.html",
+    "/letters-french.html",
+    "/words-french.html",
+    "/phrases-french.html",
+    "/world-german.html",
+    "/letters-german.html",
+    "/words-german.html",
+    "/phrases-german.html",
   ];
   const runPrefetch = () => {
     warmRoutes.forEach((route) => prefetchDocument(route));
@@ -3256,6 +3271,26 @@ const setupSpeechCards = () => {
     X: "x",
     Y: "y",
     Z: "zed",
+    À: "à",
+    Â: "â",
+    Æ: "æ",
+    Ç: "ç",
+    É: "é",
+    È: "è",
+    Ê: "ê",
+    Ë: "ë",
+    Î: "î",
+    Ï: "ï",
+    Ô: "ô",
+    Œ: "œ",
+    Ù: "ù",
+    Û: "û",
+    Ÿ: "ÿ",
+    Ä: "ä",
+    Ö: "ö",
+    Ü: "ü",
+    ß: "ß",
+    ɪ: "ɪ",
   });
 
   const normalizeLetterSpeechText = (rawText) => {
@@ -3268,21 +3303,13 @@ const setupSpeechCards = () => {
     if (!text) {
       return "";
     }
-    const exactLetterTokens = text.match(/\b([A-Za-z])\b/g);
-    if (exactLetterTokens && exactLetterTokens.length) {
-      const token = exactLetterTokens[exactLetterTokens.length - 1].toUpperCase();
-      return LETTER_SPEECH_MAP[token] || token;
-    }
-    const match = text.match(/[A-Za-z\u026A](?!.*[A-Za-z\u026A])/);
-    if (!match) {
+    const exactLetterTokens = text.match(/\p{L}/gu);
+    if (!exactLetterTokens || !exactLetterTokens.length) {
       return text;
     }
-    const first = match[0] === "ɪ" ? "ɪ" : match[0].toUpperCase();
-    if (first === "ɪ") {
-      return LETTER_SPEECH_MAP[first];
-    }
-    // Let the speech engine pronounce natural letter names directly.
-    return LETTER_SPEECH_MAP[first] || first;
+    const rawToken = exactLetterTokens[exactLetterTokens.length - 1];
+    const token = rawToken === "ɪ" ? "ɪ" : rawToken.toLowerCase() === "ß" ? "ß" : rawToken.toUpperCase();
+    return LETTER_SPEECH_MAP[token] || LETTER_SPEECH_MAP[rawToken] || rawToken;
   };
 
   const setupCards = (
