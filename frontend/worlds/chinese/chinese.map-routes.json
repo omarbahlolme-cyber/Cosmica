@@ -1,0 +1,11 @@
+{
+  "worldKey": "chinese",
+  "displayName": "Chinese",
+  "routes": {
+    "world": "world-chinese.html",
+    "letters": "letters-chinese.html",
+    "words": "words-chinese.html",
+    "phrases": "phrases-chinese.html",
+    "grammar": "grammar-chinese.html"
+  }
+}

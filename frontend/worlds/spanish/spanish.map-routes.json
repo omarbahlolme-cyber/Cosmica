@@ -1,0 +1,11 @@
+﻿{
+  "worldKey": "spanish",
+  "displayName": "Spanish",
+  "routes": {
+    "world": "world-spanish.html",
+    "letters": "letters-spanish.html",
+    "words": "words-spanish.html",
+    "phrases": "phrases-spanish.html",
+    "grammar": "grammar-spanish.html"
+  }
+}

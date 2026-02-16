@@ -6687,6 +6687,179 @@ const applyWordTranslations = () => {
   });
 };
 
+const PHRASE_RUNTIME_TRANSLATION_CACHE_KEY = "cosmicaRuntimePhraseTranslationCache:v1";
+const runtimePhraseTranslationCache = new Map();
+const runtimePhraseTranslationRequests = new Map();
+
+const persistRuntimePhraseTranslationCache = () => {
+  try {
+    localStorage.setItem(
+      PHRASE_RUNTIME_TRANSLATION_CACHE_KEY,
+      JSON.stringify(Object.fromEntries(runtimePhraseTranslationCache))
+    );
+  } catch {}
+};
+
+const loadRuntimePhraseTranslationCache = () => {
+  try {
+    const raw = localStorage.getItem(PHRASE_RUNTIME_TRANSLATION_CACHE_KEY);
+    if (!raw) {
+      return;
+    }
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object") {
+      return;
+    }
+    Object.entries(parsed).forEach(([key, value]) => {
+      if (typeof value === "string" && value.trim()) {
+        runtimePhraseTranslationCache.set(key, value.trim());
+      }
+    });
+  } catch {}
+};
+
+loadRuntimePhraseTranslationCache();
+
+const buildRuntimePhraseCacheKey = (section, phrase, baseLanguage) => {
+  const sectionKey = String(section || PHRASE_SECTION_ORDER[0]).trim();
+  const phraseKey = normalizeWordLookupKey(phrase);
+  const langKey = String(baseLanguage || "").trim().toLowerCase();
+  return `${WORLD_KEY}|${sectionKey}|${langKey}|${phraseKey}`;
+};
+
+const cacheRuntimePhraseTranslation = (section, phrase, baseLanguage, translation) => {
+  const cacheKey = buildRuntimePhraseCacheKey(section, phrase, baseLanguage);
+  if (!cacheKey || !translation) {
+    return;
+  }
+  runtimePhraseTranslationCache.set(cacheKey, String(translation).trim());
+  persistRuntimePhraseTranslationCache();
+};
+
+const getRuntimePhraseTranslation = (section, phrase, baseLanguage) => {
+  const cacheKey = buildRuntimePhraseCacheKey(section, phrase, baseLanguage);
+  const value = runtimePhraseTranslationCache.get(cacheKey);
+  return typeof value === "string" ? value : "";
+};
+
+const buildTranslateEndpointCandidates = () => {
+  const candidates = [];
+  const addCandidate = (url) => {
+    const normalized = String(url || "").trim();
+    if (!normalized || candidates.includes(normalized)) {
+      return;
+    }
+    candidates.push(normalized);
+  };
+  addCandidate("/api/translate");
+  if (typeof getApiEndpointCandidates === "function") {
+    const sharedCandidates = getApiEndpointCandidates();
+    if (Array.isArray(sharedCandidates)) {
+      sharedCandidates.forEach((candidate) =>
+        addCandidate(
+          String(candidate || "").replace(/\/api\/chat(?=$|[?#])/i, "/api/translate")
+        )
+      );
+    }
+  }
+  return candidates;
+};
+
+const requestRuntimePhraseTranslation = async (section, phraseText, baseLanguage) => {
+  const sectionKey = String(section || PHRASE_SECTION_ORDER[0]).trim();
+  const langKey = String(baseLanguage || "").trim().toLowerCase();
+  const phrase = String(phraseText || "").trim();
+  if (!sectionKey || !langKey || !phrase || langKey === "english") {
+    return "";
+  }
+  const cacheKey = buildRuntimePhraseCacheKey(sectionKey, phrase, langKey);
+  const cached = runtimePhraseTranslationCache.get(cacheKey);
+  if (typeof cached === "string" && cached.trim()) {
+    return cached.trim();
+  }
+  const pending = runtimePhraseTranslationRequests.get(cacheKey);
+  if (pending) {
+    return pending;
+  }
+
+  const endpointCandidates = buildTranslateEndpointCandidates();
+  const createAbortController = () => {
+    if (typeof AbortController === "undefined") {
+      return null;
+    }
+    return new AbortController();
+  };
+
+  const translateOnce = async (endpoint) => {
+    const controller = createAbortController();
+    const timeout = controller
+      ? window.setTimeout(() => controller.abort(), 10000)
+      : null;
+    try {
+      const options = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          text: phrase,
+          targetLanguage: langKey,
+        }),
+        cache: "no-store",
+        credentials: "same-origin",
+      };
+      if (controller) {
+        options.signal = controller.signal;
+      }
+      const response = await fetch(endpoint, options);
+      if (!response.ok) {
+        throw new Error(`Translation request failed with status ${response.status}`);
+      }
+      const data = await response.json().catch(() => ({}));
+      const translated = String(data?.translation || data?.content || "")
+        .replace(/^["'`]|["'`]$/g, "")
+        .trim();
+      if (!translated) {
+        throw new Error("Empty translation response");
+      }
+      cacheRuntimePhraseTranslation(sectionKey, phrase, langKey, translated);
+      return translated;
+    } finally {
+      if (timeout) {
+        window.clearTimeout(timeout);
+      }
+    }
+  };
+
+  const request = (async () => {
+    try {
+      const attempts = navigator.onLine ? 2 : 1;
+      for (let attemptIndex = 0; attemptIndex < attempts; attemptIndex += 1) {
+        for (let i = 0; i < endpointCandidates.length; i += 1) {
+          try {
+            return await translateOnce(endpointCandidates[i]);
+          } catch {}
+        }
+        if (attemptIndex < attempts - 1) {
+          await new Promise((resolve) => window.setTimeout(resolve, 300));
+        }
+      }
+      return "";
+    } finally {
+      runtimePhraseTranslationRequests.delete(cacheKey);
+    }
+  })();
+
+  runtimePhraseTranslationRequests.set(cacheKey, request);
+  return request;
+};
+
+const resolveWorldPhraseEntry = (sectionKey, phrase) => {
+  const worldSection = WORLD_TRANSLATIONS?.phrases?.[sectionKey] || {};
+  return (
+    worldSection?.[String(phrase || "").toLowerCase()] ||
+    resolveEntryByNormalizedKey(worldSection, phrase)
+  );
+};
+
 const resolvePhraseTranslation = (section, englishPhrase, baseLanguage) => {
   if (!baseLanguage || !translationPayloadReady) {
     return "";
@@ -6695,7 +6868,9 @@ const resolvePhraseTranslation = (section, englishPhrase, baseLanguage) => {
   const phraseKey = (englishPhrase || "").toLowerCase();
   const langKey = String(baseLanguage || "").trim().toLowerCase();
   let translation = "";
-  const worldEntry = WORLD_TRANSLATIONS?.phrases?.[sectionKey]?.[phraseKey];
+  const worldEntry =
+    WORLD_TRANSLATIONS?.phrases?.[sectionKey]?.[phraseKey] ||
+    resolveWorldPhraseEntry(sectionKey, englishPhrase);
   const worldSourcePhrase = String(worldEntry?.source || "").trim();
   if (worldEntry && worldEntry.translations) {
     translation = worldEntry.translations?.[langKey] || "";
@@ -6709,6 +6884,9 @@ const resolvePhraseTranslation = (section, englishPhrase, baseLanguage) => {
   }
   if (!translation) {
     translation = PHRASE_TRANSLATIONS[sectionKey]?.[phraseKey]?.[langKey] || "";
+  }
+  if (!translation && worldEntry?.intent) {
+    translation = getRuntimePhraseTranslation(sectionKey, englishPhrase, langKey);
   }
   if (!translation) {
     if (englishPhrase && baseLanguage) {
@@ -6727,6 +6905,7 @@ const applyPhraseTranslations = () => {
     const phrase =
       card.dataset.phrase || card.querySelector(".phrase-text")?.textContent?.trim() || "";
     const section = card.closest("[data-section]")?.dataset.section || PHRASE_SECTION_ORDER[0];
+    const worldEntry = resolveWorldPhraseEntry(section, phrase);
     let translationEl = card.querySelector(".phrase-translation");
     if (!translationEl) {
       translationEl = document.createElement("div");
@@ -6734,7 +6913,28 @@ const applyPhraseTranslations = () => {
       const audioEl = card.querySelector(".word-audio");
       card.insertBefore(translationEl, audioEl || null);
     }
-    translationEl.textContent = resolvePhraseTranslation(section, phrase, baseLanguage);
+    const resolved = resolvePhraseTranslation(section, phrase, baseLanguage);
+    translationEl.textContent = resolved;
+    if (
+      !resolved &&
+      worldEntry?.intent &&
+      baseLanguage &&
+      String(baseLanguage).trim().toLowerCase() !== "english"
+    ) {
+      requestRuntimePhraseTranslation(section, phrase, baseLanguage).then((translated) => {
+        if (!translated) {
+          return;
+        }
+        const currentPhrase =
+          card.dataset.phrase || card.querySelector(".phrase-text")?.textContent?.trim() || "";
+        if (currentPhrase !== phrase) {
+          return;
+        }
+        if (translationEl) {
+          translationEl.textContent = translated;
+        }
+      });
+    }
   });
 };
 

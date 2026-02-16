@@ -1,0 +1,18 @@
+{
+  "worldKey": "portuguese",
+  "nativeName": "Português",
+  "tts": {
+    "languageCode": "pt-BR",
+    "voice": "pt-BR-Wavenet-A"
+  },
+  "phraseIntents": {
+    "englishLanguageLabel": "portuguese",
+    "forms": {
+      "learn_world_language": "estou aprendendo português",
+      "speak_world_language": "eu falo português",
+      "not_speak_world_language": "eu não falo português",
+      "ask_speak_world_language": "você fala português?"
+    }
+  },
+  "translationPack": "frontend/worlds/portuguese/translations.json"
+}

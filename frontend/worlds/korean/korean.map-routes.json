@@ -1,0 +1,11 @@
+{
+  "worldKey": "korean",
+  "displayName": "Korean",
+  "routes": {
+    "world": "world-korean.html",
+    "letters": "letters-korean.html",
+    "words": "words-korean.html",
+    "phrases": "phrases-korean.html",
+    "grammar": "grammar-korean.html"
+  }
+}

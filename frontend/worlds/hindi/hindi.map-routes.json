@@ -1,0 +1,11 @@
+{
+  "worldKey": "hindi",
+  "displayName": "Hindi",
+  "routes": {
+    "world": "world-hindi.html",
+    "letters": "letters-hindi.html",
+    "words": "words-hindi.html",
+    "phrases": "phrases-hindi.html",
+    "grammar": "grammar-hindi.html"
+  }
+}

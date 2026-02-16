@@ -1,0 +1,11 @@
+{
+  "worldKey": "dutch",
+  "displayName": "Dutch",
+  "routes": {
+    "world": "world-dutch.html",
+    "letters": "letters-dutch.html",
+    "words": "words-dutch.html",
+    "phrases": "phrases-dutch.html",
+    "grammar": "grammar-dutch.html"
+  }
+}

@@ -13,6 +13,7 @@ This folder keeps world-specific assets/data organized by language.
 1. `frontend/worlds/english/`
 2. `frontend/worlds/french/`
 3. `frontend/worlds/german/`
+4. `frontend/worlds/spanish/`
 
 ## Routing rule (important)
 
@@ -27,3 +28,11 @@ World folders are for world-specific data/config, not for changing public route 
 2. Present language-specific accented letters, ligatures, or extra letters as supplemental forms.
 3. Keep pronunciation cards for supplemental forms when they are used in real writing.
 4. Do not present supplemental forms as if they replace the core alphabet order.
+
+## Phrase Intent Policy (All non-English worlds)
+
+1. The 4 self-reference intents must target the world language, never English:
+   `learn_world_language`, `speak_world_language`, `not_speak_world_language`, `ask_speak_world_language`.
+2. These intents live under `Introductions` (first 3) and `Questions` (last one).
+3. Store intent metadata in each world pack entry (`intent` + world-native phrase + world-native English source meaning).
+4. `npm run check:intents` must pass before deploying.

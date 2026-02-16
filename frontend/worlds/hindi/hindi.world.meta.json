@@ -1,0 +1,18 @@
+{
+  "worldKey": "hindi",
+  "nativeName": "हिन्दी",
+  "tts": {
+    "languageCode": "hi-IN",
+    "voice": "hi-IN-Wavenet-A"
+  },
+  "phraseIntents": {
+    "englishLanguageLabel": "hindi",
+    "forms": {
+      "learn_world_language": "मैं हिंदी सीख रहा/रही हूँ",
+      "speak_world_language": "मैं हिंदी बोलता/बोलती हूँ",
+      "not_speak_world_language": "मैं हिंदी नहीं बोलता/बोलती हूँ",
+      "ask_speak_world_language": "क्या आप हिंदी बोलते हैं?"
+    }
+  },
+  "translationPack": "frontend/worlds/hindi/translations.json"
+}

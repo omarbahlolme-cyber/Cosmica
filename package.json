@@ -17,6 +17,7 @@
     "check:assets": "node scripts/check-asset-version-consistency.js",
     "check:integrity": "node scripts/check-external-integrity.js",
     "check:securitytxt": "node scripts/check-security-txt.js",
+    "check:intents": "node scripts/check-world-phrase-intents.js",
     "check:bloat": "node scripts/check-bloat.js",
     "check:bloat:refresh": "node scripts/check-bloat.js --write-allowlist",
     "perf:baseline": "node scripts/perf-snapshot.js --write",
@@ -27,7 +28,7 @@
     "backup:create": "node scripts/create-backup.js",
     "backup:verify": "node scripts/verify-backup.js",
     "release:check": "node scripts/check-release.js",
-    "quality": "npm run check:syntax && npm run check:literal-escapes && npm run check:a11y && npm run check:seo && npm run check:assets && npm run check:integrity && npm run check:securitytxt && npm run check:bloat && npm run perf:check && npm run security:audit && npm run release:check && npm run smoke",
+    "quality": "npm run check:syntax && npm run check:literal-escapes && npm run check:a11y && npm run check:seo && npm run check:assets && npm run check:integrity && npm run check:securitytxt && npm run check:intents && npm run check:bloat && npm run perf:check && npm run security:audit && npm run release:check && npm run smoke",
     "format": "prettier --write \"**/*.{html,css,js,json,md}\""
   },
   "devDependencies": {

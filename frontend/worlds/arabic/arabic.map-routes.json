@@ -1,0 +1,11 @@
+{
+  "worldKey": "arabic",
+  "displayName": "Arabic",
+  "routes": {
+    "world": "world-arabic.html",
+    "letters": "letters-arabic.html",
+    "words": "words-arabic.html",
+    "phrases": "phrases-arabic.html",
+    "grammar": "grammar-arabic.html"
+  }
+}

@@ -1,0 +1,18 @@
+﻿{
+  "worldKey": "spanish",
+  "nativeName": "Español",
+  "tts": {
+    "languageCode": "es-ES",
+    "voice": "es-ES-Neural2-F"
+  },
+  "phraseIntents": {
+    "englishLanguageLabel": "spanish",
+    "forms": {
+      "learn_world_language": "estoy aprendiendo español",
+      "speak_world_language": "hablo español",
+      "not_speak_world_language": "no hablo español",
+      "ask_speak_world_language": "¿hablas español?"
+    }
+  },
+  "translationPack": "frontend/worlds/spanish/translations.json"
+}

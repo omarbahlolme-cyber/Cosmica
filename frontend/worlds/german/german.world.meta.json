@@ -5,6 +5,15 @@
     "languageCode": "de-DE",
     "voice": "de-DE-Neural2-F"
   },
+  "phraseIntents": {
+    "englishLanguageLabel": "german",
+    "forms": {
+      "learn_world_language": "ich lerne Deutsch",
+      "speak_world_language": "ich spreche Deutsch",
+      "not_speak_world_language": "ich spreche kein Deutsch",
+      "ask_speak_world_language": "sprichst du Deutsch"
+    }
+  },
   "translationPack": "frontend/worlds/german/translations.json"
 }
 

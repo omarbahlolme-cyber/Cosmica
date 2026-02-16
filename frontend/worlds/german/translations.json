@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-15T23:11:03.720Z",
+  "generatedAt": "2026-02-16T14:48:04.554Z",
   "worldLanguage": "german",
   "baseLanguages": [
     "albanian",
@@ -6474,22 +6474,25 @@
           "english": "pleased to meet you"
         }
       },
-      "ich lerne Englisch": {
-        "source": "i am learning english",
+      "ich lerne Deutsch": {
+        "source": "i am learning german",
+        "intent": "learn_world_language",
         "translations": {
-          "english": "i am learning english"
+          "english": "i am learning german"
         }
       },
-      "ich spreche Englisch": {
-        "source": "i speak english",
+      "ich spreche Deutsch": {
+        "source": "i speak german",
+        "intent": "speak_world_language",
         "translations": {
-          "english": "i speak english"
+          "english": "i speak german"
         }
       },
-      "ich spreche kein Englisch": {
-        "source": "i do not speak english",
+      "ich spreche kein Deutsch": {
+        "source": "i do not speak german",
+        "intent": "not_speak_world_language",
         "translations": {
-          "english": "i do not speak english"
+          "english": "i do not speak german"
         }
       }
     },
@@ -6622,10 +6625,11 @@
           "english": "which one is better"
         }
       },
-      "sprichst du Englisch": {
-        "source": "do you speak english",
+      "sprichst du Deutsch": {
+        "source": "do you speak german",
+        "intent": "ask_speak_world_language",
         "translations": {
-          "english": "do you speak english"
+          "english": "do you speak german"
         }
       },
       "hast du das": {
@@ -9125,9 +9129,12 @@
         "this is my sister": "das ist meine Schwester",
         "nice to meet you": "schön, Sie kennenzulernen",
         "pleased to meet you": "freut mich, Sie kennenzulernen",
-        "i am learning english": "ich lerne Englisch",
-        "i speak english": "ich spreche Englisch",
-        "i do not speak english": "ich spreche kein Englisch"
+        "i am learning english": "ich lerne Deutsch",
+        "i am learning german": "ich lerne Deutsch",
+        "i speak english": "ich spreche Deutsch",
+        "i speak german": "ich spreche Deutsch",
+        "i do not speak english": "ich spreche kein Deutsch",
+        "i do not speak german": "ich spreche kein Deutsch"
       },
       "Conversation": {
         "can you repeat that": "kannst du das wiederholen",
@@ -9153,7 +9160,8 @@
         "what time is it": "wie spät ist es",
         "how many people": "wie viele Leute",
         "which one is better": "welcher ist besser",
-        "do you speak english": "sprichst du Englisch",
+        "do you speak english": "sprichst du Deutsch",
+        "do you speak german": "sprichst du Deutsch",
         "do you have this": "hast du das",
         "is this correct": "ist das korrekt",
         "is it open": "ist es geöffnet",

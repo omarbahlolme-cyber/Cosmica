@@ -1,0 +1,11 @@
+{
+  "worldKey": "japanese",
+  "displayName": "Japanese",
+  "routes": {
+    "world": "world-japanese.html",
+    "letters": "letters-japanese.html",
+    "words": "words-japanese.html",
+    "phrases": "phrases-japanese.html",
+    "grammar": "grammar-japanese.html"
+  }
+}

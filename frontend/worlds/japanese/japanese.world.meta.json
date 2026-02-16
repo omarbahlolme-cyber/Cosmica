@@ -1,0 +1,18 @@
+{
+  "worldKey": "japanese",
+  "nativeName": "日本語",
+  "tts": {
+    "languageCode": "ja-JP",
+    "voice": "ja-JP-Wavenet-A"
+  },
+  "phraseIntents": {
+    "englishLanguageLabel": "japanese",
+    "forms": {
+      "learn_world_language": "日本語を勉強しています",
+      "speak_world_language": "日本語を話せます",
+      "not_speak_world_language": "日本語を話せません",
+      "ask_speak_world_language": "日本語を話せますか？"
+    }
+  },
+  "translationPack": "frontend/worlds/japanese/translations.json"
+}

@@ -1,0 +1,11 @@
+{
+  "worldKey": "portuguese",
+  "displayName": "Portuguese",
+  "routes": {
+    "world": "world-portuguese.html",
+    "letters": "letters-portuguese.html",
+    "words": "words-portuguese.html",
+    "phrases": "phrases-portuguese.html",
+    "grammar": "grammar-portuguese.html"
+  }
+}

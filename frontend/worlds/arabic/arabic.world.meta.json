@@ -1,0 +1,18 @@
+{
+  "worldKey": "arabic",
+  "nativeName": "العربية",
+  "tts": {
+    "languageCode": "ar-XA",
+    "voice": "ar-XA-Wavenet-A"
+  },
+  "phraseIntents": {
+    "englishLanguageLabel": "arabic",
+    "forms": {
+      "learn_world_language": "أتعلم العربية",
+      "speak_world_language": "أنا أتحدث العربية",
+      "not_speak_world_language": "أنا لا أتحدث العربية",
+      "ask_speak_world_language": "هل تتحدث العربية؟"
+    }
+  },
+  "translationPack": "frontend/worlds/arabic/translations.json"
+}

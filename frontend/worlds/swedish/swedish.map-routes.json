@@ -1,0 +1,11 @@
+{
+  "worldKey": "swedish",
+  "displayName": "Swedish",
+  "routes": {
+    "world": "world-swedish.html",
+    "letters": "letters-swedish.html",
+    "words": "words-swedish.html",
+    "phrases": "phrases-swedish.html",
+    "grammar": "grammar-swedish.html"
+  }
+}

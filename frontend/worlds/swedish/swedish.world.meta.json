@@ -1,0 +1,18 @@
+{
+  "worldKey": "swedish",
+  "nativeName": "Svenska",
+  "tts": {
+    "languageCode": "sv-SE",
+    "voice": "sv-SE-Wavenet-A"
+  },
+  "phraseIntents": {
+    "englishLanguageLabel": "swedish",
+    "forms": {
+      "learn_world_language": "jag lär mig svenska",
+      "speak_world_language": "jag talar svenska",
+      "not_speak_world_language": "jag talar inte svenska",
+      "ask_speak_world_language": "talar du svenska?"
+    }
+  },
+  "translationPack": "frontend/worlds/swedish/translations.json"
+}

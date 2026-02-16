@@ -1,0 +1,18 @@
+{
+  "worldKey": "dutch",
+  "nativeName": "Nederlands",
+  "tts": {
+    "languageCode": "nl-NL",
+    "voice": "nl-NL-Wavenet-A"
+  },
+  "phraseIntents": {
+    "englishLanguageLabel": "dutch",
+    "forms": {
+      "learn_world_language": "ik leer Nederlands",
+      "speak_world_language": "ik spreek Nederlands",
+      "not_speak_world_language": "ik spreek geen Nederlands",
+      "ask_speak_world_language": "spreek je Nederlands?"
+    }
+  },
+  "translationPack": "frontend/worlds/dutch/translations.json"
+}

@@ -174,6 +174,15 @@ const WORLD_TRANSLATION_FILES = {
   english: BASE_MAP_TRANSLATION_FILE,
   french: "worlds/french/translations.json",
   german: "worlds/german/translations.json",
+  spanish: "worlds/spanish/translations.json",
+  portuguese: "worlds/portuguese/translations.json",
+  dutch: "worlds/dutch/translations.json",
+  swedish: "worlds/swedish/translations.json",
+  arabic: "worlds/arabic/translations.json",
+  chinese: "worlds/chinese/translations.json",
+  japanese: "worlds/japanese/translations.json",
+  korean: "worlds/korean/translations.json",
+  hindi: "worlds/hindi/translations.json",
 };
 const WORLD_TTS_CONFIG = {
   english: {
@@ -187,6 +196,42 @@ const WORLD_TTS_CONFIG = {
   german: {
     languageCode: "de-DE",
     voice: "de-DE-Neural2-F",
+  },
+  spanish: {
+    languageCode: "es-ES",
+    voice: "es-ES-Neural2-F",
+  },
+  portuguese: {
+    languageCode: "pt-BR",
+    voice: "pt-BR-Wavenet-A",
+  },
+  dutch: {
+    languageCode: "nl-NL",
+    voice: "nl-NL-Wavenet-A",
+  },
+  swedish: {
+    languageCode: "sv-SE",
+    voice: "sv-SE-Wavenet-A",
+  },
+  arabic: {
+    languageCode: "ar-XA",
+    voice: "ar-XA-Wavenet-A",
+  },
+  chinese: {
+    languageCode: "cmn-CN",
+    voice: "cmn-CN-Wavenet-A",
+  },
+  japanese: {
+    languageCode: "ja-JP",
+    voice: "ja-JP-Wavenet-A",
+  },
+  korean: {
+    languageCode: "ko-KR",
+    voice: "ko-KR-Wavenet-A",
+  },
+  hindi: {
+    languageCode: "hi-IN",
+    voice: "hi-IN-Wavenet-A",
   },
 };
 const WORLD_TRANSLATION_FILE =
@@ -340,7 +385,7 @@ const MIMI_CONFIG = {
 const WORLD_START_LESSON_DESKTOP_DOWN_SHIFT = 34;
 const MIMI_SITE_CONTEXT = [
   "Cosmica is a space-universe language learning site where each language is a world.",
-  "Worlds available now: English, French, German.",
+  "Worlds available now: English, French, German, Spanish, Portuguese, Dutch, Swedish, Arabic, Chinese, Japanese, Korean, and Hindi.",
   "User actions: click a world to trigger a warp transition that says 'Entering {World} World'.",
   "Tone: cinematic, exploratory, playful, focused on discovery and learning by missions.",
   "Mimi can suggest worlds, give short quests, and teach greetings.",
@@ -353,7 +398,7 @@ const MIMI_SYSTEM_PROMPT = [
   "You can answer broad questions across topics, then connect back to learning goals when useful.",
   "Maintain a cosmic discovery vibe while sounding natural and smart.",
   "Know Cosmica in detail: site sections, maps, world flow, base-language behavior, and currently available content.",
-  "Treat English, French, and German worlds as live. Mention other worlds as upcoming only.",
+  "Treat English, French, German, Spanish, Portuguese, Dutch, Swedish, Arabic, Chinese, Japanese, Korean, and Hindi worlds as live.",
   "Ask for the user's target language, goal, and time available when needed.",
   "Give one concrete next step (a quick quest, a phrase to practice, or a world to enter).",
   "If asked about features beyond the current site, call them planned or upcoming.",
@@ -365,12 +410,30 @@ const worldLines = {
   English: "English world online. Neon cities are ready for your hello.",
   French: "French world online. Parisian constellations are now in orbit.",
   German: "German world online. Precision constellations are now in orbit.",
+  Spanish: "Spanish world online. Sunlit constellations are now in orbit.",
+  Portuguese: "Portuguese world online. Atlantic constellations are now in orbit.",
+  Dutch: "Dutch world online. Canal constellations are now in orbit.",
+  Swedish: "Swedish world online. Aurora constellations are now in orbit.",
+  Arabic: "Arabic world online. Calligraphy constellations are now in orbit.",
+  Chinese: "Chinese world online. Hanzi constellations are now in orbit.",
+  Japanese: "Japanese world online. Kana constellations are now in orbit.",
+  Korean: "Korean world online. Hangeul constellations are now in orbit.",
+  Hindi: "Hindi world online. Devanagari constellations are now in orbit.",
 };
 
 const worldPages = {
   English: "english-world.html",
   French: "world-french.html",
   German: "world-german.html",
+  Spanish: "world-spanish.html",
+  Portuguese: "world-portuguese.html",
+  Dutch: "world-dutch.html",
+  Swedish: "world-swedish.html",
+  Arabic: "world-arabic.html",
+  Chinese: "world-chinese.html",
+  Japanese: "world-japanese.html",
+  Korean: "world-korean.html",
+  Hindi: "world-hindi.html",
 };
 
 /* ==========================================================================
@@ -464,6 +527,42 @@ const scheduleCoreRoutePrefetch = () => {
     "/letters-german.html",
     "/words-german.html",
     "/phrases-german.html",
+    "/world-spanish.html",
+    "/letters-spanish.html",
+    "/words-spanish.html",
+    "/phrases-spanish.html",
+    "/world-portuguese.html",
+    "/letters-portuguese.html",
+    "/words-portuguese.html",
+    "/phrases-portuguese.html",
+    "/world-dutch.html",
+    "/letters-dutch.html",
+    "/words-dutch.html",
+    "/phrases-dutch.html",
+    "/world-swedish.html",
+    "/letters-swedish.html",
+    "/words-swedish.html",
+    "/phrases-swedish.html",
+    "/world-arabic.html",
+    "/letters-arabic.html",
+    "/words-arabic.html",
+    "/phrases-arabic.html",
+    "/world-chinese.html",
+    "/letters-chinese.html",
+    "/words-chinese.html",
+    "/phrases-chinese.html",
+    "/world-japanese.html",
+    "/letters-japanese.html",
+    "/words-japanese.html",
+    "/phrases-japanese.html",
+    "/world-korean.html",
+    "/letters-korean.html",
+    "/words-korean.html",
+    "/phrases-korean.html",
+    "/world-hindi.html",
+    "/letters-hindi.html",
+    "/words-hindi.html",
+    "/phrases-hindi.html",
   ];
   const runPrefetch = () => {
     warmRoutes.forEach((route) => prefetchDocument(route));

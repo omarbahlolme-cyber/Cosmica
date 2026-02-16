@@ -1,0 +1,7436 @@
+{
+  "generatedAt": "2026-02-16T19:07:27.249Z",
+  "worldLanguage": "portuguese",
+  "baseLanguages": [
+    "albanian",
+    "arabic",
+    "bulgarian",
+    "chinese",
+    "croatian",
+    "czech",
+    "dutch",
+    "finnish",
+    "german",
+    "greek",
+    "hebrew",
+    "hindi",
+    "indonesian",
+    "italian",
+    "japanese",
+    "korean",
+    "kurdish",
+    "malaysian",
+    "norwegian",
+    "persian",
+    "polish",
+    "romanian",
+    "russian",
+    "somali",
+    "spanish",
+    "swedish",
+    "tagalog",
+    "thai",
+    "turkish",
+    "ukrainian",
+    "urdu",
+    "uzbek",
+    "vietnamese"
+  ],
+  "words": {
+    "Greetings": {
+      "oi": {
+        "source": "hi",
+        "translations": {
+          "english": "hi"
+        }
+      },
+      "olá": {
+        "source": "hello",
+        "translations": {
+          "english": "hello"
+        }
+      },
+      "bom dia": {
+        "source": "good day",
+        "translations": {
+          "english": "good day"
+        }
+      },
+      "boa tarde": {
+        "source": "good afternoon",
+        "translations": {
+          "english": "good afternoon"
+        }
+      },
+      "boa noite": {
+        "source": "good night",
+        "translations": {
+          "english": "good night"
+        }
+      },
+      "adeus": {
+        "source": "goodbye",
+        "translations": {
+          "english": "goodbye"
+        }
+      },
+      "tchau": {
+        "source": "bye",
+        "translations": {
+          "english": "bye"
+        }
+      },
+      "até logo": {
+        "source": "see you soon",
+        "translations": {
+          "english": "see you soon"
+        }
+      },
+      "cuide-se": {
+        "source": "take care",
+        "translations": {
+          "english": "take care"
+        }
+      },
+      "bem-vindo": {
+        "source": "welcome",
+        "translations": {
+          "english": "welcome"
+        }
+      },
+      "com licença": {
+        "source": "excuse me",
+        "translations": {
+          "english": "excuse me"
+        }
+      },
+      "desculpe": {
+        "source": "sorry",
+        "translations": {
+          "english": "sorry"
+        }
+      },
+      "obrigado": {
+        "source": "thank you",
+        "translations": {
+          "english": "thank you"
+        }
+      },
+      "de nada": {
+        "source": "you're welcome",
+        "translations": {
+          "english": "you're welcome"
+        }
+      },
+      "valeu": {
+        "source": "thanks",
+        "translations": {
+          "english": "thanks"
+        }
+      },
+      "como você está": {
+        "source": "how are you",
+        "translations": {
+          "english": "how are you"
+        }
+      },
+      "prazer em conhecê-lo": {
+        "source": "pleased to meet you",
+        "translations": {
+          "english": "pleased to meet you"
+        }
+      },
+      "até mais": {
+        "source": "see you later",
+        "translations": {
+          "english": "see you later"
+        }
+      },
+      "até amanhã": {
+        "source": "see you tomorrow",
+        "translations": {
+          "english": "see you tomorrow"
+        }
+      },
+      "tenha um bom dia": {
+        "source": "have a good day",
+        "translations": {
+          "english": "have a good day"
+        }
+      },
+      "boa sorte": {
+        "source": "good luck",
+        "translations": {
+          "english": "good luck"
+        }
+      },
+      "bem-vindo de volta": {
+        "source": "welcome back",
+        "translations": {
+          "english": "welcome back"
+        }
+      },
+      "sem problemas": {
+        "source": "no problem",
+        "translations": {
+          "english": "no problem"
+        }
+      }
+    },
+    "Pronouns": {
+      "eu": {
+        "source": "i",
+        "translations": {
+          "english": "i"
+        }
+      },
+      "você": {
+        "source": "you",
+        "translations": {
+          "english": "you"
+        }
+      },
+      "ele": {
+        "source": "him",
+        "translations": {
+          "english": "him"
+        }
+      },
+      "ela": {
+        "source": "her",
+        "translations": {
+          "english": "her"
+        }
+      },
+      "isso": {
+        "source": "it",
+        "translations": {
+          "english": "it"
+        }
+      },
+      "nós": {
+        "source": "we",
+        "translations": {
+          "english": "we"
+        }
+      },
+      "eles": {
+        "source": "them",
+        "translations": {
+          "english": "them"
+        }
+      },
+      "me": {
+        "source": "me",
+        "translations": {
+          "english": "me"
+        }
+      },
+      "nos": {
+        "source": "us",
+        "translations": {
+          "english": "us"
+        }
+      },
+      "meu": {
+        "source": "mine",
+        "translations": {
+          "english": "mine"
+        }
+      },
+      "seu": {
+        "source": "yours",
+        "translations": {
+          "english": "yours"
+        }
+      },
+      "dele": {
+        "source": "his",
+        "translations": {
+          "english": "his"
+        }
+      },
+      "nosso": {
+        "source": "ours",
+        "translations": {
+          "english": "ours"
+        }
+      },
+      "deles": {
+        "source": "theirs",
+        "translations": {
+          "english": "theirs"
+        }
+      },
+      "dela": {
+        "source": "hers",
+        "translations": {
+          "english": "hers"
+        }
+      },
+      "eu mesmo": {
+        "source": "myself",
+        "translations": {
+          "english": "myself"
+        }
+      },
+      "você mesmo": {
+        "source": "yourself",
+        "translations": {
+          "english": "yourself"
+        }
+      },
+      "ele mesmo": {
+        "source": "himself",
+        "translations": {
+          "english": "himself"
+        }
+      },
+      "ela mesma": {
+        "source": "herself",
+        "translations": {
+          "english": "herself"
+        }
+      },
+      "isso mesmo": {
+        "source": "itself",
+        "translations": {
+          "english": "itself"
+        }
+      },
+      "nós mesmos": {
+        "source": "ourselves",
+        "translations": {
+          "english": "ourselves"
+        }
+      },
+      "eles mesmos": {
+        "source": "themselves",
+        "translations": {
+          "english": "themselves"
+        }
+      },
+      "isto": {
+        "source": "this",
+        "translations": {
+          "english": "this"
+        }
+      },
+      "aquilo": {
+        "source": "that",
+        "translations": {
+          "english": "that"
+        }
+      },
+      "estes": {
+        "source": "these",
+        "translations": {
+          "english": "these"
+        }
+      },
+      "aqueles": {
+        "source": "those",
+        "translations": {
+          "english": "those"
+        }
+      },
+      "alguém": {
+        "source": "somebody",
+        "translations": {
+          "english": "somebody"
+        }
+      },
+      "qualquer um": {
+        "source": "anybody",
+        "translations": {
+          "english": "anybody"
+        }
+      },
+      "todos": {
+        "source": "all",
+        "translations": {
+          "english": "all"
+        }
+      },
+      "ninguém": {
+        "source": "no one",
+        "translations": {
+          "english": "no one"
+        }
+      },
+      "algo": {
+        "source": "something",
+        "translations": {
+          "english": "something"
+        }
+      },
+      "qualquer coisa": {
+        "source": "anything",
+        "translations": {
+          "english": "anything"
+        }
+      },
+      "tudo": {
+        "source": "everything",
+        "translations": {
+          "english": "everything"
+        }
+      },
+      "nada": {
+        "source": "nothing",
+        "translations": {
+          "english": "nothing"
+        }
+      },
+      "todo mundo": {
+        "source": "everybody",
+        "translations": {
+          "english": "everybody"
+        }
+      },
+      "cada": {
+        "source": "each",
+        "translations": {
+          "english": "each"
+        }
+      },
+      "um ou outro": {
+        "source": "either",
+        "translations": {
+          "english": "either"
+        }
+      },
+      "nenhum dos dois": {
+        "source": "neither",
+        "translations": {
+          "english": "neither"
+        }
+      },
+      "ambos": {
+        "source": "both",
+        "translations": {
+          "english": "both"
+        }
+      },
+      "nenhum": {
+        "source": "none",
+        "translations": {
+          "english": "none"
+        }
+      },
+      "um ao outro": {
+        "source": "one another",
+        "translations": {
+          "english": "one another"
+        }
+      }
+    },
+    "Verbs & Tenses": {
+      "ser": {
+        "source": "be",
+        "translations": {
+          "english": "be"
+        }
+      },
+      "ter": {
+        "source": "have",
+        "translations": {
+          "english": "have"
+        }
+      },
+      "fazer": {
+        "source": "make",
+        "translations": {
+          "english": "make"
+        }
+      },
+      "ir": {
+        "source": "go",
+        "translations": {
+          "english": "go"
+        }
+      },
+      "obter": {
+        "source": "get",
+        "translations": {
+          "english": "get"
+        }
+      },
+      "levar": {
+        "source": "take",
+        "translations": {
+          "english": "take"
+        }
+      },
+      "vir": {
+        "source": "come",
+        "translations": {
+          "english": "come"
+        }
+      },
+      "ver": {
+        "source": "see",
+        "translations": {
+          "english": "see"
+        }
+      },
+      "olhar": {
+        "source": "look",
+        "translations": {
+          "english": "look"
+        }
+      },
+      "ouvir": {
+        "source": "listen",
+        "translations": {
+          "english": "listen"
+        }
+      },
+      "dizer": {
+        "source": "say",
+        "translations": {
+          "english": "say"
+        }
+      },
+      "contar": {
+        "source": "tell",
+        "translations": {
+          "english": "tell"
+        }
+      },
+      "perguntar": {
+        "source": "ask",
+        "translations": {
+          "english": "ask"
+        }
+      },
+      "dar": {
+        "source": "give",
+        "translations": {
+          "english": "give"
+        }
+      },
+      "trazer": {
+        "source": "bring",
+        "translations": {
+          "english": "bring"
+        }
+      },
+      "colocar": {
+        "source": "put",
+        "translations": {
+          "english": "put"
+        }
+      },
+      "manter": {
+        "source": "keep",
+        "translations": {
+          "english": "keep"
+        }
+      },
+      "encontrar": {
+        "source": "meet",
+        "translations": {
+          "english": "meet"
+        }
+      },
+      "deixar": {
+        "source": "leave",
+        "translations": {
+          "english": "leave"
+        }
+      },
+      "mover": {
+        "source": "move",
+        "translations": {
+          "english": "move"
+        }
+      },
+      "viver": {
+        "source": "live",
+        "translations": {
+          "english": "live"
+        }
+      },
+      "abrir": {
+        "source": "open",
+        "translations": {
+          "english": "open"
+        }
+      },
+      "fechar": {
+        "source": "close",
+        "translations": {
+          "english": "close"
+        }
+      },
+      "começar": {
+        "source": "start",
+        "translations": {
+          "english": "start"
+        }
+      },
+      "terminar": {
+        "source": "finish",
+        "translations": {
+          "english": "finish"
+        }
+      },
+      "jogar": {
+        "source": "play",
+        "translations": {
+          "english": "play"
+        }
+      },
+      "ler": {
+        "source": "read",
+        "translations": {
+          "english": "read"
+        }
+      },
+      "escrever": {
+        "source": "write",
+        "translations": {
+          "english": "write"
+        }
+      },
+      "falar": {
+        "source": "speak",
+        "translations": {
+          "english": "speak"
+        }
+      },
+      "aprender": {
+        "source": "learn",
+        "translations": {
+          "english": "learn"
+        }
+      },
+      "ajudar": {
+        "source": "help",
+        "translations": {
+          "english": "help"
+        }
+      },
+      "viajar": {
+        "source": "travel",
+        "translations": {
+          "english": "travel"
+        }
+      },
+      "dirigir": {
+        "source": "drive",
+        "translations": {
+          "english": "drive"
+        }
+      },
+      "andar": {
+        "source": "walk",
+        "translations": {
+          "english": "walk"
+        }
+      },
+      "correr": {
+        "source": "run",
+        "translations": {
+          "english": "run"
+        }
+      },
+      "dormir": {
+        "source": "sleep",
+        "translations": {
+          "english": "sleep"
+        }
+      },
+      "cozinhar": {
+        "source": "cook",
+        "translations": {
+          "english": "cook"
+        }
+      },
+      "comprar": {
+        "source": "buy",
+        "translations": {
+          "english": "buy"
+        }
+      },
+      "vender": {
+        "source": "sell",
+        "translations": {
+          "english": "sell"
+        }
+      },
+      "pagar": {
+        "source": "pay",
+        "translations": {
+          "english": "pay"
+        }
+      },
+      "usar": {
+        "source": "use",
+        "translations": {
+          "english": "use"
+        }
+      },
+      "comer": {
+        "source": "eat",
+        "translations": {
+          "english": "eat"
+        }
+      },
+      "beber": {
+        "source": "drink",
+        "translations": {
+          "english": "drink"
+        }
+      },
+      "ensinar": {
+        "source": "teach",
+        "translations": {
+          "english": "teach"
+        }
+      },
+      "entender": {
+        "source": "understand",
+        "translations": {
+          "english": "understand"
+        }
+      },
+      "lembrar": {
+        "source": "remember",
+        "translations": {
+          "english": "remember"
+        }
+      },
+      "esquecer": {
+        "source": "forget",
+        "translations": {
+          "english": "forget"
+        }
+      },
+      "esperar": {
+        "source": "wait",
+        "translations": {
+          "english": "wait"
+        }
+      },
+      "ficar": {
+        "source": "stay",
+        "translations": {
+          "english": "stay"
+        }
+      },
+      "chegar": {
+        "source": "arrive",
+        "translations": {
+          "english": "arrive"
+        }
+      },
+      "retornar": {
+        "source": "return",
+        "translations": {
+          "english": "return"
+        }
+      },
+      "visitar": {
+        "source": "visit",
+        "translations": {
+          "english": "visit"
+        }
+      },
+      "enviar": {
+        "source": "send",
+        "translations": {
+          "english": "send"
+        }
+      },
+      "receber": {
+        "source": "receive",
+        "translations": {
+          "english": "receive"
+        }
+      },
+      "responder": {
+        "source": "answer",
+        "translations": {
+          "english": "answer"
+        }
+      },
+      "explicar": {
+        "source": "explain",
+        "translations": {
+          "english": "explain"
+        }
+      },
+      "repetir": {
+        "source": "repeat",
+        "translations": {
+          "english": "repeat"
+        }
+      },
+      "praticar": {
+        "source": "practice",
+        "translations": {
+          "english": "practice"
+        }
+      },
+      "planejar": {
+        "source": "plan",
+        "translations": {
+          "english": "plan"
+        }
+      },
+      "decidir": {
+        "source": "decide",
+        "translations": {
+          "english": "decide"
+        }
+      },
+      "tentar": {
+        "source": "try",
+        "translations": {
+          "english": "try"
+        }
+      },
+      "mudar": {
+        "source": "change",
+        "translations": {
+          "english": "change"
+        }
+      },
+      "construir": {
+        "source": "build",
+        "translations": {
+          "english": "build"
+        }
+      },
+      "consertar": {
+        "source": "fix",
+        "translations": {
+          "english": "fix"
+        }
+      },
+      "parar": {
+        "source": "stop",
+        "translations": {
+          "english": "stop"
+        }
+      },
+      "ficar de pé": {
+        "source": "stand",
+        "translations": {
+          "english": "stand"
+        }
+      },
+      "sentar": {
+        "source": "sit",
+        "translations": {
+          "english": "sit"
+        }
+      },
+      "virar": {
+        "source": "turn",
+        "translations": {
+          "english": "turn"
+        }
+      },
+      "carregar": {
+        "source": "carry",
+        "translations": {
+          "english": "carry"
+        }
+      },
+      "segurar": {
+        "source": "hold",
+        "translations": {
+          "english": "hold"
+        }
+      },
+      "vestir": {
+        "source": "wear",
+        "translations": {
+          "english": "wear"
+        }
+      },
+      "lavar": {
+        "source": "wash",
+        "translations": {
+          "english": "wash"
+        }
+      },
+      "crescer": {
+        "source": "grow",
+        "translations": {
+          "english": "grow"
+        }
+      },
+      "ganhar": {
+        "source": "win",
+        "translations": {
+          "english": "win"
+        }
+      },
+      "perder": {
+        "source": "lose",
+        "translations": {
+          "english": "lose"
+        }
+      },
+      "juntar": {
+        "source": "join",
+        "translations": {
+          "english": "join"
+        }
+      },
+      "compartilhar": {
+        "source": "share",
+        "translations": {
+          "english": "share"
+        }
+      },
+      "pedir": {
+        "source": "order",
+        "translations": {
+          "english": "order"
+        }
+      },
+      "seguir": {
+        "source": "follow",
+        "translations": {
+          "english": "follow"
+        }
+      },
+      "salvar": {
+        "source": "save",
+        "translations": {
+          "english": "save"
+        }
+      }
+    },
+    "Questions & Connectors": {
+      "quem": {
+        "source": "whom",
+        "translations": {
+          "english": "whom"
+        }
+      },
+      "o que": {
+        "source": "what",
+        "translations": {
+          "english": "what"
+        }
+      },
+      "onde": {
+        "source": "where",
+        "translations": {
+          "english": "where"
+        }
+      },
+      "quando": {
+        "source": "when",
+        "translations": {
+          "english": "when"
+        }
+      },
+      "por que": {
+        "source": "why",
+        "translations": {
+          "english": "why"
+        }
+      },
+      "como": {
+        "source": "as",
+        "translations": {
+          "english": "as"
+        }
+      },
+      "qual": {
+        "source": "which",
+        "translations": {
+          "english": "which"
+        }
+      },
+      "de quem": {
+        "source": "whose",
+        "translations": {
+          "english": "whose"
+        }
+      },
+      "quantos": {
+        "source": "how many",
+        "translations": {
+          "english": "how many"
+        }
+      },
+      "quanto": {
+        "source": "how much",
+        "translations": {
+          "english": "how much"
+        }
+      },
+      "e": {
+        "source": "and",
+        "translations": {
+          "english": "and"
+        }
+      },
+      "mas": {
+        "source": "but",
+        "translations": {
+          "english": "but"
+        }
+      },
+      "ou": {
+        "source": "or",
+        "translations": {
+          "english": "or"
+        }
+      },
+      "então": {
+        "source": "then",
+        "translations": {
+          "english": "then"
+        }
+      },
+      "porque": {
+        "source": "because",
+        "translations": {
+          "english": "because"
+        }
+      },
+      "se": {
+        "source": "whether",
+        "translations": {
+          "english": "whether"
+        }
+      },
+      "também": {
+        "source": "also",
+        "translations": {
+          "english": "also"
+        }
+      },
+      "antes": {
+        "source": "before",
+        "translations": {
+          "english": "before"
+        }
+      },
+      "depois": {
+        "source": "after",
+        "translations": {
+          "english": "after"
+        }
+      },
+      "enquanto": {
+        "source": "while",
+        "translations": {
+          "english": "while"
+        }
+      },
+      "desde": {
+        "source": "since",
+        "translations": {
+          "english": "since"
+        }
+      },
+      "até": {
+        "source": "until",
+        "translations": {
+          "english": "until"
+        }
+      },
+      "embora": {
+        "source": "although",
+        "translations": {
+          "english": "although"
+        }
+      },
+      "no entanto": {
+        "source": "however",
+        "translations": {
+          "english": "however"
+        }
+      },
+      "de onde": {
+        "source": "where from",
+        "translations": {
+          "english": "where from"
+        }
+      },
+      "que horas": {
+        "source": "what time",
+        "translations": {
+          "english": "what time"
+        }
+      },
+      "quanto tempo": {
+        "source": "how long",
+        "translations": {
+          "english": "how long"
+        }
+      },
+      "com que frequência": {
+        "source": "how often",
+        "translations": {
+          "english": "how often"
+        }
+      },
+      "a menos que": {
+        "source": "unless",
+        "translations": {
+          "english": "unless"
+        }
+      },
+      "ainda": {
+        "source": "still",
+        "translations": {
+          "english": "still"
+        }
+      },
+      "portanto": {
+        "source": "therefore",
+        "translations": {
+          "english": "therefore"
+        }
+      },
+      "para que": {
+        "source": "so that",
+        "translations": {
+          "english": "so that"
+        }
+      },
+      "caso": {
+        "source": "in case",
+        "translations": {
+          "english": "in case"
+        }
+      },
+      "por causa de": {
+        "source": "because of",
+        "translations": {
+          "english": "because of"
+        }
+      },
+      "do que": {
+        "source": "than",
+        "translations": {
+          "english": "than"
+        }
+      },
+      "através": {
+        "source": "through",
+        "translations": {
+          "english": "through"
+        }
+      },
+      "sem": {
+        "source": "without",
+        "translations": {
+          "english": "without"
+        }
+      },
+      "com": {
+        "source": "with",
+        "translations": {
+          "english": "with"
+        }
+      },
+      "sobre": {
+        "source": "over",
+        "translations": {
+          "english": "over"
+        }
+      },
+      "para": {
+        "source": "to",
+        "translations": {
+          "english": "to"
+        }
+      },
+      "de": {
+        "source": "from",
+        "translations": {
+          "english": "from"
+        }
+      },
+      "dentro de": {
+        "source": "into",
+        "translations": {
+          "english": "into"
+        }
+      },
+      "debaixo de": {
+        "source": "under",
+        "translations": {
+          "english": "under"
+        }
+      },
+      "entre": {
+        "source": "between",
+        "translations": {
+          "english": "between"
+        }
+      },
+      "ao redor de": {
+        "source": "around",
+        "translations": {
+          "english": "around"
+        }
+      },
+      "através de": {
+        "source": "across",
+        "translations": {
+          "english": "across"
+        }
+      },
+      "atrás de": {
+        "source": "behind",
+        "translations": {
+          "english": "behind"
+        }
+      },
+      "na frente de": {
+        "source": "in front of",
+        "translations": {
+          "english": "in front of"
+        }
+      },
+      "ao lado de": {
+        "source": "next to",
+        "translations": {
+          "english": "next to"
+        }
+      },
+      "passado": {
+        "source": "past",
+        "translations": {
+          "english": "past"
+        }
+      }
+    },
+    "Numbers & Counting": {
+      "zero": {
+        "source": "zero",
+        "translations": {
+          "english": "zero"
+        }
+      },
+      "um": {
+        "source": "one",
+        "translations": {
+          "english": "one"
+        }
+      },
+      "dois": {
+        "source": "two",
+        "translations": {
+          "english": "two"
+        }
+      },
+      "três": {
+        "source": "three",
+        "translations": {
+          "english": "three"
+        }
+      },
+      "quatro": {
+        "source": "four",
+        "translations": {
+          "english": "four"
+        }
+      },
+      "cinco": {
+        "source": "five",
+        "translations": {
+          "english": "five"
+        }
+      },
+      "seis": {
+        "source": "six",
+        "translations": {
+          "english": "six"
+        }
+      },
+      "sete": {
+        "source": "seven",
+        "translations": {
+          "english": "seven"
+        }
+      },
+      "oito": {
+        "source": "eight",
+        "translations": {
+          "english": "eight"
+        }
+      },
+      "nove": {
+        "source": "nine",
+        "translations": {
+          "english": "nine"
+        }
+      },
+      "dez": {
+        "source": "ten",
+        "translations": {
+          "english": "ten"
+        }
+      },
+      "onze": {
+        "source": "eleven",
+        "translations": {
+          "english": "eleven"
+        }
+      },
+      "doze": {
+        "source": "twelve",
+        "translations": {
+          "english": "twelve"
+        }
+      },
+      "treze": {
+        "source": "thirteen",
+        "translations": {
+          "english": "thirteen"
+        }
+      },
+      "quatorze": {
+        "source": "fourteen",
+        "translations": {
+          "english": "fourteen"
+        }
+      },
+      "quinze": {
+        "source": "fifteen",
+        "translations": {
+          "english": "fifteen"
+        }
+      },
+      "dezesseis": {
+        "source": "sixteen",
+        "translations": {
+          "english": "sixteen"
+        }
+      },
+      "dezessete": {
+        "source": "seventeen",
+        "translations": {
+          "english": "seventeen"
+        }
+      },
+      "dezoito": {
+        "source": "eighteen",
+        "translations": {
+          "english": "eighteen"
+        }
+      },
+      "dezenove": {
+        "source": "nineteen",
+        "translations": {
+          "english": "nineteen"
+        }
+      },
+      "vinte": {
+        "source": "twenty",
+        "translations": {
+          "english": "twenty"
+        }
+      },
+      "trinta": {
+        "source": "thirty",
+        "translations": {
+          "english": "thirty"
+        }
+      },
+      "quarenta": {
+        "source": "forty",
+        "translations": {
+          "english": "forty"
+        }
+      },
+      "cinquenta": {
+        "source": "fifty",
+        "translations": {
+          "english": "fifty"
+        }
+      },
+      "sessenta": {
+        "source": "sixty",
+        "translations": {
+          "english": "sixty"
+        }
+      },
+      "setenta": {
+        "source": "seventy",
+        "translations": {
+          "english": "seventy"
+        }
+      },
+      "oitenta": {
+        "source": "eighty",
+        "translations": {
+          "english": "eighty"
+        }
+      },
+      "noventa": {
+        "source": "ninety",
+        "translations": {
+          "english": "ninety"
+        }
+      },
+      "cem": {
+        "source": "hundred",
+        "translations": {
+          "english": "hundred"
+        }
+      },
+      "mil": {
+        "source": "thousand",
+        "translations": {
+          "english": "thousand"
+        }
+      },
+      "milhão": {
+        "source": "million",
+        "translations": {
+          "english": "million"
+        }
+      },
+      "bilhão": {
+        "source": "billion",
+        "translations": {
+          "english": "billion"
+        }
+      },
+      "primeiro": {
+        "source": "first",
+        "translations": {
+          "english": "first"
+        }
+      },
+      "segundo": {
+        "source": "second",
+        "translations": {
+          "english": "second"
+        }
+      },
+      "terceiro": {
+        "source": "third",
+        "translations": {
+          "english": "third"
+        }
+      },
+      "quarto": {
+        "source": "quarter",
+        "translations": {
+          "english": "quarter"
+        }
+      },
+      "quinto": {
+        "source": "fifth",
+        "translations": {
+          "english": "fifth"
+        }
+      },
+      "sexto": {
+        "source": "sixth",
+        "translations": {
+          "english": "sixth"
+        }
+      },
+      "sétimo": {
+        "source": "seventh",
+        "translations": {
+          "english": "seventh"
+        }
+      },
+      "oitavo": {
+        "source": "eighth",
+        "translations": {
+          "english": "eighth"
+        }
+      },
+      "nono": {
+        "source": "ninth",
+        "translations": {
+          "english": "ninth"
+        }
+      },
+      "décimo": {
+        "source": "tenth",
+        "translations": {
+          "english": "tenth"
+        }
+      },
+      "último": {
+        "source": "last",
+        "translations": {
+          "english": "last"
+        }
+      },
+      "décimo primeiro": {
+        "source": "eleventh",
+        "translations": {
+          "english": "eleventh"
+        }
+      },
+      "décimo segundo": {
+        "source": "twelfth",
+        "translations": {
+          "english": "twelfth"
+        }
+      },
+      "décimo terceiro": {
+        "source": "thirteenth",
+        "translations": {
+          "english": "thirteenth"
+        }
+      },
+      "décimo quarto": {
+        "source": "fourteenth",
+        "translations": {
+          "english": "fourteenth"
+        }
+      },
+      "décimo quinto": {
+        "source": "fifteenth",
+        "translations": {
+          "english": "fifteenth"
+        }
+      },
+      "décimo sexto": {
+        "source": "sixteenth",
+        "translations": {
+          "english": "sixteenth"
+        }
+      },
+      "décimo sétimo": {
+        "source": "seventeenth",
+        "translations": {
+          "english": "seventeenth"
+        }
+      },
+      "décimo oitavo": {
+        "source": "eighteenth",
+        "translations": {
+          "english": "eighteenth"
+        }
+      },
+      "décimo nono": {
+        "source": "nineteenth",
+        "translations": {
+          "english": "nineteenth"
+        }
+      },
+      "vigésimo": {
+        "source": "twentieth",
+        "translations": {
+          "english": "twentieth"
+        }
+      },
+      "trigésimo": {
+        "source": "thirtieth",
+        "translations": {
+          "english": "thirtieth"
+        }
+      },
+      "quadragésimo": {
+        "source": "fortieth",
+        "translations": {
+          "english": "fortieth"
+        }
+      },
+      "quinquagésimo": {
+        "source": "fiftieth",
+        "translations": {
+          "english": "fiftieth"
+        }
+      },
+      "sexagésimo": {
+        "source": "sixtieth",
+        "translations": {
+          "english": "sixtieth"
+        }
+      },
+      "septuagésimo": {
+        "source": "seventieth",
+        "translations": {
+          "english": "seventieth"
+        }
+      },
+      "octogésimo": {
+        "source": "eightieth",
+        "translations": {
+          "english": "eightieth"
+        }
+      },
+      "nonagésimo": {
+        "source": "ninetieth",
+        "translations": {
+          "english": "ninetieth"
+        }
+      },
+      "centésimo": {
+        "source": "hundredth",
+        "translations": {
+          "english": "hundredth"
+        }
+      },
+      "milésimo": {
+        "source": "thousandth",
+        "translations": {
+          "english": "thousandth"
+        }
+      },
+      "milionésimo": {
+        "source": "millionth",
+        "translations": {
+          "english": "millionth"
+        }
+      },
+      "bilionésimo": {
+        "source": "billionth",
+        "translations": {
+          "english": "billionth"
+        }
+      },
+      "metade": {
+        "source": "half",
+        "translations": {
+          "english": "half"
+        }
+      },
+      "dúzia": {
+        "source": "dozen",
+        "translations": {
+          "english": "dozen"
+        }
+      },
+      "par": {
+        "source": "pair",
+        "translations": {
+          "english": "pair"
+        }
+      },
+      "casal": {
+        "source": "couple",
+        "translations": {
+          "english": "couple"
+        }
+      }
+    },
+    "Time, Date & Frequency": {
+      "tempo": {
+        "source": "time",
+        "translations": {
+          "english": "time"
+        }
+      },
+      "relógio": {
+        "source": "clock",
+        "translations": {
+          "english": "clock"
+        }
+      },
+      "hora": {
+        "source": "hour",
+        "translations": {
+          "english": "hour"
+        }
+      },
+      "minuto": {
+        "source": "minute",
+        "translations": {
+          "english": "minute"
+        }
+      },
+      "segundo": {
+        "source": "second",
+        "translations": {
+          "english": "second"
+        }
+      },
+      "dia": {
+        "source": "day",
+        "translations": {
+          "english": "day"
+        }
+      },
+      "semana": {
+        "source": "week",
+        "translations": {
+          "english": "week"
+        }
+      },
+      "mês": {
+        "source": "month",
+        "translations": {
+          "english": "month"
+        }
+      },
+      "ano": {
+        "source": "year",
+        "translations": {
+          "english": "year"
+        }
+      },
+      "hoje": {
+        "source": "today",
+        "translations": {
+          "english": "today"
+        }
+      },
+      "amanhã": {
+        "source": "tomorrow",
+        "translations": {
+          "english": "tomorrow"
+        }
+      },
+      "ontem": {
+        "source": "yesterday",
+        "translations": {
+          "english": "yesterday"
+        }
+      },
+      "aurora": {
+        "source": "dawn",
+        "translations": {
+          "english": "dawn"
+        }
+      },
+      "manhã": {
+        "source": "morning",
+        "translations": {
+          "english": "morning"
+        }
+      },
+      "tarde": {
+        "source": "late",
+        "translations": {
+          "english": "late"
+        }
+      },
+      "crepúsculo": {
+        "source": "dusk",
+        "translations": {
+          "english": "dusk"
+        }
+      },
+      "noite": {
+        "source": "night",
+        "translations": {
+          "english": "night"
+        }
+      },
+      "fim de semana": {
+        "source": "weekend",
+        "translations": {
+          "english": "weekend"
+        }
+      },
+      "data": {
+        "source": "date",
+        "translations": {
+          "english": "date"
+        }
+      },
+      "calendário": {
+        "source": "calendar",
+        "translations": {
+          "english": "calendar"
+        }
+      },
+      "feriado": {
+        "source": "holiday",
+        "translations": {
+          "english": "holiday"
+        }
+      },
+      "agora": {
+        "source": "now",
+        "translations": {
+          "english": "now"
+        }
+      },
+      "depois": {
+        "source": "later",
+        "translations": {
+          "english": "later"
+        }
+      },
+      "em breve": {
+        "source": "soon",
+        "translations": {
+          "english": "soon"
+        }
+      },
+      "cedo": {
+        "source": "early",
+        "translations": {
+          "english": "early"
+        }
+      },
+      "sempre": {
+        "source": "always",
+        "translations": {
+          "english": "always"
+        }
+      },
+      "geralmente": {
+        "source": "usually",
+        "translations": {
+          "english": "usually"
+        }
+      },
+      "frequentemente": {
+        "source": "frequently",
+        "translations": {
+          "english": "frequently"
+        }
+      },
+      "às vezes": {
+        "source": "sometimes",
+        "translations": {
+          "english": "sometimes"
+        }
+      },
+      "raramente": {
+        "source": "rarely",
+        "translations": {
+          "english": "rarely"
+        }
+      },
+      "nunca": {
+        "source": "never",
+        "translations": {
+          "english": "never"
+        }
+      },
+      "momento": {
+        "source": "moment",
+        "translations": {
+          "english": "moment"
+        }
+      },
+      "meio-dia": {
+        "source": "noon",
+        "translations": {
+          "english": "noon"
+        }
+      },
+      "meia-noite": {
+        "source": "midnight",
+        "translations": {
+          "english": "midnight"
+        }
+      },
+      "esta noite": {
+        "source": "tonight",
+        "translations": {
+          "english": "tonight"
+        }
+      },
+      "diariamente": {
+        "source": "daily",
+        "translations": {
+          "english": "daily"
+        }
+      },
+      "semanalmente": {
+        "source": "weekly",
+        "translations": {
+          "english": "weekly"
+        }
+      },
+      "mensalmente": {
+        "source": "monthly",
+        "translations": {
+          "english": "monthly"
+        }
+      },
+      "anualmente": {
+        "source": "yearly",
+        "translations": {
+          "english": "yearly"
+        }
+      },
+      "horariamente": {
+        "source": "hourly",
+        "translations": {
+          "english": "hourly"
+        }
+      },
+      "uma vez": {
+        "source": "once",
+        "translations": {
+          "english": "once"
+        }
+      },
+      "duas vezes": {
+        "source": "twice",
+        "translations": {
+          "english": "twice"
+        }
+      },
+      "ocasionalmente": {
+        "source": "occasionally",
+        "translations": {
+          "english": "occasionally"
+        }
+      }
+    },
+    "Descriptions & Adjectives": {
+      "bom": {
+        "source": "good",
+        "translations": {
+          "english": "good"
+        }
+      },
+      "ruim": {
+        "source": "bad",
+        "translations": {
+          "english": "bad"
+        }
+      },
+      "grande": {
+        "source": "big",
+        "translations": {
+          "english": "big"
+        }
+      },
+      "pequeno": {
+        "source": "small",
+        "translations": {
+          "english": "small"
+        }
+      },
+      "novo": {
+        "source": "new",
+        "translations": {
+          "english": "new"
+        }
+      },
+      "velho": {
+        "source": "stale",
+        "translations": {
+          "english": "stale"
+        }
+      },
+      "jovem": {
+        "source": "young",
+        "translations": {
+          "english": "young"
+        }
+      },
+      "bonito": {
+        "source": "beautiful",
+        "translations": {
+          "english": "beautiful"
+        }
+      },
+      "feio": {
+        "source": "ugly",
+        "translations": {
+          "english": "ugly"
+        }
+      },
+      "fácil": {
+        "source": "easy",
+        "translations": {
+          "english": "easy"
+        }
+      },
+      "difícil": {
+        "source": "difficult",
+        "translations": {
+          "english": "difficult"
+        }
+      },
+      "rápido": {
+        "source": "fast",
+        "translations": {
+          "english": "fast"
+        }
+      },
+      "lento": {
+        "source": "slow",
+        "translations": {
+          "english": "slow"
+        }
+      },
+      "limpo": {
+        "source": "clean",
+        "translations": {
+          "english": "clean"
+        }
+      },
+      "sujo": {
+        "source": "dirty",
+        "translations": {
+          "english": "dirty"
+        }
+      },
+      "rico": {
+        "source": "rich",
+        "translations": {
+          "english": "rich"
+        }
+      },
+      "pobre": {
+        "source": "poor",
+        "translations": {
+          "english": "poor"
+        }
+      },
+      "alto": {
+        "source": "tall",
+        "translations": {
+          "english": "tall"
+        }
+      },
+      "baixo": {
+        "source": "low",
+        "translations": {
+          "english": "low"
+        }
+      },
+      "curto": {
+        "source": "short",
+        "translations": {
+          "english": "short"
+        }
+      },
+      "longo": {
+        "source": "long",
+        "translations": {
+          "english": "long"
+        }
+      },
+      "forte": {
+        "source": "strong",
+        "translations": {
+          "english": "strong"
+        }
+      },
+      "fraco": {
+        "source": "weak",
+        "translations": {
+          "english": "weak"
+        }
+      },
+      "silencioso": {
+        "source": "quiet",
+        "translations": {
+          "english": "quiet"
+        }
+      },
+      "seguro": {
+        "source": "safe",
+        "translations": {
+          "english": "safe"
+        }
+      },
+      "perigoso": {
+        "source": "dangerous",
+        "translations": {
+          "english": "dangerous"
+        }
+      },
+      "simples": {
+        "source": "simple",
+        "translations": {
+          "english": "simple"
+        }
+      },
+      "importante": {
+        "source": "important",
+        "translations": {
+          "english": "important"
+        }
+      },
+      "diferente": {
+        "source": "different",
+        "translations": {
+          "english": "different"
+        }
+      },
+      "mesmo": {
+        "source": "same",
+        "translations": {
+          "english": "same"
+        }
+      },
+      "aberto": {
+        "source": "open",
+        "translations": {
+          "english": "open"
+        }
+      },
+      "fechado": {
+        "source": "closed",
+        "translations": {
+          "english": "closed"
+        }
+      },
+      "cheio": {
+        "source": "full",
+        "translations": {
+          "english": "full"
+        }
+      },
+      "vazio": {
+        "source": "empty",
+        "translations": {
+          "english": "empty"
+        }
+      },
+      "brilhante": {
+        "source": "bright",
+        "translations": {
+          "english": "bright"
+        }
+      },
+      "escuro": {
+        "source": "dark",
+        "translations": {
+          "english": "dark"
+        }
+      },
+      "largo": {
+        "source": "wide",
+        "translations": {
+          "english": "wide"
+        }
+      },
+      "estreito": {
+        "source": "narrow",
+        "translations": {
+          "english": "narrow"
+        }
+      },
+      "profundo": {
+        "source": "deep",
+        "translations": {
+          "english": "deep"
+        }
+      },
+      "raso": {
+        "source": "shallow",
+        "translations": {
+          "english": "shallow"
+        }
+      },
+      "pesado": {
+        "source": "heavy",
+        "translations": {
+          "english": "heavy"
+        }
+      },
+      "leve": {
+        "source": "light",
+        "translations": {
+          "english": "light"
+        }
+      },
+      "macio": {
+        "source": "soft",
+        "translations": {
+          "english": "soft"
+        }
+      },
+      "liso": {
+        "source": "smooth",
+        "translations": {
+          "english": "smooth"
+        }
+      },
+      "áspero": {
+        "source": "rough",
+        "translations": {
+          "english": "rough"
+        }
+      },
+      "afiado": {
+        "source": "sharp",
+        "translations": {
+          "english": "sharp"
+        }
+      },
+      "cego": {
+        "source": "dull",
+        "translations": {
+          "english": "dull"
+        }
+      },
+      "barato": {
+        "source": "cheap",
+        "translations": {
+          "english": "cheap"
+        }
+      },
+      "caro": {
+        "source": "expensive",
+        "translations": {
+          "english": "expensive"
+        }
+      },
+      "ocupado": {
+        "source": "busy",
+        "translations": {
+          "english": "busy"
+        }
+      },
+      "livre": {
+        "source": "free",
+        "translations": {
+          "english": "free"
+        }
+      },
+      "pronto": {
+        "source": "ready",
+        "translations": {
+          "english": "ready"
+        }
+      },
+      "disponível": {
+        "source": "available",
+        "translations": {
+          "english": "available"
+        }
+      },
+      "possível": {
+        "source": "possible",
+        "translations": {
+          "english": "possible"
+        }
+      },
+      "impossível": {
+        "source": "impossible",
+        "translations": {
+          "english": "impossible"
+        }
+      },
+      "correto": {
+        "source": "correct",
+        "translations": {
+          "english": "correct"
+        }
+      },
+      "errado": {
+        "source": "wrong",
+        "translations": {
+          "english": "wrong"
+        }
+      },
+      "amigável": {
+        "source": "friendly",
+        "translations": {
+          "english": "friendly"
+        }
+      },
+      "gentil": {
+        "source": "kind",
+        "translations": {
+          "english": "kind"
+        }
+      },
+      "educado": {
+        "source": "polite",
+        "translations": {
+          "english": "polite"
+        }
+      },
+      "grosseiro": {
+        "source": "rude",
+        "translations": {
+          "english": "rude"
+        }
+      },
+      "corajoso": {
+        "source": "brave",
+        "translations": {
+          "english": "brave"
+        }
+      },
+      "cuidadoso": {
+        "source": "careful",
+        "translations": {
+          "english": "careful"
+        }
+      },
+      "famoso": {
+        "source": "famous",
+        "translations": {
+          "english": "famous"
+        }
+      },
+      "local": {
+        "source": "local",
+        "translations": {
+          "english": "local"
+        }
+      },
+      "estrangeiro": {
+        "source": "foreign",
+        "translations": {
+          "english": "foreign"
+        }
+      },
+      "moderno": {
+        "source": "modern",
+        "translations": {
+          "english": "modern"
+        }
+      },
+      "antigo": {
+        "source": "ancient",
+        "translations": {
+          "english": "ancient"
+        }
+      },
+      "fresco": {
+        "source": "fresh",
+        "translations": {
+          "english": "fresh"
+        }
+      },
+      "redondo": {
+        "source": "round",
+        "translations": {
+          "english": "round"
+        }
+      },
+      "quadrado": {
+        "source": "square",
+        "translations": {
+          "english": "square"
+        }
+      },
+      "plano": {
+        "source": "flat",
+        "translations": {
+          "english": "flat"
+        }
+      },
+      "fino": {
+        "source": "thin",
+        "translations": {
+          "english": "thin"
+        }
+      },
+      "grosso": {
+        "source": "thick",
+        "translations": {
+          "english": "thick"
+        }
+      },
+      "seco": {
+        "source": "dry",
+        "translations": {
+          "english": "dry"
+        }
+      },
+      "molhado": {
+        "source": "wet",
+        "translations": {
+          "english": "wet"
+        }
+      }
+    },
+    "Opinions & Preferences": {
+      "gostar": {
+        "source": "like",
+        "translations": {
+          "english": "like"
+        }
+      },
+      "amar": {
+        "source": "love",
+        "translations": {
+          "english": "love"
+        }
+      },
+      "preferir": {
+        "source": "prefer",
+        "translations": {
+          "english": "prefer"
+        }
+      },
+      "apreciar": {
+        "source": "enjoy",
+        "translations": {
+          "english": "enjoy"
+        }
+      },
+      "odiar": {
+        "source": "hate",
+        "translations": {
+          "english": "hate"
+        }
+      },
+      "querer": {
+        "source": "want",
+        "translations": {
+          "english": "want"
+        }
+      },
+      "precisar": {
+        "source": "need",
+        "translations": {
+          "english": "need"
+        }
+      },
+      "pensar": {
+        "source": "think",
+        "translations": {
+          "english": "think"
+        }
+      },
+      "acreditar": {
+        "source": "believe",
+        "translations": {
+          "english": "believe"
+        }
+      },
+      "concordar": {
+        "source": "agree",
+        "translations": {
+          "english": "agree"
+        }
+      },
+      "discordar": {
+        "source": "disagree",
+        "translations": {
+          "english": "disagree"
+        }
+      },
+      "favorito": {
+        "source": "favorite",
+        "translations": {
+          "english": "favorite"
+        }
+      },
+      "melhor": {
+        "source": "best",
+        "translations": {
+          "english": "best"
+        }
+      },
+      "pior": {
+        "source": "worst",
+        "translations": {
+          "english": "worst"
+        }
+      },
+      "escolher": {
+        "source": "choose",
+        "translations": {
+          "english": "choose"
+        }
+      },
+      "opinião": {
+        "source": "opinion",
+        "translations": {
+          "english": "opinion"
+        }
+      },
+      "escolha": {
+        "source": "choice",
+        "translations": {
+          "english": "choice"
+        }
+      },
+      "sugerir": {
+        "source": "suggest",
+        "translations": {
+          "english": "suggest"
+        }
+      },
+      "recomendar": {
+        "source": "recommend",
+        "translations": {
+          "english": "recommend"
+        }
+      },
+      "desejar": {
+        "source": "wish",
+        "translations": {
+          "english": "wish"
+        }
+      },
+      "adivinhar": {
+        "source": "guess",
+        "translations": {
+          "english": "guess"
+        }
+      },
+      "talvez": {
+        "source": "perhaps",
+        "translations": {
+          "english": "perhaps"
+        }
+      },
+      "provavelmente": {
+        "source": "probably",
+        "translations": {
+          "english": "probably"
+        }
+      },
+      "definitivamente": {
+        "source": "definitely",
+        "translations": {
+          "english": "definitely"
+        }
+      },
+      "certamente": {
+        "source": "certainly",
+        "translations": {
+          "english": "certainly"
+        }
+      },
+      "depende": {
+        "source": "depends",
+        "translations": {
+          "english": "depends"
+        }
+      },
+      "importar": {
+        "source": "matter",
+        "translations": {
+          "english": "matter"
+        }
+      }
+    },
+    "Weather & Seasons": {
+      "clima": {
+        "source": "weather",
+        "translations": {
+          "english": "weather"
+        }
+      },
+      "sol": {
+        "source": "sun",
+        "translations": {
+          "english": "sun"
+        }
+      },
+      "ensolarado": {
+        "source": "sunny",
+        "translations": {
+          "english": "sunny"
+        }
+      },
+      "chuva": {
+        "source": "rain",
+        "translations": {
+          "english": "rain"
+        }
+      },
+      "chuvoso": {
+        "source": "rainy",
+        "translations": {
+          "english": "rainy"
+        }
+      },
+      "neve": {
+        "source": "snowy",
+        "translations": {
+          "english": "snowy"
+        }
+      },
+      "vento": {
+        "source": "wind",
+        "translations": {
+          "english": "wind"
+        }
+      },
+      "ventoso": {
+        "source": "windy",
+        "translations": {
+          "english": "windy"
+        }
+      },
+      "nuvem": {
+        "source": "cloud",
+        "translations": {
+          "english": "cloud"
+        }
+      },
+      "nublado": {
+        "source": "cloudy",
+        "translations": {
+          "english": "cloudy"
+        }
+      },
+      "tempestade": {
+        "source": "storm",
+        "translations": {
+          "english": "storm"
+        }
+      },
+      "neblina": {
+        "source": "fog",
+        "translations": {
+          "english": "fog"
+        }
+      },
+      "quente": {
+        "source": "hot",
+        "translations": {
+          "english": "hot"
+        }
+      },
+      "morno": {
+        "source": "warm",
+        "translations": {
+          "english": "warm"
+        }
+      },
+      "frio": {
+        "source": "cold",
+        "translations": {
+          "english": "cold"
+        }
+      },
+      "fresco": {
+        "source": "cool",
+        "translations": {
+          "english": "cool"
+        }
+      },
+      "temperatura": {
+        "source": "temperature",
+        "translations": {
+          "english": "temperature"
+        }
+      },
+      "primavera": {
+        "source": "spring",
+        "translations": {
+          "english": "spring"
+        }
+      },
+      "verão": {
+        "source": "summer",
+        "translations": {
+          "english": "summer"
+        }
+      },
+      "outono": {
+        "source": "autumn",
+        "translations": {
+          "english": "autumn"
+        }
+      },
+      "inverno": {
+        "source": "winter",
+        "translations": {
+          "english": "winter"
+        }
+      },
+      "previsão": {
+        "source": "forecast",
+        "translations": {
+          "english": "forecast"
+        }
+      },
+      "brisa": {
+        "source": "breeze",
+        "translations": {
+          "english": "breeze"
+        }
+      },
+      "chuvisco": {
+        "source": "drizzle",
+        "translations": {
+          "english": "drizzle"
+        }
+      },
+      "trovão": {
+        "source": "thunder",
+        "translations": {
+          "english": "thunder"
+        }
+      },
+      "relâmpago": {
+        "source": "lightning",
+        "translations": {
+          "english": "lightning"
+        }
+      },
+      "granizo": {
+        "source": "hail",
+        "translations": {
+          "english": "hail"
+        }
+      },
+      "tempestuoso": {
+        "source": "stormy",
+        "translations": {
+          "english": "stormy"
+        }
+      },
+      "nebuloso": {
+        "source": "foggy",
+        "translations": {
+          "english": "foggy"
+        }
+      },
+      "úmido": {
+        "source": "humid",
+        "translations": {
+          "english": "humid"
+        }
+      },
+      "umidade": {
+        "source": "humidity",
+        "translations": {
+          "english": "humidity"
+        }
+      },
+      "seco": {
+        "source": "dry",
+        "translations": {
+          "english": "dry"
+        }
+      },
+      "molhado": {
+        "source": "wet",
+        "translations": {
+          "english": "wet"
+        }
+      },
+      "gelado": {
+        "source": "icy",
+        "translations": {
+          "english": "icy"
+        }
+      },
+      "congelante": {
+        "source": "freezing",
+        "translations": {
+          "english": "freezing"
+        }
+      },
+      "calor": {
+        "source": "heat",
+        "translations": {
+          "english": "heat"
+        }
+      },
+      "nascer do sol": {
+        "source": "sunrise",
+        "translations": {
+          "english": "sunrise"
+        }
+      },
+      "pôr do sol": {
+        "source": "sunset",
+        "translations": {
+          "english": "sunset"
+        }
+      },
+      "arco-íris": {
+        "source": "rainbow",
+        "translations": {
+          "english": "rainbow"
+        }
+      }
+    },
+    "Places & Directions": {
+      "casa": {
+        "source": "home",
+        "translations": {
+          "english": "home"
+        }
+      },
+      "cidade": {
+        "source": "town",
+        "translations": {
+          "english": "town"
+        }
+      },
+      "vila": {
+        "source": "village",
+        "translations": {
+          "english": "village"
+        }
+      },
+      "rua": {
+        "source": "street",
+        "translations": {
+          "english": "street"
+        }
+      },
+      "estrada": {
+        "source": "road",
+        "translations": {
+          "english": "road"
+        }
+      },
+      "caminho": {
+        "source": "way",
+        "translations": {
+          "english": "way"
+        }
+      },
+      "canto": {
+        "source": "corner",
+        "translations": {
+          "english": "corner"
+        }
+      },
+      "esquerda": {
+        "source": "left",
+        "translations": {
+          "english": "left"
+        }
+      },
+      "direita": {
+        "source": "right",
+        "translations": {
+          "english": "right"
+        }
+      },
+      "reto": {
+        "source": "straight",
+        "translations": {
+          "english": "straight"
+        }
+      },
+      "norte": {
+        "source": "north",
+        "translations": {
+          "english": "north"
+        }
+      },
+      "sul": {
+        "source": "south",
+        "translations": {
+          "english": "south"
+        }
+      },
+      "leste": {
+        "source": "east",
+        "translations": {
+          "english": "east"
+        }
+      },
+      "oeste": {
+        "source": "west",
+        "translations": {
+          "english": "west"
+        }
+      },
+      "dentro": {
+        "source": "inside",
+        "translations": {
+          "english": "inside"
+        }
+      },
+      "fora": {
+        "source": "outside",
+        "translations": {
+          "english": "outside"
+        }
+      },
+      "perto": {
+        "source": "near",
+        "translations": {
+          "english": "near"
+        }
+      },
+      "longe": {
+        "source": "far",
+        "translations": {
+          "english": "far"
+        }
+      },
+      "aqui": {
+        "source": "here",
+        "translations": {
+          "english": "here"
+        }
+      },
+      "lá": {
+        "source": "there",
+        "translations": {
+          "english": "there"
+        }
+      },
+      "entrada": {
+        "source": "entrance",
+        "translations": {
+          "english": "entrance"
+        }
+      },
+      "saída": {
+        "source": "exit",
+        "translations": {
+          "english": "exit"
+        }
+      },
+      "prédio": {
+        "source": "building",
+        "translations": {
+          "english": "building"
+        }
+      },
+      "quarto": {
+        "source": "bedroom",
+        "translations": {
+          "english": "bedroom"
+        }
+      },
+      "banheiro": {
+        "source": "bathroom",
+        "translations": {
+          "english": "bathroom"
+        }
+      },
+      "cozinha": {
+        "source": "kitchen",
+        "translations": {
+          "english": "kitchen"
+        }
+      },
+      "estação": {
+        "source": "station",
+        "translations": {
+          "english": "station"
+        }
+      },
+      "aeroporto": {
+        "source": "airport",
+        "translations": {
+          "english": "airport"
+        }
+      },
+      "hotel": {
+        "source": "hotel",
+        "translations": {
+          "english": "hotel"
+        }
+      },
+      "restaurante": {
+        "source": "restaurant",
+        "translations": {
+          "english": "restaurant"
+        }
+      },
+      "café": {
+        "source": "cafe",
+        "translations": {
+          "english": "cafe"
+        }
+      },
+      "loja": {
+        "source": "store",
+        "translations": {
+          "english": "store"
+        }
+      },
+      "mercado": {
+        "source": "market",
+        "translations": {
+          "english": "market"
+        }
+      },
+      "banco": {
+        "source": "bank",
+        "translations": {
+          "english": "bank"
+        }
+      },
+      "correio": {
+        "source": "post office",
+        "translations": {
+          "english": "post office"
+        }
+      },
+      "parque": {
+        "source": "park",
+        "translations": {
+          "english": "park"
+        }
+      },
+      "museu": {
+        "source": "museum",
+        "translations": {
+          "english": "museum"
+        }
+      },
+      "biblioteca": {
+        "source": "library",
+        "translations": {
+          "english": "library"
+        }
+      },
+      "hospital": {
+        "source": "hospital",
+        "translations": {
+          "english": "hospital"
+        }
+      },
+      "farmácia": {
+        "source": "pharmacy",
+        "translations": {
+          "english": "pharmacy"
+        }
+      },
+      "clínica": {
+        "source": "clinic",
+        "translations": {
+          "english": "clinic"
+        }
+      },
+      "delegacia": {
+        "source": "police station",
+        "translations": {
+          "english": "police station"
+        }
+      },
+      "bombeiros": {
+        "source": "fire station",
+        "translations": {
+          "english": "fire station"
+        }
+      },
+      "academia": {
+        "source": "gym",
+        "translations": {
+          "english": "gym"
+        }
+      },
+      "estádio": {
+        "source": "stadium",
+        "translations": {
+          "english": "stadium"
+        }
+      },
+      "praia": {
+        "source": "beach",
+        "translations": {
+          "english": "beach"
+        }
+      },
+      "montanha": {
+        "source": "mountain",
+        "translations": {
+          "english": "mountain"
+        }
+      },
+      "rio": {
+        "source": "river",
+        "translations": {
+          "english": "river"
+        }
+      },
+      "lago": {
+        "source": "lake",
+        "translations": {
+          "english": "lake"
+        }
+      },
+      "floresta": {
+        "source": "forest",
+        "translations": {
+          "english": "forest"
+        }
+      },
+      "ilha": {
+        "source": "island",
+        "translations": {
+          "english": "island"
+        }
+      },
+      "ponte": {
+        "source": "bridge",
+        "translations": {
+          "english": "bridge"
+        }
+      },
+      "praça": {
+        "source": "square",
+        "translations": {
+          "english": "square"
+        }
+      },
+      "shopping": {
+        "source": "mall",
+        "translations": {
+          "english": "mall"
+        }
+      },
+      "padaria": {
+        "source": "bakery",
+        "translations": {
+          "english": "bakery"
+        }
+      },
+      "zoológico": {
+        "source": "zoo",
+        "translations": {
+          "english": "zoo"
+        }
+      },
+      "teatro": {
+        "source": "theater",
+        "translations": {
+          "english": "theater"
+        }
+      },
+      "cinema": {
+        "source": "cinema",
+        "translations": {
+          "english": "cinema"
+        }
+      },
+      "ponto de ônibus": {
+        "source": "bus stop",
+        "translations": {
+          "english": "bus stop"
+        }
+      },
+      "metrô": {
+        "source": "subway",
+        "translations": {
+          "english": "subway"
+        }
+      },
+      "estacionamento": {
+        "source": "parking lot",
+        "translations": {
+          "english": "parking lot"
+        }
+      },
+      "fazenda": {
+        "source": "farm",
+        "translations": {
+          "english": "farm"
+        }
+      },
+      "fábrica": {
+        "source": "factory",
+        "translations": {
+          "english": "factory"
+        }
+      },
+      "porto": {
+        "source": "port",
+        "translations": {
+          "english": "port"
+        }
+      },
+      "doca": {
+        "source": "dock",
+        "translations": {
+          "english": "dock"
+        }
+      },
+      "igreja": {
+        "source": "church",
+        "translations": {
+          "english": "church"
+        }
+      },
+      "templo": {
+        "source": "temple",
+        "translations": {
+          "english": "temple"
+        }
+      },
+      "mesquita": {
+        "source": "mosque",
+        "translations": {
+          "english": "mosque"
+        }
+      },
+      "sinagoga": {
+        "source": "synagogue",
+        "translations": {
+          "english": "synagogue"
+        }
+      }
+    },
+    "countries": {
+      "reino unido": {
+        "source": "United Kingdom",
+        "translations": {
+          "english": "United Kingdom"
+        }
+      },
+      "irlanda": {
+        "source": "Ireland",
+        "translations": {
+          "english": "Ireland"
+        }
+      },
+      "frança": {
+        "source": "France",
+        "translations": {
+          "english": "France"
+        }
+      },
+      "alemanha": {
+        "source": "Germany",
+        "translations": {
+          "english": "Germany"
+        }
+      },
+      "espanha": {
+        "source": "Spain",
+        "translations": {
+          "english": "Spain"
+        }
+      },
+      "portugal": {
+        "source": "Portugal",
+        "translations": {
+          "english": "Portugal"
+        }
+      },
+      "itália": {
+        "source": "Italy",
+        "translations": {
+          "english": "Italy"
+        }
+      },
+      "países baixos": {
+        "source": "Netherlands",
+        "translations": {
+          "english": "Netherlands"
+        }
+      },
+      "bélgica": {
+        "source": "Belgium",
+        "translations": {
+          "english": "Belgium"
+        }
+      },
+      "suécia": {
+        "source": "Sweden",
+        "translations": {
+          "english": "Sweden"
+        }
+      },
+      "noruega": {
+        "source": "Norway",
+        "translations": {
+          "english": "Norway"
+        }
+      },
+      "dinamarca": {
+        "source": "Denmark",
+        "translations": {
+          "english": "Denmark"
+        }
+      },
+      "finlândia": {
+        "source": "Finland",
+        "translations": {
+          "english": "Finland"
+        }
+      },
+      "islândia": {
+        "source": "Iceland",
+        "translations": {
+          "english": "Iceland"
+        }
+      },
+      "suíça": {
+        "source": "Switzerland",
+        "translations": {
+          "english": "Switzerland"
+        }
+      },
+      "áustria": {
+        "source": "Austria",
+        "translations": {
+          "english": "Austria"
+        }
+      },
+      "grécia": {
+        "source": "Greece",
+        "translations": {
+          "english": "Greece"
+        }
+      },
+      "polônia": {
+        "source": "Poland",
+        "translations": {
+          "english": "Poland"
+        }
+      },
+      "república tcheca": {
+        "source": "Czechia",
+        "translations": {
+          "english": "Czechia"
+        }
+      },
+      "hungria": {
+        "source": "Hungary",
+        "translations": {
+          "english": "Hungary"
+        }
+      },
+      "romênia": {
+        "source": "Romania",
+        "translations": {
+          "english": "Romania"
+        }
+      },
+      "bulgária": {
+        "source": "Bulgaria",
+        "translations": {
+          "english": "Bulgaria"
+        }
+      },
+      "sérvia": {
+        "source": "Serbia",
+        "translations": {
+          "english": "Serbia"
+        }
+      },
+      "croácia": {
+        "source": "Croatia",
+        "translations": {
+          "english": "Croatia"
+        }
+      },
+      "eslovênia": {
+        "source": "Slovenia",
+        "translations": {
+          "english": "Slovenia"
+        }
+      },
+      "eslováquia": {
+        "source": "Slovakia",
+        "translations": {
+          "english": "Slovakia"
+        }
+      },
+      "bósnia e herzegovina": {
+        "source": "Bosnia and Herzegovina",
+        "translations": {
+          "english": "Bosnia and Herzegovina"
+        }
+      },
+      "montenegro": {
+        "source": "Montenegro",
+        "translations": {
+          "english": "Montenegro"
+        }
+      },
+      "kosovo": {
+        "source": "Kosovo",
+        "translations": {
+          "english": "Kosovo"
+        }
+      },
+      "albânia": {
+        "source": "Albania",
+        "translations": {
+          "english": "Albania"
+        }
+      },
+      "moldávia": {
+        "source": "Moldova",
+        "translations": {
+          "english": "Moldova"
+        }
+      },
+      "ucrânia": {
+        "source": "Ukraine",
+        "translations": {
+          "english": "Ukraine"
+        }
+      },
+      "bielorrússia": {
+        "source": "Belarus",
+        "translations": {
+          "english": "Belarus"
+        }
+      },
+      "rússia": {
+        "source": "Russia",
+        "translations": {
+          "english": "Russia"
+        }
+      },
+      "estônia": {
+        "source": "Estonia",
+        "translations": {
+          "english": "Estonia"
+        }
+      },
+      "letônia": {
+        "source": "Latvia",
+        "translations": {
+          "english": "Latvia"
+        }
+      },
+      "lituânia": {
+        "source": "Lithuania",
+        "translations": {
+          "english": "Lithuania"
+        }
+      },
+      "luxemburgo": {
+        "source": "Luxembourg",
+        "translations": {
+          "english": "Luxembourg"
+        }
+      },
+      "malta": {
+        "source": "Malta",
+        "translations": {
+          "english": "Malta"
+        }
+      },
+      "chipre": {
+        "source": "Cyprus",
+        "translations": {
+          "english": "Cyprus"
+        }
+      },
+      "andorra": {
+        "source": "Andorra",
+        "translations": {
+          "english": "Andorra"
+        }
+      },
+      "liechtenstein": {
+        "source": "Liechtenstein",
+        "translations": {
+          "english": "Liechtenstein"
+        }
+      },
+      "mônaco": {
+        "source": "Monaco",
+        "translations": {
+          "english": "Monaco"
+        }
+      },
+      "san marino": {
+        "source": "San Marino",
+        "translations": {
+          "english": "San Marino"
+        }
+      },
+      "vaticano": {
+        "source": "Vatican City",
+        "translations": {
+          "english": "Vatican City"
+        }
+      },
+      "geórgia": {
+        "source": "Georgia",
+        "translations": {
+          "english": "Georgia"
+        }
+      },
+      "armênia": {
+        "source": "Armenia",
+        "translations": {
+          "english": "Armenia"
+        }
+      },
+      "azerbaijão": {
+        "source": "Azerbaijan",
+        "translations": {
+          "english": "Azerbaijan"
+        }
+      },
+      "turquia": {
+        "source": "Turkey",
+        "translations": {
+          "english": "Turkey"
+        }
+      },
+      "cazaquistão": {
+        "source": "Kazakhstan",
+        "translations": {
+          "english": "Kazakhstan"
+        }
+      },
+      "quirguistão": {
+        "source": "Kyrgyzstan",
+        "translations": {
+          "english": "Kyrgyzstan"
+        }
+      },
+      "tajiquistão": {
+        "source": "Tajikistan",
+        "translations": {
+          "english": "Tajikistan"
+        }
+      },
+      "turcomenistão": {
+        "source": "Turkmenistan",
+        "translations": {
+          "english": "Turkmenistan"
+        }
+      },
+      "uzbequistão": {
+        "source": "Uzbekistan",
+        "translations": {
+          "english": "Uzbekistan"
+        }
+      },
+      "afeganistão": {
+        "source": "Afghanistan",
+        "translations": {
+          "english": "Afghanistan"
+        }
+      },
+      "paquistão": {
+        "source": "Pakistan",
+        "translations": {
+          "english": "Pakistan"
+        }
+      },
+      "índia": {
+        "source": "India",
+        "translations": {
+          "english": "India"
+        }
+      },
+      "bangladesh": {
+        "source": "Bangladesh",
+        "translations": {
+          "english": "Bangladesh"
+        }
+      },
+      "sri lanka": {
+        "source": "Sri Lanka",
+        "translations": {
+          "english": "Sri Lanka"
+        }
+      },
+      "nepal": {
+        "source": "Nepal",
+        "translations": {
+          "english": "Nepal"
+        }
+      },
+      "butão": {
+        "source": "Bhutan",
+        "translations": {
+          "english": "Bhutan"
+        }
+      },
+      "maldivas": {
+        "source": "Maldives",
+        "translations": {
+          "english": "Maldives"
+        }
+      },
+      "china": {
+        "source": "China",
+        "translations": {
+          "english": "China"
+        }
+      },
+      "mongólia": {
+        "source": "Mongolia",
+        "translations": {
+          "english": "Mongolia"
+        }
+      },
+      "coreia do norte": {
+        "source": "North Korea",
+        "translations": {
+          "english": "North Korea"
+        }
+      },
+      "coreia do sul": {
+        "source": "South Korea",
+        "translations": {
+          "english": "South Korea"
+        }
+      },
+      "japão": {
+        "source": "Japan",
+        "translations": {
+          "english": "Japan"
+        }
+      },
+      "taiwan": {
+        "source": "Taiwan",
+        "translations": {
+          "english": "Taiwan"
+        }
+      },
+      "hong kong": {
+        "source": "Hong Kong",
+        "translations": {
+          "english": "Hong Kong"
+        }
+      },
+      "vietnã": {
+        "source": "Vietnam",
+        "translations": {
+          "english": "Vietnam"
+        }
+      },
+      "tailândia": {
+        "source": "Thailand",
+        "translations": {
+          "english": "Thailand"
+        }
+      },
+      "malásia": {
+        "source": "Malaysia",
+        "translations": {
+          "english": "Malaysia"
+        }
+      },
+      "indonésia": {
+        "source": "Indonesia",
+        "translations": {
+          "english": "Indonesia"
+        }
+      },
+      "filipinas": {
+        "source": "Philippines",
+        "translations": {
+          "english": "Philippines"
+        }
+      },
+      "cingapura": {
+        "source": "Singapore",
+        "translations": {
+          "english": "Singapore"
+        }
+      },
+      "mianmar": {
+        "source": "Myanmar",
+        "translations": {
+          "english": "Myanmar"
+        }
+      },
+      "camboja": {
+        "source": "Cambodia",
+        "translations": {
+          "english": "Cambodia"
+        }
+      },
+      "laos": {
+        "source": "Laos",
+        "translations": {
+          "english": "Laos"
+        }
+      },
+      "brunei": {
+        "source": "Brunei",
+        "translations": {
+          "english": "Brunei"
+        }
+      },
+      "timor-leste": {
+        "source": "Timor-Leste",
+        "translations": {
+          "english": "Timor-Leste"
+        }
+      },
+      "papua nova guiné": {
+        "source": "Papua New Guinea",
+        "translations": {
+          "english": "Papua New Guinea"
+        }
+      },
+      "austrália": {
+        "source": "Australia",
+        "translations": {
+          "english": "Australia"
+        }
+      },
+      "nova zelândia": {
+        "source": "New Zealand",
+        "translations": {
+          "english": "New Zealand"
+        }
+      },
+      "fiji": {
+        "source": "Fiji",
+        "translations": {
+          "english": "Fiji"
+        }
+      },
+      "samoa": {
+        "source": "Samoa",
+        "translations": {
+          "english": "Samoa"
+        }
+      },
+      "tonga": {
+        "source": "Tonga",
+        "translations": {
+          "english": "Tonga"
+        }
+      },
+      "vanuatu": {
+        "source": "Vanuatu",
+        "translations": {
+          "english": "Vanuatu"
+        }
+      },
+      "ilhas salomão": {
+        "source": "Solomon Islands",
+        "translations": {
+          "english": "Solomon Islands"
+        }
+      },
+      "quiribati": {
+        "source": "Kiribati",
+        "translations": {
+          "english": "Kiribati"
+        }
+      },
+      "tuvalu": {
+        "source": "Tuvalu",
+        "translations": {
+          "english": "Tuvalu"
+        }
+      },
+      "nauru": {
+        "source": "Nauru",
+        "translations": {
+          "english": "Nauru"
+        }
+      },
+      "palau": {
+        "source": "Palau",
+        "translations": {
+          "english": "Palau"
+        }
+      },
+      "ilhas marshall": {
+        "source": "Marshall Islands",
+        "translations": {
+          "english": "Marshall Islands"
+        }
+      },
+      "micronésia": {
+        "source": "Micronesia",
+        "translations": {
+          "english": "Micronesia"
+        }
+      },
+      "estados unidos": {
+        "source": "United States",
+        "translations": {
+          "english": "United States"
+        }
+      },
+      "canadá": {
+        "source": "Canada",
+        "translations": {
+          "english": "Canada"
+        }
+      },
+      "méxico": {
+        "source": "Mexico",
+        "translations": {
+          "english": "Mexico"
+        }
+      },
+      "guatemala": {
+        "source": "Guatemala",
+        "translations": {
+          "english": "Guatemala"
+        }
+      },
+      "honduras": {
+        "source": "Honduras",
+        "translations": {
+          "english": "Honduras"
+        }
+      },
+      "el salvador": {
+        "source": "El Salvador",
+        "translations": {
+          "english": "El Salvador"
+        }
+      },
+      "nicarágua": {
+        "source": "Nicaragua",
+        "translations": {
+          "english": "Nicaragua"
+        }
+      },
+      "costa rica": {
+        "source": "Costa Rica",
+        "translations": {
+          "english": "Costa Rica"
+        }
+      },
+      "panamá": {
+        "source": "Panama",
+        "translations": {
+          "english": "Panama"
+        }
+      },
+      "cuba": {
+        "source": "Cuba",
+        "translations": {
+          "english": "Cuba"
+        }
+      },
+      "república dominicana": {
+        "source": "Dominican Republic",
+        "translations": {
+          "english": "Dominican Republic"
+        }
+      },
+      "jamaica": {
+        "source": "Jamaica",
+        "translations": {
+          "english": "Jamaica"
+        }
+      },
+      "haiti": {
+        "source": "Haiti",
+        "translations": {
+          "english": "Haiti"
+        }
+      },
+      "bahamas": {
+        "source": "Bahamas",
+        "translations": {
+          "english": "Bahamas"
+        }
+      },
+      "barbados": {
+        "source": "Barbados",
+        "translations": {
+          "english": "Barbados"
+        }
+      },
+      "trinidad e tobago": {
+        "source": "Trinidad and Tobago",
+        "translations": {
+          "english": "Trinidad and Tobago"
+        }
+      },
+      "antígua e barbuda": {
+        "source": "Antigua and Barbuda",
+        "translations": {
+          "english": "Antigua and Barbuda"
+        }
+      },
+      "são cristóvão e névis": {
+        "source": "Saint Kitts and Nevis",
+        "translations": {
+          "english": "Saint Kitts and Nevis"
+        }
+      },
+      "santa lúcia": {
+        "source": "Saint Lucia",
+        "translations": {
+          "english": "Saint Lucia"
+        }
+      },
+      "são vicente e granadinas": {
+        "source": "Saint Vincent and the Grenadines",
+        "translations": {
+          "english": "Saint Vincent and the Grenadines"
+        }
+      },
+      "granada": {
+        "source": "Grenada",
+        "translations": {
+          "english": "Grenada"
+        }
+      },
+      "belize": {
+        "source": "Belize",
+        "translations": {
+          "english": "Belize"
+        }
+      },
+      "guiana": {
+        "source": "Guyana",
+        "translations": {
+          "english": "Guyana"
+        }
+      },
+      "suriname": {
+        "source": "Suriname",
+        "translations": {
+          "english": "Suriname"
+        }
+      },
+      "brasil": {
+        "source": "Brazil",
+        "translations": {
+          "english": "Brazil"
+        }
+      },
+      "argentina": {
+        "source": "Argentina",
+        "translations": {
+          "english": "Argentina"
+        }
+      },
+      "chile": {
+        "source": "Chile",
+        "translations": {
+          "english": "Chile"
+        }
+      },
+      "uruguai": {
+        "source": "Uruguay",
+        "translations": {
+          "english": "Uruguay"
+        }
+      },
+      "paraguai": {
+        "source": "Paraguay",
+        "translations": {
+          "english": "Paraguay"
+        }
+      },
+      "bolívia": {
+        "source": "Bolivia",
+        "translations": {
+          "english": "Bolivia"
+        }
+      },
+      "peru": {
+        "source": "Peru",
+        "translations": {
+          "english": "Peru"
+        }
+      },
+      "colômbia": {
+        "source": "Colombia",
+        "translations": {
+          "english": "Colombia"
+        }
+      },
+      "venezuela": {
+        "source": "Venezuela",
+        "translations": {
+          "english": "Venezuela"
+        }
+      },
+      "equador": {
+        "source": "Ecuador",
+        "translations": {
+          "english": "Ecuador"
+        }
+      },
+      "catar": {
+        "source": "Qatar",
+        "translations": {
+          "english": "Qatar"
+        }
+      },
+      "bahrein": {
+        "source": "Bahrain",
+        "translations": {
+          "english": "Bahrain"
+        }
+      },
+      "kuwait": {
+        "source": "Kuwait",
+        "translations": {
+          "english": "Kuwait"
+        }
+      },
+      "omã": {
+        "source": "Oman",
+        "translations": {
+          "english": "Oman"
+        }
+      },
+      "arábia saudita": {
+        "source": "Saudi Arabia",
+        "translations": {
+          "english": "Saudi Arabia"
+        }
+      },
+      "emirados árabes unidos": {
+        "source": "United Arab Emirates",
+        "translations": {
+          "english": "United Arab Emirates"
+        }
+      },
+      "iémen": {
+        "source": "Yemen",
+        "translations": {
+          "english": "Yemen"
+        }
+      },
+      "iraque": {
+        "source": "Iraq",
+        "translations": {
+          "english": "Iraq"
+        }
+      },
+      "irã": {
+        "source": "Iran",
+        "translations": {
+          "english": "Iran"
+        }
+      },
+      "jordânia": {
+        "source": "Jordan",
+        "translations": {
+          "english": "Jordan"
+        }
+      },
+      "líbano": {
+        "source": "Lebanon",
+        "translations": {
+          "english": "Lebanon"
+        }
+      },
+      "síria": {
+        "source": "Syria",
+        "translations": {
+          "english": "Syria"
+        }
+      },
+      "palestina": {
+        "source": "Palestine",
+        "translations": {
+          "english": "Palestine"
+        }
+      },
+      "egito": {
+        "source": "Egypt",
+        "translations": {
+          "english": "Egypt"
+        }
+      },
+      "líbia": {
+        "source": "Libya",
+        "translations": {
+          "english": "Libya"
+        }
+      },
+      "tunísia": {
+        "source": "Tunisia",
+        "translations": {
+          "english": "Tunisia"
+        }
+      },
+      "argélia": {
+        "source": "Algeria",
+        "translations": {
+          "english": "Algeria"
+        }
+      },
+      "marrocos": {
+        "source": "Morocco",
+        "translations": {
+          "english": "Morocco"
+        }
+      },
+      "mauritânia": {
+        "source": "Mauritania",
+        "translations": {
+          "english": "Mauritania"
+        }
+      },
+      "sudão": {
+        "source": "Sudan",
+        "translations": {
+          "english": "Sudan"
+        }
+      },
+      "etiópia": {
+        "source": "Ethiopia",
+        "translations": {
+          "english": "Ethiopia"
+        }
+      },
+      "somália": {
+        "source": "Somalia",
+        "translations": {
+          "english": "Somalia"
+        }
+      },
+      "eritreia": {
+        "source": "Eritrea",
+        "translations": {
+          "english": "Eritrea"
+        }
+      },
+      "djibuti": {
+        "source": "Djibouti",
+        "translations": {
+          "english": "Djibouti"
+        }
+      },
+      "quênia": {
+        "source": "Kenya",
+        "translations": {
+          "english": "Kenya"
+        }
+      },
+      "uganda": {
+        "source": "Uganda",
+        "translations": {
+          "english": "Uganda"
+        }
+      },
+      "tanzânia": {
+        "source": "Tanzania",
+        "translations": {
+          "english": "Tanzania"
+        }
+      },
+      "ruanda": {
+        "source": "Rwanda",
+        "translations": {
+          "english": "Rwanda"
+        }
+      },
+      "burundi": {
+        "source": "Burundi",
+        "translations": {
+          "english": "Burundi"
+        }
+      },
+      "república democrática do congo": {
+        "source": "Democratic Republic of the Congo",
+        "translations": {
+          "english": "Democratic Republic of the Congo"
+        }
+      },
+      "gabão": {
+        "source": "Gabon",
+        "translations": {
+          "english": "Gabon"
+        }
+      },
+      "camarões": {
+        "source": "Cameroon",
+        "translations": {
+          "english": "Cameroon"
+        }
+      },
+      "república centro-africana": {
+        "source": "Central African Republic",
+        "translations": {
+          "english": "Central African Republic"
+        }
+      },
+      "chade": {
+        "source": "Chad",
+        "translations": {
+          "english": "Chad"
+        }
+      },
+      "níger": {
+        "source": "Niger",
+        "translations": {
+          "english": "Niger"
+        }
+      },
+      "nigéria": {
+        "source": "Nigeria",
+        "translations": {
+          "english": "Nigeria"
+        }
+      },
+      "gana": {
+        "source": "Ghana",
+        "translations": {
+          "english": "Ghana"
+        }
+      },
+      "costa do marfim": {
+        "source": "Cote d'Ivoire",
+        "translations": {
+          "english": "Cote d'Ivoire"
+        }
+      },
+      "burquina faso": {
+        "source": "Burkina Faso",
+        "translations": {
+          "english": "Burkina Faso"
+        }
+      },
+      "mali": {
+        "source": "Mali",
+        "translations": {
+          "english": "Mali"
+        }
+      },
+      "senegal": {
+        "source": "Senegal",
+        "translations": {
+          "english": "Senegal"
+        }
+      },
+      "gâmbia": {
+        "source": "Gambia",
+        "translations": {
+          "english": "Gambia"
+        }
+      },
+      "guiné": {
+        "source": "Guinea",
+        "translations": {
+          "english": "Guinea"
+        }
+      },
+      "serra leoa": {
+        "source": "Sierra Leone",
+        "translations": {
+          "english": "Sierra Leone"
+        }
+      },
+      "libéria": {
+        "source": "Liberia",
+        "translations": {
+          "english": "Liberia"
+        }
+      },
+      "togo": {
+        "source": "Togo",
+        "translations": {
+          "english": "Togo"
+        }
+      },
+      "benin": {
+        "source": "Benin",
+        "translations": {
+          "english": "Benin"
+        }
+      },
+      "cabo verde": {
+        "source": "Cape Verde",
+        "translations": {
+          "english": "Cape Verde"
+        }
+      },
+      "são tomé e príncipe": {
+        "source": "Sao Tome and Principe",
+        "translations": {
+          "english": "Sao Tome and Principe"
+        }
+      },
+      "angola": {
+        "source": "Angola",
+        "translations": {
+          "english": "Angola"
+        }
+      },
+      "namíbia": {
+        "source": "Namibia",
+        "translations": {
+          "english": "Namibia"
+        }
+      },
+      "botsuana": {
+        "source": "Botswana",
+        "translations": {
+          "english": "Botswana"
+        }
+      },
+      "zimbábue": {
+        "source": "Zimbabwe",
+        "translations": {
+          "english": "Zimbabwe"
+        }
+      },
+      "zâmbia": {
+        "source": "Zambia",
+        "translations": {
+          "english": "Zambia"
+        }
+      },
+      "moçambique": {
+        "source": "Mozambique",
+        "translations": {
+          "english": "Mozambique"
+        }
+      },
+      "malawi": {
+        "source": "Malawi",
+        "translations": {
+          "english": "Malawi"
+        }
+      },
+      "madagáscar": {
+        "source": "Madagascar",
+        "translations": {
+          "english": "Madagascar"
+        }
+      },
+      "comores": {
+        "source": "Comoros",
+        "translations": {
+          "english": "Comoros"
+        }
+      },
+      "seicheles": {
+        "source": "Seychelles",
+        "translations": {
+          "english": "Seychelles"
+        }
+      },
+      "maurício": {
+        "source": "Mauritius",
+        "translations": {
+          "english": "Mauritius"
+        }
+      },
+      "áfrica do sul": {
+        "source": "South Africa",
+        "translations": {
+          "english": "South Africa"
+        }
+      },
+      "eswatini": {
+        "source": "Eswatini",
+        "translations": {
+          "english": "Eswatini"
+        }
+      },
+      "lesoto": {
+        "source": "Lesotho",
+        "translations": {
+          "english": "Lesotho"
+        }
+      }
+    },
+    "Feelings & States": {
+      "feliz": {
+        "source": "happy",
+        "translations": {
+          "english": "happy"
+        }
+      },
+      "triste": {
+        "source": "sad",
+        "translations": {
+          "english": "sad"
+        }
+      },
+      "zangado": {
+        "source": "angry",
+        "translations": {
+          "english": "angry"
+        }
+      },
+      "medroso": {
+        "source": "afraid",
+        "translations": {
+          "english": "afraid"
+        }
+      },
+      "animado": {
+        "source": "excited",
+        "translations": {
+          "english": "excited"
+        }
+      },
+      "entediado": {
+        "source": "bored",
+        "translations": {
+          "english": "bored"
+        }
+      },
+      "cansado": {
+        "source": "tired",
+        "translations": {
+          "english": "tired"
+        }
+      },
+      "sonolento": {
+        "source": "sleepy",
+        "translations": {
+          "english": "sleepy"
+        }
+      },
+      "faminto": {
+        "source": "hungry",
+        "translations": {
+          "english": "hungry"
+        }
+      },
+      "sedento": {
+        "source": "thirsty",
+        "translations": {
+          "english": "thirsty"
+        }
+      },
+      "nervoso": {
+        "source": "nervous",
+        "translations": {
+          "english": "nervous"
+        }
+      },
+      "calmo": {
+        "source": "calm",
+        "translations": {
+          "english": "calm"
+        }
+      },
+      "ok": {
+        "source": "okay",
+        "translations": {
+          "english": "okay"
+        }
+      },
+      "solitário": {
+        "source": "lonely",
+        "translations": {
+          "english": "lonely"
+        }
+      },
+      "confuso": {
+        "source": "confused",
+        "translations": {
+          "english": "confused"
+        }
+      },
+      "orgulhoso": {
+        "source": "proud",
+        "translations": {
+          "english": "proud"
+        }
+      },
+      "relaxado": {
+        "source": "relaxed",
+        "translations": {
+          "english": "relaxed"
+        }
+      },
+      "estressado": {
+        "source": "stressed",
+        "translations": {
+          "english": "stressed"
+        }
+      },
+      "preocupado": {
+        "source": "worried",
+        "translations": {
+          "english": "worried"
+        }
+      },
+      "surpreso": {
+        "source": "surprised",
+        "translations": {
+          "english": "surprised"
+        }
+      },
+      "tímido": {
+        "source": "shy",
+        "translations": {
+          "english": "shy"
+        }
+      },
+      "envergonhado": {
+        "source": "ashamed",
+        "translations": {
+          "english": "ashamed"
+        }
+      },
+      "embaraçado": {
+        "source": "embarrassed",
+        "translations": {
+          "english": "embarrassed"
+        }
+      },
+      "invejoso": {
+        "source": "jealous",
+        "translations": {
+          "english": "jealous"
+        }
+      },
+      "grato": {
+        "source": "grateful",
+        "translations": {
+          "english": "grateful"
+        }
+      },
+      "esperançoso": {
+        "source": "hopeful",
+        "translations": {
+          "english": "hopeful"
+        }
+      },
+      "frustrado": {
+        "source": "frustrated",
+        "translations": {
+          "english": "frustrated"
+        }
+      },
+      "sobrecarregado": {
+        "source": "overwhelmed",
+        "translations": {
+          "english": "overwhelmed"
+        }
+      },
+      "confiante": {
+        "source": "confident",
+        "translations": {
+          "english": "confident"
+        }
+      },
+      "inseguro": {
+        "source": "insecure",
+        "translations": {
+          "english": "insecure"
+        }
+      },
+      "curioso": {
+        "source": "curious",
+        "translations": {
+          "english": "curious"
+        }
+      },
+      "focado": {
+        "source": "focused",
+        "translations": {
+          "english": "focused"
+        }
+      },
+      "satisfeito": {
+        "source": "satisfied",
+        "translations": {
+          "english": "satisfied"
+        }
+      },
+      "decepcionado": {
+        "source": "disappointed",
+        "translations": {
+          "english": "disappointed"
+        }
+      },
+      "aliviado": {
+        "source": "relieved",
+        "translations": {
+          "english": "relieved"
+        }
+      },
+      "ansioso": {
+        "source": "anxious",
+        "translations": {
+          "english": "anxious"
+        }
+      },
+      "contente": {
+        "source": "content",
+        "translations": {
+          "english": "content"
+        }
+      }
+    },
+    "Family & Relationships": {
+      "família": {
+        "source": "family",
+        "translations": {
+          "english": "family"
+        }
+      },
+      "pai ou mãe": {
+        "source": "parent",
+        "translations": {
+          "english": "parent"
+        }
+      },
+      "mãe": {
+        "source": "mother",
+        "translations": {
+          "english": "mother"
+        }
+      },
+      "pai": {
+        "source": "father",
+        "translations": {
+          "english": "father"
+        }
+      },
+      "filho": {
+        "source": "son",
+        "translations": {
+          "english": "son"
+        }
+      },
+      "filha": {
+        "source": "daughter",
+        "translations": {
+          "english": "daughter"
+        }
+      },
+      "irmão": {
+        "source": "brother",
+        "translations": {
+          "english": "brother"
+        }
+      },
+      "irmã": {
+        "source": "sister",
+        "translations": {
+          "english": "sister"
+        }
+      },
+      "marido": {
+        "source": "husband",
+        "translations": {
+          "english": "husband"
+        }
+      },
+      "esposa": {
+        "source": "wife",
+        "translations": {
+          "english": "wife"
+        }
+      },
+      "parceiro": {
+        "source": "partner",
+        "translations": {
+          "english": "partner"
+        }
+      },
+      "criança": {
+        "source": "child",
+        "translations": {
+          "english": "child"
+        }
+      },
+      "bebê": {
+        "source": "baby",
+        "translations": {
+          "english": "baby"
+        }
+      },
+      "primo ou prima": {
+        "source": "cousin",
+        "translations": {
+          "english": "cousin"
+        }
+      },
+      "tia": {
+        "source": "aunt",
+        "translations": {
+          "english": "aunt"
+        }
+      },
+      "tio": {
+        "source": "uncle",
+        "translations": {
+          "english": "uncle"
+        }
+      },
+      "avó": {
+        "source": "grandmother",
+        "translations": {
+          "english": "grandmother"
+        }
+      },
+      "avô": {
+        "source": "grandfather",
+        "translations": {
+          "english": "grandfather"
+        }
+      },
+      "amigo": {
+        "source": "friend",
+        "translations": {
+          "english": "friend"
+        }
+      },
+      "vizinho": {
+        "source": "neighbor",
+        "translations": {
+          "english": "neighbor"
+        }
+      },
+      "irmão ou irmã": {
+        "source": "sibling",
+        "translations": {
+          "english": "sibling"
+        }
+      },
+      "avô ou avó": {
+        "source": "grandparent",
+        "translations": {
+          "english": "grandparent"
+        }
+      },
+      "neto ou neta": {
+        "source": "grandchild",
+        "translations": {
+          "english": "grandchild"
+        }
+      },
+      "neto": {
+        "source": "grandson",
+        "translations": {
+          "english": "grandson"
+        }
+      },
+      "neta": {
+        "source": "granddaughter",
+        "translations": {
+          "english": "granddaughter"
+        }
+      },
+      "madrasta": {
+        "source": "stepmother",
+        "translations": {
+          "english": "stepmother"
+        }
+      },
+      "padrasto": {
+        "source": "stepfather",
+        "translations": {
+          "english": "stepfather"
+        }
+      },
+      "enteado": {
+        "source": "stepson",
+        "translations": {
+          "english": "stepson"
+        }
+      },
+      "enteada": {
+        "source": "stepdaughter",
+        "translations": {
+          "english": "stepdaughter"
+        }
+      },
+      "namorado": {
+        "source": "boyfriend",
+        "translations": {
+          "english": "boyfriend"
+        }
+      },
+      "namorada": {
+        "source": "girlfriend",
+        "translations": {
+          "english": "girlfriend"
+        }
+      },
+      "noivo": {
+        "source": "fiancé",
+        "translations": {
+          "english": "fiancé"
+        }
+      },
+      "noiva": {
+        "source": "fiancée",
+        "translations": {
+          "english": "fiancée"
+        }
+      },
+      "cônjuge": {
+        "source": "spouse",
+        "translations": {
+          "english": "spouse"
+        }
+      },
+      "parente": {
+        "source": "relative",
+        "translations": {
+          "english": "relative"
+        }
+      },
+      "colega de quarto": {
+        "source": "roommate",
+        "translations": {
+          "english": "roommate"
+        }
+      },
+      "sogro ou sogra": {
+        "source": "in-law",
+        "translations": {
+          "english": "in-law"
+        }
+      },
+      "sogra": {
+        "source": "mother-in-law",
+        "translations": {
+          "english": "mother-in-law"
+        }
+      },
+      "sogro": {
+        "source": "father-in-law",
+        "translations": {
+          "english": "father-in-law"
+        }
+      },
+      "cunhado": {
+        "source": "brother-in-law",
+        "translations": {
+          "english": "brother-in-law"
+        }
+      },
+      "cunhada": {
+        "source": "sister-in-law",
+        "translations": {
+          "english": "sister-in-law"
+        }
+      }
+    },
+    "Food & Eating": {
+      "água": {
+        "source": "water",
+        "translations": {
+          "english": "water"
+        }
+      },
+      "pão": {
+        "source": "bread",
+        "translations": {
+          "english": "bread"
+        }
+      },
+      "arroz": {
+        "source": "rice",
+        "translations": {
+          "english": "rice"
+        }
+      },
+      "massa": {
+        "source": "pasta",
+        "translations": {
+          "english": "pasta"
+        }
+      },
+      "carne": {
+        "source": "meat",
+        "translations": {
+          "english": "meat"
+        }
+      },
+      "frango": {
+        "source": "chicken",
+        "translations": {
+          "english": "chicken"
+        }
+      },
+      "peixe": {
+        "source": "fish",
+        "translations": {
+          "english": "fish"
+        }
+      },
+      "ovo": {
+        "source": "egg",
+        "translations": {
+          "english": "egg"
+        }
+      },
+      "leite": {
+        "source": "milk",
+        "translations": {
+          "english": "milk"
+        }
+      },
+      "queijo": {
+        "source": "cheese",
+        "translations": {
+          "english": "cheese"
+        }
+      },
+      "fruta": {
+        "source": "fruit",
+        "translations": {
+          "english": "fruit"
+        }
+      },
+      "maçã": {
+        "source": "apple",
+        "translations": {
+          "english": "apple"
+        }
+      },
+      "banana": {
+        "source": "banana",
+        "translations": {
+          "english": "banana"
+        }
+      },
+      "laranja": {
+        "source": "orange",
+        "translations": {
+          "english": "orange"
+        }
+      },
+      "vegetal": {
+        "source": "vegetable",
+        "translations": {
+          "english": "vegetable"
+        }
+      },
+      "salada": {
+        "source": "salad",
+        "translations": {
+          "english": "salad"
+        }
+      },
+      "sopa": {
+        "source": "soup",
+        "translations": {
+          "english": "soup"
+        }
+      },
+      "açúcar": {
+        "source": "sugar",
+        "translations": {
+          "english": "sugar"
+        }
+      },
+      "sal": {
+        "source": "salt",
+        "translations": {
+          "english": "salt"
+        }
+      },
+      "café": {
+        "source": "coffee",
+        "translations": {
+          "english": "coffee"
+        }
+      },
+      "chá": {
+        "source": "tea",
+        "translations": {
+          "english": "tea"
+        }
+      },
+      "suco": {
+        "source": "juice",
+        "translations": {
+          "english": "juice"
+        }
+      },
+      "café da manhã": {
+        "source": "breakfast",
+        "translations": {
+          "english": "breakfast"
+        }
+      },
+      "almoço": {
+        "source": "lunch",
+        "translations": {
+          "english": "lunch"
+        }
+      },
+      "jantar": {
+        "source": "dinner",
+        "translations": {
+          "english": "dinner"
+        }
+      },
+      "lanche": {
+        "source": "snack",
+        "translations": {
+          "english": "snack"
+        }
+      },
+      "sobremesa": {
+        "source": "dessert",
+        "translations": {
+          "english": "dessert"
+        }
+      },
+      "manteiga": {
+        "source": "butter",
+        "translations": {
+          "english": "butter"
+        }
+      },
+      "iogurte": {
+        "source": "yogurt",
+        "translations": {
+          "english": "yogurt"
+        }
+      },
+      "carne bovina": {
+        "source": "beef",
+        "translations": {
+          "english": "beef"
+        }
+      },
+      "carne de porco": {
+        "source": "pork",
+        "translations": {
+          "english": "pork"
+        }
+      },
+      "presunto": {
+        "source": "ham",
+        "translations": {
+          "english": "ham"
+        }
+      },
+      "salsicha": {
+        "source": "sausage",
+        "translations": {
+          "english": "sausage"
+        }
+      },
+      "camarão": {
+        "source": "shrimp",
+        "translations": {
+          "english": "shrimp"
+        }
+      },
+      "frutos do mar": {
+        "source": "seafood",
+        "translations": {
+          "english": "seafood"
+        }
+      },
+      "batata": {
+        "source": "potato",
+        "translations": {
+          "english": "potato"
+        }
+      },
+      "tomate": {
+        "source": "tomato",
+        "translations": {
+          "english": "tomato"
+        }
+      },
+      "cebola": {
+        "source": "onion",
+        "translations": {
+          "english": "onion"
+        }
+      },
+      "alho": {
+        "source": "garlic",
+        "translations": {
+          "english": "garlic"
+        }
+      },
+      "cenoura": {
+        "source": "carrot",
+        "translations": {
+          "english": "carrot"
+        }
+      },
+      "alface": {
+        "source": "lettuce",
+        "translations": {
+          "english": "lettuce"
+        }
+      },
+      "pimenta": {
+        "source": "pepper",
+        "translations": {
+          "english": "pepper"
+        }
+      },
+      "pepino": {
+        "source": "cucumber",
+        "translations": {
+          "english": "cucumber"
+        }
+      },
+      "milho": {
+        "source": "corn",
+        "translations": {
+          "english": "corn"
+        }
+      },
+      "feijão": {
+        "source": "beans",
+        "translations": {
+          "english": "beans"
+        }
+      },
+      "cogumelo": {
+        "source": "mushroom",
+        "translations": {
+          "english": "mushroom"
+        }
+      },
+      "óleo": {
+        "source": "oil",
+        "translations": {
+          "english": "oil"
+        }
+      },
+      "vinagre": {
+        "source": "vinegar",
+        "translations": {
+          "english": "vinegar"
+        }
+      },
+      "especiaria": {
+        "source": "spice",
+        "translations": {
+          "english": "spice"
+        }
+      },
+      "molho": {
+        "source": "sauce",
+        "translations": {
+          "english": "sauce"
+        }
+      },
+      "macarrão": {
+        "source": "noodle",
+        "translations": {
+          "english": "noodle"
+        }
+      },
+      "sanduíche": {
+        "source": "sandwich",
+        "translations": {
+          "english": "sandwich"
+        }
+      },
+      "pizza": {
+        "source": "pizza",
+        "translations": {
+          "english": "pizza"
+        }
+      },
+      "hambúrguer": {
+        "source": "burger",
+        "translations": {
+          "english": "burger"
+        }
+      },
+      "bife": {
+        "source": "steak",
+        "translations": {
+          "english": "steak"
+        }
+      },
+      "bolo": {
+        "source": "cake",
+        "translations": {
+          "english": "cake"
+        }
+      },
+      "biscoito": {
+        "source": "cookie",
+        "translations": {
+          "english": "cookie"
+        }
+      },
+      "sorvete": {
+        "source": "ice cream",
+        "translations": {
+          "english": "ice cream"
+        }
+      },
+      "chocolate": {
+        "source": "chocolate",
+        "translations": {
+          "english": "chocolate"
+        }
+      },
+      "mel": {
+        "source": "honey",
+        "translations": {
+          "english": "honey"
+        }
+      },
+      "geleia": {
+        "source": "jam",
+        "translations": {
+          "english": "jam"
+        }
+      },
+      "cereal": {
+        "source": "cereal",
+        "translations": {
+          "english": "cereal"
+        }
+      },
+      "aveia": {
+        "source": "oats",
+        "translations": {
+          "english": "oats"
+        }
+      }
+    },
+    "Health & Body": {
+      "cabeça": {
+        "source": "head",
+        "translations": {
+          "english": "head"
+        }
+      },
+      "cabelo": {
+        "source": "hair",
+        "translations": {
+          "english": "hair"
+        }
+      },
+      "rosto": {
+        "source": "face",
+        "translations": {
+          "english": "face"
+        }
+      },
+      "olho": {
+        "source": "eye",
+        "translations": {
+          "english": "eye"
+        }
+      },
+      "orelha": {
+        "source": "ear",
+        "translations": {
+          "english": "ear"
+        }
+      },
+      "nariz": {
+        "source": "nose",
+        "translations": {
+          "english": "nose"
+        }
+      },
+      "boca": {
+        "source": "mouth",
+        "translations": {
+          "english": "mouth"
+        }
+      },
+      "dente": {
+        "source": "tooth",
+        "translations": {
+          "english": "tooth"
+        }
+      },
+      "pescoço": {
+        "source": "neck",
+        "translations": {
+          "english": "neck"
+        }
+      },
+      "ombro": {
+        "source": "shoulder",
+        "translations": {
+          "english": "shoulder"
+        }
+      },
+      "braço": {
+        "source": "arm",
+        "translations": {
+          "english": "arm"
+        }
+      },
+      "mão": {
+        "source": "hand",
+        "translations": {
+          "english": "hand"
+        }
+      },
+      "dedo": {
+        "source": "finger",
+        "translations": {
+          "english": "finger"
+        }
+      },
+      "peito": {
+        "source": "chest",
+        "translations": {
+          "english": "chest"
+        }
+      },
+      "costas": {
+        "source": "back",
+        "translations": {
+          "english": "back"
+        }
+      },
+      "estômago": {
+        "source": "stomach",
+        "translations": {
+          "english": "stomach"
+        }
+      },
+      "perna": {
+        "source": "leg",
+        "translations": {
+          "english": "leg"
+        }
+      },
+      "joelho": {
+        "source": "knee",
+        "translations": {
+          "english": "knee"
+        }
+      },
+      "pé": {
+        "source": "foot",
+        "translations": {
+          "english": "foot"
+        }
+      },
+      "pele": {
+        "source": "skin",
+        "translations": {
+          "english": "skin"
+        }
+      },
+      "coração": {
+        "source": "heart",
+        "translations": {
+          "english": "heart"
+        }
+      },
+      "sangue": {
+        "source": "blood",
+        "translations": {
+          "english": "blood"
+        }
+      },
+      "osso": {
+        "source": "bone",
+        "translations": {
+          "english": "bone"
+        }
+      },
+      "médico": {
+        "source": "doctor",
+        "translations": {
+          "english": "doctor"
+        }
+      },
+      "enfermeira": {
+        "source": "nurse",
+        "translations": {
+          "english": "nurse"
+        }
+      },
+      "medicina": {
+        "source": "medicine",
+        "translations": {
+          "english": "medicine"
+        }
+      },
+      "dor": {
+        "source": "pain",
+        "translations": {
+          "english": "pain"
+        }
+      },
+      "febre": {
+        "source": "fever",
+        "translations": {
+          "english": "fever"
+        }
+      },
+      "doente": {
+        "source": "sick",
+        "translations": {
+          "english": "sick"
+        }
+      },
+      "saudável": {
+        "source": "healthy",
+        "translations": {
+          "english": "healthy"
+        }
+      },
+      "cérebro": {
+        "source": "brain",
+        "translations": {
+          "english": "brain"
+        }
+      },
+      "garganta": {
+        "source": "throat",
+        "translations": {
+          "english": "throat"
+        }
+      },
+      "lábio": {
+        "source": "lip",
+        "translations": {
+          "english": "lip"
+        }
+      },
+      "língua": {
+        "source": "tongue",
+        "translations": {
+          "english": "tongue"
+        }
+      },
+      "cotovelo": {
+        "source": "elbow",
+        "translations": {
+          "english": "elbow"
+        }
+      },
+      "pulso": {
+        "source": "wrist",
+        "translations": {
+          "english": "wrist"
+        }
+      },
+      "quadril": {
+        "source": "hip",
+        "translations": {
+          "english": "hip"
+        }
+      },
+      "tornozelo": {
+        "source": "ankle",
+        "translations": {
+          "english": "ankle"
+        }
+      },
+      "dedo do pé": {
+        "source": "toe",
+        "translations": {
+          "english": "toe"
+        }
+      },
+      "unha": {
+        "source": "nail",
+        "translations": {
+          "english": "nail"
+        }
+      },
+      "pulmão": {
+        "source": "lung",
+        "translations": {
+          "english": "lung"
+        }
+      },
+      "fígado": {
+        "source": "liver",
+        "translations": {
+          "english": "liver"
+        }
+      },
+      "rim": {
+        "source": "kidney",
+        "translations": {
+          "english": "kidney"
+        }
+      },
+      "músculo": {
+        "source": "muscle",
+        "translations": {
+          "english": "muscle"
+        }
+      },
+      "articulação": {
+        "source": "joint",
+        "translations": {
+          "english": "joint"
+        }
+      },
+      "coluna": {
+        "source": "spine",
+        "translations": {
+          "english": "spine"
+        }
+      },
+      "dor de cabeça": {
+        "source": "headache",
+        "translations": {
+          "english": "headache"
+        }
+      },
+      "dor de estômago": {
+        "source": "stomachache",
+        "translations": {
+          "english": "stomachache"
+        }
+      },
+      "tosse": {
+        "source": "cough",
+        "translations": {
+          "english": "cough"
+        }
+      },
+      "lesão": {
+        "source": "injury",
+        "translations": {
+          "english": "injury"
+        }
+      },
+      "ferida": {
+        "source": "wound",
+        "translations": {
+          "english": "wound"
+        }
+      },
+      "bandagem": {
+        "source": "bandage",
+        "translations": {
+          "english": "bandage"
+        }
+      },
+      "pílula": {
+        "source": "pill",
+        "translations": {
+          "english": "pill"
+        }
+      },
+      "vacina": {
+        "source": "vaccine",
+        "translations": {
+          "english": "vaccine"
+        }
+      },
+      "alergia": {
+        "source": "allergy",
+        "translations": {
+          "english": "allergy"
+        }
+      },
+      "sintoma": {
+        "source": "symptom",
+        "translations": {
+          "english": "symptom"
+        }
+      },
+      "consulta": {
+        "source": "appointment",
+        "translations": {
+          "english": "appointment"
+        }
+      },
+      "exame": {
+        "source": "checkup",
+        "translations": {
+          "english": "checkup"
+        }
+      }
+    },
+    "Technology & Communication": {
+      "telefone": {
+        "source": "phone",
+        "translations": {
+          "english": "phone"
+        }
+      },
+      "computador": {
+        "source": "computer",
+        "translations": {
+          "english": "computer"
+        }
+      },
+      "internet": {
+        "source": "internet",
+        "translations": {
+          "english": "internet"
+        }
+      },
+      "email": {
+        "source": "email",
+        "translations": {
+          "english": "email"
+        }
+      },
+      "mensagem": {
+        "source": "message",
+        "translations": {
+          "english": "message"
+        }
+      },
+      "texto": {
+        "source": "text",
+        "translations": {
+          "english": "text"
+        }
+      },
+      "chamada": {
+        "source": "call",
+        "translations": {
+          "english": "call"
+        }
+      },
+      "vídeo": {
+        "source": "video",
+        "translations": {
+          "english": "video"
+        }
+      },
+      "câmera": {
+        "source": "camera",
+        "translations": {
+          "english": "camera"
+        }
+      },
+      "aplicativo": {
+        "source": "app",
+        "translations": {
+          "english": "app"
+        }
+      },
+      "site": {
+        "source": "website",
+        "translations": {
+          "english": "website"
+        }
+      },
+      "senha": {
+        "source": "password",
+        "translations": {
+          "english": "password"
+        }
+      },
+      "wifi": {
+        "source": "wifi",
+        "translations": {
+          "english": "wifi"
+        }
+      },
+      "tela": {
+        "source": "screen",
+        "translations": {
+          "english": "screen"
+        }
+      },
+      "teclado": {
+        "source": "keyboard",
+        "translations": {
+          "english": "keyboard"
+        }
+      },
+      "mouse": {
+        "source": "mouse",
+        "translations": {
+          "english": "mouse"
+        }
+      },
+      "bateria": {
+        "source": "battery",
+        "translations": {
+          "english": "battery"
+        }
+      },
+      "carregador": {
+        "source": "charger",
+        "translations": {
+          "english": "charger"
+        }
+      },
+      "mídia social": {
+        "source": "social media",
+        "translations": {
+          "english": "social media"
+        }
+      },
+      "online": {
+        "source": "online",
+        "translations": {
+          "english": "online"
+        }
+      },
+      "offline": {
+        "source": "offline",
+        "translations": {
+          "english": "offline"
+        }
+      },
+      "baixar": {
+        "source": "download",
+        "translations": {
+          "english": "download"
+        }
+      },
+      "enviar": {
+        "source": "upload",
+        "translations": {
+          "english": "upload"
+        }
+      },
+      "arquivo": {
+        "source": "file",
+        "translations": {
+          "english": "file"
+        }
+      },
+      "link": {
+        "source": "link",
+        "translations": {
+          "english": "link"
+        }
+      },
+      "tablet": {
+        "source": "tablet",
+        "translations": {
+          "english": "tablet"
+        }
+      },
+      "notebook": {
+        "source": "laptop",
+        "translations": {
+          "english": "laptop"
+        }
+      },
+      "desktop": {
+        "source": "desktop",
+        "translations": {
+          "english": "desktop"
+        }
+      },
+      "microfone": {
+        "source": "microphone",
+        "translations": {
+          "english": "microphone"
+        }
+      },
+      "alto-falante": {
+        "source": "speaker",
+        "translations": {
+          "english": "speaker"
+        }
+      },
+      "fones de ouvido": {
+        "source": "headphones",
+        "translations": {
+          "english": "headphones"
+        }
+      },
+      "fones de ouvido intra-auriculares": {
+        "source": "earbuds",
+        "translations": {
+          "english": "earbuds"
+        }
+      },
+      "navegador": {
+        "source": "browser",
+        "translations": {
+          "english": "browser"
+        }
+      },
+      "pesquisar": {
+        "source": "search",
+        "translations": {
+          "english": "search"
+        }
+      },
+      "entrar": {
+        "source": "login",
+        "translations": {
+          "english": "login"
+        }
+      },
+      "sair": {
+        "source": "logout",
+        "translations": {
+          "english": "logout"
+        }
+      },
+      "nome de usuário": {
+        "source": "username",
+        "translations": {
+          "english": "username"
+        }
+      },
+      "conta": {
+        "source": "account",
+        "translations": {
+          "english": "account"
+        }
+      },
+      "perfil": {
+        "source": "profile",
+        "translations": {
+          "english": "profile"
+        }
+      },
+      "notificação": {
+        "source": "notification",
+        "translations": {
+          "english": "notification"
+        }
+      },
+      "bate-papo": {
+        "source": "chat",
+        "translations": {
+          "english": "chat"
+        }
+      },
+      "voz": {
+        "source": "voice",
+        "translations": {
+          "english": "voice"
+        }
+      },
+      "sinal": {
+        "source": "signal",
+        "translations": {
+          "english": "signal"
+        }
+      },
+      "rede": {
+        "source": "network",
+        "translations": {
+          "english": "network"
+        }
+      },
+      "roteador": {
+        "source": "router",
+        "translations": {
+          "english": "router"
+        }
+      },
+      "bluetooth": {
+        "source": "bluetooth",
+        "translations": {
+          "english": "bluetooth"
+        }
+      },
+      "impressora": {
+        "source": "printer",
+        "translations": {
+          "english": "printer"
+        }
+      },
+      "scanner": {
+        "source": "scanner",
+        "translations": {
+          "english": "scanner"
+        }
+      },
+      "armazenamento": {
+        "source": "storage",
+        "translations": {
+          "english": "storage"
+        }
+      },
+      "nuvem": {
+        "source": "cloud",
+        "translations": {
+          "english": "cloud"
+        }
+      },
+      "atualizar": {
+        "source": "update",
+        "translations": {
+          "english": "update"
+        }
+      },
+      "configurações": {
+        "source": "settings",
+        "translations": {
+          "english": "settings"
+        }
+      },
+      "transmitir": {
+        "source": "stream",
+        "translations": {
+          "english": "stream"
+        }
+      }
+    },
+    "Work & School": {
+      "trabalho": {
+        "source": "assignment",
+        "translations": {
+          "english": "assignment"
+        }
+      },
+      "emprego": {
+        "source": "job",
+        "translations": {
+          "english": "job"
+        }
+      },
+      "escritório": {
+        "source": "office",
+        "translations": {
+          "english": "office"
+        }
+      },
+      "empresa": {
+        "source": "company",
+        "translations": {
+          "english": "company"
+        }
+      },
+      "chefe": {
+        "source": "boss",
+        "translations": {
+          "english": "boss"
+        }
+      },
+      "colega": {
+        "source": "colleague",
+        "translations": {
+          "english": "colleague"
+        }
+      },
+      "reunião": {
+        "source": "meeting",
+        "translations": {
+          "english": "meeting"
+        }
+      },
+      "projeto": {
+        "source": "project",
+        "translations": {
+          "english": "project"
+        }
+      },
+      "tarefa": {
+        "source": "task",
+        "translations": {
+          "english": "task"
+        }
+      },
+      "salário": {
+        "source": "salary",
+        "translations": {
+          "english": "salary"
+        }
+      },
+      "horário": {
+        "source": "schedule",
+        "translations": {
+          "english": "schedule"
+        }
+      },
+      "estudante": {
+        "source": "student",
+        "translations": {
+          "english": "student"
+        }
+      },
+      "professor": {
+        "source": "professor",
+        "translations": {
+          "english": "professor"
+        }
+      },
+      "escola": {
+        "source": "school",
+        "translations": {
+          "english": "school"
+        }
+      },
+      "aula": {
+        "source": "class",
+        "translations": {
+          "english": "class"
+        }
+      },
+      "lição": {
+        "source": "lesson",
+        "translations": {
+          "english": "lesson"
+        }
+      },
+      "dever de casa": {
+        "source": "homework",
+        "translations": {
+          "english": "homework"
+        }
+      },
+      "prova": {
+        "source": "exam",
+        "translations": {
+          "english": "exam"
+        }
+      },
+      "nota": {
+        "source": "grade",
+        "translations": {
+          "english": "grade"
+        }
+      },
+      "estudar": {
+        "source": "study",
+        "translations": {
+          "english": "study"
+        }
+      },
+      "livro": {
+        "source": "book",
+        "translations": {
+          "english": "book"
+        }
+      },
+      "caderno": {
+        "source": "notebook",
+        "translations": {
+          "english": "notebook"
+        }
+      },
+      "caneta": {
+        "source": "pen",
+        "translations": {
+          "english": "pen"
+        }
+      },
+      "lápis": {
+        "source": "pencil",
+        "translations": {
+          "english": "pencil"
+        }
+      },
+      "mesa": {
+        "source": "desk",
+        "translations": {
+          "english": "desk"
+        }
+      },
+      "intervalo": {
+        "source": "break",
+        "translations": {
+          "english": "break"
+        }
+      },
+      "universidade": {
+        "source": "university",
+        "translations": {
+          "english": "university"
+        }
+      },
+      "treinamento": {
+        "source": "training",
+        "translations": {
+          "english": "training"
+        }
+      },
+      "disciplina": {
+        "source": "subject",
+        "translations": {
+          "english": "subject"
+        }
+      },
+      "curso": {
+        "source": "course",
+        "translations": {
+          "english": "course"
+        }
+      },
+      "palestra": {
+        "source": "lecture",
+        "translations": {
+          "english": "lecture"
+        }
+      },
+      "apresentação": {
+        "source": "presentation",
+        "translations": {
+          "english": "presentation"
+        }
+      },
+      "relatório": {
+        "source": "report",
+        "translations": {
+          "english": "report"
+        }
+      },
+      "prazo": {
+        "source": "deadline",
+        "translations": {
+          "english": "deadline"
+        }
+      },
+      "grupo": {
+        "source": "group",
+        "translations": {
+          "english": "group"
+        }
+      },
+      "equipe": {
+        "source": "team",
+        "translations": {
+          "english": "team"
+        }
+      },
+      "gerente": {
+        "source": "manager",
+        "translations": {
+          "english": "manager"
+        }
+      },
+      "funcionário": {
+        "source": "employee",
+        "translations": {
+          "english": "employee"
+        }
+      },
+      "estagiário": {
+        "source": "intern",
+        "translations": {
+          "english": "intern"
+        }
+      },
+      "currículo": {
+        "source": "resume",
+        "translations": {
+          "english": "resume"
+        }
+      },
+      "entrevista": {
+        "source": "interview",
+        "translations": {
+          "english": "interview"
+        }
+      },
+      "carreira": {
+        "source": "career",
+        "translations": {
+          "english": "career"
+        }
+      },
+      "promoção": {
+        "source": "promotion",
+        "translations": {
+          "english": "promotion"
+        }
+      },
+      "habilidades": {
+        "source": "skills",
+        "translations": {
+          "english": "skills"
+        }
+      },
+      "departamento": {
+        "source": "department",
+        "translations": {
+          "english": "department"
+        }
+      },
+      "diretor": {
+        "source": "principal",
+        "translations": {
+          "english": "principal"
+        }
+      },
+      "assistente": {
+        "source": "assistant",
+        "translations": {
+          "english": "assistant"
+        }
+      },
+      "pesquisa": {
+        "source": "research",
+        "translations": {
+          "english": "research"
+        }
+      },
+      "teste": {
+        "source": "quiz",
+        "translations": {
+          "english": "quiz"
+        }
+      },
+      "certificado": {
+        "source": "certificate",
+        "translations": {
+          "english": "certificate"
+        }
+      },
+      "grau": {
+        "source": "degree",
+        "translations": {
+          "english": "degree"
+        }
+      }
+    }
+  },
+  "phrases": {
+    "Greetings": {},
+    "Politeness": {},
+    "Introductions": {},
+    "Conversation": {},
+    "Questions": {},
+    "Requests": {},
+    "Time & Plans": {},
+    "Directions": {},
+    "Food": {},
+    "Shopping": {},
+    "Health": {},
+    "Feelings": {},
+    "Opinions": {},
+    "Work & Study": {},
+    "Problems": {},
+    "Everyday Expressions": {}
+  },
+  "grammar": {
+    "titles": {
+      "Sentence Structure": {},
+      "Verbs": {},
+      "Tenses & Aspect": {},
+      "Nouns & Articles": {},
+      "Pronouns & Reference": {},
+      "Modifiers": {},
+      "Questions": {},
+      "Negation": {},
+      "Connections": {},
+      "Conditions": {},
+      "Voice & Focus": {},
+      "Modality": {},
+      "Reported Speech": {},
+      "Formality & Style": {},
+      "Discourse & Flow": {}
+    },
+    "examples": {
+      "Sentence Structure": {},
+      "Verbs": {},
+      "Tenses & Aspect": {},
+      "Nouns & Articles": {},
+      "Pronouns & Reference": {},
+      "Modifiers": {},
+      "Questions": {},
+      "Negation": {},
+      "Connections": {},
+      "Conditions": {},
+      "Voice & Focus": {},
+      "Modality": {},
+      "Reported Speech": {},
+      "Formality & Style": {},
+      "Discourse & Flow": {}
+    },
+    "explanations": {
+      "Sentence Structure": {},
+      "Verbs": {},
+      "Tenses & Aspect": {},
+      "Nouns & Articles": {},
+      "Pronouns & Reference": {},
+      "Modifiers": {},
+      "Questions": {},
+      "Negation": {},
+      "Connections": {},
+      "Conditions": {},
+      "Voice & Focus": {},
+      "Modality": {},
+      "Reported Speech": {},
+      "Formality & Style": {},
+      "Discourse & Flow": {}
+    },
+    "cards": {
+      "Sentence Structure": [],
+      "Verbs": [],
+      "Tenses & Aspect": [],
+      "Nouns & Articles": [],
+      "Pronouns & Reference": [],
+      "Modifiers": [],
+      "Questions": [],
+      "Negation": [],
+      "Connections": [],
+      "Conditions": [],
+      "Voice & Focus": [],
+      "Modality": [],
+      "Reported Speech": [],
+      "Formality & Style": [],
+      "Discourse & Flow": []
+    }
+  },
+  "worldSource": {
+    "words": {
+      "Greetings": {
+        "hi": "oi",
+        "hello": "olá",
+        "good morning": "bom dia",
+        "good afternoon": "boa tarde",
+        "good evening": "boa noite",
+        "good night": "boa noite",
+        "goodbye": "adeus",
+        "bye": "tchau",
+        "see you": "até logo",
+        "take care": "cuide-se",
+        "welcome": "bem-vindo",
+        "excuse me": "com licença",
+        "sorry": "desculpe",
+        "thank you": "obrigado",
+        "you're welcome": "de nada",
+        "thanks": "valeu",
+        "good day": "bom dia",
+        "how are you": "como você está",
+        "nice to meet you": "prazer em conhecê-lo",
+        "pleased to meet you": "prazer em conhecê-lo",
+        "see you later": "até mais",
+        "see you soon": "até logo",
+        "see you tomorrow": "até amanhã",
+        "have a nice day": "tenha um bom dia",
+        "have a good day": "tenha um bom dia",
+        "good luck": "boa sorte",
+        "welcome back": "bem-vindo de volta",
+        "no problem": "sem problemas"
+      },
+      "Pronouns": {
+        "i": "eu",
+        "you": "você",
+        "he": "ele",
+        "she": "ela",
+        "it": "isso",
+        "we": "nós",
+        "they": "eles",
+        "me": "me",
+        "him": "ele",
+        "her": "ela",
+        "us": "nos",
+        "them": "eles",
+        "my": "meu",
+        "your": "seu",
+        "his": "dele",
+        "its": "seu",
+        "our": "nosso",
+        "their": "deles",
+        "mine": "meu",
+        "yours": "seu",
+        "hers": "dela",
+        "ours": "nosso",
+        "theirs": "deles",
+        "myself": "eu mesmo",
+        "yourself": "você mesmo",
+        "himself": "ele mesmo",
+        "herself": "ela mesma",
+        "itself": "isso mesmo",
+        "ourselves": "nós mesmos",
+        "themselves": "eles mesmos",
+        "this": "isto",
+        "that": "aquilo",
+        "these": "estes",
+        "those": "aqueles",
+        "someone": "alguém",
+        "anyone": "qualquer um",
+        "everyone": "todos",
+        "nobody": "ninguém",
+        "something": "algo",
+        "anything": "qualquer coisa",
+        "everything": "tudo",
+        "nothing": "nada",
+        "everybody": "todo mundo",
+        "somebody": "alguém",
+        "anybody": "qualquer um",
+        "no one": "ninguém",
+        "each": "cada",
+        "either": "um ou outro",
+        "neither": "nenhum dos dois",
+        "both": "ambos",
+        "all": "todos",
+        "none": "nenhum",
+        "each other": "um ao outro",
+        "one another": "um ao outro"
+      },
+      "Verbs & Tenses": {
+        "be": "ser",
+        "have": "ter",
+        "do": "fazer",
+        "go": "ir",
+        "get": "obter",
+        "make": "fazer",
+        "take": "levar",
+        "come": "vir",
+        "see": "ver",
+        "look": "olhar",
+        "hear": "ouvir",
+        "say": "dizer",
+        "tell": "contar",
+        "ask": "perguntar",
+        "give": "dar",
+        "bring": "trazer",
+        "put": "colocar",
+        "keep": "manter",
+        "find": "encontrar",
+        "leave": "deixar",
+        "move": "mover",
+        "live": "viver",
+        "open": "abrir",
+        "close": "fechar",
+        "start": "começar",
+        "finish": "terminar",
+        "play": "jogar",
+        "read": "ler",
+        "write": "escrever",
+        "speak": "falar",
+        "listen": "ouvir",
+        "learn": "aprender",
+        "help": "ajudar",
+        "travel": "viajar",
+        "drive": "dirigir",
+        "walk": "andar",
+        "run": "correr",
+        "sleep": "dormir",
+        "cook": "cozinhar",
+        "buy": "comprar",
+        "sell": "vender",
+        "pay": "pagar",
+        "use": "usar",
+        "eat": "comer",
+        "drink": "beber",
+        "teach": "ensinar",
+        "understand": "entender",
+        "remember": "lembrar",
+        "forget": "esquecer",
+        "wait": "esperar",
+        "stay": "ficar",
+        "arrive": "chegar",
+        "return": "retornar",
+        "meet": "encontrar",
+        "visit": "visitar",
+        "send": "enviar",
+        "receive": "receber",
+        "answer": "responder",
+        "explain": "explicar",
+        "repeat": "repetir",
+        "practice": "praticar",
+        "plan": "planejar",
+        "decide": "decidir",
+        "try": "tentar",
+        "change": "mudar",
+        "build": "construir",
+        "fix": "consertar",
+        "stop": "parar",
+        "stand": "ficar de pé",
+        "sit": "sentar",
+        "turn": "virar",
+        "carry": "carregar",
+        "hold": "segurar",
+        "wear": "vestir",
+        "wash": "lavar",
+        "grow": "crescer",
+        "win": "ganhar",
+        "lose": "perder",
+        "join": "juntar",
+        "share": "compartilhar",
+        "order": "pedir",
+        "follow": "seguir",
+        "save": "salvar"
+      },
+      "Questions & Connectors": {
+        "who": "quem",
+        "what": "o que",
+        "where": "onde",
+        "when": "quando",
+        "why": "por que",
+        "how": "como",
+        "which": "qual",
+        "whose": "de quem",
+        "how many": "quantos",
+        "how much": "quanto",
+        "and": "e",
+        "but": "mas",
+        "or": "ou",
+        "so": "então",
+        "because": "porque",
+        "if": "se",
+        "then": "então",
+        "also": "também",
+        "before": "antes",
+        "after": "depois",
+        "while": "enquanto",
+        "since": "desde",
+        "until": "até",
+        "although": "embora",
+        "however": "no entanto",
+        "whom": "quem",
+        "where from": "de onde",
+        "what time": "que horas",
+        "how long": "quanto tempo",
+        "how often": "com que frequência",
+        "whether": "se",
+        "unless": "a menos que",
+        "yet": "ainda",
+        "still": "ainda",
+        "therefore": "portanto",
+        "so that": "para que",
+        "in case": "caso",
+        "because of": "por causa de",
+        "as": "como",
+        "than": "do que",
+        "through": "através",
+        "without": "sem",
+        "with": "com",
+        "about": "sobre",
+        "for": "para",
+        "from": "de",
+        "to": "para",
+        "into": "dentro de",
+        "over": "sobre",
+        "under": "debaixo de",
+        "between": "entre",
+        "around": "ao redor de",
+        "across": "através de",
+        "behind": "atrás de",
+        "in front of": "na frente de",
+        "next to": "ao lado de",
+        "past": "passado"
+      },
+      "Numbers & Counting": {
+        "zero": "zero",
+        "one": "um",
+        "two": "dois",
+        "three": "três",
+        "four": "quatro",
+        "five": "cinco",
+        "six": "seis",
+        "seven": "sete",
+        "eight": "oito",
+        "nine": "nove",
+        "ten": "dez",
+        "eleven": "onze",
+        "twelve": "doze",
+        "thirteen": "treze",
+        "fourteen": "quatorze",
+        "fifteen": "quinze",
+        "sixteen": "dezesseis",
+        "seventeen": "dezessete",
+        "eighteen": "dezoito",
+        "nineteen": "dezenove",
+        "twenty": "vinte",
+        "thirty": "trinta",
+        "forty": "quarenta",
+        "fifty": "cinquenta",
+        "sixty": "sessenta",
+        "seventy": "setenta",
+        "eighty": "oitenta",
+        "ninety": "noventa",
+        "hundred": "cem",
+        "thousand": "mil",
+        "million": "milhão",
+        "billion": "bilhão",
+        "first": "primeiro",
+        "second": "segundo",
+        "third": "terceiro",
+        "fourth": "quarto",
+        "fifth": "quinto",
+        "sixth": "sexto",
+        "seventh": "sétimo",
+        "eighth": "oitavo",
+        "ninth": "nono",
+        "tenth": "décimo",
+        "last": "último",
+        "eleventh": "décimo primeiro",
+        "twelfth": "décimo segundo",
+        "thirteenth": "décimo terceiro",
+        "fourteenth": "décimo quarto",
+        "fifteenth": "décimo quinto",
+        "sixteenth": "décimo sexto",
+        "seventeenth": "décimo sétimo",
+        "eighteenth": "décimo oitavo",
+        "nineteenth": "décimo nono",
+        "twentieth": "vigésimo",
+        "thirtieth": "trigésimo",
+        "fortieth": "quadragésimo",
+        "fiftieth": "quinquagésimo",
+        "sixtieth": "sexagésimo",
+        "seventieth": "septuagésimo",
+        "eightieth": "octogésimo",
+        "ninetieth": "nonagésimo",
+        "hundredth": "centésimo",
+        "thousandth": "milésimo",
+        "millionth": "milionésimo",
+        "billionth": "bilionésimo",
+        "half": "metade",
+        "quarter": "quarto",
+        "dozen": "dúzia",
+        "pair": "par",
+        "couple": "casal"
+      },
+      "Time, Date & Frequency": {
+        "time": "tempo",
+        "clock": "relógio",
+        "hour": "hora",
+        "minute": "minuto",
+        "second": "segundo",
+        "day": "dia",
+        "week": "semana",
+        "month": "mês",
+        "year": "ano",
+        "today": "hoje",
+        "tomorrow": "amanhã",
+        "yesterday": "ontem",
+        "dawn": "aurora",
+        "morning": "manhã",
+        "afternoon": "tarde",
+        "dusk": "crepúsculo",
+        "evening": "noite",
+        "night": "noite",
+        "weekend": "fim de semana",
+        "date": "data",
+        "calendar": "calendário",
+        "holiday": "feriado",
+        "now": "agora",
+        "later": "depois",
+        "soon": "em breve",
+        "early": "cedo",
+        "late": "tarde",
+        "always": "sempre",
+        "usually": "geralmente",
+        "often": "frequentemente",
+        "sometimes": "às vezes",
+        "rarely": "raramente",
+        "never": "nunca",
+        "moment": "momento",
+        "midday": "meio-dia",
+        "noon": "meio-dia",
+        "midnight": "meia-noite",
+        "tonight": "esta noite",
+        "daily": "diariamente",
+        "weekly": "semanalmente",
+        "monthly": "mensalmente",
+        "yearly": "anualmente",
+        "hourly": "horariamente",
+        "once": "uma vez",
+        "twice": "duas vezes",
+        "occasionally": "ocasionalmente",
+        "frequently": "frequentemente"
+      },
+      "Descriptions & Adjectives": {
+        "good": "bom",
+        "bad": "ruim",
+        "big": "grande",
+        "small": "pequeno",
+        "new": "novo",
+        "old": "velho",
+        "young": "jovem",
+        "beautiful": "bonito",
+        "ugly": "feio",
+        "easy": "fácil",
+        "hard": "difícil",
+        "fast": "rápido",
+        "slow": "lento",
+        "clean": "limpo",
+        "dirty": "sujo",
+        "rich": "rico",
+        "poor": "pobre",
+        "high": "alto",
+        "low": "baixo",
+        "short": "curto",
+        "long": "longo",
+        "strong": "forte",
+        "weak": "fraco",
+        "quiet": "silencioso",
+        "loud": "alto",
+        "safe": "seguro",
+        "dangerous": "perigoso",
+        "simple": "simples",
+        "difficult": "difícil",
+        "important": "importante",
+        "different": "diferente",
+        "same": "mesmo",
+        "open": "aberto",
+        "closed": "fechado",
+        "full": "cheio",
+        "empty": "vazio",
+        "bright": "brilhante",
+        "dark": "escuro",
+        "tall": "alto",
+        "wide": "largo",
+        "narrow": "estreito",
+        "deep": "profundo",
+        "shallow": "raso",
+        "heavy": "pesado",
+        "light": "leve",
+        "soft": "macio",
+        "smooth": "liso",
+        "rough": "áspero",
+        "sharp": "afiado",
+        "dull": "cego",
+        "cheap": "barato",
+        "expensive": "caro",
+        "busy": "ocupado",
+        "free": "livre",
+        "ready": "pronto",
+        "available": "disponível",
+        "possible": "possível",
+        "impossible": "impossível",
+        "correct": "correto",
+        "wrong": "errado",
+        "friendly": "amigável",
+        "kind": "gentil",
+        "polite": "educado",
+        "rude": "grosseiro",
+        "brave": "corajoso",
+        "careful": "cuidadoso",
+        "famous": "famoso",
+        "local": "local",
+        "foreign": "estrangeiro",
+        "modern": "moderno",
+        "ancient": "antigo",
+        "fresh": "fresco",
+        "stale": "velho",
+        "round": "redondo",
+        "square": "quadrado",
+        "flat": "plano",
+        "thin": "fino",
+        "thick": "grosso",
+        "dry": "seco",
+        "wet": "molhado"
+      },
+      "Opinions & Preferences": {
+        "like": "gostar",
+        "love": "amar",
+        "prefer": "preferir",
+        "enjoy": "apreciar",
+        "hate": "odiar",
+        "want": "querer",
+        "need": "precisar",
+        "think": "pensar",
+        "believe": "acreditar",
+        "agree": "concordar",
+        "disagree": "discordar",
+        "favorite": "favorito",
+        "best": "melhor",
+        "worst": "pior",
+        "choose": "escolher",
+        "opinion": "opinião",
+        "choice": "escolha",
+        "suggest": "sugerir",
+        "recommend": "recomendar",
+        "wish": "desejar",
+        "guess": "adivinhar",
+        "maybe": "talvez",
+        "probably": "provavelmente",
+        "perhaps": "talvez",
+        "definitely": "definitivamente",
+        "certainly": "certamente",
+        "depends": "depende",
+        "matter": "importar"
+      },
+      "Weather & Seasons": {
+        "weather": "clima",
+        "sun": "sol",
+        "sunny": "ensolarado",
+        "rain": "chuva",
+        "rainy": "chuvoso",
+        "snow": "neve",
+        "snowy": "neve",
+        "wind": "vento",
+        "windy": "ventoso",
+        "cloud": "nuvem",
+        "cloudy": "nublado",
+        "storm": "tempestade",
+        "fog": "neblina",
+        "hot": "quente",
+        "warm": "morno",
+        "cold": "frio",
+        "cool": "fresco",
+        "temperature": "temperatura",
+        "spring": "primavera",
+        "summer": "verão",
+        "autumn": "outono",
+        "winter": "inverno",
+        "forecast": "previsão",
+        "breeze": "brisa",
+        "drizzle": "chuvisco",
+        "thunder": "trovão",
+        "lightning": "relâmpago",
+        "hail": "granizo",
+        "stormy": "tempestuoso",
+        "foggy": "nebuloso",
+        "humid": "úmido",
+        "humidity": "umidade",
+        "dry": "seco",
+        "wet": "molhado",
+        "icy": "gelado",
+        "freezing": "congelante",
+        "heat": "calor",
+        "sunrise": "nascer do sol",
+        "sunset": "pôr do sol",
+        "rainbow": "arco-íris"
+      },
+      "Places & Directions": {
+        "home": "casa",
+        "city": "cidade",
+        "town": "cidade",
+        "village": "vila",
+        "street": "rua",
+        "road": "estrada",
+        "way": "caminho",
+        "corner": "canto",
+        "left": "esquerda",
+        "right": "direita",
+        "straight": "reto",
+        "north": "norte",
+        "south": "sul",
+        "east": "leste",
+        "west": "oeste",
+        "inside": "dentro",
+        "outside": "fora",
+        "near": "perto",
+        "far": "longe",
+        "here": "aqui",
+        "there": "lá",
+        "entrance": "entrada",
+        "exit": "saída",
+        "building": "prédio",
+        "room": "quarto",
+        "bathroom": "banheiro",
+        "kitchen": "cozinha",
+        "bedroom": "quarto",
+        "station": "estação",
+        "airport": "aeroporto",
+        "hotel": "hotel",
+        "restaurant": "restaurante",
+        "cafe": "café",
+        "shop": "loja",
+        "market": "mercado",
+        "bank": "banco",
+        "post office": "correio",
+        "park": "parque",
+        "museum": "museu",
+        "library": "biblioteca",
+        "hospital": "hospital",
+        "pharmacy": "farmácia",
+        "clinic": "clínica",
+        "police station": "delegacia",
+        "fire station": "bombeiros",
+        "gym": "academia",
+        "stadium": "estádio",
+        "beach": "praia",
+        "mountain": "montanha",
+        "river": "rio",
+        "lake": "lago",
+        "forest": "floresta",
+        "island": "ilha",
+        "bridge": "ponte",
+        "square": "praça",
+        "mall": "shopping",
+        "store": "loja",
+        "bakery": "padaria",
+        "zoo": "zoológico",
+        "theater": "teatro",
+        "cinema": "cinema",
+        "bus stop": "ponto de ônibus",
+        "subway": "metrô",
+        "parking lot": "estacionamento",
+        "farm": "fazenda",
+        "factory": "fábrica",
+        "harbor": "porto",
+        "port": "porto",
+        "dock": "doca",
+        "church": "igreja",
+        "temple": "templo",
+        "mosque": "mesquita",
+        "synagogue": "sinagoga"
+      },
+      "countries": {
+        "united kingdom": "Reino Unido",
+        "ireland": "Irlanda",
+        "france": "França",
+        "germany": "Alemanha",
+        "spain": "Espanha",
+        "portugal": "Portugal",
+        "italy": "Itália",
+        "netherlands": "Países Baixos",
+        "belgium": "Bélgica",
+        "sweden": "Suécia",
+        "norway": "Noruega",
+        "denmark": "Dinamarca",
+        "finland": "Finlândia",
+        "iceland": "Islândia",
+        "switzerland": "Suíça",
+        "austria": "Áustria",
+        "greece": "Grécia",
+        "poland": "Polônia",
+        "czechia": "República Tcheca",
+        "hungary": "Hungria",
+        "romania": "Romênia",
+        "bulgaria": "Bulgária",
+        "serbia": "Sérvia",
+        "croatia": "Croácia",
+        "slovenia": "Eslovênia",
+        "slovakia": "Eslováquia",
+        "bosnia and herzegovina": "Bósnia e Herzegovina",
+        "montenegro": "Montenegro",
+        "kosovo": "Kosovo",
+        "albania": "Albânia",
+        "moldova": "Moldávia",
+        "ukraine": "Ucrânia",
+        "belarus": "Bielorrússia",
+        "russia": "Rússia",
+        "estonia": "Estônia",
+        "latvia": "Letônia",
+        "lithuania": "Lituânia",
+        "luxembourg": "Luxemburgo",
+        "malta": "Malta",
+        "cyprus": "Chipre",
+        "andorra": "Andorra",
+        "liechtenstein": "Liechtenstein",
+        "monaco": "Mônaco",
+        "san marino": "San Marino",
+        "vatican city": "Vaticano",
+        "georgia": "Geórgia",
+        "armenia": "Armênia",
+        "azerbaijan": "Azerbaijão",
+        "turkey": "Turquia",
+        "kazakhstan": "Cazaquistão",
+        "kyrgyzstan": "Quirguistão",
+        "tajikistan": "Tajiquistão",
+        "turkmenistan": "Turcomenistão",
+        "uzbekistan": "Uzbequistão",
+        "afghanistan": "Afeganistão",
+        "pakistan": "Paquistão",
+        "india": "Índia",
+        "bangladesh": "Bangladesh",
+        "sri lanka": "Sri Lanka",
+        "nepal": "Nepal",
+        "bhutan": "Butão",
+        "maldives": "Maldivas",
+        "china": "China",
+        "mongolia": "Mongólia",
+        "north korea": "Coreia do Norte",
+        "south korea": "Coreia do Sul",
+        "japan": "Japão",
+        "taiwan": "Taiwan",
+        "hong kong": "Hong Kong",
+        "vietnam": "Vietnã",
+        "thailand": "Tailândia",
+        "malaysia": "Malásia",
+        "indonesia": "Indonésia",
+        "philippines": "Filipinas",
+        "singapore": "Cingapura",
+        "myanmar": "Mianmar",
+        "cambodia": "Camboja",
+        "laos": "Laos",
+        "brunei": "Brunei",
+        "timor-leste": "Timor-Leste",
+        "papua new guinea": "Papua Nova Guiné",
+        "australia": "Austrália",
+        "new zealand": "Nova Zelândia",
+        "fiji": "Fiji",
+        "samoa": "Samoa",
+        "tonga": "Tonga",
+        "vanuatu": "Vanuatu",
+        "solomon islands": "Ilhas Salomão",
+        "kiribati": "Quiribati",
+        "tuvalu": "Tuvalu",
+        "nauru": "Nauru",
+        "palau": "Palau",
+        "marshall islands": "Ilhas Marshall",
+        "micronesia": "Micronésia",
+        "united states": "Estados Unidos",
+        "canada": "Canadá",
+        "mexico": "México",
+        "guatemala": "Guatemala",
+        "honduras": "Honduras",
+        "el salvador": "El Salvador",
+        "nicaragua": "Nicarágua",
+        "costa rica": "Costa Rica",
+        "panama": "Panamá",
+        "cuba": "Cuba",
+        "dominican republic": "República Dominicana",
+        "jamaica": "Jamaica",
+        "haiti": "Haiti",
+        "bahamas": "Bahamas",
+        "barbados": "Barbados",
+        "trinidad and tobago": "Trinidad e Tobago",
+        "antigua and barbuda": "Antígua e Barbuda",
+        "saint kitts and nevis": "São Cristóvão e Névis",
+        "saint lucia": "Santa Lúcia",
+        "saint vincent and the grenadines": "São Vicente e Granadinas",
+        "grenada": "Granada",
+        "belize": "Belize",
+        "guyana": "Guiana",
+        "suriname": "Suriname",
+        "brazil": "Brasil",
+        "argentina": "Argentina",
+        "chile": "Chile",
+        "uruguay": "Uruguai",
+        "paraguay": "Paraguai",
+        "bolivia": "Bolívia",
+        "peru": "Peru",
+        "colombia": "Colômbia",
+        "venezuela": "Venezuela",
+        "ecuador": "Equador",
+        "qatar": "Catar",
+        "bahrain": "Bahrein",
+        "kuwait": "Kuwait",
+        "oman": "Omã",
+        "saudi arabia": "Arábia Saudita",
+        "united arab emirates": "Emirados Árabes Unidos",
+        "yemen": "Iémen",
+        "iraq": "Iraque",
+        "iran": "Irã",
+        "jordan": "Jordânia",
+        "lebanon": "Líbano",
+        "syria": "Síria",
+        "palestine": "Palestina",
+        "egypt": "Egito",
+        "libya": "Líbia",
+        "tunisia": "Tunísia",
+        "algeria": "Argélia",
+        "morocco": "Marrocos",
+        "mauritania": "Mauritânia",
+        "sudan": "Sudão",
+        "ethiopia": "Etiópia",
+        "somalia": "Somália",
+        "eritrea": "Eritreia",
+        "djibouti": "Djibuti",
+        "kenya": "Quênia",
+        "uganda": "Uganda",
+        "tanzania": "Tanzânia",
+        "rwanda": "Ruanda",
+        "burundi": "Burundi",
+        "democratic republic of the congo": "República Democrática do Congo",
+        "gabon": "Gabão",
+        "cameroon": "Camarões",
+        "central african republic": "República Centro-Africana",
+        "chad": "Chade",
+        "niger": "Níger",
+        "nigeria": "Nigéria",
+        "ghana": "Gana",
+        "cote d'ivoire": "Costa do Marfim",
+        "burkina faso": "Burquina Faso",
+        "mali": "Mali",
+        "senegal": "Senegal",
+        "gambia": "Gâmbia",
+        "guinea": "Guiné",
+        "sierra leone": "Serra Leoa",
+        "liberia": "Libéria",
+        "togo": "Togo",
+        "benin": "Benin",
+        "cape verde": "Cabo Verde",
+        "sao tome and principe": "São Tomé e Príncipe",
+        "angola": "Angola",
+        "namibia": "Namíbia",
+        "botswana": "Botsuana",
+        "zimbabwe": "Zimbábue",
+        "zambia": "Zâmbia",
+        "mozambique": "Moçambique",
+        "malawi": "Malawi",
+        "madagascar": "Madagáscar",
+        "comoros": "Comores",
+        "seychelles": "Seicheles",
+        "mauritius": "Maurício",
+        "south africa": "África do Sul",
+        "eswatini": "Eswatini",
+        "lesotho": "Lesoto"
+      },
+      "Feelings & States": {
+        "happy": "feliz",
+        "sad": "triste",
+        "angry": "zangado",
+        "afraid": "medroso",
+        "excited": "animado",
+        "bored": "entediado",
+        "tired": "cansado",
+        "sleepy": "sonolento",
+        "hungry": "faminto",
+        "thirsty": "sedento",
+        "nervous": "nervoso",
+        "calm": "calmo",
+        "okay": "ok",
+        "lonely": "solitário",
+        "confused": "confuso",
+        "proud": "orgulhoso",
+        "relaxed": "relaxado",
+        "stressed": "estressado",
+        "worried": "preocupado",
+        "surprised": "surpreso",
+        "shy": "tímido",
+        "ashamed": "envergonhado",
+        "embarrassed": "embaraçado",
+        "jealous": "invejoso",
+        "grateful": "grato",
+        "hopeful": "esperançoso",
+        "frustrated": "frustrado",
+        "overwhelmed": "sobrecarregado",
+        "confident": "confiante",
+        "insecure": "inseguro",
+        "curious": "curioso",
+        "focused": "focado",
+        "satisfied": "satisfeito",
+        "disappointed": "decepcionado",
+        "relieved": "aliviado",
+        "anxious": "ansioso",
+        "content": "contente"
+      },
+      "Family & Relationships": {
+        "family": "família",
+        "parent": "pai ou mãe",
+        "mother": "mãe",
+        "father": "pai",
+        "son": "filho",
+        "daughter": "filha",
+        "brother": "irmão",
+        "sister": "irmã",
+        "husband": "marido",
+        "wife": "esposa",
+        "partner": "parceiro",
+        "child": "criança",
+        "baby": "bebê",
+        "cousin": "primo ou prima",
+        "aunt": "tia",
+        "uncle": "tio",
+        "grandmother": "avó",
+        "grandfather": "avô",
+        "friend": "amigo",
+        "neighbor": "vizinho",
+        "sibling": "irmão ou irmã",
+        "grandparent": "avô ou avó",
+        "grandchild": "neto ou neta",
+        "grandson": "neto",
+        "granddaughter": "neta",
+        "stepmother": "madrasta",
+        "stepfather": "padrasto",
+        "stepson": "enteado",
+        "stepdaughter": "enteada",
+        "boyfriend": "namorado",
+        "girlfriend": "namorada",
+        "fiancé": "noivo",
+        "fiancée": "noiva",
+        "spouse": "cônjuge",
+        "relative": "parente",
+        "roommate": "colega de quarto",
+        "in-law": "sogro ou sogra",
+        "mother-in-law": "sogra",
+        "father-in-law": "sogro",
+        "brother-in-law": "cunhado",
+        "sister-in-law": "cunhada"
+      },
+      "Food & Eating": {
+        "water": "água",
+        "bread": "pão",
+        "rice": "arroz",
+        "pasta": "massa",
+        "meat": "carne",
+        "chicken": "frango",
+        "fish": "peixe",
+        "egg": "ovo",
+        "milk": "leite",
+        "cheese": "queijo",
+        "fruit": "fruta",
+        "apple": "maçã",
+        "banana": "banana",
+        "orange": "laranja",
+        "vegetable": "vegetal",
+        "salad": "salada",
+        "soup": "sopa",
+        "sugar": "açúcar",
+        "salt": "sal",
+        "coffee": "café",
+        "tea": "chá",
+        "juice": "suco",
+        "breakfast": "café da manhã",
+        "lunch": "almoço",
+        "dinner": "jantar",
+        "snack": "lanche",
+        "dessert": "sobremesa",
+        "butter": "manteiga",
+        "yogurt": "iogurte",
+        "beef": "carne bovina",
+        "pork": "carne de porco",
+        "ham": "presunto",
+        "sausage": "salsicha",
+        "shrimp": "camarão",
+        "seafood": "frutos do mar",
+        "potato": "batata",
+        "tomato": "tomate",
+        "onion": "cebola",
+        "garlic": "alho",
+        "carrot": "cenoura",
+        "lettuce": "alface",
+        "pepper": "pimenta",
+        "cucumber": "pepino",
+        "corn": "milho",
+        "beans": "feijão",
+        "mushroom": "cogumelo",
+        "oil": "óleo",
+        "vinegar": "vinagre",
+        "spice": "especiaria",
+        "sauce": "molho",
+        "noodle": "macarrão",
+        "sandwich": "sanduíche",
+        "pizza": "pizza",
+        "burger": "hambúrguer",
+        "steak": "bife",
+        "cake": "bolo",
+        "cookie": "biscoito",
+        "ice cream": "sorvete",
+        "chocolate": "chocolate",
+        "honey": "mel",
+        "jam": "geleia",
+        "cereal": "cereal",
+        "oats": "aveia"
+      },
+      "Health & Body": {
+        "head": "cabeça",
+        "hair": "cabelo",
+        "face": "rosto",
+        "eye": "olho",
+        "ear": "orelha",
+        "nose": "nariz",
+        "mouth": "boca",
+        "tooth": "dente",
+        "neck": "pescoço",
+        "shoulder": "ombro",
+        "arm": "braço",
+        "hand": "mão",
+        "finger": "dedo",
+        "chest": "peito",
+        "back": "costas",
+        "stomach": "estômago",
+        "leg": "perna",
+        "knee": "joelho",
+        "foot": "pé",
+        "skin": "pele",
+        "heart": "coração",
+        "blood": "sangue",
+        "bone": "osso",
+        "doctor": "médico",
+        "nurse": "enfermeira",
+        "medicine": "medicina",
+        "pain": "dor",
+        "fever": "febre",
+        "sick": "doente",
+        "healthy": "saudável",
+        "brain": "cérebro",
+        "throat": "garganta",
+        "lip": "lábio",
+        "tongue": "língua",
+        "elbow": "cotovelo",
+        "wrist": "pulso",
+        "hip": "quadril",
+        "ankle": "tornozelo",
+        "toe": "dedo do pé",
+        "nail": "unha",
+        "lung": "pulmão",
+        "liver": "fígado",
+        "kidney": "rim",
+        "muscle": "músculo",
+        "joint": "articulação",
+        "spine": "coluna",
+        "headache": "dor de cabeça",
+        "stomachache": "dor de estômago",
+        "cough": "tosse",
+        "injury": "lesão",
+        "wound": "ferida",
+        "bandage": "bandagem",
+        "pill": "pílula",
+        "vaccine": "vacina",
+        "allergy": "alergia",
+        "symptom": "sintoma",
+        "appointment": "consulta",
+        "checkup": "exame"
+      },
+      "Technology & Communication": {
+        "phone": "telefone",
+        "computer": "computador",
+        "internet": "internet",
+        "email": "email",
+        "message": "mensagem",
+        "text": "texto",
+        "call": "chamada",
+        "video": "vídeo",
+        "camera": "câmera",
+        "app": "aplicativo",
+        "website": "site",
+        "password": "senha",
+        "wifi": "wifi",
+        "screen": "tela",
+        "keyboard": "teclado",
+        "mouse": "mouse",
+        "battery": "bateria",
+        "charger": "carregador",
+        "social media": "mídia social",
+        "online": "online",
+        "offline": "offline",
+        "download": "baixar",
+        "upload": "enviar",
+        "file": "arquivo",
+        "link": "link",
+        "tablet": "tablet",
+        "laptop": "notebook",
+        "desktop": "desktop",
+        "microphone": "microfone",
+        "speaker": "alto-falante",
+        "headphones": "fones de ouvido",
+        "earbuds": "fones de ouvido intra-auriculares",
+        "browser": "navegador",
+        "search": "pesquisar",
+        "login": "entrar",
+        "logout": "sair",
+        "username": "nome de usuário",
+        "account": "conta",
+        "profile": "perfil",
+        "notification": "notificação",
+        "chat": "bate-papo",
+        "voice": "voz",
+        "signal": "sinal",
+        "network": "rede",
+        "router": "roteador",
+        "bluetooth": "bluetooth",
+        "printer": "impressora",
+        "scanner": "scanner",
+        "storage": "armazenamento",
+        "cloud": "nuvem",
+        "update": "atualizar",
+        "settings": "configurações",
+        "stream": "transmitir"
+      },
+      "Work & School": {
+        "work": "trabalho",
+        "job": "emprego",
+        "office": "escritório",
+        "company": "empresa",
+        "boss": "chefe",
+        "colleague": "colega",
+        "meeting": "reunião",
+        "project": "projeto",
+        "task": "tarefa",
+        "salary": "salário",
+        "schedule": "horário",
+        "student": "estudante",
+        "teacher": "professor",
+        "school": "escola",
+        "class": "aula",
+        "lesson": "lição",
+        "homework": "dever de casa",
+        "exam": "prova",
+        "grade": "nota",
+        "study": "estudar",
+        "book": "livro",
+        "notebook": "caderno",
+        "pen": "caneta",
+        "pencil": "lápis",
+        "desk": "mesa",
+        "break": "intervalo",
+        "university": "universidade",
+        "training": "treinamento",
+        "subject": "disciplina",
+        "course": "curso",
+        "assignment": "trabalho",
+        "lecture": "palestra",
+        "presentation": "apresentação",
+        "report": "relatório",
+        "deadline": "prazo",
+        "group": "grupo",
+        "team": "equipe",
+        "manager": "gerente",
+        "employee": "funcionário",
+        "intern": "estagiário",
+        "resume": "currículo",
+        "interview": "entrevista",
+        "career": "carreira",
+        "promotion": "promoção",
+        "skills": "habilidades",
+        "department": "departamento",
+        "principal": "diretor",
+        "professor": "professor",
+        "assistant": "assistente",
+        "research": "pesquisa",
+        "quiz": "teste",
+        "certificate": "certificado",
+        "degree": "grau"
+      }
+    },
+    "phrases": {
+      "Greetings": {},
+      "Politeness": {},
+      "Introductions": {},
+      "Conversation": {},
+      "Questions": {},
+      "Requests": {},
+      "Time & Plans": {},
+      "Directions": {},
+      "Food": {},
+      "Shopping": {},
+      "Health": {},
+      "Feelings": {},
+      "Opinions": {},
+      "Work & Study": {},
+      "Problems": {},
+      "Everyday Expressions": {}
+    },
+    "grammarTitles": {
+      "Sentence Structure": {},
+      "Verbs": {},
+      "Tenses & Aspect": {},
+      "Nouns & Articles": {},
+      "Pronouns & Reference": {},
+      "Modifiers": {},
+      "Questions": {},
+      "Negation": {},
+      "Connections": {},
+      "Conditions": {},
+      "Voice & Focus": {},
+      "Modality": {},
+      "Reported Speech": {},
+      "Formality & Style": {},
+      "Discourse & Flow": {}
+    },
+    "grammarExamples": {
+      "Sentence Structure": {},
+      "Verbs": {},
+      "Tenses & Aspect": {},
+      "Nouns & Articles": {},
+      "Pronouns & Reference": {},
+      "Modifiers": {},
+      "Questions": {},
+      "Negation": {},
+      "Connections": {},
+      "Conditions": {},
+      "Voice & Focus": {},
+      "Modality": {},
+      "Reported Speech": {},
+      "Formality & Style": {},
+      "Discourse & Flow": {}
+    },
+    "grammarExplanations": {
+      "Sentence Structure": {},
+      "Verbs": {},
+      "Tenses & Aspect": {},
+      "Nouns & Articles": {},
+      "Pronouns & Reference": {},
+      "Modifiers": {},
+      "Questions": {},
+      "Negation": {},
+      "Connections": {},
+      "Conditions": {},
+      "Voice & Focus": {},
+      "Modality": {},
+      "Reported Speech": {},
+      "Formality & Style": {},
+      "Discourse & Flow": {}
+    },
+    "grammarPoints": {
+      "Sentence Structure": {},
+      "Verbs": {},
+      "Tenses & Aspect": {},
+      "Nouns & Articles": {},
+      "Pronouns & Reference": {},
+      "Modifiers": {},
+      "Questions": {},
+      "Negation": {},
+      "Connections": {},
+      "Conditions": {},
+      "Voice & Focus": {},
+      "Modality": {},
+      "Reported Speech": {},
+      "Formality & Style": {},
+      "Discourse & Flow": {}
+    },
+    "grammarMistakeWrong": {
+      "Sentence Structure": {},
+      "Verbs": {},
+      "Tenses & Aspect": {},
+      "Nouns & Articles": {},
+      "Pronouns & Reference": {},
+      "Modifiers": {},
+      "Questions": {},
+      "Negation": {},
+      "Connections": {},
+      "Conditions": {},
+      "Voice & Focus": {},
+      "Modality": {},
+      "Reported Speech": {},
+      "Formality & Style": {},
+      "Discourse & Flow": {}
+    },
+    "grammarMistakeFix": {
+      "Sentence Structure": {},
+      "Verbs": {},
+      "Tenses & Aspect": {},
+      "Nouns & Articles": {},
+      "Pronouns & Reference": {},
+      "Modifiers": {},
+      "Questions": {},
+      "Negation": {},
+      "Connections": {},
+      "Conditions": {},
+      "Voice & Focus": {},
+      "Modality": {},
+      "Reported Speech": {},
+      "Formality & Style": {},
+      "Discourse & Flow": {}
+    }
+  }
+}

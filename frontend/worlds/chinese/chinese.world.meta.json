@@ -1,0 +1,18 @@
+{
+  "worldKey": "chinese",
+  "nativeName": "中文",
+  "tts": {
+    "languageCode": "cmn-CN",
+    "voice": "cmn-CN-Wavenet-A"
+  },
+  "phraseIntents": {
+    "englishLanguageLabel": "chinese",
+    "forms": {
+      "learn_world_language": "我在学中文",
+      "speak_world_language": "我会说中文",
+      "not_speak_world_language": "我不会说中文",
+      "ask_speak_world_language": "你会说中文吗？"
+    }
+  },
+  "translationPack": "frontend/worlds/chinese/translations.json"
+}
