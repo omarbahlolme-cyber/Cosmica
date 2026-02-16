@@ -1174,6 +1174,164 @@ const getApiEndpointCandidates = () => {
   return candidates;
 };
 
+const LETTERS_TITLE_TRANSLATION_CACHE_KEY = "cosmicaLettersTitleTranslationCache:v1";
+let lettersTitleTranslationCache = null;
+
+const readLettersTitleTranslationCache = () => {
+  if (lettersTitleTranslationCache instanceof Map) {
+    return lettersTitleTranslationCache;
+  }
+  try {
+    const raw = localStorage.getItem(LETTERS_TITLE_TRANSLATION_CACHE_KEY);
+    if (!raw) {
+      lettersTitleTranslationCache = new Map();
+      return lettersTitleTranslationCache;
+    }
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object") {
+      lettersTitleTranslationCache = new Map();
+      return lettersTitleTranslationCache;
+    }
+    const entries = Object.entries(parsed).filter(
+      ([key, value]) => key && typeof value === "string" && value.trim()
+    );
+    lettersTitleTranslationCache = new Map(entries);
+    return lettersTitleTranslationCache;
+  } catch {
+    lettersTitleTranslationCache = new Map();
+    return lettersTitleTranslationCache;
+  }
+};
+
+const persistLettersTitleTranslationCache = () => {
+  if (!(lettersTitleTranslationCache instanceof Map)) {
+    return;
+  }
+  try {
+    localStorage.setItem(
+      LETTERS_TITLE_TRANSLATION_CACHE_KEY,
+      JSON.stringify(Object.fromEntries(lettersTitleTranslationCache))
+    );
+  } catch {}
+};
+
+const buildLettersTranslateEndpointCandidates = () => {
+  const candidates = [];
+  const addCandidate = (value) => {
+    const normalized = String(value || "").trim();
+    if (!normalized || candidates.includes(normalized)) {
+      return;
+    }
+    candidates.push(normalized);
+  };
+  addCandidate("/api/translate");
+  if (typeof getApiEndpointCandidates === "function") {
+    getApiEndpointCandidates().forEach((candidate) => {
+      addCandidate(
+        String(candidate || "").replace(/\/api\/chat(?=$|[?#])/i, "/api/translate")
+      );
+    });
+  }
+  return candidates;
+};
+
+const requestLettersTitleTranslation = async (titleText, targetLanguage) => {
+  const title = String(titleText || "").trim();
+  const lang = String(targetLanguage || "").trim().toLowerCase();
+  if (!title || !lang || lang === "english") {
+    return "";
+  }
+
+  const endpointCandidates = buildLettersTranslateEndpointCandidates();
+  const translateOnce = async (endpoint) => {
+    const controller = createAbortController();
+    const timeout = controller
+      ? window.setTimeout(() => controller.abort(), 9000)
+      : null;
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          text: title,
+          targetLanguage: lang,
+        }),
+        cache: "no-store",
+        credentials: "same-origin",
+        ...(controller ? { signal: controller.signal } : {}),
+      });
+      if (!response.ok) {
+        throw new Error(`Letters title translation failed: ${response.status}`);
+      }
+      const data = await response.json().catch(() => ({}));
+      return String(data?.translation || data?.content || "")
+        .replace(/^["'`]|["'`]$/g, "")
+        .trim();
+    } finally {
+      if (timeout) {
+        window.clearTimeout(timeout);
+      }
+    }
+  };
+
+  for (const endpoint of endpointCandidates) {
+    try {
+      const translated = await translateOnce(endpoint);
+      if (translated) {
+        return translated;
+      }
+    } catch {}
+  }
+  return "";
+};
+
+const setupLettersTitleTranslation = async () => {
+  if (!document.body.classList.contains("letters-page")) {
+    return;
+  }
+  const selectedBaseLanguage = String(
+    localStorage.getItem("cosmicaBaseLanguage") || ""
+  )
+    .trim()
+    .toLowerCase();
+  if (!selectedBaseLanguage || selectedBaseLanguage === "english") {
+    return;
+  }
+
+  const lettersHeading = document.querySelector(".letters-grid-section .section-title h2");
+  if (!lettersHeading) {
+    return;
+  }
+  const baseTitle = String(lettersHeading.textContent || "").replace(/\s+/g, " ").trim();
+  if (!baseTitle) {
+    return;
+  }
+  let translationNode = lettersHeading.querySelector(".letters-title-translation");
+  if (!translationNode) {
+    translationNode = document.createElement("span");
+    translationNode.className = "letters-title-translation";
+    translationNode.setAttribute("dir", "auto");
+    lettersHeading.appendChild(document.createTextNode(" "));
+    lettersHeading.appendChild(translationNode);
+  }
+
+  const cache = readLettersTitleTranslationCache();
+  const cacheKey = `${WORLD_KEY}::${selectedBaseLanguage}::${baseTitle.toLowerCase()}`;
+  const cached = cache.get(cacheKey);
+  if (cached) {
+    translationNode.textContent = `(${cached})`;
+    return;
+  }
+
+  const translated = await requestLettersTitleTranslation(baseTitle, selectedBaseLanguage);
+  if (!translated) {
+    return;
+  }
+  cache.set(cacheKey, translated);
+  persistLettersTitleTranslationCache();
+  translationNode.textContent = `(${translated})`;
+};
+
 const getChatRequestTimeoutMs = () => {
   const isMobileViewport = window.matchMedia("(max-width: 960px)").matches;
   if (isMobileViewport) {
@@ -3791,6 +3949,7 @@ const loadMapsBundle = () =>
 
 const initializeCommonShell = () => {
   document.querySelectorAll(".reveal").forEach((el) => observeRevealElement(el));
+  void setupLettersTitleTranslation();
   setupSpeechCards();
   setupBackToTopButton();
 };
