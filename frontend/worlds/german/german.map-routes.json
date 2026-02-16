@@ -1,0 +1,12 @@
+﻿{
+  "worldKey": "german",
+  "displayName": "German",
+  "routes": {
+    "world": "world-german.html",
+    "letters": "letters-german.html",
+    "words": "words-german.html",
+    "phrases": "phrases-german.html",
+    "grammar": "grammar-german.html"
+  }
+}
+

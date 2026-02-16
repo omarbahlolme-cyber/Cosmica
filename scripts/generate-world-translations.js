@@ -87,7 +87,18 @@ const loadExisting = () => {
     return null;
   }
   try {
-    return JSON.parse(fs.readFileSync(outputPath, "utf8"));
+    const parsed = JSON.parse(fs.readFileSync(outputPath, "utf8"));
+    const existingWorldLanguage = String(parsed?.worldLanguage || "")
+      .trim()
+      .toLowerCase();
+    // Guardrail: never reuse a pack generated for a different world language.
+    if (existingWorldLanguage && existingWorldLanguage !== WORLD_LANG_KEY) {
+      console.warn(
+        `Existing pack worldLanguage="${existingWorldLanguage}" does not match target "${WORLD_LANG_KEY}". Rebuilding from scratch.`
+      );
+      return null;
+    }
+    return parsed;
   } catch (error) {
     console.warn("Failed to load existing world translation pack. Rebuilding.", error.message);
     return null;

@@ -1,0 +1,10 @@
+﻿{
+  "worldKey": "german",
+  "nativeName": "Deutsch",
+  "tts": {
+    "languageCode": "de-DE",
+    "voice": "de-DE-Neural2-F"
+  },
+  "translationPack": "frontend/worlds/german/translations.json"
+}
+

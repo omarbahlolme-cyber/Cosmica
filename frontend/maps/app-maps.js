@@ -2406,7 +2406,14 @@ const buildWorldGrammarMaps = () => {
 const getWorldWordList = (section) => {
   const fromWorld = WORLD_TRANSLATIONS?.words?.[section];
   if (fromWorld && typeof fromWorld === "object") {
-    return Object.keys(fromWorld);
+    const keys = Object.keys(fromWorld).filter((key) => String(key || "").trim());
+    if (keys.length) {
+      return keys;
+    }
+  }
+  // Strict rule for non-English worlds: never silently fall back to English cards.
+  if (isNonEnglishWorld) {
+    return [];
   }
   return WORD_SECTION_LISTS[section] || [];
 };
@@ -2414,7 +2421,14 @@ const getWorldWordList = (section) => {
 const getWorldPhraseList = (section) => {
   const fromWorld = WORLD_TRANSLATIONS?.phrases?.[section];
   if (fromWorld && typeof fromWorld === "object") {
-    return Object.keys(fromWorld);
+    const keys = Object.keys(fromWorld).filter((key) => String(key || "").trim());
+    if (keys.length) {
+      return keys;
+    }
+  }
+  // Strict rule for non-English worlds: never silently fall back to English cards.
+  if (isNonEnglishWorld) {
+    return [];
   }
   return PHRASE_SECTION_LISTS[section] || [];
 };
@@ -2639,6 +2653,16 @@ const loadTranslations = async () => {
         return;
       }
       const data = await response.json();
+      const packWorldLanguage = String(data?.worldLanguage || "")
+        .trim()
+        .toLowerCase();
+      if (packWorldLanguage && packWorldLanguage !== WORLD_KEY) {
+        console.warn(
+          `Ignoring world pack mismatch: expected "${WORLD_KEY}" but got "${packWorldLanguage}" from ${WORLD_TRANSLATION_FILE}`
+        );
+        WORLD_TRANSLATIONS = null;
+        return;
+      }
       if (data?.worldLanguage) {
         WORLD_TRANSLATIONS = data;
         if (needsGrammarDetails) {
