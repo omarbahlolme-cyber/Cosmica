@@ -41,7 +41,7 @@ const worldConfigs = [
       }
     },
     lettersTitle: 'Alfabeto Português (A-Z)',
-    lettersDescription: 'Tap a letter to hear clear Portuguese pronunciation. Additional forms include Á, Â, Ã, À, Ç, É, Ê, Í, Ó, Ô, Õ, Ú.',
+    lettersDescription: 'Tap a letter to hear clear Portuguese pronunciation. Additional forms include &Aacute;, &Acirc;, &Atilde;, &Agrave;, &Ccedil;, &Eacute;, &Ecirc;, &Iacute;, &Oacute;, &Ocirc;, &Otilde;, &Uacute;.',
     letters: [
       ...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''),
       'Á','Â','Ã','À','Ç','É','Ê','Í','Ó','Ô','Õ','Ú'
@@ -64,7 +64,7 @@ const worldConfigs = [
       }
     },
     lettersTitle: 'Nederlands Alfabet (A-Z)',
-    lettersDescription: 'Tap a letter to hear clear Dutch pronunciation. Additional forms include É, Ë, Ï, Ö, Ü.',
+    lettersDescription: 'Tap a letter to hear clear Dutch pronunciation. Additional forms include &Eacute;, &Euml;, &Iuml;, &Ouml;, &Uuml;.',
     letters: [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''), 'É','Ë','Ï','Ö','Ü']
   },
   {
@@ -84,7 +84,7 @@ const worldConfigs = [
       }
     },
     lettersTitle: 'Svenska alfabetet (A-Z)',
-    lettersDescription: 'Tap a letter to hear clear Swedish pronunciation. Additional Swedish letters: Å, Ä, Ö.',
+    lettersDescription: 'Tap a letter to hear clear Swedish pronunciation. Additional Swedish letters: &Aring;, &Auml;, &Ouml;.',
     letters: [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''), 'Å','Ä','Ö']
   },
   {
@@ -104,7 +104,7 @@ const worldConfigs = [
       }
     },
     lettersTitle: 'الحروف العربية',
-    lettersDescription: 'اضغط على الحرف لسماع نطقه بوضوح.',
+    lettersDescription: 'Tap a letter to hear clear Arabic pronunciation.',
     letters: ['ا','ب','ت','ث','ج','ح','خ','د','ذ','ر','ز','س','ش','ص','ض','ط','ظ','ع','غ','ف','ق','ك','ل','م','ن','ه','و','ي']
   },
   {
@@ -124,7 +124,7 @@ const worldConfigs = [
       }
     },
     lettersTitle: '汉字基础',
-    lettersDescription: '点击字符听标准普通话发音。',
+    lettersDescription: 'Tap a character to hear clear Mandarin pronunciation.',
     letters: ['一','二','三','人','口','日','月','山','水','火','木','土','金','女','子','学','生','好','中','国','语','文','天','地']
   },
   {
@@ -144,7 +144,7 @@ const worldConfigs = [
       }
     },
     lettersTitle: 'ひらがな (基本)',
-    lettersDescription: '文字をタップして日本語の発音を確認しましょう。',
+    lettersDescription: 'Tap a character to hear clear Japanese pronunciation.',
     letters: ['あ','い','う','え','お','か','き','く','け','こ','さ','し','す','せ','そ','た','ち','つ','て','と','な','に','ぬ','ね','の','は','ひ','ふ','へ','ほ','ま','み','む','め','も','や','ゆ','よ','ら','り','る','れ','ろ','わ','を','ん']
   },
   {
@@ -164,7 +164,7 @@ const worldConfigs = [
       }
     },
     lettersTitle: '한글 자모',
-    lettersDescription: '글자를 눌러 정확한 한국어 발음을 들어보세요.',
+    lettersDescription: 'Tap a character to hear clear Korean pronunciation.',
     letters: ['ㄱ','ㄴ','ㄷ','ㄹ','ㅁ','ㅂ','ㅅ','ㅇ','ㅈ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ','ㅏ','ㅑ','ㅓ','ㅕ','ㅗ','ㅛ','ㅜ','ㅠ','ㅡ','ㅣ']
   },
   {
@@ -184,7 +184,7 @@ const worldConfigs = [
       }
     },
     lettersTitle: 'देवनागरी अक्षर',
-    lettersDescription: 'अक्षर पर टैप करें और स्पष्ट हिंदी उच्चारण सुनें।',
+    lettersDescription: 'Tap a letter to hear clear Hindi pronunciation.',
     letters: ['अ','आ','इ','ई','उ','ऊ','ए','ऐ','ओ','औ','अं','अः','क','ख','ग','घ','ङ','च','छ','ज','झ','ञ','ट','ठ','ड','ढ','ण','त','थ','द','ध','न','प','फ','ब','भ','म','य','र','ल','व','श','ष','स','ह']
   }
 ];
@@ -236,7 +236,10 @@ for (const world of worldConfigs) {
 
   lettersPage = lettersPage
     .replace(/<h2>[\s\S]*?<\/h2>/, `<h2>${world.lettersTitle}</h2>`)
-    .replace(/<p>[\s\S]*?Additional German letters:[\s\S]*?<\/p>/, `<p>${world.lettersDescription}</p>`)
+    .replace(
+      /(<section class="section letters-grid-section reveal" id="letters">[\s\S]*?<div class="section-copy">\s*<h2>[\s\S]*?<\/h2>\s*)<p>[\s\S]*?<\/p>/,
+      `$1<p>${world.lettersDescription}</p>`
+    )
     .replace(/<div class="letters-grid">[\s\S]*?<\/div>\s*<\/section>/, `<div class="letters-grid">\n${buildLetterCards(world.letters)}\n        </div>\n      </section>`);
 
   writeIfChanged(path.join(FRONTEND, `world-${world.key}.html`), worldPage);
