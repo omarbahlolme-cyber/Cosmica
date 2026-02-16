@@ -13,11 +13,11 @@
 |   |-- english-words.html            # English words map
 |   |-- english-phrases.html          # English phrases map
 |   |-- english-grammar.html          # English grammar map
-|   |-- world-french.html             # French world entry page
-|   |-- letters-french.html           # French letters map
-|   |-- words-french.html             # French words map
-|   |-- phrases-french.html           # French phrases map
-|   |-- grammar-french.html           # French grammar map
+|   |-- world-<language>.html         # Non-English world entry pages (french, german, spanish, portuguese, dutch, swedish, arabic, chinese, japanese, korean, hindi)
+|   |-- letters-<language>.html       # Non-English letters maps
+|   |-- words-<language>.html         # Non-English words maps
+|   |-- phrases-<language>.html       # Non-English phrases maps
+|   |-- grammar-<language>.html       # Non-English grammar maps
 |   |-- privacy.html                  # Privacy policy
 |   |-- terms.html                    # Terms of use
 |   |-- license.html                  # License page
@@ -37,10 +37,20 @@
 |   |   |   |-- english.map-routes.json
 |   |   |   |-- english.world.meta.json
 |   |   |   `-- README.md
-|   |   `-- french/
-|   |       |-- french.map-routes.json
-|   |       |-- french.world.meta.json
-|   |       |-- translations.json     # French world pack (world-specific)
+|   |   |-- french/
+|   |   |-- german/
+|   |   |-- spanish/
+|   |   |-- portuguese/
+|   |   |-- dutch/
+|   |   |-- swedish/
+|   |   |-- arabic/
+|   |   |-- chinese/
+|   |   |-- japanese/
+|   |   |-- korean/
+|   |   `-- hindi/
+|   |       |-- <world>.map-routes.json
+|   |       |-- <world>.world.meta.json
+|   |       |-- translations.json     # World-specific pack (when generated)
 |   |       `-- README.md
 |   `-- naverc3bcca6a08043c716e45b0c95a298a16.html  # Naver ownership verification
 |-- docs/
@@ -50,15 +60,18 @@
 |   `-- SECURITY.md                   # Vulnerability reporting/security policy
 |-- scripts/
 |   |-- apply-html-baseline.js
+|   |-- apply-world-phrase-intents.js
 |   |-- apply-github-hardening.js
 |   |-- bloat-allowlist.json
 |   |-- check-accessibility-baseline.js
 |   |-- check-asset-version-consistency.js
 |   |-- check-bloat.js
 |   |-- check-external-integrity.js
+|   |-- check-literal-escapes.js
 |   |-- check-release.js
 |   |-- check-security-txt.js
 |   |-- check-seo-baseline.js
+|   |-- check-world-phrase-intents.js
 |   |-- create-backup.js
 |   |-- generate-translations.js
 |   |-- generate-world-translations.js
@@ -67,6 +80,7 @@
 |   |-- perf-check.js
 |   |-- perf-snapshot.js
 |   |-- rollback-info.js
+|   |-- scaffold-bulk-worlds.js
 |   |-- smoke.js
 |   `-- verify-backup.js
 |-- perf/

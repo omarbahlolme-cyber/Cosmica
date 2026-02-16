@@ -14,6 +14,14 @@ This folder keeps world-specific assets/data organized by language.
 2. `frontend/worlds/french/`
 3. `frontend/worlds/german/`
 4. `frontend/worlds/spanish/`
+5. `frontend/worlds/portuguese/`
+6. `frontend/worlds/dutch/`
+7. `frontend/worlds/swedish/`
+8. `frontend/worlds/arabic/`
+9. `frontend/worlds/chinese/`
+10. `frontend/worlds/japanese/`
+11. `frontend/worlds/korean/`
+12. `frontend/worlds/hindi/`
 
 ## Routing rule (important)
 
@@ -36,3 +44,8 @@ World folders are for world-specific data/config, not for changing public route 
 2. These intents live under `Introductions` (first 3) and `Questions` (last one).
 3. Store intent metadata in each world pack entry (`intent` + world-native phrase + world-native English source meaning).
 4. `npm run check:intents` must pass before deploying.
+
+## Grammar Availability Policy (Non-English worlds)
+
+1. Grammar map cards are currently marked `Coming soon` on non-English world pages.
+2. Keep grammar page routes present for compatibility, but do not expose grammar as active learning content until the world grammar is fully validated.
