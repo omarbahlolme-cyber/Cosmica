@@ -2371,6 +2371,16 @@ const createTranslationShell = () => {
   return shell;
 };
 
+const WORLD_CARD_ROMANIZATION_KEYS = new Set([
+  "arabic",
+  "chinese",
+  "japanese",
+  "korean",
+  "hindi",
+]);
+
+const shouldDisplayCardRomanization = () => WORLD_CARD_ROMANIZATION_KEYS.has(WORLD_KEY);
+
 const buildWorldGrammarMaps = () => {
   if (!WORLD_TRANSLATIONS?.grammar) {
     WORLD_GRAMMAR_TITLE_MAP = null;
@@ -2440,11 +2450,9 @@ const getWorldGrammarTitle = (section, title) => {
 };
 
 const getWorldGrammarSectionLabel = (section) => {
-  if (WORLD_KEY === "french") {
-    const worldLabel = WORLD_TRANSLATIONS?.grammar?.sectionLabels?.[section];
-    if (typeof worldLabel === "string" && worldLabel.trim()) {
-      return worldLabel.trim();
-    }
+  const worldLabel = WORLD_TRANSLATIONS?.grammar?.sectionLabels?.[section];
+  if (typeof worldLabel === "string" && worldLabel.trim()) {
+    return worldLabel.trim();
   }
   return section;
 };
@@ -2466,7 +2474,39 @@ const getGrammarCardsForSection = (section) => {
   if (Array.isArray(worldCards) && worldCards.length) {
     return worldCards;
   }
+  if (isNonEnglishWorld) {
+    return [];
+  }
   return GRAMMAR_SECTION_LISTS[section] || [];
+};
+
+const resolveWorldGrammarSourceTitle = (section, title) => {
+  const explicit = String(title || "").trim();
+  if (!explicit) {
+    return "";
+  }
+  const titleEntries = WORLD_TRANSLATIONS?.grammar?.titles?.[section];
+  if (!titleEntries || typeof titleEntries !== "object") {
+    return explicit;
+  }
+  const normalizedExplicit = normalizeWordLookupKey(explicit);
+  for (const [translatedTitle, payload] of Object.entries(titleEntries)) {
+    const source = String(payload?.source || "").trim();
+    if (!source) {
+      continue;
+    }
+    const translated = String(translatedTitle || "").trim();
+    if (!translated) {
+      continue;
+    }
+    if (
+      normalizeWordLookupKey(translated) === normalizedExplicit ||
+      normalizeWordLookupKey(source) === normalizedExplicit
+    ) {
+      return source;
+    }
+  }
+  return explicit;
 };
 
 const getGrammarCardData = (section, index) => {
@@ -2478,7 +2518,18 @@ const getGrammarCardData = (section, index) => {
   if (!Number.isFinite(numericIndex) || numericIndex < 0) {
     return null;
   }
-  return cards[numericIndex] || null;
+  const card = cards[numericIndex];
+  if (!card || typeof card !== "object") {
+    return null;
+  }
+  const resolvedSourceTitle = resolveWorldGrammarSourceTitle(
+    section,
+    String(card.sourceTitle || card.title || "")
+  );
+  return {
+    ...card,
+    sourceTitle: resolvedSourceTitle || String(card.sourceTitle || card.title || ""),
+  };
 };
 
 const WORD_TRANSLATIONS = Object.fromEntries(
@@ -3115,21 +3166,48 @@ const renderGrammarSections = () => {
     section.dataset.section = sectionName;
     const title = document.createElement("div");
     title.className = "section-title";
-    title.innerHTML = `<h2>${getWorldGrammarSectionLabel(sectionName)}</h2>`;
+    const displaySectionName = getWorldGrammarSectionLabel(sectionName) || sectionName;
+    const titleHeading = document.createElement("h2");
+    titleHeading.dataset.sourceTitle = sectionName;
+    titleHeading.dataset.baseTitle = sectionName;
+    const titleMain = document.createElement("span");
+    titleMain.className = "map-section-title-main";
+    titleMain.textContent = displaySectionName;
+    titleHeading.appendChild(titleMain);
+    title.appendChild(titleHeading);
     const grid = document.createElement("div");
     grid.className = "words-grid";
     concepts.forEach((concept, conceptIndex) => {
       const card = document.createElement("div");
       card.className = "card grammar-card";
+      card.tabIndex = 0;
+      card.setAttribute("role", "button");
       card.dataset.concept = concept.title;
       card.dataset.section = sectionName;
       card.dataset.index = String(conceptIndex);
       const hasWorldCards =
         !!WORLD_TRANSLATIONS?.grammar?.cards?.[sectionName]?.length;
+      const sourceTitle = resolveWorldGrammarSourceTitle(
+        sectionName,
+        String(concept?.sourceTitle || concept?.title || "")
+      );
       const displayTitle = hasWorldCards
         ? concept.title
         : getWorldGrammarTitle(sectionName, concept.title);
-      card.innerHTML = `<div class="grammar-text">${displayTitle}</div>`;
+      card.dataset.sourceTitle = sourceTitle || displayTitle;
+      card.setAttribute("aria-label", displayTitle);
+      const text = document.createElement("div");
+      text.className = "grammar-text";
+      const textMain = document.createElement("span");
+      textMain.className = "grammar-title-main";
+      textMain.textContent = displayTitle;
+      const textTranslation = document.createElement("span");
+      textTranslation.className = "grammar-title-translation";
+      textTranslation.hidden = true;
+      text.appendChild(textMain);
+      text.appendChild(document.createTextNode(" "));
+      text.appendChild(textTranslation);
+      card.appendChild(text);
       grid.appendChild(card);
     });
     section.appendChild(title);
@@ -6247,7 +6325,11 @@ const buildGrammarMistakes = (card) => {
 };
 
 const getGrammarUiLabels = () => {
-  if (WORLD_KEY === "french") {
+  const baseLanguage = String(localStorage.getItem("cosmicaBaseLanguage") || "")
+    .trim()
+    .toLowerCase();
+  const preferredLanguage = baseLanguage || WORLD_KEY;
+  if (preferredLanguage === "french") {
     return {
       grammar: "Grammaire",
       chooseSection: "Choisissez une section",
@@ -6320,10 +6402,19 @@ const renderGrammarModal = (section, index) => {
     return;
   }
 
-  const shouldTranslateExplanation = false;
-  const grammarTranslationLanguage = "";
-  const explanation = buildGrammarExplanation(cardData);
-  const explanationTranslation = "";
+  const grammarTranslationLanguage = String(
+    localStorage.getItem("cosmicaBaseLanguage") || ""
+  )
+    .trim()
+    .toLowerCase();
+  const shouldTranslateExplanation =
+    !!grammarTranslationLanguage &&
+    !isWorldNativeBaseLanguage(grammarTranslationLanguage);
+  const explanation =
+    String(cardData?.explanation || "").trim() || buildGrammarExplanation(cardData);
+  const explanationTranslation = shouldTranslateExplanation
+    ? resolveGrammarExplanation(section, explanation, grammarTranslationLanguage)
+    : "";
   const mistakes = buildGrammarMistakes(cardData);
   const howItWorks = buildGrammarHowItWorks(cardData);
   const examples = [cardData.example, buildAltGrammarExample(cardData, index)];
@@ -6585,6 +6676,7 @@ const unlockModalScroll = () => {
   document.body.style.width = "";
   window.scrollTo(0, modalScrollLockY || 0);
 };
+let grammarModalListenersBound = false;
 const setupGrammarModal = () => {
   const hasGrammarPage = document.body.classList.contains("grammar-page");
   const hasGrammarCards = !!document.querySelector(".grammar-card");
@@ -6603,6 +6695,10 @@ const setupGrammarModal = () => {
     const index = Number(overlay.dataset.index || "0");
     renderGrammarModal(section, index);
   };
+  if (grammarModalListenersBound) {
+    return;
+  }
+  grammarModalListenersBound = true;
 
   const closeModal = () => {
     overlay.classList.remove("is-visible");
@@ -6645,6 +6741,19 @@ const setupGrammarModal = () => {
     }
     event.preventDefault();
     markTouchActivation(card);
+    const section = card.dataset.section;
+    const index = Number(card.dataset.index);
+    openGrammarModal(section, index);
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") {
+      return;
+    }
+    const card = event.target?.closest?.(".grammar-card");
+    if (!card) {
+      return;
+    }
+    event.preventDefault();
     const section = card.dataset.section;
     const index = Number(card.dataset.index);
     openGrammarModal(section, index);
@@ -6817,8 +6926,25 @@ const resolveEntryByNormalizedKey = (entries, rawValue) => {
   return null;
 };
 
+const resolveWorldWordEntry = (sectionKey, word) => {
+  const worldSection = WORLD_TRANSLATIONS?.words?.[sectionKey] || {};
+  return (
+    worldSection?.[String(word || "").toLowerCase()] ||
+    resolveEntryByNormalizedKey(worldSection, word)
+  );
+};
+
 const isWorldNativeBaseLanguage = (baseLanguage) =>
   String(baseLanguage || "").trim().toLowerCase() === WORLD_KEY;
+
+const resolveWordRomanization = (section, worldWord) => {
+  if (!shouldDisplayCardRomanization()) {
+    return "";
+  }
+  const sectionKey = section || WORD_SECTION_ORDER[0];
+  const worldEntry = resolveWorldWordEntry(sectionKey, worldWord);
+  return String(worldEntry?.romanization || "").trim();
+};
 
 const resolveWordTranslation = (section, englishWord, baseLanguage) => {
   if (!baseLanguage || !translationPayloadReady) {
@@ -6835,8 +6961,7 @@ const resolveWordTranslation = (section, englishWord, baseLanguage) => {
   let translation = "";
 
   const worldSection = WORLD_TRANSLATIONS?.words?.[sectionKey] || {};
-  const worldEntry =
-    worldSection?.[wordKey] || resolveEntryByNormalizedKey(worldSection, englishWord);
+  const worldEntry = resolveWorldWordEntry(sectionKey, englishWord);
   const worldAliasEntry = aliasSource
     ? worldSection?.[aliasSource.toLowerCase()] ||
       resolveEntryByNormalizedKey(worldSection, aliasSource)
@@ -6897,6 +7022,17 @@ const applyWordTranslations = () => {
       const audioEl = card.querySelector(".word-audio");
       card.insertBefore(translationEl, audioEl || null);
     }
+    let romanizationEl = card.querySelector(".word-romanization");
+    if (!romanizationEl) {
+      romanizationEl = document.createElement("div");
+      romanizationEl.className = "word-romanization";
+      romanizationEl.setAttribute("lang", "en");
+      romanizationEl.setAttribute("dir", "ltr");
+      card.insertBefore(romanizationEl, translationEl);
+    }
+    const romanization = resolveWordRomanization(section, word);
+    romanizationEl.textContent = romanization;
+    romanizationEl.hidden = !romanization;
     translationEl.textContent = resolveWordTranslation(section, word, baseLanguage);
   });
 };
@@ -7046,7 +7182,7 @@ const requestRuntimeSectionTitleTranslation = async (mapType, sectionTitleText, 
   const langKey = String(baseLanguage || "").trim().toLowerCase();
   if (
     !mapKey ||
-    !["words", "phrases"].includes(mapKey) ||
+    !["words", "phrases", "grammar"].includes(mapKey) ||
     !sectionTitle ||
     !langKey
   ) {
@@ -7138,7 +7274,7 @@ const requestRuntimeSectionTitleTranslation = async (mapType, sectionTitleText, 
 
 const applySectionTitleTranslations = (mapType) => {
   const mapKey = String(mapType || "").trim().toLowerCase();
-  if (!["words", "phrases"].includes(mapKey)) {
+  if (!["words", "phrases", "grammar"].includes(mapKey)) {
     return;
   }
 
@@ -7146,7 +7282,11 @@ const applySectionTitleTranslations = (mapType) => {
     .trim()
     .toLowerCase();
   const sectionSelector =
-    mapKey === "words" ? ".words-group[data-section]" : ".phrases-group[data-section]";
+    mapKey === "words"
+      ? ".words-group[data-section]"
+      : mapKey === "phrases"
+        ? ".phrases-group[data-section]"
+        : ".grammar-group[data-section]";
   document.querySelectorAll(sectionSelector).forEach((sectionEl) => {
     const heading = sectionEl.querySelector(".section-title h2");
     if (!heading) {
@@ -7236,12 +7376,16 @@ const setMapSectionTitleMainText = (heading, text) => {
 
 const applyWorldSectionTitleLabels = (mapType) => {
   const mapKey = String(mapType || "").trim().toLowerCase();
-  if (!["words", "phrases"].includes(mapKey) || !isNonEnglishWorld) {
+  if (!["words", "phrases", "grammar"].includes(mapKey) || !isNonEnglishWorld) {
     return;
   }
 
   const sectionSelector =
-    mapKey === "words" ? ".words-group[data-section]" : ".phrases-group[data-section]";
+    mapKey === "words"
+      ? ".words-group[data-section]"
+      : mapKey === "phrases"
+        ? ".phrases-group[data-section]"
+        : ".grammar-group[data-section]";
   document.querySelectorAll(sectionSelector).forEach((sectionEl) => {
     const heading = sectionEl.querySelector(".section-title h2");
     if (!heading) {
@@ -7279,6 +7423,82 @@ const applyWorldSectionTitleLabels = (mapType) => {
       }
       setMapSectionTitleMainText(heading, translated);
     });
+  });
+};
+
+const applyGrammarCardTitleTranslations = () => {
+  if (!isGrammarPage) {
+    return;
+  }
+  const baseLanguage = String(localStorage.getItem("cosmicaBaseLanguage") || "")
+    .trim()
+    .toLowerCase();
+  document.querySelectorAll(".grammar-card").forEach((card) => {
+    const titleNode = card.querySelector(".grammar-text");
+    if (!titleNode) {
+      return;
+    }
+    const sourceTitle = String(
+      card.dataset.sourceTitle ||
+        card.dataset.concept ||
+        titleNode.querySelector(".grammar-title-main")?.textContent ||
+        titleNode.textContent ||
+        ""
+    ).trim();
+    if (!sourceTitle) {
+      return;
+    }
+    let translationNode = titleNode.querySelector(".grammar-title-translation");
+    if (!translationNode) {
+      translationNode = document.createElement("span");
+      translationNode.className = "grammar-title-translation";
+      translationNode.hidden = true;
+      titleNode.appendChild(document.createTextNode(" "));
+      titleNode.appendChild(translationNode);
+    }
+
+    if (!baseLanguage || isWorldNativeBaseLanguage(baseLanguage)) {
+      translationNode.textContent = "";
+      translationNode.hidden = true;
+      return;
+    }
+
+    const mainText = String(
+      titleNode.querySelector(".grammar-title-main")?.textContent || ""
+    ).trim();
+    const hideIfSameAsMain = (value) =>
+      normalizeWordLookupKey(value) === normalizeWordLookupKey(mainText);
+
+    const cached = getRuntimeSectionTitleTranslation("grammar", sourceTitle, baseLanguage);
+    if (cached) {
+      translationNode.textContent = `(${cached})`;
+      translationNode.hidden = hideIfSameAsMain(cached);
+      return;
+    }
+
+    if (baseLanguage === "english") {
+      translationNode.textContent = `(${sourceTitle})`;
+      translationNode.hidden = hideIfSameAsMain(sourceTitle);
+      return;
+    }
+
+    const requestKey = `grammar-card|${sourceTitle}|${baseLanguage}|${Date.now()}`;
+    card.dataset.cardTitleTranslationRequest = requestKey;
+    translationNode.hidden = true;
+    requestRuntimeSectionTitleTranslation("grammar", sourceTitle, baseLanguage).then(
+      (translated) => {
+        if (card.dataset.cardTitleTranslationRequest !== requestKey) {
+          return;
+        }
+        if (!translated) {
+          translationNode.textContent = "";
+          translationNode.hidden = true;
+          return;
+        }
+        translationNode.textContent = `(${translated})`;
+        translationNode.hidden = hideIfSameAsMain(translated);
+      }
+    );
   });
 };
 
@@ -7380,6 +7600,15 @@ const resolveWorldPhraseEntry = (sectionKey, phrase) => {
   );
 };
 
+const resolvePhraseRomanization = (section, worldPhrase) => {
+  if (!shouldDisplayCardRomanization()) {
+    return "";
+  }
+  const sectionKey = section || PHRASE_SECTION_ORDER[0];
+  const worldEntry = resolveWorldPhraseEntry(sectionKey, worldPhrase);
+  return String(worldEntry?.romanization || "").trim();
+};
+
 const resolvePhraseTranslation = (section, englishPhrase, baseLanguage) => {
   if (!baseLanguage || !translationPayloadReady) {
     return "";
@@ -7436,6 +7665,17 @@ const applyPhraseTranslations = () => {
       const audioEl = card.querySelector(".word-audio");
       card.insertBefore(translationEl, audioEl || null);
     }
+    let romanizationEl = card.querySelector(".phrase-romanization");
+    if (!romanizationEl) {
+      romanizationEl = document.createElement("div");
+      romanizationEl.className = "phrase-romanization";
+      romanizationEl.setAttribute("lang", "en");
+      romanizationEl.setAttribute("dir", "ltr");
+      card.insertBefore(romanizationEl, translationEl);
+    }
+    const romanization = resolvePhraseRomanization(section, phrase);
+    romanizationEl.textContent = romanization;
+    romanizationEl.hidden = !romanization;
     const resolved = resolvePhraseTranslation(section, phrase, baseLanguage);
     translationEl.textContent = resolved;
     if (
@@ -7598,6 +7838,9 @@ refreshMapsForBaseLanguage = () => {
       applySectionTitleTranslations("phrases");
     }
     if (isGrammarPage) {
+      applyWorldSectionTitleLabels("grammar");
+      applySectionTitleTranslations("grammar");
+      applyGrammarCardTitleTranslations();
       prewarmGrammarExplanationTranslations();
     }
     const overlay = ensureGrammarOverlay();
@@ -7693,6 +7936,11 @@ if (!shouldRenderLoadingSkeleton && isPhrasesPage) {
   applyWorldSectionTitleLabels("phrases");
   applySectionTitleTranslations("phrases");
 }
+if (!shouldRenderLoadingSkeleton && isGrammarPage) {
+  applyWorldSectionTitleLabels("grammar");
+  applySectionTitleTranslations("grammar");
+  applyGrammarCardTitleTranslations();
+}
 if (isWordsPage) {
   updateWordsTopState();
   window.addEventListener(
@@ -7768,6 +8016,9 @@ if (needsMapTranslations) {
           applySectionTitleTranslations("phrases");
         }
         if (isGrammarPage) {
+          applyWorldSectionTitleLabels("grammar");
+          applySectionTitleTranslations("grammar");
+          applyGrammarCardTitleTranslations();
           prewarmGrammarExplanationTranslations();
           const overlay = ensureGrammarOverlay();
           if (overlay && typeof overlay.__refresh === "function") {

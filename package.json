@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "generate:translations": "node scripts/generate-translations.js",
+    "generate:romanization": "node scripts/generate-world-romanization.js",
     "html:baseline": "node scripts/apply-html-baseline.js",
     "smoke": "node scripts/smoke.js",
     "indexing:check": "node scripts/indexing-followup.js",

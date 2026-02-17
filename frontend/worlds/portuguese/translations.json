@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-16T19:21:42.448Z",
+  "generatedAt": "2026-02-17T23:32:00.396Z",
   "worldLanguage": "portuguese",
   "baseLanguages": [
     "albanian",
@@ -6410,23 +6410,38 @@
       },
       "estou aprendendo português": {
         "source": "i am learning portuguese",
-        "intent": "learn_world_language",
         "translations": {
           "english": "i am learning portuguese"
         }
       },
       "eu falo português": {
         "source": "i speak portuguese",
-        "intent": "speak_world_language",
         "translations": {
           "english": "i speak portuguese"
         }
       },
       "eu não falo português": {
         "source": "i do not speak portuguese",
-        "intent": "not_speak_world_language",
         "translations": {
           "english": "i do not speak portuguese"
+        }
+      },
+      "eu estou aprendendo inglês": {
+        "source": "i am learning english",
+        "translations": {
+          "english": "i am learning english"
+        }
+      },
+      "eu falo inglês": {
+        "source": "i speak english",
+        "translations": {
+          "english": "i speak english"
+        }
+      },
+      "eu não falo inglês": {
+        "source": "i do not speak english",
+        "translations": {
+          "english": "i do not speak english"
         }
       }
     },
@@ -6609,9 +6624,14 @@
       },
       "você fala português?": {
         "source": "do you speak portuguese",
-        "intent": "ask_speak_world_language",
         "translations": {
           "english": "do you speak portuguese"
+        }
+      },
+      "você fala inglês": {
+        "source": "do you speak english",
+        "translations": {
+          "english": "do you speak english"
         }
       }
     },

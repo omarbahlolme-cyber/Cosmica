@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-14T14:24:40.270Z",
+  "generatedAt": "2026-02-17T23:20:34.247Z",
   "worldLanguage": "french",
   "baseLanguages": [
     "albanian",
@@ -6497,6 +6497,24 @@
         "translations": {
           "english": "i do not speak french"
         }
+      },
+      "j'apprends l'anglais": {
+        "source": "i am learning english",
+        "translations": {
+          "english": "i am learning english"
+        }
+      },
+      "je parle anglais": {
+        "source": "i speak english",
+        "translations": {
+          "english": "i speak english"
+        }
+      },
+      "je ne parle pas anglais": {
+        "source": "i do not speak english",
+        "translations": {
+          "english": "i do not speak english"
+        }
       }
     },
     "Conversation": {
@@ -9980,480 +9998,2442 @@
     "cards": {
       "Sentence Structure": [
         {
-          "title": "ordre canonique",
+          "title": "ordre des mots de base",
+          "sourceTitle": "basic word order",
           "points": [
-            "sujet avant verbe",
-            "compléments après verbe"
+            "ordre des mots de base pour les déclarations",
+            "sujet avant le verbe",
+            "objet après le verbe"
           ],
-          "example": "Marie lit un roman le soir.",
-          "template": "sujet + verbe + complément",
+          "sourcePoints": [
+            "basic word order for statements",
+            "subject before verb",
+            "object after verb"
+          ],
+          "example": "Elle lit un livre.",
+          "sourceExample": "She reads a book.",
           "mistakes": [
             {
-              "wrong": "Lit Marie un roman le soir.",
-              "fix": "Marie lit un roman le soir."
+              "wrong": "Lit-elle un livre.",
+              "fix": "Elle lit un livre.",
+              "sourceWrong": "Reads she a book.",
+              "sourceFix": "She reads a book."
             }
           ]
         },
         {
-          "title": "mise en relief c'est ... qui/que",
+          "title": "parties de la phrase",
+          "sourceTitle": "sentence parts",
           "points": [
-            "focaliser un élément",
-            "garder qui/que correct"
+            "emplacement du sujet principal",
+            "emplacement du verbe principal",
+            "emplacement de l'objet et du complément"
           ],
-          "example": "C'est Paul qui prépare le dîner.",
-          "template": "c'est + focus + qui/que + proposition",
+          "sourcePoints": [
+            "core subject slot",
+            "core verb slot",
+            "object and complement slot"
+          ],
+          "example": "Ils l'ont nommée capitaine.",
+          "sourceExample": "They named her captain.",
           "mistakes": [
             {
-              "wrong": "C'est Paul que prépare le dîner.",
-              "fix": "C'est Paul qui prépare le dîner."
+              "wrong": "Est pilote mon frère.",
+              "fix": "Mon frère est pilote.",
+              "sourceWrong": "Is a pilot my brother.",
+              "sourceFix": "My brother is a pilot."
+            }
+          ]
+        },
+        {
+          "title": "ajouter des détails",
+          "sourceTitle": "adding details",
+          "points": [
+            "temps à la fin de la phrase",
+            "lieu après le verbe",
+            "phrases supplémentaires après les objets"
+          ],
+          "sourcePoints": [
+            "time at sentence end",
+            "place after verb",
+            "extra phrases after objects"
+          ],
+          "example": "Elle l'a rencontré à midi à la gare.",
+          "sourceExample": "She met him at noon at the station.",
+          "mistakes": [
+            {
+              "wrong": "Elle l'a rencontré à la station de midi.",
+              "fix": "Elle l'a rencontré à midi à la gare.",
+              "sourceWrong": "She met him noon station.",
+              "sourceFix": "She met him at noon at the station."
+            }
+          ]
+        },
+        {
+          "title": "lier des propositions",
+          "sourceTitle": "linking clauses",
+          "points": [
+            "idée de la proposition principale",
+            "ajout de la clause de raison",
+            "ajout de la clause de temps"
+          ],
+          "sourcePoints": [
+            "main clause idea",
+            "reason clause add-on",
+            "time clause add-on"
+          ],
+          "example": "Je suis resté à la maison parce qu'il a plu.",
+          "sourceExample": "I stayed home because it rained.",
+          "mistakes": [
+            {
+              "wrong": "Je suis resté à la maison parce que.",
+              "fix": "Je suis resté à la maison parce qu'il a plu.",
+              "sourceWrong": "I stayed home because.",
+              "sourceFix": "I stayed home because it rained."
+            }
+          ]
+        },
+        {
+          "title": "variété des phrases",
+          "sourceTitle": "sentence variety",
+          "points": [
+            "phrases courtes pour l'impact",
+            "phrases longues pour le détail",
+            "éviter les phrases à rallonge"
+          ],
+          "sourcePoints": [
+            "short sentences for impact",
+            "long sentences for detail",
+            "avoid run-on sentences"
+          ],
+          "example": "Nous avons fini tôt. Nous sommes rentrés chez nous après le cours parce que nous étions fatigués.",
+          "sourceExample": "We finished early. We went home after class because we were tired.",
+          "mistakes": [
+            {
+              "wrong": "Nous avons fini tôt donc.",
+              "fix": "Nous avons fini tôt, donc nous sommes partis.",
+              "sourceWrong": "We finished early so.",
+              "sourceFix": "We finished early, so we left."
             }
           ]
         }
       ],
       "Verbs": [
         {
-          "title": "verbes irréguliers fréquents",
+          "title": "verbes d'action",
+          "sourceTitle": "action verbs",
           "points": [
-            "être, avoir, aller, faire",
-            "accord sujet-verbe"
+            "verbes d'action pour le mouvement",
+            "verbes d'action pour les tâches",
+            "verbes d'action pour le changement"
           ],
-          "example": "Ils vont au marché.",
-          "template": "sujet + verbe irrégulier + complément",
+          "sourcePoints": [
+            "action verbs for movement",
+            "action verbs for tasks",
+            "action verbs for change"
+          ],
+          "example": "Ils portent les boîtes.",
+          "sourceExample": "They carry the boxes.",
           "mistakes": [
             {
-              "wrong": "Ils va au marché.",
-              "fix": "Ils vont au marché."
+              "wrong": "Elle court tous les matins.",
+              "fix": "Elle court tous les matins.",
+              "sourceWrong": "She run every morning.",
+              "sourceFix": "She runs every morning."
             }
           ]
         },
         {
-          "title": "verbes pronominaux",
+          "title": "verbes d'état",
+          "sourceTitle": "state verbs",
           "points": [
-            "pronom réfléchi avant verbe",
-            "être aux temps composés"
+            "verbes d'état pour les sentiments",
+            "verbes d'état pour les pensées",
+            "verbes d'état pour la possession"
           ],
-          "example": "Elle se lève tôt.",
-          "template": "sujet + pronom réfléchi + verbe",
+          "sourcePoints": [
+            "state verbs for feelings",
+            "state verbs for thoughts",
+            "state verbs for possession"
+          ],
+          "example": "Elle se sent fatiguée.",
+          "sourceExample": "She feels tired.",
           "mistakes": [
             {
-              "wrong": "Elle lève se tôt.",
-              "fix": "Elle se lève tôt."
+              "wrong": "Il sait la réponse.",
+              "fix": "Il connaît la réponse.",
+              "sourceWrong": "He is knowing the answer.",
+              "sourceFix": "He knows the answer."
+            }
+          ]
+        },
+        {
+          "title": "verbes de liaison",
+          "sourceTitle": "linking verbs",
+          "points": [
+            "être en tant que verbe de liaison",
+            "liens de sentir et sembler",
+            "liens de devenir et rester"
+          ],
+          "sourcePoints": [
+            "be as linking verb",
+            "feel and seem links",
+            "become and remain links"
+          ],
+          "example": "La pièce semble calme.",
+          "sourceExample": "The room feels quiet.",
+          "mistakes": [
+            {
+              "wrong": "La soupe est bonne.",
+              "fix": "La soupe a bon goût.",
+              "sourceWrong": "The soup tastes is good.",
+              "sourceFix": "The soup tastes good."
+            }
+          ]
+        },
+        {
+          "title": "schémas verbaux",
+          "sourceTitle": "verb patterns",
+          "points": [
+            "modèle verbe plus objet",
+            "modèle verbe plus adjectif",
+            "modèle verbe plus préposition"
+          ],
+          "sourcePoints": [
+            "verb plus object pattern",
+            "verb plus adjective pattern",
+            "verb plus preposition pattern"
+          ],
+          "example": "Il a placé le livre sur la table.",
+          "sourceExample": "He placed the book on the table.",
+          "mistakes": [
+            {
+              "wrong": "Il a posé le livre.",
+              "fix": "Il a placé le livre sur la table.",
+              "sourceWrong": "He placed the book on.",
+              "sourceFix": "He placed the book on the table."
+            }
+          ]
+        },
+        {
+          "title": "combinaisons de verbes",
+          "sourceTitle": "verb combinations",
+          "points": [
+            "verbe plus infinitif",
+            "verbe plus gérondif",
+            "verbe plus proposition que"
+          ],
+          "sourcePoints": [
+            "verb plus infinitive",
+            "verb plus gerund",
+            "verb plus that clause"
+          ],
+          "example": "Nous avons décidé de rester.",
+          "sourceExample": "We decided to stay.",
+          "mistakes": [
+            {
+              "wrong": "Elle aime nager.",
+              "fix": "Elle aime nager.",
+              "sourceWrong": "She enjoys to swim.",
+              "sourceFix": "She enjoys swimming."
+            }
+          ]
+        },
+        {
+          "title": "verbes à particule",
+          "sourceTitle": "phrasal verbs",
+          "points": [
+            "verbe plus particule",
+            "verbes à particule séparables",
+            "changement de sens avec des particules"
+          ],
+          "sourcePoints": [
+            "verb plus particle",
+            "separable phrasal verbs",
+            "meaning shift with particles"
+          ],
+          "example": "Elle a éteint la lumière.",
+          "sourceExample": "She turned off the light.",
+          "mistakes": [
+            {
+              "wrong": "Il a allumé et éteint la lumière.",
+              "fix": "Il a éteint la lumière.",
+              "sourceWrong": "He turned the light on off.",
+              "sourceFix": "He turned off the light."
             }
           ]
         }
       ],
       "Tenses & Aspect": [
         {
-          "title": "passé composé",
+          "title": "présent simple",
+          "sourceTitle": "present simple",
           "points": [
-            "avoir/être + participe passé",
-            "accord avec être"
+            "présent simple pour les habitudes",
+            "présent simple pour les faits",
+            "présent simple pour les horaires"
           ],
-          "example": "Nous avons terminé le chapitre.",
-          "template": "sujet + auxiliaire + participe passé",
+          "sourcePoints": [
+            "present simple for habits",
+            "present simple for facts",
+            "present simple for schedules"
+          ],
+          "example": "Elle travaille tous les jours.",
+          "sourceExample": "She works every day.",
           "mistakes": [
             {
-              "wrong": "Nous avons terminer le chapitre.",
-              "fix": "Nous avons terminé le chapitre."
+              "wrong": "Elle travaille tous les jours.",
+              "fix": "Elle travaille tous les jours.",
+              "sourceWrong": "She is work every day.",
+              "sourceFix": "She works every day."
             }
           ]
         },
         {
-          "title": "imparfait vs passé composé",
+          "title": "présent continu",
+          "sourceTitle": "present continuous",
           "points": [
-            "imparfait = contexte",
-            "passé composé = action ponctuelle"
+            "présent continu pour maintenant",
+            "présent continu pour les actions temporaires",
+            "présent continu pour les projets proches"
           ],
-          "example": "Il pleuvait quand je suis sorti.",
-          "template": "imparfait + quand + passé composé",
+          "sourcePoints": [
+            "present continuous for now",
+            "present continuous for temporary actions",
+            "present continuous for near plans"
+          ],
+          "example": "J'attends dehors.",
+          "sourceExample": "I am waiting outside.",
           "mistakes": [
             {
-              "wrong": "Il a plu quand je sortais.",
-              "fix": "Il pleuvait quand je suis sorti."
+              "wrong": "Elle travaille maintenant.",
+              "fix": "Elle travaille maintenant.",
+              "sourceWrong": "She works now.",
+              "sourceFix": "She is working now."
+            }
+          ]
+        },
+        {
+          "title": "passé simple",
+          "sourceTitle": "past simple",
+          "points": [
+            "passé simple pour les actions terminées",
+            "passé simple pour les mots de temps passés",
+            "passé simple pour les séquences"
+          ],
+          "sourcePoints": [
+            "past simple for finished actions",
+            "past simple for past time words",
+            "past simple for sequences"
+          ],
+          "example": "Ils ont visité Paris.",
+          "sourceExample": "They visited Paris.",
+          "mistakes": [
+            {
+              "wrong": "Elle est allée hier.",
+              "fix": "Elle est allée hier.",
+              "sourceWrong": "She go yesterday.",
+              "sourceFix": "She went yesterday."
+            }
+          ]
+        },
+        {
+          "title": "passé continu",
+          "sourceTitle": "past continuous",
+          "points": [
+            "passé continu pour le contexte",
+            "passé continu avec interruption",
+            "passé continu pour deux actions"
+          ],
+          "sourcePoints": [
+            "past continuous for background",
+            "past continuous with interruption",
+            "past continuous for two actions"
+          ],
+          "example": "Je cuisinais quand il a appelé.",
+          "sourceExample": "I was cooking when he called.",
+          "mistakes": [
+            {
+              "wrong": "Elle cuisinait quand j'ai appelé.",
+              "fix": "Elle cuisinait quand j'ai appelé.",
+              "sourceWrong": "She was cook when I called.",
+              "sourceFix": "She was cooking when I called."
+            }
+          ]
+        },
+        {
+          "title": "passé composé",
+          "sourceTitle": "present perfect",
+          "points": [
+            "présent parfait pour l'expérience",
+            "présent parfait pour les résultats récents",
+            "présent parfait avec depuis et pendant"
+          ],
+          "sourcePoints": [
+            "present perfect for experience",
+            "present perfect for recent results",
+            "present perfect with since and for"
+          ],
+          "example": "Il vit ici depuis des années.",
+          "sourceExample": "He has lived here for years.",
+          "mistakes": [
+            {
+              "wrong": "Elle a déjà fini.",
+              "fix": "Elle a déjà fini.",
+              "sourceWrong": "She finished already.",
+              "sourceFix": "She has finished already."
+            }
+          ]
+        },
+        {
+          "title": "plus-que-parfait",
+          "sourceTitle": "past perfect",
+          "points": [
+            "plus-que-parfait pour un passé antérieur",
+            "plus-que-parfait pour cause dans le passé",
+            "plus-que-parfait avec avant"
+          ],
+          "sourcePoints": [
+            "past perfect for earlier past",
+            "past perfect for cause in past",
+            "past perfect with before"
+          ],
+          "example": "Elle était partie avant que j'arrive.",
+          "sourceExample": "She had left before I arrived.",
+          "mistakes": [
+            {
+              "wrong": "Il est parti quand je suis arrivé.",
+              "fix": "Il était parti quand je suis arrivé.",
+              "sourceWrong": "He left when I arrive.",
+              "sourceFix": "He had left when I arrived."
+            }
+          ]
+        },
+        {
+          "title": "formes futures",
+          "sourceTitle": "future forms",
+          "points": [
+            "will pour les décisions",
+            "aller pour les projets",
+            "présent continu pour les projets"
+          ],
+          "sourcePoints": [
+            "will for decisions",
+            "going to for plans",
+            "present continuous for plans"
+          ],
+          "example": "Nous nous rencontrerons demain.",
+          "sourceExample": "We will meet tomorrow.",
+          "mistakes": [
+            {
+              "wrong": "Elle va appeler.",
+              "fix": "Elle va appeler.",
+              "sourceWrong": "She will going to call.",
+              "sourceFix": "She is going to call."
+            }
+          ]
+        },
+        {
+          "title": "futur continu",
+          "sourceTitle": "future continuous",
+          "points": [
+            "futur continu pour le progrès",
+            "futur continu pour le contexte",
+            "futur continu pour une demande polie"
+          ],
+          "sourcePoints": [
+            "future continuous for progress",
+            "future continuous for background",
+            "future continuous for polite inquiry"
+          ],
+          "example": "Je travaillerai à six heures.",
+          "sourceExample": "I will be working at six.",
+          "mistakes": [
+            {
+              "wrong": "Elle travaillera à 8 heures.",
+              "fix": "Elle travaillera à 8 heures.",
+              "sourceWrong": "She will work at 8.",
+              "sourceFix": "She will be working at 8."
+            }
+          ]
+        },
+        {
+          "title": "futur antérieur",
+          "sourceTitle": "future perfect",
+          "points": [
+            "futur parfait pour les délais",
+            "futur parfait avec d'ici",
+            "futur parfait pour l'achèvement"
+          ],
+          "sourcePoints": [
+            "future perfect for deadlines",
+            "future perfect with by time",
+            "future perfect for completion"
+          ],
+          "example": "Ils auront fini d'ici vendredi.",
+          "sourceExample": "They will have finished by Friday.",
+          "mistakes": [
+            {
+              "wrong": "Elle finira avant midi.",
+              "fix": "Elle aura fini d'ici midi.",
+              "sourceWrong": "She will finish by noon.",
+              "sourceFix": "She will have finished by noon."
+            }
+          ]
+        },
+        {
+          "title": "contrastes d'aspect",
+          "sourceTitle": "aspect contrasts",
+          "points": [
+            "contraste simple vs continu",
+            "contraste parfait vs simple",
+            "contraste de focalisation sur la durée"
+          ],
+          "sourcePoints": [
+            "simple vs continuous contrast",
+            "perfect vs simple contrast",
+            "duration focus contrast"
+          ],
+          "example": "Je travaille tous les jours, je travaille maintenant, et j'ai travaillé ici pendant des années.",
+          "sourceExample": "I work every day, I am working now, and I have worked here for years.",
+          "mistakes": [
+            {
+              "wrong": "Je le connais.",
+              "fix": "Je le connais.",
+              "sourceWrong": "I am knowing him.",
+              "sourceFix": "I know him."
             }
           ]
         }
       ],
       "Nouns & Articles": [
         {
-          "title": "genre et article",
+          "title": "noms dénombrables",
+          "sourceTitle": "countable nouns",
           "points": [
-            "mémoriser nom + article",
-            "accorder genre"
+            "noms dénombrables avec des nombres",
+            "un ou une avant les dénombrables",
+            "pluriel pour plus d'un"
           ],
-          "example": "La table est près du mur.",
-          "template": "article + nom",
+          "sourcePoints": [
+            "countable nouns with numbers",
+            "a or an before countables",
+            "plural for more than one"
+          ],
+          "example": "J'ai une pièce.",
+          "sourceExample": "I have a coin.",
           "mistakes": [
             {
-              "wrong": "Le table est près du mur.",
-              "fix": "La table est près du mur."
+              "wrong": "Elle a acheté une pomme.",
+              "fix": "Elle a acheté une pomme.",
+              "sourceWrong": "She bought apple.",
+              "sourceFix": "She bought an apple."
             }
           ]
         },
         {
-          "title": "articles partitifs",
+          "title": "noms indénombrables",
+          "sourceTitle": "uncountable nouns",
           "points": [
-            "du, de la, de l', des",
-            "de après négation complète"
+            "noms indénombrables sans pluriel",
+            "certains avec des indénombrables",
+            "un morceau de pour les unités"
           ],
-          "example": "Nous buvons du thé.",
-          "template": "verbe + article partitif + nom",
+          "sourcePoints": [
+            "uncountable nouns without plural",
+            "some with uncountables",
+            "a piece of for units"
+          ],
+          "example": "Nous avons besoin de riz.",
+          "sourceExample": "We need some rice.",
           "mistakes": [
             {
-              "wrong": "Nous buvons de thé.",
-              "fix": "Nous buvons du thé."
+              "wrong": "J'ai besoin de deux pains.",
+              "fix": "J'ai besoin de pain.",
+              "sourceWrong": "I need two breads.",
+              "sourceFix": "I need some bread."
+            }
+          ]
+        },
+        {
+          "title": "articles",
+          "sourceTitle": "articles",
+          "points": [
+            "un ou une pour la première mention",
+            "le pour référence spécifique",
+            "pas d'article pour des idées générales"
+          ],
+          "sourcePoints": [
+            "a or an for first mention",
+            "the for specific reference",
+            "no article for general ideas"
+          ],
+          "example": "Le chien est dehors.",
+          "sourceExample": "The dog is outside.",
+          "mistakes": [
+            {
+              "wrong": "J'ai vu un film.",
+              "fix": "J'ai vu un film.",
+              "sourceWrong": "I saw movie.",
+              "sourceFix": "I saw a movie."
+            }
+          ]
+        },
+        {
+          "title": "formes plurielles",
+          "sourceTitle": "plural forms",
+          "points": [
+            "terminaisons pluriel régulières",
+            "changements d'orthographe dans les pluriels",
+            "formes pluriel irrégulières"
+          ],
+          "sourcePoints": [
+            "regular plural endings",
+            "spelling changes in plurals",
+            "irregular plural forms"
+          ],
+          "example": "Deux enfants sont ici.",
+          "sourceExample": "Two children are here.",
+          "mistakes": [
+            {
+              "wrong": "Trois enfants jouent.",
+              "fix": "Trois enfants jouent.",
+              "sourceWrong": "Three child play.",
+              "sourceFix": "Three children play."
+            }
+          ]
+        },
+        {
+          "title": "noms possessifs",
+          "sourceTitle": "possessive nouns",
+          "points": [
+            "possession avec apostrophe s",
+            "terminaisons possessives pluriel",
+            "choses et relations"
+          ],
+          "sourcePoints": [
+            "apostrophe s ownership",
+            "plural possessive endings",
+            "things and relationships"
+          ],
+          "example": "Le téléphone de Sara est nouveau.",
+          "sourceExample": "Sara's phone is new.",
+          "mistakes": [
+            {
+              "wrong": "Le livre du professeur est nouveau.",
+              "fix": "Le livre du professeur est nouveau.",
+              "sourceWrong": "The teachers book is new.",
+              "sourceFix": "The teacher's book is new."
+            }
+          ]
+        },
+        {
+          "title": "groupes nominaux",
+          "sourceTitle": "noun phrases",
+          "points": [
+            "déterminant plus nom",
+            "adjectif plus nom",
+            "association nom plus nom"
+          ],
+          "sourcePoints": [
+            "determiner plus noun",
+            "adjective plus noun",
+            "noun plus noun pairing"
+          ],
+          "example": "La petite table de cuisine est cassée.",
+          "sourceExample": "The small kitchen table broke.",
+          "mistakes": [
+            {
+              "wrong": "Elle a acheté une robe rouge.",
+              "fix": "Elle a acheté une robe rouge.",
+              "sourceWrong": "She bought dress red.",
+              "sourceFix": "She bought a red dress."
+            }
+          ]
+        },
+        {
+          "title": "quantificateurs",
+          "sourceTitle": "quantifiers",
+          "points": [
+            "beaucoup de choix",
+            "peu de choix",
+            "beaucoup de pour la quantité"
+          ],
+          "sourcePoints": [
+            "many and much choice",
+            "few and little choice",
+            "a lot of for quantity"
+          ],
+          "example": "Il y a beaucoup d'options.",
+          "sourceExample": "There are many options.",
+          "mistakes": [
+            {
+              "wrong": "Combien de pommes ?",
+              "fix": "Combien de pommes ?",
+              "sourceWrong": "How much apples?",
+              "sourceFix": "How many apples?"
             }
           ]
         }
       ],
       "Pronouns & Reference": [
         {
-          "title": "pronoms COD/COI",
+          "title": "pronoms sujets",
+          "sourceTitle": "subject pronouns",
           "points": [
-            "le/la/les avant verbe",
-            "lui/leur pour COI"
+            "je tu il elle ensemble",
+            "nous et ils pluriel",
+            "cela pour les choses"
           ],
-          "example": "Je la connais bien.",
-          "template": "sujet + pronom + verbe",
+          "sourcePoints": [
+            "i you he she set",
+            "we and they plural",
+            "it for things"
+          ],
+          "example": "Ils sont prêts.",
+          "sourceExample": "They are ready.",
           "mistakes": [
             {
-              "wrong": "Je connais la bien.",
-              "fix": "Je la connais bien."
+              "wrong": "Elle est ici.",
+              "fix": "Elle est ici.",
+              "sourceWrong": "Her is here.",
+              "sourceFix": "She is here."
             }
           ]
         },
         {
-          "title": "pronoms y et en",
+          "title": "pronoms objets",
+          "sourceTitle": "object pronouns",
           "points": [
-            "y = lieu / à + chose",
-            "en = de + chose / quantité"
+            "moi lui elle ensemble",
+            "nous et eux pluriel",
+            "position de l'objet après les verbes"
           ],
-          "example": "Tu vas à Paris ? Oui, j'y vais.",
-          "template": "question + reprise avec y/en",
+          "sourcePoints": [
+            "me him her set",
+            "us and them plural",
+            "object position after verbs"
+          ],
+          "example": "Elle m'a appelé.",
+          "sourceExample": "She called me.",
           "mistakes": [
             {
-              "wrong": "Tu vas à Paris ? Oui, je vais y.",
-              "fix": "Tu vas à Paris ? Oui, j'y vais."
+              "wrong": "Il m'a vu.",
+              "fix": "Il m'a vu.",
+              "sourceWrong": "He saw I.",
+              "sourceFix": "He saw me."
+            }
+          ]
+        },
+        {
+          "title": "formes possessives",
+          "sourceTitle": "possessive forms",
+          "points": [
+            "mon ton son sa ensemble",
+            "notre leur avec des noms",
+            "le mien le tien pour autonome"
+          ],
+          "sourcePoints": [
+            "my your his her set",
+            "our their with nouns",
+            "mine yours for standalone"
+          ],
+          "example": "C'est mon sac.",
+          "sourceExample": "This is my bag.",
+          "mistakes": [
+            {
+              "wrong": "C'est son livre.",
+              "fix": "Ce livre est à elle.",
+              "sourceWrong": "This is her book is.",
+              "sourceFix": "This book is hers."
+            }
+          ]
+        },
+        {
+          "title": "pronoms réfléchis",
+          "sourceTitle": "reflexive pronouns",
+          "points": [
+            "moi-même toi-même modèle",
+            "elle-même lui-même modèle",
+            "accent avec des réflexifs"
+          ],
+          "sourcePoints": [
+            "myself yourself pattern",
+            "herself himself pattern",
+            "emphasis with reflexives"
+          ],
+          "example": "Il s'est fait mal.",
+          "sourceExample": "He hurt himself.",
+          "mistakes": [
+            {
+              "wrong": "Je me fais mal.",
+              "fix": "Je me suis fait mal.",
+              "sourceWrong": "I hurt me.",
+              "sourceFix": "I hurt myself."
+            }
+          ]
+        },
+        {
+          "title": "démonstratifs",
+          "sourceTitle": "demonstratives",
+          "points": [
+            "ce cela pour singulier",
+            "ces ceux pour pluriel",
+            "référence proche vs éloignée"
+          ],
+          "sourcePoints": [
+            "this that for single",
+            "these those for plural",
+            "near vs far reference"
+          ],
+          "example": "Ce sont mes clés.",
+          "sourceExample": "Those are my keys.",
+          "mistakes": [
+            {
+              "wrong": "Ces livres sont à moi.",
+              "fix": "Ce livre est à moi.",
+              "sourceWrong": "These book is mine.",
+              "sourceFix": "This book is mine."
+            }
+          ]
+        },
+        {
+          "title": "référence relative",
+          "sourceTitle": "relative reference",
+          "points": [
+            "qui pour les personnes",
+            "lequel pour les choses",
+            "cela pour usage général"
+          ],
+          "sourcePoints": [
+            "who for people",
+            "which for things",
+            "that for general use"
+          ],
+          "example": "L'homme qui a appelé est parti.",
+          "sourceExample": "The man who called left.",
+          "mistakes": [
+            {
+              "wrong": "L'homme qui m'a appelé.",
+              "fix": "L'homme qui m'a appelé.",
+              "sourceWrong": "The man which called me.",
+              "sourceFix": "The man who called me."
+            }
+          ]
+        },
+        {
+          "title": "référence indéfinie",
+          "sourceTitle": "indefinite reference",
+          "points": [
+            "quelqu'un n'importe qui ensemble",
+            "tout le monde personne ensemble",
+            "quelque chose n'importe quoi ensemble"
+          ],
+          "sourcePoints": [
+            "someone anyone set",
+            "everyone no one set",
+            "something anything set"
+          ],
+          "example": "Quelqu'un attend.",
+          "sourceExample": "Someone is waiting.",
+          "mistakes": [
+            {
+              "wrong": "Quelqu'un est ici.",
+              "fix": "Quelqu'un est ici.",
+              "sourceWrong": "Anyone is here.",
+              "sourceFix": "Someone is here."
             }
           ]
         }
       ],
       "Modifiers": [
         {
-          "title": "accord des adjectifs",
+          "title": "les bases des adjectifs",
+          "sourceTitle": "adjectives basics",
           "points": [
-            "genre + nombre",
-            "formes féminines/plurielles"
+            "les adjectifs décrivent les noms",
+            "les adjectifs avant les noms",
+            "les adjectifs après être"
           ],
-          "example": "Ces filles sont contentes.",
-          "template": "nom + adjectif accordé",
+          "sourcePoints": [
+            "adjectives describe nouns",
+            "adjectives before nouns",
+            "adjectives after be"
+          ],
+          "example": "La maison est silencieuse.",
+          "sourceExample": "The house is quiet.",
           "mistakes": [
             {
-              "wrong": "Ces filles sont contents.",
-              "fix": "Ces filles sont contentes."
+              "wrong": "Elle a les cheveux longs.",
+              "fix": "Elle a les cheveux longs.",
+              "sourceWrong": "She has hair long.",
+              "sourceFix": "She has long hair."
             }
           ]
         },
         {
-          "title": "comparatif et superlatif",
+          "title": "l'ordre des adjectifs",
+          "sourceTitle": "adjective order",
           "points": [
-            "plus/moins/aussi ... que",
-            "le plus / le moins"
+            "opinion avant taille",
+            "âge avant couleur",
+            "matériau près du nom"
           ],
-          "example": "Ce film est plus long que l'autre.",
-          "template": "comparatif + que",
+          "sourcePoints": [
+            "opinion before size",
+            "age before color",
+            "material near noun"
+          ],
+          "example": "Elle a acheté un petit sac rouge.",
+          "sourceExample": "She bought a small red bag.",
           "mistakes": [
             {
-              "wrong": "Ce film est plus long comme l'autre.",
-              "fix": "Ce film est plus long que l'autre."
+              "wrong": "Une petite voiture rouge.",
+              "fix": "Une petite voiture rouge.",
+              "sourceWrong": "A red small car.",
+              "sourceFix": "A small red car."
+            }
+          ]
+        },
+        {
+          "title": "les comparatifs",
+          "sourceTitle": "comparatives",
+          "points": [
+            "formes en er ou plus",
+            "comparaisons avec que",
+            "formes comparatives irrégulières"
+          ],
+          "sourcePoints": [
+            "er or more forms",
+            "than comparisons",
+            "irregular comparative forms"
+          ],
+          "example": "Ceci est plus rapide que cela.",
+          "sourceExample": "This is faster than that.",
+          "mistakes": [
+            {
+              "wrong": "C'est moins cher.",
+              "fix": "C'est moins cher.",
+              "sourceWrong": "This is more cheap.",
+              "sourceFix": "This is cheaper."
+            }
+          ]
+        },
+        {
+          "title": "les superlatifs",
+          "sourceTitle": "superlatives",
+          "points": [
+            "formes en est ou le plus",
+            "le avec le superlatif",
+            "focus sur la comparaison de groupe"
+          ],
+          "sourcePoints": [
+            "est or most forms",
+            "the with superlative",
+            "group comparison focus"
+          ],
+          "example": "Il est le plus grand.",
+          "sourceExample": "He is the tallest.",
+          "mistakes": [
+            {
+              "wrong": "Il est le plus rapide.",
+              "fix": "Il est le plus rapide.",
+              "sourceWrong": "He is the most fast.",
+              "sourceFix": "He is the fastest."
+            }
+          ]
+        },
+        {
+          "title": "les bases des adverbes",
+          "sourceTitle": "adverbs basics",
+          "points": [
+            "les adverbes décrivent les verbes",
+            "les adverbes après le verbe",
+            "les adverbes avant les adjectifs"
+          ],
+          "sourcePoints": [
+            "adverbs describe verbs",
+            "adverbs after verb",
+            "adverbs before adjectives"
+          ],
+          "example": "Elle parle clairement.",
+          "sourceExample": "She speaks clearly.",
+          "mistakes": [
+            {
+              "wrong": "Elle parle lentement.",
+              "fix": "Elle parle lentement.",
+              "sourceWrong": "She speaks slow.",
+              "sourceFix": "She speaks slowly."
+            }
+          ]
+        },
+        {
+          "title": "les adverbes de fréquence",
+          "sourceTitle": "frequency adverbs",
+          "points": [
+            "toujours généralement souvent",
+            "rarement jamais",
+            "position avec être"
+          ],
+          "sourcePoints": [
+            "always usually often set",
+            "rarely never set",
+            "position with be"
+          ],
+          "example": "Je me réveille généralement tôt.",
+          "sourceExample": "I usually wake early.",
+          "mistakes": [
+            {
+              "wrong": "Elle va toujours tôt.",
+              "fix": "Elle va toujours tôt.",
+              "sourceWrong": "She goes always early.",
+              "sourceFix": "She always goes early."
+            }
+          ]
+        },
+        {
+          "title": "les adverbes de temps et de lieu",
+          "sourceTitle": "time and place adverbs",
+          "points": [
+            "temps à la fin de la position",
+            "lieu à la fin",
+            "temps avant ordre de lieu"
+          ],
+          "sourcePoints": [
+            "time at end position",
+            "place at the end",
+            "time before place order"
+          ],
+          "example": "Nous nous sommes rencontrés là-bas hier.",
+          "sourceExample": "We met there yesterday.",
+          "mistakes": [
+            {
+              "wrong": "Il est arrivé ici hier.",
+              "fix": "Il est arrivé ici hier.",
+              "sourceWrong": "He arrived yesterday here.",
+              "sourceFix": "He arrived here yesterday."
+            }
+          ]
+        },
+        {
+          "title": "les mots de degré",
+          "sourceTitle": "degree words",
+          "points": [
+            "très vraiment",
+            "trop et assez",
+            "assez et plutôt"
+          ],
+          "sourcePoints": [
+            "very really set",
+            "too and enough",
+            "quite and rather"
+          ],
+          "example": "La chambre est très chaude.",
+          "sourceExample": "The room is very warm.",
+          "mistakes": [
+            {
+              "wrong": "Il fait assez chaud.",
+              "fix": "Il fait assez chaud.",
+              "sourceWrong": "It is enough hot.",
+              "sourceFix": "It is hot enough."
+            }
+          ]
+        },
+        {
+          "title": "les participes",
+          "sourceTitle": "participles",
+          "points": [
+            "adjectifs en ing pour la cause",
+            "adjectifs en ed pour le sentiment",
+            "éviter la confusion"
+          ],
+          "sourcePoints": [
+            "ing adjectives for cause",
+            "ed adjectives for feeling",
+            "avoid confusion"
+          ],
+          "example": "Le film était ennuyeux.",
+          "sourceExample": "The movie was boring.",
+          "mistakes": [
+            {
+              "wrong": "L'histoire était ennuyeuse.",
+              "fix": "L'histoire était ennuyeuse.",
+              "sourceWrong": "The story was boringed.",
+              "sourceFix": "The story was boring."
+            }
+          ]
+        },
+        {
+          "title": "l'empilement des modificateurs",
+          "sourceTitle": "modifier stacking",
+          "points": [
+            "plusieurs adjectifs",
+            "plusieurs adverbes",
+            "garder le focus clair"
+          ],
+          "sourcePoints": [
+            "multiple adjectives",
+            "multiple adverbs",
+            "keep focus clear"
+          ],
+          "example": "Elle a rapidement répondu à la question difficile.",
+          "sourceExample": "She quickly answered the hard question.",
+          "mistakes": [
+            {
+              "wrong": "Elle a acheté un nouveau petit sac rouge.",
+              "fix": "Elle a acheté un petit nouveau sac rouge.",
+              "sourceWrong": "She bought a red small new bag.",
+              "sourceFix": "She bought a small new red bag."
             }
           ]
         }
       ],
       "Questions": [
         {
-          "title": "question avec est-ce que",
+          "title": "questions fermées",
+          "sourceTitle": "yes no questions",
           "points": [
-            "registre neutre",
-            "ordre sujet-verbe conservé"
+            "aux + sujet + verbe de base"
           ],
-          "example": "Est-ce que vous avez fini ?",
-          "template": "est-ce que + sujet + verbe",
+          "sourcePoints": [
+            "aux + subject + base verb"
+          ],
+          "example": "Travaillez-vous ici ?",
+          "sourceExample": "Do you work here?",
           "mistakes": [
             {
-              "wrong": "Est-ce que avez vous fini ?",
-              "fix": "Est-ce que vous avez fini ?"
+              "wrong": "Tu aimes le café ?",
+              "fix": "Aimes-tu le café ?",
+              "sourceWrong": "You like coffee?",
+              "sourceFix": "Do you like coffee?"
             }
           ]
         },
         {
-          "title": "inversion sujet-verbe",
+          "title": "questions ouvertes",
+          "sourceTitle": "wh questions",
           "points": [
-            "trait d'union",
-            "t euphonique si besoin"
+            "mot interrogatif + aux + sujet + verbe de base"
           ],
-          "example": "Parle-t-il français ?",
-          "template": "verbe-pronom + complément",
+          "sourcePoints": [
+            "wh word + aux + subject + base verb"
+          ],
+          "example": "Où habite-t-il ?",
+          "sourceExample": "Where does he live?",
           "mistakes": [
             {
-              "wrong": "Parle il français ?",
-              "fix": "Parle-t-il français ?"
+              "wrong": "Où tu vis ?",
+              "fix": "Où vis-tu ?",
+              "sourceWrong": "Where you live?",
+              "sourceFix": "Where do you live?"
+            }
+          ]
+        },
+        {
+          "title": "questions avec être",
+          "sourceTitle": "questions with be",
+          "points": [
+            "être + sujet + complément"
+          ],
+          "sourcePoints": [
+            "be + subject + complement"
+          ],
+          "example": "Le magasin est-il ouvert ?",
+          "sourceExample": "Is the store open?",
+          "mistakes": [
+            {
+              "wrong": "Tu es prêt ?",
+              "fix": "Es-tu prêt ?",
+              "sourceWrong": "You are ready?",
+              "sourceFix": "Are you ready?"
+            }
+          ]
+        },
+        {
+          "title": "questions avec faire",
+          "sourceTitle": "questions with do",
+          "points": [
+            "aux + sujet + verbe de base"
+          ],
+          "sourcePoints": [
+            "aux + subject + base verb"
+          ],
+          "example": "L'as-tu appelée ?",
+          "sourceExample": "Did you call her?",
+          "mistakes": [
+            {
+              "wrong": "Elle aime la pizza ?",
+              "fix": "Aime-t-elle la pizza ?",
+              "sourceWrong": "She likes pizza?",
+              "sourceFix": "Does she like pizza?"
+            }
+          ]
+        },
+        {
+          "title": "questions avec des modaux",
+          "sourceTitle": "questions with modals",
+          "points": [
+            "modal + sujet + verbe de base"
+          ],
+          "sourcePoints": [
+            "modal + subject + base verb"
+          ],
+          "example": "Pourriez-vous m'aider ?",
+          "sourceExample": "Could you help me?",
+          "mistakes": [
+            {
+              "wrong": "Tu peux m'aider ?",
+              "fix": "Peux-tu m'aider ?",
+              "sourceWrong": "You can help me?",
+              "sourceFix": "Can you help me?"
+            }
+          ]
+        },
+        {
+          "title": "questions tag",
+          "sourceTitle": "tag questions",
+          "points": [
+            "déclaration + étiquette"
+          ],
+          "sourcePoints": [
+            "statement + tag"
+          ],
+          "example": "Tu es prêt, n'est-ce pas ?",
+          "sourceExample": "You are ready, aren't you?",
+          "mistakes": [
+            {
+              "wrong": "Elle est ici, n'est-ce pas ?",
+              "fix": "Elle est ici, n'est-ce pas ?",
+              "sourceWrong": "She is here, is she?",
+              "sourceFix": "She is here, isn't she?"
+            }
+          ]
+        },
+        {
+          "title": "questions indirectes",
+          "sourceTitle": "indirect questions",
+          "points": [
+            "intro + clause interrogative"
+          ],
+          "sourcePoints": [
+            "intro + wh clause"
+          ],
+          "example": "Pourriez-vous me dire où c'est ?",
+          "sourceExample": "Could you tell me where it is?",
+          "mistakes": [
+            {
+              "wrong": "Peux-tu me dire où il est ?",
+              "fix": "Peux-tu me dire où il est ?",
+              "sourceWrong": "Can you tell me where is he?",
+              "sourceFix": "Can you tell me where he is?"
             }
           ]
         }
       ],
       "Negation": [
         {
-          "title": "ne ... pas",
+          "title": "pas avec être",
+          "sourceTitle": "not with be",
           "points": [
-            "ne avant verbe",
-            "pas après verbe"
+            "sujet + être + ne + complément"
           ],
-          "example": "Je ne comprends pas.",
-          "template": "sujet + ne + verbe + pas",
+          "sourcePoints": [
+            "subject + be + not + complement"
+          ],
+          "example": "Elle n'est pas fatiguée.",
+          "sourceExample": "She is not tired.",
           "mistakes": [
             {
-              "wrong": "Je comprends ne pas.",
-              "fix": "Je ne comprends pas."
+              "wrong": "Il n'est pas heureux.",
+              "fix": "Il n'est pas heureux.",
+              "sourceWrong": "He not happy.",
+              "sourceFix": "He is not happy."
             }
           ]
         },
         {
-          "title": "ne ... jamais / plus",
+          "title": "pas avec faire",
+          "sourceTitle": "not with do",
           "points": [
-            "jamais = aucune fois",
-            "plus = arrêt"
+            "sujet + auxiliaire + ne + verbe à l'infinitif"
           ],
-          "example": "Elle n'arrive jamais en retard.",
-          "template": "sujet + ne + verbe + jamais/plus",
+          "sourcePoints": [
+            "subject + aux + not + base verb"
+          ],
+          "example": "Ils ne sont pas d'accord.",
+          "sourceExample": "They do not agree.",
           "mistakes": [
             {
-              "wrong": "Elle arrive jamais en retard.",
-              "fix": "Elle n'arrive jamais en retard."
+              "wrong": "Elle n'aime pas le thé.",
+              "fix": "Elle n'aime pas le thé.",
+              "sourceWrong": "She not like tea.",
+              "sourceFix": "She does not like tea."
+            }
+          ]
+        },
+        {
+          "title": "formes courtes négatives",
+          "sourceTitle": "negative short forms",
+          "points": [
+            "sujet + auxiliaire + ne + verbe à l'infinitif"
+          ],
+          "sourcePoints": [
+            "subject + aux + not + base verb"
+          ],
+          "example": "Je ne sais pas.",
+          "sourceExample": "I don't know.",
+          "mistakes": [
+            {
+              "wrong": "Il ne sait pas.",
+              "fix": "Il ne sait pas.",
+              "sourceWrong": "He does notn't know.",
+              "sourceFix": "He doesn't know."
+            }
+          ]
+        },
+        {
+          "title": "mots négatifs",
+          "sourceTitle": "negative words",
+          "points": [
+            "mot négatif + nom"
+          ],
+          "sourcePoints": [
+            "negative word + noun"
+          ],
+          "example": "Il n'y a pas de lait.",
+          "sourceExample": "There is no milk.",
+          "mistakes": [
+            {
+              "wrong": "Je n'ai rien.",
+              "fix": "Je n'ai rien.",
+              "sourceWrong": "I don't have nothing.",
+              "sourceFix": "I don't have anything."
+            }
+          ]
+        },
+        {
+          "title": "questions négatives",
+          "sourceTitle": "negative questions",
+          "points": [
+            "auxiliaire + ne + sujet + verbe à l'infinitif + objet"
+          ],
+          "sourcePoints": [
+            "aux + not + subject + base verb + object"
+          ],
+          "example": "Tu ne veux pas de café ?",
+          "sourceExample": "Don't you want coffee?",
+          "mistakes": [
+            {
+              "wrong": "Tu n'aimes pas ça ?",
+              "fix": "Tu ne l'aimes pas ?",
+              "sourceWrong": "You don't like it?",
+              "sourceFix": "Don't you like it?"
+            }
+          ]
+        },
+        {
+          "title": "négatifs limités",
+          "sourceTitle": "limited negatives",
+          "points": [
+            "sujet + adverbe négatif + verbe"
+          ],
+          "sourcePoints": [
+            "subject + negative adverb + verb"
+          ],
+          "example": "Il mange rarement au restaurant.",
+          "sourceExample": "He rarely eats out.",
+          "mistakes": [
+            {
+              "wrong": "Elle ne dort presque pas.",
+              "fix": "Elle dort à peine.",
+              "sourceWrong": "She hardly doesn't sleep.",
+              "sourceFix": "She hardly sleeps."
             }
           ]
         }
       ],
       "Connections": [
         {
-          "title": "cause et conséquence",
+          "title": "connecteurs de base",
+          "sourceTitle": "basic connectors",
           "points": [
-            "parce que / car",
-            "donc / alors"
+            "clause 1 + connecteur + clause 2"
           ],
-          "example": "Le train est annulé, donc nous attendons.",
-          "template": "proposition + connecteur + proposition",
+          "sourcePoints": [
+            "clause 1 + connector + clause 2"
+          ],
+          "example": "J'ai appelé mais personne n'a répondu.",
+          "sourceExample": "I called but no one answered.",
           "mistakes": [
             {
-              "wrong": "Le train est annulé donc, nous attendons.",
-              "fix": "Le train est annulé, donc nous attendons."
+              "wrong": "Je suis allé mais je suis resté.",
+              "fix": "Je suis allé et je suis resté.",
+              "sourceWrong": "I went and but stayed.",
+              "sourceFix": "I went and stayed."
             }
           ]
         },
         {
-          "title": "opposition et concession",
+          "title": "raison et résultat",
+          "sourceTitle": "reason and result",
           "points": [
-            "mais / pourtant / cependant",
-            "relier deux idées"
+            "clause de raison + connecteur + clause de résultat"
           ],
-          "example": "Il est fatigué, mais il continue.",
-          "template": "proposition + connecteur d'opposition + proposition",
+          "sourcePoints": [
+            "reason clause + connector + result clause"
+          ],
+          "example": "Il a plu, donc nous sommes restés.",
+          "sourceExample": "It rained, so we stayed.",
           "mistakes": [
             {
-              "wrong": "Il est fatigué, pourtant mais il continue.",
-              "fix": "Il est fatigué, mais il continue."
+              "wrong": "J'étais en retard à cause du bus.",
+              "fix": "J'étais en retard parce que le bus était en retard.",
+              "sourceWrong": "I was late because the bus.",
+              "sourceFix": "I was late because the bus was late."
+            }
+          ]
+        },
+        {
+          "title": "contraste et choix",
+          "sourceTitle": "contrast and choice",
+          "points": [
+            "clause 1 + connecteur de contraste + clause 2"
+          ],
+          "sourcePoints": [
+            "clause 1 + contrast connector + clause 2"
+          ],
+          "example": "Elle est partie, bien qu'elle fût fatiguée.",
+          "sourceExample": "She went, although she was tired.",
+          "mistakes": [
+            {
+              "wrong": "J'aime le thé mais aussi le café.",
+              "fix": "J'aime le thé, mais j'aime aussi le café.",
+              "sourceWrong": "I like tea but also or coffee.",
+              "sourceFix": "I like tea, but I also like coffee."
+            }
+          ]
+        },
+        {
+          "title": "connecteurs temporels",
+          "sourceTitle": "time connectors",
+          "points": [
+            "clause principale + connecteur temporel + clause"
+          ],
+          "sourcePoints": [
+            "main clause + time connector + clause"
+          ],
+          "example": "Appelle-moi quand tu arrives.",
+          "sourceExample": "Call me when you arrive.",
+          "mistakes": [
+            {
+              "wrong": "Je suis parti avant de manger.",
+              "fix": "Je suis parti avant de manger.",
+              "sourceWrong": "I left before I will eat.",
+              "sourceFix": "I left before I ate."
+            }
+          ]
+        },
+        {
+          "title": "liens de comparaison",
+          "sourceTitle": "comparison links",
+          "points": [
+            "sujet + verbe + comparaison + objet"
+          ],
+          "sourcePoints": [
+            "subject + verb + comparison + object"
+          ],
+          "example": "C'est comme à la maison.",
+          "sourceExample": "This feels like home.",
+          "mistakes": [
+            {
+              "wrong": "Elle est plus grande que moi.",
+              "fix": "Elle est plus grande que moi.",
+              "sourceWrong": "She is like taller me.",
+              "sourceFix": "She is taller than me."
+            }
+          ]
+        },
+        {
+          "title": "ajout d'idées",
+          "sourceTitle": "adding ideas",
+          "points": [
+            "marqueur d'addition + clause"
+          ],
+          "sourcePoints": [
+            "addition marker + clause"
+          ],
+          "example": "Nous avons aussi besoin de chaises.",
+          "sourceExample": "We also need chairs.",
+          "mistakes": [
+            {
+              "wrong": "Il est aussi allé.",
+              "fix": "Il est aussi parti.",
+              "sourceWrong": "He also went but too.",
+              "sourceFix": "He also went."
+            }
+          ]
+        },
+        {
+          "title": "ordonnancement des idées",
+          "sourceTitle": "ordering ideas",
+          "points": [
+            "séquence + clause"
+          ],
+          "sourcePoints": [
+            "sequence + clause"
+          ],
+          "example": "D'abord nous planifions, ensuite nous agissons.",
+          "sourceExample": "First we plan, then we act.",
+          "mistakes": [
+            {
+              "wrong": "Enfin, nous nous rencontrons d'abord.",
+              "fix": "D'abord nous nous sommes rencontrés, enfin nous sommes partis.",
+              "sourceWrong": "Finally, first we meet.",
+              "sourceFix": "First we met, finally we left."
             }
           ]
         }
       ],
       "Conditions": [
         {
-          "title": "si + présent, futur",
+          "title": "conditions réelles",
+          "sourceTitle": "real conditions",
           "points": [
-            "condition réelle",
-            "futur en principale"
+            "si clause + résultat clause"
           ],
-          "example": "Si tu étudies, tu réussiras.",
-          "template": "si + présent, futur simple",
+          "sourcePoints": [
+            "if clause + result clause"
+          ],
+          "example": "Si vous appuyez sur cela, ça commence.",
+          "sourceExample": "If you press this, it starts.",
           "mistakes": [
             {
-              "wrong": "Si tu étudieras, tu réussiras.",
-              "fix": "Si tu étudies, tu réussiras."
+              "wrong": "Si tu viens, nous nous rencontrons.",
+              "fix": "Si tu viens, nous nous rencontrons.",
+              "sourceWrong": "If you will come, we meet.",
+              "sourceFix": "If you come, we meet."
             }
           ]
         },
         {
-          "title": "si + imparfait, conditionnel",
+          "title": "conditions futures",
+          "sourceTitle": "future conditions",
           "points": [
-            "hypothèse",
-            "résultat conditionnel"
+            "si clause + résultat clause"
           ],
-          "example": "Si j'avais le temps, je voyagerais.",
-          "template": "si + imparfait, conditionnel présent",
+          "sourcePoints": [
+            "if clause + result clause"
+          ],
+          "example": "S'il fait beau, nous irons.",
+          "sourceExample": "If it is sunny, we will go.",
           "mistakes": [
             {
-              "wrong": "Si j'aurais le temps, je voyagerais.",
-              "fix": "Si j'avais le temps, je voyagerais."
+              "wrong": "S'il pleut, nous resterons.",
+              "fix": "S'il pleut, nous resterons.",
+              "sourceWrong": "If it will rain, we will stay.",
+              "sourceFix": "If it rains, we will stay."
+            }
+          ]
+        },
+        {
+          "title": "présent irréel",
+          "sourceTitle": "unreal present",
+          "points": [
+            "si clause + conditionnel clause"
+          ],
+          "sourcePoints": [
+            "if clause + would clause"
+          ],
+          "example": "Si j'avais le temps, j'aiderais.",
+          "sourceExample": "If I had time, I would help.",
+          "mistakes": [
+            {
+              "wrong": "Si j'ai le temps, j'irais.",
+              "fix": "Si j'avais le temps, j'irais.",
+              "sourceWrong": "If I will have time, I would go.",
+              "sourceFix": "If I had time, I would go."
+            }
+          ]
+        },
+        {
+          "title": "passé irréel",
+          "sourceTitle": "unreal past",
+          "points": [
+            "si clause + conditionnel passé clause"
+          ],
+          "sourcePoints": [
+            "if clause + would have clause"
+          ],
+          "example": "Si nous étions partis plus tôt, nous serions arrivés.",
+          "sourceExample": "If we had left earlier, we would have arrived.",
+          "mistakes": [
+            {
+              "wrong": "Si je savais, je l'aurais dit.",
+              "fix": "Si j'avais su, je l'aurais dit.",
+              "sourceWrong": "If I knew, I would have told.",
+              "sourceFix": "If I had known, I would have told."
+            }
+          ]
+        },
+        {
+          "title": "conditions mixtes",
+          "sourceTitle": "mixed conditions",
+          "points": [
+            "si clause (plus-que-parfait) + résultat présent (conditionnel + verbe à l'infinitif)"
+          ],
+          "sourcePoints": [
+            "if clause (past perfect) + present result (would + base verb)"
+          ],
+          "example": "Si elle avait étudié, elle serait calme maintenant.",
+          "sourceExample": "If she had studied, she would be calm now.",
+          "mistakes": [
+            {
+              "wrong": "Si j'étudiais, j'aurais le poste maintenant.",
+              "fix": "Si j'avais étudié, j'aurais le poste maintenant.",
+              "sourceWrong": "If I studied, I would have the job now.",
+              "sourceFix": "If I had studied, I would have the job now."
+            }
+          ]
+        },
+        {
+          "title": "sauf et autrement",
+          "sourceTitle": "unless and otherwise",
+          "points": [
+            "résultat clause + sauf si clause"
+          ],
+          "sourcePoints": [
+            "result clause + unless clause"
+          ],
+          "example": "Nous irons à moins qu'il ne pleuve.",
+          "sourceExample": "We will go unless it rains.",
+          "mistakes": [
+            {
+              "wrong": "Nous irons à moins qu'il ne pleuve.",
+              "fix": "Nous irons à moins qu'il ne pleuve.",
+              "sourceWrong": "We will go unless it will rain.",
+              "sourceFix": "We will go unless it rains."
             }
           ]
         }
       ],
       "Voice & Focus": [
         {
-          "title": "voix passive",
+          "title": "voix active",
+          "sourceTitle": "active voice",
           "points": [
-            "être + participe passé",
-            "accord du participe"
+            "acteur + verbe d'action + objet"
           ],
-          "example": "Le repas est préparé par le chef.",
-          "template": "sujet patient + être + participe passé",
+          "sourcePoints": [
+            "doer + action verb + object"
+          ],
+          "example": "Le chef a préparé le dîner.",
+          "sourceExample": "The chef cooked dinner.",
           "mistakes": [
             {
-              "wrong": "Le repas est préparer par le chef.",
-              "fix": "Le repas est préparé par le chef."
+              "wrong": "Le gâteau a été cuit par ma mère.",
+              "fix": "Ma mère a cuit le gâteau.",
+              "sourceWrong": "The cake baked my mom.",
+              "sourceFix": "My mom baked the cake."
             }
           ]
         },
         {
-          "title": "présentatifs et focalisation",
+          "title": "voix passive",
+          "sourceTitle": "passive voice",
           "points": [
-            "il y a / voici / voilà",
-            "c'est ... qui/que"
+            "objet + verbe être + participe passé"
           ],
-          "example": "C'est demain que nous partons.",
-          "template": "présentatif / focalisation",
+          "sourcePoints": [
+            "object + be verb + past participle"
+          ],
+          "example": "Le repas a été préparé.",
+          "sourceExample": "The meal was cooked.",
           "mistakes": [
             {
-              "wrong": "C'est demain qui nous partons.",
-              "fix": "C'est demain que nous partons."
+              "wrong": "Le rapport a été terminé hier.",
+              "fix": "Le rapport a été terminé hier.",
+              "sourceWrong": "The report finished yesterday.",
+              "sourceFix": "The report was finished yesterday."
+            }
+          ]
+        },
+        {
+          "title": "changement de focus",
+          "sourceTitle": "focus shifts",
+          "points": [
+            "phrase de focus + sujet + verbe"
+          ],
+          "sourcePoints": [
+            "focus phrase + subject + verb"
+          ],
+          "example": "Ce livre, je l'ai fini hier.",
+          "sourceExample": "That book, I finished yesterday.",
+          "mistakes": [
+            {
+              "wrong": "Ce livre que j'ai acheté hier.",
+              "fix": "Ce livre, je l'ai acheté hier.",
+              "sourceWrong": "This book I bought yesterday it.",
+              "sourceFix": "This book, I bought yesterday."
+            }
+          ]
+        },
+        {
+          "title": "phrases éclatées",
+          "sourceTitle": "cleft sentences",
+          "points": [
+            "sujet il + phrase de focus + proposition"
+          ],
+          "sourcePoints": [
+            "it subject + focus phrase + clause"
+          ],
+          "example": "C'est John qui a appelé.",
+          "sourceExample": "It is John who called.",
+          "mistakes": [
+            {
+              "wrong": "Est-ce elle qui a appelé.",
+              "fix": "C'est elle qui a appelé.",
+              "sourceWrong": "Was it she called.",
+              "sourceFix": "It was she who called."
+            }
+          ]
+        },
+        {
+          "title": "sujets 'il' et 'il y a'",
+          "sourceTitle": "there and it subjects",
+          "points": [
+            "sujet il y a + verbe être + nom"
+          ],
+          "sourcePoints": [
+            "there subject + be verb + noun"
+          ],
+          "example": "Il y a un problème.",
+          "sourceExample": "There is a problem.",
+          "mistakes": [
+            {
+              "wrong": "Il y a un problème dans la pièce.",
+              "fix": "Il y a un problème dans la pièce.",
+              "sourceWrong": "Is a problem in the room.",
+              "sourceFix": "There is a problem in the room."
             }
           ]
         }
       ],
       "Modality": [
         {
-          "title": "obligation et conseil",
+          "title": "capacité",
+          "sourceTitle": "ability",
           "points": [
-            "devoir, il faut",
-            "conditionnel de politesse"
+            "sujet + modal + verbe à l'infinitif"
           ],
-          "example": "Vous devriez vous reposer.",
-          "template": "sujet + modal + infinitif",
+          "sourcePoints": [
+            "subject + modal + base verb"
+          ],
+          "example": "Elle peut nager.",
+          "sourceExample": "She can swim.",
           "mistakes": [
             {
-              "wrong": "Vous devriez vous repose.",
-              "fix": "Vous devriez vous reposer."
+              "wrong": "Elle peut nager.",
+              "fix": "Elle peut nager.",
+              "sourceWrong": "She can to swim.",
+              "sourceFix": "She can swim."
             }
           ]
         },
         {
-          "title": "possibilité et probabilité",
+          "title": "permission",
+          "sourceTitle": "permission",
           "points": [
-            "pouvoir",
-            "peut-être / probablement"
+            "modal + sujet + verbe à l'infinitif"
           ],
-          "example": "Il est probablement déjà parti.",
-          "template": "sujet + adverbe modal + verbe",
+          "sourcePoints": [
+            "modal + subject + base verb"
+          ],
+          "example": "Puis-je m'asseoir ici ?",
+          "sourceExample": "May I sit here?",
           "mistakes": [
             {
-              "wrong": "Il probablement est déjà parti.",
-              "fix": "Il est probablement déjà parti."
+              "wrong": "Puis-je m'asseoir ici ?",
+              "fix": "Puis-je m'asseoir ici ?",
+              "sourceWrong": "May I to sit here?",
+              "sourceFix": "May I sit here?"
+            }
+          ]
+        },
+        {
+          "title": "obligation",
+          "sourceTitle": "obligation",
+          "points": [
+            "sujet + modal + verbe à l'infinitif"
+          ],
+          "sourcePoints": [
+            "subject + modal + base verb"
+          ],
+          "example": "Vous devez porter une ceinture de sécurité.",
+          "sourceExample": "You must wear a seatbelt.",
+          "mistakes": [
+            {
+              "wrong": "Vous devez porter un badge.",
+              "fix": "Vous devez porter un badge.",
+              "sourceWrong": "You must to wear a badge.",
+              "sourceFix": "You must wear a badge."
+            }
+          ]
+        },
+        {
+          "title": "conseil",
+          "sourceTitle": "advice",
+          "points": [
+            "sujet + modal + verbe à l'infinitif"
+          ],
+          "sourcePoints": [
+            "subject + modal + base verb"
+          ],
+          "example": "Vous devriez vous reposer.",
+          "sourceExample": "You should rest.",
+          "mistakes": [
+            {
+              "wrong": "Vous devriez vous reposer.",
+              "fix": "Vous devriez vous reposer.",
+              "sourceWrong": "You should to rest.",
+              "sourceFix": "You should rest."
+            }
+          ]
+        },
+        {
+          "title": "possibilité",
+          "sourceTitle": "possibility",
+          "points": [
+            "modal + verbe à l'infinitif"
+          ],
+          "sourcePoints": [
+            "modal + base verb"
+          ],
+          "example": "Il pourrait pleuvoir aujourd'hui.",
+          "sourceExample": "It might rain today.",
+          "mistakes": [
+            {
+              "wrong": "Il pourrait pleuvoir.",
+              "fix": "Il pourrait pleuvoir.",
+              "sourceWrong": "It might to rain.",
+              "sourceFix": "It might rain."
+            }
+          ]
+        },
+        {
+          "title": "probabilité",
+          "sourceTitle": "probability",
+          "points": [
+            "sujet + modal + mot de probabilité + verbe à l'infinitif"
+          ],
+          "sourcePoints": [
+            "subject + modal + probability word + base verb"
+          ],
+          "example": "Il viendra probablement.",
+          "sourceExample": "He will probably come.",
+          "mistakes": [
+            {
+              "wrong": "Il arrivera probablement en retard.",
+              "fix": "Il arrivera probablement en retard.",
+              "sourceWrong": "He probably to arrive late.",
+              "sourceFix": "He will probably arrive late."
+            }
+          ]
+        },
+        {
+          "title": "demandes polies",
+          "sourceTitle": "polite requests",
+          "points": [
+            "modal + sujet + verbe à l'infinitif + objet"
+          ],
+          "sourcePoints": [
+            "modal + subject + base verb + object"
+          ],
+          "example": "Pourriez-vous ouvrir la fenêtre ?",
+          "sourceExample": "Could you open the window?",
+          "mistakes": [
+            {
+              "wrong": "Pourriez-vous ouvrir la porte ?",
+              "fix": "Pourriez-vous ouvrir la porte, s'il vous plaît ?",
+              "sourceWrong": "Could you opens the door?",
+              "sourceFix": "Could you open the door, please?"
+            }
+          ]
+        },
+        {
+          "title": "offres et invitations",
+          "sourceTitle": "offers and invitations",
+          "points": [
+            "phrase modale + objet"
+          ],
+          "sourcePoints": [
+            "modal phrase + object"
+          ],
+          "example": "Voudriez-vous du thé ?",
+          "sourceExample": "Would you like some tea?",
+          "mistakes": [
+            {
+              "wrong": "Aimez-vous venir ?",
+              "fix": "Voudriez-vous venir ?",
+              "sourceWrong": "Do you like to come?",
+              "sourceFix": "Would you like to come?"
             }
           ]
         }
       ],
       "Reported Speech": [
         {
-          "title": "discours indirect",
+          "title": "rapport des déclarations",
+          "sourceTitle": "reporting statements",
           "points": [
-            "dire que",
-            "adapter temps et repères"
+            "dire avec une clause (que)",
+            "que souvent omis",
+            "verbe de rapport + clause"
           ],
-          "example": "Il a dit qu'il viendrait le lendemain.",
-          "template": "verbe introducteur + que + proposition",
+          "sourcePoints": [
+            "say with (that) clause",
+            "that often omitted",
+            "reporting verb + clause"
+          ],
+          "example": "Elle a dit qu'elle était prête.",
+          "sourceExample": "She said she was ready.",
           "mistakes": [
             {
-              "wrong": "Il a dit qu'il viendra le lendemain.",
-              "fix": "Il a dit qu'il viendrait le lendemain."
+              "wrong": "Elle m'a dit qu'elle est fatiguée.",
+              "fix": "Elle a dit qu'elle était fatiguée.",
+              "sourceWrong": "She said me she is tired.",
+              "sourceFix": "She said she was tired."
             }
           ]
         },
         {
-          "title": "questions rapportées",
+          "title": "rapport des questions",
+          "sourceTitle": "reporting questions",
           "points": [
-            "demander si / pourquoi",
-            "ordre déclaratif en subordonnée"
+            "demander avec si",
+            "demander avec un mot interrogatif",
+            "pas d'inversion"
           ],
-          "example": "Elle a demandé si nous étions prêts.",
-          "template": "demander + si/mot interrogatif + proposition",
+          "sourcePoints": [
+            "ask with if",
+            "ask with question word",
+            "no inversion"
+          ],
+          "example": "Il a demandé si j'allais bien.",
+          "sourceExample": "He asked if I was okay.",
           "mistakes": [
             {
-              "wrong": "Elle a demandé si étions-nous prêts.",
-              "fix": "Elle a demandé si nous étions prêts."
+              "wrong": "Il a demandé où est la gare.",
+              "fix": "Il a demandé où était la gare.",
+              "sourceWrong": "He asked where is the station.",
+              "sourceFix": "He asked where the station was."
+            }
+          ]
+        },
+        {
+          "title": "rapport des demandes",
+          "sourceTitle": "reporting requests",
+          "points": [
+            "demander de faire",
+            "dire de faire des demandes",
+            "rapport poli"
+          ],
+          "sourcePoints": [
+            "ask to do",
+            "tell to do requests",
+            "polite reporting"
+          ],
+          "example": "Elle m'a demandé d'attendre.",
+          "sourceExample": "She asked me to wait.",
+          "mistakes": [
+            {
+              "wrong": "Elle m'a demandé si je peux aider.",
+              "fix": "Elle m'a demandé d'aider.",
+              "sourceWrong": "She asked me can I help.",
+              "sourceFix": "She asked me to help."
+            }
+          ]
+        },
+        {
+          "title": "rapport des ordres",
+          "sourceTitle": "reporting commands",
+          "points": [
+            "dire de faire des ordres",
+            "ordonner de faire",
+            "changement d'instruction"
+          ],
+          "sourcePoints": [
+            "tell to do commands",
+            "order to do",
+            "instruction shift"
+          ],
+          "example": "Il nous a dit de partir.",
+          "sourceExample": "He told us to leave.",
+          "mistakes": [
+            {
+              "wrong": "Il m'a dit d'aller.",
+              "fix": "Il m'a dit d'y aller.",
+              "sourceWrong": "He told me to went.",
+              "sourceFix": "He told me to go."
+            }
+          ]
+        },
+        {
+          "title": "les bases du décalage",
+          "sourceTitle": "backshift basics",
+          "points": [
+            "changement du présent au passé",
+            "changement de will à would",
+            "changement de can à could"
+          ],
+          "sourcePoints": [
+            "present to past shift",
+            "will to would shift",
+            "can to could shift"
+          ],
+          "example": "Ils ont dit qu'ils avaient le temps.",
+          "sourceExample": "They said they had time.",
+          "mistakes": [
+            {
+              "wrong": "Elle a dit qu'elle est prête.",
+              "fix": "Elle a dit qu'elle était prête.",
+              "sourceWrong": "She said she is ready.",
+              "sourceFix": "She said she was ready."
+            }
+          ]
+        },
+        {
+          "title": "changements de temps et de lieu",
+          "sourceTitle": "time place changes",
+          "points": [
+            "maintenant à alors",
+            "ici à là",
+            "aujourd'hui à ce jour-là"
+          ],
+          "sourcePoints": [
+            "now to then",
+            "here to there",
+            "today to that day"
+          ],
+          "example": "Il a dit qu'il était là.",
+          "sourceExample": "He said he was there.",
+          "mistakes": [
+            {
+              "wrong": "Il a dit qu'il viendra ici aujourd'hui.",
+              "fix": "Il a dit qu'il viendrait là-bas ce jour-là.",
+              "sourceWrong": "He said he will come here today.",
+              "sourceFix": "He said he would come there that day."
             }
           ]
         }
       ],
       "Formality & Style": [
         {
-          "title": "tu / vous",
+          "title": "formel vs informel",
+          "sourceTitle": "formal vs informal",
           "points": [
-            "choisir selon relation",
-            "rester cohérent dans l'échange"
+            "choix de mots formels",
+            "choix de mots informels",
+            "adapter le ton au public"
           ],
-          "example": "Bonjour Madame, vous avez un moment ?",
-          "template": "formule + vous + verbe",
+          "sourcePoints": [
+            "formal word choice",
+            "informal word choice",
+            "match audience tone"
+          ],
+          "example": "Pourriez-vous m'aider ?",
+          "sourceExample": "Could you assist me?",
           "mistakes": [
             {
-              "wrong": "Bonjour Madame, tu as un moment ?",
-              "fix": "Bonjour Madame, vous avez un moment ?"
+              "wrong": "Salut, donne-moi le rapport.",
+              "fix": "Bonjour, pourriez-vous envoyer le rapport ?",
+              "sourceWrong": "Hey, give me the report.",
+              "sourceFix": "Hello, could you send the report?"
             }
           ]
         },
         {
-          "title": "politesse écrite",
+          "title": "contractions",
+          "sourceTitle": "contractions",
           "points": [
-            "formules d'ouverture et clôture",
-            "conditionnel de demande"
+            "formes courtes dans le discours",
+            "éviter dans l'écriture formelle",
+            "choix de clarté"
           ],
-          "example": "Pourriez-vous me confirmer la date ?",
-          "template": "conditionnel de politesse + infinitif",
+          "sourcePoints": [
+            "short forms in speech",
+            "avoid in formal writing",
+            "clarity choices"
+          ],
+          "example": "Je ne peux pas rester longtemps.",
+          "sourceExample": "I can't stay long.",
           "mistakes": [
             {
-              "wrong": "Confirmez-moi la date.",
-              "fix": "Pourriez-vous me confirmer la date ?"
+              "wrong": "Je suis en retard, ne m'attendez pas.",
+              "fix": "Je suis en retard, ne m'attendez pas.",
+              "sourceWrong": "I am late, do not wait.",
+              "sourceFix": "I'm late, don't wait."
+            }
+          ]
+        },
+        {
+          "title": "adoucir poliment",
+          "sourceTitle": "polite softening",
+          "points": [
+            "s'il vous plaît pour la politesse",
+            "formes de demande douce",
+            "langage indirect"
+          ],
+          "sourcePoints": [
+            "please for politeness",
+            "soft request forms",
+            "indirect language"
+          ],
+          "example": "Pourriez-vous fermer la porte ?",
+          "sourceExample": "Could you close the door?",
+          "mistakes": [
+            {
+              "wrong": "Envoie-moi le fichier maintenant.",
+              "fix": "Pourriez-vous m'envoyer le fichier ?",
+              "sourceWrong": "Send me the file now.",
+              "sourceFix": "Could you send me the file?"
+            }
+          ]
+        },
+        {
+          "title": "oral vs écrit",
+          "sourceTitle": "spoken vs written",
+          "points": [
+            "simplicité orale",
+            "clarté écrite",
+            "contrôle de la longueur des phrases"
+          ],
+          "sourcePoints": [
+            "spoken simplicity",
+            "written clarity",
+            "sentence length control"
+          ],
+          "example": "Veuillez voir les détails ci-dessous.",
+          "sourceExample": "Please see the details below.",
+          "mistakes": [
+            {
+              "wrong": "Dans un écrit formel : Je suis arrivé(e) lol.",
+              "fix": "Dans un écrit formel : Je suis arrivé.",
+              "sourceWrong": "In formal writing: I arrived lol.",
+              "sourceFix": "In formal writing: I have arrived."
+            }
+          ]
+        },
+        {
+          "title": "style professionnel",
+          "sourceTitle": "professional style",
+          "points": [
+            "objectif clair en premier",
+            "ton neutre",
+            "fermeture polie"
+          ],
+          "sourcePoints": [
+            "clear purpose first",
+            "neutral tone",
+            "polite closing"
+          ],
+          "example": "Merci pour votre temps.",
+          "sourceExample": "Thank you for your time.",
+          "mistakes": [
+            {
+              "wrong": "Salut, j'ai besoin de ça dès que possible.",
+              "fix": "Bonjour, j'ai besoin de cela rapidement.",
+              "sourceWrong": "Hey, I need this ASAP.",
+              "sourceFix": "Hello, I need this soon."
+            }
+          ]
+        },
+        {
+          "title": "style décontracté",
+          "sourceTitle": "casual style",
+          "points": [
+            "ton amical",
+            "phrases courtes",
+            "ouvertures informelles"
+          ],
+          "sourcePoints": [
+            "friendly tone",
+            "short phrases",
+            "informal openings"
+          ],
+          "example": "Salut, comment ça va ?",
+          "sourceExample": "Hey, how is it going?",
+          "mistakes": [
+            {
+              "wrong": "Monsieur ou Madame, comment ça va ?",
+              "fix": "Salut, quoi de neuf ?",
+              "sourceWrong": "Dear Sir or Madam, what's up?",
+              "sourceFix": "Hey, what's up?"
+            }
+          ]
+        },
+        {
+          "title": "clarté et concision",
+          "sourceTitle": "clarity and brevity",
+          "points": [
+            "phrases courtes",
+            "éviter les mots superflus",
+            "point principal en premier"
+          ],
+          "sourcePoints": [
+            "short sentences",
+            "avoid extra words",
+            "main point first"
+          ],
+          "example": "Nous avons besoin d'une réponse rapide.",
+          "sourceExample": "We need a quick answer.",
+          "mistakes": [
+            {
+              "wrong": "Étant donné qu'il pleut, nous n'irons pas.",
+              "fix": "Il pleut, donc nous n'irons pas.",
+              "sourceWrong": "Due to the fact that it is raining, we will not go.",
+              "sourceFix": "It is raining, so we will not go."
             }
           ]
         }
       ],
       "Discourse & Flow": [
         {
-          "title": "enchaînement logique",
+          "title": "ouverture et fermeture",
+          "sourceTitle": "opening and closing",
           "points": [
-            "d'abord, ensuite, enfin",
-            "progression claire"
+            "commencer une conversation",
+            "terminer une conversation",
+            "mots de signal de clôture"
           ],
-          "example": "D'abord nous observons, ensuite nous analysons.",
-          "template": "connecteur + proposition",
+          "sourcePoints": [
+            "start a talk",
+            "end a talk",
+            "closing signal words"
+          ],
+          "example": "Salut tout le monde, de toute façon, c'est tout pour aujourd'hui.",
+          "sourceExample": "Hi everyone, anyway, that is all for today.",
           "mistakes": [
             {
-              "wrong": "D'abord ensuite nous observons.",
-              "fix": "D'abord nous observons, ensuite nous analysons."
+              "wrong": "Je veux parler. Au revoir.",
+              "fix": "Salut, je voulais parler. Merci, au revoir.",
+              "sourceWrong": "I want to talk. Goodbye.",
+              "sourceFix": "Hi, I wanted to talk. Thanks, goodbye."
             }
           ]
         },
         {
-          "title": "reformulation et synthèse",
+          "title": "changements de sujet",
+          "sourceTitle": "topic shifts",
           "points": [
-            "c'est-à-dire / autrement dit",
-            "en résumé / en bref"
+            "changer de sujet en douceur",
+            "revenir au sujet",
+            "signaler le changement"
           ],
-          "example": "En résumé, la solution reste efficace.",
-          "template": "marqueur de synthèse + idée principale",
+          "sourcePoints": [
+            "change topic smoothly",
+            "return to topic",
+            "signal the shift"
+          ],
+          "example": "Au fait, j'ai des nouvelles.",
+          "sourceExample": "By the way, I have news.",
           "mistakes": [
             {
-              "wrong": "En résumé, et aussi un autre sujet.",
-              "fix": "En résumé, la solution reste efficace."
+              "wrong": "Au fait, à cause du planning.",
+              "fix": "Au fait, pouvons-nous parler du planning ?",
+              "sourceWrong": "By the way because schedule.",
+              "sourceFix": "By the way, can we talk about the schedule?"
+            }
+          ]
+        },
+        {
+          "title": "outils de cohésion",
+          "sourceTitle": "cohesion tools",
+          "points": [
+            "mots de référence",
+            "phrases de liaison",
+            "suivi du sujet"
+          ],
+          "sourcePoints": [
+            "reference words",
+            "linking phrases",
+            "topic tracking"
+          ],
+          "example": "Cette idée se connecte au dernier point.",
+          "sourceExample": "This idea connects to the last point.",
+          "mistakes": [
+            {
+              "wrong": "J'ai acheté un livre. Le livre est nouveau.",
+              "fix": "J'ai acheté un livre. Il est nouveau.",
+              "sourceWrong": "I bought a book. Book is new.",
+              "sourceFix": "I bought a book. It is new."
+            }
+          ]
+        },
+        {
+          "title": "séquençage des idées",
+          "sourceTitle": "sequencing ideas",
+          "points": [
+            "premier suivant dernier",
+            "mots de signal de séquence",
+            "séquence claire"
+          ],
+          "sourcePoints": [
+            "first next last",
+            "sequence signal words",
+            "clear sequence"
+          ],
+          "example": "D'abord nous faisons nos bagages, puis nous partons.",
+          "sourceExample": "First we pack, then we leave.",
+          "mistakes": [
+            {
+              "wrong": "D'abord, je suis parti, puis je me suis réveillé.",
+              "fix": "D'abord, je me suis réveillé, puis je suis parti.",
+              "sourceWrong": "First I left, then I woke up.",
+              "sourceFix": "First I woke up, then I left."
+            }
+          ]
+        },
+        {
+          "title": "mouvements de clarification",
+          "sourceTitle": "clarification moves",
+          "points": [
+            "reformuler le point clé",
+            "demander des éclaircissements",
+            "confirmer le sens"
+          ],
+          "sourcePoints": [
+            "rephrase key point",
+            "ask for clarity",
+            "confirm meaning"
+          ],
+          "example": "Laissez-moi le formuler autrement.",
+          "sourceExample": "Let me put it another way.",
+          "mistakes": [
+            {
+              "wrong": "Qu'est-ce que tu as dit ?",
+              "fix": "Que veux-tu dire ?",
+              "sourceWrong": "What you said?",
+              "sourceFix": "What do you mean?"
+            }
+          ]
+        },
+        {
+          "title": "résumés",
+          "sourceTitle": "summaries",
+          "points": [
+            "en résumé",
+            "pour résumer",
+            "récapitulatif du point principal"
+          ],
+          "sourcePoints": [
+            "in short",
+            "to sum up",
+            "main point recap"
+          ],
+          "example": "En résumé, nous sommes prêts.",
+          "sourceExample": "In short, we are ready.",
+          "mistakes": [
+            {
+              "wrong": "En résumé, beaucoup de choses.",
+              "fix": "En résumé, nous avons besoin de plus de temps.",
+              "sourceWrong": "In short, many things.",
+              "sourceFix": "In short, we need more time."
+            }
+          ]
+        },
+        {
+          "title": "emphase et répétition",
+          "sourceTitle": "emphasis and repetition",
+          "points": [
+            "insister sur l'idée clé",
+            "répéter pour l'accent",
+            "signaler l'emphase"
+          ],
+          "sourcePoints": [
+            "stress key idea",
+            "repeat for focus",
+            "signal emphasis"
+          ],
+          "example": "C'est vraiment important.",
+          "sourceExample": "It is really important.",
+          "mistakes": [
+            {
+              "wrong": "Je ne veux pas y aller.",
+              "fix": "Je veux vraiment y aller.",
+              "sourceWrong": "I do want to go not.",
+              "sourceFix": "I do want to go."
+            }
+          ]
+        },
+        {
+          "title": "flux de conversation",
+          "sourceTitle": "conversation flow",
+          "points": [
+            "prise de parole",
+            "signaux d'écoute",
+            "échange fluide"
+          ],
+          "sourcePoints": [
+            "turn taking",
+            "listening signals",
+            "smooth exchange"
+          ],
+          "example": "Je vois, s'il vous plaît continuez.",
+          "sourceExample": "I see, please continue.",
+          "mistakes": [
+            {
+              "wrong": "Moi aussi. Et toi, tu es ?",
+              "fix": "Moi aussi. Et toi ?",
+              "sourceWrong": "Me too. And you is?",
+              "sourceFix": "Me too. And you?"
+            }
+          ]
+        },
+        {
+          "title": "donner des exemples",
+          "sourceTitle": "giving examples",
+          "points": [
+            "par exemple",
+            "par instance",
+            "tel que"
+          ],
+          "sourcePoints": [
+            "for example",
+            "for instance",
+            "such as"
+          ],
+          "example": "Par exemple, appelez le service d'assistance.",
+          "sourceExample": "For example, call the help desk.",
+          "mistakes": [
+            {
+              "wrong": "Par exemple, c'est.",
+              "fix": "Par exemple, c'est utile pour voyager.",
+              "sourceWrong": "For example, it is.",
+              "sourceFix": "For example, it is useful for travel."
+            }
+          ]
+        },
+        {
+          "title": "réparation et correction",
+          "sourceTitle": "repair and correction",
+          "points": [
+            "auto-correction",
+            "clarifier rapidement",
+            "redémarrer la formulation"
+          ],
+          "sourcePoints": [
+            "self correction",
+            "clarify quickly",
+            "restart phrasing"
+          ],
+          "example": "Désolé, laissez-moi essayer à nouveau.",
+          "sourceExample": "Sorry, let me try again.",
+          "mistakes": [
+            {
+              "wrong": "Je veux dire, je vais.",
+              "fix": "Désolé, je veux dire que je pars.",
+              "sourceWrong": "I mean, I am go.",
+              "sourceFix": "Sorry, I mean I am going."
             }
           ]
         }
@@ -11625,7 +13605,10 @@
         "pleased to meet you": "heureux/heureuse de vous rencontrer",
         "i am learning french": "j'apprends le français",
         "i speak french": "je parle français",
-        "i do not speak french": "je ne parle pas français"
+        "i do not speak french": "je ne parle pas français",
+        "i am learning english": "j'apprends l'anglais",
+        "i speak english": "je parle anglais",
+        "i do not speak english": "je ne parle pas anglais"
       },
       "Conversation": {
         "can you repeat that": "peux-tu répéter ça",

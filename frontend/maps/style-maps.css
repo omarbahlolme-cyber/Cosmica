@@ -305,6 +305,21 @@ body.letters-page main {
   line-height: 1.4;
 }
 
+.word-romanization,
+.phrase-romanization {
+  font-size: 0.8rem;
+  color: rgba(170, 210, 255, 0.88);
+  line-height: 1.28;
+  letter-spacing: 0.01em;
+  margin-bottom: 2px;
+  overflow-wrap: anywhere;
+}
+
+.word-romanization[hidden],
+.phrase-romanization[hidden] {
+  display: none !important;
+}
+
 .word-audio {
   position: absolute;
   right: 14px;
@@ -330,8 +345,26 @@ body.letters-page main {
 }
 
 .grammar-card .grammar-text {
+  display: grid;
+  gap: 6px;
+  justify-items: center;
+  text-wrap: balance;
+}
+
+.grammar-card .grammar-title-main {
   font-size: 1.2rem;
   font-weight: 700;
+}
+
+.grammar-card .grammar-title-translation {
+  font-size: 0.82rem;
+  font-weight: 500;
+  line-height: 1.28;
+  color: rgba(187, 206, 238, 0.88);
+}
+
+.grammar-card .grammar-title-translation[hidden] {
+  display: none !important;
 }
 
 /* === Grammar modal === */
@@ -1108,7 +1141,7 @@ body.letters-page .letters-grid-section .section-title h2 {
 .word-card,
 .phrase-card {
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: auto auto 1fr auto;
   gap: 8px;
   min-height: 154px;
   padding: 16px 14px 12px;
@@ -1128,6 +1161,13 @@ body.letters-page .letters-grid-section .section-title h2 {
   min-height: 2.2em;
   line-height: 1.38;
   overflow-wrap: anywhere;
+}
+
+.word-romanization,
+.phrase-romanization {
+  margin: 0;
+  min-height: 1.25em;
+  line-height: 1.28;
 }
 
 .word-audio {

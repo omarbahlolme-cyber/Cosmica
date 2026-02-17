@@ -13,6 +13,7 @@ const startVoyageButton = document.getElementById("startVoyageButton");
 const chatInput = document.getElementById("chatInput");
 const chatLog = document.getElementById("chatLog");
 const chatStatus = document.getElementById("chatStatus");
+const mimiChatPanel = document.getElementById("mimiChat");
 const chatChips = document.querySelectorAll(".chat-chip");
 const navRoot = document.querySelector(".nav");
 const alien = document.getElementById("alien");
@@ -402,7 +403,12 @@ const MIMI_CONFIG = {
   retryLimit: 2,
   historyLimit: 12,
 };
-const WORLD_START_LESSON_DESKTOP_DOWN_SHIFT = 34;
+const WORLD_START_LESSON_DESKTOP_DOWN_SHIFT = 64;
+const WORLD_START_LESSON_MOBILE_DOWN_SHIFT = 70;
+const WORLD_MAPS_SELECTION_UP_SHIFT = -26;
+const WORLD_SECTION_SWITCH_HYSTERESIS_PX = 90;
+const WORLD_LANGUAGE_ENTER_FROM_WORLD_EARLY_PX = 118;
+const WORLD_LANGUAGE_ENTER_FROM_MAPS_EARLY_PX = 82;
 const MIMI_SITE_CONTEXT = [
   "Cosmica is a space-universe language learning site where each language is a world.",
   "Worlds available now: English, French, German, Spanish, Portuguese, Dutch, Swedish, Arabic, Chinese, Japanese, Korean, and Hindi.",
@@ -806,11 +812,14 @@ let activeLine = lines[0];
 let typingTimer;
 let speakingTimer;
 let gazeResetTimer;
+let guideInteractionTimer;
+let speechReplayTimer;
 const chatHistory = [];
 let chatRequestInFlight = false;
 const MAX_VISIBLE_CHAT_MESSAGES = 16;
 let userHasMessagedMimi = false;
 let lastMimiReply = "";
+let chatFreshPulseTimer;
 const MIMI_CHAT_HISTORY_KEY = "cosmicaMimiChatHistory:v1";
 const MIMI_CHAT_STORAGE_SCHEMA_KEY = "cosmicaMimiChatSchema";
 const MIMI_CHAT_STORAGE_SCHEMA_VERSION = "v2";
@@ -917,6 +926,18 @@ const setMood = (mood) => {
   }
 };
 
+const pulseGuideInteractivity = (durationMs = 980) => {
+  const section = document.getElementById("guide");
+  if (!section) {
+    return;
+  }
+  section.classList.add("is-active");
+  window.clearTimeout(guideInteractionTimer);
+  guideInteractionTimer = window.setTimeout(() => {
+    section.classList.remove("is-active");
+  }, durationMs);
+};
+
 const stopSpeaking = () => {
   if (!speechBubble) {
     return;
@@ -932,9 +953,12 @@ const speakLine = (text, mood = "happy", options = {}) => {
     return;
   }
   const { instant = false } = options;
+  activeLine = String(text || "").trim() || activeLine;
+  speechText.dataset.text = activeLine;
   window.clearTimeout(typingTimer);
   window.clearTimeout(speakingTimer);
   speechBubble.classList.add("speaking");
+  pulseGuideInteractivity(1200);
   setMood(mood);
   if (instant) {
     speechText.textContent = text;
@@ -960,6 +984,57 @@ const scrollChatToBottom = () => {
     return;
   }
   chatLog.scrollTop = chatLog.scrollHeight;
+};
+
+const syncChatLogMessageState = () => {
+  if (!chatLog) {
+    return;
+  }
+  const hasMessages = Boolean(chatLog.querySelector(".chat-message"));
+  chatLog.classList.toggle("has-messages", hasMessages);
+};
+
+const animateChatLogPulse = () => {
+  if (!chatLog) {
+    return;
+  }
+  if (prefersReducedMotion) {
+    return;
+  }
+  chatLog.classList.remove("has-fresh-message");
+  window.requestAnimationFrame(() => {
+    if (!chatLog) {
+      return;
+    }
+    chatLog.classList.add("has-fresh-message");
+  });
+  window.clearTimeout(chatFreshPulseTimer);
+  chatFreshPulseTimer = window.setTimeout(() => {
+    if (!chatLog) {
+      return;
+    }
+    chatLog.classList.remove("has-fresh-message");
+  }, 620);
+};
+
+const normalizeChatStatusState = (text) => {
+  const value = String(text || "").toLowerCase();
+  if (!value) {
+    return "ready";
+  }
+  if (value.includes("offline")) {
+    return "offline";
+  }
+  if (value.includes("reconnect")) {
+    return "reconnecting";
+  }
+  if (value.includes("charting") || value.includes("typing") || value.includes("thinking")) {
+    return "thinking";
+  }
+  if (value.includes("live")) {
+    return "live";
+  }
+  return "ready";
 };
 
 const revealMimiBubbleOnMobile = () => {
@@ -991,6 +1066,7 @@ const trimVisibleChatMessages = () => {
   for (let i = 0; i < overflowCount; i += 1) {
     messages[i].remove();
   }
+  syncChatLogMessageState();
 };
 
 const appendChatMessage = (role, text, options = {}) => {
@@ -1001,6 +1077,7 @@ const appendChatMessage = (role, text, options = {}) => {
   if (role === "mimi" && options.typing) {
     if (existingTyping) {
       chatLog.classList.add("typing");
+      syncChatLogMessageState();
       scrollChatToBottom();
       return existingTyping;
     }
@@ -1020,11 +1097,14 @@ const appendChatMessage = (role, text, options = {}) => {
     typingMessage.appendChild(typingBubble);
     chatLog.appendChild(typingMessage);
     chatLog.classList.add("typing");
+    syncChatLogMessageState();
+    animateChatLogPulse();
     scrollChatToBottom();
     return typingMessage;
   }
   if (existingTyping) {
     existingTyping.remove();
+    syncChatLogMessageState();
   }
   chatLog.classList.remove("typing");
 
@@ -1045,6 +1125,14 @@ const appendChatMessage = (role, text, options = {}) => {
   bubble.appendChild(body);
   message.appendChild(bubble);
   chatLog.appendChild(message);
+  syncChatLogMessageState();
+  if (!prefersReducedMotion) {
+    message.classList.add("is-entering");
+    window.setTimeout(() => {
+      message.classList.remove("is-entering");
+    }, 340);
+  }
+  animateChatLogPulse();
   trimVisibleChatMessages();
   scrollChatToBottom();
   return message;
@@ -1054,6 +1142,8 @@ const setChatStatus = (text) => {
   if (!chatStatus) {
     return;
   }
+  const state = normalizeChatStatusState(text);
+  chatStatus.dataset.state = state;
   const statusText = chatStatus.querySelector(".chat-status-text");
   if (statusText) {
     statusText.textContent = text;
@@ -1068,6 +1158,7 @@ const resetMimiConversationState = ({ resetPromptText = false } = {}) => {
   if (chatLog) {
     chatLog.innerHTML = "";
     chatLog.classList.remove("typing");
+    syncChatLogMessageState();
   }
   if (chatInput) {
     chatInput.value = "";
@@ -1083,6 +1174,11 @@ const resetMimiConversationState = ({ resetPromptText = false } = {}) => {
   }
   if (speechBubble) {
     speechBubble.classList.remove("speaking");
+    speechBubble.classList.remove("is-replaying");
+  }
+  const guideSection = document.getElementById("guide");
+  if (guideSection) {
+    guideSection.classList.remove("is-active");
   }
   setChatStatus("Mimi ready");
 };
@@ -1725,6 +1821,10 @@ const sendChatMessage = async (message) => {
   const isMobileViewport = window.matchMedia("(max-width: 960px)").matches;
   chatRequestInFlight = true;
   chatInput.disabled = true;
+  if (mimiChatPanel) {
+    mimiChatPanel.classList.add("is-busy");
+  }
+  pulseGuideInteractivity(1050);
   try {
     userHasMessagedMimi = true;
     appendChatMessage("user", text);
@@ -1767,6 +1867,9 @@ const sendChatMessage = async (message) => {
   } finally {
     chatRequestInFlight = false;
     chatInput.disabled = false;
+    if (mimiChatPanel) {
+      mimiChatPanel.classList.remove("is-busy");
+    }
     if (!isMobileViewport) {
       chatInput.focus();
     }
@@ -1780,8 +1883,29 @@ if (chatForm) {
   });
 }
 
+if (chatInput && mimiChatPanel) {
+  chatInput.addEventListener("focus", () => {
+    mimiChatPanel.classList.add("is-focused");
+    pulseGuideInteractivity(900);
+  });
+  chatInput.addEventListener("blur", () => {
+    mimiChatPanel.classList.remove("is-focused");
+  });
+}
+
 chatChips.forEach((chip) => {
+  const releaseChipPress = () => {
+    chip.classList.remove("is-pressed");
+  };
+  chip.addEventListener("pointerdown", () => {
+    chip.classList.add("is-pressed");
+  });
+  chip.addEventListener("pointerup", releaseChipPress);
+  chip.addEventListener("pointercancel", releaseChipPress);
+  chip.addEventListener("mouseleave", releaseChipPress);
+  chip.addEventListener("blur", releaseChipPress);
   chip.addEventListener("click", () => {
+    pulseGuideInteractivity(980);
     const prompt = chip.dataset.prompt || chip.textContent || "";
     sendChatMessage(prompt);
   });
@@ -1792,6 +1916,54 @@ if (chatLog) {
   // Keep visible user message history while Mimi replies stay in the speech bubble.
   chatLog.removeAttribute("aria-hidden");
   chatLog.style.removeProperty("display");
+  syncChatLogMessageState();
+}
+if (chatStatus) {
+  const statusText = chatStatus.querySelector(".chat-status-text");
+  setChatStatus(statusText ? statusText.textContent.trim() || "Mimi ready" : "Mimi ready");
+}
+
+const getReplaySpeechLine = () => {
+  const latestReply = String(lastMimiReply || "").trim();
+  if (latestReply) {
+    return latestReply;
+  }
+  const visibleText = speechText ? speechText.textContent.trim() : "";
+  if (visibleText) {
+    return visibleText;
+  }
+  const fallback =
+    defaultMimiPrompt ||
+    (speechText ? speechText.dataset.defaultMimiPrompt || speechText.dataset.text : "") ||
+    activeLine;
+  return String(fallback || "").trim();
+};
+
+if (speechBubble && speechText) {
+  speechBubble.tabIndex = 0;
+  speechBubble.setAttribute("role", "button");
+  speechBubble.setAttribute("aria-label", "Replay Mimi message");
+  const replayMimiBubble = () => {
+    const replayText = getReplaySpeechLine();
+    if (!replayText) {
+      return;
+    }
+    pulseGuideInteractivity(1120);
+    speechBubble.classList.add("is-replaying");
+    window.clearTimeout(speechReplayTimer);
+    speechReplayTimer = window.setTimeout(() => {
+      speechBubble.classList.remove("is-replaying");
+    }, 620);
+    speakLine(replayText, userHasMessagedMimi ? "curious" : "happy");
+  };
+  speechBubble.addEventListener("click", replayMimiBubble);
+  speechBubble.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") {
+      return;
+    }
+    event.preventDefault();
+    replayMimiBubble();
+  });
 }
 
 setupApiHealthIndicator();
@@ -1995,9 +2167,7 @@ if (languageSection) {
   if (startLessonLink) {
     startLessonLink.addEventListener("click", (event) => {
       const isDesktopStart = window.matchMedia("(min-width: 961px)").matches;
-      if (isDesktopStart) {
-        event.preventDefault();
-      }
+      event.preventDefault();
       languageForceShow = true;
       languageUserActivated = true;
       startLessonTransitionLockUntil =
@@ -2017,17 +2187,18 @@ if (languageSection) {
           document.body.classList.remove("start-lesson-transition");
         }
       }, isDesktopStart ? 980 : 730);
-      if (isDesktopStart) {
-        const baseOffset =
-          Number.parseFloat(window.getComputedStyle(languageSection).scrollMarginTop) || 0;
-        const targetTop =
-          languageSection.getBoundingClientRect().top +
-          window.scrollY -
-          baseOffset +
-          WORLD_START_LESSON_DESKTOP_DOWN_SHIFT;
-        history.replaceState(null, "", `${window.location.pathname}${window.location.search}#language`);
-        window.scrollTo({ top: Math.max(0, targetTop), behavior: "smooth" });
-      }
+      const baseOffset =
+        Number.parseFloat(window.getComputedStyle(languageSection).scrollMarginTop) || 0;
+      const startLessonDownShift = isDesktopStart
+        ? WORLD_START_LESSON_DESKTOP_DOWN_SHIFT
+        : WORLD_START_LESSON_MOBILE_DOWN_SHIFT;
+      const targetTop =
+        languageSection.getBoundingClientRect().top +
+        window.scrollY -
+        baseOffset +
+        startLessonDownShift;
+      history.replaceState(null, "", `${window.location.pathname}${window.location.search}#language`);
+      window.scrollTo({ top: Math.max(0, targetTop), behavior: "smooth" });
     });
   }
 
@@ -2055,6 +2226,14 @@ if (document.body.classList.contains("world-page")) {
   if (worldSections.length) {
     worldSections.forEach((section) => section.classList.add("world-section"));
     let activeSectionId = "";
+    const sectionById = Object.fromEntries(worldSections.map((section) => [section.id, section]));
+    const getSectionMidpoint = (id) => {
+      const section = sectionById[id];
+      if (!section) {
+        return 0;
+      }
+      return section.offsetTop + section.offsetHeight / 2;
+    };
     const getClosestSection = () => {
       const focusY = window.scrollY + window.innerHeight * 0.4;
       let closestId = "";
@@ -2068,6 +2247,42 @@ if (document.body.classList.contains("world-page")) {
         }
       });
       return closestId;
+    };
+    const getWorldSectionWithHysteresis = () => {
+      const focusY = window.scrollY + window.innerHeight * 0.4;
+      const worldToLanguageBoundary = (getSectionMidpoint("world") + getSectionMidpoint("language")) / 2;
+      const languageToMapsBoundary = (getSectionMidpoint("language") + getSectionMidpoint("maps")) / 2;
+      const worldToLanguageEnterThreshold =
+        worldToLanguageBoundary +
+        WORLD_SECTION_SWITCH_HYSTERESIS_PX -
+        WORLD_LANGUAGE_ENTER_FROM_WORLD_EARLY_PX;
+      const mapsToLanguageEnterThreshold =
+        languageToMapsBoundary -
+        WORLD_SECTION_SWITCH_HYSTERESIS_PX +
+        WORLD_LANGUAGE_ENTER_FROM_MAPS_EARLY_PX;
+
+      if (activeSectionId === "world") {
+        if (focusY > worldToLanguageEnterThreshold) {
+          return "language";
+        }
+        return "world";
+      }
+      if (activeSectionId === "language") {
+        if (focusY < worldToLanguageBoundary - WORLD_SECTION_SWITCH_HYSTERESIS_PX) {
+          return "world";
+        }
+        if (focusY > languageToMapsBoundary + WORLD_SECTION_SWITCH_HYSTERESIS_PX) {
+          return "maps";
+        }
+        return "language";
+      }
+      if (activeSectionId === "maps") {
+        if (focusY < mapsToLanguageEnterThreshold) {
+          return "language";
+        }
+        return "maps";
+      }
+      return getClosestSection();
     };
     setActiveWorldSection = (id) => {
       if (
@@ -2098,7 +2313,7 @@ if (document.body.classList.contains("world-page")) {
       updateMapsTitleVisibility();
     };
     const handleWorldScroll = () => {
-      const closest = getClosestSection();
+      const closest = getWorldSectionWithHysteresis();
       if (closest) {
         setActiveWorldSection(closest);
       }
@@ -2973,26 +3188,15 @@ const scrollToAnchor = (hash) => {
 
   if (talkButton) {
     talkButton.addEventListener("click", () => {
+      if (scrollToAnchor("#guide")) {
+        return;
+      }
       const guideSection = document.getElementById("guide");
-    const guideTitle = guideSection ? guideSection.querySelector("h2") : null;
-    const chatPanel = document.getElementById("mimiChat");
-    if (guideSection && guideTitle && chatPanel) {
-      const top = guideTitle.getBoundingClientRect().top + window.scrollY;
-      const bottom = chatPanel.getBoundingClientRect().bottom + window.scrollY;
-      const midpoint = (top + bottom) / 2 - window.innerHeight / 2;
-      const clamped = Math.max(0, midpoint);
-      window.scrollTo({ top: clamped, behavior: "smooth" });
-      return;
-    }
-    if (guideSection) {
-      guideSection.scrollIntoView({ behavior: "smooth", block: "start" });
-      return;
-    }
-    if (chatPanel) {
-      chatPanel.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-  });
-}
+      if (guideSection) {
+        guideSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+  }
 
   const navLinks = document.querySelectorAll(".nav-links a[href^=\"#\"]");
   const anchorTargets = new Set([
@@ -3043,6 +3247,7 @@ window.addEventListener("load", () => {
 
 if (alien) {
   alien.addEventListener("click", () => {
+    pulseGuideInteractivity(1150);
     speakLine("Hi, explorer. I'm listening.", "happy");
   });
 }
@@ -3473,13 +3678,32 @@ const applyMapComingSoonRules = () => {
   if (!document.body.classList.contains("world-page")) {
     return;
   }
-  if (WORLD_KEY === "english") {
-    return;
-  }
 
   const grammarCard = document.querySelector(".map-card.map-grammar");
   if (!grammarCard) {
     return;
+  }
+
+  const forceComingSoon = grammarCard.dataset.forceComingSoon === "true";
+  if (!forceComingSoon) {
+    grammarCard.classList.remove("coming-soon");
+    grammarCard.classList.add("map-link");
+    grammarCard.dataset.comingSoon = "false";
+    grammarCard.removeAttribute("aria-disabled");
+    grammarCard.removeAttribute("title");
+    const originalHref =
+      grammarCard.getAttribute("href") || grammarCard.dataset.originalHref || "";
+    if (originalHref) {
+      grammarCard.setAttribute("href", originalHref);
+      grammarCard.dataset.originalHref = originalHref;
+    }
+    grammarCard.querySelector(".coming-soon-badge")?.remove();
+    return;
+  }
+
+  const currentHref = grammarCard.getAttribute("href");
+  if (currentHref) {
+    grammarCard.dataset.originalHref = currentHref;
   }
 
   grammarCard.classList.add("coming-soon");
@@ -3752,7 +3976,7 @@ if (languagePills.length) {
       const offset = Number.parseFloat(
         window.getComputedStyle(mapsSection).scrollMarginTop
       ) || 0;
-      const y = targetTop - offset;
+      const y = targetTop - offset + WORLD_MAPS_SELECTION_UP_SHIFT;
       window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
     }
     if (setActiveWorldSection) {
@@ -4680,6 +4904,289 @@ const setupWebVitalsReporting = () => {
   window.addEventListener("pagehide", flushMetrics);
 };
 
+const setupHomeAltInteractivity = () => {
+  if (!document.body.classList.contains("home-alt-luxe")) {
+    return;
+  }
+
+  const interactiveSurfaces = Array.from(
+    document.querySelectorAll(
+      ".steps .card, .world-card:not(.coming-soon), .join-panel, .support-panel"
+    )
+  );
+  const pressTimers = new WeakMap();
+
+  const queuePressRelease = (surface, delayMs = 110) => {
+    if (!surface) {
+      return;
+    }
+    const existingTimer = pressTimers.get(surface);
+    if (existingTimer) {
+      window.clearTimeout(existingTimer);
+    }
+    const timer = window.setTimeout(() => {
+      surface.classList.remove("is-pressed");
+      pressTimers.delete(surface);
+    }, delayMs);
+    pressTimers.set(surface, timer);
+  };
+
+  interactiveSurfaces.forEach((surface) => {
+    surface.classList.add("is-interactive-surface");
+
+    surface.addEventListener("pointerdown", (event) => {
+      if (event.pointerType === "mouse" && event.button !== 0) {
+        return;
+      }
+      surface.classList.add("is-pressed");
+    });
+
+    surface.addEventListener("pointerup", () => {
+      queuePressRelease(surface, 80);
+    });
+    surface.addEventListener("pointercancel", () => {
+      queuePressRelease(surface, 60);
+    });
+    surface.addEventListener("mouseleave", () => {
+      queuePressRelease(surface, 60);
+    });
+
+    surface.addEventListener("pointerenter", (event) => {
+      if (event.pointerType !== "mouse") {
+        return;
+      }
+      surface.classList.add("is-hovered");
+    });
+    surface.addEventListener("pointerleave", () => {
+      surface.classList.remove("is-hovered");
+    });
+
+    surface.addEventListener("focusin", () => {
+      surface.classList.add("is-hovered");
+    });
+    surface.addEventListener("focusout", () => {
+      surface.classList.remove("is-hovered");
+    });
+  });
+
+  const homeWorldsSection = document.getElementById("worlds");
+  if (homeWorldsSection && !prefersReducedMotion) {
+    const homeWorldCards = Array.from(
+      homeWorldsSection.querySelectorAll(".world-card:not(.coming-soon)")
+    );
+    const pulseTimers = new WeakMap();
+    let waveTimer = 0;
+
+    const pulseWorldCard = (card, durationMs = 620) => {
+      if (!card) {
+        return;
+      }
+      card.classList.remove("is-cosmic-ping");
+      void card.offsetWidth;
+      card.classList.add("is-cosmic-ping");
+      const existingTimer = pulseTimers.get(card);
+      if (existingTimer) {
+        window.clearTimeout(existingTimer);
+      }
+      const timer = window.setTimeout(() => {
+        card.classList.remove("is-cosmic-ping");
+        pulseTimers.delete(card);
+      }, durationMs);
+      pulseTimers.set(card, timer);
+    };
+
+    homeWorldCards.forEach((card, index) => {
+      card.style.setProperty("--world-seq", `${(index * 0.22).toFixed(2)}s`);
+      card.style.setProperty("--world-wave-delay", `${index * 80}ms`);
+      card.addEventListener("pointerdown", () => {
+        pulseWorldCard(card, 520);
+      });
+      card.addEventListener("focusin", () => {
+        pulseWorldCard(card, 560);
+      });
+    });
+
+    const triggerWorldWave = () => {
+      homeWorldsSection.classList.remove("is-cosmic-wave");
+      void homeWorldsSection.offsetWidth;
+      homeWorldsSection.classList.add("is-cosmic-wave");
+      window.clearTimeout(waveTimer);
+      waveTimer = window.setTimeout(() => {
+        homeWorldsSection.classList.remove("is-cosmic-wave");
+      }, 1700);
+    };
+
+    const worldsFlowObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.target !== homeWorldsSection) {
+            return;
+          }
+          const isLive = entry.isIntersecting && entry.intersectionRatio >= 0.28;
+          homeWorldsSection.classList.toggle("is-cosmic-live", isLive);
+          if (isLive) {
+            triggerWorldWave();
+          } else {
+            homeWorldsSection.classList.remove("is-cosmic-wave");
+          }
+        });
+      },
+      { threshold: [0.28, 0.52] }
+    );
+    worldsFlowObserver.observe(homeWorldsSection);
+  }
+
+  const heroRightPanel = document.querySelector(".hero-right");
+  if (heroRightPanel && !prefersReducedMotion) {
+    let pulseTimer = 0;
+    let pointerRaf = 0;
+    let pointerX = 50;
+    let pointerY = 50;
+    heroRightPanel.classList.remove("is-engaged", "is-boosted");
+
+    const applyPointerGlow = () => {
+      pointerRaf = 0;
+      heroRightPanel.style.setProperty("--orbit-focus-x", `${pointerX.toFixed(2)}%`);
+      heroRightPanel.style.setProperty("--orbit-focus-y", `${pointerY.toFixed(2)}%`);
+    };
+
+    const queuePointerGlow = (event) => {
+      const bounds = heroRightPanel.getBoundingClientRect();
+      if (!bounds.width || !bounds.height) {
+        return;
+      }
+      const localX = ((event.clientX - bounds.left) / bounds.width) * 100;
+      const localY = ((event.clientY - bounds.top) / bounds.height) * 100;
+      pointerX = Math.max(0, Math.min(100, localX));
+      pointerY = Math.max(0, Math.min(100, localY));
+      if (!pointerRaf) {
+        pointerRaf = window.requestAnimationFrame(applyPointerGlow);
+      }
+    };
+
+    const triggerOrbitPulse = (durationMs = 560) => {
+      heroRightPanel.classList.remove("is-orbit-pulse");
+      void heroRightPanel.offsetWidth;
+      heroRightPanel.classList.add("is-orbit-pulse");
+      window.clearTimeout(pulseTimer);
+      pulseTimer = window.setTimeout(() => {
+        heroRightPanel.classList.remove("is-orbit-pulse");
+      }, durationMs);
+    };
+
+    heroRightPanel.addEventListener("pointerenter", (event) => {
+      if (event.pointerType !== "mouse") {
+        return;
+      }
+      heroRightPanel.classList.add("is-orbit-focused");
+      queuePointerGlow(event);
+    });
+    heroRightPanel.addEventListener("pointermove", (event) => {
+      if (event.pointerType !== "mouse") {
+        return;
+      }
+      if (!heroRightPanel.classList.contains("is-orbit-focused")) {
+        return;
+      }
+      queuePointerGlow(event);
+    });
+    heroRightPanel.addEventListener("pointerleave", () => {
+      heroRightPanel.classList.remove("is-orbit-focused");
+      heroRightPanel.style.removeProperty("--orbit-focus-x");
+      heroRightPanel.style.removeProperty("--orbit-focus-y");
+    });
+    heroRightPanel.addEventListener("pointerdown", () => {
+      triggerOrbitPulse(620);
+    });
+    if (startVoyageButton) {
+      startVoyageButton.addEventListener("pointerenter", (event) => {
+        if (event.pointerType !== "mouse") {
+          return;
+        }
+        triggerOrbitPulse(520);
+      });
+    }
+  }
+
+  const navLinks = Array.from(document.querySelectorAll('.nav-links a[href^="#"]'));
+  if (!navLinks.length) {
+    return;
+  }
+
+  const sectionHashes = ["#home", "#how", "#worlds", "#guide", "#join", "#support"];
+  const trackedSections = sectionHashes
+    .map((hash) => ({ hash, section: document.querySelector(hash) }))
+    .filter((entry) => entry.section);
+  if (!trackedSections.length) {
+    return;
+  }
+
+  let activeHash = "";
+  let navSpyRaf = 0;
+
+  const setActiveNav = (hash) => {
+    if (!hash || hash === activeHash) {
+      return;
+    }
+    activeHash = hash;
+    navLinks.forEach((link) => {
+      const isActive = link.getAttribute("href") === hash;
+      link.classList.toggle("is-current", isActive);
+      if (isActive) {
+        link.setAttribute("aria-current", "page");
+      } else {
+        link.removeAttribute("aria-current");
+      }
+    });
+  };
+
+  const resolveClosestSectionHash = () => {
+    if (!trackedSections.length) {
+      return "";
+    }
+    if (window.scrollY <= 12) {
+      return "#home";
+    }
+    const nearPageBottom =
+      window.scrollY + window.innerHeight >=
+      document.documentElement.scrollHeight - 16;
+    if (nearPageBottom) {
+      return trackedSections[trackedSections.length - 1].hash;
+    }
+    const focalY = window.scrollY + window.innerHeight * 0.36;
+    let winner = trackedSections[0].hash;
+    let minDistance = Number.POSITIVE_INFINITY;
+    trackedSections.forEach(({ hash, section }) => {
+      const distance = Math.abs(section.offsetTop - focalY);
+      if (distance < minDistance) {
+        minDistance = distance;
+        winner = hash;
+      }
+    });
+    return winner;
+  };
+
+  const scheduleNavSpyUpdate = () => {
+    if (navSpyRaf) {
+      return;
+    }
+    navSpyRaf = window.requestAnimationFrame(() => {
+      navSpyRaf = 0;
+      setActiveNav(resolveClosestSectionHash());
+    });
+  };
+
+  navLinks.forEach((link) => {
+    link.addEventListener("click", () => {
+      setActiveNav(link.getAttribute("href") || "");
+    });
+  });
+
+  window.addEventListener("scroll", scheduleNavSpyUpdate, { passive: true });
+  window.addEventListener("resize", scheduleNavSpyUpdate, { passive: true });
+  scheduleNavSpyUpdate();
+};
+
 const setupBackToTopButton = () => {
   const existing = document.getElementById("backToTopButton");
   if (existing) {
@@ -4755,6 +5262,7 @@ const loadMapsBundle = () =>
 
 const initializeCommonShell = () => {
   document.querySelectorAll(".reveal").forEach((el) => observeRevealElement(el));
+  setupHomeAltInteractivity();
   void setupLettersTitleTranslation();
   setupLetterRomanization();
   setupSpeechCards();
