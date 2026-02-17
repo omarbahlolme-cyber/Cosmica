@@ -6817,8 +6817,14 @@ const resolveEntryByNormalizedKey = (entries, rawValue) => {
   return null;
 };
 
+const isWorldNativeBaseLanguage = (baseLanguage) =>
+  String(baseLanguage || "").trim().toLowerCase() === WORLD_KEY;
+
 const resolveWordTranslation = (section, englishWord, baseLanguage) => {
   if (!baseLanguage || !translationPayloadReady) {
+    return "";
+  }
+  if (isWorldNativeBaseLanguage(baseLanguage)) {
     return "";
   }
   const sectionKey = section || WORD_SECTION_ORDER[0];
@@ -7165,7 +7171,7 @@ const applySectionTitleTranslations = (mapType) => {
       heading.appendChild(translationNode);
     }
 
-    if (!baseLanguage) {
+    if (!baseLanguage || isWorldNativeBaseLanguage(baseLanguage)) {
       translationNode.textContent = "";
       translationNode.hidden = true;
       return;
@@ -7283,6 +7289,9 @@ const requestRuntimePhraseTranslation = async (section, phraseText, baseLanguage
   if (!sectionKey || !langKey || !phrase || langKey === "english") {
     return "";
   }
+  if (langKey === WORLD_KEY) {
+    return "";
+  }
   const cacheKey = buildRuntimePhraseCacheKey(sectionKey, phrase, langKey);
   const cached = runtimePhraseTranslationCache.get(cacheKey);
   if (typeof cached === "string" && cached.trim()) {
@@ -7375,6 +7384,9 @@ const resolvePhraseTranslation = (section, englishPhrase, baseLanguage) => {
   if (!baseLanguage || !translationPayloadReady) {
     return "";
   }
+  if (isWorldNativeBaseLanguage(baseLanguage)) {
+    return "";
+  }
   const sectionKey = section || PHRASE_SECTION_ORDER[0];
   const phraseKey = (englishPhrase || "").toLowerCase();
   const langKey = String(baseLanguage || "").trim().toLowerCase();
@@ -7430,7 +7442,8 @@ const applyPhraseTranslations = () => {
       !resolved &&
       worldEntry?.intent &&
       baseLanguage &&
-      String(baseLanguage).trim().toLowerCase() !== "english"
+      String(baseLanguage).trim().toLowerCase() !== "english" &&
+      !isWorldNativeBaseLanguage(baseLanguage)
     ) {
       requestRuntimePhraseTranslation(section, phrase, baseLanguage).then((translated) => {
         if (!translated) {
@@ -7773,17 +7786,3 @@ if (needsMapTranslations) {
     runWhenBrowserIdle(refreshAfterTranslations);
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

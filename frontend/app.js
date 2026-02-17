@@ -1234,8 +1234,8 @@ const buildLettersTranslateEndpointCandidates = () => {
 const requestLettersTitleTranslation = async (titleText, targetLanguage) => {
   const title = String(titleText || "").trim();
   const lang = String(targetLanguage || "").trim().toLowerCase();
-  const shouldSkipForEnglishWorld = lang === "english" && WORLD_KEY === "english";
-  if (!title || !lang || shouldSkipForEnglishWorld) {
+  const shouldSkipForWorldNativeLanguage = lang === WORLD_KEY;
+  if (!title || !lang || shouldSkipForWorldNativeLanguage) {
     return "";
   }
 
@@ -1291,21 +1291,23 @@ const setupLettersTitleTranslation = async () => {
   )
     .trim()
     .toLowerCase();
-  const shouldSkipForEnglishWorld =
-    selectedBaseLanguage === "english" && WORLD_KEY === "english";
-  if (!selectedBaseLanguage || shouldSkipForEnglishWorld) {
-    return;
-  }
-
   const lettersHeading = document.querySelector(".letters-grid-section .section-title h2");
   if (!lettersHeading) {
+    return;
+  }
+  let translationNode = lettersHeading.querySelector(".letters-title-translation");
+  const shouldSkipForWorldNativeLanguage = selectedBaseLanguage === WORLD_KEY;
+  if (!selectedBaseLanguage || shouldSkipForWorldNativeLanguage) {
+    if (translationNode) {
+      translationNode.textContent = "";
+      translationNode.hidden = true;
+    }
     return;
   }
   const baseTitle = String(lettersHeading.textContent || "").replace(/\s+/g, " ").trim();
   if (!baseTitle) {
     return;
   }
-  let translationNode = lettersHeading.querySelector(".letters-title-translation");
   if (!translationNode) {
     translationNode = document.createElement("span");
     translationNode.className = "letters-title-translation";
@@ -1313,12 +1315,14 @@ const setupLettersTitleTranslation = async () => {
     lettersHeading.appendChild(document.createTextNode(" "));
     lettersHeading.appendChild(translationNode);
   }
+  translationNode.hidden = false;
 
   const cache = readLettersTitleTranslationCache();
   const cacheKey = `${WORLD_KEY}::${selectedBaseLanguage}::${baseTitle.toLowerCase()}`;
   const cached = cache.get(cacheKey);
   if (cached) {
     translationNode.textContent = `(${cached})`;
+    translationNode.hidden = false;
     return;
   }
 
@@ -1329,6 +1333,7 @@ const setupLettersTitleTranslation = async () => {
   cache.set(cacheKey, translated);
   persistLettersTitleTranslationCache();
   translationNode.textContent = `(${translated})`;
+  translationNode.hidden = false;
 };
 
 const LETTER_ROMANIZATION_MAP = Object.freeze({
@@ -1910,6 +1915,7 @@ document.querySelectorAll(".reveal").forEach((el) => {
 });
 
 let setActiveWorldSection = null;
+let startLessonTransitionLockUntil = 0;
 const languageSection = document.querySelector("#language");
 const mapsSection = document.querySelector("#maps");
 const updateMapsTitleVisibility = () => {
@@ -1988,8 +1994,30 @@ if (languageSection) {
   );
   if (startLessonLink) {
     startLessonLink.addEventListener("click", (event) => {
-      if (window.matchMedia("(min-width: 961px)").matches) {
+      const isDesktopStart = window.matchMedia("(min-width: 961px)").matches;
+      if (isDesktopStart) {
         event.preventDefault();
+      }
+      languageForceShow = true;
+      languageUserActivated = true;
+      startLessonTransitionLockUntil =
+        performance.now() + (isDesktopStart ? 900 : 650);
+      if (document.body.classList.contains("world-page")) {
+        document.body.classList.add("hide-maps");
+        document.body.classList.add("show-language");
+        document.body.classList.add("start-lesson-transition");
+      }
+      languageSection.classList.add("is-visible");
+      if (setActiveWorldSection) {
+        setActiveWorldSection("language");
+      }
+      updateMapsTitleVisibility();
+      window.setTimeout(() => {
+        if (performance.now() >= startLessonTransitionLockUntil) {
+          document.body.classList.remove("start-lesson-transition");
+        }
+      }, isDesktopStart ? 980 : 730);
+      if (isDesktopStart) {
         const baseOffset =
           Number.parseFloat(window.getComputedStyle(languageSection).scrollMarginTop) || 0;
         const targetTop =
@@ -2000,21 +2028,6 @@ if (languageSection) {
         history.replaceState(null, "", `${window.location.pathname}${window.location.search}#language`);
         window.scrollTo({ top: Math.max(0, targetTop), behavior: "smooth" });
       }
-      languageForceShow = true;
-      languageUserActivated = true;
-      if (document.body.classList.contains("world-page")) {
-        document.body.classList.add("hide-maps");
-      }
-      window.requestAnimationFrame(() => {
-        languageSection.classList.add("is-visible");
-        if (document.body.classList.contains("world-page")) {
-          document.body.classList.add("show-language");
-        }
-        updateMapsTitleVisibility();
-        if (setActiveWorldSection) {
-          setActiveWorldSection("language");
-        }
-      });
     });
   }
 
@@ -2057,6 +2070,13 @@ if (document.body.classList.contains("world-page")) {
       return closestId;
     };
     setActiveWorldSection = (id) => {
+      if (
+        performance.now() < startLessonTransitionLockUntil &&
+        id !== "language" &&
+        id !== "maps"
+      ) {
+        id = "language";
+      }
       if (!id || activeSectionId === id) {
         updateMapsTitleVisibility();
         return;
@@ -2074,6 +2094,7 @@ if (document.body.classList.contains("world-page")) {
       } else {
         document.body.classList.remove("show-language");
       }
+      document.body.dataset.activeWorldSection = id;
       updateMapsTitleVisibility();
     };
     const handleWorldScroll = () => {
@@ -2088,6 +2109,270 @@ if (document.body.classList.contains("world-page")) {
     window.addEventListener("hashchange", scheduleWorldScroll);
   }
 }
+
+const setupWorldPageInteractiveFx = () => {
+  if (!document.body.classList.contains("world-page")) {
+    return;
+  }
+  const root = document.documentElement;
+  const worldAmbient = document.querySelector(".world-ambient");
+  const worldSections = Array.from(document.querySelectorAll(".world-section"));
+  document.body.classList.add("world-fx-ready");
+
+  const ensureAmbientStars = () => {
+    if (!worldAmbient || worldAmbient.querySelector(".world-fx-stars")) {
+      return;
+    }
+    const stars = document.createElement("div");
+    stars.className = "world-fx-stars";
+    const starCount = prefersReducedMotion ? 10 : 26;
+    for (let i = 0; i < starCount; i += 1) {
+      const star = document.createElement("span");
+      star.className = "world-fx-star";
+      star.style.setProperty("--s-x", `${(6 + Math.random() * 88).toFixed(2)}%`);
+      star.style.setProperty("--s-y", `${(8 + Math.random() * 84).toFixed(2)}%`);
+      star.style.setProperty("--s-size", `${(1 + Math.random() * 2.2).toFixed(2)}px`);
+      star.style.setProperty("--s-drift", `${(4 + Math.random() * 14).toFixed(2)}px`);
+      star.style.setProperty("--s-delay", `${(Math.random() * 3.2).toFixed(2)}s`);
+      star.style.setProperty("--s-duration", `${(4.4 + Math.random() * 5.2).toFixed(2)}s`);
+      stars.appendChild(star);
+    }
+    worldAmbient.appendChild(stars);
+  };
+
+  const ensureSpaceLayers = () => {
+    if (!worldAmbient || prefersReducedMotion) {
+      return;
+    }
+    if (!worldAmbient.querySelector(".world-fx-dust")) {
+      const dust = document.createElement("div");
+      dust.className = "world-fx-dust";
+      for (let i = 0; i < 18; i += 1) {
+        const particle = document.createElement("span");
+        particle.className = "world-fx-dust-particle";
+        particle.style.setProperty("--d-x", `${(Math.random() * 100).toFixed(2)}%`);
+        particle.style.setProperty("--d-y", `${(Math.random() * 100).toFixed(2)}%`);
+        particle.style.setProperty("--d-size", `${(2.2 + Math.random() * 4.4).toFixed(2)}px`);
+        particle.style.setProperty("--d-delay", `${(Math.random() * 4.5).toFixed(2)}s`);
+        particle.style.setProperty("--d-duration", `${(9 + Math.random() * 8).toFixed(2)}s`);
+        dust.appendChild(particle);
+      }
+      worldAmbient.appendChild(dust);
+    }
+    if (!worldAmbient.querySelector(".world-fx-comets")) {
+      const comets = document.createElement("div");
+      comets.className = "world-fx-comets";
+      for (let i = 0; i < 4; i += 1) {
+        const comet = document.createElement("span");
+        comet.className = "world-fx-comet";
+        comet.style.setProperty("--c-top", `${(8 + Math.random() * 56).toFixed(2)}%`);
+        comet.style.setProperty("--c-size", `${(78 + Math.random() * 44).toFixed(2)}px`);
+        comet.style.setProperty("--c-delay", `${(Math.random() * 8).toFixed(2)}s`);
+        comet.style.setProperty("--c-duration", `${(5.2 + Math.random() * 3.8).toFixed(2)}s`);
+        comets.appendChild(comet);
+      }
+      worldAmbient.appendChild(comets);
+    }
+  };
+
+  ensureAmbientStars();
+  ensureSpaceLayers();
+
+  const setPointerShift = (x, y) => {
+    root.style.setProperty("--world-pointer-shift-x", `${x.toFixed(2)}px`);
+    root.style.setProperty("--world-pointer-shift-y", `${y.toFixed(2)}px`);
+  };
+
+  let pointerTargetX = 0;
+  let pointerTargetY = 0;
+  let pointerCurrentX = 0;
+  let pointerCurrentY = 0;
+  const setPointerTargetFromPoint = (clientX, clientY) => {
+    const w = Math.max(1, window.innerWidth);
+    const h = Math.max(1, window.innerHeight);
+    pointerTargetX = ((clientX / w) - 0.5) * 30;
+    pointerTargetY = ((clientY / h) - 0.5) * 26;
+  };
+
+  const ambientNebulaA = worldAmbient?.querySelector(".nebula-a") || null;
+  const ambientNebulaB = worldAmbient?.querySelector(".nebula-b") || null;
+  const ambientPlanetA = worldAmbient?.querySelector(".planet-a") || null;
+  let ambientRafId = 0;
+  const animateAmbient = (timestamp) => {
+    ambientRafId = window.requestAnimationFrame(animateAmbient);
+    pointerCurrentX += (pointerTargetX - pointerCurrentX) * 0.075;
+    pointerCurrentY += (pointerTargetY - pointerCurrentY) * 0.075;
+    setPointerShift(pointerCurrentX, pointerCurrentY);
+    if (prefersReducedMotion) {
+      return;
+    }
+    const t = timestamp * 0.001;
+    if (ambientNebulaA) {
+      const driftX = Math.sin(t * 0.45) * 10 - pointerCurrentX * 0.42;
+      const driftY = Math.cos(t * 0.38) * 8 - pointerCurrentY * 0.34;
+      ambientNebulaA.style.transform = `translate3d(${driftX.toFixed(2)}px, ${driftY.toFixed(2)}px, 0)`;
+    }
+    if (ambientNebulaB) {
+      const driftX = Math.cos(t * 0.4) * 9 + pointerCurrentX * 0.38;
+      const driftY = Math.sin(t * 0.34) * 7 + pointerCurrentY * 0.32;
+      ambientNebulaB.style.transform = `translate3d(${driftX.toFixed(2)}px, ${driftY.toFixed(2)}px, 0)`;
+    }
+    if (ambientPlanetA) {
+      const driftX = Math.sin(t * 0.28) * 6 + pointerCurrentX * 0.28;
+      const driftY = Math.cos(t * 0.22) * 5 + pointerCurrentY * 0.24;
+      const spin = t * 4.6;
+      ambientPlanetA.style.transform = `translate3d(${driftX.toFixed(2)}px, ${driftY.toFixed(2)}px, 0) rotate(${spin.toFixed(2)}deg)`;
+    }
+  };
+  if (!prefersReducedMotion) {
+    ambientRafId = window.requestAnimationFrame(animateAmbient);
+  }
+
+  window.addEventListener(
+    "pointermove",
+    (event) => {
+      setPointerTargetFromPoint(event.clientX, event.clientY);
+    },
+    { passive: true }
+  );
+  window.addEventListener(
+    "touchmove",
+    (event) => {
+      const touch = event.touches?.[0];
+      if (!touch) {
+        return;
+      }
+      setPointerTargetFromPoint(touch.clientX, touch.clientY);
+    },
+    { passive: true }
+  );
+  window.addEventListener(
+    "pointerleave",
+    () => {
+      pointerTargetX = 0;
+      pointerTargetY = 0;
+    },
+    { passive: true }
+  );
+
+  const updateWorldScrollFx = () => {
+    const scrollMax = Math.max(1, document.body.scrollHeight - window.innerHeight);
+    const scrollRatio = window.scrollY / scrollMax;
+    root.style.setProperty("--world-scroll-ratio", scrollRatio.toFixed(4));
+    root.style.setProperty("--world-cosmic-arc", `${(scrollRatio * 360).toFixed(2)}deg`);
+    worldSections.forEach((section) => {
+      const rect = section.getBoundingClientRect();
+      const midpoint = rect.top + rect.height / 2;
+      const offset = (midpoint - window.innerHeight / 2) / window.innerHeight;
+      const clamped = Math.max(-1, Math.min(1, offset));
+      section.style.setProperty("--world-section-drift", `${(-clamped * 16).toFixed(2)}px`);
+      section.style.setProperty("--world-section-glow", `${(1 - Math.abs(clamped)).toFixed(3)}`);
+    });
+  };
+  const scheduleWorldFxScroll = createRafThrottled(updateWorldScrollFx);
+  updateWorldScrollFx();
+  window.addEventListener("scroll", scheduleWorldFxScroll, { passive: true });
+  window.addEventListener("resize", scheduleWorldFxScroll, { passive: true });
+
+  const bindPulseFx = (elements) => {
+    elements.forEach((element) => {
+      if (!element) {
+        return;
+      }
+      const trigger = () => {
+        element.classList.remove("is-energized");
+        void element.offsetWidth;
+        element.classList.add("is-energized");
+        window.setTimeout(() => {
+          element.classList.remove("is-energized");
+        }, 460);
+      };
+      element.addEventListener("pointerdown", trigger, { passive: true });
+      element.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") {
+          return;
+        }
+        trigger();
+      });
+    });
+  };
+
+  bindPulseFx(Array.from(document.querySelectorAll(".language-pill, .language-skip, .hero-actions .primary")));
+
+  const bindMapCosmicFx = () => {
+    const mapCards = Array.from(document.querySelectorAll(".world-maps .map-card"));
+    mapCards.forEach((card) => {
+      card.style.setProperty("--map-hot-x", "50%");
+      card.style.setProperty("--map-hot-y", "50%");
+      let hotSpotRafId = 0;
+      let hotSpotX = 50;
+      let hotSpotY = 50;
+      const queueHotSpotUpdate = (x, y) => {
+        hotSpotX = Math.max(0, Math.min(100, x));
+        hotSpotY = Math.max(0, Math.min(100, y));
+        if (hotSpotRafId) {
+          return;
+        }
+        hotSpotRafId = window.requestAnimationFrame(() => {
+          hotSpotRafId = 0;
+          card.style.setProperty("--map-hot-x", `${hotSpotX.toFixed(2)}%`);
+          card.style.setProperty("--map-hot-y", `${hotSpotY.toFixed(2)}%`);
+        });
+      };
+      const triggerBurst = () => {
+        card.classList.remove("is-cosmic-burst");
+        window.requestAnimationFrame(() => {
+          card.classList.add("is-cosmic-burst");
+        });
+        window.setTimeout(() => {
+          card.classList.remove("is-cosmic-burst");
+        }, 760);
+      };
+      card.addEventListener("pointerenter", () => {
+        card.classList.add("is-cosmic-hot");
+      });
+      card.addEventListener("pointerleave", () => {
+        card.classList.remove("is-cosmic-hot");
+        if (hotSpotRafId) {
+          window.cancelAnimationFrame(hotSpotRafId);
+          hotSpotRafId = 0;
+        }
+        card.style.setProperty("--map-hot-x", "50%");
+        card.style.setProperty("--map-hot-y", "50%");
+      });
+      card.addEventListener(
+        "pointermove",
+        (event) => {
+          if (event.pointerType === "touch") {
+            return;
+          }
+          const rect = card.getBoundingClientRect();
+          const x = ((event.clientX - rect.left) / Math.max(rect.width, 1)) * 100;
+          const y = ((event.clientY - rect.top) / Math.max(rect.height, 1)) * 100;
+          queueHotSpotUpdate(x, y);
+        },
+        { passive: true }
+      );
+      card.addEventListener(
+        "pointerdown",
+        () => {
+          triggerBurst();
+        },
+        { passive: true }
+      );
+      card.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") {
+          return;
+        }
+        triggerBurst();
+      });
+    });
+  };
+
+  bindMapCosmicFx();
+};
+
+setupWorldPageInteractiveFx();
 
 
 /* ==========================================================================
@@ -3263,29 +3548,197 @@ mapLinks.forEach((link) => {
   });
 });
 
-const languagePills = document.querySelectorAll(".language-pill");
+const setupInteractiveMapCards = () => {
+  const mapCards = document.querySelectorAll(".map-card");
+  if (!mapCards.length) {
+    return;
+  }
+  const igniteTimers = new WeakMap();
+  const igniteCard = (card, clientX = null, clientY = null) => {
+    if (!card || card.classList.contains("coming-soon")) {
+      return;
+    }
+    const rect = card.getBoundingClientRect();
+    const hasPointer = Number.isFinite(clientX) && Number.isFinite(clientY) && rect.width && rect.height;
+    const x = hasPointer ? ((clientX - rect.left) / rect.width) * 100 : 50;
+    const y = hasPointer ? ((clientY - rect.top) / rect.height) * 100 : 50;
+    card.style.setProperty("--map-pulse-x", `${Math.min(100, Math.max(0, x)).toFixed(1)}%`);
+    card.style.setProperty("--map-pulse-y", `${Math.min(100, Math.max(0, y)).toFixed(1)}%`);
+    card.classList.remove("is-ignited");
+    // Restart CSS animation even when users tap rapidly.
+    void card.offsetWidth;
+    card.classList.add("is-ignited");
+    const existingTimer = igniteTimers.get(card);
+    if (existingTimer) {
+      window.clearTimeout(existingTimer);
+    }
+    const timer = window.setTimeout(() => {
+      card.classList.remove("is-ignited");
+      igniteTimers.delete(card);
+    }, 520);
+    igniteTimers.set(card, timer);
+  };
+
+  mapCards.forEach((card) => {
+    card.addEventListener("pointerdown", (event) => {
+      if (event.pointerType === "mouse" && event.button !== 0) {
+        return;
+      }
+      igniteCard(card, event.clientX, event.clientY);
+    });
+    card.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" && event.key !== " ") {
+        return;
+      }
+      igniteCard(card);
+    });
+  });
+};
+
+setupInteractiveMapCards();
+
+const languagePills = Array.from(document.querySelectorAll(".language-pill"));
+let availableLanguagePills = [];
+const BASE_LANGUAGE_NATIVE_LABELS = Object.freeze({
+  albanian: "Shqip",
+  arabic: "العربية",
+  bulgarian: "Български",
+  chinese: "中文",
+  croatian: "Hrvatski",
+  czech: "Čeština",
+  dutch: "Nederlands",
+  finnish: "Suomi",
+  french: "Français",
+  german: "Deutsch",
+  greek: "Ελληνικά",
+  hebrew: "עברית",
+  hindi: "हिन्दी",
+  indonesian: "Bahasa Indonesia",
+  italian: "Italiano",
+  japanese: "日本語",
+  korean: "한국어",
+  kurdish: "Kurdî",
+  malaysian: "Bahasa Melayu",
+  norwegian: "Norsk",
+  persian: "فارسی",
+  polish: "Polski",
+  portuguese: "Português",
+  romanian: "Română",
+  russian: "Русский",
+  somali: "Soomaali",
+  spanish: "Español",
+  swedish: "Svenska",
+  tagalog: "Tagalog",
+  thai: "ไทย",
+  turkish: "Türkçe",
+  ukrainian: "Українська",
+  urdu: "اردو",
+  uzbek: "O'zbek",
+  vietnamese: "Tiếng Việt",
+});
+const normalizeLanguageLabel = (value) =>
+  String(value || "")
+    .replace(/\s+/g, " ")
+    .trim();
+const getLanguagePillKey = (pill) =>
+  normalizeLanguageLabel(
+    pill?.dataset.languageKey || pill?.querySelector(".language-pill-label")?.textContent || ""
+  ).toLowerCase();
+const enhanceLanguagePillLabels = (pills) => {
+  pills.forEach((pill) => {
+    const rawLabel = normalizeLanguageLabel(
+      pill.querySelector(".language-pill-label")?.textContent || pill.textContent
+    );
+    if (!rawLabel) {
+      return;
+    }
+    const key = rawLabel.toLowerCase();
+    const nativeLabel = key === "english" ? "" : BASE_LANGUAGE_NATIVE_LABELS[key] || "";
+    pill.dataset.languageKey = key;
+    pill.dataset.languageNative = nativeLabel.toLowerCase();
+
+    const labelNode = document.createElement("span");
+    labelNode.className = "language-pill-label";
+    labelNode.textContent = rawLabel;
+
+    pill.textContent = "";
+    pill.appendChild(labelNode);
+
+    if (nativeLabel) {
+      const nativeNode = document.createElement("span");
+      nativeNode.className = "language-pill-native";
+      nativeNode.setAttribute("dir", "auto");
+      nativeNode.textContent = nativeLabel;
+      pill.appendChild(nativeNode);
+    }
+
+    pill.setAttribute(
+      "aria-label",
+      nativeLabel ? `${rawLabel} ${nativeLabel}` : rawLabel
+    );
+  });
+};
 if (languagePills.length) {
+  enhanceLanguagePillLabels(languagePills);
+  availableLanguagePills = languagePills.filter((pill) => getLanguagePillKey(pill) !== WORLD_KEY);
+  languagePills.forEach((pill) => {
+    if (getLanguagePillKey(pill) === WORLD_KEY) {
+      pill.remove();
+    }
+  });
   const mapsSection = document.querySelector("#maps");
-  const storedLanguage = localStorage.getItem("cosmicaBaseLanguage");
+  const storedLanguageRaw = normalizeLanguageLabel(
+    localStorage.getItem("cosmicaBaseLanguage")
+  ).toLowerCase();
+  const storedLanguage = storedLanguageRaw === WORLD_KEY ? "" : storedLanguageRaw;
+  if (storedLanguageRaw === WORLD_KEY) {
+    localStorage.removeItem("cosmicaBaseLanguage");
+  }
   if (storedLanguage) {
-    languagePills.forEach((pill) => {
-      const key = pill.textContent.trim().toLowerCase();
+    availableLanguagePills.forEach((pill) => {
+      const key = getLanguagePillKey(pill);
       if (key === storedLanguage) {
         pill.classList.add("is-selected");
       }
     });
   }
-  const selectLanguagePill = (pill) => {
-    if (!pill) {
-      return;
+  const languageBox = document.querySelector(".language-box");
+  const ensureLanguageSkipButton = () => {
+    if (!languageBox) {
+      return null;
     }
-    languagePills.forEach((btn) => btn.classList.remove("is-selected"));
-    pill.classList.add("is-selected");
-    const selected = pill.textContent.trim().toLowerCase();
+    let actions = languageBox.querySelector(".language-box-actions");
+    if (!actions) {
+      actions = document.createElement("div");
+      actions.className = "language-box-actions";
+      languageBox.appendChild(actions);
+    }
+
+    let skipButton = languageBox.querySelector(".language-skip");
+    if (!skipButton) {
+      skipButton = document.createElement("button");
+      skipButton.type = "button";
+      skipButton.className = "language-skip";
+      actions.appendChild(skipButton);
+    }
+    skipButton.textContent = "Skip translation";
+    skipButton.setAttribute("aria-label", "Skip translation");
+    languageBox.querySelector(".language-box-frames")?.remove();
+    return skipButton;
+  };
+  const skipLanguageButton = ensureLanguageSkipButton();
+  const applyLanguageChoice = (selectedLanguage = "", selectedPill = null) => {
+    const selected = normalizeLanguageLabel(selectedLanguage).toLowerCase();
+    availableLanguagePills.forEach((btn) => btn.classList.remove("is-selected"));
+    if (selectedPill) {
+      selectedPill.classList.add("is-selected");
+    }
     if (selected) {
       localStorage.setItem("cosmicaBaseLanguage", selected);
       void warmMapTranslationsCache();
       void warmWorldTranslationsCache();
+    } else {
+      localStorage.removeItem("cosmicaBaseLanguage");
     }
     document.body.classList.add("language-picked");
     languageSection?.classList.remove("is-visible");
@@ -3306,10 +3759,20 @@ if (languagePills.length) {
       setActiveWorldSection("maps");
     }
   };
+  const selectLanguagePill = (pill) => {
+    if (!pill) {
+      return;
+    }
+    const selected = getLanguagePillKey(pill);
+    if (!selected) {
+      return;
+    }
+    applyLanguageChoice(selected, pill);
+  };
   const touchTapMaxMovePx = 10;
   const touchPillState = new WeakMap();
 
-  languagePills.forEach((pill) => {
+  availableLanguagePills.forEach((pill) => {
     pill.addEventListener("pointerdown", (event) => {
       if (event.pointerType !== "touch") {
         return;
@@ -3364,28 +3827,46 @@ if (languagePills.length) {
       selectLanguagePill(pill);
     });
   });
+  if (skipLanguageButton) {
+    skipLanguageButton.addEventListener("pointerup", (event) => {
+      if (event.pointerType !== "touch") {
+        return;
+      }
+      event.preventDefault();
+      markTouchActivation(skipLanguageButton);
+      applyLanguageChoice("");
+    });
+    skipLanguageButton.addEventListener("click", () => {
+      if (isRecentTouchActivation(skipLanguageButton)) {
+        return;
+      }
+      applyLanguageChoice("");
+    });
+  }
 
   void warmMapTranslationsCache();
   void warmWorldTranslationsCache();
 }
 
 const languageSearch = document.getElementById("languageSearch");
-if (languageSearch && languagePills.length) {
+if (languageSearch && availableLanguagePills.length) {
   const applyLanguageFirstLetterFilter = () => {
     const query = languageSearch.value.trim().toLowerCase();
     if (!query) {
-      languagePills.forEach((pill) => {
+      availableLanguagePills.forEach((pill) => {
         pill.style.display = "";
       });
       return;
     }
     const isSingleLetter = query.length === 1;
     const firstLetter = query[0];
-    languagePills.forEach((pill) => {
-      const name = pill.textContent.trim().toLowerCase();
+    availableLanguagePills.forEach((pill) => {
+      const name = getLanguagePillKey(pill);
+      const native = String(pill.dataset.languageNative || "").trim().toLowerCase();
+      const searchTarget = `${name} ${native}`.trim();
       const matches = isSingleLetter
-        ? name.startsWith(firstLetter)
-        : name.includes(query);
+        ? name.startsWith(firstLetter) || native.startsWith(firstLetter)
+        : searchTarget.includes(query);
       pill.style.display = matches ? "" : "none";
     });
   };
