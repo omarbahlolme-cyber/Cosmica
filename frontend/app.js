@@ -24,32 +24,6 @@ const worldCards = document.querySelectorAll(".world-card");
 const urlParams = new URLSearchParams(window.location.search);
 const currentPath = window.location.pathname.toLowerCase();
 
-// Load Cloudflare Web Analytics only on production domains, not localhost/dev.
-const setupCloudflareBeacon = () => {
-  const host = String(window.location.hostname || "").toLowerCase();
-  const isProductionHost =
-    host === "cosmicalearn.com" ||
-    host === "www.cosmicalearn.com";
-  if (!isProductionHost) {
-    return;
-  }
-  if (document.querySelector('script[src*="static.cloudflareinsights.com/beacon.min.js"]')) {
-    return;
-  }
-
-  const script = document.createElement("script");
-  script.defer = true;
-  script.src = "https://static.cloudflareinsights.com/beacon.min.js";
-  script.crossOrigin = "anonymous";
-  script.setAttribute(
-    "data-cf-beacon",
-    '{"token":"041d74ecd7df4a418564fff0b1d1f030"}'
-  );
-  script.setAttribute("data-sri-exempt", "cloudflare-beacon-dynamic-script");
-  document.head.appendChild(script);
-};
-setupCloudflareBeacon();
-
 // Keep viewport-height based layout stable on mobile when browser UI bars expand/collapse.
 const setupDynamicViewportHeight = () => {
   const root = document.documentElement;
@@ -3488,6 +3462,67 @@ const setupSpeechCards = () => {
     return Date.now() - last < windowMs;
   };
 
+  const WORLD_BROWSER_VOICE_CONFIG = Object.freeze({
+    english: Object.freeze({
+      langPrefixes: ["en"],
+      prioritizedHints: [
+        "samantha",
+        "ava",
+        "allison",
+        "serena",
+        "karen",
+        "moira",
+        "google us english",
+        "google uk english female",
+        "microsoft aria",
+        "microsoft jenny",
+      ],
+    }),
+    french: Object.freeze({
+      langPrefixes: ["fr"],
+      prioritizedHints: ["microsoft denise", "google francais", "amelie", "celine", "marie"],
+    }),
+    german: Object.freeze({
+      langPrefixes: ["de"],
+      prioritizedHints: ["microsoft katja", "google deutsch", "helena", "anna"],
+    }),
+    spanish: Object.freeze({
+      langPrefixes: ["es"],
+      prioritizedHints: ["microsoft helena", "microsoft elvira", "google espanol", "monica", "paulina"],
+    }),
+    portuguese: Object.freeze({
+      langPrefixes: ["pt"],
+      prioritizedHints: ["microsoft francisca", "google portugues", "luciana", "helena"],
+    }),
+    dutch: Object.freeze({
+      langPrefixes: ["nl"],
+      prioritizedHints: ["microsoft colette", "google nederlands", "fenna"],
+    }),
+    swedish: Object.freeze({
+      langPrefixes: ["sv"],
+      prioritizedHints: ["microsoft sofie", "google svenska", "alva"],
+    }),
+    arabic: Object.freeze({
+      langPrefixes: ["ar"],
+      prioritizedHints: ["microsoft salma", "microsoft hoda", "google arabic", "zeina"],
+    }),
+    chinese: Object.freeze({
+      langPrefixes: ["zh", "cmn"],
+      prioritizedHints: ["xiaoxiao", "xiaoyi", "tingting", "huihui", "google zhongwen"],
+    }),
+    japanese: Object.freeze({
+      langPrefixes: ["ja"],
+      prioritizedHints: ["nanami", "haruka", "google nihongo", "microsoft nanami"],
+    }),
+    korean: Object.freeze({
+      langPrefixes: ["ko"],
+      prioritizedHints: ["sunhi", "seoyeon", "google hangug-eo", "microsoft sun-hi"],
+    }),
+    hindi: Object.freeze({
+      langPrefixes: ["hi"],
+      prioritizedHints: ["microsoft swara", "microsoft kalpana", "google hindi"],
+    }),
+  });
   const FEMALE_HINT =
     /female|woman|girl|samantha|karen|moira|ava|allison|serena|zira|jenny|aria|joanna|emma|lily|lucy|zoe|google uk english female|google us english female|microsoft aria|microsoft jenny/i;
   const MALE_HINT =
@@ -3574,24 +3609,58 @@ const setupSpeechCards = () => {
     const pickFrom = (voices) =>
       [...voices].sort((a, b) => voiceScore(b) - voiceScore(a))[0] || null;
 
+    const worldVoiceConfig =
+      WORLD_BROWSER_VOICE_CONFIG[WORLD_KEY] || WORLD_BROWSER_VOICE_CONFIG.english;
+    const ttsLangPrefix = String(WORLD_TTS_LANGUAGE_CODE || "")
+      .trim()
+      .toLowerCase()
+      .split("-")[0];
+    const worldLangPrefixes = Array.from(
+      new Set(
+        [
+          ...(Array.isArray(worldVoiceConfig?.langPrefixes) ? worldVoiceConfig.langPrefixes : []),
+          ttsLangPrefix,
+        ].filter(Boolean)
+      )
+    );
+    const prioritizedVoiceHints = Array.isArray(worldVoiceConfig?.prioritizedHints)
+      ? worldVoiceConfig.prioritizedHints
+      : [];
+    const worldVoices = availableVoices.filter((voice) => {
+      const lang = (voice.lang || "").toLowerCase();
+      return worldLangPrefixes.some((prefix) => lang.startsWith(prefix));
+    });
+    const prioritizedWorldVoices = worldVoices.filter((voice) =>
+      prioritizedVoiceHints.some((hint) =>
+        (voice.name || "").toLowerCase().includes(String(hint || "").toLowerCase())
+      )
+    );
+    const femaleWorldVoices = worldVoices.filter((voice) =>
+      FEMALE_HINT.test(voice.name || "")
+    );
+    const preferredWorldVoices = worldVoices.filter((voice) =>
+      FEMALE_HINT.test(voice.name || "") || HIGH_QUALITY_HINT.test(voice.name || "")
+    );
     const englishVoices = availableVoices.filter((voice) =>
       (voice.lang || "").toLowerCase().startsWith("en")
     );
-    const prioritizedVoiceHints = isIOS
+    const prioritizedEnglishHints = isIOS
       ? ["samantha", "ava", "allison", "serena", "karen", "moira"]
       : ["google us english", "google uk english female", "microsoft aria", "microsoft jenny"];
     const prioritizedEnglishVoices = englishVoices.filter((voice) =>
-      prioritizedVoiceHints.some((hint) =>
+      prioritizedEnglishHints.some((hint) =>
         (voice.name || "").toLowerCase().includes(hint)
       )
     );
-    const femaleEnglishVoices = englishVoices.filter((voice) =>
-      FEMALE_HINT.test(voice.name || "")
-    );
+    const femaleEnglishVoices = englishVoices.filter((voice) => FEMALE_HINT.test(voice.name || ""));
     const preferredEnglishVoices = englishVoices.filter((voice) =>
       FEMALE_HINT.test(voice.name || "") || HIGH_QUALITY_HINT.test(voice.name || "")
     );
     return (
+      pickFrom(prioritizedWorldVoices) ||
+      pickFrom(femaleWorldVoices) ||
+      pickFrom(preferredWorldVoices) ||
+      pickFrom(worldVoices) ||
       pickFrom(prioritizedEnglishVoices) ||
       pickFrom(femaleEnglishVoices) ||
       pickFrom(preferredEnglishVoices) ||
@@ -3755,7 +3824,7 @@ const setupSpeechCards = () => {
       selectedVoice = pickVoice();
     }
     const utterance = new SpeechSynthesisUtterance(normalizedText);
-    utterance.lang = selectedVoice?.lang || "en-US";
+    utterance.lang = selectedVoice?.lang || WORLD_TTS_LANGUAGE_CODE || "en-US";
     utterance.rate = rate;
     utterance.pitch = pitch;
     if (selectedVoice) {

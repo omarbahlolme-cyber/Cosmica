@@ -2705,6 +2705,87 @@ const ensureTranslationsLoaded = ({ awaitNetwork = false } = {}) => {
    DYNAMIC MAP RENDERERS
    Build Words, Phrases, and Grammar pages from shared section datasets.
    ========================================================================== */
+const createMapLoadingCard = () => {
+  const card = document.createElement("div");
+  card.className = "card map-skeleton-card";
+  card.innerHTML =
+    '<span class="map-skeleton-line map-skeleton-line-card"></span><span class="map-skeleton-line map-skeleton-line-sub"></span>';
+  return card;
+};
+
+const createMapLoadingSection = () => {
+  const section = document.createElement("section");
+  section.className = "section map-skeleton-section";
+  const title = document.createElement("div");
+  title.className = "section-title";
+  title.innerHTML =
+    '<span class="map-skeleton-line map-skeleton-line-eyebrow"></span><span class="map-skeleton-line map-skeleton-line-title"></span>';
+  const grid = document.createElement("div");
+  grid.className = "words-grid";
+  for (let index = 0; index < 8; index += 1) {
+    grid.appendChild(createMapLoadingCard());
+  }
+  section.appendChild(title);
+  section.appendChild(grid);
+  return section;
+};
+
+const renderMapLoadingState = (mapType) => {
+  const type = String(mapType || "").trim().toLowerCase();
+  const controls =
+    type === "words"
+      ? document.getElementById("wordsControls")
+      : type === "phrases"
+        ? document.getElementById("phrasesControls")
+        : type === "grammar"
+          ? document.getElementById("grammarControls")
+          : null;
+  const container =
+    type === "words"
+      ? document.getElementById("wordsSections")
+      : type === "phrases"
+        ? document.getElementById("phrasesSections")
+        : type === "grammar"
+          ? document.getElementById("grammarSections")
+          : null;
+  if (!container) {
+    return;
+  }
+  document.body.classList.add("maps-loading");
+  if (controls) {
+    controls.innerHTML = `
+      <div class="map-loading-controls" aria-hidden="true">
+        <span class="map-skeleton-line map-skeleton-line-eyebrow"></span>
+        <span class="map-skeleton-line map-skeleton-line-label"></span>
+        <div class="map-loading-chip-row">
+          <span class="map-loading-chip"></span>
+          <span class="map-loading-chip"></span>
+          <span class="map-loading-chip"></span>
+          <span class="map-loading-chip"></span>
+          <span class="map-loading-chip"></span>
+        </div>
+      </div>
+    `;
+  }
+  container.innerHTML = "";
+  for (let index = 0; index < 3; index += 1) {
+    container.appendChild(createMapLoadingSection());
+  }
+};
+
+const buildMapUnavailableState = (mapType) => {
+  const wrapper = document.createElement("section");
+  wrapper.className = "section map-unavailable";
+  const mapLabel = String(mapType || "Map").trim();
+  wrapper.innerHTML = `
+    <div class="section-title">
+      <h2>${mapLabel} content is still loading</h2>
+      <p>Please wait a moment, then refresh this page if cards do not appear.</p>
+    </div>
+  `;
+  return wrapper;
+};
+
 const renderWordsSections = () => {
   const container = document.getElementById("wordsSections");
   const controls = document.getElementById("wordsControls");
@@ -2762,6 +2843,12 @@ const renderWordsSections = () => {
     container.appendChild(section);
     sections.push(section);
   });
+
+  if (!sections.length) {
+    container.appendChild(buildMapUnavailableState("Words"));
+    return;
+  }
+  document.body.classList.remove("maps-loading");
 
   if (controls) {
     const eyebrow = document.createElement("div");
@@ -2911,6 +2998,12 @@ const renderPhrasesSections = () => {
     sections.push(section);
   });
 
+  if (!sections.length) {
+    container.appendChild(buildMapUnavailableState("Phrases"));
+    return;
+  }
+  document.body.classList.remove("maps-loading");
+
   if (controls) {
     const eyebrow = document.createElement("div");
     eyebrow.className = "words-controls-eyebrow";
@@ -3044,6 +3137,12 @@ const renderGrammarSections = () => {
     container.appendChild(section);
     sections.push(section);
   });
+
+  if (!sections.length) {
+    container.appendChild(buildMapUnavailableState("Grammar"));
+    return;
+  }
+  document.body.classList.remove("maps-loading");
 
   if (controls) {
     const grammarUi = getGrammarUiLabels();
@@ -7539,31 +7638,45 @@ const cachedWorldTranslations = readMapsWorldTranslationsCache();
 if (cachedWorldTranslations) {
   hydrateMapsWorldTranslationsPayload(cachedWorldTranslations);
 }
+const shouldRenderLoadingSkeleton =
+  needsMapTranslations && isNonEnglishWorld && !cachedWorldTranslations;
 
-if (isWordsPage) {
-  renderWordsSections();
-}
-if (isPhrasesPage) {
-  renderPhrasesSections();
-}
-if (isGrammarPage) {
-  renderGrammarSections();
-  setupGrammarModal();
+if (shouldRenderLoadingSkeleton) {
+  if (isWordsPage) {
+    renderMapLoadingState("words");
+  }
+  if (isPhrasesPage) {
+    renderMapLoadingState("phrases");
+  }
+  if (isGrammarPage) {
+    renderMapLoadingState("grammar");
+  }
+} else {
+  if (isWordsPage) {
+    renderWordsSections();
+  }
+  if (isPhrasesPage) {
+    renderPhrasesSections();
+  }
+  if (isGrammarPage) {
+    renderGrammarSections();
+    setupGrammarModal();
+  }
 }
 if (typeof initializeCommonShell === "function") {
   initializeCommonShell();
 }
-if (isWordsPage && document.querySelector(".word-card")) {
+if (!shouldRenderLoadingSkeleton && isWordsPage && document.querySelector(".word-card")) {
   applyWordTranslations();
 }
-if (isWordsPage) {
+if (!shouldRenderLoadingSkeleton && isWordsPage) {
   applyWorldSectionTitleLabels("words");
   applySectionTitleTranslations("words");
 }
-if (isPhrasesPage && document.querySelector(".phrase-card")) {
+if (!shouldRenderLoadingSkeleton && isPhrasesPage && document.querySelector(".phrase-card")) {
   applyPhraseTranslations();
 }
-if (isPhrasesPage) {
+if (!shouldRenderLoadingSkeleton && isPhrasesPage) {
   applyWorldSectionTitleLabels("phrases");
   applySectionTitleTranslations("phrases");
 }
@@ -7610,47 +7723,51 @@ if (needsMapTranslations) {
     isNonEnglishWorld || (shouldPrioritizeTranslations && isGrammarPage);
 
   const refreshAfterTranslations = () => {
-    ensureTranslationsLoaded({ awaitNetwork: shouldAwaitNetworkHydration }).then(() => {
-      if (isNonEnglishWorld) {
+    ensureTranslationsLoaded({ awaitNetwork: shouldAwaitNetworkHydration })
+      .then(() => {
+        if (isNonEnglishWorld) {
+          if (isWordsPage) {
+            renderWordsSections();
+          }
+          if (isPhrasesPage) {
+            renderPhrasesSections();
+          }
+          if (isGrammarPage) {
+            renderGrammarSections();
+            setupGrammarModal();
+          }
+          if (typeof setupSpeechCards === "function") {
+            setupSpeechCards();
+          }
+        }
+        if (isWordsPage && document.querySelector(".word-card")) {
+          applyWordTranslations();
+        }
         if (isWordsPage) {
-          renderWordsSections();
+          applyWorldSectionTitleLabels("words");
+          applySectionTitleTranslations("words");
+        }
+        if (isPhrasesPage && document.querySelector(".phrase-card")) {
+          applyPhraseTranslations();
         }
         if (isPhrasesPage) {
-          renderPhrasesSections();
+          applyWorldSectionTitleLabels("phrases");
+          applySectionTitleTranslations("phrases");
         }
         if (isGrammarPage) {
-          renderGrammarSections();
-          setupGrammarModal();
+          prewarmGrammarExplanationTranslations();
+          const overlay = ensureGrammarOverlay();
+          if (overlay && typeof overlay.__refresh === "function") {
+            overlay.__refresh();
+          }
         }
-        if (typeof setupSpeechCards === "function") {
-          setupSpeechCards();
-        }
-      }
-      if (isWordsPage && document.querySelector(".word-card")) {
-        applyWordTranslations();
-      }
-      if (isWordsPage) {
-        applyWorldSectionTitleLabels("words");
-        applySectionTitleTranslations("words");
-      }
-      if (isPhrasesPage && document.querySelector(".phrase-card")) {
-        applyPhraseTranslations();
-      }
-      if (isPhrasesPage) {
-        applyWorldSectionTitleLabels("phrases");
-        applySectionTitleTranslations("phrases");
-      }
-      if (isGrammarPage) {
-        prewarmGrammarExplanationTranslations();
-        const overlay = ensureGrammarOverlay();
-        if (overlay && typeof overlay.__refresh === "function") {
-          overlay.__refresh();
-        }
-      }
-    });
+      })
+      .finally(() => {
+        document.body.classList.remove("maps-loading");
+      });
   };
 
-  if (shouldPrioritizeTranslations) {
+  if (shouldPrioritizeTranslations || shouldRenderLoadingSkeleton) {
     refreshAfterTranslations();
   } else {
     runWhenBrowserIdle(refreshAfterTranslations);
