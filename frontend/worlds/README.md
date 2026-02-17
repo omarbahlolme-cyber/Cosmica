@@ -49,3 +49,10 @@ World folders are for world-specific data/config, not for changing public route 
 
 1. Grammar map cards are currently marked `Coming soon` on non-English world pages.
 2. Keep grammar page routes present for compatibility, but do not expose grammar as active learning content until the world grammar is fully validated.
+
+## Map Runtime UX Notes
+
+1. On non-English worlds, Words/Phrases section headers should use world-language labels where available.
+2. If a base language is selected, add section title meaning translation next to each Words/Phrases title.
+3. World entry should warm translation caches so map pages render with less perceived wait.
+4. Never leave map pages visually empty during translation hydration; show a loading or fallback state.

@@ -5,6 +5,7 @@ Cosmica is a static language-learning site with a small Node/Express backend for
 ## Developer map
 
 - Full file-by-file map: `docs/PROJECT_STRUCTURE.md`
+- Frontend runtime guardrails: `docs/FRONTEND_RUNTIME_NOTES.md`
 - Ops/security runbook: `docs/OPERATIONS_HARDENING.md`
 - Policy enforcement runbook: `docs/ENFORCEMENT_RUNBOOK.md`
 - Front-end entry points: `frontend/index.html`, `frontend/english-*.html`, and per-world pages in `frontend/world-*.html`, `frontend/letters-*.html`, `frontend/words-*.html`, `frontend/phrases-*.html`, `frontend/grammar-*.html`

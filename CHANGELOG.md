@@ -20,6 +20,7 @@ All notable changes to this project are documented in this file.
 - Accessibility/SEO/integrity/security.txt baseline check scripts added to quality pipeline.
 - HTML baseline updater script for consistent skip links, main landmarks, semantic h1, and JSON-LD.
 - Real-user performance telemetry endpoint (`/api/web-vitals`) and client-side Core Web Vitals reporting.
+- Frontend runtime notes document (`docs/FRONTEND_RUNTIME_NOTES.md`) with guardrails for prefetch, map hydration, and analytics mode.
 
 ### Changed
 - Server error monitoring with request IDs, structured error reporting, and optional webhook alerts.
@@ -28,6 +29,10 @@ All notable changes to this project are documented in this file.
 - Repository ignores generated local backups under `backups/`.
 - All HTML pages now include explicit main landmark IDs, structured data, and third-party integrity exemptions.
 - Performance baseline refreshed after intentional metadata/accessibility additions.
+- Background navigation prefetch was disabled in `frontend/app.js` to prevent burst prefetch `503` noise and partial-load regressions.
+- Map pages now include loading/fallback rendering states during translation hydration to avoid blank sections.
+- Mobile letter-card tuning was adjusted for romanization-heavy worlds, and related dynamic classes were allowlisted for bloat checks.
+- Cache-busted `app.js` reference advanced to `v=20260303` across HTML pages to force stale-client recovery after runtime fixes.
 
 ## [1.1.0] - 2026-02-08
 

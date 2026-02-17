@@ -55,6 +55,7 @@
 |   `-- naverc3bcca6a08043c716e45b0c95a298a16.html  # Naver ownership verification
 |-- docs/
 |   |-- PROJECT_STRUCTURE.md          # This file
+|   |-- FRONTEND_RUNTIME_NOTES.md     # Frontend runtime guardrails + recent behavior notes
 |   |-- OPERATIONS_HARDENING.md       # Platform hardening + backup runbook
 |   |-- ROLLBACK_RUNBOOK.md           # Rollback procedures and recovery commands
 |   `-- SECURITY.md                   # Vulnerability reporting/security policy
@@ -110,3 +111,4 @@
 6. Keep utility scripts under `scripts/` with clear section headers and scoped purpose.
 7. Update `perf/baseline.json` intentionally (`npm run perf:baseline`) after verified performance changes.
 8. Update bloat allowlist intentionally (`npm run check:bloat:refresh`) only after verified cleanup.
+9. Review `docs/FRONTEND_RUNTIME_NOTES.md` before changing prefetch, translation hydration, or analytics loading behavior.
