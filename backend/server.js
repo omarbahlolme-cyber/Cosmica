@@ -293,10 +293,9 @@ app.use(
     setHeaders: (res, filePath) => {
       const ext = path.extname(filePath).toLowerCase();
       if (ext === ".html") {
-        // Keep documents always fresh so mobile browsers never pin stale layout shells.
-        res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
-        res.setHeader("Pragma", "no-cache");
-        res.setHeader("Expires", "0");
+        // Keep documents revalidated on every request while remaining eligible
+        // for platform/browser speculation and prefetch pipelines.
+        res.setHeader("Cache-Control", "public, max-age=0, must-revalidate");
         return;
       }
       if (FRESH_ASSET_EXTENSIONS.has(ext)) {

@@ -15,6 +15,7 @@
     "check:a11y": "node scripts/check-accessibility-baseline.js",
     "check:seo": "node scripts/check-seo-baseline.js",
     "check:assets": "node scripts/check-asset-version-consistency.js",
+    "check:html-cache": "node scripts/check-html-cache-policy.js",
     "check:integrity": "node scripts/check-external-integrity.js",
     "check:securitytxt": "node scripts/check-security-txt.js",
     "check:intents": "node scripts/check-world-phrase-intents.js",
@@ -28,7 +29,7 @@
     "backup:create": "node scripts/create-backup.js",
     "backup:verify": "node scripts/verify-backup.js",
     "release:check": "node scripts/check-release.js",
-    "quality": "npm run check:syntax && npm run check:literal-escapes && npm run check:a11y && npm run check:seo && npm run check:assets && npm run check:integrity && npm run check:securitytxt && npm run check:intents && npm run check:bloat && npm run perf:check && npm run security:audit && npm run release:check && npm run smoke",
+    "quality": "npm run check:syntax && npm run check:literal-escapes && npm run check:a11y && npm run check:seo && npm run check:assets && npm run check:html-cache && npm run check:integrity && npm run check:securitytxt && npm run check:intents && npm run check:bloat && npm run perf:check && npm run security:audit && npm run release:check && npm run smoke",
     "format": "prettier --write \"**/*.{html,css,js,json,md}\""
   },
   "devDependencies": {
