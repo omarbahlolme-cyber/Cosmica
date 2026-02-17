@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-17T23:58:59.794Z",
+  "generatedAt": "2026-02-17T23:59:06.158Z",
   "worldLanguage": "japanese",
   "baseLanguages": [
     "albanian",
@@ -13841,7 +13841,29 @@
         "here to there": "ここからあそこへ",
         "today to that day": "今日からその日へ"
       },
-      "Formality & Style": {},
+      "Formality & Style": {
+        "formal word choice": "正式な言葉の選択",
+        "informal word choice": "非公式な言葉の選択",
+        "match audience tone": "聴衆のトーンに合わせる",
+        "short forms in speech": "スピーチでの短縮形",
+        "avoid in formal writing": "正式な文章では避ける",
+        "clarity choices": "明確さの選択",
+        "please for politeness": "丁寧さのための「お願いします」",
+        "soft request forms": "柔らかい依頼の形",
+        "indirect language": "間接的な言語",
+        "spoken simplicity": "話し言葉のシンプルさ",
+        "written clarity": "書き言葉の明確さ",
+        "sentence length control": "文の長さのコントロール",
+        "clear purpose first": "明確な目的を最初に",
+        "neutral tone": "中立的なトーン",
+        "polite closing": "丁寧な締めくくり",
+        "friendly tone": "友好的なトーン",
+        "short phrases": "短いフレーズ",
+        "informal openings": "非公式な始まり",
+        "short sentences": "短い文",
+        "avoid extra words": "余分な言葉を避ける",
+        "main point first": "主なポイントを最初に"
+      },
       "Discourse & Flow": {}
     },
     "grammarMistakeWrong": {
