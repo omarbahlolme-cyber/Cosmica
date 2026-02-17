@@ -532,60 +532,33 @@ const scheduleCoreRoutePrefetch = () => {
   if (!CAN_PREFETCH_NAVIGATION) {
     return;
   }
-  const warmRoutes = [
-    "/",
-    "/english-world.html",
-    "/english-letters.html",
-    "/english-words.html",
-    "/english-phrases.html",
-    "/english-grammar.html",
-    "/world-french.html",
-    "/letters-french.html",
-    "/words-french.html",
-    "/phrases-french.html",
-    "/world-german.html",
-    "/letters-german.html",
-    "/words-german.html",
-    "/phrases-german.html",
-    "/world-spanish.html",
-    "/letters-spanish.html",
-    "/words-spanish.html",
-    "/phrases-spanish.html",
-    "/world-portuguese.html",
-    "/letters-portuguese.html",
-    "/words-portuguese.html",
-    "/phrases-portuguese.html",
-    "/world-dutch.html",
-    "/letters-dutch.html",
-    "/words-dutch.html",
-    "/phrases-dutch.html",
-    "/world-swedish.html",
-    "/letters-swedish.html",
-    "/words-swedish.html",
-    "/phrases-swedish.html",
-    "/world-arabic.html",
-    "/letters-arabic.html",
-    "/words-arabic.html",
-    "/phrases-arabic.html",
-    "/world-chinese.html",
-    "/letters-chinese.html",
-    "/words-chinese.html",
-    "/phrases-chinese.html",
-    "/world-japanese.html",
-    "/letters-japanese.html",
-    "/words-japanese.html",
-    "/phrases-japanese.html",
-    "/world-korean.html",
-    "/letters-korean.html",
-    "/words-korean.html",
-    "/phrases-korean.html",
-    "/world-hindi.html",
-    "/letters-hindi.html",
-    "/words-hindi.html",
-    "/phrases-hindi.html",
-  ];
+  const warmRoutes = [];
+  const addRoute = (route) => {
+    const nextRoute = String(route || "").trim();
+    if (!nextRoute) {
+      return;
+    }
+    warmRoutes.push(nextRoute);
+  };
+  const isHomePage = currentPath === "/" || currentPath.endsWith("/index.html");
+  if (document.body.classList.contains("world-page")) {
+    document.querySelectorAll(".map-link[href]").forEach((link) => {
+      addRoute(link.getAttribute("href"));
+    });
+    addRoute(WORLD_ROUTES[WORLD_NAME] || "");
+  } else if (isHomePage) {
+    Object.values(WORLD_ROUTES).forEach((route) => addRoute(route));
+  } else {
+    return;
+  }
+  const uniqueWarmRoutes = [...new Set(warmRoutes)].slice(0, 8);
+  if (!uniqueWarmRoutes.length) {
+    return;
+  }
   const runPrefetch = () => {
-    warmRoutes.forEach((route) => prefetchDocument(route));
+    uniqueWarmRoutes.forEach((route, index) => {
+      window.setTimeout(() => prefetchDocument(route), index * 260);
+    });
   };
   if ("requestIdleCallback" in window) {
     window.requestIdleCallback(runPrefetch, { timeout: 2500 });
