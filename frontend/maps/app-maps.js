@@ -2525,6 +2525,10 @@ let translationPayloadReady = false;
 let translationsLoadPromise = null;
 const MAPS_BUNDLE_TRANSLATIONS_CACHE_KEY = "cosmicaMapTranslationsCache:v3";
 const MAPS_BUNDLE_TRANSLATIONS_CACHE_MAX_AGE_MS = 24 * 60 * 60 * 1000;
+const MAPS_WORLD_TRANSLATIONS_CACHE_KEY_PREFIX = "cosmicaWorldTranslationsCache:v1";
+const MAPS_WORLD_TRANSLATIONS_CACHE_MAX_AGE_MS = 24 * 60 * 60 * 1000;
+const buildMapsWorldTranslationsCacheKey = (worldKey = WORLD_KEY) =>
+  `${MAPS_WORLD_TRANSLATIONS_CACHE_KEY_PREFIX}:${String(worldKey || "").trim().toLowerCase()}`;
 
 const normalizeGrammarSectionLookup = (value) =>
   String(value || "")
@@ -2672,16 +2676,10 @@ const loadTranslations = async () => {
         console.warn(
           `Ignoring world pack mismatch: expected "${WORLD_KEY}" but got "${packWorldLanguage}" from ${WORLD_TRANSLATION_FILE}`
         );
-        WORLD_TRANSLATIONS = null;
         return;
       }
-      if (data?.worldLanguage) {
-        WORLD_TRANSLATIONS = data;
-        if (needsGrammarDetails) {
-          buildWorldGrammarMaps();
-          hydrateGrammarExplanationTranslations(data);
-        }
-      }
+      hydrateMapsWorldTranslationsPayload(data);
+      writeMapsWorldTranslationsCache(data);
     }
   } catch (error) {
     console.warn("Failed to load maps/translations.json", error);
@@ -2729,7 +2727,18 @@ const renderWordsSections = () => {
     section.dataset.section = sectionName;
     const title = document.createElement("div");
     title.className = "section-title";
-    title.innerHTML = `<h2>${sectionName}</h2>`;
+    const sourceSectionName = sectionName;
+    const displaySectionName =
+      getWorldSectionLabelFromPack("words", sourceSectionName) || sourceSectionName;
+    const titleHeading = document.createElement("h2");
+    titleHeading.dataset.sourceTitle = sourceSectionName;
+    // Keep translation source stable in English so "(...)" remains meaning-focused.
+    titleHeading.dataset.baseTitle = sourceSectionName;
+    const titleMain = document.createElement("span");
+    titleMain.className = "map-section-title-main";
+    titleMain.textContent = displaySectionName;
+    titleHeading.appendChild(titleMain);
+    title.appendChild(titleHeading);
     const grid = document.createElement("div");
     grid.className = "words-grid";
     words.forEach((word) => {
@@ -2866,7 +2875,18 @@ const renderPhrasesSections = () => {
     section.dataset.section = sectionName;
     const title = document.createElement("div");
     title.className = "section-title";
-    title.innerHTML = `<h2>${sectionName}</h2>`;
+    const sourceSectionName = sectionName;
+    const displaySectionName =
+      getWorldSectionLabelFromPack("phrases", sourceSectionName) || sourceSectionName;
+    const titleHeading = document.createElement("h2");
+    titleHeading.dataset.sourceTitle = sourceSectionName;
+    // Keep translation source stable in English so "(...)" remains meaning-focused.
+    titleHeading.dataset.baseTitle = sourceSectionName;
+    const titleMain = document.createElement("span");
+    titleMain.className = "map-section-title-main";
+    titleMain.textContent = displaySectionName;
+    titleHeading.appendChild(titleMain);
+    title.appendChild(titleHeading);
     const grid = document.createElement("div");
     grid.className = "words-grid";
     phrases.forEach((phrase) => {
@@ -6544,6 +6564,23 @@ const hydrateBaseTranslationsPayload = (payload) => {
   }
 };
 
+const hydrateMapsWorldTranslationsPayload = (payload) => {
+  if (!payload || typeof payload !== "object") {
+    return;
+  }
+  const packWorldLanguage = String(payload?.worldLanguage || "")
+    .trim()
+    .toLowerCase();
+  if (!packWorldLanguage || packWorldLanguage !== WORLD_KEY) {
+    return;
+  }
+  WORLD_TRANSLATIONS = payload;
+  if (needsGrammarDetails) {
+    buildWorldGrammarMaps();
+    hydrateGrammarExplanationTranslations(payload);
+  }
+};
+
 const readMapsBundleTranslationsCache = () => {
   try {
     const raw = localStorage.getItem(MAPS_BUNDLE_TRANSLATIONS_CACHE_KEY);
@@ -6571,6 +6608,42 @@ const readMapsBundleTranslationsCache = () => {
   }
 };
 
+const readMapsWorldTranslationsCache = () => {
+  if (!isNonEnglishWorld) {
+    return null;
+  }
+  try {
+    const raw = localStorage.getItem(buildMapsWorldTranslationsCacheKey(WORLD_KEY));
+    if (!raw) {
+      return null;
+    }
+    const parsed = JSON.parse(raw);
+    const savedAt = Number(parsed?.savedAt || 0);
+    if (!Number.isFinite(savedAt) || savedAt <= 0) {
+      return null;
+    }
+    if (Date.now() - savedAt > MAPS_WORLD_TRANSLATIONS_CACHE_MAX_AGE_MS) {
+      return null;
+    }
+    const payload = parsed?.payload;
+    const packWorldLanguage = String(payload?.worldLanguage || "")
+      .trim()
+      .toLowerCase();
+    if (!payload || typeof payload !== "object") {
+      return null;
+    }
+    if (!payload.words || !payload.phrases) {
+      return null;
+    }
+    if (!packWorldLanguage || packWorldLanguage !== WORLD_KEY) {
+      return null;
+    }
+    return payload;
+  } catch {
+    return null;
+  }
+};
+
 const writeMapsBundleTranslationsCache = (payload) => {
   if (!payload || typeof payload !== "object") {
     return;
@@ -6581,6 +6654,30 @@ const writeMapsBundleTranslationsCache = (payload) => {
   try {
     localStorage.setItem(
       MAPS_BUNDLE_TRANSLATIONS_CACHE_KEY,
+      JSON.stringify({
+        savedAt: Date.now(),
+        payload,
+      })
+    );
+  } catch {}
+};
+
+const writeMapsWorldTranslationsCache = (payload) => {
+  if (!isNonEnglishWorld || !payload || typeof payload !== "object") {
+    return;
+  }
+  const packWorldLanguage = String(payload?.worldLanguage || "")
+    .trim()
+    .toLowerCase();
+  if (!packWorldLanguage || packWorldLanguage !== WORLD_KEY) {
+    return;
+  }
+  if (!payload.words || !payload.phrases) {
+    return;
+  }
+  try {
+    localStorage.setItem(
+      buildMapsWorldTranslationsCacheKey(packWorldLanguage),
       JSON.stringify({
         savedAt: Date.now(),
         payload,
@@ -6775,6 +6872,309 @@ const buildTranslateEndpointCandidates = () => {
     }
   }
   return candidates;
+};
+
+const SECTION_TITLE_RUNTIME_TRANSLATION_CACHE_KEY =
+  "cosmicaRuntimeSectionTitleTranslationCache:v1";
+const runtimeSectionTitleTranslationCache = new Map();
+const runtimeSectionTitleTranslationRequests = new Map();
+
+const persistRuntimeSectionTitleTranslationCache = () => {
+  try {
+    localStorage.setItem(
+      SECTION_TITLE_RUNTIME_TRANSLATION_CACHE_KEY,
+      JSON.stringify(Object.fromEntries(runtimeSectionTitleTranslationCache))
+    );
+  } catch {}
+};
+
+const loadRuntimeSectionTitleTranslationCache = () => {
+  try {
+    const raw = localStorage.getItem(SECTION_TITLE_RUNTIME_TRANSLATION_CACHE_KEY);
+    if (!raw) {
+      return;
+    }
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object") {
+      return;
+    }
+    Object.entries(parsed).forEach(([key, value]) => {
+      if (typeof value === "string" && value.trim()) {
+        runtimeSectionTitleTranslationCache.set(key, value.trim());
+      }
+    });
+  } catch {}
+};
+
+loadRuntimeSectionTitleTranslationCache();
+
+const buildRuntimeSectionTitleCacheKey = (mapType, sectionTitle, baseLanguage) => {
+  const mapKey = String(mapType || "").trim().toLowerCase();
+  const titleKey = normalizeWordLookupKey(sectionTitle);
+  const langKey = String(baseLanguage || "").trim().toLowerCase();
+  return `${WORLD_KEY}|${mapKey}|${langKey}|${titleKey}`;
+};
+
+const cacheRuntimeSectionTitleTranslation = (
+  mapType,
+  sectionTitle,
+  baseLanguage,
+  translation
+) => {
+  const cacheKey = buildRuntimeSectionTitleCacheKey(mapType, sectionTitle, baseLanguage);
+  if (!cacheKey || !translation) {
+    return;
+  }
+  runtimeSectionTitleTranslationCache.set(cacheKey, String(translation).trim());
+  persistRuntimeSectionTitleTranslationCache();
+};
+
+const getRuntimeSectionTitleTranslation = (mapType, sectionTitle, baseLanguage) => {
+  const cacheKey = buildRuntimeSectionTitleCacheKey(mapType, sectionTitle, baseLanguage);
+  const value = runtimeSectionTitleTranslationCache.get(cacheKey);
+  return typeof value === "string" ? value : "";
+};
+
+const requestRuntimeSectionTitleTranslation = async (mapType, sectionTitleText, baseLanguage) => {
+  const mapKey = String(mapType || "").trim().toLowerCase();
+  const sectionTitle = String(sectionTitleText || "").trim();
+  const langKey = String(baseLanguage || "").trim().toLowerCase();
+  if (
+    !mapKey ||
+    !["words", "phrases"].includes(mapKey) ||
+    !sectionTitle ||
+    !langKey
+  ) {
+    return "";
+  }
+  if (langKey === "english") {
+    return sectionTitle;
+  }
+
+  const cacheKey = buildRuntimeSectionTitleCacheKey(mapKey, sectionTitle, langKey);
+  const cached = runtimeSectionTitleTranslationCache.get(cacheKey);
+  if (typeof cached === "string" && cached.trim()) {
+    return cached.trim();
+  }
+  const pending = runtimeSectionTitleTranslationRequests.get(cacheKey);
+  if (pending) {
+    return pending;
+  }
+
+  const endpointCandidates = buildTranslateEndpointCandidates();
+  const createAbortController = () => {
+    if (typeof AbortController === "undefined") {
+      return null;
+    }
+    return new AbortController();
+  };
+
+  const translateOnce = async (endpoint) => {
+    const controller = createAbortController();
+    const timeout = controller
+      ? window.setTimeout(() => controller.abort(), 10000)
+      : null;
+    try {
+      const options = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          text: sectionTitle,
+          targetLanguage: langKey,
+        }),
+        cache: "no-store",
+        credentials: "same-origin",
+      };
+      if (controller) {
+        options.signal = controller.signal;
+      }
+      const response = await fetch(endpoint, options);
+      if (!response.ok) {
+        throw new Error(`Section title translation failed with status ${response.status}`);
+      }
+      const data = await response.json().catch(() => ({}));
+      const translated = String(data?.translation || data?.content || "")
+        .replace(/^["'`]|["'`]$/g, "")
+        .trim();
+      if (!translated) {
+        throw new Error("Empty section title translation response");
+      }
+      cacheRuntimeSectionTitleTranslation(mapKey, sectionTitle, langKey, translated);
+      return translated;
+    } finally {
+      if (timeout) {
+        window.clearTimeout(timeout);
+      }
+    }
+  };
+
+  const request = (async () => {
+    try {
+      const attempts = navigator.onLine ? 2 : 1;
+      for (let attemptIndex = 0; attemptIndex < attempts; attemptIndex += 1) {
+        for (let i = 0; i < endpointCandidates.length; i += 1) {
+          try {
+            return await translateOnce(endpointCandidates[i]);
+          } catch {}
+        }
+        if (attemptIndex < attempts - 1) {
+          await new Promise((resolve) => window.setTimeout(resolve, 300));
+        }
+      }
+      return "";
+    } finally {
+      runtimeSectionTitleTranslationRequests.delete(cacheKey);
+    }
+  })();
+
+  runtimeSectionTitleTranslationRequests.set(cacheKey, request);
+  return request;
+};
+
+const applySectionTitleTranslations = (mapType) => {
+  const mapKey = String(mapType || "").trim().toLowerCase();
+  if (!["words", "phrases"].includes(mapKey)) {
+    return;
+  }
+
+  const baseLanguage = String(localStorage.getItem("cosmicaBaseLanguage") || "")
+    .trim()
+    .toLowerCase();
+  const sectionSelector =
+    mapKey === "words" ? ".words-group[data-section]" : ".phrases-group[data-section]";
+  document.querySelectorAll(sectionSelector).forEach((sectionEl) => {
+    const heading = sectionEl.querySelector(".section-title h2");
+    if (!heading) {
+      return;
+    }
+    const baseTitle = String(
+      heading.dataset.baseTitle ||
+        heading.dataset.sourceTitle ||
+        sectionEl.dataset.section ||
+        heading.textContent ||
+        ""
+    ).trim();
+    if (!baseTitle) {
+      return;
+    }
+    let translationNode = heading.querySelector(".map-section-title-translation");
+    if (!translationNode) {
+      translationNode = document.createElement("span");
+      translationNode.className = "map-section-title-translation";
+      translationNode.setAttribute("dir", "auto");
+      heading.appendChild(document.createTextNode(" "));
+      heading.appendChild(translationNode);
+    }
+
+    if (!baseLanguage) {
+      translationNode.textContent = "";
+      translationNode.hidden = true;
+      return;
+    }
+
+    const cached = getRuntimeSectionTitleTranslation(mapKey, baseTitle, baseLanguage);
+    if (cached) {
+      translationNode.textContent = `(${cached})`;
+      translationNode.hidden = false;
+      return;
+    }
+
+    if (baseLanguage === "english") {
+      translationNode.textContent = `(${baseTitle})`;
+      translationNode.hidden = false;
+      return;
+    }
+
+    const requestKey = `${mapKey}|${baseTitle}|${baseLanguage}|${Date.now()}`;
+    heading.dataset.sectionTitleTranslationRequest = requestKey;
+    translationNode.hidden = true;
+    requestRuntimeSectionTitleTranslation(mapKey, baseTitle, baseLanguage).then((translated) => {
+      if (heading.dataset.sectionTitleTranslationRequest !== requestKey) {
+        return;
+      }
+      if (!translated) {
+        translationNode.textContent = "";
+        translationNode.hidden = true;
+        return;
+      }
+      translationNode.textContent = `(${translated})`;
+      translationNode.hidden = false;
+    });
+  });
+};
+
+const setMapSectionTitleMainText = (heading, text) => {
+  if (!heading) {
+    return;
+  }
+  const normalized = String(text || "").trim();
+  if (!normalized) {
+    return;
+  }
+  let mainNode = heading.querySelector(".map-section-title-main");
+  if (!mainNode) {
+    mainNode = document.createElement("span");
+    mainNode.className = "map-section-title-main";
+    const currentText = String(heading.textContent || "").trim();
+    if (currentText) {
+      mainNode.textContent = currentText;
+      heading.textContent = "";
+      heading.appendChild(mainNode);
+    } else if (heading.firstChild) {
+      heading.insertBefore(mainNode, heading.firstChild);
+    } else {
+      heading.appendChild(mainNode);
+    }
+  }
+  mainNode.textContent = normalized;
+};
+
+const applyWorldSectionTitleLabels = (mapType) => {
+  const mapKey = String(mapType || "").trim().toLowerCase();
+  if (!["words", "phrases"].includes(mapKey) || !isNonEnglishWorld) {
+    return;
+  }
+
+  const sectionSelector =
+    mapKey === "words" ? ".words-group[data-section]" : ".phrases-group[data-section]";
+  document.querySelectorAll(sectionSelector).forEach((sectionEl) => {
+    const heading = sectionEl.querySelector(".section-title h2");
+    if (!heading) {
+      return;
+    }
+    const sourceTitle = String(
+      heading.dataset.sourceTitle || sectionEl.dataset.section || ""
+    ).trim();
+    if (!sourceTitle) {
+      return;
+    }
+    heading.dataset.sourceTitle = sourceTitle;
+    heading.dataset.baseTitle = sourceTitle;
+
+    const fromPack = getWorldSectionLabelFromPack(mapKey, sourceTitle);
+    if (fromPack) {
+      setMapSectionTitleMainText(heading, fromPack);
+      return;
+    }
+
+    const cached = getRuntimeSectionTitleTranslation(mapKey, sourceTitle, WORLD_KEY);
+    if (cached) {
+      setMapSectionTitleMainText(heading, cached);
+      return;
+    }
+
+    const requestKey = `${mapKey}|${sourceTitle}|${WORLD_KEY}|${Date.now()}`;
+    heading.dataset.worldSectionTitleRequest = requestKey;
+    requestRuntimeSectionTitleTranslation(mapKey, sourceTitle, WORLD_KEY).then((translated) => {
+      if (heading.dataset.worldSectionTitleRequest !== requestKey) {
+        return;
+      }
+      if (!translated) {
+        return;
+      }
+      setMapSectionTitleMainText(heading, translated);
+    });
+  });
 };
 
 const requestRuntimePhraseTranslation = async (section, phraseText, baseLanguage) => {
@@ -7064,14 +7464,26 @@ refreshMapsForBaseLanguage = () => {
     .trim()
     .toLowerCase();
   const shouldPrioritizeTranslations =
-    !!selectedBaseLanguage && selectedBaseLanguage !== "english";
+    !!selectedBaseLanguage && (isNonEnglishWorld || selectedBaseLanguage !== "english");
 
   const refreshRenderedMaps = () => {
+    if (isWordsPage) {
+      applyWorldSectionTitleLabels("words");
+    }
     if (document.querySelector(".word-card")) {
       applyWordTranslations();
     }
+    if (isWordsPage) {
+      applySectionTitleTranslations("words");
+    }
+    if (isPhrasesPage) {
+      applyWorldSectionTitleLabels("phrases");
+    }
     if (document.querySelector(".phrase-card")) {
       applyPhraseTranslations();
+    }
+    if (isPhrasesPage) {
+      applySectionTitleTranslations("phrases");
     }
     if (isGrammarPage) {
       prewarmGrammarExplanationTranslations();
@@ -7123,6 +7535,10 @@ if (cachedBaseTranslations) {
   hydrateBaseTranslationsPayload(cachedBaseTranslations);
   translationPayloadReady = true;
 }
+const cachedWorldTranslations = readMapsWorldTranslationsCache();
+if (cachedWorldTranslations) {
+  hydrateMapsWorldTranslationsPayload(cachedWorldTranslations);
+}
 
 if (isWordsPage) {
   renderWordsSections();
@@ -7140,8 +7556,16 @@ if (typeof initializeCommonShell === "function") {
 if (isWordsPage && document.querySelector(".word-card")) {
   applyWordTranslations();
 }
+if (isWordsPage) {
+  applyWorldSectionTitleLabels("words");
+  applySectionTitleTranslations("words");
+}
 if (isPhrasesPage && document.querySelector(".phrase-card")) {
   applyPhraseTranslations();
+}
+if (isPhrasesPage) {
+  applyWorldSectionTitleLabels("phrases");
+  applySectionTitleTranslations("phrases");
 }
 if (isWordsPage) {
   updateWordsTopState();
@@ -7181,7 +7605,7 @@ if (needsMapTranslations) {
     .trim()
     .toLowerCase();
   const shouldPrioritizeTranslations =
-    !!selectedBaseLanguage && selectedBaseLanguage !== "english";
+    !!selectedBaseLanguage && (isNonEnglishWorld || selectedBaseLanguage !== "english");
   const shouldAwaitNetworkHydration =
     isNonEnglishWorld || (shouldPrioritizeTranslations && isGrammarPage);
 
@@ -7205,8 +7629,16 @@ if (needsMapTranslations) {
       if (isWordsPage && document.querySelector(".word-card")) {
         applyWordTranslations();
       }
+      if (isWordsPage) {
+        applyWorldSectionTitleLabels("words");
+        applySectionTitleTranslations("words");
+      }
       if (isPhrasesPage && document.querySelector(".phrase-card")) {
         applyPhraseTranslations();
+      }
+      if (isPhrasesPage) {
+        applyWorldSectionTitleLabels("phrases");
+        applySectionTitleTranslations("phrases");
       }
       if (isGrammarPage) {
         prewarmGrammarExplanationTranslations();

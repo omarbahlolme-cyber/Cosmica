@@ -239,7 +239,10 @@ const WORLD_TRANSLATION_FILE =
 const WORLD_TTS_LANGUAGE_CODE =
   WORLD_TTS_CONFIG[WORLD_KEY]?.languageCode || WORLD_TTS_CONFIG.english.languageCode;
 const WORLD_TTS_VOICE = WORLD_TTS_CONFIG[WORLD_KEY]?.voice || WORLD_TTS_CONFIG.english.voice;
-const MAP_TRANSLATIONS_CACHE_KEY = "cosmicaMapTranslationsCache:v2";
+const MAP_TRANSLATIONS_CACHE_KEY = "cosmicaMapTranslationsCache:v3";
+const WORLD_TRANSLATIONS_CACHE_KEY_PREFIX = "cosmicaWorldTranslationsCache:v1";
+const buildWorldTranslationsCacheKey = (worldKey = WORLD_KEY) =>
+  `${WORLD_TRANSLATIONS_CACHE_KEY_PREFIX}:${String(worldKey || "").trim().toLowerCase()}`;
 const readAssetVersionParam = (rawUrl) => {
   if (!rawUrl) {
     return "";
@@ -315,8 +318,51 @@ const warmMapTranslationsCache = async () => {
   } catch {}
 };
 
+const writeWorldTranslationsCache = (payload) => {
+  if (!payload || typeof payload !== "object") {
+    return;
+  }
+  const packWorldLanguage = String(payload?.worldLanguage || "")
+    .trim()
+    .toLowerCase();
+  if (!packWorldLanguage || !payload.words || !payload.phrases) {
+    return;
+  }
+  try {
+    localStorage.setItem(
+      buildWorldTranslationsCacheKey(packWorldLanguage),
+      JSON.stringify({
+        savedAt: Date.now(),
+        payload,
+      })
+    );
+  } catch {}
+};
+
+const warmWorldTranslationsCache = async () => {
+  if (!document.body.classList.contains("world-page")) {
+    return;
+  }
+  if (!isNonEnglishWorld || WORLD_TRANSLATION_FILE === BASE_MAP_TRANSLATION_FILE) {
+    return;
+  }
+  try {
+    const response = await fetch(WORLD_TRANSLATION_FILE, { cache: "no-store" });
+    if (!response.ok) {
+      return;
+    }
+    const payload = await response.json();
+    const packWorldLanguage = String(payload?.worldLanguage || "")
+      .trim()
+      .toLowerCase();
+    if (packWorldLanguage && packWorldLanguage === WORLD_KEY) {
+      writeWorldTranslationsCache(payload);
+    }
+  } catch {}
+};
+
 const preloadMapsBundleAsset = () => {
-  if (!needsMapTranslations) {
+  if (!needsMapTranslations && !document.body.classList.contains("world-page")) {
     return;
   }
   const href = withAssetVersion("maps/app-maps.js");
@@ -1238,7 +1284,8 @@ const buildLettersTranslateEndpointCandidates = () => {
 const requestLettersTitleTranslation = async (titleText, targetLanguage) => {
   const title = String(titleText || "").trim();
   const lang = String(targetLanguage || "").trim().toLowerCase();
-  if (!title || !lang || lang === "english") {
+  const shouldSkipForEnglishWorld = lang === "english" && WORLD_KEY === "english";
+  if (!title || !lang || shouldSkipForEnglishWorld) {
     return "";
   }
 
@@ -1294,7 +1341,9 @@ const setupLettersTitleTranslation = async () => {
   )
     .trim()
     .toLowerCase();
-  if (!selectedBaseLanguage || selectedBaseLanguage === "english") {
+  const shouldSkipForEnglishWorld =
+    selectedBaseLanguage === "english" && WORLD_KEY === "english";
+  if (!selectedBaseLanguage || shouldSkipForEnglishWorld) {
     return;
   }
 
@@ -1330,6 +1379,220 @@ const setupLettersTitleTranslation = async () => {
   cache.set(cacheKey, translated);
   persistLettersTitleTranslationCache();
   translationNode.textContent = `(${translated})`;
+};
+
+const LETTER_ROMANIZATION_MAP = Object.freeze({
+  korean: Object.freeze({
+    ㄱ: "g/k",
+    ㄴ: "n",
+    ㄷ: "d/t",
+    ㄹ: "r/l",
+    ㅁ: "m",
+    ㅂ: "b/p",
+    ㅅ: "s",
+    ㅇ: "ng (silent initial)",
+    ㅈ: "j",
+    ㅊ: "ch",
+    ㅋ: "k",
+    ㅌ: "t",
+    ㅍ: "p",
+    ㅎ: "h",
+    ㅏ: "a",
+    ㅑ: "ya",
+    ㅓ: "eo",
+    ㅕ: "yeo",
+    ㅗ: "o",
+    ㅛ: "yo",
+    ㅜ: "u",
+    ㅠ: "yu",
+    ㅡ: "eu",
+    ㅣ: "i",
+  }),
+  chinese: Object.freeze({
+    一: "yī",
+    二: "èr",
+    三: "sān",
+    人: "rén",
+    口: "kǒu",
+    日: "rì",
+    月: "yuè",
+    山: "shān",
+    水: "shuǐ",
+    火: "huǒ",
+    木: "mù",
+    土: "tǔ",
+    金: "jīn",
+    女: "nǚ",
+    子: "zǐ",
+    学: "xué",
+    生: "shēng",
+    好: "hǎo",
+    中: "zhōng",
+    国: "guó",
+    语: "yǔ",
+    文: "wén",
+    天: "tiān",
+    地: "dì",
+  }),
+  japanese: Object.freeze({
+    あ: "a",
+    い: "i",
+    う: "u",
+    え: "e",
+    お: "o",
+    か: "ka",
+    き: "ki",
+    く: "ku",
+    け: "ke",
+    こ: "ko",
+    さ: "sa",
+    し: "shi",
+    す: "su",
+    せ: "se",
+    そ: "so",
+    た: "ta",
+    ち: "chi",
+    つ: "tsu",
+    て: "te",
+    と: "to",
+    な: "na",
+    に: "ni",
+    ぬ: "nu",
+    ね: "ne",
+    の: "no",
+    は: "ha",
+    ひ: "hi",
+    ふ: "fu",
+    へ: "he",
+    ほ: "ho",
+    ま: "ma",
+    み: "mi",
+    む: "mu",
+    め: "me",
+    も: "mo",
+    や: "ya",
+    ゆ: "yu",
+    よ: "yo",
+    ら: "ra",
+    り: "ri",
+    る: "ru",
+    れ: "re",
+    ろ: "ro",
+    わ: "wa",
+    を: "wo",
+    ん: "n",
+  }),
+  arabic: Object.freeze({
+    ا: "ʾalif",
+    ب: "bāʾ",
+    ت: "tāʾ",
+    ث: "thāʾ",
+    ج: "jīm",
+    ح: "ḥāʾ",
+    خ: "khāʾ",
+    د: "dāl",
+    ذ: "dhāl",
+    ر: "rāʾ",
+    ز: "zāy",
+    س: "sīn",
+    ش: "shīn",
+    ص: "ṣād",
+    ض: "ḍād",
+    ط: "ṭāʾ",
+    ظ: "ẓāʾ",
+    ع: "ʿayn",
+    غ: "ghayn",
+    ف: "fāʾ",
+    ق: "qāf",
+    ك: "kāf",
+    ل: "lām",
+    م: "mīm",
+    ن: "nūn",
+    ه: "hāʾ",
+    و: "wāw",
+    ي: "yāʾ",
+  }),
+  hindi: Object.freeze({
+    अ: "a",
+    आ: "ā",
+    इ: "i",
+    ई: "ī",
+    उ: "u",
+    ऊ: "ū",
+    ए: "e",
+    ऐ: "ai",
+    ओ: "o",
+    औ: "au",
+    अं: "aṃ",
+    अः: "aḥ",
+    क: "ka",
+    ख: "kha",
+    ग: "ga",
+    घ: "gha",
+    ङ: "ṅa",
+    च: "ca",
+    छ: "cha",
+    ज: "ja",
+    झ: "jha",
+    ञ: "ña",
+    ट: "ṭa",
+    ठ: "ṭha",
+    ड: "ḍa",
+    ढ: "ḍha",
+    ण: "ṇa",
+    त: "ta",
+    थ: "tha",
+    द: "da",
+    ध: "dha",
+    न: "na",
+    प: "pa",
+    फ: "pha",
+    ब: "ba",
+    भ: "bha",
+    म: "ma",
+    य: "ya",
+    र: "ra",
+    ल: "la",
+    व: "va",
+    श: "śa",
+    ष: "ṣa",
+    स: "sa",
+    ह: "ha",
+  }),
+});
+
+const setupLetterRomanization = () => {
+  if (!document.body.classList.contains("letters-page")) {
+    return;
+  }
+  const worldMap = LETTER_ROMANIZATION_MAP[WORLD_KEY];
+  if (!worldMap) {
+    return;
+  }
+  document.querySelectorAll(".letter-card").forEach((card) => {
+    const letterEl = card.querySelector(".letter");
+    if (!letterEl) {
+      return;
+    }
+    const symbol = String(card.dataset.letter || letterEl.textContent || "").trim();
+    if (!symbol) {
+      return;
+    }
+    const romanization = worldMap[symbol];
+    if (!romanization) {
+      return;
+    }
+    let romanizationEl = card.querySelector(".letter-romanization");
+    if (!romanizationEl) {
+      romanizationEl = document.createElement("div");
+      romanizationEl.className = "letter-romanization";
+      romanizationEl.setAttribute("lang", "en");
+      romanizationEl.setAttribute("dir", "ltr");
+      const audioEl = card.querySelector(".letter-audio");
+      card.insertBefore(romanizationEl, audioEl || null);
+    }
+    romanizationEl.textContent = romanization;
+  });
 };
 
 const getChatRequestTimeoutMs = () => {
@@ -3019,9 +3282,11 @@ const navigateToMapLink = (href) => {
     navigated = true;
     window.location.href = href;
   };
-  const deadline = window.setTimeout(finalize, 350);
-  Promise.resolve(warmMapTranslationsCache())
-    .catch(() => {})
+  const deadline = window.setTimeout(finalize, 800);
+  Promise.allSettled([
+    Promise.resolve(warmMapTranslationsCache()),
+    Promise.resolve(warmWorldTranslationsCache()),
+  ])
     .finally(() => {
       window.clearTimeout(deadline);
       finalize();
@@ -3070,6 +3335,7 @@ if (languagePills.length) {
     if (selected) {
       localStorage.setItem("cosmicaBaseLanguage", selected);
       void warmMapTranslationsCache();
+      void warmWorldTranslationsCache();
     }
     document.body.classList.add("language-picked");
     languageSection?.classList.remove("is-visible");
@@ -3150,6 +3416,7 @@ if (languagePills.length) {
   });
 
   void warmMapTranslationsCache();
+  void warmWorldTranslationsCache();
 }
 
 const languageSearch = document.getElementById("languageSearch");
@@ -3963,6 +4230,7 @@ const loadMapsBundle = () =>
 const initializeCommonShell = () => {
   document.querySelectorAll(".reveal").forEach((el) => observeRevealElement(el));
   void setupLettersTitleTranslation();
+  setupLetterRomanization();
   setupSpeechCards();
   setupBackToTopButton();
 };

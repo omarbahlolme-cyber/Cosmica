@@ -80,6 +80,16 @@ body.letters-page main {
   text-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
 }
 
+.letter-card .letter-romanization {
+  font-size: clamp(0.62rem, 1.65vw, 0.78rem);
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  color: rgba(195, 214, 245, 0.88);
+  text-align: center;
+  max-width: 100%;
+  word-break: break-word;
+}
+
 .letter-audio {
   border: none;
   background: transparent;
@@ -106,6 +116,9 @@ body.letters-page main {
   }
   .letter-card .letter {
     font-size: 2.2rem;
+  }
+  .letter-card .letter-romanization {
+    font-size: 0.66rem;
   }
 }
 

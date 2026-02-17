@@ -29,6 +29,7 @@
   );
   --font-title: "Space Grotesk", sans-serif;
   --font-body: "Rajdhani", sans-serif;
+  --font-cinematic: "Orbitron", "Oxanium", "Space Grotesk", sans-serif;
 }
 
 /* --------------------------------------------------------------------------
@@ -431,9 +432,17 @@ body:not(.world-page) main {
 }
 
 .hero-left h1 {
+  font-family: var(--font-cinematic);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-shadow: 0 10px 34px rgba(84, 180, 255, 0.22);
   font-size: clamp(2.6rem, 4vw, 4.2rem);
   line-height: 1.05;
   margin-bottom: 18px;
+}
+
+.hero-left h1 .hero-title-break {
+  display: block;
 }
 
 .lede {
@@ -943,7 +952,8 @@ body.world-page .section-title {
   margin-bottom: 12px;
 }
 
-.section-title h2 .letters-title-translation {
+.section-title h2 .letters-title-translation,
+.section-title h2 .map-section-title-translation {
   display: inline-block;
   margin-inline-start: 0.45em;
   font-size: 0.58em;
@@ -3029,6 +3039,10 @@ body:not(.world-page) .footer {
 
   .hero-left h1 {
     font-size: clamp(2rem, 7vw, 2.6rem);
+  }
+
+  .hero-left h1 .hero-title-break {
+    display: inline;
   }
 
   .lede {
