@@ -157,16 +157,14 @@ const isLocalOrigin = (origin) => {
   }
 };
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.has(origin) || isLocalOrigin(origin)) {
-        return callback(null, true);
-      }
-      return callback(new Error("Not allowed by CORS"));
-    },
-  })
-);
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.has(origin) || isLocalOrigin(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error("Not allowed by CORS"));
+  },
+};
 
 /* --------------------------------------------------------------------------
    RATE LIMITING
@@ -322,6 +320,7 @@ app.use("/api", (req, res, next) => {
   res.setHeader("Cache-Control", "no-store");
   next();
 });
+app.use("/api", cors(corsOptions));
 app.use("/api", apiLimiter);
 
 /* --------------------------------------------------------------------------
