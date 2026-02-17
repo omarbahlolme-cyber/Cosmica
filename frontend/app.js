@@ -3549,6 +3549,12 @@ const setupSpeechCards = () => {
     ß: "ß",
     ɪ: "ɪ",
   });
+  const WORLD_LETTER_SPEECH_OVERRIDES = Object.freeze({
+    portuguese: Object.freeze({
+      Ç: "cê cedilha",
+      ç: "cê cedilha",
+    }),
+  });
 
   const normalizeLetterSpeechText = (rawText) => {
     const text = String(rawText || "")
@@ -3566,6 +3572,13 @@ const setupSpeechCards = () => {
     }
     const rawToken = exactLetterTokens[exactLetterTokens.length - 1];
     const token = rawToken === "ɪ" ? "ɪ" : rawToken.toLowerCase() === "ß" ? "ß" : rawToken.toUpperCase();
+    const worldOverrides = WORLD_LETTER_SPEECH_OVERRIDES[WORLD_KEY];
+    if (worldOverrides) {
+      const worldValue = worldOverrides[token] || worldOverrides[rawToken];
+      if (worldValue) {
+        return worldValue;
+      }
+    }
     return LETTER_SPEECH_MAP[token] || LETTER_SPEECH_MAP[rawToken] || rawToken;
   };
 

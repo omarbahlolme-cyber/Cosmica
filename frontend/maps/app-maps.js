@@ -2449,6 +2449,18 @@ const getWorldGrammarSectionLabel = (section) => {
   return section;
 };
 
+const getWorldSectionLabelFromPack = (mapType, section) => {
+  const labels = WORLD_TRANSLATIONS?.[mapType]?.sectionLabels;
+  if (!labels || typeof labels !== "object") {
+    return "";
+  }
+  const value = labels?.[section];
+  if (typeof value === "string" && value.trim()) {
+    return value.trim();
+  }
+  return "";
+};
+
 const getGrammarCardsForSection = (section) => {
   const worldCards = WORLD_TRANSLATIONS?.grammar?.cards?.[section];
   if (Array.isArray(worldCards) && worldCards.length) {
