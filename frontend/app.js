@@ -460,7 +460,9 @@ const worldPages = {
    NAVIGATION PREFETCH
    Warms likely next pages on capable networks/devices for smoother transitions.
    ========================================================================== */
-const CAN_PREFETCH_NAVIGATION = !prefersReducedData && !isSlowNetwork;
+const ENABLE_NAVIGATION_PREFETCH = false;
+const CAN_PREFETCH_NAVIGATION =
+  ENABLE_NAVIGATION_PREFETCH && !prefersReducedData && !isSlowNetwork;
 const ENABLE_BACKGROUND_ROUTE_PREFETCH = false;
 const prefetchedDocuments = new Set();
 const currentDocumentKey = `${window.location.origin}${window.location.pathname}${window.location.search}`;
