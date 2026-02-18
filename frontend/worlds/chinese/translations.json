@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-17T23:53:17.180Z",
+  "generatedAt": "2026-02-18T00:43:24.079Z",
   "worldLanguage": "chinese",
   "baseLanguages": [
     "albanian",
@@ -7931,4473 +7931,1663 @@
     }
   },
   "grammar": {
-    "titles": {
-      "Sentence Structure": {
-        "基本词序": {
-          "source": "basic word order",
-          "translations": {
-            "english": "basic word order"
-          }
-        },
-        "句子成分": {
-          "source": "sentence parts",
-          "translations": {
-            "english": "sentence parts"
-          }
-        },
-        "添加细节": {
-          "source": "adding details",
-          "translations": {
-            "english": "adding details"
-          }
-        },
-        "连接从句": {
-          "source": "linking clauses",
-          "translations": {
-            "english": "linking clauses"
-          }
-        },
-        "句子多样性": {
-          "source": "sentence variety",
-          "translations": {
-            "english": "sentence variety"
-          }
-        }
-      },
-      "Verbs": {
-        "动作动词": {
-          "source": "action verbs",
-          "translations": {
-            "english": "action verbs"
-          }
-        },
-        "状态动词": {
-          "source": "state verbs",
-          "translations": {
-            "english": "state verbs"
-          }
-        },
-        "连系动词": {
-          "source": "linking verbs",
-          "translations": {
-            "english": "linking verbs"
-          }
-        },
-        "动词模式": {
-          "source": "verb patterns",
-          "translations": {
-            "english": "verb patterns"
-          }
-        },
-        "动词组合": {
-          "source": "verb combinations",
-          "translations": {
-            "english": "verb combinations"
-          }
-        },
-        "短语动词": {
-          "source": "phrasal verbs",
-          "translations": {
-            "english": "phrasal verbs"
-          }
-        }
-      },
-      "Tenses & Aspect": {
-        "一般现在时": {
-          "source": "present simple",
-          "translations": {
-            "english": "present simple"
-          }
-        },
-        "现在进行时": {
-          "source": "present continuous",
-          "translations": {
-            "english": "present continuous"
-          }
-        },
-        "一般过去时": {
-          "source": "past simple",
-          "translations": {
-            "english": "past simple"
-          }
-        },
-        "过去进行时": {
-          "source": "past continuous",
-          "translations": {
-            "english": "past continuous"
-          }
-        },
-        "现在完成时": {
-          "source": "present perfect",
-          "translations": {
-            "english": "present perfect"
-          }
-        },
-        "过去完成时": {
-          "source": "past perfect",
-          "translations": {
-            "english": "past perfect"
-          }
-        },
-        "将来时态": {
-          "source": "future forms",
-          "translations": {
-            "english": "future forms"
-          }
-        },
-        "将来进行时": {
-          "source": "future continuous",
-          "translations": {
-            "english": "future continuous"
-          }
-        },
-        "将来完成时": {
-          "source": "future perfect",
-          "translations": {
-            "english": "future perfect"
-          }
-        },
-        "时态对比": {
-          "source": "aspect contrasts",
-          "translations": {
-            "english": "aspect contrasts"
-          }
-        }
-      },
-      "Nouns & Articles": {
-        "可数名词": {
-          "source": "countable nouns",
-          "translations": {
-            "english": "countable nouns"
-          }
-        },
-        "不可数名词": {
-          "source": "uncountable nouns",
-          "translations": {
-            "english": "uncountable nouns"
-          }
-        },
-        "冠词": {
-          "source": "articles",
-          "translations": {
-            "english": "articles"
-          }
-        },
-        "复数形式": {
-          "source": "plural forms",
-          "translations": {
-            "english": "plural forms"
-          }
-        },
-        "所有格名词": {
-          "source": "possessive nouns",
-          "translations": {
-            "english": "possessive nouns"
-          }
-        },
-        "名词短语": {
-          "source": "noun phrases",
-          "translations": {
-            "english": "noun phrases"
-          }
-        },
-        "量词": {
-          "source": "quantifiers",
-          "translations": {
-            "english": "quantifiers"
-          }
-        }
-      },
-      "Pronouns & Reference": {
-        "主格代词": {
-          "source": "subject pronouns",
-          "translations": {
-            "english": "subject pronouns"
-          }
-        },
-        "宾格代词": {
-          "source": "object pronouns",
-          "translations": {
-            "english": "object pronouns"
-          }
-        },
-        "物主形式": {
-          "source": "possessive forms",
-          "translations": {
-            "english": "possessive forms"
-          }
-        },
-        "反身代词": {
-          "source": "reflexive pronouns",
-          "translations": {
-            "english": "reflexive pronouns"
-          }
-        },
-        "指示代词": {
-          "source": "demonstratives",
-          "translations": {
-            "english": "demonstratives"
-          }
-        },
-        "关系代词": {
-          "source": "relative reference",
-          "translations": {
-            "english": "relative reference"
-          }
-        },
-        "不定代词": {
-          "source": "indefinite reference",
-          "translations": {
-            "english": "indefinite reference"
-          }
-        }
-      },
-      "Modifiers": {
-        "形容词基础": {
-          "source": "adjectives basics",
-          "translations": {
-            "english": "adjectives basics"
-          }
-        },
-        "形容词顺序": {
-          "source": "adjective order",
-          "translations": {
-            "english": "adjective order"
-          }
-        },
-        "比较级": {
-          "source": "comparatives",
-          "translations": {
-            "english": "comparatives"
-          }
-        },
-        "最高级": {
-          "source": "superlatives",
-          "translations": {
-            "english": "superlatives"
-          }
-        },
-        "副词基础": {
-          "source": "adverbs basics",
-          "translations": {
-            "english": "adverbs basics"
-          }
-        },
-        "频率副词": {
-          "source": "frequency adverbs",
-          "translations": {
-            "english": "frequency adverbs"
-          }
-        },
-        "时间和地点副词": {
-          "source": "time and place adverbs",
-          "translations": {
-            "english": "time and place adverbs"
-          }
-        },
-        "程度词": {
-          "source": "degree words",
-          "translations": {
-            "english": "degree words"
-          }
-        },
-        "分词": {
-          "source": "participles",
-          "translations": {
-            "english": "participles"
-          }
-        },
-        "修饰语叠加": {
-          "source": "modifier stacking",
-          "translations": {
-            "english": "modifier stacking"
-          }
-        }
-      },
-      "Questions": {
-        "是非问题": {
-          "source": "yes no questions",
-          "translations": {
-            "english": "yes no questions"
-          }
-        },
-        "疑问词问题": {
-          "source": "wh questions",
-          "translations": {
-            "english": "wh questions"
-          }
-        },
-        "含有be动词的问题": {
-          "source": "questions with be",
-          "translations": {
-            "english": "questions with be"
-          }
-        },
-        "含有do动词的问题": {
-          "source": "questions with do",
-          "translations": {
-            "english": "questions with do"
-          }
-        },
-        "含有情态动词的问题": {
-          "source": "questions with modals",
-          "translations": {
-            "english": "questions with modals"
-          }
-        },
-        "附加问句": {
-          "source": "tag questions",
-          "translations": {
-            "english": "tag questions"
-          }
-        },
-        "间接问句": {
-          "source": "indirect questions",
-          "translations": {
-            "english": "indirect questions"
-          }
-        }
-      },
-      "Negation": {
-        "不与be动词": {
-          "source": "not with be",
-          "translations": {
-            "english": "not with be"
-          }
-        },
-        "不与do动词": {
-          "source": "not with do",
-          "translations": {
-            "english": "not with do"
-          }
-        },
-        "否定短形式": {
-          "source": "negative short forms",
-          "translations": {
-            "english": "negative short forms"
-          }
-        },
-        "否定词": {
-          "source": "negative words",
-          "translations": {
-            "english": "negative words"
-          }
-        },
-        "否定疑问句": {
-          "source": "negative questions",
-          "translations": {
-            "english": "negative questions"
-          }
-        },
-        "有限否定": {
-          "source": "limited negatives",
-          "translations": {
-            "english": "limited negatives"
-          }
-        }
-      },
-      "Connections": {
-        "基本连接词": {
-          "source": "basic connectors",
-          "translations": {
-            "english": "basic connectors"
-          }
-        },
-        "原因和结果": {
-          "source": "reason and result",
-          "translations": {
-            "english": "reason and result"
-          }
-        },
-        "对比和选择": {
-          "source": "contrast and choice",
-          "translations": {
-            "english": "contrast and choice"
-          }
-        },
-        "时间连接词": {
-          "source": "time connectors",
-          "translations": {
-            "english": "time connectors"
-          }
-        },
-        "比较连接词": {
-          "source": "comparison links",
-          "translations": {
-            "english": "comparison links"
-          }
-        },
-        "添加观点": {
-          "source": "adding ideas",
-          "translations": {
-            "english": "adding ideas"
-          }
-        },
-        "排序观点": {
-          "source": "ordering ideas",
-          "translations": {
-            "english": "ordering ideas"
-          }
-        }
-      },
-      "Conditions": {
-        "真实条件": {
-          "source": "real conditions",
-          "translations": {
-            "english": "real conditions"
-          }
-        },
-        "未来条件": {
-          "source": "future conditions",
-          "translations": {
-            "english": "future conditions"
-          }
-        },
-        "不真实的现在": {
-          "source": "unreal present",
-          "translations": {
-            "english": "unreal present"
-          }
-        },
-        "不真实的过去": {
-          "source": "unreal past",
-          "translations": {
-            "english": "unreal past"
-          }
-        },
-        "混合条件": {
-          "source": "mixed conditions",
-          "translations": {
-            "english": "mixed conditions"
-          }
-        },
-        "除非和其他情况": {
-          "source": "unless and otherwise",
-          "translations": {
-            "english": "unless and otherwise"
-          }
-        }
-      },
-      "Voice & Focus": {
-        "主动语态": {
-          "source": "active voice",
-          "translations": {
-            "english": "active voice"
-          }
-        },
-        "被动语态": {
-          "source": "passive voice",
-          "translations": {
-            "english": "passive voice"
-          }
-        },
-        "焦点转移": {
-          "source": "focus shifts",
-          "translations": {
-            "english": "focus shifts"
-          }
-        },
-        "分裂句": {
-          "source": "cleft sentences",
-          "translations": {
-            "english": "cleft sentences"
-          }
-        },
-        "虚主语": {
-          "source": "there and it subjects",
-          "translations": {
-            "english": "there and it subjects"
-          }
-        }
-      },
-      "Modality": {
-        "能力": {
-          "source": "ability",
-          "translations": {
-            "english": "ability"
-          }
-        },
-        "许可": {
-          "source": "permission",
-          "translations": {
-            "english": "permission"
-          }
-        },
-        "义务": {
-          "source": "obligation",
-          "translations": {
-            "english": "obligation"
-          }
-        },
-        "建议": {
-          "source": "advice",
-          "translations": {
-            "english": "advice"
-          }
-        },
-        "可能性": {
-          "source": "possibility",
-          "translations": {
-            "english": "possibility"
-          }
-        },
-        "概率": {
-          "source": "probability",
-          "translations": {
-            "english": "probability"
-          }
-        },
-        "礼貌请求": {
-          "source": "polite requests",
-          "translations": {
-            "english": "polite requests"
-          }
-        },
-        "提议和邀请": {
-          "source": "offers and invitations",
-          "translations": {
-            "english": "offers and invitations"
-          }
-        }
-      },
-      "Reported Speech": {
-        "陈述句的转述": {
-          "source": "reporting statements",
-          "translations": {
-            "english": "reporting statements"
-          }
-        },
-        "疑问句的转述": {
-          "source": "reporting questions",
-          "translations": {
-            "english": "reporting questions"
-          }
-        },
-        "请求的转述": {
-          "source": "reporting requests",
-          "translations": {
-            "english": "reporting requests"
-          }
-        },
-        "命令的转述": {
-          "source": "reporting commands",
-          "translations": {
-            "english": "reporting commands"
-          }
-        },
-        "时态后移基础": {
-          "source": "backshift basics",
-          "translations": {
-            "english": "backshift basics"
-          }
-        },
-        "时间地点的变化": {
-          "source": "time place changes",
-          "translations": {
-            "english": "time place changes"
-          }
-        }
-      },
-      "Formality & Style": {
-        "正式与非正式": {
-          "source": "formal vs informal",
-          "translations": {
-            "english": "formal vs informal"
-          }
-        },
-        "缩写": {
-          "source": "contractions",
-          "translations": {
-            "english": "contractions"
-          }
-        },
-        "礼貌缓和": {
-          "source": "polite softening",
-          "translations": {
-            "english": "polite softening"
-          }
-        },
-        "口语与书面语": {
-          "source": "spoken vs written",
-          "translations": {
-            "english": "spoken vs written"
-          }
-        },
-        "专业风格": {
-          "source": "professional style",
-          "translations": {
-            "english": "professional style"
-          }
-        },
-        "休闲风格": {
-          "source": "casual style",
-          "translations": {
-            "english": "casual style"
-          }
-        },
-        "清晰与简洁": {
-          "source": "clarity and brevity",
-          "translations": {
-            "english": "clarity and brevity"
-          }
-        }
-      },
-      "Discourse & Flow": {
-        "开场与结束": {
-          "source": "opening and closing",
-          "translations": {
-            "english": "opening and closing"
-          }
-        },
-        "话题转换": {
-          "source": "topic shifts",
-          "translations": {
-            "english": "topic shifts"
-          }
-        },
-        "衔接工具": {
-          "source": "cohesion tools",
-          "translations": {
-            "english": "cohesion tools"
-          }
-        },
-        "思路排序": {
-          "source": "sequencing ideas",
-          "translations": {
-            "english": "sequencing ideas"
-          }
-        },
-        "澄清举措": {
-          "source": "clarification moves",
-          "translations": {
-            "english": "clarification moves"
-          }
-        },
-        "总结": {
-          "source": "summaries",
-          "translations": {
-            "english": "summaries"
-          }
-        },
-        "强调与重复": {
-          "source": "emphasis and repetition",
-          "translations": {
-            "english": "emphasis and repetition"
-          }
-        },
-        "对话流畅": {
-          "source": "conversation flow",
-          "translations": {
-            "english": "conversation flow"
-          }
-        },
-        "举例说明": {
-          "source": "giving examples",
-          "translations": {
-            "english": "giving examples"
-          }
-        },
-        "修正与纠正": {
-          "source": "repair and correction",
-          "translations": {
-            "english": "repair and correction"
-          }
-        }
-      }
-    },
-    "examples": {
-      "Sentence Structure": {
-        "她在读一本书。": {
-          "source": "She reads a book.",
-          "translations": {
-            "english": "She reads a book."
-          }
-        },
-        "他们给她起了队长的名字。": {
-          "source": "They named her captain.",
-          "translations": {
-            "english": "They named her captain."
-          }
-        },
-        "她在中午在车站遇见了他。": {
-          "source": "She met him at noon at the station.",
-          "translations": {
-            "english": "She met him at noon at the station."
-          }
-        },
-        "我待在家里因为下雨了。": {
-          "source": "I stayed home because it rained.",
-          "translations": {
-            "english": "I stayed home because it rained."
-          }
-        },
-        "我们早早完成了。下课后我们回家因为我们累了。": {
-          "source": "We finished early. We went home after class because we were tired.",
-          "translations": {
-            "english": "We finished early. We went home after class because we were tired."
-          }
-        }
-      },
-      "Verbs": {
-        "他们搬运箱子。": {
-          "source": "They carry the boxes.",
-          "translations": {
-            "english": "They carry the boxes."
-          }
-        },
-        "她感到疲倦。": {
-          "source": "She feels tired.",
-          "translations": {
-            "english": "She feels tired."
-          }
-        },
-        "房间感觉安静。": {
-          "source": "The room feels quiet.",
-          "translations": {
-            "english": "The room feels quiet."
-          }
-        },
-        "他把书放在桌子上。": {
-          "source": "He placed the book on the table.",
-          "translations": {
-            "english": "He placed the book on the table."
-          }
-        },
-        "我们决定留下。": {
-          "source": "We decided to stay.",
-          "translations": {
-            "english": "We decided to stay."
-          }
-        },
-        "她关掉了灯。": {
-          "source": "She turned off the light.",
-          "translations": {
-            "english": "She turned off the light."
-          }
-        }
-      },
-      "Tenses & Aspect": {
-        "她每天工作。": {
-          "source": "She works every day.",
-          "translations": {
-            "english": "She works every day."
-          }
-        },
-        "我在外面等。": {
-          "source": "I am waiting outside.",
-          "translations": {
-            "english": "I am waiting outside."
-          }
-        },
-        "他们访问了巴黎。": {
-          "source": "They visited Paris.",
-          "translations": {
-            "english": "They visited Paris."
-          }
-        },
-        "他打电话时我正在做饭。": {
-          "source": "I was cooking when he called.",
-          "translations": {
-            "english": "I was cooking when he called."
-          }
-        },
-        "他在这里住了多年。": {
-          "source": "He has lived here for years.",
-          "translations": {
-            "english": "He has lived here for years."
-          }
-        },
-        "我到达之前她已经离开了。": {
-          "source": "She had left before I arrived.",
-          "translations": {
-            "english": "She had left before I arrived."
-          }
-        },
-        "我们明天见。": {
-          "source": "We will meet tomorrow.",
-          "translations": {
-            "english": "We will meet tomorrow."
-          }
-        },
-        "我六点会在工作。": {
-          "source": "I will be working at six.",
-          "translations": {
-            "english": "I will be working at six."
-          }
-        },
-        "他们到星期五会完成。": {
-          "source": "They will have finished by Friday.",
-          "translations": {
-            "english": "They will have finished by Friday."
-          }
-        },
-        "我每天工作，我现在正在工作，我在这里工作了多年。": {
-          "source": "I work every day, I am working now, and I have worked here for years.",
-          "translations": {
-            "english": "I work every day, I am working now, and I have worked here for years."
-          }
-        }
-      },
-      "Nouns & Articles": {
-        "我有一枚硬币。": {
-          "source": "I have a coin.",
-          "translations": {
-            "english": "I have a coin."
-          }
-        },
-        "我们需要一些米。": {
-          "source": "We need some rice.",
-          "translations": {
-            "english": "We need some rice."
-          }
-        },
-        "狗在外面。": {
-          "source": "The dog is outside.",
-          "translations": {
-            "english": "The dog is outside."
-          }
-        },
-        "这里有两个孩子。": {
-          "source": "Two children are here.",
-          "translations": {
-            "english": "Two children are here."
-          }
-        },
-        "萨拉的手机是新的。": {
-          "source": "Sara's phone is new.",
-          "translations": {
-            "english": "Sara's phone is new."
-          }
-        },
-        "小厨房桌子坏了。": {
-          "source": "The small kitchen table broke.",
-          "translations": {
-            "english": "The small kitchen table broke."
-          }
-        },
-        "有很多选择。": {
-          "source": "There are many options.",
-          "translations": {
-            "english": "There are many options."
-          }
-        }
-      },
-      "Pronouns & Reference": {
-        "他们准备好了。": {
-          "source": "They are ready.",
-          "translations": {
-            "english": "They are ready."
-          }
-        },
-        "她给我打了电话。": {
-          "source": "She called me.",
-          "translations": {
-            "english": "She called me."
-          }
-        },
-        "这是我的包。": {
-          "source": "This is my bag.",
-          "translations": {
-            "english": "This is my bag."
-          }
-        },
-        "他伤了自己。": {
-          "source": "He hurt himself.",
-          "translations": {
-            "english": "He hurt himself."
-          }
-        },
-        "那些是我的钥匙。": {
-          "source": "Those are my keys.",
-          "translations": {
-            "english": "Those are my keys."
-          }
-        },
-        "打电话的那个人走了。": {
-          "source": "The man who called left.",
-          "translations": {
-            "english": "The man who called left."
-          }
-        },
-        "有人在等。": {
-          "source": "Someone is waiting.",
-          "translations": {
-            "english": "Someone is waiting."
-          }
-        }
-      },
-      "Modifiers": {
-        "房子很安静。": {
-          "source": "The house is quiet.",
-          "translations": {
-            "english": "The house is quiet."
-          }
-        },
-        "她买了一个小红包。": {
-          "source": "She bought a small red bag.",
-          "translations": {
-            "english": "She bought a small red bag."
-          }
-        },
-        "这个比那个快。": {
-          "source": "This is faster than that.",
-          "translations": {
-            "english": "This is faster than that."
-          }
-        },
-        "他是最高的。": {
-          "source": "He is the tallest.",
-          "translations": {
-            "english": "He is the tallest."
-          }
-        },
-        "她说得很清楚。": {
-          "source": "She speaks clearly.",
-          "translations": {
-            "english": "She speaks clearly."
-          }
-        },
-        "我通常早起。": {
-          "source": "I usually wake early.",
-          "translations": {
-            "english": "I usually wake early."
-          }
-        },
-        "我们昨天在那里见面。": {
-          "source": "We met there yesterday.",
-          "translations": {
-            "english": "We met there yesterday."
-          }
-        },
-        "房间很温暖。": {
-          "source": "The room is very warm.",
-          "translations": {
-            "english": "The room is very warm."
-          }
-        },
-        "这部电影很无聊。": {
-          "source": "The movie was boring.",
-          "translations": {
-            "english": "The movie was boring."
-          }
-        },
-        "她迅速回答了那个难题。": {
-          "source": "She quickly answered the hard question.",
-          "translations": {
-            "english": "She quickly answered the hard question."
-          }
-        }
-      },
-      "Questions": {
-        "你在这里工作吗？": {
-          "source": "Do you work here?",
-          "translations": {
-            "english": "Do you work here?"
-          }
-        },
-        "他住在哪里？": {
-          "source": "Where does he live?",
-          "translations": {
-            "english": "Where does he live?"
-          }
-        },
-        "商店开门吗？": {
-          "source": "Is the store open?",
-          "translations": {
-            "english": "Is the store open?"
-          }
-        },
-        "你给她打电话了吗？": {
-          "source": "Did you call her?",
-          "translations": {
-            "english": "Did you call her?"
-          }
-        },
-        "你能帮我吗？": {
-          "source": "Could you help me?",
-          "translations": {
-            "english": "Could you help me?"
-          }
-        },
-        "你准备好了，对吧？": {
-          "source": "You are ready, aren't you?",
-          "translations": {
-            "english": "You are ready, aren't you?"
-          }
-        },
-        "你能告诉我它在哪里吗？": {
-          "source": "Could you tell me where it is?",
-          "translations": {
-            "english": "Could you tell me where it is?"
-          }
-        }
-      },
-      "Negation": {
-        "她不累。": {
-          "source": "She is not tired.",
-          "translations": {
-            "english": "She is not tired."
-          }
-        },
-        "他们不同意。": {
-          "source": "They do not agree.",
-          "translations": {
-            "english": "They do not agree."
-          }
-        },
-        "我不知道。": {
-          "source": "I don't know.",
-          "translations": {
-            "english": "I don't know."
-          }
-        },
-        "没有牛奶。": {
-          "source": "There is no milk.",
-          "translations": {
-            "english": "There is no milk."
-          }
-        },
-        "你不想要咖啡吗？": {
-          "source": "Don't you want coffee?",
-          "translations": {
-            "english": "Don't you want coffee?"
-          }
-        },
-        "他很少在外面吃。": {
-          "source": "He rarely eats out.",
-          "translations": {
-            "english": "He rarely eats out."
-          }
-        }
-      },
-      "Connections": {
-        "我打了电话，但没有人接。": {
-          "source": "I called but no one answered.",
-          "translations": {
-            "english": "I called but no one answered."
-          }
-        },
-        "下雨了，所以我们留了下来。": {
-          "source": "It rained, so we stayed.",
-          "translations": {
-            "english": "It rained, so we stayed."
-          }
-        },
-        "她走了，尽管她很累。": {
-          "source": "She went, although she was tired.",
-          "translations": {
-            "english": "She went, although she was tired."
-          }
-        },
-        "到达时给我打电话。": {
-          "source": "Call me when you arrive.",
-          "translations": {
-            "english": "Call me when you arrive."
-          }
-        },
-        "这感觉像家。": {
-          "source": "This feels like home.",
-          "translations": {
-            "english": "This feels like home."
-          }
-        },
-        "我们还需要椅子。": {
-          "source": "We also need chairs.",
-          "translations": {
-            "english": "We also need chairs."
-          }
-        },
-        "我们先计划，然后行动。": {
-          "source": "First we plan, then we act.",
-          "translations": {
-            "english": "First we plan, then we act."
-          }
-        }
-      },
-      "Conditions": {
-        "如果你按这个，它就开始。": {
-          "source": "If you press this, it starts.",
-          "translations": {
-            "english": "If you press this, it starts."
-          }
-        },
-        "如果天气晴朗，我们就去。": {
-          "source": "If it is sunny, we will go.",
-          "translations": {
-            "english": "If it is sunny, we will go."
-          }
-        },
-        "如果我有时间，我会帮忙。": {
-          "source": "If I had time, I would help.",
-          "translations": {
-            "english": "If I had time, I would help."
-          }
-        },
-        "如果我们早点离开，我们就会到了。": {
-          "source": "If we had left earlier, we would have arrived.",
-          "translations": {
-            "english": "If we had left earlier, we would have arrived."
-          }
-        },
-        "如果她学习过，她现在会很冷静。": {
-          "source": "If she had studied, she would be calm now.",
-          "translations": {
-            "english": "If she had studied, she would be calm now."
-          }
-        },
-        "除非下雨，否则我们就去。": {
-          "source": "We will go unless it rains.",
-          "translations": {
-            "english": "We will go unless it rains."
-          }
-        }
-      },
-      "Voice & Focus": {
-        "厨师做了晚餐。": {
-          "source": "The chef cooked dinner.",
-          "translations": {
-            "english": "The chef cooked dinner."
-          }
-        },
-        "这顿饭被做了。": {
-          "source": "The meal was cooked.",
-          "translations": {
-            "english": "The meal was cooked."
-          }
-        },
-        "那本书，我昨天读完了。": {
-          "source": "That book, I finished yesterday.",
-          "translations": {
-            "english": "That book, I finished yesterday."
-          }
-        },
-        "打电话的是约翰。": {
-          "source": "It is John who called.",
-          "translations": {
-            "english": "It is John who called."
-          }
-        },
-        "有一个问题。": {
-          "source": "There is a problem.",
-          "translations": {
-            "english": "There is a problem."
-          }
-        }
-      },
-      "Modality": {
-        "她会游泳。": {
-          "source": "She can swim.",
-          "translations": {
-            "english": "She can swim."
-          }
-        },
-        "我可以坐在这里吗？": {
-          "source": "May I sit here?",
-          "translations": {
-            "english": "May I sit here?"
-          }
-        },
-        "你必须系好安全带。": {
-          "source": "You must wear a seatbelt.",
-          "translations": {
-            "english": "You must wear a seatbelt."
-          }
-        },
-        "你应该休息。": {
-          "source": "You should rest.",
-          "translations": {
-            "english": "You should rest."
-          }
-        },
-        "今天可能会下雨。": {
-          "source": "It might rain today.",
-          "translations": {
-            "english": "It might rain today."
-          }
-        },
-        "他可能会来。": {
-          "source": "He will probably come.",
-          "translations": {
-            "english": "He will probably come."
-          }
-        },
-        "你能打开窗户吗？": {
-          "source": "Could you open the window?",
-          "translations": {
-            "english": "Could you open the window?"
-          }
-        },
-        "你想喝点茶吗？": {
-          "source": "Would you like some tea?",
-          "translations": {
-            "english": "Would you like some tea?"
-          }
-        }
-      },
-      "Reported Speech": {
-        "她说她准备好了。": {
-          "source": "She said she was ready.",
-          "translations": {
-            "english": "She said she was ready."
-          }
-        },
-        "他问我是否还好。": {
-          "source": "He asked if I was okay.",
-          "translations": {
-            "english": "He asked if I was okay."
-          }
-        },
-        "她让我等。": {
-          "source": "She asked me to wait.",
-          "translations": {
-            "english": "She asked me to wait."
-          }
-        },
-        "他告诉我们离开。": {
-          "source": "He told us to leave.",
-          "translations": {
-            "english": "He told us to leave."
-          }
-        },
-        "他们说他们有时间。": {
-          "source": "They said they had time.",
-          "translations": {
-            "english": "They said they had time."
-          }
-        },
-        "他说他在那儿。": {
-          "source": "He said he was there.",
-          "translations": {
-            "english": "He said he was there."
-          }
-        }
-      },
-      "Formality & Style": {
-        "您能帮我吗？": {
-          "source": "Could you assist me?",
-          "translations": {
-            "english": "Could you assist me?"
-          }
-        },
-        "我不能待太久。": {
-          "source": "I can't stay long.",
-          "translations": {
-            "english": "I can't stay long."
-          }
-        },
-        "您能关上门吗？": {
-          "source": "Could you close the door?",
-          "translations": {
-            "english": "Could you close the door?"
-          }
-        },
-        "请查看下面的详细信息。": {
-          "source": "Please see the details below.",
-          "translations": {
-            "english": "Please see the details below."
-          }
-        },
-        "感谢您的时间。": {
-          "source": "Thank you for your time.",
-          "translations": {
-            "english": "Thank you for your time."
-          }
-        },
-        "嘿，最近怎么样？": {
-          "source": "Hey, how is it going?",
-          "translations": {
-            "english": "Hey, how is it going?"
-          }
-        },
-        "我们需要一个快速的答案。": {
-          "source": "We need a quick answer.",
-          "translations": {
-            "english": "We need a quick answer."
-          }
-        }
-      },
-      "Discourse & Flow": {
-        "大家好，反正今天就到这里。": {
-          "source": "Hi everyone, anyway, that is all for today.",
-          "translations": {
-            "english": "Hi everyone, anyway, that is all for today."
-          }
-        },
-        "顺便说一下，我有消息。": {
-          "source": "By the way, I have news.",
-          "translations": {
-            "english": "By the way, I have news."
-          }
-        },
-        "这个想法与最后一点有关。": {
-          "source": "This idea connects to the last point.",
-          "translations": {
-            "english": "This idea connects to the last point."
-          }
-        },
-        "我们先打包，然后离开。": {
-          "source": "First we pack, then we leave.",
-          "translations": {
-            "english": "First we pack, then we leave."
-          }
-        },
-        "让我换个说法。": {
-          "source": "Let me put it another way.",
-          "translations": {
-            "english": "Let me put it another way."
-          }
-        },
-        "简而言之，我们准备好了。": {
-          "source": "In short, we are ready.",
-          "translations": {
-            "english": "In short, we are ready."
-          }
-        },
-        "这真的很重要。": {
-          "source": "It is really important.",
-          "translations": {
-            "english": "It is really important."
-          }
-        },
-        "我明白了，请继续。": {
-          "source": "I see, please continue.",
-          "translations": {
-            "english": "I see, please continue."
-          }
-        },
-        "例如，拨打帮助热线。": {
-          "source": "For example, call the help desk.",
-          "translations": {
-            "english": "For example, call the help desk."
-          }
-        },
-        "抱歉，让我再试一次。": {
-          "source": "Sorry, let me try again.",
-          "translations": {
-            "english": "Sorry, let me try again."
-          }
-        }
-      }
-    },
-    "explanations": {
-      "Sentence Structure": {
-        "这张卡片解释了基本的词序以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains basic word order and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains basic word order and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了句子的组成部分以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains sentence parts and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains sentence parts and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了添加细节以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains adding details and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains adding details and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了连接从句以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains linking clauses and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains linking clauses and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了句子多样性以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains sentence variety and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains sentence variety and how to form it clearly in real sentences."
-          }
-        }
-      },
-      "Verbs": {
-        "这张卡片解释了动作动词以及如何在真实句子中清晰地构成它。": {
-          "source": "This card explains action verbs and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains action verbs and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了状态动词以及如何在真实句子中清晰地构成它。": {
-          "source": "This card explains state verbs and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains state verbs and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了连系动词以及如何在真实句子中清晰地构成它。": {
-          "source": "This card explains linking verbs and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains linking verbs and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了动词模式以及如何在真实句子中清晰地构成它。": {
-          "source": "This card explains verb patterns and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains verb patterns and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了动词组合以及如何在真实句子中清晰地构成它。": {
-          "source": "This card explains verb combinations and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains verb combinations and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了短语动词以及如何在真实句子中清晰地构成它。": {
-          "source": "This card explains phrasal verbs and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains phrasal verbs and how to form it clearly in real sentences."
-          }
-        }
-      },
-      "Tenses & Aspect": {
-        "这张卡片解释了现在简单时态及其在真实句子中的形成方式。": {
-          "source": "This card explains present simple and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains present simple and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了现在进行时及其在真实句子中的形成方式。": {
-          "source": "This card explains present continuous and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains present continuous and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了过去简单时态及其在真实句子中的形成方式。": {
-          "source": "This card explains past simple and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains past simple and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了过去进行时及其在真实句子中的形成方式。": {
-          "source": "This card explains past continuous and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains past continuous and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了现在完成时及其在真实句子中的形成方式。": {
-          "source": "This card explains present perfect and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains present perfect and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了过去完成时及其在真实句子中的形成方式。": {
-          "source": "This card explains past perfect and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains past perfect and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了将来时态及其在真实句子中的形成方式。": {
-          "source": "This card explains future forms and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains future forms and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了将来进行时及其在真实句子中的形成方式。": {
-          "source": "This card explains future continuous and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains future continuous and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了将来完成时及其在真实句子中的形成方式。": {
-          "source": "This card explains future perfect and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains future perfect and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了时态对比及其在真实句子中的形成方式。": {
-          "source": "This card explains aspect contrasts and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains aspect contrasts and how to form it clearly in real sentences."
-          }
-        }
-      },
-      "Nouns & Articles": {
-        "这张卡片解释了可数名词及其在真实句子中的清晰构成。": {
-          "source": "This card explains countable nouns and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains countable nouns and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了不可数名词及其在真实句子中的清晰构成。": {
-          "source": "This card explains uncountable nouns and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains uncountable nouns and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了冠词及其在真实句子中的清晰构成。": {
-          "source": "This card explains articles and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains articles and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了复数形式及其在真实句子中的清晰构成。": {
-          "source": "This card explains plural forms and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains plural forms and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了所有格名词及其在真实句子中的清晰构成。": {
-          "source": "This card explains possessive nouns and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains possessive nouns and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了名词短语及其在真实句子中的清晰构成。": {
-          "source": "This card explains noun phrases and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains noun phrases and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了量词及其在真实句子中的清晰构成。": {
-          "source": "This card explains quantifiers and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains quantifiers and how to form it clearly in real sentences."
-          }
-        }
-      },
-      "Pronouns & Reference": {
-        "这张卡片解释了主语代词及其在真实句子中的清晰构成。": {
-          "source": "This card explains subject pronouns and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains subject pronouns and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了宾语代词及其在真实句子中的清晰构成。": {
-          "source": "This card explains object pronouns and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains object pronouns and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了物主形式及其在真实句子中的清晰构成。": {
-          "source": "This card explains possessive forms and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains possessive forms and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了反身代词及其在真实句子中的清晰构成。": {
-          "source": "This card explains reflexive pronouns and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains reflexive pronouns and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了指示词及其在真实句子中的清晰构成。": {
-          "source": "This card explains demonstratives and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains demonstratives and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了关系指代及其在真实句子中的清晰构成。": {
-          "source": "This card explains relative reference and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains relative reference and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了不定指代及其在真实句子中的清晰构成。": {
-          "source": "This card explains indefinite reference and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains indefinite reference and how to form it clearly in real sentences."
-          }
-        }
-      },
-      "Modifiers": {
-        "这张卡片解释了形容词的基础知识以及如何在真实句子中清晰地使用它。": {
-          "source": "This card explains adjectives basics and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains adjectives basics and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了形容词的顺序以及如何在真实句子中清晰地使用它。": {
-          "source": "This card explains adjective order and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains adjective order and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了比较级以及如何在真实句子中清晰地使用它。": {
-          "source": "This card explains comparatives and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains comparatives and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了最高级以及如何在真实句子中清晰地使用它。": {
-          "source": "This card explains superlatives and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains superlatives and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了副词的基础知识以及如何在真实句子中清晰地使用它。": {
-          "source": "This card explains adverbs basics and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains adverbs basics and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了频率副词以及如何在真实句子中清晰地使用它。": {
-          "source": "This card explains frequency adverbs and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains frequency adverbs and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了时间和地点副词以及如何在真实句子中清晰地使用它。": {
-          "source": "This card explains time and place adverbs and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains time and place adverbs and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了程度词以及如何在真实句子中清晰地使用它。": {
-          "source": "This card explains degree words and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains degree words and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了分词以及如何在真实句子中清晰地使用它。": {
-          "source": "This card explains participles and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains participles and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了修饰语堆叠以及如何在真实句子中清晰地使用它。": {
-          "source": "This card explains modifier stacking and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains modifier stacking and how to form it clearly in real sentences."
-          }
-        }
-      },
-      "Questions": {
-        "这张卡片解释了是非问题以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains yes no questions and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains yes no questions and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了疑问词问题以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains wh questions and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains wh questions and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了与be动词相关的问题以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains questions with be and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains questions with be and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了与do动词相关的问题以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains questions with do and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains questions with do and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了情态动词相关的问题以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains questions with modals and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains questions with modals and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了附加疑问句以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains tag questions and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains tag questions and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了间接疑问句以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains indirect questions and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains indirect questions and how to form it clearly in real sentences."
-          }
-        }
-      },
-      "Negation": {
-        "这张卡片解释了如何在真实句子中清晰地使用be的否定形式not。": {
-          "source": "This card explains not with be and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains not with be and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了如何在真实句子中清晰地使用do的否定形式not。": {
-          "source": "This card explains not with do and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains not with do and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了否定短语及其在真实句子中的清晰构成。": {
-          "source": "This card explains negative short forms and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains negative short forms and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了否定词及其在真实句子中的清晰构成。": {
-          "source": "This card explains negative words and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains negative words and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了否定疑问句及其在真实句子中的清晰构成。": {
-          "source": "This card explains negative questions and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains negative questions and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了有限否定及其在真实句子中的清晰构成。": {
-          "source": "This card explains limited negatives and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains limited negatives and how to form it clearly in real sentences."
-          }
-        }
-      },
-      "Connections": {
-        "这张卡片解释了基本连接词以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains basic connectors and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains basic connectors and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了原因和结果，以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains reason and result and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains reason and result and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了对比和选择，以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains contrast and choice and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains contrast and choice and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了时间连接词，以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains time connectors and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains time connectors and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了比较连接词，以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains comparison links and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains comparison links and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了添加想法，以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains adding ideas and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains adding ideas and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了组织想法，以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains ordering ideas and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains ordering ideas and how to form it clearly in real sentences."
-          }
-        }
-      },
-      "Conditions": {
-        "这张卡片解释了真实条件以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains real conditions and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains real conditions and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了未来条件以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains future conditions and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains future conditions and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了不真实的现在以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains unreal present and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains unreal present and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了不真实的过去以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains unreal past and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains unreal past and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了混合条件以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains mixed conditions and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains mixed conditions and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了除非和其他情况，以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains unless and otherwise and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains unless and otherwise and how to form it clearly in real sentences."
-          }
-        }
-      },
-      "Voice & Focus": {
-        "这张卡片解释了主动语态以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains active voice and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains active voice and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了被动语态以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains passive voice and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains passive voice and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了焦点转移以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains focus shifts and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains focus shifts and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了分裂句以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains cleft sentences and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains cleft sentences and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了there和it主语以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains there and it subjects and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains there and it subjects and how to form it clearly in real sentences."
-          }
-        }
-      },
-      "Modality": {
-        "这张卡片解释了能力以及如何在真实句子中清晰地表达它。": {
-          "source": "This card explains ability and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains ability and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了许可以及如何在真实句子中清晰地表达它。": {
-          "source": "This card explains permission and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains permission and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了义务以及如何在真实句子中清晰地表达它。": {
-          "source": "This card explains obligation and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains obligation and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了建议以及如何在真实句子中清晰地表达它。": {
-          "source": "This card explains advice and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains advice and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了可能性以及如何在真实句子中清晰地表达它。": {
-          "source": "This card explains possibility and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains possibility and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了概率以及如何在真实句子中清晰地表达它。": {
-          "source": "This card explains probability and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains probability and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了礼貌请求以及如何在真实句子中清晰地表达它。": {
-          "source": "This card explains polite requests and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains polite requests and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了提议和邀请以及如何在真实句子中清晰地表达它。": {
-          "source": "This card explains offers and invitations and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains offers and invitations and how to form it clearly in real sentences."
-          }
-        }
-      },
-      "Reported Speech": {
-        "这张卡片解释了如何清晰地在真实句子中报告陈述。": {
-          "source": "This card explains reporting statements and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains reporting statements and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了如何清晰地在真实句子中报告问题。": {
-          "source": "This card explains reporting questions and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains reporting questions and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了如何清晰地在真实句子中报告请求。": {
-          "source": "This card explains reporting requests and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains reporting requests and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了如何清晰地在真实句子中报告命令。": {
-          "source": "This card explains reporting commands and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains reporting commands and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了时态倒退的基本知识以及如何在真实句子中清晰地表达。": {
-          "source": "This card explains backshift basics and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains backshift basics and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了时间和地点变化以及如何在真实句子中清晰地表达。": {
-          "source": "This card explains time place changes and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains time place changes and how to form it clearly in real sentences."
-          }
-        }
-      },
-      "Formality & Style": {
-        "这张卡片解释了正式与非正式的区别，以及如何在真实句子中清晰地表达。": {
-          "source": "This card explains formal vs informal and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains formal vs informal and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了缩写形式，以及如何在真实句子中清晰地表达。": {
-          "source": "This card explains contractions and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains contractions and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了礼貌的缓和语气，以及如何在真实句子中清晰地表达。": {
-          "source": "This card explains polite softening and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains polite softening and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了口语与书面语的区别，以及如何在真实句子中清晰地表达。": {
-          "source": "This card explains spoken vs written and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains spoken vs written and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了专业风格，以及如何在真实句子中清晰地表达。": {
-          "source": "This card explains professional style and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains professional style and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了休闲风格，以及如何在真实句子中清晰地表达。": {
-          "source": "This card explains casual style and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains casual style and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了清晰与简洁，以及如何在真实句子中清晰地表达。": {
-          "source": "This card explains clarity and brevity and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains clarity and brevity and how to form it clearly in real sentences."
-          }
-        }
-      },
-      "Discourse & Flow": {
-        "这张卡片解释了开头和结尾，以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains opening and closing and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains opening and closing and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了话题转换，以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains topic shifts and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains topic shifts and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了衔接工具，以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains cohesion tools and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains cohesion tools and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了思路排序，以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains sequencing ideas and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains sequencing ideas and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了澄清措施，以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains clarification moves and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains clarification moves and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了总结，以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains summaries and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains summaries and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了强调和重复，以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains emphasis and repetition and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains emphasis and repetition and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了对话流程，以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains conversation flow and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains conversation flow and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了举例，以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains giving examples and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains giving examples and how to form it clearly in real sentences."
-          }
-        },
-        "这张卡片解释了修正和纠正，以及如何在真实句子中清晰地形成它。": {
-          "source": "This card explains repair and correction and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains repair and correction and how to form it clearly in real sentences."
-          }
-        }
-      }
-    },
+    "titles": {},
+    "examples": {},
+    "explanations": {},
     "cards": {
       "Sentence Structure": [
         {
-          "title": "基本词序",
-          "sourceTitle": "basic word order",
+          "title": "主谓宾结构",
           "points": [
-            "陈述句的基本词序",
-            "主语在动词之前",
-            "宾语在动词之后"
+            "中文的基本句子结构是主谓宾。",
+            "主语通常在句首，谓语紧随其后，宾语在最后。",
+            "例如：我（主）喜欢（谓）苹果（宾）。"
           ],
-          "sourcePoints": [
-            "basic word order for statements",
-            "subject before verb",
-            "object after verb"
-          ],
-          "example": "她在读一本书。",
-          "sourceExample": "She reads a book.",
+          "example": "我喜欢苹果。",
           "mistakes": [
             {
-              "wrong": "她在读一本书。",
-              "fix": "她在读一本书。",
-              "sourceWrong": "Reads she a book.",
-              "sourceFix": "She reads a book."
+              "wrong": "喜欢我苹果。",
+              "fix": "我喜欢苹果。"
             }
           ]
         },
         {
-          "title": "句子成分",
-          "sourceTitle": "sentence parts",
+          "title": "时间状语的使用",
           "points": [
-            "核心主语位置",
-            "核心动词位置",
-            "宾语和补语位置"
+            "时间状语通常放在句首或句中。",
+            "常见的时间词有：今天、昨天、明天。",
+            "例如：今天我去商店。"
           ],
-          "sourcePoints": [
-            "core subject slot",
-            "core verb slot",
-            "object and complement slot"
-          ],
-          "example": "他们给她起了队长的名字。",
-          "sourceExample": "They named her captain.",
+          "example": "今天我去商店。",
           "mistakes": [
             {
-              "wrong": "我哥哥是一名飞行员。",
-              "fix": "我哥哥是一名飞行员。",
-              "sourceWrong": "Is a pilot my brother.",
-              "sourceFix": "My brother is a pilot."
+              "wrong": "我今天去商店。",
+              "fix": "今天我去商店。"
             }
           ]
         },
         {
-          "title": "添加细节",
-          "sourceTitle": "adding details",
+          "title": "形容词的用法",
           "points": [
-            "时间放在句末",
-            "地点在动词之后",
-            "额外短语在宾语之后"
+            "形容词通常放在名词前面。",
+            "形容词可以用来描述名词的性质或状态。",
+            "例如：漂亮的花。"
           ],
-          "sourcePoints": [
-            "time at sentence end",
-            "place after verb",
-            "extra phrases after objects"
-          ],
-          "example": "她在中午在车站遇见了他。",
-          "sourceExample": "She met him at noon at the station.",
+          "example": "漂亮的花。",
           "mistakes": [
             {
-              "wrong": "她在中午的车站遇见了他。",
-              "fix": "她在中午在车站遇见了他。",
-              "sourceWrong": "She met him noon station.",
-              "sourceFix": "She met him at noon at the station."
+              "wrong": "花漂亮的。",
+              "fix": "漂亮的花。"
             }
           ]
         },
         {
-          "title": "连接从句",
-          "sourceTitle": "linking clauses",
+          "title": "否定句的构造",
           "points": [
-            "主句思想",
-            "原因从句附加",
-            "时间从句附加"
+            "否定句通常在动词前加上“不”或“没”。",
+            "使用“不”表示一般否定，使用“没”表示过去的否定。",
+            "例如：我不喜欢这个。"
           ],
-          "sourcePoints": [
-            "main clause idea",
-            "reason clause add-on",
-            "time clause add-on"
-          ],
-          "example": "我待在家里因为下雨了。",
-          "sourceExample": "I stayed home because it rained.",
+          "example": "我不喜欢这个。",
           "mistakes": [
             {
-              "wrong": "我待在家里因为。",
-              "fix": "我待在家里，因为下雨了。",
-              "sourceWrong": "I stayed home because.",
-              "sourceFix": "I stayed home because it rained."
+              "wrong": "我喜欢不这个。",
+              "fix": "我不喜欢这个。"
             }
           ]
         },
         {
-          "title": "句子多样性",
-          "sourceTitle": "sentence variety",
+          "title": "疑问句的形式",
           "points": [
-            "短句以增强影响",
-            "长句以提供细节",
-            "避免连写句"
+            "疑问句通常在句末加上“吗”。",
+            "也可以用疑问词开头，例如：什么、谁、哪里。",
+            "例如：你好吗？"
           ],
-          "sourcePoints": [
-            "short sentences for impact",
-            "long sentences for detail",
-            "avoid run-on sentences"
-          ],
-          "example": "我们早早完成了。下课后我们回家因为我们累了。",
-          "sourceExample": "We finished early. We went home after class because we were tired.",
+          "example": "你好吗？",
           "mistakes": [
             {
-              "wrong": "我们早早完成了。",
-              "fix": "我们提前完成了，所以我们离开了。",
-              "sourceWrong": "We finished early so.",
-              "sourceFix": "We finished early, so we left."
+              "wrong": "你是好吗？",
+              "fix": "你好吗？"
             }
           ]
         }
       ],
       "Verbs": [
         {
-          "title": "动作动词",
-          "sourceTitle": "action verbs",
+          "title": "吃",
           "points": [
-            "表示运动的动词",
-            "表示任务的动词",
-            "表示变化的动词"
+            "表示摄取食物或饮料",
+            "常用于日常对话",
+            "可以与不同的宾语搭配"
           ],
-          "sourcePoints": [
-            "action verbs for movement",
-            "action verbs for tasks",
-            "action verbs for change"
-          ],
-          "example": "他们搬运箱子。",
-          "sourceExample": "They carry the boxes.",
+          "example": "我每天都吃苹果。",
           "mistakes": [
             {
-              "wrong": "她每天早上跑步。",
-              "fix": "她每天早上跑步。",
-              "sourceWrong": "She run every morning.",
-              "sourceFix": "She runs every morning."
+              "wrong": "我每天都吃苹果们。",
+              "fix": "我每天都吃苹果。"
             }
           ]
         },
         {
-          "title": "状态动词",
-          "sourceTitle": "state verbs",
+          "title": "去",
           "points": [
-            "表示感情的状态动词",
-            "表示思想的状态动词",
-            "表示拥有的状态动词"
+            "表示移动到某个地方",
+            "可以与地点名词搭配",
+            "常用于表示目的地"
           ],
-          "sourcePoints": [
-            "state verbs for feelings",
-            "state verbs for thoughts",
-            "state verbs for possession"
-          ],
-          "example": "她感到疲倦。",
-          "sourceExample": "She feels tired.",
+          "example": "她去学校上课。",
           "mistakes": [
             {
-              "wrong": "他知道答案。",
-              "fix": "他知道答案。",
-              "sourceWrong": "He is knowing the answer.",
-              "sourceFix": "He knows the answer."
+              "wrong": "她去学校上课们。",
+              "fix": "她去学校上课。"
             }
           ]
         },
         {
-          "title": "连系动词",
-          "sourceTitle": "linking verbs",
+          "title": "看",
           "points": [
-            "作为连系动词的be",
-            "feel和seem的连系",
-            "become和remain的连系"
+            "表示视觉上的观察",
+            "可以用于电影、书籍等",
+            "常与宾语搭配"
           ],
-          "sourcePoints": [
-            "be as linking verb",
-            "feel and seem links",
-            "become and remain links"
-          ],
-          "example": "房间感觉安静。",
-          "sourceExample": "The room feels quiet.",
+          "example": "我们昨天看了一部电影。",
           "mistakes": [
             {
-              "wrong": "汤很好吃。",
-              "fix": "汤很好喝。",
-              "sourceWrong": "The soup tastes is good.",
-              "sourceFix": "The soup tastes good."
+              "wrong": "我们昨天看一部电影。",
+              "fix": "我们昨天看了一部电影。"
             }
           ]
         },
         {
-          "title": "动词模式",
-          "sourceTitle": "verb patterns",
+          "title": "说",
           "points": [
-            "动词加宾语的结构",
-            "动词加形容词的结构",
-            "动词加介词的结构"
+            "表示口头表达",
+            "可以用于直接引语和间接引语",
+            "常与对象搭配"
           ],
-          "sourcePoints": [
-            "verb plus object pattern",
-            "verb plus adjective pattern",
-            "verb plus preposition pattern"
-          ],
-          "example": "他把书放在桌子上。",
-          "sourceExample": "He placed the book on the table.",
+          "example": "他告诉我他要去旅行。",
           "mistakes": [
             {
-              "wrong": "他把书放在了。",
-              "fix": "他把书放在桌子上。",
-              "sourceWrong": "He placed the book on.",
-              "sourceFix": "He placed the book on the table."
+              "wrong": "他告诉我他去旅行。",
+              "fix": "他告诉我他要去旅行。"
             }
           ]
         },
         {
-          "title": "动词组合",
-          "sourceTitle": "verb combinations",
+          "title": "做",
           "points": [
-            "动词加不定式",
-            "动词加动名词",
-            "动词加that从句"
+            "表示执行某个动作或任务",
+            "可以用于多种活动",
+            "常与名词搭配"
           ],
-          "sourcePoints": [
-            "verb plus infinitive",
-            "verb plus gerund",
-            "verb plus that clause"
-          ],
-          "example": "我们决定留下。",
-          "sourceExample": "We decided to stay.",
+          "example": "我正在做作业。",
           "mistakes": [
             {
-              "wrong": "她喜欢游泳。",
-              "fix": "她喜欢游泳。",
-              "sourceWrong": "She enjoys to swim.",
-              "sourceFix": "She enjoys swimming."
+              "wrong": "我正在做的作业。",
+              "fix": "我正在做作业。"
             }
           ]
         },
         {
-          "title": "短语动词",
-          "sourceTitle": "phrasal verbs",
+          "title": "学习",
           "points": [
-            "动词加小品词",
-            "可分离的短语动词",
-            "与小品词的意义转变"
+            "表示获取知识或技能",
+            "可以与科目或技能搭配",
+            "常用于学校环境"
           ],
-          "sourcePoints": [
-            "verb plus particle",
-            "separable phrasal verbs",
-            "meaning shift with particles"
-          ],
-          "example": "她关掉了灯。",
-          "sourceExample": "She turned off the light.",
+          "example": "他们在学习中文。",
           "mistakes": [
             {
-              "wrong": "他把灯打开关掉了。",
-              "fix": "他关掉了灯。",
-              "sourceWrong": "He turned the light on off.",
-              "sourceFix": "He turned off the light."
+              "wrong": "他们在学习的中文。",
+              "fix": "他们在学习中文。"
             }
           ]
         }
       ],
       "Tenses & Aspect": [
         {
-          "title": "一般现在时",
-          "sourceTitle": "present simple",
-          "points": [
-            "一般现在时用于习惯",
-            "一般现在时用于事实",
-            "一般现在时用于时间表"
-          ],
-          "sourcePoints": [
-            "present simple for habits",
-            "present simple for facts",
-            "present simple for schedules"
-          ],
-          "example": "她每天工作。",
-          "sourceExample": "She works every day.",
-          "mistakes": [
-            {
-              "wrong": "她每天工作。",
-              "fix": "她每天工作。",
-              "sourceWrong": "She is work every day.",
-              "sourceFix": "She works every day."
-            }
-          ]
-        },
-        {
           "title": "现在进行时",
-          "sourceTitle": "present continuous",
           "points": [
-            "现在进行时用于现在",
-            "现在进行时用于临时动作",
-            "现在进行时用于近期计划"
+            "表示正在进行的动作。",
+            "常与时间词如‘现在’、‘此刻’一起使用。",
+            "结构为‘主语 + 在 + 动词’。"
           ],
-          "sourcePoints": [
-            "present continuous for now",
-            "present continuous for temporary actions",
-            "present continuous for near plans"
-          ],
-          "example": "我在外面等。",
-          "sourceExample": "I am waiting outside.",
+          "example": "我现在正在学习中文。",
           "mistakes": [
             {
-              "wrong": "她现在在工作。",
-              "fix": "她现在正在工作。",
-              "sourceWrong": "She works now.",
-              "sourceFix": "She is working now."
+              "wrong": "我现在学习中文。",
+              "fix": "我现在正在学习中文。"
             }
           ]
         },
         {
-          "title": "一般过去时",
-          "sourceTitle": "past simple",
+          "title": "过去时",
           "points": [
-            "一般过去时用于已完成的动作",
-            "一般过去时用于过去时间词",
-            "一般过去时用于顺序"
+            "表示已经完成的动作。",
+            "常与时间词如‘昨天’、‘上周’一起使用。",
+            "结构为‘主语 + 动词的过去式’。"
           ],
-          "sourcePoints": [
-            "past simple for finished actions",
-            "past simple for past time words",
-            "past simple for sequences"
-          ],
-          "example": "他们访问了巴黎。",
-          "sourceExample": "They visited Paris.",
+          "example": "我昨天去了商店。",
           "mistakes": [
             {
-              "wrong": "她昨天去了。",
-              "fix": "她昨天去了。",
-              "sourceWrong": "She go yesterday.",
-              "sourceFix": "She went yesterday."
+              "wrong": "我昨天去商店。",
+              "fix": "我昨天去了商店。"
+            }
+          ]
+        },
+        {
+          "title": "将来时",
+          "points": [
+            "表示将要发生的动作。",
+            "常与时间词如‘明天’、‘下个月’一起使用。",
+            "结构为‘主语 + 要 + 动词’。"
+          ],
+          "example": "我明天要去旅行。",
+          "mistakes": [
+            {
+              "wrong": "我明天去旅行。",
+              "fix": "我明天要去旅行。"
+            }
+          ]
+        },
+        {
+          "title": "完成时",
+          "points": [
+            "表示动作已经完成并与现在有联系。",
+            "常与‘已经’一起使用。",
+            "结构为‘主语 + 已经 + 动词’。"
+          ],
+          "example": "我已经吃过午饭了。",
+          "mistakes": [
+            {
+              "wrong": "我吃过午饭了。",
+              "fix": "我已经吃过午饭了。"
+            }
+          ]
+        },
+        {
+          "title": "进行时的否定形式",
+          "points": [
+            "表示动作没有在进行。",
+            "结构为‘主语 + 不 + 在 + 动词’。",
+            "常用于表达拒绝或否定。"
+          ],
+          "example": "我现在不在看电视。",
+          "mistakes": [
+            {
+              "wrong": "我现在没有看电视。",
+              "fix": "我现在不在看电视。"
             }
           ]
         },
         {
           "title": "过去进行时",
-          "sourceTitle": "past continuous",
           "points": [
-            "过去进行时用于背景",
-            "过去进行时与中断",
-            "过去进行时用于两个动作"
+            "表示过去某一时刻正在进行的动作。",
+            "结构为‘主语 + 当时 + 在 + 动词’。",
+            "常与时间词如‘那时’一起使用。"
           ],
-          "sourcePoints": [
-            "past continuous for background",
-            "past continuous with interruption",
-            "past continuous for two actions"
-          ],
-          "example": "他打电话时我正在做饭。",
-          "sourceExample": "I was cooking when he called.",
+          "example": "那时我正在读书。",
           "mistakes": [
             {
-              "wrong": "我打电话时她正在做饭。",
-              "fix": "我打电话时她正在做饭。",
-              "sourceWrong": "She was cook when I called.",
-              "sourceFix": "She was cooking when I called."
-            }
-          ]
-        },
-        {
-          "title": "现在完成时",
-          "sourceTitle": "present perfect",
-          "points": [
-            "现在完成时用于经历",
-            "现在完成时用于最近结果",
-            "现在完成时与since和for"
-          ],
-          "sourcePoints": [
-            "present perfect for experience",
-            "present perfect for recent results",
-            "present perfect with since and for"
-          ],
-          "example": "他在这里住了多年。",
-          "sourceExample": "He has lived here for years.",
-          "mistakes": [
-            {
-              "wrong": "她已经完成了。",
-              "fix": "她已经完成了。",
-              "sourceWrong": "She finished already.",
-              "sourceFix": "She has finished already."
-            }
-          ]
-        },
-        {
-          "title": "过去完成时",
-          "sourceTitle": "past perfect",
-          "points": [
-            "过去完成时用于更早的过去",
-            "过去完成时用于过去的原因",
-            "过去完成时与before"
-          ],
-          "sourcePoints": [
-            "past perfect for earlier past",
-            "past perfect for cause in past",
-            "past perfect with before"
-          ],
-          "example": "我到达之前她已经离开了。",
-          "sourceExample": "She had left before I arrived.",
-          "mistakes": [
-            {
-              "wrong": "他离开时我到达。",
-              "fix": "我到达时他已经离开了。",
-              "sourceWrong": "He left when I arrive.",
-              "sourceFix": "He had left when I arrived."
-            }
-          ]
-        },
-        {
-          "title": "将来时态",
-          "sourceTitle": "future forms",
-          "points": [
-            "将来时用于决定",
-            "将要用于计划",
-            "现在进行时用于计划"
-          ],
-          "sourcePoints": [
-            "will for decisions",
-            "going to for plans",
-            "present continuous for plans"
-          ],
-          "example": "我们明天见。",
-          "sourceExample": "We will meet tomorrow.",
-          "mistakes": [
-            {
-              "wrong": "她将要打电话。",
-              "fix": "她打算打电话。",
-              "sourceWrong": "She will going to call.",
-              "sourceFix": "She is going to call."
+              "wrong": "那时我读书。",
+              "fix": "那时我正在读书。"
             }
           ]
         },
         {
           "title": "将来进行时",
-          "sourceTitle": "future continuous",
           "points": [
-            "将来进行时用于进展",
-            "将来进行时用于背景",
-            "将来进行时用于礼貌询问"
+            "表示将来某一时刻正在进行的动作。",
+            "结构为‘主语 + 将会 + 在 + 动词’。",
+            "常与时间词如‘明天’一起使用。"
           ],
-          "sourcePoints": [
-            "future continuous for progress",
-            "future continuous for background",
-            "future continuous for polite inquiry"
-          ],
-          "example": "我六点会在工作。",
-          "sourceExample": "I will be working at six.",
+          "example": "明天我将会在工作。",
           "mistakes": [
             {
-              "wrong": "她将在8点工作。",
-              "fix": "她将在8点工作。",
-              "sourceWrong": "She will work at 8.",
-              "sourceFix": "She will be working at 8."
+              "wrong": "明天我在工作。",
+              "fix": "明天我将会在工作。"
             }
           ]
         },
         {
-          "title": "将来完成时",
-          "sourceTitle": "future perfect",
+          "title": "完成进行时",
           "points": [
-            "将来完成时用于截止日期",
-            "将来完成时与by时间",
-            "将来完成时用于完成"
+            "表示从过去某一时间开始一直持续到现在的动作。",
+            "结构为‘主语 + 一直 + 在 + 动词’。",
+            "常与时间词如‘已经’一起使用。"
           ],
-          "sourcePoints": [
-            "future perfect for deadlines",
-            "future perfect with by time",
-            "future perfect for completion"
-          ],
-          "example": "他们到星期五会完成。",
-          "sourceExample": "They will have finished by Friday.",
+          "example": "我已经一直在学习中文。",
           "mistakes": [
             {
-              "wrong": "她将在中午之前完成。",
-              "fix": "她到中午时将完成。",
-              "sourceWrong": "She will finish by noon.",
-              "sourceFix": "She will have finished by noon."
+              "wrong": "我一直在学习中文。",
+              "fix": "我已经一直在学习中文。"
             }
           ]
         },
         {
-          "title": "时态对比",
-          "sourceTitle": "aspect contrasts",
+          "title": "条件句的时态",
           "points": [
-            "简单时与进行时对比",
-            "完成时与简单时对比",
-            "持续时间聚焦对比"
+            "条件句通常使用过去时表示与现在相反的假设。",
+            "结构为‘如果 + 主语 + 动词的过去式’。",
+            "常用于表达假设或不可能的情况。"
           ],
-          "sourcePoints": [
-            "simple vs continuous contrast",
-            "perfect vs simple contrast",
-            "duration focus contrast"
-          ],
-          "example": "我每天工作，我现在正在工作，我在这里工作了多年。",
-          "sourceExample": "I work every day, I am working now, and I have worked here for years.",
+          "example": "如果我有钱，我会去旅行。",
           "mistakes": [
             {
-              "wrong": "我认识他。",
-              "fix": "我认识他。",
-              "sourceWrong": "I am knowing him.",
-              "sourceFix": "I know him."
+              "wrong": "如果我有钱，我去旅行。",
+              "fix": "如果我有钱，我会去旅行。"
+            }
+          ]
+        },
+        {
+          "title": "时间副词的使用",
+          "points": [
+            "时间副词可以影响句子的时态。",
+            "常见的时间副词有‘现在’、‘昨天’、‘明天’等。",
+            "根据时间副词选择合适的时态。"
+          ],
+          "example": "我昨天去过商店。",
+          "mistakes": [
+            {
+              "wrong": "我昨天去商店。",
+              "fix": "我昨天去过商店。"
             }
           ]
         }
       ],
       "Nouns & Articles": [
         {
-          "title": "可数名词",
-          "sourceTitle": "countable nouns",
+          "title": "可数名词与不可数名词",
           "points": [
-            "可数名词与数字",
-            "可数名词前的a或an",
-            "复数形式表示多个"
+            "可数名词可以用数字直接计数。",
+            "不可数名词通常不使用复数形式。",
+            "不可数名词在句中常用量词来表达数量。"
           ],
-          "sourcePoints": [
-            "countable nouns with numbers",
-            "a or an before countables",
-            "plural for more than one"
-          ],
-          "example": "我有一枚硬币。",
-          "sourceExample": "I have a coin.",
+          "example": "我有三个苹果。",
           "mistakes": [
             {
-              "wrong": "她买了一个苹果。",
-              "fix": "她买了一个苹果。",
-              "sourceWrong": "She bought apple.",
-              "sourceFix": "She bought an apple."
+              "wrong": "我有三水。",
+              "fix": "我有三瓶水。"
             }
           ]
         },
         {
-          "title": "不可数名词",
-          "sourceTitle": "uncountable nouns",
+          "title": "定冠词与不定冠词",
           "points": [
-            "不可数名词没有复数",
-            "与不可数名词的some",
-            "用于单位的a piece of"
+            "定冠词用于特指的名词。",
+            "不定冠词用于泛指的名词。",
+            "在中文中，冠词的使用依赖于上下文。"
           ],
-          "sourcePoints": [
-            "uncountable nouns without plural",
-            "some with uncountables",
-            "a piece of for units"
-          ],
-          "example": "我们需要一些米。",
-          "sourceExample": "We need some rice.",
+          "example": "那本书很有趣。",
           "mistakes": [
             {
-              "wrong": "我需要两个面包。",
-              "fix": "我需要一些面包。",
-              "sourceWrong": "I need two breads.",
-              "sourceFix": "I need some bread."
+              "wrong": "一本书很有趣。",
+              "fix": "这本书很有趣。"
             }
           ]
         },
         {
-          "title": "冠词",
-          "sourceTitle": "articles",
+          "title": "量词的使用",
           "points": [
-            "首次提及时的a或an",
-            "特指时的the",
-            "一般概念不使用冠词"
+            "中文名词前通常需要量词。",
+            "量词与名词的搭配是固定的。",
+            "不同的名词有不同的量词。"
           ],
-          "sourcePoints": [
-            "a or an for first mention",
-            "the for specific reference",
-            "no article for general ideas"
-          ],
-          "example": "狗在外面。",
-          "sourceExample": "The dog is outside.",
+          "example": "我买了两条鱼。",
           "mistakes": [
             {
-              "wrong": "我看了一部电影。",
-              "fix": "我看了一部电影。",
-              "sourceWrong": "I saw movie.",
-              "sourceFix": "I saw a movie."
+              "wrong": "我买了两鱼。",
+              "fix": "我买了两条鱼。"
             }
           ]
         },
         {
-          "title": "复数形式",
-          "sourceTitle": "plural forms",
+          "title": "名词的复数形式",
           "points": [
-            "规则复数结尾",
-            "复数形式的拼写变化",
-            "不规则复数形式"
+            "中文名词通常不通过加-s来表示复数。",
+            "复数的表达常通过上下文或量词来实现。",
+            "某些名词可以通过加上“们”来表示复数。"
           ],
-          "sourcePoints": [
-            "regular plural endings",
-            "spelling changes in plurals",
-            "irregular plural forms"
-          ],
-          "example": "这里有两个孩子。",
-          "sourceExample": "Two children are here.",
+          "example": "学生们在学习。",
           "mistakes": [
             {
-              "wrong": "三个孩子在玩。",
-              "fix": "三个孩子在玩。",
-              "sourceWrong": "Three child play.",
-              "sourceFix": "Three children play."
+              "wrong": "学生在学习。",
+              "fix": "学生们在学习。"
             }
           ]
         },
         {
-          "title": "所有格名词",
-          "sourceTitle": "possessive nouns",
+          "title": "名词的性别",
           "points": [
-            "所有格的撇号s",
-            "复数所有格结尾",
-            "事物与关系"
+            "中文名词没有性别的变化。",
+            "某些名词可能与性别相关，但不影响词形变化。",
+            "性别通常通过上下文来理解。"
           ],
-          "sourcePoints": [
-            "apostrophe s ownership",
-            "plural possessive endings",
-            "things and relationships"
-          ],
-          "example": "萨拉的手机是新的。",
-          "sourceExample": "Sara's phone is new.",
+          "example": "她是一位医生。",
           "mistakes": [
             {
-              "wrong": "老师的书是新的。",
-              "fix": "老师的书是新的。",
-              "sourceWrong": "The teachers book is new.",
-              "sourceFix": "The teacher's book is new."
+              "wrong": "他是一位医生。",
+              "fix": "她是一位医生。"
             }
           ]
         },
         {
-          "title": "名词短语",
-          "sourceTitle": "noun phrases",
+          "title": "名词的量词搭配",
           "points": [
-            "限定词加名词",
-            "形容词加名词",
-            "名词加名词的搭配"
+            "不同的名词需要不同的量词。",
+            "量词的选择影响句子的准确性。",
+            "学习常用的量词是掌握中文的重要部分。"
           ],
-          "sourcePoints": [
-            "determiner plus noun",
-            "adjective plus noun",
-            "noun plus noun pairing"
-          ],
-          "example": "小厨房桌子坏了。",
-          "sourceExample": "The small kitchen table broke.",
+          "example": "我有一只狗。",
           "mistakes": [
             {
-              "wrong": "她买了一件红色的裙子。",
-              "fix": "她买了一件红色的裙子。",
-              "sourceWrong": "She bought dress red.",
-              "sourceFix": "She bought a red dress."
+              "wrong": "我有一狗。",
+              "fix": "我有一只狗。"
             }
           ]
         },
         {
-          "title": "量词",
-          "sourceTitle": "quantifiers",
+          "title": "名词的修饰",
           "points": [
-            "many和much的选择",
-            "few和little的选择",
-            "表示数量的a lot of"
+            "形容词可以修饰名词，形成名词短语。",
+            "修饰词通常放在名词前面。",
+            "修饰词的顺序也很重要。"
           ],
-          "sourcePoints": [
-            "many and much choice",
-            "few and little choice",
-            "a lot of for quantity"
-          ],
-          "example": "有很多选择。",
-          "sourceExample": "There are many options.",
+          "example": "这是一朵美丽的花。",
           "mistakes": [
             {
-              "wrong": "苹果多少钱？",
-              "fix": "多少个苹果？",
-              "sourceWrong": "How much apples?",
-              "sourceFix": "How many apples?"
+              "wrong": "这是一花美丽的。",
+              "fix": "这是一朵美丽的花。"
             }
           ]
         }
       ],
       "Pronouns & Reference": [
         {
-          "title": "主格代词",
-          "sourceTitle": "subject pronouns",
+          "title": "人称代词",
           "points": [
-            "我 你 他 她 组",
-            "我们 和 他们 复数",
-            "它 用于事物"
+            "我 (wǒ) - 我是学生。",
+            "你 (nǐ) - 你喜欢吃什么？",
+            "他 (tā) - 他在图书馆。"
           ],
-          "sourcePoints": [
-            "i you he she set",
-            "we and they plural",
-            "it for things"
-          ],
-          "example": "他们准备好了。",
-          "sourceExample": "They are ready.",
+          "example": "我和他一起去商店。",
           "mistakes": [
             {
-              "wrong": "她在这里。",
-              "fix": "她在这里。",
-              "sourceWrong": "Her is here.",
-              "sourceFix": "She is here."
-            }
-          ]
-        },
-        {
-          "title": "宾格代词",
-          "sourceTitle": "object pronouns",
-          "points": [
-            "我 他 她 组",
-            "我们 和 他们 复数",
-            "动词后面的宾语位置"
-          ],
-          "sourcePoints": [
-            "me him her set",
-            "us and them plural",
-            "object position after verbs"
-          ],
-          "example": "她给我打了电话。",
-          "sourceExample": "She called me.",
-          "mistakes": [
-            {
-              "wrong": "他看见我。",
-              "fix": "他看到了我。",
-              "sourceWrong": "He saw I.",
-              "sourceFix": "He saw me."
-            }
-          ]
-        },
-        {
-          "title": "物主形式",
-          "sourceTitle": "possessive forms",
-          "points": [
-            "我的 你的 他的 她的 组",
-            "我们的 他们的 与名词",
-            "我的 你的 独立使用"
-          ],
-          "sourcePoints": [
-            "my your his her set",
-            "our their with nouns",
-            "mine yours for standalone"
-          ],
-          "example": "这是我的包。",
-          "sourceExample": "This is my bag.",
-          "mistakes": [
-            {
-              "wrong": "这是她的书。",
-              "fix": "这本书是她的。",
-              "sourceWrong": "This is her book is.",
-              "sourceFix": "This book is hers."
-            }
-          ]
-        },
-        {
-          "title": "反身代词",
-          "sourceTitle": "reflexive pronouns",
-          "points": [
-            "我自己 你自己 结构",
-            "她自己 他自己 结构",
-            "用反身代词强调"
-          ],
-          "sourcePoints": [
-            "myself yourself pattern",
-            "herself himself pattern",
-            "emphasis with reflexives"
-          ],
-          "example": "他伤了自己。",
-          "sourceExample": "He hurt himself.",
-          "mistakes": [
-            {
-              "wrong": "我伤了我自己。",
-              "fix": "我伤了自己。",
-              "sourceWrong": "I hurt me.",
-              "sourceFix": "I hurt myself."
+              "wrong": "我和他一起去商店的。",
+              "fix": "我和他一起去商店。"
             }
           ]
         },
         {
           "title": "指示代词",
-          "sourceTitle": "demonstratives",
           "points": [
-            "这个 那个 用于单数",
-            "这些 那些 用于复数",
-            "近与远的指代"
+            "这个 (zhège) - 这个苹果很好吃。",
+            "那个 (nàgè) - 那个是我的书。",
+            "这些 (zhèxiē) - 这些花很漂亮。"
           ],
-          "sourcePoints": [
-            "this that for single",
-            "these those for plural",
-            "near vs far reference"
-          ],
-          "example": "那些是我的钥匙。",
-          "sourceExample": "Those are my keys.",
+          "example": "这个是我的手机。",
           "mistakes": [
             {
-              "wrong": "这些书是我的。",
-              "fix": "这本书是我的。",
-              "sourceWrong": "These book is mine.",
-              "sourceFix": "This book is mine."
+              "wrong": "这个是我手机。",
+              "fix": "这个是我的手机。"
             }
           ]
         },
         {
-          "title": "关系代词",
-          "sourceTitle": "relative reference",
+          "title": "反身代词",
           "points": [
-            "谁 用于人",
-            "哪个 用于事物",
-            "那个 用于一般使用"
+            "自己 (zìjǐ) - 我自己做的饭。",
+            "他自己去旅行。",
+            "她自己买了衣服。"
           ],
-          "sourcePoints": [
-            "who for people",
-            "which for things",
-            "that for general use"
-          ],
-          "example": "打电话的那个人走了。",
-          "sourceExample": "The man who called left.",
+          "example": "我需要照顾自己。",
           "mistakes": [
             {
-              "wrong": "那个给我打电话的男人。",
-              "fix": "给我打电话的那个人。",
-              "sourceWrong": "The man which called me.",
-              "sourceFix": "The man who called me."
+              "wrong": "我需要照顾我自己。",
+              "fix": "我需要照顾自己。"
             }
           ]
         },
         {
           "title": "不定代词",
-          "sourceTitle": "indefinite reference",
           "points": [
-            "某人 任何人 组",
-            "每个人 没有人 组",
-            "某事 任何事 组"
+            "有人 (yǒurén) - 有人来了。",
+            "没有人 (méiyǒurén) - 没有人知道。",
+            "每个人 (měi gèrén) - 每个人都很开心。"
           ],
-          "sourcePoints": [
-            "someone anyone set",
-            "everyone no one set",
-            "something anything set"
-          ],
-          "example": "有人在等。",
-          "sourceExample": "Someone is waiting.",
+          "example": "有人在门口等。",
           "mistakes": [
             {
-              "wrong": "这里有人。",
-              "fix": "有人在这里。",
-              "sourceWrong": "Anyone is here.",
-              "sourceFix": "Someone is here."
+              "wrong": "有人在门口等着。",
+              "fix": "有人在门口等。"
+            }
+          ]
+        },
+        {
+          "title": "疑问代词",
+          "points": [
+            "谁 (shéi) - 谁在那儿？",
+            "什么 (shénme) - 你在做什么？",
+            "哪里 (nǎlǐ) - 你从哪里来？"
+          ],
+          "example": "你知道谁来了吗？",
+          "mistakes": [
+            {
+              "wrong": "你知道谁来了吗？",
+              "fix": "你知道谁来了吗？"
+            }
+          ]
+        },
+        {
+          "title": "数量代词",
+          "points": [
+            "一个 (yīgè) - 我有一个问题。",
+            "两个 (liǎnggè) - 我有两个朋友。",
+            "很多 (hěnduō) - 我有很多书。"
+          ],
+          "example": "我买了两个苹果。",
+          "mistakes": [
+            {
+              "wrong": "我买了两个的苹果。",
+              "fix": "我买了两个苹果。"
+            }
+          ]
+        },
+        {
+          "title": "指代与省略",
+          "points": [
+            "他指的是他的朋友。",
+            "她说的是她的书。",
+            "我们讨论的是这个问题。"
+          ],
+          "example": "他们说的是那个电影。",
+          "mistakes": [
+            {
+              "wrong": "他们说的是那个的电影。",
+              "fix": "他们说的是那个电影。"
             }
           ]
         }
       ],
       "Modifiers": [
         {
-          "title": "形容词基础",
-          "sourceTitle": "adjectives basics",
+          "title": "形容词的使用",
           "points": [
-            "形容词描述名词",
-            "形容词在名词前",
-            "形容词在be动词后"
+            "形容词通常放在名词前面。",
+            "形容词可以通过程度副词进行修饰。",
+            "形容词的比较级和最高级形式需要注意。"
           ],
-          "sourcePoints": [
-            "adjectives describe nouns",
-            "adjectives before nouns",
-            "adjectives after be"
-          ],
-          "example": "房子很安静。",
-          "sourceExample": "The house is quiet.",
+          "example": "这是一只可爱的狗。",
           "mistakes": [
             {
-              "wrong": "她的头发很长。",
-              "fix": "她有长头发。",
-              "sourceWrong": "She has hair long.",
-              "sourceFix": "She has long hair."
+              "wrong": "这是一只狗可爱的。",
+              "fix": "这是一只可爱的狗。"
             }
           ]
         },
         {
-          "title": "形容词顺序",
-          "sourceTitle": "adjective order",
+          "title": "副词的放置",
           "points": [
-            "意见在大小之前",
-            "年龄在颜色之前",
-            "材料靠近名词"
+            "副词通常放在动词前或后。",
+            "副词可以修饰形容词。",
+            "副词的顺序在句子中可以影响语义。"
           ],
-          "sourcePoints": [
-            "opinion before size",
-            "age before color",
-            "material near noun"
-          ],
-          "example": "她买了一个小红包。",
-          "sourceExample": "She bought a small red bag.",
+          "example": "她快速地跑。",
           "mistakes": [
             {
-              "wrong": "一辆小红车。",
-              "fix": "一辆小红车。",
-              "sourceWrong": "A red small car.",
-              "sourceFix": "A small red car."
+              "wrong": "她跑快速地。",
+              "fix": "她快速地跑。"
             }
           ]
         },
         {
-          "title": "比较级",
-          "sourceTitle": "comparatives",
+          "title": "定语的使用",
           "points": [
-            "er或more形式",
-            "than比较",
-            "不规则比较形式"
+            "定语通常放在被修饰的名词前。",
+            "定语可以是名词、形容词或短语。",
+            "定语的使用可以使句子更具体。"
           ],
-          "sourcePoints": [
-            "er or more forms",
-            "than comparisons",
-            "irregular comparative forms"
-          ],
-          "example": "这个比那个快。",
-          "sourceExample": "This is faster than that.",
+          "example": "我喜欢那本红色的书。",
           "mistakes": [
             {
-              "wrong": "这个更便宜。",
-              "fix": "这个更便宜。",
-              "sourceWrong": "This is more cheap.",
-              "sourceFix": "This is cheaper."
+              "wrong": "我喜欢书那本红色的。",
+              "fix": "我喜欢那本红色的书。"
             }
           ]
         },
         {
-          "title": "最高级",
-          "sourceTitle": "superlatives",
+          "title": "状语的功能",
           "points": [
-            "est或most形式",
-            "与最高级的the",
-            "群体比较重点"
+            "状语可以修饰动词、形容词或整个句子。",
+            "状语通常可以放在句首或句末。",
+            "状语的使用可以提供时间、地点、方式等信息。"
           ],
-          "sourcePoints": [
-            "est or most forms",
-            "the with superlative",
-            "group comparison focus"
-          ],
-          "example": "他是最高的。",
-          "sourceExample": "He is the tallest.",
+          "example": "他昨天在公园里跑步。",
           "mistakes": [
             {
-              "wrong": "他是最快的。",
-              "fix": "他是最快的。",
-              "sourceWrong": "He is the most fast.",
-              "sourceFix": "He is the fastest."
+              "wrong": "他在公园里昨天跑步。",
+              "fix": "他昨天在公园里跑步。"
             }
           ]
         },
         {
-          "title": "副词基础",
-          "sourceTitle": "adverbs basics",
+          "title": "比较级的构成",
           "points": [
-            "副词描述动词",
-            "副词在动词后",
-            "副词在形容词前"
+            "形容词的比较级通常通过加上'更'来形成。",
+            "某些形容词有不规则的比较级形式。",
+            "比较级可以用来比较两个事物。"
           ],
-          "sourcePoints": [
-            "adverbs describe verbs",
-            "adverbs after verb",
-            "adverbs before adjectives"
-          ],
-          "example": "她说得很清楚。",
-          "sourceExample": "She speaks clearly.",
+          "example": "这本书比那本书更有趣。",
           "mistakes": [
             {
-              "wrong": "她说得很慢。",
-              "fix": "她说得很慢。",
-              "sourceWrong": "She speaks slow.",
-              "sourceFix": "She speaks slowly."
+              "wrong": "这本书更有趣比那本书。",
+              "fix": "这本书比那本书更有趣。"
             }
           ]
         },
         {
-          "title": "频率副词",
-          "sourceTitle": "frequency adverbs",
+          "title": "最高级的表达",
           "points": [
-            "总是、通常、经常的组合",
-            "很少、从不的组合",
-            "与be动词的位置"
+            "最高级通常通过加上'最'来形成。",
+            "最高级用于表示三者或三者以上的比较。",
+            "最高级形式有时需要特殊的词汇。"
           ],
-          "sourcePoints": [
-            "always usually often set",
-            "rarely never set",
-            "position with be"
-          ],
-          "example": "我通常早起。",
-          "sourceExample": "I usually wake early.",
+          "example": "这是我见过的最好的电影。",
           "mistakes": [
             {
-              "wrong": "她总是早去。",
-              "fix": "她总是早去。",
-              "sourceWrong": "She goes always early.",
-              "sourceFix": "She always goes early."
+              "wrong": "这是我见过的好电影最。",
+              "fix": "这是我见过的最好的电影。"
             }
           ]
         },
         {
-          "title": "时间和地点副词",
-          "sourceTitle": "time and place adverbs",
+          "title": "名词的修饰",
           "points": [
-            "时间在句尾位置",
-            "地点在句尾",
-            "时间在地点之前的顺序"
+            "名词可以通过形容词或名词短语进行修饰。",
+            "修饰名词的词语通常放在名词前。",
+            "使用修饰语可以使名词更具体。"
           ],
-          "sourcePoints": [
-            "time at end position",
-            "place at the end",
-            "time before place order"
-          ],
-          "example": "我们昨天在那里见面。",
-          "sourceExample": "We met there yesterday.",
+          "example": "她买了一件漂亮的衣服。",
           "mistakes": [
             {
-              "wrong": "他昨天到这里。",
-              "fix": "他昨天到这里。",
-              "sourceWrong": "He arrived yesterday here.",
-              "sourceFix": "He arrived here yesterday."
+              "wrong": "她买了一件衣服漂亮的。",
+              "fix": "她买了一件漂亮的衣服。"
             }
           ]
         },
         {
-          "title": "程度词",
-          "sourceTitle": "degree words",
+          "title": "量词的使用",
           "points": [
-            "非常、真的组合",
-            "too和enough",
-            "quite和rather"
+            "名词前通常需要使用量词。",
+            "量词的选择取决于名词的性质。",
+            "量词可以帮助明确数量和种类。"
           ],
-          "sourcePoints": [
-            "very really set",
-            "too and enough",
-            "quite and rather"
-          ],
-          "example": "房间很温暖。",
-          "sourceExample": "The room is very warm.",
+          "example": "我有两只猫。",
           "mistakes": [
             {
-              "wrong": "天气很热。",
-              "fix": "天气足够热。",
-              "sourceWrong": "It is enough hot.",
-              "sourceFix": "It is hot enough."
+              "wrong": "我有猫两只。",
+              "fix": "我有两只猫。"
             }
           ]
         },
         {
-          "title": "分词",
-          "sourceTitle": "participles",
+          "title": "副词的比较",
           "points": [
-            "表示原因的ing形容词",
-            "表示感觉的ed形容词",
-            "避免混淆"
+            "副词的比较形式通常通过加上'更'来形成。",
+            "副词的比较可以用来描述动作的程度。",
+            "副词的比较级和最高级使用时要注意语境。"
           ],
-          "sourcePoints": [
-            "ing adjectives for cause",
-            "ed adjectives for feeling",
-            "avoid confusion"
-          ],
-          "example": "这部电影很无聊。",
-          "sourceExample": "The movie was boring.",
+          "example": "她跑得比我快。",
           "mistakes": [
             {
-              "wrong": "这个故事很无聊。",
-              "fix": "这个故事很无聊。",
-              "sourceWrong": "The story was boringed.",
-              "sourceFix": "The story was boring."
+              "wrong": "她比我快跑得。",
+              "fix": "她跑得比我快。"
             }
           ]
         },
         {
-          "title": "修饰语叠加",
-          "sourceTitle": "modifier stacking",
+          "title": "修饰语的顺序",
           "points": [
-            "多个形容词",
-            "多个副词",
-            "保持焦点清晰"
+            "在句子中，修饰语的顺序可以影响句意。",
+            "通常，状语在动词之前或之后。",
+            "定语在名词之前，副词在动词之前或之后。"
           ],
-          "sourcePoints": [
-            "multiple adjectives",
-            "multiple adverbs",
-            "keep focus clear"
-          ],
-          "example": "她迅速回答了那个难题。",
-          "sourceExample": "She quickly answered the hard question.",
+          "example": "他慢慢地走进了房间。",
           "mistakes": [
             {
-              "wrong": "她买了一个新的小红包。",
-              "fix": "她买了一个小的新红包。",
-              "sourceWrong": "She bought a red small new bag.",
-              "sourceFix": "She bought a small new red bag."
+              "wrong": "他走进了房间慢慢地。",
+              "fix": "他慢慢地走进了房间。"
             }
           ]
         }
       ],
       "Questions": [
         {
-          "title": "是非问题",
-          "sourceTitle": "yes no questions",
+          "title": "是非题",
           "points": [
-            "助动词 + 主语 + 基本动词"
+            "使用'是'来确认或否定信息。",
+            "可以用'吗'来构成疑问句。",
+            "通常在句尾加'吗'表示疑问。"
           ],
-          "sourcePoints": [
-            "aux + subject + base verb"
-          ],
-          "example": "你在这里工作吗？",
-          "sourceExample": "Do you work here?",
+          "example": "你是学生吗？",
           "mistakes": [
             {
-              "wrong": "你喜欢咖啡吗？",
-              "fix": "你喜欢咖啡吗？",
-              "sourceWrong": "You like coffee?",
-              "sourceFix": "Do you like coffee?"
+              "wrong": "你是学生。",
+              "fix": "你是学生吗？"
             }
           ]
         },
         {
-          "title": "疑问词问题",
-          "sourceTitle": "wh questions",
+          "title": "选择题",
           "points": [
-            "疑问词 + 助动词 + 主语 + 基本动词"
+            "使用'还是'来提供选择。",
+            "可以用'或者'来表示不确定的选择。",
+            "选择题通常包含两个或多个选项。"
           ],
-          "sourcePoints": [
-            "wh word + aux + subject + base verb"
-          ],
-          "example": "他住在哪里？",
-          "sourceExample": "Where does he live?",
+          "example": "你喜欢苹果还是香蕉？",
           "mistakes": [
             {
-              "wrong": "你住在哪里？",
-              "fix": "你住在哪里？",
-              "sourceWrong": "Where you live?",
-              "sourceFix": "Where do you live?"
+              "wrong": "你喜欢苹果香蕉？",
+              "fix": "你喜欢苹果还是香蕉？"
             }
           ]
         },
         {
-          "title": "含有be动词的问题",
-          "sourceTitle": "questions with be",
+          "title": "特殊疑问句",
           "points": [
-            "be动词 + 主语 + 补语"
+            "使用'什么'询问事物。",
+            "使用'谁'询问人。",
+            "使用'哪里'询问地点。"
           ],
-          "sourcePoints": [
-            "be + subject + complement"
-          ],
-          "example": "商店开门吗？",
-          "sourceExample": "Is the store open?",
+          "example": "你在做什么？",
           "mistakes": [
             {
-              "wrong": "你准备好了吗？",
-              "fix": "你准备好了吗？",
-              "sourceWrong": "You are ready?",
-              "sourceFix": "Are you ready?"
+              "wrong": "你做什么？",
+              "fix": "你在做什么？"
             }
           ]
         },
         {
-          "title": "含有do动词的问题",
-          "sourceTitle": "questions with do",
+          "title": "时间问题",
           "points": [
-            "助动词 + 主语 + 基本动词"
+            "使用'什么时候'询问时间。",
+            "可以用'几'来询问数量或时间。",
+            "时间问题通常需要具体的时间词。"
           ],
-          "sourcePoints": [
-            "aux + subject + base verb"
-          ],
-          "example": "你给她打电话了吗？",
-          "sourceExample": "Did you call her?",
+          "example": "你什么时候来？",
           "mistakes": [
             {
-              "wrong": "她喜欢披萨吗？",
-              "fix": "她喜欢比萨吗？",
-              "sourceWrong": "She likes pizza?",
-              "sourceFix": "Does she like pizza?"
+              "wrong": "你来什么时候？",
+              "fix": "你什么时候来？"
             }
           ]
         },
         {
-          "title": "含有情态动词的问题",
-          "sourceTitle": "questions with modals",
+          "title": "原因问题",
           "points": [
-            "情态动词 + 主语 + 基本动词"
+            "使用'为什么'询问原因。",
+            "可以用'因为什么'来引导原因。",
+            "原因问题通常需要解释。"
           ],
-          "sourcePoints": [
-            "modal + subject + base verb"
-          ],
-          "example": "你能帮我吗？",
-          "sourceExample": "Could you help me?",
+          "example": "你为什么迟到？",
           "mistakes": [
             {
-              "wrong": "你能帮我吗？",
-              "fix": "你能帮我吗？",
-              "sourceWrong": "You can help me?",
-              "sourceFix": "Can you help me?"
+              "wrong": "你迟到为什么？",
+              "fix": "你为什么迟到？"
             }
           ]
         },
         {
-          "title": "附加问句",
-          "sourceTitle": "tag questions",
+          "title": "方式问题",
           "points": [
-            "陈述句 + 附加问句"
+            "使用'怎么'询问方式。",
+            "可以用'怎样'来询问方法。",
+            "方式问题通常涉及动作的执行。"
           ],
-          "sourcePoints": [
-            "statement + tag"
-          ],
-          "example": "你准备好了，对吧？",
-          "sourceExample": "You are ready, aren't you?",
+          "example": "你怎么去学校？",
           "mistakes": [
             {
-              "wrong": "她在这里，是吗？",
-              "fix": "她在这里，是吗？",
-              "sourceWrong": "She is here, is she?",
-              "sourceFix": "She is here, isn't she?"
+              "wrong": "你去学校怎么？",
+              "fix": "你怎么去学校？"
             }
           ]
         },
         {
-          "title": "间接问句",
-          "sourceTitle": "indirect questions",
+          "title": "数量问题",
           "points": [
-            "引导词 + 疑问从句"
+            "使用'多少'询问数量。",
+            "可以用'几'来询问小数量。",
+            "数量问题通常需要具体的名词。"
           ],
-          "sourcePoints": [
-            "intro + wh clause"
-          ],
-          "example": "你能告诉我它在哪里吗？",
-          "sourceExample": "Could you tell me where it is?",
+          "example": "你有多少本书？",
           "mistakes": [
             {
-              "wrong": "你能告诉我他在哪里吗？",
-              "fix": "你能告诉我他在哪里吗？",
-              "sourceWrong": "Can you tell me where is he?",
-              "sourceFix": "Can you tell me where he is?"
+              "wrong": "你有几本书多少？",
+              "fix": "你有多少本书？"
             }
           ]
         }
       ],
       "Negation": [
         {
-          "title": "不与be动词",
-          "sourceTitle": "not with be",
+          "title": "不的用法",
           "points": [
-            "主语 + 是 + 不 + 补语"
+            "用于否定动词",
+            "可与形容词连用",
+            "用于否定名词时需特别注意"
           ],
-          "sourcePoints": [
-            "subject + be + not + complement"
-          ],
-          "example": "她不累。",
-          "sourceExample": "She is not tired.",
+          "example": "我不喜欢吃苹果。",
           "mistakes": [
             {
-              "wrong": "他不快乐。",
-              "fix": "他不快乐。",
-              "sourceWrong": "He not happy.",
-              "sourceFix": "He is not happy."
+              "wrong": "我喜欢不吃苹果。",
+              "fix": "我不喜欢吃苹果。"
             }
           ]
         },
         {
-          "title": "不与do动词",
-          "sourceTitle": "not with do",
+          "title": "没有的用法",
           "points": [
-            "主语 + 助动词 + 不 + 基本动词"
+            "用于否定存在或拥有",
+            "常与名词搭配",
+            "表示缺乏或不存在"
           ],
-          "sourcePoints": [
-            "subject + aux + not + base verb"
-          ],
-          "example": "他们不同意。",
-          "sourceExample": "They do not agree.",
+          "example": "我没有钱。",
           "mistakes": [
             {
-              "wrong": "她不喜欢茶。",
-              "fix": "她不喜欢茶。",
-              "sourceWrong": "She not like tea.",
-              "sourceFix": "She does not like tea."
+              "wrong": "我钱没有。",
+              "fix": "我没有钱。"
             }
           ]
         },
         {
-          "title": "否定短形式",
-          "sourceTitle": "negative short forms",
+          "title": "从不的用法",
           "points": [
-            "主语 + 助动词 + 不 + 基本动词"
+            "用于强调从未发生",
+            "常与时间副词连用",
+            "用于表示绝对否定"
           ],
-          "sourcePoints": [
-            "subject + aux + not + base verb"
-          ],
-          "example": "我不知道。",
-          "sourceExample": "I don't know.",
+          "example": "我从不喝酒。",
           "mistakes": [
             {
-              "wrong": "他不知道。",
-              "fix": "他不知道。",
-              "sourceWrong": "He does notn't know.",
-              "sourceFix": "He doesn't know."
+              "wrong": "我不喝酒从。",
+              "fix": "我从不喝酒。"
             }
           ]
         },
         {
-          "title": "否定词",
-          "sourceTitle": "negative words",
+          "title": "没的用法",
           "points": [
-            "否定词 + 名词"
+            "用于表示过去的否定",
+            "常用于口语",
+            "与动词连用时需注意时态"
           ],
-          "sourcePoints": [
-            "negative word + noun"
-          ],
-          "example": "没有牛奶。",
-          "sourceExample": "There is no milk.",
+          "example": "我没去过北京。",
           "mistakes": [
             {
-              "wrong": "我没有任何东西。",
-              "fix": "我没有任何东西。",
-              "sourceWrong": "I don't have nothing.",
-              "sourceFix": "I don't have anything."
+              "wrong": "我去过北京没。",
+              "fix": "我没去过北京。"
             }
           ]
         },
         {
-          "title": "否定疑问句",
-          "sourceTitle": "negative questions",
+          "title": "别的用法",
           "points": [
-            "助动词 + 不 + 主语 + 基本动词 + 宾语"
+            "用于命令或建议的否定",
+            "常用于口语",
+            "表示禁止或劝阻"
           ],
-          "sourcePoints": [
-            "aux + not + subject + base verb + object"
-          ],
-          "example": "你不想要咖啡吗？",
-          "sourceExample": "Don't you want coffee?",
+          "example": "别说话！",
           "mistakes": [
             {
-              "wrong": "你不喜欢它吗？",
-              "fix": "你不喜欢它吗？",
-              "sourceWrong": "You don't like it?",
-              "sourceFix": "Don't you like it?"
+              "wrong": "说话别！",
+              "fix": "别说话！"
             }
           ]
         },
         {
-          "title": "有限否定",
-          "sourceTitle": "limited negatives",
+          "title": "不可以的用法",
           "points": [
-            "主语 + 否定副词 + 动词"
+            "用于表示禁止或不允许",
+            "常与动词连用",
+            "用于强调不允许的状态"
           ],
-          "sourcePoints": [
-            "subject + negative adverb + verb"
-          ],
-          "example": "他很少在外面吃。",
-          "sourceExample": "He rarely eats out.",
+          "example": "你不可以迟到。",
           "mistakes": [
             {
-              "wrong": "她几乎不睡觉。",
-              "fix": "她几乎不睡觉。",
-              "sourceWrong": "She hardly doesn't sleep.",
-              "sourceFix": "She hardly sleeps."
+              "wrong": "你迟到不可以。",
+              "fix": "你不可以迟到。"
             }
           ]
         }
       ],
       "Connections": [
         {
-          "title": "基本连接词",
-          "sourceTitle": "basic connectors",
+          "title": "而且",
           "points": [
-            "从句1 + 连接词 + 从句2"
+            "用于连接两个并列的句子或词语。",
+            "表示递进关系。",
+            "常用于口语和书面语中。"
           ],
-          "sourcePoints": [
-            "clause 1 + connector + clause 2"
-          ],
-          "example": "我打了电话，但没有人接。",
-          "sourceExample": "I called but no one answered.",
+          "example": "我喜欢吃苹果，而且我也喜欢吃香蕉。",
           "mistakes": [
             {
-              "wrong": "我去了但留下了。",
-              "fix": "我去了并留下了。",
-              "sourceWrong": "I went and but stayed.",
-              "sourceFix": "I went and stayed."
+              "wrong": "我喜欢吃苹果，且我也喜欢吃香蕉。",
+              "fix": "我喜欢吃苹果，而且我也喜欢吃香蕉。"
             }
           ]
         },
         {
-          "title": "原因和结果",
-          "sourceTitle": "reason and result",
+          "title": "虽然...但是...",
           "points": [
-            "原因从句 + 连接词 + 结果从句"
+            "用于表达转折关系。",
+            "常用于复杂句中。",
+            "可以表示对比或让步。"
           ],
-          "sourcePoints": [
-            "reason clause + connector + result clause"
-          ],
-          "example": "下雨了，所以我们留了下来。",
-          "sourceExample": "It rained, so we stayed.",
+          "example": "虽然外面很冷，但是我还是想去散步。",
           "mistakes": [
             {
-              "wrong": "我迟到了因为公交车。",
-              "fix": "我迟到了，因为公交车迟到了。",
-              "sourceWrong": "I was late because the bus.",
-              "sourceFix": "I was late because the bus was late."
+              "wrong": "虽然外面很冷，我还是想去散步。",
+              "fix": "虽然外面很冷，但是我还是想去散步。"
             }
           ]
         },
         {
-          "title": "对比和选择",
-          "sourceTitle": "contrast and choice",
+          "title": "因为...所以...",
           "points": [
-            "从句1 + 对比连接词 + 从句2"
+            "用于表示因果关系。",
+            "常用于解释原因和结果。",
+            "可以用于口语和书面语。"
           ],
-          "sourcePoints": [
-            "clause 1 + contrast connector + clause 2"
-          ],
-          "example": "她走了，尽管她很累。",
-          "sourceExample": "She went, although she was tired.",
+          "example": "因为下雨，所以我们取消了计划。",
           "mistakes": [
             {
-              "wrong": "我喜欢茶但也喜欢咖啡。",
-              "fix": "我喜欢茶，但我也喜欢咖啡。",
-              "sourceWrong": "I like tea but also or coffee.",
-              "sourceFix": "I like tea, but I also like coffee."
+              "wrong": "因为下雨，我们取消了计划。",
+              "fix": "因为下雨，所以我们取消了计划。"
             }
           ]
         },
         {
-          "title": "时间连接词",
-          "sourceTitle": "time connectors",
+          "title": "不但...而且...",
           "points": [
-            "主句 + 时间连接词 + 从句"
+            "用于强调并列关系。",
+            "表示递进或补充。",
+            "常用于书面语中。"
           ],
-          "sourcePoints": [
-            "main clause + time connector + clause"
-          ],
-          "example": "到达时给我打电话。",
-          "sourceExample": "Call me when you arrive.",
+          "example": "他不但会说英语，而且会说法语。",
           "mistakes": [
             {
-              "wrong": "我在吃之前就离开了。",
-              "fix": "我在吃之前就离开了。",
-              "sourceWrong": "I left before I will eat.",
-              "sourceFix": "I left before I ate."
+              "wrong": "他不但会说英语，也会说法语。",
+              "fix": "他不但会说英语，而且会说法语。"
             }
           ]
         },
         {
-          "title": "比较连接词",
-          "sourceTitle": "comparison links",
+          "title": "即使...也...",
           "points": [
-            "主语 + 动词 + 比较 + 宾语"
+            "用于表示让步关系。",
+            "强调即使在某种情况下，结果仍然不变。",
+            "常用于书面语和口语中。"
           ],
-          "sourcePoints": [
-            "subject + verb + comparison + object"
-          ],
-          "example": "这感觉像家。",
-          "sourceExample": "This feels like home.",
+          "example": "即使下雨，我也要去跑步。",
           "mistakes": [
             {
-              "wrong": "她比我高。",
-              "fix": "她比我高。",
-              "sourceWrong": "She is like taller me.",
-              "sourceFix": "She is taller than me."
+              "wrong": "即使下雨，我还是要去跑步。",
+              "fix": "即使下雨，我也要去跑步。"
             }
           ]
         },
         {
-          "title": "添加观点",
-          "sourceTitle": "adding ideas",
+          "title": "为了...",
           "points": [
-            "添加标记 + 从句"
+            "用于表示目的。",
+            "常用于句首或句中。",
+            "可以用于口语和书面语。"
           ],
-          "sourcePoints": [
-            "addition marker + clause"
-          ],
-          "example": "我们还需要椅子。",
-          "sourceExample": "We also need chairs.",
+          "example": "为了提高中文水平，我每天都练习。",
           "mistakes": [
             {
-              "wrong": "他也去了。",
-              "fix": "他也去了。",
-              "sourceWrong": "He also went but too.",
-              "sourceFix": "He also went."
+              "wrong": "为了提高中文水平，我每天练习。",
+              "fix": "为了提高中文水平，我每天都练习。"
             }
           ]
         },
         {
-          "title": "排序观点",
-          "sourceTitle": "ordering ideas",
+          "title": "虽然...可是...",
           "points": [
-            "顺序 + 从句"
+            "用于表达转折关系。",
+            "与“虽然...但是...”相似，但口语中更常用。",
+            "可以用于强调对比。"
           ],
-          "sourcePoints": [
-            "sequence + clause"
-          ],
-          "example": "我们先计划，然后行动。",
-          "sourceExample": "First we plan, then we act.",
+          "example": "虽然我很累，可是我还是要完成作业。",
           "mistakes": [
             {
-              "wrong": "最后，我们先见面。",
-              "fix": "我们先见面，最后离开。",
-              "sourceWrong": "Finally, first we meet.",
-              "sourceFix": "First we met, finally we left."
+              "wrong": "虽然我很累，我还是要完成作业。",
+              "fix": "虽然我很累，可是我还是要完成作业。"
             }
           ]
         }
       ],
       "Conditions": [
         {
-          "title": "真实条件",
-          "sourceTitle": "real conditions",
+          "title": "真实条件句",
           "points": [
-            "如果从句 + 结果从句"
+            "用于表达真实的情况。",
+            "通常使用'如果'引导条件。",
+            "主句通常使用将来时或现在时。"
           ],
-          "sourcePoints": [
-            "if clause + result clause"
-          ],
-          "example": "如果你按这个，它就开始。",
-          "sourceExample": "If you press this, it starts.",
+          "example": "如果明天下雨，我就不去公园。",
           "mistakes": [
             {
-              "wrong": "如果你来，我们见面。",
-              "fix": "如果你来，我们见面。",
-              "sourceWrong": "If you will come, we meet.",
-              "sourceFix": "If you come, we meet."
+              "wrong": "如果明天下雨，我不去公园。",
+              "fix": "如果明天下雨，我就不去公园。"
             }
           ]
         },
         {
-          "title": "未来条件",
-          "sourceTitle": "future conditions",
+          "title": "非真实条件句",
           "points": [
-            "如果从句 + 结果从句"
+            "用于表达假设或不太可能发生的情况。",
+            "通常使用'如果'引导条件。",
+            "主句通常使用虚拟语气。"
           ],
-          "sourcePoints": [
-            "if clause + result clause"
-          ],
-          "example": "如果天气晴朗，我们就去。",
-          "sourceExample": "If it is sunny, we will go.",
+          "example": "如果我有钱，我会买一辆车。",
           "mistakes": [
             {
-              "wrong": "如果下雨，我们就留在这里。",
-              "fix": "如果下雨，我们就留在这里。",
-              "sourceWrong": "If it will rain, we will stay.",
-              "sourceFix": "If it rains, we will stay."
+              "wrong": "如果我有钱，我买一辆车。",
+              "fix": "如果我有钱，我会买一辆车。"
             }
           ]
         },
         {
-          "title": "不真实的现在",
-          "sourceTitle": "unreal present",
+          "title": "混合条件句",
           "points": [
-            "如果从句 + 会从句"
+            "用于表达过去的假设对现在的影响。",
+            "通常结合真实和非真实条件句的结构。",
+            "可以使用'如果'和'就'。"
           ],
-          "sourcePoints": [
-            "if clause + would clause"
-          ],
-          "example": "如果我有时间，我会帮忙。",
-          "sourceExample": "If I had time, I would help.",
+          "example": "如果我当时学习了，我现在就会有好工作。",
           "mistakes": [
             {
-              "wrong": "如果我有时间，我会去。",
-              "fix": "如果我有时间，我会去。",
-              "sourceWrong": "If I will have time, I would go.",
-              "sourceFix": "If I had time, I would go."
+              "wrong": "如果我当时学习，我现在有好工作。",
+              "fix": "如果我当时学习了，我现在就会有好工作。"
             }
           ]
         },
         {
-          "title": "不真实的过去",
-          "sourceTitle": "unreal past",
+          "title": "条件句的顺序",
           "points": [
-            "如果从句 + 本来会从句"
+            "条件句可以放在主句前或后。",
+            "如果条件句在前，主句后通常用逗号分隔。",
+            "如果主句在前，条件句后不需要逗号。"
           ],
-          "sourcePoints": [
-            "if clause + would have clause"
-          ],
-          "example": "如果我们早点离开，我们就会到了。",
-          "sourceExample": "If we had left earlier, we would have arrived.",
+          "example": "我会去，如果你来。",
           "mistakes": [
             {
-              "wrong": "如果我知道，我会告诉你。",
-              "fix": "如果我早知道，我会告诉你。",
-              "sourceWrong": "If I knew, I would have told.",
-              "sourceFix": "If I had known, I would have told."
+              "wrong": "如果你来，我会去。",
+              "fix": "如果你来，我会去。"
             }
           ]
         },
         {
-          "title": "混合条件",
-          "sourceTitle": "mixed conditions",
+          "title": "条件句中的时间词",
           "points": [
-            "如果从句（过去完成时） + 现在结果（会 + 基本动词）"
+            "可以在条件句中使用时间词如'当'、'一旦'。",
+            "这些词可以替代'如果'。",
+            "表达条件和时间的关系。"
           ],
-          "sourcePoints": [
-            "if clause (past perfect) + present result (would + base verb)"
-          ],
-          "example": "如果她学习过，她现在会很冷静。",
-          "sourceExample": "If she had studied, she would be calm now.",
+          "example": "一旦你完成作业，我们就可以出去玩。",
           "mistakes": [
             {
-              "wrong": "如果我学习了，我现在就会有这份工作。",
-              "fix": "如果我当时学习了，我现在就会有这份工作。",
-              "sourceWrong": "If I studied, I would have the job now.",
-              "sourceFix": "If I had studied, I would have the job now."
+              "wrong": "如果你完成作业，我们可以出去玩。",
+              "fix": "一旦你完成作业，我们就可以出去玩。"
             }
           ]
         },
         {
-          "title": "除非和其他情况",
-          "sourceTitle": "unless and otherwise",
+          "title": "条件句的否定形式",
           "points": [
-            "结果从句 + 除非从句"
+            "条件句可以使用否定形式来表达条件的否定。",
+            "通常在'如果'后加'不'。",
+            "表达条件不成立的情况。"
           ],
-          "sourcePoints": [
-            "result clause + unless clause"
-          ],
-          "example": "除非下雨，否则我们就去。",
-          "sourceExample": "We will go unless it rains.",
+          "example": "如果你不来，我就不去。",
           "mistakes": [
             {
-              "wrong": "除非下雨，否则我们会去。",
-              "fix": "除非下雨，否则我们会去。",
-              "sourceWrong": "We will go unless it will rain.",
-              "sourceFix": "We will go unless it rains."
+              "wrong": "如果你来，我不去。",
+              "fix": "如果你不来，我就不去。"
             }
           ]
         }
       ],
       "Voice & Focus": [
         {
-          "title": "主动语态",
-          "sourceTitle": "active voice",
-          "points": [
-            "执行者 + 动作动词 + 物体"
-          ],
-          "sourcePoints": [
-            "doer + action verb + object"
-          ],
-          "example": "厨师做了晚餐。",
-          "sourceExample": "The chef cooked dinner.",
-          "mistakes": [
-            {
-              "wrong": "蛋糕是我妈妈烤的。",
-              "fix": "我妈妈烤了蛋糕。",
-              "sourceWrong": "The cake baked my mom.",
-              "sourceFix": "My mom baked the cake."
-            }
-          ]
-        },
-        {
           "title": "被动语态",
-          "sourceTitle": "passive voice",
           "points": [
-            "物体 + 系动词 + 过去分词"
+            "被动语态用于强调动作的接受者。",
+            "常用结构：被 + 动词。",
+            "在书面和口语中都很常见。"
           ],
-          "sourcePoints": [
-            "object + be verb + past participle"
-          ],
-          "example": "这顿饭被做了。",
-          "sourceExample": "The meal was cooked.",
+          "example": "这本书是我写的。",
           "mistakes": [
             {
-              "wrong": "报告昨天完成了。",
-              "fix": "报告昨天完成了。",
-              "sourceWrong": "The report finished yesterday.",
-              "sourceFix": "The report was finished yesterday."
+              "wrong": "我写这本书。",
+              "fix": "这本书是我写的。"
             }
           ]
         },
         {
-          "title": "焦点转移",
-          "sourceTitle": "focus shifts",
+          "title": "主动与被动的转换",
           "points": [
-            "焦点短语 + 主语 + 动词"
+            "主动句强调动作的执行者。",
+            "被动句强调动作的接受者。",
+            "理解两者的转换有助于更好地表达。"
           ],
-          "sourcePoints": [
-            "focus phrase + subject + verb"
-          ],
-          "example": "那本书，我昨天读完了。",
-          "sourceExample": "That book, I finished yesterday.",
+          "example": "老师教了学生。",
           "mistakes": [
             {
-              "wrong": "这本书是我昨天买的。",
-              "fix": "这本书是我昨天买的。",
-              "sourceWrong": "This book I bought yesterday it.",
-              "sourceFix": "This book, I bought yesterday."
+              "wrong": "学生被老师教了。",
+              "fix": "学生被老师教了。"
             }
           ]
         },
         {
-          "title": "分裂句",
-          "sourceTitle": "cleft sentences",
+          "title": "焦点结构",
           "points": [
-            "它主语 + 焦点短语 + 从句"
+            "焦点结构用于突出句子中的某个成分。",
+            "常用的结构是‘是……的’。",
+            "帮助听者理解句子的重点。"
           ],
-          "sourcePoints": [
-            "it subject + focus phrase + clause"
-          ],
-          "example": "打电话的是约翰。",
-          "sourceExample": "It is John who called.",
+          "example": "是我昨天买的这本书。",
           "mistakes": [
             {
-              "wrong": "是她打电话吗？",
-              "fix": "打电话的是她。",
-              "sourceWrong": "Was it she called.",
-              "sourceFix": "It was she who called."
+              "wrong": "我昨天买这本书。",
+              "fix": "是我昨天买的这本书。"
             }
           ]
         },
         {
-          "title": "虚主语",
-          "sourceTitle": "there and it subjects",
+          "title": "强调句",
           "points": [
-            "那里主语 + 系动词 + 名词"
+            "强调句用于强调某个特定的信息。",
+            "通常使用‘正是……’结构。",
+            "在口语和书面语中都很有效。"
           ],
-          "sourcePoints": [
-            "there subject + be verb + noun"
-          ],
-          "example": "有一个问题。",
-          "sourceExample": "There is a problem.",
+          "example": "正是他帮助了我。",
           "mistakes": [
             {
-              "wrong": "房间里有一个问题。",
-              "fix": "房间里有一个问题。",
-              "sourceWrong": "Is a problem in the room.",
-              "sourceFix": "There is a problem in the room."
+              "wrong": "他帮助了我。",
+              "fix": "正是他帮助了我。"
+            }
+          ]
+        },
+        {
+          "title": "反身代词的使用",
+          "points": [
+            "反身代词用于强调动作的执行者与接受者是同一人。",
+            "常见结构是‘自己’。",
+            "在日常交流中非常实用。"
+          ],
+          "example": "我自己做的。",
+          "mistakes": [
+            {
+              "wrong": "我做的。",
+              "fix": "我自己做的。"
             }
           ]
         }
       ],
       "Modality": [
         {
+          "title": "可能性",
+          "points": [
+            "表示某事有可能发生。",
+            "常用词：可能、也许。",
+            "与动词搭配使用。"
+          ],
+          "example": "他可能会来。",
+          "mistakes": [
+            {
+              "wrong": "他可能来。",
+              "fix": "他可能会来。"
+            }
+          ]
+        },
+        {
           "title": "能力",
-          "sourceTitle": "ability",
           "points": [
-            "主语 + 情态动词 + 基本动词"
+            "表示某人有能力做某事。",
+            "常用词：能、会。",
+            "与动词搭配使用。"
           ],
-          "sourcePoints": [
-            "subject + modal + base verb"
-          ],
-          "example": "她会游泳。",
-          "sourceExample": "She can swim.",
+          "example": "我会游泳。",
           "mistakes": [
             {
-              "wrong": "她会游泳。",
-              "fix": "她会游泳。",
-              "sourceWrong": "She can to swim.",
-              "sourceFix": "She can swim."
+              "wrong": "我能游泳。",
+              "fix": "我会游泳。"
             }
           ]
         },
         {
-          "title": "许可",
-          "sourceTitle": "permission",
+          "title": "必要性",
           "points": [
-            "情态动词 + 主语 + 基本动词"
+            "表示某事是必要的。",
+            "常用词：必须、应该。",
+            "与动词搭配使用。"
           ],
-          "sourcePoints": [
-            "modal + subject + base verb"
-          ],
-          "example": "我可以坐在这里吗？",
-          "sourceExample": "May I sit here?",
+          "example": "你必须完成作业。",
           "mistakes": [
             {
-              "wrong": "我可以坐在这里吗？",
-              "fix": "我可以坐在这里吗？",
-              "sourceWrong": "May I to sit here?",
-              "sourceFix": "May I sit here?"
-            }
-          ]
-        },
-        {
-          "title": "义务",
-          "sourceTitle": "obligation",
-          "points": [
-            "主语 + 情态动词 + 基本动词"
-          ],
-          "sourcePoints": [
-            "subject + modal + base verb"
-          ],
-          "example": "你必须系好安全带。",
-          "sourceExample": "You must wear a seatbelt.",
-          "mistakes": [
-            {
-              "wrong": "你必须佩戴徽章。",
-              "fix": "你必须佩戴徽章。",
-              "sourceWrong": "You must to wear a badge.",
-              "sourceFix": "You must wear a badge."
+              "wrong": "你应该完成作业。",
+              "fix": "你必须完成作业。"
             }
           ]
         },
         {
           "title": "建议",
-          "sourceTitle": "advice",
           "points": [
-            "主语 + 情态动词 + 基本动词"
+            "表示对某事的建议。",
+            "常用词：建议、最好。",
+            "与动词搭配使用。"
           ],
-          "sourcePoints": [
-            "subject + modal + base verb"
-          ],
-          "example": "你应该休息。",
-          "sourceExample": "You should rest.",
+          "example": "你最好早点休息。",
           "mistakes": [
             {
-              "wrong": "你应该休息。",
-              "fix": "你应该休息。",
-              "sourceWrong": "You should to rest.",
-              "sourceFix": "You should rest."
+              "wrong": "你建议早点休息。",
+              "fix": "你最好早点休息。"
             }
           ]
         },
         {
-          "title": "可能性",
-          "sourceTitle": "possibility",
+          "title": "愿望",
           "points": [
-            "情态动词 + 基本动词"
+            "表示某人的愿望或希望。",
+            "常用词：想、希望。",
+            "与动词搭配使用。"
           ],
-          "sourcePoints": [
-            "modal + base verb"
-          ],
-          "example": "今天可能会下雨。",
-          "sourceExample": "It might rain today.",
+          "example": "我希望你快乐。",
           "mistakes": [
             {
-              "wrong": "可能会下雨。",
-              "fix": "可能会下雨。",
-              "sourceWrong": "It might to rain.",
-              "sourceFix": "It might rain."
+              "wrong": "我想你快乐。",
+              "fix": "我希望你快乐。"
             }
           ]
         },
         {
-          "title": "概率",
-          "sourceTitle": "probability",
+          "title": "禁止",
           "points": [
-            "主语 + 情态动词 + 概率词 + 基本动词"
+            "表示某事是被禁止的。",
+            "常用词：不能、不允许。",
+            "与动词搭配使用。"
           ],
-          "sourcePoints": [
-            "subject + modal + probability word + base verb"
-          ],
-          "example": "他可能会来。",
-          "sourceExample": "He will probably come.",
+          "example": "你不能在这里抽烟。",
           "mistakes": [
             {
-              "wrong": "他可能会迟到。",
-              "fix": "他可能会晚到。",
-              "sourceWrong": "He probably to arrive late.",
-              "sourceFix": "He will probably arrive late."
+              "wrong": "你不允许在这里抽烟。",
+              "fix": "你不能在这里抽烟。"
             }
           ]
         },
         {
-          "title": "礼貌请求",
-          "sourceTitle": "polite requests",
+          "title": "请求",
           "points": [
-            "情态动词 + 主语 + 基本动词 + 宾语"
+            "表示请求某人做某事。",
+            "常用词：请、能不能。",
+            "与动词搭配使用。"
           ],
-          "sourcePoints": [
-            "modal + subject + base verb + object"
-          ],
-          "example": "你能打开窗户吗？",
-          "sourceExample": "Could you open the window?",
+          "example": "请你帮我一下。",
           "mistakes": [
             {
-              "wrong": "你能打开门吗？",
-              "fix": "请你能开门吗？",
-              "sourceWrong": "Could you opens the door?",
-              "sourceFix": "Could you open the door, please?"
+              "wrong": "能不能帮我一下？",
+              "fix": "请你帮我一下。"
             }
           ]
         },
         {
-          "title": "提议和邀请",
-          "sourceTitle": "offers and invitations",
+          "title": "假设",
           "points": [
-            "情态短语 + 宾语"
+            "表示假设的情况。",
+            "常用词：如果、要是。",
+            "与动词搭配使用。"
           ],
-          "sourcePoints": [
-            "modal phrase + object"
-          ],
-          "example": "你想喝点茶吗？",
-          "sourceExample": "Would you like some tea?",
+          "example": "如果我有时间，我会去。",
           "mistakes": [
             {
-              "wrong": "你喜欢来吗？",
-              "fix": "你想来吗？",
-              "sourceWrong": "Do you like to come?",
-              "sourceFix": "Would you like to come?"
+              "wrong": "要是我有时间，我去。",
+              "fix": "如果我有时间，我会去。"
             }
           ]
         }
       ],
       "Reported Speech": [
         {
-          "title": "陈述句的转述",
-          "sourceTitle": "reporting statements",
+          "title": "陈述句的间接引语",
           "points": [
-            "说带（that）从句",
-            "that常常被省略",
-            "报告动词 + 从句"
+            "直接引语变为间接引语时，时态通常要后退。",
+            "如果直接引语中有时间状语，间接引语中需要进行相应的调整。",
+            "间接引语中不需要使用引号。"
           ],
-          "sourcePoints": [
-            "say with (that) clause",
-            "that often omitted",
-            "reporting verb + clause"
-          ],
-          "example": "她说她准备好了。",
-          "sourceExample": "She said she was ready.",
+          "example": "他说他今天有事。",
           "mistakes": [
             {
-              "wrong": "她告诉我她累了。",
-              "fix": "她说她累了。",
-              "sourceWrong": "She said me she is tired.",
-              "sourceFix": "She said she was tired."
+              "wrong": "他说他今天有事了。",
+              "fix": "他说他今天有事。"
             }
           ]
         },
         {
-          "title": "疑问句的转述",
-          "sourceTitle": "reporting questions",
+          "title": "疑问句的间接引语",
           "points": [
-            "用if提问",
-            "用疑问词提问",
-            "没有倒装"
+            "疑问句变为间接引语时，语序要调整为陈述句的形式。",
+            "在间接引语中，通常需要使用‘是否’或‘什么’来引导。",
+            "间接引语中不需要问号。"
           ],
-          "sourcePoints": [
-            "ask with if",
-            "ask with question word",
-            "no inversion"
-          ],
-          "example": "他问我是否还好。",
-          "sourceExample": "He asked if I was okay.",
+          "example": "她问我是否去过北京。",
           "mistakes": [
             {
-              "wrong": "他问车站在哪里。",
-              "fix": "他问车站在哪里。",
-              "sourceWrong": "He asked where is the station.",
-              "sourceFix": "He asked where the station was."
+              "wrong": "她问我去过北京吗？",
+              "fix": "她问我是否去过北京。"
             }
           ]
         },
         {
-          "title": "请求的转述",
-          "sourceTitle": "reporting requests",
+          "title": "命令句的间接引语",
           "points": [
-            "请求做某事",
-            "告诉做请求",
-            "礼貌的报告"
+            "命令句变为间接引语时，通常使用‘让’或‘叫’来引导。",
+            "要注意命令句的语气变化。",
+            "间接引语中不需要感叹号。"
           ],
-          "sourcePoints": [
-            "ask to do",
-            "tell to do requests",
-            "polite reporting"
-          ],
-          "example": "她让我等。",
-          "sourceExample": "She asked me to wait.",
+          "example": "老师让我完成作业。",
           "mistakes": [
             {
-              "wrong": "她问我我能否帮忙。",
-              "fix": "她让我帮忙。",
-              "sourceWrong": "She asked me can I help.",
-              "sourceFix": "She asked me to help."
+              "wrong": "老师叫我完成作业！",
+              "fix": "老师让我完成作业。"
             }
           ]
         },
         {
-          "title": "命令的转述",
-          "sourceTitle": "reporting commands",
+          "title": "时间状语的变化",
           "points": [
-            "告诉做命令",
-            "命令做某事",
-            "指令转换"
+            "直接引语中的时间词需要根据上下文进行调整。",
+            "常见的变化有：‘今天’变为‘那天’，‘现在’变为‘当时’。",
+            "注意时间状语的准确性。"
           ],
-          "sourcePoints": [
-            "tell to do commands",
-            "order to do",
-            "instruction shift"
-          ],
-          "example": "他告诉我们离开。",
-          "sourceExample": "He told us to leave.",
+          "example": "他昨天说他今天有空。",
           "mistakes": [
             {
-              "wrong": "他告诉我去。",
-              "fix": "他告诉我去。",
-              "sourceWrong": "He told me to went.",
-              "sourceFix": "He told me to go."
+              "wrong": "他昨天说他现在有空。",
+              "fix": "他昨天说他今天有空。"
             }
           ]
         },
         {
-          "title": "时态后移基础",
-          "sourceTitle": "backshift basics",
+          "title": "人称代词的变化",
           "points": [
-            "现在时转为过去时",
-            "will转为would",
-            "can转为could"
+            "在间接引语中，人称代词需要根据说话者和听话者的关系进行调整。",
+            "例如，‘我’可能变为‘他’或‘她’。",
+            "确保人称代词的准确性。"
           ],
-          "sourcePoints": [
-            "present to past shift",
-            "will to would shift",
-            "can to could shift"
-          ],
-          "example": "他们说他们有时间。",
-          "sourceExample": "They said they had time.",
+          "example": "她说她喜欢这个电影。",
           "mistakes": [
             {
-              "wrong": "她说她准备好了。",
-              "fix": "她说她准备好了。",
-              "sourceWrong": "She said she is ready.",
-              "sourceFix": "She said she was ready."
+              "wrong": "她说我喜欢这个电影。",
+              "fix": "她说她喜欢这个电影。"
             }
           ]
         },
         {
-          "title": "时间地点的变化",
-          "sourceTitle": "time place changes",
+          "title": "情态动词的变化",
           "points": [
-            "现在转为那时",
-            "这里转为那里",
-            "今天转为那天"
+            "在间接引语中，情态动词的形式可能会发生变化。",
+            "例如，‘可以’可能变为‘能’。",
+            "注意情态动词的语境适用性。"
           ],
-          "sourcePoints": [
-            "now to then",
-            "here to there",
-            "today to that day"
-          ],
-          "example": "他说他在那儿。",
-          "sourceExample": "He said he was there.",
+          "example": "他表示他可以参加会议。",
           "mistakes": [
             {
-              "wrong": "他说他今天会来这里。",
-              "fix": "他说他那天会来那里。",
-              "sourceWrong": "He said he will come here today.",
-              "sourceFix": "He said he would come there that day."
+              "wrong": "他说他能参加会议。",
+              "fix": "他说他可以参加会议。"
             }
           ]
         }
       ],
       "Formality & Style": [
         {
-          "title": "正式与非正式",
-          "sourceTitle": "formal vs informal",
+          "title": "正式用语的使用",
           "points": [
-            "正式用词",
-            "非正式用词",
-            "匹配听众语气"
+            "在正式场合中，使用完整的句子。",
+            "避免使用俚语或口语化表达。",
+            "选择适当的称谓以显示尊重。"
           ],
-          "sourcePoints": [
-            "formal word choice",
-            "informal word choice",
-            "match audience tone"
-          ],
-          "example": "您能帮我吗？",
-          "sourceExample": "Could you assist me?",
+          "example": "尊敬的李先生，感谢您抽出时间与我会面。",
           "mistakes": [
             {
-              "wrong": "嘿，把报告给我。",
-              "fix": "你好，你能把报告发给我吗？",
-              "sourceWrong": "Hey, give me the report.",
-              "sourceFix": "Hello, could you send the report?"
+              "wrong": "李先生，谢谢你见我。",
+              "fix": "尊敬的李先生，感谢您抽出时间与我会面。"
             }
           ]
         },
         {
-          "title": "缩写",
-          "sourceTitle": "contractions",
+          "title": "非正式用语的使用",
           "points": [
-            "口语中的简短形式",
-            "在正式写作中避免",
-            "清晰选择"
+            "在朋友间可以使用简短的句子。",
+            "可以使用俚语和口语化表达。",
+            "称谓可以更随意。"
           ],
-          "sourcePoints": [
-            "short forms in speech",
-            "avoid in formal writing",
-            "clarity choices"
-          ],
-          "example": "我不能待太久。",
-          "sourceExample": "I can't stay long.",
+          "example": "嘿，老王，最近怎么样？",
           "mistakes": [
             {
-              "wrong": "我迟到了，请不要等我。",
-              "fix": "我迟到了，请不要等我。",
-              "sourceWrong": "I am late, do not wait.",
-              "sourceFix": "I'm late, don't wait."
+              "wrong": "您好，王先生，最近好吗？",
+              "fix": "嘿，老王，最近怎么样？"
             }
           ]
         },
         {
-          "title": "礼貌缓和",
-          "sourceTitle": "polite softening",
+          "title": "敬语的使用",
           "points": [
-            "请以示礼貌",
-            "委婉请求形式",
-            "间接语言"
+            "在与长辈或上级交流时使用敬语。",
+            "敬语可以显示对对方的尊重。",
+            "注意敬语的正确使用方式。"
           ],
-          "sourcePoints": [
-            "please for politeness",
-            "soft request forms",
-            "indirect language"
-          ],
-          "example": "您能关上门吗？",
-          "sourceExample": "Could you close the door?",
+          "example": "您今天过得怎么样？",
           "mistakes": [
             {
-              "wrong": "请现在把文件发给我。",
-              "fix": "你能把文件发给我吗？",
-              "sourceWrong": "Send me the file now.",
-              "sourceFix": "Could you send me the file?"
+              "wrong": "你今天过得怎么样？",
+              "fix": "您今天过得怎么样？"
             }
           ]
         },
         {
-          "title": "口语与书面语",
-          "sourceTitle": "spoken vs written",
+          "title": "口语与书面语的区别",
           "points": [
-            "口语简洁",
-            "书面清晰",
-            "句子长度控制"
+            "书面语通常更正式，结构更复杂。",
+            "口语更简洁，常用短语和习惯用语。",
+            "注意场合选择合适的表达方式。"
           ],
-          "sourcePoints": [
-            "spoken simplicity",
-            "written clarity",
-            "sentence length control"
-          ],
-          "example": "请查看下面的详细信息。",
-          "sourceExample": "Please see the details below.",
+          "example": "我觉得这个计划不错。",
           "mistakes": [
             {
-              "wrong": "正式写作：我到了，哈哈。",
-              "fix": "正式写作：我已经到达。",
-              "sourceWrong": "In formal writing: I arrived lol.",
-              "sourceFix": "In formal writing: I have arrived."
+              "wrong": "我觉得这个计划挺好的。",
+              "fix": "我觉得这个计划不错。"
             }
           ]
         },
         {
-          "title": "专业风格",
-          "sourceTitle": "professional style",
+          "title": "避免重复的表达",
           "points": [
-            "明确目的优先",
-            "中性语气",
-            "礼貌结束"
+            "在正式场合中应避免重复同一词汇。",
+            "使用同义词或不同的表达方式。",
+            "提高语言的丰富性和表达的准确性。"
           ],
-          "sourcePoints": [
-            "clear purpose first",
-            "neutral tone",
-            "polite closing"
-          ],
-          "example": "感谢您的时间。",
-          "sourceExample": "Thank you for your time.",
+          "example": "这个项目非常重要，我们必须认真对待。",
           "mistakes": [
             {
-              "wrong": "嘿，我需要这个尽快。",
-              "fix": "你好，我需要这个尽快。",
-              "sourceWrong": "Hey, I need this ASAP.",
-              "sourceFix": "Hello, I need this soon."
+              "wrong": "这个项目很重要，我们要很认真。",
+              "fix": "这个项目非常重要，我们必须认真对待。"
             }
           ]
         },
         {
-          "title": "休闲风格",
-          "sourceTitle": "casual style",
+          "title": "使用适当的连接词",
           "points": [
-            "友好语气",
-            "简短短语",
-            "非正式开头"
+            "在书面语中使用连接词使句子更流畅。",
+            "选择合适的连接词以增强逻辑性。",
+            "避免使用口语化的连接词。"
           ],
-          "sourcePoints": [
-            "friendly tone",
-            "short phrases",
-            "informal openings"
-          ],
-          "example": "嘿，最近怎么样？",
-          "sourceExample": "Hey, how is it going?",
+          "example": "因此，我们需要重新评估这个计划。",
           "mistakes": [
             {
-              "wrong": "尊敬的先生或女士，您好吗？",
-              "fix": "嘿，最近怎么样？",
-              "sourceWrong": "Dear Sir or Madam, what's up?",
-              "sourceFix": "Hey, what's up?"
+              "wrong": "所以，我们需要重新考虑这个计划。",
+              "fix": "因此，我们需要重新评估这个计划。"
             }
           ]
         },
         {
-          "title": "清晰与简洁",
-          "sourceTitle": "clarity and brevity",
+          "title": "避免使用模糊的表达",
           "points": [
-            "简短句子",
-            "避免多余词汇",
-            "主旨优先"
+            "在正式场合中使用明确的表达。",
+            "避免使用模糊的词汇以免引起误解。",
+            "确保信息传达的清晰性。"
           ],
-          "sourcePoints": [
-            "short sentences",
-            "avoid extra words",
-            "main point first"
-          ],
-          "example": "我们需要一个快速的答案。",
-          "sourceExample": "We need a quick answer.",
+          "example": "请在下周一之前提交报告。",
           "mistakes": [
             {
-              "wrong": "由于下雨，我们将不去。",
-              "fix": "下雨了，所以我们不去。",
-              "sourceWrong": "Due to the fact that it is raining, we will not go.",
-              "sourceFix": "It is raining, so we will not go."
+              "wrong": "尽快给我报告。",
+              "fix": "请在下周一之前提交报告。"
             }
           ]
         }
       ],
       "Discourse & Flow": [
         {
-          "title": "开场与结束",
-          "sourceTitle": "opening and closing",
+          "title": "连词的使用",
           "points": [
-            "开始谈话",
-            "结束谈话",
-            "结束信号词"
+            "连词连接句子或句子成分。",
+            "常用的连词包括'和'、'但是'、'所以'。",
+            "连词的使用可以增强句子的流畅性。"
           ],
-          "sourcePoints": [
-            "start a talk",
-            "end a talk",
-            "closing signal words"
-          ],
-          "example": "大家好，反正今天就到这里。",
-          "sourceExample": "Hi everyone, anyway, that is all for today.",
+          "example": "我喜欢吃苹果和香蕉。",
           "mistakes": [
             {
-              "wrong": "我想谈谈。再见。",
-              "fix": "嗨，我想谈谈。谢谢，再见。",
-              "sourceWrong": "I want to talk. Goodbye.",
-              "sourceFix": "Hi, I wanted to talk. Thanks, goodbye."
+              "wrong": "我喜欢吃苹果但是香蕉。",
+              "fix": "我喜欢吃苹果，但是我不喜欢香蕉。"
             }
           ]
         },
         {
-          "title": "话题转换",
-          "sourceTitle": "topic shifts",
+          "title": "句子结构的变化",
           "points": [
-            "平滑地换话题",
-            "回到话题",
-            "信号转换"
+            "中文句子通常为主谓宾结构。",
+            "可以通过改变句子结构来强调不同的信息。",
+            "使用倒装句可以增加句子的多样性。"
           ],
-          "sourcePoints": [
-            "change topic smoothly",
-            "return to topic",
-            "signal the shift"
-          ],
-          "example": "顺便说一下，我有消息。",
-          "sourceExample": "By the way, I have news.",
+          "example": "他昨天去了商店。",
           "mistakes": [
             {
-              "wrong": "顺便提一下，因为日程。",
-              "fix": "顺便问一下，我们可以谈谈日程吗？",
-              "sourceWrong": "By the way because schedule.",
-              "sourceFix": "By the way, can we talk about the schedule?"
+              "wrong": "商店他昨天去了。",
+              "fix": "他昨天去了商店。"
             }
           ]
         },
         {
-          "title": "衔接工具",
-          "sourceTitle": "cohesion tools",
+          "title": "使用副词",
           "points": [
-            "参考词",
-            "连接短语",
-            "话题跟踪"
+            "副词用于修饰动词、形容词或其他副词。",
+            "副词的位置通常在动词之前或之后。",
+            "适当使用副词可以使句子更生动。"
           ],
-          "sourcePoints": [
-            "reference words",
-            "linking phrases",
-            "topic tracking"
-          ],
-          "example": "这个想法与最后一点有关。",
-          "sourceExample": "This idea connects to the last point.",
+          "example": "她快速地跑。",
           "mistakes": [
             {
-              "wrong": "我买了一本书。这本书是新的。",
-              "fix": "我买了一本书。它是新的。",
-              "sourceWrong": "I bought a book. Book is new.",
-              "sourceFix": "I bought a book. It is new."
+              "wrong": "她跑快速地。",
+              "fix": "她快速地跑。"
             }
           ]
         },
         {
-          "title": "思路排序",
-          "sourceTitle": "sequencing ideas",
+          "title": "时间状语的表达",
           "points": [
-            "首先 其次 最后",
-            "顺序信号词",
-            "清晰的顺序"
+            "时间状语通常放在句首或句尾。",
+            "可以使用'在'、'于'等词来引导时间状语。",
+            "清晰的时间表达有助于理解句子。"
           ],
-          "sourcePoints": [
-            "first next last",
-            "sequence signal words",
-            "clear sequence"
-          ],
-          "example": "我们先打包，然后离开。",
-          "sourceExample": "First we pack, then we leave.",
+          "example": "明天我会去上班。",
           "mistakes": [
             {
-              "wrong": "我先离开了，然后我醒来了。",
-              "fix": "我先醒来，然后离开。",
-              "sourceWrong": "First I left, then I woke up.",
-              "sourceFix": "First I woke up, then I left."
+              "wrong": "我明天会去上班。",
+              "fix": "明天我会去上班。"
             }
           ]
         },
         {
-          "title": "澄清举措",
-          "sourceTitle": "clarification moves",
+          "title": "使用被动语态",
           "points": [
-            "重新表述关键点",
-            "请求澄清",
-            "确认意思"
+            "被动语态用于强调动作的承受者。",
+            "常用'被'字结构来构成被动句。",
+            "被动语态在书面语中更为常见。"
           ],
-          "sourcePoints": [
-            "rephrase key point",
-            "ask for clarity",
-            "confirm meaning"
-          ],
-          "example": "让我换个说法。",
-          "sourceExample": "Let me put it another way.",
+          "example": "这本书被他读了。",
           "mistakes": [
             {
-              "wrong": "你说了什么？",
-              "fix": "你是什么意思？",
-              "sourceWrong": "What you said?",
-              "sourceFix": "What do you mean?"
+              "wrong": "他读了这本书被。",
+              "fix": "这本书被他读了。"
             }
           ]
         },
         {
-          "title": "总结",
-          "sourceTitle": "summaries",
+          "title": "使用比较级",
           "points": [
-            "简而言之",
-            "总结",
-            "主要观点回顾"
+            "比较级用于比较两个事物的差异。",
+            "常用'更'、'比'等词来构成比较级。",
+            "比较级可以用于形容词和副词。"
           ],
-          "sourcePoints": [
-            "in short",
-            "to sum up",
-            "main point recap"
-          ],
-          "example": "简而言之，我们准备好了。",
-          "sourceExample": "In short, we are ready.",
+          "example": "她比我更聪明。",
           "mistakes": [
             {
-              "wrong": "总之，有很多事情。",
-              "fix": "总之，我们需要更多时间。",
-              "sourceWrong": "In short, many things.",
-              "sourceFix": "In short, we need more time."
+              "wrong": "她更聪明比我。",
+              "fix": "她比我更聪明。"
             }
           ]
         },
         {
-          "title": "强调与重复",
-          "sourceTitle": "emphasis and repetition",
+          "title": "使用条件句",
           "points": [
-            "强调关键思想",
-            "重复以强调",
-            "信号强调"
+            "条件句用于表达假设或条件关系。",
+            "常用'如果'、'要是'等词引导条件句。",
+            "条件句可以使句子更具逻辑性。"
           ],
-          "sourcePoints": [
-            "stress key idea",
-            "repeat for focus",
-            "signal emphasis"
-          ],
-          "example": "这真的很重要。",
-          "sourceExample": "It is really important.",
+          "example": "如果下雨，我就不去。",
           "mistakes": [
             {
-              "wrong": "我确实不想去。",
-              "fix": "我确实想去。",
-              "sourceWrong": "I do want to go not.",
-              "sourceFix": "I do want to go."
+              "wrong": "我就不去如果下雨。",
+              "fix": "如果下雨，我就不去。"
             }
           ]
         },
         {
-          "title": "对话流畅",
-          "sourceTitle": "conversation flow",
+          "title": "使用感叹句",
           "points": [
-            "轮流发言",
-            "倾听信号",
-            "顺畅交流"
+            "感叹句用于表达强烈的情感或感受。",
+            "常用'多么'、'真'等词引导感叹句。",
+            "感叹句可以增强句子的表现力。"
           ],
-          "sourcePoints": [
-            "turn taking",
-            "listening signals",
-            "smooth exchange"
-          ],
-          "example": "我明白了，请继续。",
-          "sourceExample": "I see, please continue.",
+          "example": "多么美丽的风景啊！",
           "mistakes": [
             {
-              "wrong": "我也是。你呢？",
-              "fix": "我也是。你呢？",
-              "sourceWrong": "Me too. And you is?",
-              "sourceFix": "Me too. And you?"
+              "wrong": "美丽的风景多么啊！",
+              "fix": "多么美丽的风景啊！"
             }
           ]
         },
         {
-          "title": "举例说明",
-          "sourceTitle": "giving examples",
+          "title": "使用否定句",
           "points": [
-            "例如",
-            "比如",
-            "诸如"
+            "否定句用于表达否定的意思。",
+            "常用'不'、'没'等词构成否定句。",
+            "清晰的否定表达有助于避免误解。"
           ],
-          "sourcePoints": [
-            "for example",
-            "for instance",
-            "such as"
-          ],
-          "example": "例如，拨打帮助热线。",
-          "sourceExample": "For example, call the help desk.",
+          "example": "我不喜欢吃辣。",
           "mistakes": [
             {
-              "wrong": "例如，就是这样。",
-              "fix": "例如，它对旅行很有用。",
-              "sourceWrong": "For example, it is.",
-              "sourceFix": "For example, it is useful for travel."
+              "wrong": "我喜欢不吃辣。",
+              "fix": "我不喜欢吃辣。"
             }
           ]
         },
         {
-          "title": "修正与纠正",
-          "sourceTitle": "repair and correction",
+          "title": "使用复合句",
           "points": [
-            "自我纠正",
-            "快速澄清",
-            "重新开始措辞"
+            "复合句由多个简单句组成。",
+            "可以使用连词连接不同的分句。",
+            "复合句使表达更为复杂和丰富。"
           ],
-          "sourcePoints": [
-            "self correction",
-            "clarify quickly",
-            "restart phrasing"
-          ],
-          "example": "抱歉，让我再试一次。",
-          "sourceExample": "Sorry, let me try again.",
+          "example": "我去商店，买了一些水果。",
           "mistakes": [
             {
-              "wrong": "我的意思是，我要走。",
-              "fix": "抱歉，我是说我正在去。",
-              "sourceWrong": "I mean, I am go.",
-              "sourceFix": "Sorry, I mean I am going."
+              "wrong": "我去商店买了一些水果。",
+              "fix": "我去商店，买了一些水果。"
             }
           ]
         }
       ]
     },
-    "sectionLabels": {}
+    "sectionLabels": {
+      "Sentence Structure": "句子结构",
+      "Verbs": "动词",
+      "Tenses & Aspect": "时态与体",
+      "Nouns & Articles": "名词与冠词",
+      "Pronouns & Reference": "代词与指代",
+      "Modifiers": "修饰语",
+      "Questions": "问题",
+      "Negation": "否定",
+      "Connections": "连接词",
+      "Conditions": "条件句",
+      "Voice & Focus": "语态与焦点",
+      "Modality": "情态",
+      "Reported Speech": "间接引语",
+      "Formality & Style": "正式与非正式用语",
+      "Discourse & Flow": "话语与流畅性"
+    }
   },
   "worldSource": {
     "words": {

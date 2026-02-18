@@ -29,9 +29,11 @@ const currentPath = window.location.pathname.toLowerCase();
 const setupDynamicViewportHeight = () => {
   const root = document.documentElement;
   let stableHeight = 0;
+  let stableWidth = 0;
   let lastAppliedHeight = 0;
   let orientationKey = "";
   let rafId = 0;
+  const lockOnTouchViewport = window.matchMedia("(hover: none), (pointer: coarse)").matches;
 
   const getOrientationKey = () => {
     const landscape = window.matchMedia("(orientation: landscape)").matches;
@@ -40,18 +42,27 @@ const setupDynamicViewportHeight = () => {
 
   const applyViewportHeight = (forceReset = false) => {
     const innerHeight = Math.round(window.innerHeight || root.clientHeight || 0);
+    const innerWidth = Math.round(window.innerWidth || root.clientWidth || 0);
     if (!innerHeight || !Number.isFinite(innerHeight)) {
       return;
     }
     const nextOrientation = getOrientationKey();
     const orientationChanged = orientationKey !== nextOrientation;
-    if (forceReset || !stableHeight || orientationChanged) {
+    const widthChanged =
+      Number.isFinite(innerWidth) &&
+      Number.isFinite(stableWidth) &&
+      Math.abs(innerWidth - stableWidth) > 48;
+    if (forceReset || !stableHeight || orientationChanged || widthChanged) {
       orientationKey = nextOrientation;
       stableHeight = innerHeight;
-    } else if (innerHeight > stableHeight) {
-      // Keep the maximum visible viewport height so toolbar collapse/expand
-      // does not shrink layout while scrolling.
+      stableWidth = innerWidth || stableWidth;
+    } else if (lockOnTouchViewport) {
+      // On touch browsers (notably iOS Safari), ignore toolbar show/hide
+      // viewport fluctuations to avoid jumpy relayout during scroll.
+      return;
+    } else if (innerHeight !== stableHeight) {
       stableHeight = innerHeight;
+      stableWidth = innerWidth || stableWidth;
     } else {
       return;
     }

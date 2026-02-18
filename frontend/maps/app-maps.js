@@ -2472,6 +2472,24 @@ const getWorldSectionLabelFromPack = (mapType, section) => {
 const getGrammarCardsForSection = (section) => {
   const worldCards = WORLD_TRANSLATIONS?.grammar?.cards?.[section];
   if (Array.isArray(worldCards) && worldCards.length) {
+    if (isNonEnglishWorld) {
+      return worldCards.filter((card) => {
+        if (!card || typeof card !== "object") {
+          return false;
+        }
+        const hasEnglishSourceMarkers =
+          !!String(card.sourceTitle || "").trim() ||
+          !!String(card.sourceExample || "").trim() ||
+          (Array.isArray(card.sourcePoints) && card.sourcePoints.length > 0) ||
+          (Array.isArray(card.mistakes) &&
+            card.mistakes.some(
+              (mistake) =>
+                !!String(mistake?.sourceWrong || "").trim() ||
+                !!String(mistake?.sourceFix || "").trim()
+            ));
+        return !hasEnglishSourceMarkers;
+      });
+    }
     return worldCards;
   }
   if (isNonEnglishWorld) {
@@ -2851,7 +2869,7 @@ const renderWordsSections = () => {
   const sections = [];
   WORD_SECTION_ORDER.forEach((sectionName) => {
     const words = getWorldWordList(sectionName);
-    if (!words) {
+    if (!Array.isArray(words) || !words.length) {
       return;
     }
     const section = document.createElement("section");
@@ -3005,7 +3023,7 @@ const renderPhrasesSections = () => {
   const sections = [];
   PHRASE_SECTION_ORDER.forEach((sectionName) => {
     const phrases = getWorldPhraseList(sectionName);
-    if (!phrases) {
+    if (!Array.isArray(phrases) || !phrases.length) {
       return;
     }
     const section = document.createElement("section");
@@ -3158,7 +3176,7 @@ const renderGrammarSections = () => {
   const sections = [];
   GRAMMAR_SECTION_ORDER.forEach((sectionName) => {
     const concepts = getGrammarCardsForSection(sectionName);
-    if (!concepts) {
+    if (!Array.isArray(concepts) || !concepts.length) {
       return;
     }
     const section = document.createElement("section");
@@ -7188,9 +7206,6 @@ const requestRuntimeSectionTitleTranslation = async (mapType, sectionTitleText, 
   ) {
     return "";
   }
-  if (langKey === "english") {
-    return sectionTitle;
-  }
 
   const cacheKey = buildRuntimeSectionTitleCacheKey(mapKey, sectionTitle, langKey);
   const cached = runtimeSectionTitleTranslationCache.get(cacheKey);
@@ -7473,12 +7488,6 @@ const applyGrammarCardTitleTranslations = () => {
     if (cached) {
       translationNode.textContent = `(${cached})`;
       translationNode.hidden = hideIfSameAsMain(cached);
-      return;
-    }
-
-    if (baseLanguage === "english") {
-      translationNode.textContent = `(${sourceTitle})`;
-      translationNode.hidden = hideIfSameAsMain(sourceTitle);
       return;
     }
 

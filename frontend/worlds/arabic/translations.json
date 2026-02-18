@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-17T23:47:50.261Z",
+  "generatedAt": "2026-02-18T00:40:16.591Z",
   "worldLanguage": "arabic",
   "baseLanguages": [
     "albanian",
@@ -7895,4473 +7895,1663 @@
     }
   },
   "grammar": {
-    "titles": {
-      "Sentence Structure": {
-        "ترتيب الكلمات الأساسي": {
-          "source": "basic word order",
-          "translations": {
-            "english": "basic word order"
-          }
-        },
-        "أجزاء الجملة": {
-          "source": "sentence parts",
-          "translations": {
-            "english": "sentence parts"
-          }
-        },
-        "إضافة التفاصيل": {
-          "source": "adding details",
-          "translations": {
-            "english": "adding details"
-          }
-        },
-        "ربط الجمل": {
-          "source": "linking clauses",
-          "translations": {
-            "english": "linking clauses"
-          }
-        },
-        "تنوع الجمل": {
-          "source": "sentence variety",
-          "translations": {
-            "english": "sentence variety"
-          }
-        }
-      },
-      "Verbs": {
-        "أفعال الحركة": {
-          "source": "action verbs",
-          "translations": {
-            "english": "action verbs"
-          }
-        },
-        "أفعال الحالة": {
-          "source": "state verbs",
-          "translations": {
-            "english": "state verbs"
-          }
-        },
-        "أفعال الربط": {
-          "source": "linking verbs",
-          "translations": {
-            "english": "linking verbs"
-          }
-        },
-        "أنماط الأفعال": {
-          "source": "verb patterns",
-          "translations": {
-            "english": "verb patterns"
-          }
-        },
-        "تركيبات الأفعال": {
-          "source": "verb combinations",
-          "translations": {
-            "english": "verb combinations"
-          }
-        },
-        "الأفعال المركبة": {
-          "source": "phrasal verbs",
-          "translations": {
-            "english": "phrasal verbs"
-          }
-        }
-      },
-      "Tenses & Aspect": {
-        "المضارع البسيط": {
-          "source": "present simple",
-          "translations": {
-            "english": "present simple"
-          }
-        },
-        "المضارع المستمر": {
-          "source": "present continuous",
-          "translations": {
-            "english": "present continuous"
-          }
-        },
-        "الماضي البسيط": {
-          "source": "past simple",
-          "translations": {
-            "english": "past simple"
-          }
-        },
-        "الماضي المستمر": {
-          "source": "past continuous",
-          "translations": {
-            "english": "past continuous"
-          }
-        },
-        "المضارع التام": {
-          "source": "present perfect",
-          "translations": {
-            "english": "present perfect"
-          }
-        },
-        "الماضي التام": {
-          "source": "past perfect",
-          "translations": {
-            "english": "past perfect"
-          }
-        },
-        "أشكال المستقبل": {
-          "source": "future forms",
-          "translations": {
-            "english": "future forms"
-          }
-        },
-        "المستقبل المستمر": {
-          "source": "future continuous",
-          "translations": {
-            "english": "future continuous"
-          }
-        },
-        "المستقبل التام": {
-          "source": "future perfect",
-          "translations": {
-            "english": "future perfect"
-          }
-        },
-        "تباينات الجوانب": {
-          "source": "aspect contrasts",
-          "translations": {
-            "english": "aspect contrasts"
-          }
-        }
-      },
-      "Nouns & Articles": {
-        "الأسماء المعدودة": {
-          "source": "countable nouns",
-          "translations": {
-            "english": "countable nouns"
-          }
-        },
-        "الأسماء غير المعدودة": {
-          "source": "uncountable nouns",
-          "translations": {
-            "english": "uncountable nouns"
-          }
-        },
-        "المقالات": {
-          "source": "articles",
-          "translations": {
-            "english": "articles"
-          }
-        },
-        "الصيغ الجمع": {
-          "source": "plural forms",
-          "translations": {
-            "english": "plural forms"
-          }
-        },
-        "الأسماء الملكية": {
-          "source": "possessive nouns",
-          "translations": {
-            "english": "possessive nouns"
-          }
-        },
-        "عبارات اسمية": {
-          "source": "noun phrases",
-          "translations": {
-            "english": "noun phrases"
-          }
-        },
-        "المحددات": {
-          "source": "quantifiers",
-          "translations": {
-            "english": "quantifiers"
-          }
-        }
-      },
-      "Pronouns & Reference": {
-        "ضمائر الفاعل": {
-          "source": "subject pronouns",
-          "translations": {
-            "english": "subject pronouns"
-          }
-        },
-        "ضمائر المفعول": {
-          "source": "object pronouns",
-          "translations": {
-            "english": "object pronouns"
-          }
-        },
-        "أشكال الملكية": {
-          "source": "possessive forms",
-          "translations": {
-            "english": "possessive forms"
-          }
-        },
-        "ضمائر الانعكاس": {
-          "source": "reflexive pronouns",
-          "translations": {
-            "english": "reflexive pronouns"
-          }
-        },
-        "أدوات الإشارة": {
-          "source": "demonstratives",
-          "translations": {
-            "english": "demonstratives"
-          }
-        },
-        "المرجع النسبي": {
-          "source": "relative reference",
-          "translations": {
-            "english": "relative reference"
-          }
-        },
-        "المرجع غير المحدد": {
-          "source": "indefinite reference",
-          "translations": {
-            "english": "indefinite reference"
-          }
-        }
-      },
-      "Modifiers": {
-        "أساسيات الصفات": {
-          "source": "adjectives basics",
-          "translations": {
-            "english": "adjectives basics"
-          }
-        },
-        "ترتيب الصفات": {
-          "source": "adjective order",
-          "translations": {
-            "english": "adjective order"
-          }
-        },
-        "المقارنات": {
-          "source": "comparatives",
-          "translations": {
-            "english": "comparatives"
-          }
-        },
-        "التفضيلات": {
-          "source": "superlatives",
-          "translations": {
-            "english": "superlatives"
-          }
-        },
-        "أساسيات الظروف": {
-          "source": "adverbs basics",
-          "translations": {
-            "english": "adverbs basics"
-          }
-        },
-        "ظروف التكرار": {
-          "source": "frequency adverbs",
-          "translations": {
-            "english": "frequency adverbs"
-          }
-        },
-        "ظروف الزمن والمكان": {
-          "source": "time and place adverbs",
-          "translations": {
-            "english": "time and place adverbs"
-          }
-        },
-        "كلمات الدرجة": {
-          "source": "degree words",
-          "translations": {
-            "english": "degree words"
-          }
-        },
-        "الأسماء المشتقة": {
-          "source": "participles",
-          "translations": {
-            "english": "participles"
-          }
-        },
-        "تراص المعدلات": {
-          "source": "modifier stacking",
-          "translations": {
-            "english": "modifier stacking"
-          }
-        }
-      },
-      "Questions": {
-        "أسئلة بنعم أو لا": {
-          "source": "yes no questions",
-          "translations": {
-            "english": "yes no questions"
-          }
-        },
-        "أسئلة تبدأ بـ wh": {
-          "source": "wh questions",
-          "translations": {
-            "english": "wh questions"
-          }
-        },
-        "أسئلة مع الفعل يكون": {
-          "source": "questions with be",
-          "translations": {
-            "english": "questions with be"
-          }
-        },
-        "أسئلة مع الفعل يفعل": {
-          "source": "questions with do",
-          "translations": {
-            "english": "questions with do"
-          }
-        },
-        "أسئلة مع الأفعال المساعدة": {
-          "source": "questions with modals",
-          "translations": {
-            "english": "questions with modals"
-          }
-        },
-        "أسئلة تاغ": {
-          "source": "tag questions",
-          "translations": {
-            "english": "tag questions"
-          }
-        },
-        "أسئلة غير مباشرة": {
-          "source": "indirect questions",
-          "translations": {
-            "english": "indirect questions"
-          }
-        }
-      },
-      "Negation": {
-        "ليس مع يكون": {
-          "source": "not with be",
-          "translations": {
-            "english": "not with be"
-          }
-        },
-        "ليس مع يفعل": {
-          "source": "not with do",
-          "translations": {
-            "english": "not with do"
-          }
-        },
-        "الأشكال القصيرة السلبية": {
-          "source": "negative short forms",
-          "translations": {
-            "english": "negative short forms"
-          }
-        },
-        "الكلمات السلبية": {
-          "source": "negative words",
-          "translations": {
-            "english": "negative words"
-          }
-        },
-        "الأسئلة السلبية": {
-          "source": "negative questions",
-          "translations": {
-            "english": "negative questions"
-          }
-        },
-        "السلبيات المحدودة": {
-          "source": "limited negatives",
-          "translations": {
-            "english": "limited negatives"
-          }
-        }
-      },
-      "Connections": {
-        "موصلات أساسية": {
-          "source": "basic connectors",
-          "translations": {
-            "english": "basic connectors"
-          }
-        },
-        "السبب والنتيجة": {
-          "source": "reason and result",
-          "translations": {
-            "english": "reason and result"
-          }
-        },
-        "التباين والاختيار": {
-          "source": "contrast and choice",
-          "translations": {
-            "english": "contrast and choice"
-          }
-        },
-        "موصلات زمنية": {
-          "source": "time connectors",
-          "translations": {
-            "english": "time connectors"
-          }
-        },
-        "روابط المقارنة": {
-          "source": "comparison links",
-          "translations": {
-            "english": "comparison links"
-          }
-        },
-        "إضافة الأفكار": {
-          "source": "adding ideas",
-          "translations": {
-            "english": "adding ideas"
-          }
-        },
-        "ترتيب الأفكار": {
-          "source": "ordering ideas",
-          "translations": {
-            "english": "ordering ideas"
-          }
-        }
-      },
-      "Conditions": {
-        "الظروف الحقيقية": {
-          "source": "real conditions",
-          "translations": {
-            "english": "real conditions"
-          }
-        },
-        "الظروف المستقبلية": {
-          "source": "future conditions",
-          "translations": {
-            "english": "future conditions"
-          }
-        },
-        "الحاضر غير الواقعي": {
-          "source": "unreal present",
-          "translations": {
-            "english": "unreal present"
-          }
-        },
-        "الماضي غير الواقعي": {
-          "source": "unreal past",
-          "translations": {
-            "english": "unreal past"
-          }
-        },
-        "الظروف المختلطة": {
-          "source": "mixed conditions",
-          "translations": {
-            "english": "mixed conditions"
-          }
-        },
-        "ما لم وخلاف ذلك": {
-          "source": "unless and otherwise",
-          "translations": {
-            "english": "unless and otherwise"
-          }
-        }
-      },
-      "Voice & Focus": {
-        "الصوت النشط": {
-          "source": "active voice",
-          "translations": {
-            "english": "active voice"
-          }
-        },
-        "الصوت المبني للمجهول": {
-          "source": "passive voice",
-          "translations": {
-            "english": "passive voice"
-          }
-        },
-        "تحولات التركيز": {
-          "source": "focus shifts",
-          "translations": {
-            "english": "focus shifts"
-          }
-        },
-        "الجمل المنقسمة": {
-          "source": "cleft sentences",
-          "translations": {
-            "english": "cleft sentences"
-          }
-        },
-        "مواضيع هناك و هو": {
-          "source": "there and it subjects",
-          "translations": {
-            "english": "there and it subjects"
-          }
-        }
-      },
-      "Modality": {
-        "قدرة": {
-          "source": "ability",
-          "translations": {
-            "english": "ability"
-          }
-        },
-        "إذن": {
-          "source": "permission",
-          "translations": {
-            "english": "permission"
-          }
-        },
-        "التزام": {
-          "source": "obligation",
-          "translations": {
-            "english": "obligation"
-          }
-        },
-        "نصيحة": {
-          "source": "advice",
-          "translations": {
-            "english": "advice"
-          }
-        },
-        "احتمالية": {
-          "source": "possibility",
-          "translations": {
-            "english": "possibility"
-          }
-        },
-        "احتمال": {
-          "source": "probability",
-          "translations": {
-            "english": "probability"
-          }
-        },
-        "طلبات مهذبة": {
-          "source": "polite requests",
-          "translations": {
-            "english": "polite requests"
-          }
-        },
-        "عروض ودعوات": {
-          "source": "offers and invitations",
-          "translations": {
-            "english": "offers and invitations"
-          }
-        }
-      },
-      "Reported Speech": {
-        "الإبلاغ عن العبارات": {
-          "source": "reporting statements",
-          "translations": {
-            "english": "reporting statements"
-          }
-        },
-        "الإبلاغ عن الأسئلة": {
-          "source": "reporting questions",
-          "translations": {
-            "english": "reporting questions"
-          }
-        },
-        "الإبلاغ عن الطلبات": {
-          "source": "reporting requests",
-          "translations": {
-            "english": "reporting requests"
-          }
-        },
-        "الإبلاغ عن الأوامر": {
-          "source": "reporting commands",
-          "translations": {
-            "english": "reporting commands"
-          }
-        },
-        "أساسيات التحويل الزمني": {
-          "source": "backshift basics",
-          "translations": {
-            "english": "backshift basics"
-          }
-        },
-        "تغييرات الزمن والمكان": {
-          "source": "time place changes",
-          "translations": {
-            "english": "time place changes"
-          }
-        }
-      },
-      "Formality & Style": {
-        "رسمية مقابل غير رسمية": {
-          "source": "formal vs informal",
-          "translations": {
-            "english": "formal vs informal"
-          }
-        },
-        "اختصارات": {
-          "source": "contractions",
-          "translations": {
-            "english": "contractions"
-          }
-        },
-        "تلطيف مهذب": {
-          "source": "polite softening",
-          "translations": {
-            "english": "polite softening"
-          }
-        },
-        "محادثة مقابل كتابة": {
-          "source": "spoken vs written",
-          "translations": {
-            "english": "spoken vs written"
-          }
-        },
-        "أسلوب احترافي": {
-          "source": "professional style",
-          "translations": {
-            "english": "professional style"
-          }
-        },
-        "أسلوب غير رسمي": {
-          "source": "casual style",
-          "translations": {
-            "english": "casual style"
-          }
-        },
-        "وضوح وإيجاز": {
-          "source": "clarity and brevity",
-          "translations": {
-            "english": "clarity and brevity"
-          }
-        }
-      },
-      "Discourse & Flow": {
-        "الافتتاح والإغلاق": {
-          "source": "opening and closing",
-          "translations": {
-            "english": "opening and closing"
-          }
-        },
-        "تحولات الموضوع": {
-          "source": "topic shifts",
-          "translations": {
-            "english": "topic shifts"
-          }
-        },
-        "أدوات التماسك": {
-          "source": "cohesion tools",
-          "translations": {
-            "english": "cohesion tools"
-          }
-        },
-        "ترتيب الأفكار": {
-          "source": "sequencing ideas",
-          "translations": {
-            "english": "sequencing ideas"
-          }
-        },
-        "خطوات التوضيح": {
-          "source": "clarification moves",
-          "translations": {
-            "english": "clarification moves"
-          }
-        },
-        "الملخصات": {
-          "source": "summaries",
-          "translations": {
-            "english": "summaries"
-          }
-        },
-        "التأكيد والتكرار": {
-          "source": "emphasis and repetition",
-          "translations": {
-            "english": "emphasis and repetition"
-          }
-        },
-        "تدفق المحادثة": {
-          "source": "conversation flow",
-          "translations": {
-            "english": "conversation flow"
-          }
-        },
-        "إعطاء أمثلة": {
-          "source": "giving examples",
-          "translations": {
-            "english": "giving examples"
-          }
-        },
-        "الإصلاح والتصحيح": {
-          "source": "repair and correction",
-          "translations": {
-            "english": "repair and correction"
-          }
-        }
-      }
-    },
-    "examples": {
-      "Sentence Structure": {
-        "هي تقرأ كتابًا.": {
-          "source": "She reads a book.",
-          "translations": {
-            "english": "She reads a book."
-          }
-        },
-        "سموها قائدة.": {
-          "source": "They named her captain.",
-          "translations": {
-            "english": "They named her captain."
-          }
-        },
-        "التقت به في الظهر في المحطة.": {
-          "source": "She met him at noon at the station.",
-          "translations": {
-            "english": "She met him at noon at the station."
-          }
-        },
-        "بقيت في المنزل لأن المطر هطل.": {
-          "source": "I stayed home because it rained.",
-          "translations": {
-            "english": "I stayed home because it rained."
-          }
-        },
-        "انتهينا مبكرًا. ذهبنا إلى المنزل بعد الدرس لأننا كنا متعبين.": {
-          "source": "We finished early. We went home after class because we were tired.",
-          "translations": {
-            "english": "We finished early. We went home after class because we were tired."
-          }
-        }
-      },
-      "Verbs": {
-        "هم يحملون الصناديق.": {
-          "source": "They carry the boxes.",
-          "translations": {
-            "english": "They carry the boxes."
-          }
-        },
-        "هي تشعر بالتعب.": {
-          "source": "She feels tired.",
-          "translations": {
-            "english": "She feels tired."
-          }
-        },
-        "الغرفة تبدو هادئة.": {
-          "source": "The room feels quiet.",
-          "translations": {
-            "english": "The room feels quiet."
-          }
-        },
-        "وضع الكتاب على الطاولة.": {
-          "source": "He placed the book on the table.",
-          "translations": {
-            "english": "He placed the book on the table."
-          }
-        },
-        "قررنا البقاء.": {
-          "source": "We decided to stay.",
-          "translations": {
-            "english": "We decided to stay."
-          }
-        },
-        "أطفأت الضوء.": {
-          "source": "She turned off the light.",
-          "translations": {
-            "english": "She turned off the light."
-          }
-        }
-      },
-      "Tenses & Aspect": {
-        "هي تعمل كل يوم.": {
-          "source": "She works every day.",
-          "translations": {
-            "english": "She works every day."
-          }
-        },
-        "أنا أنتظر في الخارج.": {
-          "source": "I am waiting outside.",
-          "translations": {
-            "english": "I am waiting outside."
-          }
-        },
-        "هم زاروا باريس.": {
-          "source": "They visited Paris.",
-          "translations": {
-            "english": "They visited Paris."
-          }
-        },
-        "كنت أطبخ عندما اتصل.": {
-          "source": "I was cooking when he called.",
-          "translations": {
-            "english": "I was cooking when he called."
-          }
-        },
-        "لقد عاش هنا لسنوات.": {
-          "source": "He has lived here for years.",
-          "translations": {
-            "english": "He has lived here for years."
-          }
-        },
-        "كانت قد غادرت قبل أن أ arrived.": {
-          "source": "She had left before I arrived.",
-          "translations": {
-            "english": "She had left before I arrived."
-          }
-        },
-        "سنجتمع غداً.": {
-          "source": "We will meet tomorrow.",
-          "translations": {
-            "english": "We will meet tomorrow."
-          }
-        },
-        "سأكون أعمل في الساعة السادسة.": {
-          "source": "I will be working at six.",
-          "translations": {
-            "english": "I will be working at six."
-          }
-        },
-        "سيكونون قد أنهوا بحلول يوم الجمعة.": {
-          "source": "They will have finished by Friday.",
-          "translations": {
-            "english": "They will have finished by Friday."
-          }
-        },
-        "أعمل كل يوم، أنا أعمل الآن، وقد عملت هنا لسنوات.": {
-          "source": "I work every day, I am working now, and I have worked here for years.",
-          "translations": {
-            "english": "I work every day, I am working now, and I have worked here for years."
-          }
-        }
-      },
-      "Nouns & Articles": {
-        "لدي عملة.": {
-          "source": "I have a coin.",
-          "translations": {
-            "english": "I have a coin."
-          }
-        },
-        "نحن بحاجة إلى بعض الأرز.": {
-          "source": "We need some rice.",
-          "translations": {
-            "english": "We need some rice."
-          }
-        },
-        "الكلب في الخارج.": {
-          "source": "The dog is outside.",
-          "translations": {
-            "english": "The dog is outside."
-          }
-        },
-        "هناك طفلان هنا.": {
-          "source": "Two children are here.",
-          "translations": {
-            "english": "Two children are here."
-          }
-        },
-        "هاتف سارة جديد.": {
-          "source": "Sara's phone is new.",
-          "translations": {
-            "english": "Sara's phone is new."
-          }
-        },
-        "طاولة المطبخ الصغيرة انكسرت.": {
-          "source": "The small kitchen table broke.",
-          "translations": {
-            "english": "The small kitchen table broke."
-          }
-        },
-        "هناك العديد من الخيارات.": {
-          "source": "There are many options.",
-          "translations": {
-            "english": "There are many options."
-          }
-        }
-      },
-      "Pronouns & Reference": {
-        "هم جاهزون.": {
-          "source": "They are ready.",
-          "translations": {
-            "english": "They are ready."
-          }
-        },
-        "هي اتصلت بي.": {
-          "source": "She called me.",
-          "translations": {
-            "english": "She called me."
-          }
-        },
-        "هذه حقيبتي.": {
-          "source": "This is my bag.",
-          "translations": {
-            "english": "This is my bag."
-          }
-        },
-        "هو جرح نفسه.": {
-          "source": "He hurt himself.",
-          "translations": {
-            "english": "He hurt himself."
-          }
-        },
-        "تلك مفاتيحي.": {
-          "source": "Those are my keys.",
-          "translations": {
-            "english": "Those are my keys."
-          }
-        },
-        "الرجل الذي اتصل غادر.": {
-          "source": "The man who called left.",
-          "translations": {
-            "english": "The man who called left."
-          }
-        },
-        "شخص ما ينتظر.": {
-          "source": "Someone is waiting.",
-          "translations": {
-            "english": "Someone is waiting."
-          }
-        }
-      },
-      "Modifiers": {
-        "المنزل هادئ.": {
-          "source": "The house is quiet.",
-          "translations": {
-            "english": "The house is quiet."
-          }
-        },
-        "هي اشترت حقيبة حمراء صغيرة.": {
-          "source": "She bought a small red bag.",
-          "translations": {
-            "english": "She bought a small red bag."
-          }
-        },
-        "هذا أسرع من ذاك.": {
-          "source": "This is faster than that.",
-          "translations": {
-            "english": "This is faster than that."
-          }
-        },
-        "هو الأطول.": {
-          "source": "He is the tallest.",
-          "translations": {
-            "english": "He is the tallest."
-          }
-        },
-        "هي تتحدث بوضوح.": {
-          "source": "She speaks clearly.",
-          "translations": {
-            "english": "She speaks clearly."
-          }
-        },
-        "أنا عادة أستيقظ مبكرًا.": {
-          "source": "I usually wake early.",
-          "translations": {
-            "english": "I usually wake early."
-          }
-        },
-        "التقينا هناك أمس.": {
-          "source": "We met there yesterday.",
-          "translations": {
-            "english": "We met there yesterday."
-          }
-        },
-        "الغرفة دافئة جدًا.": {
-          "source": "The room is very warm.",
-          "translations": {
-            "english": "The room is very warm."
-          }
-        },
-        "كان الفيلم مملًا.": {
-          "source": "The movie was boring.",
-          "translations": {
-            "english": "The movie was boring."
-          }
-        },
-        "هي أجابت بسرعة على السؤال الصعب.": {
-          "source": "She quickly answered the hard question.",
-          "translations": {
-            "english": "She quickly answered the hard question."
-          }
-        }
-      },
-      "Questions": {
-        "هل تعمل هنا؟": {
-          "source": "Do you work here?",
-          "translations": {
-            "english": "Do you work here?"
-          }
-        },
-        "أين يعيش؟": {
-          "source": "Where does he live?",
-          "translations": {
-            "english": "Where does he live?"
-          }
-        },
-        "هل المتجر مفتوح؟": {
-          "source": "Is the store open?",
-          "translations": {
-            "english": "Is the store open?"
-          }
-        },
-        "هل اتصلت بها؟": {
-          "source": "Did you call her?",
-          "translations": {
-            "english": "Did you call her?"
-          }
-        },
-        "هل يمكنك مساعدتي؟": {
-          "source": "Could you help me?",
-          "translations": {
-            "english": "Could you help me?"
-          }
-        },
-        "أنت جاهز، أليس كذلك؟": {
-          "source": "You are ready, aren't you?",
-          "translations": {
-            "english": "You are ready, aren't you?"
-          }
-        },
-        "هل يمكنك أن تخبرني أين هو؟": {
-          "source": "Could you tell me where it is?",
-          "translations": {
-            "english": "Could you tell me where it is?"
-          }
-        }
-      },
-      "Negation": {
-        "هي ليست متعبة.": {
-          "source": "She is not tired.",
-          "translations": {
-            "english": "She is not tired."
-          }
-        },
-        "هم لا يتفقون.": {
-          "source": "They do not agree.",
-          "translations": {
-            "english": "They do not agree."
-          }
-        },
-        "لا أعرف.": {
-          "source": "I don't know.",
-          "translations": {
-            "english": "I don't know."
-          }
-        },
-        "لا يوجد حليب.": {
-          "source": "There is no milk.",
-          "translations": {
-            "english": "There is no milk."
-          }
-        },
-        "ألا تريد القهوة؟": {
-          "source": "Don't you want coffee?",
-          "translations": {
-            "english": "Don't you want coffee?"
-          }
-        },
-        "هو نادراً ما يأكل خارجاً.": {
-          "source": "He rarely eats out.",
-          "translations": {
-            "english": "He rarely eats out."
-          }
-        }
-      },
-      "Connections": {
-        "اتصلت لكن لم يرد أحد.": {
-          "source": "I called but no one answered.",
-          "translations": {
-            "english": "I called but no one answered."
-          }
-        },
-        "أمطرت، لذا بقينا.": {
-          "source": "It rained, so we stayed.",
-          "translations": {
-            "english": "It rained, so we stayed."
-          }
-        },
-        "ذهبت، على الرغم من أنها كانت متعبة.": {
-          "source": "She went, although she was tired.",
-          "translations": {
-            "english": "She went, although she was tired."
-          }
-        },
-        "اتصل بي عندما تصل.": {
-          "source": "Call me when you arrive.",
-          "translations": {
-            "english": "Call me when you arrive."
-          }
-        },
-        "هذا يشعر وكأنه منزل.": {
-          "source": "This feels like home.",
-          "translations": {
-            "english": "This feels like home."
-          }
-        },
-        "نحن بحاجة أيضًا إلى كراسي.": {
-          "source": "We also need chairs.",
-          "translations": {
-            "english": "We also need chairs."
-          }
-        },
-        "أولاً نخطط، ثم نتصرف.": {
-          "source": "First we plan, then we act.",
-          "translations": {
-            "english": "First we plan, then we act."
-          }
-        }
-      },
-      "Conditions": {
-        "إذا ضغطت على هذا، فإنه يبدأ.": {
-          "source": "If you press this, it starts.",
-          "translations": {
-            "english": "If you press this, it starts."
-          }
-        },
-        "إذا كانت الشمس ساطعة، سنذهب.": {
-          "source": "If it is sunny, we will go.",
-          "translations": {
-            "english": "If it is sunny, we will go."
-          }
-        },
-        "إذا كان لدي وقت، سأساعد.": {
-          "source": "If I had time, I would help.",
-          "translations": {
-            "english": "If I had time, I would help."
-          }
-        },
-        "إذا كنا قد غادرنا في وقت مبكر، لكنا قد وصلنا.": {
-          "source": "If we had left earlier, we would have arrived.",
-          "translations": {
-            "english": "If we had left earlier, we would have arrived."
-          }
-        },
-        "إذا كانت قد درست، لكانت هادئة الآن.": {
-          "source": "If she had studied, she would be calm now.",
-          "translations": {
-            "english": "If she had studied, she would be calm now."
-          }
-        },
-        "سنذهب ما لم تمطر.": {
-          "source": "We will go unless it rains.",
-          "translations": {
-            "english": "We will go unless it rains."
-          }
-        }
-      },
-      "Voice & Focus": {
-        "الطباخ طهى العشاء.": {
-          "source": "The chef cooked dinner.",
-          "translations": {
-            "english": "The chef cooked dinner."
-          }
-        },
-        "تم طهي الوجبة.": {
-          "source": "The meal was cooked.",
-          "translations": {
-            "english": "The meal was cooked."
-          }
-        },
-        "ذلك الكتاب، أنهيته البارحة.": {
-          "source": "That book, I finished yesterday.",
-          "translations": {
-            "english": "That book, I finished yesterday."
-          }
-        },
-        "إنه جون الذي اتصل.": {
-          "source": "It is John who called.",
-          "translations": {
-            "english": "It is John who called."
-          }
-        },
-        "هناك مشكلة.": {
-          "source": "There is a problem.",
-          "translations": {
-            "english": "There is a problem."
-          }
-        }
-      },
-      "Modality": {
-        "يمكنها السباحة.": {
-          "source": "She can swim.",
-          "translations": {
-            "english": "She can swim."
-          }
-        },
-        "هل يمكنني الجلوس هنا؟": {
-          "source": "May I sit here?",
-          "translations": {
-            "english": "May I sit here?"
-          }
-        },
-        "يجب عليك ارتداء حزام الأمان.": {
-          "source": "You must wear a seatbelt.",
-          "translations": {
-            "english": "You must wear a seatbelt."
-          }
-        },
-        "يجب أن ترتاح.": {
-          "source": "You should rest.",
-          "translations": {
-            "english": "You should rest."
-          }
-        },
-        "قد تمطر اليوم.": {
-          "source": "It might rain today.",
-          "translations": {
-            "english": "It might rain today."
-          }
-        },
-        "من المحتمل أن يأتي.": {
-          "source": "He will probably come.",
-          "translations": {
-            "english": "He will probably come."
-          }
-        },
-        "هل يمكنك فتح النافذة؟": {
-          "source": "Could you open the window?",
-          "translations": {
-            "english": "Could you open the window?"
-          }
-        },
-        "هل تود بعض الشاي؟": {
-          "source": "Would you like some tea?",
-          "translations": {
-            "english": "Would you like some tea?"
-          }
-        }
-      },
-      "Reported Speech": {
-        "قالت إنها جاهزة.": {
-          "source": "She said she was ready.",
-          "translations": {
-            "english": "She said she was ready."
-          }
-        },
-        "سأل إذا كنت بخير.": {
-          "source": "He asked if I was okay.",
-          "translations": {
-            "english": "He asked if I was okay."
-          }
-        },
-        "طلبت مني الانتظار.": {
-          "source": "She asked me to wait.",
-          "translations": {
-            "english": "She asked me to wait."
-          }
-        },
-        "قال لنا أن نغادر.": {
-          "source": "He told us to leave.",
-          "translations": {
-            "english": "He told us to leave."
-          }
-        },
-        "قالوا إن لديهم وقتًا.": {
-          "source": "They said they had time.",
-          "translations": {
-            "english": "They said they had time."
-          }
-        },
-        "قال إنه كان هناك.": {
-          "source": "He said he was there.",
-          "translations": {
-            "english": "He said he was there."
-          }
-        }
-      },
-      "Formality & Style": {
-        "هل يمكنك مساعدتي؟": {
-          "source": "Could you assist me?",
-          "translations": {
-            "english": "Could you assist me?"
-          }
-        },
-        "لا أستطيع البقاء طويلاً.": {
-          "source": "I can't stay long.",
-          "translations": {
-            "english": "I can't stay long."
-          }
-        },
-        "هل يمكنك غلق الباب؟": {
-          "source": "Could you close the door?",
-          "translations": {
-            "english": "Could you close the door?"
-          }
-        },
-        "يرجى الاطلاع على التفاصيل أدناه.": {
-          "source": "Please see the details below.",
-          "translations": {
-            "english": "Please see the details below."
-          }
-        },
-        "شكراً لوقتك.": {
-          "source": "Thank you for your time.",
-          "translations": {
-            "english": "Thank you for your time."
-          }
-        },
-        "مرحباً، كيف تسير الأمور؟": {
-          "source": "Hey, how is it going?",
-          "translations": {
-            "english": "Hey, how is it going?"
-          }
-        },
-        "نحتاج إلى إجابة سريعة.": {
-          "source": "We need a quick answer.",
-          "translations": {
-            "english": "We need a quick answer."
-          }
-        }
-      },
-      "Discourse & Flow": {
-        "مرحبًا بالجميع، على أي حال، هذا كل شيء لليوم.": {
-          "source": "Hi everyone, anyway, that is all for today.",
-          "translations": {
-            "english": "Hi everyone, anyway, that is all for today."
-          }
-        },
-        "بالمناسبة، لدي أخبار.": {
-          "source": "By the way, I have news.",
-          "translations": {
-            "english": "By the way, I have news."
-          }
-        },
-        "ترتبط هذه الفكرة بالنقطة الأخيرة.": {
-          "source": "This idea connects to the last point.",
-          "translations": {
-            "english": "This idea connects to the last point."
-          }
-        },
-        "أولاً نحزم، ثم نغادر.": {
-          "source": "First we pack, then we leave.",
-          "translations": {
-            "english": "First we pack, then we leave."
-          }
-        },
-        "دعني أضعها بطريقة أخرى.": {
-          "source": "Let me put it another way.",
-          "translations": {
-            "english": "Let me put it another way."
-          }
-        },
-        "باختصار، نحن جاهزون.": {
-          "source": "In short, we are ready.",
-          "translations": {
-            "english": "In short, we are ready."
-          }
-        },
-        "إنه مهم حقًا.": {
-          "source": "It is really important.",
-          "translations": {
-            "english": "It is really important."
-          }
-        },
-        "أفهم، تفضل بالاستمرار.": {
-          "source": "I see, please continue.",
-          "translations": {
-            "english": "I see, please continue."
-          }
-        },
-        "على سبيل المثال، اتصل بمكتب المساعدة.": {
-          "source": "For example, call the help desk.",
-          "translations": {
-            "english": "For example, call the help desk."
-          }
-        },
-        "عذرًا، دعني أحاول مرة أخرى.": {
-          "source": "Sorry, let me try again.",
-          "translations": {
-            "english": "Sorry, let me try again."
-          }
-        }
-      }
-    },
-    "explanations": {
-      "Sentence Structure": {
-        "تشرح هذه البطاقة ترتيب الكلمات الأساسي وكيفية تشكيله بوضوح في جمل حقيقية.": {
-          "source": "This card explains basic word order and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains basic word order and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة أجزاء الجملة وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains sentence parts and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains sentence parts and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة إضافة التفاصيل وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains adding details and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains adding details and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة ربط الجمل وكيفية تشكيله بوضوح في جمل حقيقية.": {
-          "source": "This card explains linking clauses and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains linking clauses and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة تنوع الجمل وكيفية تشكيله بوضوح في جمل حقيقية.": {
-          "source": "This card explains sentence variety and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains sentence variety and how to form it clearly in real sentences."
-          }
-        }
-      },
-      "Verbs": {
-        "تشرح هذه البطاقة الأفعال الحركية وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains action verbs and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains action verbs and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الأفعال الحالة وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains state verbs and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains state verbs and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الأفعال الربط وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains linking verbs and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains linking verbs and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة أنماط الأفعال وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains verb patterns and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains verb patterns and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة تركيبات الأفعال وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains verb combinations and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains verb combinations and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الأفعال المركبة وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains phrasal verbs and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains phrasal verbs and how to form it clearly in real sentences."
-          }
-        }
-      },
-      "Tenses & Aspect": {
-        "تشرح هذه البطاقة الزمن المضارع البسيط وكيفية تشكيله بوضوح في جمل حقيقية.": {
-          "source": "This card explains present simple and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains present simple and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الزمن المضارع المستمر وكيفية تشكيله بوضوح في جمل حقيقية.": {
-          "source": "This card explains present continuous and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains present continuous and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الزمن الماضي البسيط وكيفية تشكيله بوضوح في جمل حقيقية.": {
-          "source": "This card explains past simple and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains past simple and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الزمن الماضي المستمر وكيفية تشكيله بوضوح في جمل حقيقية.": {
-          "source": "This card explains past continuous and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains past continuous and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الزمن المضارع التام وكيفية تشكيله بوضوح في جمل حقيقية.": {
-          "source": "This card explains present perfect and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains present perfect and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الزمن الماضي التام وكيفية تشكيله بوضوح في جمل حقيقية.": {
-          "source": "This card explains past perfect and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains past perfect and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة أشكال المستقبل وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains future forms and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains future forms and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الزمن المستقبل المستمر وكيفية تشكيله بوضوح في جمل حقيقية.": {
-          "source": "This card explains future continuous and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains future continuous and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الزمن المستقبل التام وكيفية تشكيله بوضوح في جمل حقيقية.": {
-          "source": "This card explains future perfect and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains future perfect and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة تباينات الجوانب وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains aspect contrasts and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains aspect contrasts and how to form it clearly in real sentences."
-          }
-        }
-      },
-      "Nouns & Articles": {
-        "تشرح هذه البطاقة الأسماء المعدودة وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains countable nouns and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains countable nouns and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الأسماء غير المعدودة وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains uncountable nouns and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains uncountable nouns and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الأدوات وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains articles and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains articles and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الأشكال الجمع وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains plural forms and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains plural forms and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الأسماء الملكية وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains possessive nouns and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains possessive nouns and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة عبارات الأسماء وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains noun phrases and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains noun phrases and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة المحددات وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains quantifiers and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains quantifiers and how to form it clearly in real sentences."
-          }
-        }
-      },
-      "Pronouns & Reference": {
-        "تشرح هذه البطاقة الضمائر الفاعلة وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains subject pronouns and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains subject pronouns and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الضمائر المفعول بها وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains object pronouns and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains object pronouns and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الأشكال الملكية وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains possessive forms and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains possessive forms and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الضمائر الانعكاسية وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains reflexive pronouns and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains reflexive pronouns and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الضمائر الإشارية وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains demonstratives and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains demonstratives and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الإشارة النسبية وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains relative reference and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains relative reference and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الإشارة غير المحددة وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains indefinite reference and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains indefinite reference and how to form it clearly in real sentences."
-          }
-        }
-      },
-      "Modifiers": {
-        "تشرح هذه البطاقة أساسيات الصفات وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains adjectives basics and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains adjectives basics and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة ترتيب الصفات وكيفية تشكيله بوضوح في جمل حقيقية.": {
-          "source": "This card explains adjective order and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains adjective order and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة المقارنات وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains comparatives and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains comparatives and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة التفضيلات وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains superlatives and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains superlatives and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة أساسيات الظروف وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains adverbs basics and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains adverbs basics and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة ظروف التكرار وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains frequency adverbs and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains frequency adverbs and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة ظروف الزمان والمكان وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains time and place adverbs and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains time and place adverbs and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة كلمات الدرجة وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains degree words and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains degree words and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الأسماء المشتقة وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains participles and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains participles and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة تكديس المعدلات وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains modifier stacking and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains modifier stacking and how to form it clearly in real sentences."
-          }
-        }
-      },
-      "Questions": {
-        "تشرح هذه البطاقة أسئلة نعم لا وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains yes no questions and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains yes no questions and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة أسئلة wh وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains wh questions and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains wh questions and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الأسئلة مع الفعل be وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains questions with be and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains questions with be and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الأسئلة مع الفعل do وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains questions with do and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains questions with do and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الأسئلة مع الأفعال المساعدة وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains questions with modals and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains questions with modals and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الأسئلة التكميلية وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains tag questions and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains tag questions and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الأسئلة غير المباشرة وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains indirect questions and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains indirect questions and how to form it clearly in real sentences."
-          }
-        }
-      },
-      "Negation": {
-        "تشرح هذه البطاقة استخدام 'not' مع الفعل 'be' وكيفية تشكيله بوضوح في جمل حقيقية.": {
-          "source": "This card explains not with be and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains not with be and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة استخدام 'not' مع الفعل 'do' وكيفية تشكيله بوضوح في جمل حقيقية.": {
-          "source": "This card explains not with do and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains not with do and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الأشكال القصيرة السلبية وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains negative short forms and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains negative short forms and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الكلمات السلبية وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains negative words and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains negative words and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الأسئلة السلبية وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains negative questions and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains negative questions and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة النفي المحدود وكيفية تشكيله بوضوح في جمل حقيقية.": {
-          "source": "This card explains limited negatives and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains limited negatives and how to form it clearly in real sentences."
-          }
-        }
-      },
-      "Connections": {
-        "تشرح هذه البطاقة الروابط الأساسية وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains basic connectors and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains basic connectors and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة السبب والنتيجة وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains reason and result and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains reason and result and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة التباين والاختيار وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains contrast and choice and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains contrast and choice and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الروابط الزمنية وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains time connectors and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains time connectors and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة روابط المقارنة وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains comparison links and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains comparison links and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة إضافة الأفكار وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains adding ideas and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains adding ideas and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة ترتيب الأفكار وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains ordering ideas and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains ordering ideas and how to form it clearly in real sentences."
-          }
-        }
-      },
-      "Conditions": {
-        "تشرح هذه البطاقة الشروط الحقيقية وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains real conditions and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains real conditions and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الشروط المستقبلية وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains future conditions and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains future conditions and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الحاضر غير الواقعي وكيفية تشكيله بوضوح في جمل حقيقية.": {
-          "source": "This card explains unreal present and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains unreal present and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الماضي غير الواقعي وكيفية تشكيله بوضوح في جمل حقيقية.": {
-          "source": "This card explains unreal past and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains unreal past and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الشروط المختلطة وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains mixed conditions and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains mixed conditions and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة 'ما لم' و 'بخلاف ذلك' وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains unless and otherwise and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains unless and otherwise and how to form it clearly in real sentences."
-          }
-        }
-      },
-      "Voice & Focus": {
-        "تشرح هذه البطاقة الصوت النشط وكيفية تشكيله بوضوح في جمل حقيقية.": {
-          "source": "This card explains active voice and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains active voice and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الصوت المبني للمجهول وكيفية تشكيله بوضوح في جمل حقيقية.": {
-          "source": "This card explains passive voice and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains passive voice and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة تحولات التركيز وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains focus shifts and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains focus shifts and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الجمل المنقسمة وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains cleft sentences and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains cleft sentences and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة المواضيع 'هناك' و 'هو' وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains there and it subjects and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains there and it subjects and how to form it clearly in real sentences."
-          }
-        }
-      },
-      "Modality": {
-        "تشرح هذه البطاقة القدرة وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains ability and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains ability and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الإذن وكيفية تشكيله بوضوح في جمل حقيقية.": {
-          "source": "This card explains permission and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains permission and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الالتزام وكيفية تشكيله بوضوح في جمل حقيقية.": {
-          "source": "This card explains obligation and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains obligation and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة النصيحة وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains advice and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains advice and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الإمكانية وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains possibility and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains possibility and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الاحتمالية وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains probability and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains probability and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الطلبات المهذبة وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains polite requests and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains polite requests and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة العروض والدعوات وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains offers and invitations and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains offers and invitations and how to form it clearly in real sentences."
-          }
-        }
-      },
-      "Reported Speech": {
-        "تشرح هذه البطاقة كيفية الإبلاغ عن الجمل وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains reporting statements and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains reporting statements and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة كيفية الإبلاغ عن الأسئلة وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains reporting questions and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains reporting questions and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة كيفية الإبلاغ عن الطلبات وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains reporting requests and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains reporting requests and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة كيفية الإبلاغ عن الأوامر وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains reporting commands and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains reporting commands and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة أساسيات التراجع الزمني وكيفية تشكيله بوضوح في جمل حقيقية.": {
-          "source": "This card explains backshift basics and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains backshift basics and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة تغييرات الزمن والمكان وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains time place changes and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains time place changes and how to form it clearly in real sentences."
-          }
-        }
-      },
-      "Formality & Style": {
-        "تشرح هذه البطاقة الفرق بين الرسمي وغير الرسمي وكيفية تشكيله بوضوح في جمل حقيقية.": {
-          "source": "This card explains formal vs informal and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains formal vs informal and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الاختصارات وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains contractions and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains contractions and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة التلطيف المهذب وكيفية تشكيله بوضوح في جمل حقيقية.": {
-          "source": "This card explains polite softening and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains polite softening and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الفرق بين المحكي والمكتوب وكيفية تشكيله بوضوح في جمل حقيقية.": {
-          "source": "This card explains spoken vs written and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains spoken vs written and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الأسلوب المهني وكيفية تشكيله بوضوح في جمل حقيقية.": {
-          "source": "This card explains professional style and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains professional style and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الأسلوب غير الرسمي وكيفية تشكيله بوضوح في جمل حقيقية.": {
-          "source": "This card explains casual style and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains casual style and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الوضوح والإيجاز وكيفية تشكيله بوضوح في جمل حقيقية.": {
-          "source": "This card explains clarity and brevity and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains clarity and brevity and how to form it clearly in real sentences."
-          }
-        }
-      },
-      "Discourse & Flow": {
-        "تشرح هذه البطاقة الافتتاح والإغلاق وكيفية تشكيله بوضوح في جمل حقيقية.": {
-          "source": "This card explains opening and closing and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains opening and closing and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة تغييرات الموضوع وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains topic shifts and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains topic shifts and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة أدوات التماسك وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains cohesion tools and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains cohesion tools and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة تسلسل الأفكار وكيفية تشكيله بوضوح في جمل حقيقية.": {
-          "source": "This card explains sequencing ideas and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains sequencing ideas and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة خطوات التوضيح وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains clarification moves and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains clarification moves and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الملخصات وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains summaries and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains summaries and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة التأكيد والتكرار وكيفية تشكيله بوضوح في جمل حقيقية.": {
-          "source": "This card explains emphasis and repetition and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains emphasis and repetition and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة تدفق المحادثة وكيفية تشكيله بوضوح في جمل حقيقية.": {
-          "source": "This card explains conversation flow and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains conversation flow and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة إعطاء الأمثلة وكيفية تشكيلها بوضوح في جمل حقيقية.": {
-          "source": "This card explains giving examples and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains giving examples and how to form it clearly in real sentences."
-          }
-        },
-        "تشرح هذه البطاقة الإصلاح والتصحيح وكيفية تشكيله بوضوح في جمل حقيقية.": {
-          "source": "This card explains repair and correction and how to form it clearly in real sentences.",
-          "translations": {
-            "english": "This card explains repair and correction and how to form it clearly in real sentences."
-          }
-        }
-      }
-    },
+    "titles": {},
+    "examples": {},
+    "explanations": {},
     "cards": {
       "Sentence Structure": [
         {
-          "title": "ترتيب الكلمات الأساسي",
-          "sourceTitle": "basic word order",
+          "title": "الجملة الاسمية",
           "points": [
-            "ترتيب الكلمات الأساسي للجمل",
-            "الفاعل قبل الفعل",
-            "المفعول به بعد الفعل"
+            "تتكون من مبتدأ وخبر.",
+            "يجب أن يكون الخبر متوافقًا مع المبتدأ.",
+            "يمكن أن يأتي الخبر جملة أو شبه جملة."
           ],
-          "sourcePoints": [
-            "basic word order for statements",
-            "subject before verb",
-            "object after verb"
-          ],
-          "example": "هي تقرأ كتابًا.",
-          "sourceExample": "She reads a book.",
+          "example": "الكتاب مفيد.",
           "mistakes": [
             {
-              "wrong": "هل تقرأ هي كتابًا.",
-              "fix": "هي تقرأ كتابًا.",
-              "sourceWrong": "Reads she a book.",
-              "sourceFix": "She reads a book."
+              "wrong": "الكتاب مفيدون.",
+              "fix": "الكتاب مفيد."
             }
           ]
         },
         {
-          "title": "أجزاء الجملة",
-          "sourceTitle": "sentence parts",
+          "title": "الجملة الفعلية",
           "points": [
-            "موضع الفاعل الأساسي",
-            "موضع الفعل الأساسي",
-            "موضع المفعول به والمكمل"
+            "تبدأ بفعل.",
+            "يجب أن يتوافق الفعل مع الفاعل.",
+            "يمكن أن تحتوي على مفعول به."
           ],
-          "sourcePoints": [
-            "core subject slot",
-            "core verb slot",
-            "object and complement slot"
-          ],
-          "example": "سموها قائدة.",
-          "sourceExample": "They named her captain.",
+          "example": "كتب الطالب الدرس.",
           "mistakes": [
             {
-              "wrong": "هل أخي طيار.",
-              "fix": "أخي طيار.",
-              "sourceWrong": "Is a pilot my brother.",
-              "sourceFix": "My brother is a pilot."
+              "wrong": "كتب الطالبين الدرس.",
+              "fix": "كتب الطالب الدرس."
             }
           ]
         },
         {
-          "title": "إضافة التفاصيل",
-          "sourceTitle": "adding details",
+          "title": "الجملة الشرطية",
           "points": [
-            "الزمن في نهاية الجملة",
-            "المكان بعد الفعل",
-            "عبارات إضافية بعد المفعول به"
+            "تتكون من جملة شرطية وجملة نتيجة.",
+            "تستخدم أداة الشرط مثل 'إذا'.",
+            "يجب أن يكون الفعل في الجملة الشرطية في الزمن المناسب."
           ],
-          "sourcePoints": [
-            "time at sentence end",
-            "place after verb",
-            "extra phrases after objects"
-          ],
-          "example": "التقت به في الظهر في المحطة.",
-          "sourceExample": "She met him at noon at the station.",
+          "example": "إذا درست، ستنجح.",
           "mistakes": [
             {
-              "wrong": "التقت به في محطة الظهر.",
-              "fix": "التقت به في الظهر في المحطة.",
-              "sourceWrong": "She met him noon station.",
-              "sourceFix": "She met him at noon at the station."
+              "wrong": "إذا درست، تنجح.",
+              "fix": "إذا درست، ستنجح."
             }
           ]
         },
         {
-          "title": "ربط الجمل",
-          "sourceTitle": "linking clauses",
+          "title": "الجملة الاستفهامية",
           "points": [
-            "فكرة الجملة الرئيسية",
-            "إضافة جملة السبب",
-            "إضافة جملة الزمن"
+            "تستخدم للسؤال.",
+            "تبدأ بأداة استفهام.",
+            "يمكن أن تكون الإجابة بنعم أو لا."
           ],
-          "sourcePoints": [
-            "main clause idea",
-            "reason clause add-on",
-            "time clause add-on"
-          ],
-          "example": "بقيت في المنزل لأن المطر هطل.",
-          "sourceExample": "I stayed home because it rained.",
+          "example": "أين ذهب الطالب؟",
           "mistakes": [
             {
-              "wrong": "بقيت في المنزل لأن.",
-              "fix": "بقيت في المنزل لأن المطر هطل.",
-              "sourceWrong": "I stayed home because.",
-              "sourceFix": "I stayed home because it rained."
+              "wrong": "أين ذهب الطلاب؟",
+              "fix": "أين ذهب الطالب؟"
             }
           ]
         },
         {
-          "title": "تنوع الجمل",
-          "sourceTitle": "sentence variety",
+          "title": "الجملة المنفية",
           "points": [
-            "جمل قصيرة للتأثير",
-            "جمل طويلة للتفاصيل",
-            "تجنب الجمل المتصلة"
+            "تستخدم لنفي الجملة.",
+            "تبدأ بكلمة نفي مثل 'لا' أو 'لم'.",
+            "يجب أن يتوافق الفعل مع زمن النفي."
           ],
-          "sourcePoints": [
-            "short sentences for impact",
-            "long sentences for detail",
-            "avoid run-on sentences"
-          ],
-          "example": "انتهينا مبكرًا. ذهبنا إلى المنزل بعد الدرس لأننا كنا متعبين.",
-          "sourceExample": "We finished early. We went home after class because we were tired.",
+          "example": "لا يلعب الأطفال في المطر.",
           "mistakes": [
             {
-              "wrong": "أنهينا مبكرًا لذا.",
-              "fix": "انتهينا مبكرًا، لذا غادرنا.",
-              "sourceWrong": "We finished early so.",
-              "sourceFix": "We finished early, so we left."
+              "wrong": "لا يلعب الطفل في المطر.",
+              "fix": "لا يلعب الأطفال في المطر."
             }
           ]
         }
       ],
       "Verbs": [
         {
-          "title": "أفعال الحركة",
-          "sourceTitle": "action verbs",
+          "title": "الفعل الماضي",
           "points": [
-            "أفعال الحركة",
-            "أفعال المهام",
-            "أفعال التغيير"
+            "يستخدم للتعبير عن حدث وقع في الماضي.",
+            "يتكون من جذر الفعل مع إضافة حروف معينة.",
+            "يختلف بناء الفعل حسب الضمير."
           ],
-          "sourcePoints": [
-            "action verbs for movement",
-            "action verbs for tasks",
-            "action verbs for change"
-          ],
-          "example": "هم يحملون الصناديق.",
-          "sourceExample": "They carry the boxes.",
+          "example": "كتب الطالب الرسالة.",
           "mistakes": [
             {
-              "wrong": "هي تجري كل صباح.",
-              "fix": "هي تجري كل صباح.",
-              "sourceWrong": "She run every morning.",
-              "sourceFix": "She runs every morning."
+              "wrong": "كتب الطالبين الرسالة.",
+              "fix": "كتب الطالبان الرسالة."
             }
           ]
         },
         {
-          "title": "أفعال الحالة",
-          "sourceTitle": "state verbs",
+          "title": "الفعل المضارع",
           "points": [
-            "أفعال الحالة للمشاعر",
-            "أفعال الحالة للأفكار",
-            "أفعال الحالة للملكية"
+            "يستخدم للتعبير عن حدث يحدث الآن أو في المستقبل.",
+            "يتكون من جذر الفعل مع إضافة حروف معينة.",
+            "يختلف بناء الفعل حسب الضمير."
           ],
-          "sourcePoints": [
-            "state verbs for feelings",
-            "state verbs for thoughts",
-            "state verbs for possession"
-          ],
-          "example": "هي تشعر بالتعب.",
-          "sourceExample": "She feels tired.",
+          "example": "يكتب الطالب الرسالة.",
           "mistakes": [
             {
-              "wrong": "هو يعرف الجواب.",
-              "fix": "هو يعرف الإجابة.",
-              "sourceWrong": "He is knowing the answer.",
-              "sourceFix": "He knows the answer."
+              "wrong": "يكتب الطلاب الرسالة.",
+              "fix": "يكتب الطلاب الرسالة."
             }
           ]
         },
         {
-          "title": "أفعال الربط",
-          "sourceTitle": "linking verbs",
+          "title": "الفعل الأمر",
           "points": [
-            "فعل 'يكون' كفعل ربط",
-            "روابط 'يشعر' و 'يبدو'",
-            "روابط 'يصبح' و 'يبقى'"
+            "يستخدم لإعطاء الأوامر أو الطلبات.",
+            "يتكون من جذر الفعل بدون أي إضافات.",
+            "يختلف بناء الفعل حسب الضمير."
           ],
-          "sourcePoints": [
-            "be as linking verb",
-            "feel and seem links",
-            "become and remain links"
-          ],
-          "example": "الغرفة تبدو هادئة.",
-          "sourceExample": "The room feels quiet.",
+          "example": "اكتب الرسالة.",
           "mistakes": [
             {
-              "wrong": "حساء طعمه جيد.",
-              "fix": "الشوربة طعمها جيد.",
-              "sourceWrong": "The soup tastes is good.",
-              "sourceFix": "The soup tastes good."
+              "wrong": "اكتبوا الرسالة.",
+              "fix": "اكتبوا الرسالة."
             }
           ]
         },
         {
-          "title": "أنماط الأفعال",
-          "sourceTitle": "verb patterns",
+          "title": "الفعل المبني للمجهول",
           "points": [
-            "نمط الفعل مع المفعول به",
-            "نمط الفعل مع الصفة",
-            "نمط الفعل مع حرف الجر"
+            "يستخدم عندما يكون الفاعل غير معروف أو غير مهم.",
+            "يتكون من جذر الفعل مع إضافة حروف معينة.",
+            "يجب مراعاة التوافق بين الفعل والفاعل."
           ],
-          "sourcePoints": [
-            "verb plus object pattern",
-            "verb plus adjective pattern",
-            "verb plus preposition pattern"
-          ],
-          "example": "وضع الكتاب على الطاولة.",
-          "sourceExample": "He placed the book on the table.",
+          "example": "كُتبت الرسالة.",
           "mistakes": [
             {
-              "wrong": "هو وضع الكتاب على.",
-              "fix": "هو وضع الكتاب على الطاولة.",
-              "sourceWrong": "He placed the book on.",
-              "sourceFix": "He placed the book on the table."
+              "wrong": "كتب الرسالة.",
+              "fix": "كُتبت الرسالة."
             }
           ]
         },
         {
-          "title": "تركيبات الأفعال",
-          "sourceTitle": "verb combinations",
+          "title": "الفعل المتعدي",
           "points": [
-            "الفعل مع المصدر",
-            "الفعل مع اسم الفاعل",
-            "الفعل مع جملة 'أن'"
+            "يحتاج إلى مفعول به لإكمال معناه.",
+            "يمكن أن يكون له مفعول به واحد أو أكثر.",
+            "يختلف بناء الفعل حسب نوع المفعول."
           ],
-          "sourcePoints": [
-            "verb plus infinitive",
-            "verb plus gerund",
-            "verb plus that clause"
-          ],
-          "example": "قررنا البقاء.",
-          "sourceExample": "We decided to stay.",
+          "example": "أكل الطفل التفاحة.",
           "mistakes": [
             {
-              "wrong": "هي تستمتع بالسباحة.",
-              "fix": "هي تستمتع بالسباحة.",
-              "sourceWrong": "She enjoys to swim.",
-              "sourceFix": "She enjoys swimming."
+              "wrong": "أكل الطفل.",
+              "fix": "أكل الطفل التفاحة."
             }
           ]
         },
         {
-          "title": "الأفعال المركبة",
-          "sourceTitle": "phrasal verbs",
+          "title": "الفعل اللازم",
           "points": [
-            "الفعل مع الجسيم",
-            "الأفعال المركبة القابلة للفصل",
-            "تغير المعنى مع الجسيمات"
+            "لا يحتاج إلى مفعول به لإكمال معناه.",
+            "يعبر عن حالة أو فعل يحدث بدون تأثير على شيء آخر.",
+            "يكون الفعل مكتفياً بنفسه."
           ],
-          "sourcePoints": [
-            "verb plus particle",
-            "separable phrasal verbs",
-            "meaning shift with particles"
-          ],
-          "example": "أطفأت الضوء.",
-          "sourceExample": "She turned off the light.",
+          "example": "ذهب الطالب.",
           "mistakes": [
             {
-              "wrong": "هو أطفأ الضوء.",
-              "fix": "هو أطفأ الضوء.",
-              "sourceWrong": "He turned the light on off.",
-              "sourceFix": "He turned off the light."
+              "wrong": "ذهب الطالب إلى المدرسة.",
+              "fix": "ذهب الطالب."
             }
           ]
         }
       ],
       "Tenses & Aspect": [
         {
-          "title": "المضارع البسيط",
-          "sourceTitle": "present simple",
-          "points": [
-            "المضارع البسيط للعادات",
-            "المضارع البسيط للحقائق",
-            "المضارع البسيط للجداول"
-          ],
-          "sourcePoints": [
-            "present simple for habits",
-            "present simple for facts",
-            "present simple for schedules"
-          ],
-          "example": "هي تعمل كل يوم.",
-          "sourceExample": "She works every day.",
-          "mistakes": [
-            {
-              "wrong": "هي تعمل كل يوم.",
-              "fix": "هي تعمل كل يوم.",
-              "sourceWrong": "She is work every day.",
-              "sourceFix": "She works every day."
-            }
-          ]
-        },
-        {
-          "title": "المضارع المستمر",
-          "sourceTitle": "present continuous",
-          "points": [
-            "المضارع المستمر للحاضر",
-            "المضارع المستمر للأفعال المؤقتة",
-            "المضارع المستمر للخطط القريبة"
-          ],
-          "sourcePoints": [
-            "present continuous for now",
-            "present continuous for temporary actions",
-            "present continuous for near plans"
-          ],
-          "example": "أنا أنتظر في الخارج.",
-          "sourceExample": "I am waiting outside.",
-          "mistakes": [
-            {
-              "wrong": "هي تعمل الآن.",
-              "fix": "هي تعمل الآن.",
-              "sourceWrong": "She works now.",
-              "sourceFix": "She is working now."
-            }
-          ]
-        },
-        {
           "title": "الماضي البسيط",
-          "sourceTitle": "past simple",
           "points": [
-            "الماضي البسيط للأفعال المنتهية",
-            "الماضي البسيط لكلمات الزمن الماضي",
-            "الماضي البسيط للتسلسلات"
+            "يستخدم للتعبير عن حدث حدث في الماضي.",
+            "يتم تشكيله بإضافة اللاحقة المناسبة للفعل.",
+            "يستخدم مع الزمن المحدد."
           ],
-          "sourcePoints": [
-            "past simple for finished actions",
-            "past simple for past time words",
-            "past simple for sequences"
-          ],
-          "example": "هم زاروا باريس.",
-          "sourceExample": "They visited Paris.",
+          "example": "أكلت التفاحة.",
           "mistakes": [
             {
-              "wrong": "هي ذهبت أمس.",
-              "fix": "هي ذهبت أمس.",
-              "sourceWrong": "She go yesterday.",
-              "sourceFix": "She went yesterday."
+              "wrong": "أكلت التفاح.",
+              "fix": "أكلت التفاحة."
+            }
+          ]
+        },
+        {
+          "title": "المضارع البسيط",
+          "points": [
+            "يستخدم للتعبير عن حدث يحدث الآن.",
+            "يتم تشكيله عادةً باستخدام الجذر الفعلي.",
+            "يمكن استخدامه للتعبير عن الحقائق العامة."
+          ],
+          "example": "أكتب الدرس.",
+          "mistakes": [
+            {
+              "wrong": "أكتب الدروس.",
+              "fix": "أكتب الدرس."
+            }
+          ]
+        },
+        {
+          "title": "المستقبل البسيط",
+          "points": [
+            "يستخدم للتعبير عن حدث سيحدث في المستقبل.",
+            "يتم تشكيله باستخدام الفعل 'سوف'.",
+            "يمكن استخدامه للتعبير عن النوايا."
+          ],
+          "example": "سأذهب إلى السوق.",
+          "mistakes": [
+            {
+              "wrong": "سأذهب السوق.",
+              "fix": "سأذهب إلى السوق."
             }
           ]
         },
         {
           "title": "الماضي المستمر",
-          "sourceTitle": "past continuous",
           "points": [
-            "الماضي المستمر للخلفية",
-            "الماضي المستمر مع الانقطاع",
-            "الماضي المستمر لعملين"
+            "يستخدم للتعبير عن حدث كان يحدث في الماضي.",
+            "يتكون من الفعل 'كان' مع الفعل المضارع.",
+            "يمكن استخدامه لوصف الأحداث المتزامنة."
           ],
-          "sourcePoints": [
-            "past continuous for background",
-            "past continuous with interruption",
-            "past continuous for two actions"
-          ],
-          "example": "كنت أطبخ عندما اتصل.",
-          "sourceExample": "I was cooking when he called.",
+          "example": "كنت أدرس عندما اتصلت بي.",
           "mistakes": [
             {
-              "wrong": "كانت تطبخ عندما اتصلت.",
-              "fix": "كانت تطبخ عندما اتصلت.",
-              "sourceWrong": "She was cook when I called.",
-              "sourceFix": "She was cooking when I called."
+              "wrong": "كنت أدرس عندما اتصلت.",
+              "fix": "كنت أدرس عندما اتصلت بي."
             }
           ]
         },
         {
-          "title": "المضارع التام",
-          "sourceTitle": "present perfect",
+          "title": "المضارع المستمر",
           "points": [
-            "المضارع التام للتجارب",
-            "المضارع التام للنتائج الحديثة",
-            "المضارع التام مع since و for"
+            "يستخدم للتعبير عن حدث يحدث الآن.",
+            "يتكون من الفعل 'يكون' مع الفعل المضارع.",
+            "يمكن استخدامه لوصف الأنشطة الجارية."
           ],
-          "sourcePoints": [
-            "present perfect for experience",
-            "present perfect for recent results",
-            "present perfect with since and for"
-          ],
-          "example": "لقد عاش هنا لسنوات.",
-          "sourceExample": "He has lived here for years.",
+          "example": "أنا أكتب الآن.",
           "mistakes": [
             {
-              "wrong": "لقد انتهت بالفعل.",
-              "fix": "لقد انتهت بالفعل.",
-              "sourceWrong": "She finished already.",
-              "sourceFix": "She has finished already."
-            }
-          ]
-        },
-        {
-          "title": "الماضي التام",
-          "sourceTitle": "past perfect",
-          "points": [
-            "الماضي التام للماضي الأسبق",
-            "الماضي التام للسبب في الماضي",
-            "الماضي التام مع before"
-          ],
-          "sourcePoints": [
-            "past perfect for earlier past",
-            "past perfect for cause in past",
-            "past perfect with before"
-          ],
-          "example": "كانت قد غادرت قبل أن أ arrived.",
-          "sourceExample": "She had left before I arrived.",
-          "mistakes": [
-            {
-              "wrong": "غادر عندما وصلت.",
-              "fix": "كان قد غادر عندما وصلت.",
-              "sourceWrong": "He left when I arrive.",
-              "sourceFix": "He had left when I arrived."
-            }
-          ]
-        },
-        {
-          "title": "أشكال المستقبل",
-          "sourceTitle": "future forms",
-          "points": [
-            "will للقرارات",
-            "going to للخطط",
-            "المضارع المستمر للخطط"
-          ],
-          "sourcePoints": [
-            "will for decisions",
-            "going to for plans",
-            "present continuous for plans"
-          ],
-          "example": "سنجتمع غداً.",
-          "sourceExample": "We will meet tomorrow.",
-          "mistakes": [
-            {
-              "wrong": "ستتصل.",
-              "fix": "هي ستتصل.",
-              "sourceWrong": "She will going to call.",
-              "sourceFix": "She is going to call."
+              "wrong": "أنا كتابة الآن.",
+              "fix": "أنا أكتب الآن."
             }
           ]
         },
         {
           "title": "المستقبل المستمر",
-          "sourceTitle": "future continuous",
           "points": [
-            "المستقبل المستمر للتقدم",
-            "المستقبل المستمر للخلفية",
-            "المستقبل المستمر للاستفسار بأدب"
+            "يستخدم للتعبير عن حدث سيحدث في المستقبل.",
+            "يتكون من الفعل 'سوف' مع الفعل المضارع.",
+            "يمكن استخدامه لوصف الأنشطة المتوقعة."
           ],
-          "sourcePoints": [
-            "future continuous for progress",
-            "future continuous for background",
-            "future continuous for polite inquiry"
-          ],
-          "example": "سأكون أعمل في الساعة السادسة.",
-          "sourceExample": "I will be working at six.",
+          "example": "سأكون أدرس في الساعة الخامسة.",
           "mistakes": [
             {
-              "wrong": "ستعمل في الساعة 8.",
-              "fix": "ستكون تعمل في الساعة 8.",
-              "sourceWrong": "She will work at 8.",
-              "sourceFix": "She will be working at 8."
+              "wrong": "سأكون دراسة في الساعة الخامسة.",
+              "fix": "سأكون أدرس في الساعة الخامسة."
+            }
+          ]
+        },
+        {
+          "title": "الماضي التام",
+          "points": [
+            "يستخدم للتعبير عن حدث تم قبل حدث آخر في الماضي.",
+            "يتكون من الفعل 'كان قد' مع الفعل الماضي.",
+            "يمكن استخدامه لوصف الأحداث السابقة."
+          ],
+          "example": "كنت قد أكلت قبل أن أخرج.",
+          "mistakes": [
+            {
+              "wrong": "كنت أكلت قبل أن أخرج.",
+              "fix": "كنت قد أكلت قبل أن أخرج."
+            }
+          ]
+        },
+        {
+          "title": "المضارع التام",
+          "points": [
+            "يستخدم للتعبير عن حدث بدأ في الماضي وما زال مستمراً.",
+            "يتكون من الفعل 'قد' مع الفعل المضارع.",
+            "يمكن استخدامه لوصف الإنجازات."
+          ],
+          "example": "لقد كتبت العديد من المقالات.",
+          "mistakes": [
+            {
+              "wrong": "كتبت العديد من المقالات.",
+              "fix": "لقد كتبت العديد من المقالات."
             }
           ]
         },
         {
           "title": "المستقبل التام",
-          "sourceTitle": "future perfect",
           "points": [
-            "المستقبل التام للمواعيد النهائية",
-            "المستقبل التام مع by time",
-            "المستقبل التام للاكتمال"
+            "يستخدم للتعبير عن حدث سيكتمل قبل نقطة معينة في المستقبل.",
+            "يتكون من الفعل 'سوف' مع الفعل الماضي.",
+            "يمكن استخدامه لوصف الأهداف المستقبلية."
           ],
-          "sourcePoints": [
-            "future perfect for deadlines",
-            "future perfect with by time",
-            "future perfect for completion"
-          ],
-          "example": "سيكونون قد أنهوا بحلول يوم الجمعة.",
-          "sourceExample": "They will have finished by Friday.",
+          "example": "سأكون قد انتهيت من المشروع بحلول نهاية الشهر.",
           "mistakes": [
             {
-              "wrong": "ستنتهي بحلول الظهر.",
-              "fix": "ستكون قد انتهت بحلول الظهر.",
-              "sourceWrong": "She will finish by noon.",
-              "sourceFix": "She will have finished by noon."
+              "wrong": "سأكون انتهيت من المشروع بحلول نهاية الشهر.",
+              "fix": "سأكون قد انتهيت من المشروع بحلول نهاية الشهر."
             }
           ]
         },
         {
-          "title": "تباينات الجوانب",
-          "sourceTitle": "aspect contrasts",
+          "title": "الأزمنة المركبة",
           "points": [
-            "التباين بين البسيط والمستمر",
-            "التباين بين التام والبسيط",
-            "التباين في التركيز على المدة"
+            "تستخدم للتعبير عن الأحداث المعقدة.",
+            "تتكون من أكثر من زمن.",
+            "يمكن استخدامها لوصف العلاقات الزمنية."
           ],
-          "sourcePoints": [
-            "simple vs continuous contrast",
-            "perfect vs simple contrast",
-            "duration focus contrast"
-          ],
-          "example": "أعمل كل يوم، أنا أعمل الآن، وقد عملت هنا لسنوات.",
-          "sourceExample": "I work every day, I am working now, and I have worked here for years.",
+          "example": "عندما كنت أدرس، كنت أفكر في المستقبل.",
           "mistakes": [
             {
-              "wrong": "أنا أعرفه.",
-              "fix": "أنا أعرفه.",
-              "sourceWrong": "I am knowing him.",
-              "sourceFix": "I know him."
+              "wrong": "عندما كنت أدرس، أفكر في المستقبل.",
+              "fix": "عندما كنت أدرس، كنت أفكر في المستقبل."
             }
           ]
         }
       ],
       "Nouns & Articles": [
         {
-          "title": "الأسماء المعدودة",
-          "sourceTitle": "countable nouns",
+          "title": "المقالات التعريفية",
           "points": [
-            "الأسماء القابلة للعد مع الأرقام",
-            "أو 'an' قبل الأسماء القابلة للعد",
-            "الجمع لأكثر من واحد"
+            "تستخدم للإشارة إلى شيء محدد.",
+            "تأتي قبل الأسماء المفردة.",
+            "تتغير حسب الجنس والعدد."
           ],
-          "sourcePoints": [
-            "countable nouns with numbers",
-            "a or an before countables",
-            "plural for more than one"
-          ],
-          "example": "لدي عملة.",
-          "sourceExample": "I have a coin.",
+          "example": "الكتاب على الطاولة.",
           "mistakes": [
             {
-              "wrong": "هي اشترت تفاحة.",
-              "fix": "هي اشترت تفاحة.",
-              "sourceWrong": "She bought apple.",
-              "sourceFix": "She bought an apple."
+              "wrong": "كتاب على الطاولة.",
+              "fix": "الكتاب على الطاولة."
             }
           ]
         },
         {
-          "title": "الأسماء غير المعدودة",
-          "sourceTitle": "uncountable nouns",
+          "title": "المقالات غير التعريفية",
           "points": [
-            "الأسماء غير القابلة للعد بدون جمع",
-            "بعض مع الأسماء غير القابلة للعد",
-            "قطعة من لوحدات"
+            "تستخدم للإشارة إلى شيء غير محدد.",
+            "تأتي قبل الأسماء المفردة.",
+            "لا تتغير حسب الجنس."
           ],
-          "sourcePoints": [
-            "uncountable nouns without plural",
-            "some with uncountables",
-            "a piece of for units"
-          ],
-          "example": "نحن بحاجة إلى بعض الأرز.",
-          "sourceExample": "We need some rice.",
+          "example": "كتاب على الطاولة.",
           "mistakes": [
             {
-              "wrong": "أحتاج إلى خبزتين.",
-              "fix": "أحتاج إلى بعض الخبز.",
-              "sourceWrong": "I need two breads.",
-              "sourceFix": "I need some bread."
+              "wrong": "الكتاب على الطاولة.",
+              "fix": "كتاب على الطاولة."
             }
           ]
         },
         {
-          "title": "المقالات",
-          "sourceTitle": "articles",
+          "title": "الجمع",
           "points": [
-            "أو 'an' للإشارة الأولى",
-            "الـ للإشارة المحددة",
-            "لا أداة للأفكار العامة"
+            "تستخدم للدلالة على أكثر من شيء.",
+            "تتغير صيغة الاسم عند الجمع.",
+            "يمكن أن يكون الجمع صحيحًا أو غير صحيح."
           ],
-          "sourcePoints": [
-            "a or an for first mention",
-            "the for specific reference",
-            "no article for general ideas"
-          ],
-          "example": "الكلب في الخارج.",
-          "sourceExample": "The dog is outside.",
+          "example": "الأولاد يلعبون في الحديقة.",
           "mistakes": [
             {
-              "wrong": "رأيت فيلمًا.",
-              "fix": "شاهدت فيلمًا.",
-              "sourceWrong": "I saw movie.",
-              "sourceFix": "I saw a movie."
+              "wrong": "الولد يلعب في الحديقة.",
+              "fix": "الأولاد يلعبون في الحديقة."
             }
           ]
         },
         {
-          "title": "الصيغ الجمع",
-          "sourceTitle": "plural forms",
+          "title": "الأسماء الموصولة",
           "points": [
-            "نهايات الجمع العادية",
-            "تغييرات الإملاء في الجمع",
-            "أشكال الجمع غير المنتظمة"
+            "تستخدم لربط الجمل.",
+            "تأتي بعد الاسم مباشرة.",
+            "تساعد في تحديد المعنى."
           ],
-          "sourcePoints": [
-            "regular plural endings",
-            "spelling changes in plurals",
-            "irregular plural forms"
-          ],
-          "example": "هناك طفلان هنا.",
-          "sourceExample": "Two children are here.",
+          "example": "الذي قرأ الكتاب هو صديقي.",
           "mistakes": [
             {
-              "wrong": "ثلاثة أطفال يلعبون.",
-              "fix": "يلعب ثلاثة أطفال.",
-              "sourceWrong": "Three child play.",
-              "sourceFix": "Three children play."
+              "wrong": "الذي قرأ الكتاب صديقي.",
+              "fix": "الذي قرأ الكتاب هو صديقي."
             }
           ]
         },
         {
-          "title": "الأسماء الملكية",
-          "sourceTitle": "possessive nouns",
+          "title": "الأسماء الممنوعة من الصرف",
           "points": [
-            "ملكية 's مع الفاصلة",
-            "نهايات الملكية الجمع",
-            "الأشياء والعلاقات"
+            "تستخدم للدلالة على أسماء معينة.",
+            "لا تقبل التنوين.",
+            "تحتاج إلى معرفة خاصة."
           ],
-          "sourcePoints": [
-            "apostrophe s ownership",
-            "plural possessive endings",
-            "things and relationships"
-          ],
-          "example": "هاتف سارة جديد.",
-          "sourceExample": "Sara's phone is new.",
+          "example": "محمد طالب مجتهد.",
           "mistakes": [
             {
-              "wrong": "كتاب المعلم جديد.",
-              "fix": "كتاب المعلم جديد.",
-              "sourceWrong": "The teachers book is new.",
-              "sourceFix": "The teacher's book is new."
+              "wrong": "محمد طالب مجتهدٌ.",
+              "fix": "محمد طالب مجتهد."
             }
           ]
         },
         {
-          "title": "عبارات اسمية",
-          "sourceTitle": "noun phrases",
+          "title": "الأسماء الذاتية",
           "points": [
-            "أداة تحديد بالإضافة إلى الاسم",
-            "صفة بالإضافة إلى الاسم",
-            "ترتيب الاسم بالإضافة إلى الاسم"
+            "تشير إلى أشخاص أو أماكن.",
+            "تبدأ بحرف كبير.",
+            "تستخدم في السياقات الرسمية."
           ],
-          "sourcePoints": [
-            "determiner plus noun",
-            "adjective plus noun",
-            "noun plus noun pairing"
-          ],
-          "example": "طاولة المطبخ الصغيرة انكسرت.",
-          "sourceExample": "The small kitchen table broke.",
+          "example": "مصر بلد جميل.",
           "mistakes": [
             {
-              "wrong": "هي اشترت فستانًا أحمر.",
-              "fix": "هي اشترت فستانًا أحمر.",
-              "sourceWrong": "She bought dress red.",
-              "sourceFix": "She bought a red dress."
+              "wrong": "مصر بلد جميلٌ.",
+              "fix": "مصر بلد جميل."
             }
           ]
         },
         {
-          "title": "المحددات",
-          "sourceTitle": "quantifiers",
+          "title": "الأسماء الشائعة",
           "points": [
-            "الكثير من الخيارات",
-            "قليل من الخيارات",
-            "الكثير من للكمية"
+            "تستخدم للإشارة إلى أشياء عامة.",
+            "لا تبدأ بحرف كبير.",
+            "يمكن أن تكون مفردة أو جمع."
           ],
-          "sourcePoints": [
-            "many and much choice",
-            "few and little choice",
-            "a lot of for quantity"
-          ],
-          "example": "هناك العديد من الخيارات.",
-          "sourceExample": "There are many options.",
+          "example": "الطبيعة جميلة.",
           "mistakes": [
             {
-              "wrong": "كم عدد التفاح؟",
-              "fix": "كم عدد التفاح؟",
-              "sourceWrong": "How much apples?",
-              "sourceFix": "How many apples?"
+              "wrong": "الطبيعة جميلةٌ.",
+              "fix": "الطبيعة جميلة."
             }
           ]
         }
       ],
       "Pronouns & Reference": [
         {
-          "title": "ضمائر الفاعل",
-          "sourceTitle": "subject pronouns",
+          "title": "الضمائر الشخصية",
           "points": [
-            "أنا أنت هو هي مجموعة",
-            "نحن وهم جمع",
-            "هو للأشياء"
+            "أنا",
+            "أنتَ/أنتِ",
+            "هو/هي"
           ],
-          "sourcePoints": [
-            "i you he she set",
-            "we and they plural",
-            "it for things"
-          ],
-          "example": "هم جاهزون.",
-          "sourceExample": "They are ready.",
+          "example": "أنا طالب.",
           "mistakes": [
             {
-              "wrong": "هي هنا.",
-              "fix": "هي هنا.",
-              "sourceWrong": "Her is here.",
-              "sourceFix": "She is here."
+              "wrong": "أنا طلاب.",
+              "fix": "أنا طالب."
             }
           ]
         },
         {
-          "title": "ضمائر المفعول",
-          "sourceTitle": "object pronouns",
+          "title": "الضمائر الملكية",
           "points": [
-            "أنا هو هي مجموعة",
-            "نحن وهم جمع",
-            "موضع المفعول بعد الأفعال"
+            "كتابي",
+            "كتابكَ/كتابكِ",
+            "كتابه/كتابها"
           ],
-          "sourcePoints": [
-            "me him her set",
-            "us and them plural",
-            "object position after verbs"
-          ],
-          "example": "هي اتصلت بي.",
-          "sourceExample": "She called me.",
+          "example": "هذا كتابي.",
           "mistakes": [
             {
-              "wrong": "هو رأى أنا.",
-              "fix": "هو رآني.",
-              "sourceWrong": "He saw I.",
-              "sourceFix": "He saw me."
+              "wrong": "هذا كتابهم.",
+              "fix": "هذا كتابي."
             }
           ]
         },
         {
-          "title": "أشكال الملكية",
-          "sourceTitle": "possessive forms",
+          "title": "الضمائر الإشارية",
           "points": [
-            "لي لك له لها مجموعة",
-            "خاصتنا خاصتهم مع الأسماء",
-            "لي لك للوقوف بمفرده"
+            "هذا",
+            "هذه",
+            "هؤلاء"
           ],
-          "sourcePoints": [
-            "my your his her set",
-            "our their with nouns",
-            "mine yours for standalone"
-          ],
-          "example": "هذه حقيبتي.",
-          "sourceExample": "This is my bag.",
+          "example": "هذا قلم.",
           "mistakes": [
             {
-              "wrong": "هذا هو كتابها.",
-              "fix": "هذا الكتاب لها.",
-              "sourceWrong": "This is her book is.",
-              "sourceFix": "This book is hers."
+              "wrong": "هذا أقلام.",
+              "fix": "هذه أقلام."
             }
           ]
         },
         {
-          "title": "ضمائر الانعكاس",
-          "sourceTitle": "reflexive pronouns",
+          "title": "الضمائر المتصلة",
           "points": [
-            "نمط نفسي نفسك",
-            "نمط نفسها نفسه",
-            "تأكيد مع الضمائر المنعكسة"
+            "ني",
+            "ك",
+            "ه"
           ],
-          "sourcePoints": [
-            "myself yourself pattern",
-            "herself himself pattern",
-            "emphasis with reflexives"
-          ],
-          "example": "هو جرح نفسه.",
-          "sourceExample": "He hurt himself.",
+          "example": "أحبك.",
           "mistakes": [
             {
-              "wrong": "أنا آذيت نفسي.",
-              "fix": "أذيت نفسي.",
-              "sourceWrong": "I hurt me.",
-              "sourceFix": "I hurt myself."
+              "wrong": "أحبكِ.",
+              "fix": "أحبك."
             }
           ]
         },
         {
-          "title": "أدوات الإشارة",
-          "sourceTitle": "demonstratives",
+          "title": "الضمائر المنفصلة",
           "points": [
-            "هذا ذاك للمفرد",
-            "هؤلاء أولئك للجمع",
-            "الإشارة القريبة مقابل البعيدة"
+            "أنا",
+            "أنتَ",
+            "هو"
           ],
-          "sourcePoints": [
-            "this that for single",
-            "these those for plural",
-            "near vs far reference"
-          ],
-          "example": "تلك مفاتيحي.",
-          "sourceExample": "Those are my keys.",
+          "example": "أنتَ معلم.",
           "mistakes": [
             {
-              "wrong": "هذا الكتاب لي.",
-              "fix": "هذا الكتاب لي.",
-              "sourceWrong": "These book is mine.",
-              "sourceFix": "This book is mine."
+              "wrong": "أنتِ معلم.",
+              "fix": "أنتَ معلم."
             }
           ]
         },
         {
-          "title": "المرجع النسبي",
-          "sourceTitle": "relative reference",
+          "title": "الضمائر الاستفهامية",
           "points": [
-            "من للناس",
-            "أي للأشياء",
-            "ذلك للاستخدام العام"
+            "من",
+            "ماذا",
+            "أين"
           ],
-          "sourcePoints": [
-            "who for people",
-            "which for things",
-            "that for general use"
-          ],
-          "example": "الرجل الذي اتصل غادر.",
-          "sourceExample": "The man who called left.",
+          "example": "من هو؟",
           "mistakes": [
             {
-              "wrong": "الرجل الذي اتصل بي.",
-              "fix": "الرجل الذي اتصل بي.",
-              "sourceWrong": "The man which called me.",
-              "sourceFix": "The man who called me."
+              "wrong": "ماذا هو؟",
+              "fix": "من هو؟"
             }
           ]
         },
         {
-          "title": "المرجع غير المحدد",
-          "sourceTitle": "indefinite reference",
+          "title": "الضمائر الموصولة",
           "points": [
-            "شخص ما أي شخص مجموعة",
-            "الجميع لا أحد مجموعة",
-            "شيء ما أي شيء مجموعة"
+            "الذي",
+            "التي",
+            "الذين"
           ],
-          "sourcePoints": [
-            "someone anyone set",
-            "everyone no one set",
-            "something anything set"
-          ],
-          "example": "شخص ما ينتظر.",
-          "sourceExample": "Someone is waiting.",
+          "example": "الكتاب الذي قرأته.",
           "mistakes": [
             {
-              "wrong": "أي شخص هنا.",
-              "fix": "شخص ما هنا.",
-              "sourceWrong": "Anyone is here.",
-              "sourceFix": "Someone is here."
+              "wrong": "الكتاب التي قرأته.",
+              "fix": "الكتاب الذي قرأته."
             }
           ]
         }
       ],
       "Modifiers": [
         {
-          "title": "أساسيات الصفات",
-          "sourceTitle": "adjectives basics",
+          "title": "الصفة المقارنة",
           "points": [
-            "الصفات تصف الأسماء",
-            "الصفات قبل الأسماء",
-            "الصفات بعد فعل يكون"
+            "تستخدم للمقارنة بين شيئين.",
+            "تضاف 'أكثر' قبل الصفة.",
+            "تستخدم 'من' بعد الصفة."
           ],
-          "sourcePoints": [
-            "adjectives describe nouns",
-            "adjectives before nouns",
-            "adjectives after be"
-          ],
-          "example": "المنزل هادئ.",
-          "sourceExample": "The house is quiet.",
+          "example": "هذا الكتاب أكثر إثارة من ذلك.",
           "mistakes": [
             {
-              "wrong": "لديها شعر طويل.",
-              "fix": "لديها شعر طويل.",
-              "sourceWrong": "She has hair long.",
-              "sourceFix": "She has long hair."
+              "wrong": "هذا الكتاب إثارة من ذلك.",
+              "fix": "هذا الكتاب أكثر إثارة من ذلك."
             }
           ]
         },
         {
-          "title": "ترتيب الصفات",
-          "sourceTitle": "adjective order",
+          "title": "الصفة التفضيلية",
           "points": [
-            "الرأي قبل الحجم",
-            "العمر قبل اللون",
-            "المادة قريبة من الاسم"
+            "تستخدم للإشارة إلى الأفضلية.",
+            "تضاف 'الأكثر' قبل الصفة.",
+            "تستخدم 'من' بعد الصفة."
           ],
-          "sourcePoints": [
-            "opinion before size",
-            "age before color",
-            "material near noun"
-          ],
-          "example": "هي اشترت حقيبة حمراء صغيرة.",
-          "sourceExample": "She bought a small red bag.",
+          "example": "هذا هو الكتاب الأكثر فائدة.",
           "mistakes": [
             {
-              "wrong": "سيارة صغيرة حمراء.",
-              "fix": "سيارة صغيرة حمراء.",
-              "sourceWrong": "A red small car.",
-              "sourceFix": "A small red car."
+              "wrong": "هذا الكتاب فائدة.",
+              "fix": "هذا هو الكتاب الأكثر فائدة."
             }
           ]
         },
         {
-          "title": "المقارنات",
-          "sourceTitle": "comparatives",
+          "title": "المعدلات العددية",
           "points": [
-            "أشكال er أو more",
-            "مقارنات than",
-            "أشكال المقارنة الشاذة"
+            "تستخدم لوصف الكمية.",
+            "تضاف الأعداد قبل الأسماء.",
+            "يجب توافق العدد مع الاسم."
           ],
-          "sourcePoints": [
-            "er or more forms",
-            "than comparisons",
-            "irregular comparative forms"
-          ],
-          "example": "هذا أسرع من ذاك.",
-          "sourceExample": "This is faster than that.",
+          "example": "لدي ثلاثة كتب.",
           "mistakes": [
             {
-              "wrong": "هذا أرخص.",
-              "fix": "هذا أرخص.",
-              "sourceWrong": "This is more cheap.",
-              "sourceFix": "This is cheaper."
+              "wrong": "لدي ثلاث كتب.",
+              "fix": "لدي ثلاثة كتب."
             }
           ]
         },
         {
-          "title": "التفضيلات",
-          "sourceTitle": "superlatives",
+          "title": "الصفة الحالّة",
           "points": [
-            "أشكال est أو most",
-            "the مع التفضيل",
-            "تركيز المقارنة الجماعية"
+            "تستخدم لوصف الحالة.",
+            "تضاف الصفة بعد الفعل.",
+            "تستخدم مع الأسماء."
           ],
-          "sourcePoints": [
-            "est or most forms",
-            "the with superlative",
-            "group comparison focus"
-          ],
-          "example": "هو الأطول.",
-          "sourceExample": "He is the tallest.",
+          "example": "يكتب الطالب بسرعة.",
           "mistakes": [
             {
-              "wrong": "هو الأسرع.",
-              "fix": "هو الأسرع.",
-              "sourceWrong": "He is the most fast.",
-              "sourceFix": "He is the fastest."
+              "wrong": "يكتب الطالب سريع.",
+              "fix": "يكتب الطالب بسرعة."
             }
           ]
         },
         {
-          "title": "أساسيات الظروف",
-          "sourceTitle": "adverbs basics",
+          "title": "المعدلات الزمانية",
           "points": [
-            "الظروف تصف الأفعال",
-            "الظروف بعد الفعل",
-            "الظروف قبل الصفات"
+            "تستخدم لوصف الزمن.",
+            "تضاف الكلمات الزمانية قبل الفعل.",
+            "تستخدم مع الأسماء."
           ],
-          "sourcePoints": [
-            "adverbs describe verbs",
-            "adverbs after verb",
-            "adverbs before adjectives"
-          ],
-          "example": "هي تتحدث بوضوح.",
-          "sourceExample": "She speaks clearly.",
+          "example": "سأذهب غداً إلى المدرسة.",
           "mistakes": [
             {
-              "wrong": "هي تتحدث ببطء.",
-              "fix": "هي تتحدث ببطء.",
-              "sourceWrong": "She speaks slow.",
-              "sourceFix": "She speaks slowly."
+              "wrong": "سأذهب غد إلى المدرسة.",
+              "fix": "سأذهب غداً إلى المدرسة."
             }
           ]
         },
         {
-          "title": "ظروف التكرار",
-          "sourceTitle": "frequency adverbs",
+          "title": "المعدلات المكانيّة",
           "points": [
-            "دائمًا عادةً غالبًا",
-            "نادراً أبداً",
-            "الموقع مع فعل يكون"
+            "تستخدم لوصف المكان.",
+            "تضاف الكلمات المكانية قبل الاسم.",
+            "تستخدم مع الأفعال."
           ],
-          "sourcePoints": [
-            "always usually often set",
-            "rarely never set",
-            "position with be"
-          ],
-          "example": "أنا عادة أستيقظ مبكرًا.",
-          "sourceExample": "I usually wake early.",
+          "example": "الكتاب على الطاولة.",
           "mistakes": [
             {
-              "wrong": "هي تذهب دائماً مبكراً.",
-              "fix": "هي تذهب دائمًا مبكرًا.",
-              "sourceWrong": "She goes always early.",
-              "sourceFix": "She always goes early."
+              "wrong": "الكتاب في الطاولة.",
+              "fix": "الكتاب على الطاولة."
             }
           ]
         },
         {
-          "title": "ظروف الزمن والمكان",
-          "sourceTitle": "time and place adverbs",
+          "title": "الصفة الوصفية",
           "points": [
-            "الوقت في نهاية الجملة",
-            "المكان في النهاية",
-            "ترتيب الوقت قبل المكان"
+            "تستخدم لوصف الخصائص.",
+            "تضاف الصفة قبل الاسم.",
+            "تتوافق مع الجنس والعدد."
           ],
-          "sourcePoints": [
-            "time at end position",
-            "place at the end",
-            "time before place order"
-          ],
-          "example": "التقينا هناك أمس.",
-          "sourceExample": "We met there yesterday.",
+          "example": "الفتاة الجميلة تضحك.",
           "mistakes": [
             {
-              "wrong": "وصل هنا أمس.",
-              "fix": "وصل إلى هنا أمس.",
-              "sourceWrong": "He arrived yesterday here.",
-              "sourceFix": "He arrived here yesterday."
+              "wrong": "الفتاة الجميل تضحك.",
+              "fix": "الفتاة الجميلة تضحك."
             }
           ]
         },
         {
-          "title": "كلمات الدرجة",
-          "sourceTitle": "degree words",
+          "title": "المعدلات الكمية",
           "points": [
-            "جداً حقاً",
-            "too و enough",
-            "quite و rather"
+            "تستخدم لوصف الكمية.",
+            "تضاف 'كثير' أو 'قليل' قبل الاسم.",
+            "تتوافق مع الجنس والعدد."
           ],
-          "sourcePoints": [
-            "very really set",
-            "too and enough",
-            "quite and rather"
-          ],
-          "example": "الغرفة دافئة جدًا.",
-          "sourceExample": "The room is very warm.",
+          "example": "هناك كثير من الطلاب.",
           "mistakes": [
             {
-              "wrong": "إنه حار بما فيه الكفاية.",
-              "fix": "إنه حار بما فيه الكفاية.",
-              "sourceWrong": "It is enough hot.",
-              "sourceFix": "It is hot enough."
+              "wrong": "هناك كثير من الطالب.",
+              "fix": "هناك كثير من الطلاب."
             }
           ]
         },
         {
-          "title": "الأسماء المشتقة",
-          "sourceTitle": "participles",
+          "title": "الصفة المكانية",
           "points": [
-            "صفات ing للسبب",
-            "صفات ed للشعور",
-            "تجنب الارتباك"
+            "تستخدم لوصف الموقع.",
+            "تضاف الصفة قبل الاسم.",
+            "تتوافق مع الجنس والعدد."
           ],
-          "sourcePoints": [
-            "ing adjectives for cause",
-            "ed adjectives for feeling",
-            "avoid confusion"
-          ],
-          "example": "كان الفيلم مملًا.",
-          "sourceExample": "The movie was boring.",
+          "example": "البيت الكبير في الحي.",
           "mistakes": [
             {
-              "wrong": "كانت القصة مملة.",
-              "fix": "كانت القصة مملة.",
-              "sourceWrong": "The story was boringed.",
-              "sourceFix": "The story was boring."
+              "wrong": "البيت الكبيرة في الحي.",
+              "fix": "البيت الكبير في الحي."
             }
           ]
         },
         {
-          "title": "تراص المعدلات",
-          "sourceTitle": "modifier stacking",
+          "title": "الصفة الزمانية",
           "points": [
-            "صفات متعددة",
-            "ظروف متعددة",
-            "الحفاظ على وضوح التركيز"
+            "تستخدم لوصف الزمن.",
+            "تضاف الصفة قبل الاسم.",
+            "تتوافق مع الجنس والعدد."
           ],
-          "sourcePoints": [
-            "multiple adjectives",
-            "multiple adverbs",
-            "keep focus clear"
-          ],
-          "example": "هي أجابت بسرعة على السؤال الصعب.",
-          "sourceExample": "She quickly answered the hard question.",
+          "example": "الاجتماع الأسبوعي مهم.",
           "mistakes": [
             {
-              "wrong": "اشترت حقيبة جديدة صغيرة حمراء.",
-              "fix": "اشترت حقيبة صغيرة جديدة حمراء.",
-              "sourceWrong": "She bought a red small new bag.",
-              "sourceFix": "She bought a small new red bag."
+              "wrong": "الاجتماع الأسبوعي مهمة.",
+              "fix": "الاجتماع الأسبوعي مهم."
             }
           ]
         }
       ],
       "Questions": [
         {
-          "title": "أسئلة بنعم أو لا",
-          "sourceTitle": "yes no questions",
+          "title": "أسئلة عن الفاعل",
           "points": [
-            "فعل مساعد + الفاعل + الفعل الأساسي"
+            "من هو الفاعل في الجملة؟",
+            "كيف نحدد الفاعل؟",
+            "ما هي علامات الفاعل؟"
           ],
-          "sourcePoints": [
-            "aux + subject + base verb"
-          ],
-          "example": "هل تعمل هنا؟",
-          "sourceExample": "Do you work here?",
+          "example": "الولد يلعب في الحديقة.",
           "mistakes": [
             {
-              "wrong": "هل تحب القهوة؟",
-              "fix": "هل تحب القهوة؟",
-              "sourceWrong": "You like coffee?",
-              "sourceFix": "Do you like coffee?"
+              "wrong": "يلعب الولد في الحديقة.",
+              "fix": "الولد يلعب في الحديقة."
             }
           ]
         },
         {
-          "title": "أسئلة تبدأ بـ wh",
-          "sourceTitle": "wh questions",
+          "title": "أسئلة عن المفعول به",
           "points": [
-            "كلمة استفسار + فعل مساعد + الفاعل + الفعل الأساسي"
+            "ما هو المفعول به؟",
+            "كيف نستخدم المفعول به في الجملة؟",
+            "ما هي علامات المفعول به؟"
           ],
-          "sourcePoints": [
-            "wh word + aux + subject + base verb"
-          ],
-          "example": "أين يعيش؟",
-          "sourceExample": "Where does he live?",
+          "example": "أحب الكتاب.",
           "mistakes": [
             {
-              "wrong": "أين تعيش؟",
-              "fix": "أين تعيش؟",
-              "sourceWrong": "Where you live?",
-              "sourceFix": "Where do you live?"
+              "wrong": "الكتاب أحب.",
+              "fix": "أحب الكتاب."
             }
           ]
         },
         {
-          "title": "أسئلة مع الفعل يكون",
-          "sourceTitle": "questions with be",
+          "title": "أسئلة عن أدوات الاستفهام",
           "points": [
-            "فعل يكون + الفاعل + المكمل"
+            "ما هي أدوات الاستفهام؟",
+            "كيف نستخدم أدوات الاستفهام؟",
+            "ما الفرق بين 'ماذا' و'ما'؟"
           ],
-          "sourcePoints": [
-            "be + subject + complement"
-          ],
-          "example": "هل المتجر مفتوح؟",
-          "sourceExample": "Is the store open?",
+          "example": "ماذا تريد أن تأكل؟",
           "mistakes": [
             {
-              "wrong": "هل أنت مستعد؟",
-              "fix": "هل أنت مستعد؟",
-              "sourceWrong": "You are ready?",
-              "sourceFix": "Are you ready?"
+              "wrong": "ما تريد أن تأكل؟",
+              "fix": "ماذا تريد أن تأكل؟"
             }
           ]
         },
         {
-          "title": "أسئلة مع الفعل يفعل",
-          "sourceTitle": "questions with do",
+          "title": "أسئلة عن الزمن",
           "points": [
-            "فعل مساعد + الفاعل + الفعل الأساسي"
+            "كيف نستخدم الزمن في الأسئلة؟",
+            "ما الفرق بين الماضي والمستقبل؟",
+            "كيف نكون أسئلة في الزمن الحاضر؟"
           ],
-          "sourcePoints": [
-            "aux + subject + base verb"
-          ],
-          "example": "هل اتصلت بها؟",
-          "sourceExample": "Did you call her?",
+          "example": "هل تدرس الآن؟",
           "mistakes": [
             {
-              "wrong": "هل تحب البيتزا؟",
-              "fix": "هل تحب البيتزا؟",
-              "sourceWrong": "She likes pizza?",
-              "sourceFix": "Does she like pizza?"
+              "wrong": "هل درست الآن؟",
+              "fix": "هل تدرس الآن؟"
             }
           ]
         },
         {
-          "title": "أسئلة مع الأفعال المساعدة",
-          "sourceTitle": "questions with modals",
+          "title": "أسئلة عن الصفات",
           "points": [
-            "فعل مساعد + الفاعل + الفعل الأساسي"
+            "كيف نستخدم الصفات في الأسئلة؟",
+            "ما هي الصفات التي يمكن استخدامها؟",
+            "كيف نكون سؤال عن صفة؟"
           ],
-          "sourcePoints": [
-            "modal + subject + base verb"
-          ],
-          "example": "هل يمكنك مساعدتي؟",
-          "sourceExample": "Could you help me?",
+          "example": "ما هو اللون المفضل لديك؟",
           "mistakes": [
             {
-              "wrong": "هل يمكنك مساعدتي؟",
-              "fix": "هل يمكنك مساعدتي؟",
-              "sourceWrong": "You can help me?",
-              "sourceFix": "Can you help me?"
+              "wrong": "ما اللون المفضل لديك؟",
+              "fix": "ما هو اللون المفضل لديك؟"
             }
           ]
         },
         {
-          "title": "أسئلة تاغ",
-          "sourceTitle": "tag questions",
+          "title": "أسئلة عن الظروف",
           "points": [
-            "جملة + علامة"
+            "ما هي الظروف؟",
+            "كيف نستخدم الظروف في الأسئلة؟",
+            "ما الفرق بين الظروف الزمانية والمكانية؟"
           ],
-          "sourcePoints": [
-            "statement + tag"
-          ],
-          "example": "أنت جاهز، أليس كذلك؟",
-          "sourceExample": "You are ready, aren't you?",
+          "example": "أين تذهب غداً؟",
           "mistakes": [
             {
-              "wrong": "هي هنا، أليس كذلك؟",
-              "fix": "هي هنا، أليس كذلك؟",
-              "sourceWrong": "She is here, is she?",
-              "sourceFix": "She is here, isn't she?"
+              "wrong": "أين تذهب؟",
+              "fix": "أين تذهب غداً؟"
             }
           ]
         },
         {
-          "title": "أسئلة غير مباشرة",
-          "sourceTitle": "indirect questions",
+          "title": "أسئلة عن الأفعال",
           "points": [
-            "مقدمة + جملة استفسارية"
+            "كيف نستخدم الأفعال في الأسئلة؟",
+            "ما هي الأفعال التي يمكن استخدامها؟",
+            "كيف نكون سؤال عن فعل؟"
           ],
-          "sourcePoints": [
-            "intro + wh clause"
-          ],
-          "example": "هل يمكنك أن تخبرني أين هو؟",
-          "sourceExample": "Could you tell me where it is?",
+          "example": "متى ستذهب إلى المدرسة؟",
           "mistakes": [
             {
-              "wrong": "هل يمكنك أن تخبرني أين هو؟",
-              "fix": "هل يمكنك أن تخبرني أين هو؟",
-              "sourceWrong": "Can you tell me where is he?",
-              "sourceFix": "Can you tell me where he is?"
+              "wrong": "متى تذهب إلى المدرسة؟",
+              "fix": "متى ستذهب إلى المدرسة؟"
             }
           ]
         }
       ],
       "Negation": [
         {
-          "title": "ليس مع يكون",
-          "sourceTitle": "not with be",
+          "title": "النفي باستخدام \"لا\"",
           "points": [
-            "الفاعل + يكون + ليس + المكمل"
+            "تستخدم \"لا\" لنفي الجمل الفعلية.",
+            "تأتي \"لا\" قبل الفعل.",
+            "تستخدم \"لا\" مع الأفعال المضارعة."
           ],
-          "sourcePoints": [
-            "subject + be + not + complement"
-          ],
-          "example": "هي ليست متعبة.",
-          "sourceExample": "She is not tired.",
+          "example": "أنا لا أذهب إلى المدرسة.",
           "mistakes": [
             {
-              "wrong": "هو ليس سعيدًا.",
-              "fix": "هو ليس سعيدًا.",
-              "sourceWrong": "He not happy.",
-              "sourceFix": "He is not happy."
+              "wrong": "أنا لا أذهب المدرسة.",
+              "fix": "أنا لا أذهب إلى المدرسة."
             }
           ]
         },
         {
-          "title": "ليس مع يفعل",
-          "sourceTitle": "not with do",
+          "title": "النفي باستخدام \"ليس\"",
           "points": [
-            "الفاعل + الفعل المساعد + ليس + الفعل الأساسي"
+            "تستخدم \"ليس\" لنفي الجمل الاسمية.",
+            "تأتي \"ليس\" بعد المبتدأ.",
+            "تستخدم \"ليس\" مع الصفات."
           ],
-          "sourcePoints": [
-            "subject + aux + not + base verb"
-          ],
-          "example": "هم لا يتفقون.",
-          "sourceExample": "They do not agree.",
+          "example": "الكتاب ليس جديدًا.",
           "mistakes": [
             {
-              "wrong": "هي لا تحب الشاي.",
-              "fix": "هي لا تحب الشاي.",
-              "sourceWrong": "She not like tea.",
-              "sourceFix": "She does not like tea."
+              "wrong": "الكتاب ليس جديد.",
+              "fix": "الكتاب ليس جديدًا."
             }
           ]
         },
         {
-          "title": "الأشكال القصيرة السلبية",
-          "sourceTitle": "negative short forms",
+          "title": "النفي باستخدام \"ما\"",
           "points": [
-            "الفاعل + الفعل المساعد + ليس + الفعل الأساسي"
+            "تستخدم \"ما\" لنفي الجمل.",
+            "تأتي \"ما\" قبل الفعل.",
+            "تستخدم \"ما\" مع الأفعال الماضية."
           ],
-          "sourcePoints": [
-            "subject + aux + not + base verb"
-          ],
-          "example": "لا أعرف.",
-          "sourceExample": "I don't know.",
+          "example": "ما قرأت الكتاب.",
           "mistakes": [
             {
-              "wrong": "هو لا يعرف.",
-              "fix": "هو لا يعرف.",
-              "sourceWrong": "He does notn't know.",
-              "sourceFix": "He doesn't know."
+              "wrong": "ما قرأت الكتب.",
+              "fix": "ما قرأت الكتاب."
             }
           ]
         },
         {
-          "title": "الكلمات السلبية",
-          "sourceTitle": "negative words",
+          "title": "النفي باستخدام \"لم\"",
           "points": [
-            "كلمة نفي + اسم"
+            "تستخدم \"لم\" لنفي الأفعال في الماضي.",
+            "تأتي \"لم\" قبل الفعل المضارع.",
+            "تستخدم \"لم\" مع الأفعال التي تعبر عن حدث غير مكتمل."
           ],
-          "sourcePoints": [
-            "negative word + noun"
-          ],
-          "example": "لا يوجد حليب.",
-          "sourceExample": "There is no milk.",
+          "example": "لم أذهب إلى الحفلة.",
           "mistakes": [
             {
-              "wrong": "ليس لدي شيء.",
-              "fix": "ليس لدي أي شيء.",
-              "sourceWrong": "I don't have nothing.",
-              "sourceFix": "I don't have anything."
+              "wrong": "لم أذهب الحفلة.",
+              "fix": "لم أذهب إلى الحفلة."
             }
           ]
         },
         {
-          "title": "الأسئلة السلبية",
-          "sourceTitle": "negative questions",
+          "title": "النفي باستخدام \"لن\"",
           "points": [
-            "الفعل المساعد + ليس + الفاعل + الفعل الأساسي + المفعول به"
+            "تستخدم \"لن\" لنفي الأفعال المستقبلية.",
+            "تأتي \"لن\" قبل الفعل المضارع.",
+            "تستخدم \"لن\" مع الأفعال التي تعبر عن نية."
           ],
-          "sourcePoints": [
-            "aux + not + subject + base verb + object"
-          ],
-          "example": "ألا تريد القهوة؟",
-          "sourceExample": "Don't you want coffee?",
+          "example": "لن أذهب إلى العمل غدًا.",
           "mistakes": [
             {
-              "wrong": "ألا تحبه؟",
-              "fix": "ألا تحبه؟",
-              "sourceWrong": "You don't like it?",
-              "sourceFix": "Don't you like it?"
+              "wrong": "لن أذهب العمل غدًا.",
+              "fix": "لن أذهب إلى العمل غدًا."
             }
           ]
         },
         {
-          "title": "السلبيات المحدودة",
-          "sourceTitle": "limited negatives",
+          "title": "النفي باستخدام \"لا\" مع الأسماء",
           "points": [
-            "الفاعل + ظرف نفي + الفعل"
+            "تستخدم \"لا\" لنفي الأسماء.",
+            "تأتي \"لا\" قبل الاسم.",
+            "تستخدم \"لا\" مع الأسماء غير المعرفة."
           ],
-          "sourcePoints": [
-            "subject + negative adverb + verb"
-          ],
-          "example": "هو نادراً ما يأكل خارجاً.",
-          "sourceExample": "He rarely eats out.",
+          "example": "لا طالب في الفصل.",
           "mistakes": [
             {
-              "wrong": "هي بالكاد لا تنام.",
-              "fix": "هي نادرًا ما تنام.",
-              "sourceWrong": "She hardly doesn't sleep.",
-              "sourceFix": "She hardly sleeps."
+              "wrong": "لا طالبًا في الفصل.",
+              "fix": "لا طالب في الفصل."
             }
           ]
         }
       ],
       "Connections": [
         {
-          "title": "موصلات أساسية",
-          "sourceTitle": "basic connectors",
+          "title": "الضمائر الشخصية",
           "points": [
-            "الجملة 1 + رابط + الجملة 2"
+            "تستخدم للإشارة إلى المتحدث أو المخاطب أو الغائب.",
+            "تتغير حسب الجنس والعدد.",
+            "تساعد في تحديد الفاعل في الجملة."
           ],
-          "sourcePoints": [
-            "clause 1 + connector + clause 2"
-          ],
-          "example": "اتصلت لكن لم يرد أحد.",
-          "sourceExample": "I called but no one answered.",
+          "example": "أنا أحب القراءة.",
           "mistakes": [
             {
-              "wrong": "ذهبت ولكنني بقيت.",
-              "fix": "ذهبت وبقيت.",
-              "sourceWrong": "I went and but stayed.",
-              "sourceFix": "I went and stayed."
+              "wrong": "أنت تحب القراءة.",
+              "fix": "أنت تحبين القراءة."
             }
           ]
         },
         {
-          "title": "السبب والنتيجة",
-          "sourceTitle": "reason and result",
+          "title": "الأفعال المضارعة",
           "points": [
-            "جملة السبب + رابط + جملة النتيجة"
+            "تستخدم للتعبير عن الأفعال التي تحدث حاليا.",
+            "تتغير حسب الضمير.",
+            "يمكن أن تتضمن حروف الجر."
           ],
-          "sourcePoints": [
-            "reason clause + connector + result clause"
-          ],
-          "example": "أمطرت، لذا بقينا.",
-          "sourceExample": "It rained, so we stayed.",
+          "example": "هو يكتب رسالة.",
           "mistakes": [
             {
-              "wrong": "تأخرت بسبب الحافلة.",
-              "fix": "تأخرت لأن الحافلة تأخرت.",
-              "sourceWrong": "I was late because the bus.",
-              "sourceFix": "I was late because the bus was late."
+              "wrong": "هي يكتب رسالة.",
+              "fix": "هي تكتب رسالة."
             }
           ]
         },
         {
-          "title": "التباين والاختيار",
-          "sourceTitle": "contrast and choice",
+          "title": "المفردات والأسماء",
           "points": [
-            "الجملة 1 + رابط التباين + الجملة 2"
+            "تستخدم للإشارة إلى الأشخاص أو الأشياء.",
+            "يمكن أن تكون مفردة أو جمع.",
+            "تتطلب توافق في الجنس مع الصفات."
           ],
-          "sourcePoints": [
-            "clause 1 + contrast connector + clause 2"
-          ],
-          "example": "ذهبت، على الرغم من أنها كانت متعبة.",
-          "sourceExample": "She went, although she was tired.",
+          "example": "الكتاب على الطاولة.",
           "mistakes": [
             {
-              "wrong": "أحب الشاي ولكن أيضًا القهوة.",
-              "fix": "أحب الشاي، لكنني أحب القهوة أيضًا.",
-              "sourceWrong": "I like tea but also or coffee.",
-              "sourceFix": "I like tea, but I also like coffee."
+              "wrong": "الكتب على الطاولة.",
+              "fix": "الكتب على الطاولات."
             }
           ]
         },
         {
-          "title": "موصلات زمنية",
-          "sourceTitle": "time connectors",
+          "title": "الجمل الشرطية",
           "points": [
-            "الجملة الرئيسية + رابط الزمن + الجملة"
+            "تستخدم للتعبير عن الشروط.",
+            "تتكون من جملتين: الشرط والنتيجة.",
+            "يمكن أن تتضمن أدوات الشرط."
           ],
-          "sourcePoints": [
-            "main clause + time connector + clause"
-          ],
-          "example": "اتصل بي عندما تصل.",
-          "sourceExample": "Call me when you arrive.",
+          "example": "إذا درست، ستنجح.",
           "mistakes": [
             {
-              "wrong": "غادرت قبل أن آكل.",
-              "fix": "غادرت قبل أن آكل.",
-              "sourceWrong": "I left before I will eat.",
-              "sourceFix": "I left before I ate."
+              "wrong": "إذا درست، تنجح.",
+              "fix": "إذا درست، ستنجح."
             }
           ]
         },
         {
-          "title": "روابط المقارنة",
-          "sourceTitle": "comparison links",
+          "title": "الأدوات النحوية",
           "points": [
-            "الفاعل + الفعل + المقارنة + المفعول به"
+            "تستخدم لتحديد العلاقات بين الكلمات.",
+            "تشمل حروف الجر وأدوات الربط.",
+            "تساعد في بناء الجمل بشكل صحيح."
           ],
-          "sourcePoints": [
-            "subject + verb + comparison + object"
-          ],
-          "example": "هذا يشعر وكأنه منزل.",
-          "sourceExample": "This feels like home.",
+          "example": "ذهبت إلى السوق.",
           "mistakes": [
             {
-              "wrong": "هي أطول مني.",
-              "fix": "هي أطول مني.",
-              "sourceWrong": "She is like taller me.",
-              "sourceFix": "She is taller than me."
+              "wrong": "ذهبت في السوق.",
+              "fix": "ذهبت إلى السوق."
             }
           ]
         },
         {
-          "title": "إضافة الأفكار",
-          "sourceTitle": "adding ideas",
+          "title": "الصفات والأحوال",
           "points": [
-            "علامة الإضافة + الجملة"
+            "تستخدم لوصف الأسماء.",
+            "تتغير حسب الجنس والعدد.",
+            "يمكن أن تأتي قبل أو بعد الاسم."
           ],
-          "sourcePoints": [
-            "addition marker + clause"
-          ],
-          "example": "نحن بحاجة أيضًا إلى كراسي.",
-          "sourceExample": "We also need chairs.",
+          "example": "الفتاة الجميلة تضحك.",
           "mistakes": [
             {
-              "wrong": "ذهب أيضًا ولكنه أيضًا.",
-              "fix": "هو أيضًا ذهب.",
-              "sourceWrong": "He also went but too.",
-              "sourceFix": "He also went."
+              "wrong": "الفتاة الجميل تضحك.",
+              "fix": "الفتاة الجميلة تضحك."
             }
           ]
         },
         {
-          "title": "ترتيب الأفكار",
-          "sourceTitle": "ordering ideas",
+          "title": "الأزمنة",
           "points": [
-            "التسلسل + الجملة"
+            "تستخدم للتعبير عن وقت الفعل.",
+            "تشمل الماضي، المضارع، والمستقبل.",
+            "تتطلب تغييرات في صيغة الفعل."
           ],
-          "sourcePoints": [
-            "sequence + clause"
-          ],
-          "example": "أولاً نخطط، ثم نتصرف.",
-          "sourceExample": "First we plan, then we act.",
+          "example": "سأذهب غدا.",
           "mistakes": [
             {
-              "wrong": "أخيرًا، أولاً نلتقي.",
-              "fix": "أولاً التقينا، وأخيرًا غادرنا.",
-              "sourceWrong": "Finally, first we meet.",
-              "sourceFix": "First we met, finally we left."
+              "wrong": "ذهبت غدا.",
+              "fix": "سأذهب غدا."
             }
           ]
         }
       ],
       "Conditions": [
         {
-          "title": "الظروف الحقيقية",
-          "sourceTitle": "real conditions",
+          "title": "شرط الجملة الشرطية الأولى",
           "points": [
-            "إذا كانت الجملة الشرطية + جملة النتيجة"
+            "يستخدم للتعبير عن الحقائق العامة.",
+            "يتكون من جملتين: الشرط والنتيجة.",
+            "تستخدم صيغة المضارع البسيط."
           ],
-          "sourcePoints": [
-            "if clause + result clause"
-          ],
-          "example": "إذا ضغطت على هذا، فإنه يبدأ.",
-          "sourceExample": "If you press this, it starts.",
+          "example": "إذا كان الجو مشمسًا، سأذهب إلى الحديقة.",
           "mistakes": [
             {
-              "wrong": "إذا جئت، سنلتقي.",
-              "fix": "إذا جئت، سنلتقي.",
-              "sourceWrong": "If you will come, we meet.",
-              "sourceFix": "If you come, we meet."
+              "wrong": "إذا كان الجو مشمس، سأذهب إلى الحديقة.",
+              "fix": "إذا كان الجو مشمسًا، سأذهب إلى الحديقة."
             }
           ]
         },
         {
-          "title": "الظروف المستقبلية",
-          "sourceTitle": "future conditions",
+          "title": "شرط الجملة الشرطية الثانية",
           "points": [
-            "إذا كانت الجملة الشرطية + جملة النتيجة"
+            "يستخدم للتعبير عن المواقف غير الواقعية.",
+            "يتكون من جملتين: الشرط والنتيجة.",
+            "تستخدم صيغة الماضي البسيط."
           ],
-          "sourcePoints": [
-            "if clause + result clause"
-          ],
-          "example": "إذا كانت الشمس ساطعة، سنذهب.",
-          "sourceExample": "If it is sunny, we will go.",
+          "example": "إذا كنت غنيًا، لذهبت في رحلة حول العالم.",
           "mistakes": [
             {
-              "wrong": "إذا ستمطر، سنبقى.",
-              "fix": "إذا أمطرت، سنبقى.",
-              "sourceWrong": "If it will rain, we will stay.",
-              "sourceFix": "If it rains, we will stay."
+              "wrong": "إذا كنت غني، لذهبت في رحلة حول العالم.",
+              "fix": "إذا كنت غنيًا، لذهبت في رحلة حول العالم."
             }
           ]
         },
         {
-          "title": "الحاضر غير الواقعي",
-          "sourceTitle": "unreal present",
+          "title": "شرط الجملة الشرطية الثالثة",
           "points": [
-            "إذا كانت الجملة الشرطية + جملة would"
+            "يستخدم للتعبير عن مواقف غير واقعية في الماضي.",
+            "يتكون من جملتين: الشرط والنتيجة.",
+            "تستخدم صيغة الماضي التام."
           ],
-          "sourcePoints": [
-            "if clause + would clause"
-          ],
-          "example": "إذا كان لدي وقت، سأساعد.",
-          "sourceExample": "If I had time, I would help.",
+          "example": "إذا كنت قد درست أكثر، لنجحت في الامتحان.",
           "mistakes": [
             {
-              "wrong": "إذا كان لدي وقت، سأذهب.",
-              "fix": "لو كان لدي وقت، لذهبت.",
-              "sourceWrong": "If I will have time, I would go.",
-              "sourceFix": "If I had time, I would go."
+              "wrong": "إذا كنت درست أكثر، لنجحت في الامتحان.",
+              "fix": "إذا كنت قد درست أكثر، لنجحت في الامتحان."
             }
           ]
         },
         {
-          "title": "الماضي غير الواقعي",
-          "sourceTitle": "unreal past",
+          "title": "استخدام 'لو' في الشروط",
           "points": [
-            "إذا كانت الجملة الشرطية + جملة would have"
+            "تستخدم 'لو' للتعبير عن الشرط.",
+            "يمكن استخدامها في جميع أنواع الجمل الشرطية.",
+            "تساعد في توضيح الفرضيات."
           ],
-          "sourcePoints": [
-            "if clause + would have clause"
-          ],
-          "example": "إذا كنا قد غادرنا في وقت مبكر، لكنا قد وصلنا.",
-          "sourceExample": "If we had left earlier, we would have arrived.",
+          "example": "لو كنت أعلم، لما فعلت ذلك.",
           "mistakes": [
             {
-              "wrong": "لو كنت أعلم، لقلت.",
-              "fix": "لو كنت أعلم، لقلت.",
-              "sourceWrong": "If I knew, I would have told.",
-              "sourceFix": "If I had known, I would have told."
+              "wrong": "لو كنت أعلم، لما فعلت.",
+              "fix": "لو كنت أعلم، لما فعلت ذلك."
             }
           ]
         },
         {
-          "title": "الظروف المختلطة",
-          "sourceTitle": "mixed conditions",
+          "title": "الجمل الشرطية غير المباشرة",
           "points": [
-            "إذا كانت الجملة الشرطية (الماضي التام) + نتيجة حالية (would + الفعل الأساسي)"
+            "تستخدم للتعبير عن الشروط بشكل غير مباشر.",
+            "تتطلب استخدام أدوات الربط.",
+            "تستخدم في المحادثات اليومية."
           ],
-          "sourcePoints": [
-            "if clause (past perfect) + present result (would + base verb)"
-          ],
-          "example": "إذا كانت قد درست، لكانت هادئة الآن.",
-          "sourceExample": "If she had studied, she would be calm now.",
+          "example": "إذا كنت ترغب في المساعدة، يمكنك الاتصال بي.",
           "mistakes": [
             {
-              "wrong": "لو درست، لكان لدي الوظيفة الآن.",
-              "fix": "لو كنت قد درست، لكان لدي الوظيفة الآن.",
-              "sourceWrong": "If I studied, I would have the job now.",
-              "sourceFix": "If I had studied, I would have the job now."
+              "wrong": "إذا كنت ترغب المساعدة، يمكنك الاتصال بي.",
+              "fix": "إذا كنت ترغب في المساعدة، يمكنك الاتصال بي."
             }
           ]
         },
         {
-          "title": "ما لم وخلاف ذلك",
-          "sourceTitle": "unless and otherwise",
+          "title": "استخدام 'إن' في الشروط",
           "points": [
-            "جملة النتيجة + جملة unless"
+            "تستخدم 'إن' كأداة شرطية.",
+            "تستخدم بشكل شائع في اللغة الفصحى.",
+            "تساعد في تقديم الشروط بشكل رسمي."
           ],
-          "sourcePoints": [
-            "result clause + unless clause"
-          ],
-          "example": "سنذهب ما لم تمطر.",
-          "sourceExample": "We will go unless it rains.",
+          "example": "إن ذاكرت جيدًا، ستنجح.",
           "mistakes": [
             {
-              "wrong": "سنذهب ما لم تمطر.",
-              "fix": "سنذهب ما لم تمطر.",
-              "sourceWrong": "We will go unless it will rain.",
-              "sourceFix": "We will go unless it rains."
+              "wrong": "إن ذاكرت، ستنجح.",
+              "fix": "إن ذاكرت جيدًا، ستنجح."
             }
           ]
         }
       ],
       "Voice & Focus": [
         {
-          "title": "الصوت النشط",
-          "sourceTitle": "active voice",
+          "title": "الفعل المبني للمعلوم",
           "points": [
-            "الفاعل + فعل العمل + المفعول به"
+            "يستخدم الفعل المبني للمعلوم للتعبير عن الفعل الذي يقوم به الفاعل.",
+            "يكون الفاعل واضحًا ومحددًا في الجملة.",
+            "يستخدم في الكتابات الرسمية وغير الرسمية."
           ],
-          "sourcePoints": [
-            "doer + action verb + object"
-          ],
-          "example": "الطباخ طهى العشاء.",
-          "sourceExample": "The chef cooked dinner.",
+          "example": "كتب الطالب الدرس.",
           "mistakes": [
             {
-              "wrong": "الكعكة خبزتها أمي.",
-              "fix": "أمي خبزت الكعكة.",
-              "sourceWrong": "The cake baked my mom.",
-              "sourceFix": "My mom baked the cake."
+              "wrong": "الدرس كتب الطالب.",
+              "fix": "كتب الطالب الدرس."
             }
           ]
         },
         {
-          "title": "الصوت المبني للمجهول",
-          "sourceTitle": "passive voice",
+          "title": "الفعل المبني للمجهول",
           "points": [
-            "المفعول به + فعل الكينونة + اسم المفعول"
+            "يستخدم الفعل المبني للمجهول عندما يكون الفاعل غير معروف أو غير مهم.",
+            "يتم التركيز على الفعل نفسه بدلاً من الفاعل.",
+            "يستخدم في الأخبار والتقارير."
           ],
-          "sourcePoints": [
-            "object + be verb + past participle"
-          ],
-          "example": "تم طهي الوجبة.",
-          "sourceExample": "The meal was cooked.",
+          "example": "تم كتابة الدرس.",
           "mistakes": [
             {
-              "wrong": "التقرير انتهى أمس.",
-              "fix": "تم الانتهاء من التقرير أمس.",
-              "sourceWrong": "The report finished yesterday.",
-              "sourceFix": "The report was finished yesterday."
+              "wrong": "كتب الدرس.",
+              "fix": "تم كتابة الدرس."
             }
           ]
         },
         {
-          "title": "تحولات التركيز",
-          "sourceTitle": "focus shifts",
+          "title": "التركيز على الفاعل",
           "points": [
-            "عبارة التركيز + الفاعل + الفعل"
+            "يمكن استخدام أسلوب التركيز لتسليط الضوء على الفاعل.",
+            "يتم ذلك عادةً باستخدام أدوات مثل 'إن' أو 'أو'.",
+            "يساعد في توضيح المعنى في الجمل المعقدة."
           ],
-          "sourcePoints": [
-            "focus phrase + subject + verb"
-          ],
-          "example": "ذلك الكتاب، أنهيته البارحة.",
-          "sourceExample": "That book, I finished yesterday.",
+          "example": "إن الطالب هو الذي كتب الدرس.",
           "mistakes": [
             {
-              "wrong": "هذا الكتاب الذي اشتريته أمس.",
-              "fix": "هذا الكتاب، اشتريته أمس.",
-              "sourceWrong": "This book I bought yesterday it.",
-              "sourceFix": "This book, I bought yesterday."
+              "wrong": "الطالب كتب الدرس.",
+              "fix": "إن الطالب هو الذي كتب الدرس."
             }
           ]
         },
         {
-          "title": "الجمل المنقسمة",
-          "sourceTitle": "cleft sentences",
+          "title": "التركيز على الفعل",
           "points": [
-            "ضمير 'هو' + عبارة التركيز + جملة"
+            "يمكن استخدام أسلوب التركيز لتسليط الضوء على الفعل.",
+            "يتم ذلك باستخدام أدوات مثل 'إن' أو 'لكن'.",
+            "يساعد في تغيير المعنى في الجمل."
           ],
-          "sourcePoints": [
-            "it subject + focus phrase + clause"
-          ],
-          "example": "إنه جون الذي اتصل.",
-          "sourceExample": "It is John who called.",
+          "example": "إن الدرس كُتب من قبل الطالب.",
           "mistakes": [
             {
-              "wrong": "هل هي التي اتصلت؟",
-              "fix": "كانت هي التي اتصلت.",
-              "sourceWrong": "Was it she called.",
-              "sourceFix": "It was she who called."
+              "wrong": "كتب الطالب الدرس.",
+              "fix": "إن الدرس كُتب من قبل الطالب."
             }
           ]
         },
         {
-          "title": "مواضيع هناك و هو",
-          "sourceTitle": "there and it subjects",
+          "title": "التركيز على المفعول به",
           "points": [
-            "ضمير 'هناك' + فعل الكينونة + اسم"
+            "يمكن استخدام أسلوب التركيز لتسليط الضوء على المفعول به.",
+            "يتم ذلك باستخدام أدوات مثل 'إن' أو 'لكن'.",
+            "يساعد في توضيح الجملة."
           ],
-          "sourcePoints": [
-            "there subject + be verb + noun"
-          ],
-          "example": "هناك مشكلة.",
-          "sourceExample": "There is a problem.",
+          "example": "إن الدرس هو ما كتبه الطالب.",
           "mistakes": [
             {
-              "wrong": "هناك مشكلة في الغرفة.",
-              "fix": "هناك مشكلة في الغرفة.",
-              "sourceWrong": "Is a problem in the room.",
-              "sourceFix": "There is a problem in the room."
+              "wrong": "كتب الطالب الدرس.",
+              "fix": "إن الدرس هو ما كتبه الطالب."
             }
           ]
         }
       ],
       "Modality": [
         {
-          "title": "قدرة",
-          "sourceTitle": "ability",
+          "title": "المضارع المنصوب",
           "points": [
-            "الفاعل + الفعل المساعد + الفعل الأساسي"
+            "يستخدم للدلالة على الفعل الذي يُعتبر غير مؤكد.",
+            "يأتي بعد أدوات النصب مثل: أن، لن، كي.",
+            "يُعبر عن الرغبة أو الاحتمالية."
           ],
-          "sourcePoints": [
-            "subject + modal + base verb"
-          ],
-          "example": "يمكنها السباحة.",
-          "sourceExample": "She can swim.",
+          "example": "أريد أن أذهب إلى السوق.",
           "mistakes": [
             {
-              "wrong": "يمكنها السباحة.",
-              "fix": "يمكنها السباحة.",
-              "sourceWrong": "She can to swim.",
-              "sourceFix": "She can swim."
+              "wrong": "أريد أن أذهب إلى السوق.",
+              "fix": "أريد أن أذهب إلى السوق."
             }
           ]
         },
         {
-          "title": "إذن",
-          "sourceTitle": "permission",
+          "title": "المضارع المرفوع",
           "points": [
-            "الفعل المساعد + الفاعل + الفعل الأساسي"
+            "يستخدم للدلالة على الفعل المؤكد.",
+            "يأتي بعد الفاعل مباشرة.",
+            "يُعبر عن الحقائق أو العادات."
           ],
-          "sourcePoints": [
-            "modal + subject + base verb"
-          ],
-          "example": "هل يمكنني الجلوس هنا؟",
-          "sourceExample": "May I sit here?",
+          "example": "يذهب محمد إلى المدرسة.",
           "mistakes": [
             {
-              "wrong": "هل يمكنني الجلوس هنا؟",
-              "fix": "هل يمكنني الجلوس هنا؟",
-              "sourceWrong": "May I to sit here?",
-              "sourceFix": "May I sit here?"
+              "wrong": "يذهب محمد إلى المدرسة.",
+              "fix": "يذهب محمد إلى المدرسة."
             }
           ]
         },
         {
-          "title": "التزام",
-          "sourceTitle": "obligation",
+          "title": "المضارع المجزوم",
           "points": [
-            "الفاعل + الفعل المساعد + الفعل الأساسي"
+            "يستخدم للدلالة على الفعل الذي يأتي بعد أدوات الجزم.",
+            "يُعبر عن النفي أو الطلب.",
+            "يأتي الفعل بعد أدوات مثل: لم، لا، لن."
           ],
-          "sourcePoints": [
-            "subject + modal + base verb"
-          ],
-          "example": "يجب عليك ارتداء حزام الأمان.",
-          "sourceExample": "You must wear a seatbelt.",
+          "example": "لم يذهب أحمد إلى الحفل.",
           "mistakes": [
             {
-              "wrong": "يجب عليك ارتداء شارة.",
-              "fix": "يجب عليك ارتداء شارة.",
-              "sourceWrong": "You must to wear a badge.",
-              "sourceFix": "You must wear a badge."
+              "wrong": "لم يذهب أحمد إلى الحفل.",
+              "fix": "لم يذهب أحمد إلى الحفل."
             }
           ]
         },
         {
-          "title": "نصيحة",
-          "sourceTitle": "advice",
+          "title": "الماضي",
           "points": [
-            "الفاعل + الفعل المساعد + الفعل الأساسي"
+            "يستخدم للدلالة على الفعل الذي حدث في الماضي.",
+            "يتغير شكل الفعل حسب الضمير.",
+            "يُعبر عن الأحداث التي انتهت."
           ],
-          "sourcePoints": [
-            "subject + modal + base verb"
-          ],
-          "example": "يجب أن ترتاح.",
-          "sourceExample": "You should rest.",
+          "example": "كتبت سارة الرسالة.",
           "mistakes": [
             {
-              "wrong": "يجب عليك أن ترتاح.",
-              "fix": "يجب أن ترتاح.",
-              "sourceWrong": "You should to rest.",
-              "sourceFix": "You should rest."
+              "wrong": "كتبت سارة الرسالة.",
+              "fix": "كتبت سارة الرسالة."
             }
           ]
         },
         {
-          "title": "احتمالية",
-          "sourceTitle": "possibility",
+          "title": "الأمر",
           "points": [
-            "الفعل المساعد + الفعل الأساسي"
+            "يستخدم لإعطاء الأوامر أو الطلبات.",
+            "يأتي الفعل بدون حرف الجر.",
+            "يُعبر عن الرغبة في تنفيذ فعل معين."
           ],
-          "sourcePoints": [
-            "modal + base verb"
-          ],
-          "example": "قد تمطر اليوم.",
-          "sourceExample": "It might rain today.",
+          "example": "اكتب الواجب.",
           "mistakes": [
             {
-              "wrong": "قد تمطر.",
-              "fix": "قد تمطر.",
-              "sourceWrong": "It might to rain.",
-              "sourceFix": "It might rain."
+              "wrong": "اكتب الواجب.",
+              "fix": "اكتب الواجب."
             }
           ]
         },
         {
-          "title": "احتمال",
-          "sourceTitle": "probability",
+          "title": "المصدر",
           "points": [
-            "الفاعل + الفعل المساعد + كلمة احتمال + الفعل الأساسي"
+            "يستخدم للدلالة على الفعل بشكل عام.",
+            "يأتي على وزن معين حسب الفعل.",
+            "يُعبر عن الفعل كاسم."
           ],
-          "sourcePoints": [
-            "subject + modal + probability word + base verb"
-          ],
-          "example": "من المحتمل أن يأتي.",
-          "sourceExample": "He will probably come.",
+          "example": "حب القراءة مهم.",
           "mistakes": [
             {
-              "wrong": "من المحتمل أن يصل متأخراً.",
-              "fix": "من المحتمل أن يصل متأخراً.",
-              "sourceWrong": "He probably to arrive late.",
-              "sourceFix": "He will probably arrive late."
+              "wrong": "حب القراءة مهم.",
+              "fix": "حب القراءة مهم."
             }
           ]
         },
         {
-          "title": "طلبات مهذبة",
-          "sourceTitle": "polite requests",
+          "title": "الصفة",
           "points": [
-            "الفعل المساعد + الفاعل + الفعل الأساسي + المفعول به"
+            "تستخدم لوصف الأسماء.",
+            "تتوافق مع الاسم في الجنس والعدد.",
+            "تُعبر عن الخصائص."
           ],
-          "sourcePoints": [
-            "modal + subject + base verb + object"
-          ],
-          "example": "هل يمكنك فتح النافذة؟",
-          "sourceExample": "Could you open the window?",
+          "example": "الكتاب الجديد مفيد.",
           "mistakes": [
             {
-              "wrong": "هل يمكنك فتح الباب؟",
-              "fix": "هل يمكنك فتح الباب، من فضلك؟",
-              "sourceWrong": "Could you opens the door?",
-              "sourceFix": "Could you open the door, please?"
+              "wrong": "الكتاب الجديد مفيد.",
+              "fix": "الكتاب الجديد مفيد."
             }
           ]
         },
         {
-          "title": "عروض ودعوات",
-          "sourceTitle": "offers and invitations",
+          "title": "الحال",
           "points": [
-            "عبارة فعل مساعد + المفعول به"
+            "يستخدم لوصف كيفية حدوث الفعل.",
+            "يأتي بعد الفعل أو الفاعل.",
+            "يُعبر عن الحالة أو الوضع."
           ],
-          "sourcePoints": [
-            "modal phrase + object"
-          ],
-          "example": "هل تود بعض الشاي؟",
-          "sourceExample": "Would you like some tea?",
+          "example": "جاء محمد مسرعًا.",
           "mistakes": [
             {
-              "wrong": "هل تحب أن تأتي؟",
-              "fix": "هل تود أن تأتي؟",
-              "sourceWrong": "Do you like to come?",
-              "sourceFix": "Would you like to come?"
+              "wrong": "جاء محمد مسرعًا.",
+              "fix": "جاء محمد مسرعًا."
             }
           ]
         }
       ],
       "Reported Speech": [
         {
-          "title": "الإبلاغ عن العبارات",
-          "sourceTitle": "reporting statements",
+          "title": "الخطاب المنقول المباشر",
           "points": [
-            "يقول مع جملة (أن)",
-            "غالبًا ما يتم حذفها",
-            "فعل الإبلاغ + جملة"
+            "يستخدم لنقل الكلام كما هو.",
+            "يتم استخدام علامات الاقتباس.",
+            "يجب الحفاظ على الزمن الأصلي للفعل."
           ],
-          "sourcePoints": [
-            "say with (that) clause",
-            "that often omitted",
-            "reporting verb + clause"
-          ],
-          "example": "قالت إنها جاهزة.",
-          "sourceExample": "She said she was ready.",
+          "example": "قال أحمد: \"أنا ذاهب إلى السوق.\"",
           "mistakes": [
             {
-              "wrong": "قالت لي إنها متعبة.",
-              "fix": "قالت إنها كانت متعبة.",
-              "sourceWrong": "She said me she is tired.",
-              "sourceFix": "She said she was tired."
+              "wrong": "قال أحمد: أنا ذاهب إلى السوق.",
+              "fix": "قال أحمد: \"أنا ذاهب إلى السوق.\""
             }
           ]
         },
         {
-          "title": "الإبلاغ عن الأسئلة",
-          "sourceTitle": "reporting questions",
+          "title": "الخطاب المنقول غير المباشر",
           "points": [
-            "يسأل باستخدام إذا",
-            "يسأل باستخدام كلمة سؤال",
-            "لا عكس"
+            "يستخدم لنقل الكلام بدون استخدام الاقتباسات.",
+            "يجب تغيير الزمن في بعض الأحيان.",
+            "يتم استخدام أدوات الربط مثل 'أن' و 'أنها'."
           ],
-          "sourcePoints": [
-            "ask with if",
-            "ask with question word",
-            "no inversion"
-          ],
-          "example": "سأل إذا كنت بخير.",
-          "sourceExample": "He asked if I was okay.",
+          "example": "قال أحمد إنه ذاهب إلى السوق.",
           "mistakes": [
             {
-              "wrong": "سأل أين المحطة.",
-              "fix": "سأل أين كانت المحطة.",
-              "sourceWrong": "He asked where is the station.",
-              "sourceFix": "He asked where the station was."
+              "wrong": "قال أحمد أنه ذاهب إلى السوق.",
+              "fix": "قال أحمد إنه ذاهب إلى السوق."
             }
           ]
         },
         {
-          "title": "الإبلاغ عن الطلبات",
-          "sourceTitle": "reporting requests",
+          "title": "تغيير الضمائر في الخطاب المنقول",
           "points": [
-            "يطلب القيام بـ",
-            "يخبر بطلبات القيام بـ",
-            "الإبلاغ بأدب"
+            "يجب تعديل الضمائر عند نقل الكلام.",
+            "الضمير 'أنا' يتحول إلى 'هو' أو 'هي'.",
+            "الضمير 'أنت' يتحول إلى 'هو' أو 'هي' حسب السياق."
           ],
-          "sourcePoints": [
-            "ask to do",
-            "tell to do requests",
-            "polite reporting"
-          ],
-          "example": "طلبت مني الانتظار.",
-          "sourceExample": "She asked me to wait.",
+          "example": "قالت فاطمة: \"أنا أحب القراءة.\" → قالت فاطمة إنها تحب القراءة.",
           "mistakes": [
             {
-              "wrong": "سألتني هل يمكنني المساعدة.",
-              "fix": "طلبت مني أن أساعد.",
-              "sourceWrong": "She asked me can I help.",
-              "sourceFix": "She asked me to help."
+              "wrong": "قالت فاطمة: \"أنت تحب القراءة.\"",
+              "fix": "قالت فاطمة: \"أنا أحب القراءة.\""
             }
           ]
         },
         {
-          "title": "الإبلاغ عن الأوامر",
-          "sourceTitle": "reporting commands",
+          "title": "تغيير الأزمنة في الخطاب المنقول",
           "points": [
-            "يخبر بأوامر القيام بـ",
-            "أمر للقيام بـ",
-            "تحويل التعليمات"
+            "يجب تعديل الأزمنة عند نقل الكلام.",
+            "الفعل المضارع يتحول إلى الماضي.",
+            "الفعل الماضي يبقى كما هو في بعض الحالات."
           ],
-          "sourcePoints": [
-            "tell to do commands",
-            "order to do",
-            "instruction shift"
-          ],
-          "example": "قال لنا أن نغادر.",
-          "sourceExample": "He told us to leave.",
+          "example": "قال محمد: \"أذهب إلى المدرسة.\" → قال محمد إنه ذهب إلى المدرسة.",
           "mistakes": [
             {
-              "wrong": "قال لي أن أذهب.",
-              "fix": "قال لي أن أذهب.",
-              "sourceWrong": "He told me to went.",
-              "sourceFix": "He told me to go."
+              "wrong": "قال محمد: \"أذهب إلى المدرسة.\"",
+              "fix": "قال محمد إنه ذهب إلى المدرسة."
             }
           ]
         },
         {
-          "title": "أساسيات التحويل الزمني",
-          "sourceTitle": "backshift basics",
+          "title": "استخدام أدوات الربط في الخطاب المنقول",
           "points": [
-            "تحويل من المضارع إلى الماضي",
-            "تحويل من سوف إلى كان سي",
-            "تحويل من يمكن إلى كان يمكن"
+            "تستخدم أدوات الربط مثل 'أن' و 'أنها'.",
+            "تساعد في توضيح المعنى.",
+            "تستخدم لتجنب التكرار."
           ],
-          "sourcePoints": [
-            "present to past shift",
-            "will to would shift",
-            "can to could shift"
-          ],
-          "example": "قالوا إن لديهم وقتًا.",
-          "sourceExample": "They said they had time.",
+          "example": "قال علي إنه سعيد.",
           "mistakes": [
             {
-              "wrong": "قالت إنها جاهزة.",
-              "fix": "قالت إنها كانت جاهزة.",
-              "sourceWrong": "She said she is ready.",
-              "sourceFix": "She said she was ready."
+              "wrong": "قال علي سعيد.",
+              "fix": "قال علي إنه سعيد."
             }
           ]
         },
         {
-          "title": "تغييرات الزمن والمكان",
-          "sourceTitle": "time place changes",
+          "title": "الخطاب المنقول مع الأسئلة",
           "points": [
-            "الآن إلى حينها",
-            "هنا إلى هناك",
-            "اليوم إلى ذلك اليوم"
+            "يجب استخدام أدوات الاستفهام.",
+            "يتم تحويل السؤال إلى جملة خبرية.",
+            "يجب تغيير زمن الفعل حسب الحاجة."
           ],
-          "sourcePoints": [
-            "now to then",
-            "here to there",
-            "today to that day"
-          ],
-          "example": "قال إنه كان هناك.",
-          "sourceExample": "He said he was there.",
+          "example": "سأل محمد: \"أين تذهب؟\" → سأل محمد أين أذهب.",
           "mistakes": [
             {
-              "wrong": "قال إنه سيأتي إلى هنا اليوم.",
-              "fix": "قال إنه سيأتي إلى هناك في ذلك اليوم.",
-              "sourceWrong": "He said he will come here today.",
-              "sourceFix": "He said he would come there that day."
+              "wrong": "سأل محمد: أين تذهب؟",
+              "fix": "سأل محمد أين أذهب."
             }
           ]
         }
       ],
       "Formality & Style": [
         {
-          "title": "رسمية مقابل غير رسمية",
-          "sourceTitle": "formal vs informal",
+          "title": "استخدام الأفعال في الأسلوب الرسمي",
           "points": [
-            "اختيار الكلمات الرسمية",
-            "اختيار الكلمات غير الرسمية",
-            "مطابقة نبرة الجمهور"
+            "استخدم الأفعال في الزمن الحاضر عند الكتابة الرسمية.",
+            "تجنب استخدام الأفعال العامية.",
+            "احرص على استخدام الأفعال بشكل دقيق."
           ],
-          "sourcePoints": [
-            "formal word choice",
-            "informal word choice",
-            "match audience tone"
-          ],
-          "example": "هل يمكنك مساعدتي؟",
-          "sourceExample": "Could you assist me?",
+          "example": "يجب أن نلتزم بالمواعيد.",
           "mistakes": [
             {
-              "wrong": "مرحبًا، أعطني التقرير.",
-              "fix": "مرحبًا، هل يمكنك إرسال التقرير؟",
-              "sourceWrong": "Hey, give me the report.",
-              "sourceFix": "Hello, could you send the report?"
+              "wrong": "نحن نجيء في الوقت.",
+              "fix": "نحن نأتي في الوقت."
             }
           ]
         },
         {
-          "title": "اختصارات",
-          "sourceTitle": "contractions",
+          "title": "التعبيرات الرسمية",
           "points": [
-            "الاختصارات في الكلام",
-            "تجنب في الكتابة الرسمية",
-            "اختيارات الوضوح"
+            "استخدم تعبيرات رسمية عند مخاطبة الآخرين.",
+            "تجنب العبارات غير الرسمية.",
+            "احرص على احترام المستمع."
           ],
-          "sourcePoints": [
-            "short forms in speech",
-            "avoid in formal writing",
-            "clarity choices"
-          ],
-          "example": "لا أستطيع البقاء طويلاً.",
-          "sourceExample": "I can't stay long.",
+          "example": "أود أن أشكركم على تعاونكم.",
           "mistakes": [
             {
-              "wrong": "أنا متأخر، لا تنتظر.",
-              "fix": "أنا متأخر، لا تنتظر.",
-              "sourceWrong": "I am late, do not wait.",
-              "sourceFix": "I'm late, don't wait."
+              "wrong": "أشكركم كثير.",
+              "fix": "أشكركم كثيراً."
             }
           ]
         },
         {
-          "title": "تلطيف مهذب",
-          "sourceTitle": "polite softening",
+          "title": "استخدام الضمائر",
           "points": [
-            "من فضلك للأدب",
-            "أشكال الطلب اللطيفة",
-            "اللغة غير المباشرة"
+            "استخدم الضمائر بشكل صحيح في الكتابة الرسمية.",
+            "تجنب استخدام الضمائر غير المحددة.",
+            "احرص على توافق الضمائر مع الأسماء."
           ],
-          "sourcePoints": [
-            "please for politeness",
-            "soft request forms",
-            "indirect language"
-          ],
-          "example": "هل يمكنك غلق الباب؟",
-          "sourceExample": "Could you close the door?",
+          "example": "إنهم يعملون بجد.",
           "mistakes": [
             {
-              "wrong": "أرسل لي الملف الآن.",
-              "fix": "هل يمكنك إرسال الملف لي؟",
-              "sourceWrong": "Send me the file now.",
-              "sourceFix": "Could you send me the file?"
+              "wrong": "هم يعملون بجد.",
+              "fix": "إنهم يعملون بجد."
             }
           ]
         },
         {
-          "title": "محادثة مقابل كتابة",
-          "sourceTitle": "spoken vs written",
+          "title": "تنسيق الجمل",
           "points": [
-            "البساطة في الكلام",
-            "الوضوح في الكتابة",
-            "التحكم في طول الجمل"
+            "احرص على تنسيق الجمل بشكل منطقي.",
+            "تجنب الجمل الطويلة والمعقدة.",
+            "استخدم الفواصل بشكل صحيح."
           ],
-          "sourcePoints": [
-            "spoken simplicity",
-            "written clarity",
-            "sentence length control"
-          ],
-          "example": "يرجى الاطلاع على التفاصيل أدناه.",
-          "sourceExample": "Please see the details below.",
+          "example": "الاجتماع سيعقد غداً في الساعة العاشرة.",
           "mistakes": [
             {
-              "wrong": "في الكتابة الرسمية: لقد وصلت.",
-              "fix": "في الكتابة الرسمية: لقد وصلت.",
-              "sourceWrong": "In formal writing: I arrived lol.",
-              "sourceFix": "In formal writing: I have arrived."
+              "wrong": "الاجتماع غداً الساعة العاشرة.",
+              "fix": "الاجتماع سيعقد غداً في الساعة العاشرة."
             }
           ]
         },
         {
-          "title": "أسلوب احترافي",
-          "sourceTitle": "professional style",
+          "title": "استخدام الصفات",
           "points": [
-            "الغرض الواضح أولاً",
-            "نبرة محايدة",
-            "خاتمة مهذبة"
+            "استخدم الصفات بشكل دقيق.",
+            "تجنب الصفات المبالغ فيها.",
+            "احرص على توافق الصفات مع الأسماء."
           ],
-          "sourcePoints": [
-            "clear purpose first",
-            "neutral tone",
-            "polite closing"
-          ],
-          "example": "شكراً لوقتك.",
-          "sourceExample": "Thank you for your time.",
+          "example": "هذا الكتاب مفيد جداً.",
           "mistakes": [
             {
-              "wrong": "مرحبًا، أحتاج هذا بأسرع ما يمكن.",
-              "fix": "مرحبًا، أحتاج هذا قريبًا.",
-              "sourceWrong": "Hey, I need this ASAP.",
-              "sourceFix": "Hello, I need this soon."
+              "wrong": "هذا الكتاب مفيد.",
+              "fix": "هذا الكتاب مفيد جداً."
             }
           ]
         },
         {
-          "title": "أسلوب غير رسمي",
-          "sourceTitle": "casual style",
+          "title": "الأسلوب المهذب",
           "points": [
-            "نبرة ودية",
-            "عبارات قصيرة",
-            "افتتاحيات غير رسمية"
+            "استخدم أسلوباً مهذباً عند الطلب.",
+            "تجنب الأسلوب الفظ.",
+            "احرص على استخدام عبارات الشكر."
           ],
-          "sourcePoints": [
-            "friendly tone",
-            "short phrases",
-            "informal openings"
-          ],
-          "example": "مرحباً، كيف تسير الأمور؟",
-          "sourceExample": "Hey, how is it going?",
+          "example": "هل يمكنك مساعدتي، من فضلك؟",
           "mistakes": [
             {
-              "wrong": "عزيزي السيد أو السيدة، كيف حالك؟",
-              "fix": "مرحبًا، ماذا هناك؟",
-              "sourceWrong": "Dear Sir or Madam, what's up?",
-              "sourceFix": "Hey, what's up?"
+              "wrong": "ساعدني.",
+              "fix": "هل يمكنك مساعدتي، من فضلك؟"
             }
           ]
         },
         {
-          "title": "وضوح وإيجاز",
-          "sourceTitle": "clarity and brevity",
+          "title": "التكرار في الكتابة",
           "points": [
-            "جمل قصيرة",
-            "تجنب الكلمات الزائدة",
-            "النقطة الرئيسية أولاً"
+            "تجنب تكرار الكلمات بشكل مفرط.",
+            "استخدم مرادفات لتحسين الأسلوب.",
+            "احرص على تدفق النص بشكل سلس."
           ],
-          "sourcePoints": [
-            "short sentences",
-            "avoid extra words",
-            "main point first"
-          ],
-          "example": "نحتاج إلى إجابة سريعة.",
-          "sourceExample": "We need a quick answer.",
+          "example": "العمل الجاد يؤدي إلى النجاح.",
           "mistakes": [
             {
-              "wrong": "نظرًا لأن الطقس ممطر، لن نذهب.",
-              "fix": "إنها تمطر، لذا لن نذهب.",
-              "sourceWrong": "Due to the fact that it is raining, we will not go.",
-              "sourceFix": "It is raining, so we will not go."
+              "wrong": "العمل الجاد الجاد يؤدي إلى النجاح.",
+              "fix": "العمل الجاد يؤدي إلى النجاح."
             }
           ]
         }
       ],
       "Discourse & Flow": [
         {
-          "title": "الافتتاح والإغلاق",
-          "sourceTitle": "opening and closing",
+          "title": "الربط بين الجمل",
           "points": [
-            "بدء حديث",
-            "إنهاء حديث",
-            "كلمات إشارة الإغلاق"
+            "استخدام أدوات الربط بشكل صحيح.",
+            "تجنب الجمل المنفصلة.",
+            "تحسين تدفق الأفكار."
           ],
-          "sourcePoints": [
-            "start a talk",
-            "end a talk",
-            "closing signal words"
-          ],
-          "example": "مرحبًا بالجميع، على أي حال، هذا كل شيء لليوم.",
-          "sourceExample": "Hi everyone, anyway, that is all for today.",
+          "example": "أحب القراءة، وأحب السفر.",
           "mistakes": [
             {
-              "wrong": "أريد أن أتحدث. وداعًا.",
-              "fix": "مرحبًا، أردت التحدث. شكرًا، وداعًا.",
-              "sourceWrong": "I want to talk. Goodbye.",
-              "sourceFix": "Hi, I wanted to talk. Thanks, goodbye."
+              "wrong": "أحب القراءة. أحب السفر.",
+              "fix": "أحب القراءة وأحب السفر."
             }
           ]
         },
         {
-          "title": "تحولات الموضوع",
-          "sourceTitle": "topic shifts",
+          "title": "استخدام الضمائر",
           "points": [
-            "تغيير الموضوع بسلاسة",
-            "العودة إلى الموضوع",
-            "إشارة التحول"
+            "تجنب تكرار الأسماء.",
+            "استخدام الضمائر بشكل صحيح.",
+            "تحسين وضوح الجمل."
           ],
-          "sourcePoints": [
-            "change topic smoothly",
-            "return to topic",
-            "signal the shift"
-          ],
-          "example": "بالمناسبة، لدي أخبار.",
-          "sourceExample": "By the way, I have news.",
+          "example": "علي يحب كرة القدم، وهو يلعبها كل يوم.",
           "mistakes": [
             {
-              "wrong": "بالمناسبة بسبب الجدول.",
-              "fix": "بالمناسبة، هل يمكننا التحدث عن الجدول الزمني؟",
-              "sourceWrong": "By the way because schedule.",
-              "sourceFix": "By the way, can we talk about the schedule?"
+              "wrong": "علي يحب كرة القدم، علي يلعبها كل يوم.",
+              "fix": "علي يحب كرة القدم، وهو يلعبها كل يوم."
             }
           ]
         },
         {
-          "title": "أدوات التماسك",
-          "sourceTitle": "cohesion tools",
+          "title": "التعبير عن الزمن",
           "points": [
-            "كلمات مرجعية",
-            "عبارات الربط",
-            "متابعة الموضوع"
+            "استخدام الأزمنة بشكل صحيح.",
+            "تجنب الخلط بين الأزمنة.",
+            "تحسين دقة المعنى."
           ],
-          "sourcePoints": [
-            "reference words",
-            "linking phrases",
-            "topic tracking"
-          ],
-          "example": "ترتبط هذه الفكرة بالنقطة الأخيرة.",
-          "sourceExample": "This idea connects to the last point.",
+          "example": "ذهبت إلى السوق أمس.",
           "mistakes": [
             {
-              "wrong": "اشتريت كتابًا. الكتاب جديد.",
-              "fix": "اشتريت كتابًا. إنه جديد.",
-              "sourceWrong": "I bought a book. Book is new.",
-              "sourceFix": "I bought a book. It is new."
+              "wrong": "أذهب إلى السوق أمس.",
+              "fix": "ذهبت إلى السوق أمس."
             }
           ]
         },
         {
-          "title": "ترتيب الأفكار",
-          "sourceTitle": "sequencing ideas",
+          "title": "استخدام الصفات",
           "points": [
-            "الأول، التالي، الأخير",
-            "كلمات إشارة التسلسل",
-            "تسلسل واضح"
+            "وضع الصفات في المكان الصحيح.",
+            "تجنب استخدام الصفات بشكل غير صحيح.",
+            "تحسين وصف الأشياء."
           ],
-          "sourcePoints": [
-            "first next last",
-            "sequence signal words",
-            "clear sequence"
-          ],
-          "example": "أولاً نحزم، ثم نغادر.",
-          "sourceExample": "First we pack, then we leave.",
+          "example": "الكتاب الجديد مفيد.",
           "mistakes": [
             {
-              "wrong": "أولاً غادرت، ثم استيقظت.",
-              "fix": "أولاً استيقظت، ثم غادرت.",
-              "sourceWrong": "First I left, then I woke up.",
-              "sourceFix": "First I woke up, then I left."
+              "wrong": "مفيد الكتاب الجديد.",
+              "fix": "الكتاب الجديد مفيد."
             }
           ]
         },
         {
-          "title": "خطوات التوضيح",
-          "sourceTitle": "clarification moves",
+          "title": "التعبير عن السبب والنتيجة",
           "points": [
-            "إعادة صياغة النقطة الرئيسية",
-            "طلب التوضيح",
-            "تأكيد المعنى"
+            "استخدام أدوات الربط المناسبة.",
+            "تجنب الجمل الغامضة.",
+            "تحسين فهم العلاقة بين الأفكار."
           ],
-          "sourcePoints": [
-            "rephrase key point",
-            "ask for clarity",
-            "confirm meaning"
-          ],
-          "example": "دعني أضعها بطريقة أخرى.",
-          "sourceExample": "Let me put it another way.",
+          "example": "لأن الجو جميل، قررنا الخروج.",
           "mistakes": [
             {
-              "wrong": "ماذا قلت؟",
-              "fix": "ماذا تعني؟",
-              "sourceWrong": "What you said?",
-              "sourceFix": "What do you mean?"
+              "wrong": "قررنا الخروج، الجو جميل.",
+              "fix": "لأن الجو جميل، قررنا الخروج."
             }
           ]
         },
         {
-          "title": "الملخصات",
-          "sourceTitle": "summaries",
+          "title": "استخدام الأسئلة",
           "points": [
-            "باختصار",
-            "لتلخيص",
-            "إعادة تلخيص النقطة الرئيسية"
+            "تجنب الأسئلة الغامضة.",
+            "استخدام الصيغة الصحيحة للسؤال.",
+            "تحسين التفاعل."
           ],
-          "sourcePoints": [
-            "in short",
-            "to sum up",
-            "main point recap"
-          ],
-          "example": "باختصار، نحن جاهزون.",
-          "sourceExample": "In short, we are ready.",
+          "example": "أين ذهبت؟",
           "mistakes": [
             {
-              "wrong": "باختصار، أشياء كثيرة.",
-              "fix": "باختصار، نحتاج إلى مزيد من الوقت.",
-              "sourceWrong": "In short, many things.",
-              "sourceFix": "In short, we need more time."
+              "wrong": "أين تذهب؟",
+              "fix": "أين ذهبت؟"
             }
           ]
         },
         {
-          "title": "التأكيد والتكرار",
-          "sourceTitle": "emphasis and repetition",
+          "title": "التعبير عن الرغبات",
           "points": [
-            "التأكيد على الفكرة الرئيسية",
-            "التكرار للتركيز",
-            "إشارة التأكيد"
+            "استخدام الصيغ الصحيحة.",
+            "تجنب الالتباس.",
+            "تحسين وضوح التعبير."
           ],
-          "sourcePoints": [
-            "stress key idea",
-            "repeat for focus",
-            "signal emphasis"
-          ],
-          "example": "إنه مهم حقًا.",
-          "sourceExample": "It is really important.",
+          "example": "أريد أن أذهب إلى الحديقة.",
           "mistakes": [
             {
-              "wrong": "أنا لا أريد أن أذهب.",
-              "fix": "أنا أريد الذهاب.",
-              "sourceWrong": "I do want to go not.",
-              "sourceFix": "I do want to go."
+              "wrong": "أريد الذهاب إلى الحديقة.",
+              "fix": "أريد أن أذهب إلى الحديقة."
             }
           ]
         },
         {
-          "title": "تدفق المحادثة",
-          "sourceTitle": "conversation flow",
+          "title": "استخدام الأفعال",
           "points": [
-            "أخذ الدور",
-            "إشارات الاستماع",
-            "تبادل سلس"
+            "تجنب استخدام الأفعال بشكل خاطئ.",
+            "تحسين دقة التعبير.",
+            "استخدام الأفعال المناسبة للسياق."
           ],
-          "sourcePoints": [
-            "turn taking",
-            "listening signals",
-            "smooth exchange"
-          ],
-          "example": "أفهم، تفضل بالاستمرار.",
-          "sourceExample": "I see, please continue.",
+          "example": "يكتب الطالب الواجب.",
           "mistakes": [
             {
-              "wrong": "أنا أيضًا. وأنت؟",
-              "fix": "أنا أيضًا. وأنت؟",
-              "sourceWrong": "Me too. And you is?",
-              "sourceFix": "Me too. And you?"
+              "wrong": "الطالب يكتب الواجب.",
+              "fix": "يكتب الطالب الواجب."
             }
           ]
         },
         {
-          "title": "إعطاء أمثلة",
-          "sourceTitle": "giving examples",
+          "title": "التعبير عن الاحتمالات",
           "points": [
-            "على سبيل المثال",
-            "كمثال",
-            "مثل"
+            "استخدام أدوات الاحتمال بشكل صحيح.",
+            "تجنب العبارات الغامضة.",
+            "تحسين وضوح المعنى."
           ],
-          "sourcePoints": [
-            "for example",
-            "for instance",
-            "such as"
-          ],
-          "example": "على سبيل المثال، اتصل بمكتب المساعدة.",
-          "sourceExample": "For example, call the help desk.",
+          "example": "قد يأتي محمد غدًا.",
           "mistakes": [
             {
-              "wrong": "على سبيل المثال، هو.",
-              "fix": "على سبيل المثال، إنه مفيد للسفر.",
-              "sourceWrong": "For example, it is.",
-              "sourceFix": "For example, it is useful for travel."
+              "wrong": "محمد قد يأتي غدًا.",
+              "fix": "قد يأتي محمد غدًا."
             }
           ]
         },
         {
-          "title": "الإصلاح والتصحيح",
-          "sourceTitle": "repair and correction",
+          "title": "استخدام العبارات الشرطية",
           "points": [
-            "تصحيح ذاتي",
-            "توضيح سريع",
-            "إعادة بدء الصياغة"
+            "تجنب الأخطاء في تركيب الشرط.",
+            "تحسين تدفق الأفكار.",
+            "استخدام الصيغ الصحيحة."
           ],
-          "sourcePoints": [
-            "self correction",
-            "clarify quickly",
-            "restart phrasing"
-          ],
-          "example": "عذرًا، دعني أحاول مرة أخرى.",
-          "sourceExample": "Sorry, let me try again.",
+          "example": "إذا درست جيدًا، ستنجح.",
           "mistakes": [
             {
-              "wrong": "أعني، أنا ذاهب.",
-              "fix": "عذرًا، أعني أنني ذاهب.",
-              "sourceWrong": "I mean, I am go.",
-              "sourceFix": "Sorry, I mean I am going."
+              "wrong": "ستنجح إذا درست جيدًا.",
+              "fix": "إذا درست جيدًا، ستنجح."
             }
           ]
         }
       ]
     },
-    "sectionLabels": {}
+    "sectionLabels": {
+      "Sentence Structure": "تركيب الجملة",
+      "Verbs": "الأفعال",
+      "Tenses & Aspect": "الأزمنة والجانب",
+      "Nouns & Articles": "الأسماء والمقالات",
+      "Pronouns & Reference": "الضمائر والإشارة",
+      "Modifiers": "المعدلات",
+      "Questions": "أسئلة",
+      "Negation": "النفي",
+      "Connections": "الاتصالات",
+      "Conditions": "الشروط",
+      "Voice & Focus": "الصوت والتركيز",
+      "Modality": "الأسلوب",
+      "Reported Speech": "الخطاب المنقول",
+      "Formality & Style": "الرسميات والأسلوب",
+      "Discourse & Flow": "الخطاب والتدفق"
+    }
   },
   "worldSource": {
     "words": {
