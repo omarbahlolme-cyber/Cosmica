@@ -77,6 +77,27 @@ if (!sectionMatch) {
 const GRAMMAR_SECTION_LISTS = vm.runInNewContext(`(${sectionMatch[1]})`);
 const GRAMMAR_SECTION_ORDER = Object.keys(GRAMMAR_SECTION_LISTS);
 
+const parseTargetSections = (rawValue) => {
+  const raw = String(rawValue || "").trim();
+  if (!raw || raw.toLowerCase() === "all") {
+    return [...GRAMMAR_SECTION_ORDER];
+  }
+  const requested = raw
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
+  const resolved = requested.filter((section) => GRAMMAR_SECTION_ORDER.includes(section));
+  return [...new Set(resolved)];
+};
+
+const TARGET_SECTIONS = parseTargetSections(process.env.TARGET_SECTIONS);
+if (!TARGET_SECTIONS.length) {
+  console.error(
+    "No valid TARGET_SECTIONS resolved. Use exact names or omit TARGET_SECTIONS for all sections."
+  );
+  process.exit(1);
+}
+
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const normalize = (value) => String(value || "").trim();
 const normalizeKey = (value) =>
@@ -122,61 +143,120 @@ const LANGUAGE_RULES = {
   japanese: {
     focus: [
       "Respect SOV structure and particle-driven grammar.",
-      "Honorifics and register shifts are core grammar, not optional style notes.",
-      "Aspect should use native constructions such as te-iru where relevant.",
+      "Honorifics/register are core grammar domains.",
     ],
     avoid: [
-      "Do not teach article systems as if they exist.",
-      "Do not frame grammar around mandatory singular/plural noun inflection.",
+      "Do not teach definite/indefinite article paradigms as active grammar.",
       "Do not teach subject-verb agreement as a central rule.",
     ],
-    forbiddenPatterns: [/冠詞/u, /単数/u, /複数/u, /主語と動詞の一致/u],
+    forbiddenPatterns: [/定冠詞と不定冠詞/u],
   },
   korean: {
     focus: [
       "Respect SOV structure, particles, and sentence-ending systems.",
-      "Speech level and politeness endings are core grammar.",
-      "Teach tense/aspect through native endings and constructions.",
+      "Speech levels and politeness endings are core grammar.",
     ],
     avoid: [
-      "Do not teach article systems as if they exist.",
+      "Do not teach definite/indefinite article paradigms as active grammar.",
       "Do not teach noun gender as a core grammatical category.",
-      "Do not teach subject-verb agreement as a central rule.",
     ],
-    forbiddenPatterns: [/관사/u, /명사의 성/u, /주어와 동사의 일치/u],
+    forbiddenPatterns: [/명사의 성/u],
   },
   chinese: {
     focus: [
-      "Teach aspect particles and time adverbs instead of tense inflection systems.",
-      "Teach classifiers/measure words and topic-comment behavior where useful.",
-      "Keep examples natural for spoken and standard written Mandarin.",
+      "Teach aspect particles and time adverbs instead of tense inflection paradigms.",
+      "Teach classifier/measure-word logic and topic-prominent patterns.",
     ],
     avoid: [
-      "Do not teach article systems as if they exist.",
-      "Do not teach tense conjugation paradigms as if they exist.",
-      "Do not force countable/uncountable English noun framing as core.",
+      "Do not claim that Mandarin has verb conjugation by tense/person.",
+      "Do not teach a true article paradigm as if it exists.",
     ],
-    forbiddenPatterns: [/冠词/u, /时态/u, /可数名词/u, /不可数名词/u, /主谓一致/u],
+    forbiddenPatterns: [/动词变位/u, /主谓一致/u],
   },
   arabic: {
     focus: [
-      "Teach natural MSA-compatible grammar with clear, correct sentence patterns.",
-      "Handle nominal vs verbal sentence logic accurately.",
-      "Respect agreement, gender, and number in native Arabic terms.",
+      "Teach VSO/SVO behavior and nominal vs verbal sentence logic.",
+      "Teach perfect/imperfect and mood behavior accurately.",
     ],
-    avoid: [
-      "Avoid importing English article logic directly.",
-      "Avoid unnatural literal calques from English grammar labels.",
-    ],
-    forbiddenPatterns: [/المقالات التعريفية/u, /زمن المضارع المستمر/u],
+    avoid: ["Do not describe Arabic as having a full definite/indefinite article pair."],
+    forbiddenPatterns: [/المقالات التعريفية/u],
   },
   hindi: {
     focus: [
-      "Use natural Hindi grammar framing, including postpositions and ergativity where needed.",
-      "Respect honorific and register-sensitive usage.",
+      "Teach SOV order, postpositions, and agreement-sensitive structures naturally.",
+      "Respect tense-aspect-agreement logic in examples.",
     ],
-    avoid: ["Do not force English article systems as active Hindi grammar."],
+    avoid: ["Do not force a true article system as core Hindi grammar."],
     forbiddenPatterns: [/आर्टिकल/u],
+  },
+};
+
+const LANGUAGE_PROFILES = {
+  swedish: {
+    sentence: "SVO with V2 behavior in main clauses",
+    tenseAspect: "morphological past/present; aspect mostly periphrastic",
+    articles: "definite and indefinite articles; definite suffix",
+    formality: "weakly grammaticalized (mostly lexical/pragmatic)",
+  },
+  spanish: {
+    sentence: "SVO with flexible order and pro-drop",
+    tenseAspect: "rich tense morphology with aspect contrasts",
+    articles: "definite and indefinite articles",
+    formality: "weakly grammaticalized (usted/tú distinction in usage)",
+  },
+  portuguese: {
+    sentence: "SVO with flexible order and pro-drop",
+    tenseAspect: "morphological tense with aspect contrasts",
+    articles: "definite and indefinite articles",
+    formality: "weakly grammaticalized (register mostly lexical/pragmatic)",
+  },
+  french: {
+    sentence: "SVO with fixed subject presence",
+    tenseAspect: "morphological tense and compound forms",
+    articles: "definite and indefinite articles",
+    formality: "weakly grammaticalized (tu/vous distinction)",
+  },
+  german: {
+    sentence: "V2 in main clauses; verb-final tendency in subordinate clauses",
+    tenseAspect: "morphological tense with periphrastic aspect usage",
+    articles: "definite and indefinite articles; case/gender interaction",
+    formality: "weakly grammaticalized (Sie/du distinction)",
+  },
+  dutch: {
+    sentence: "V2 in main clauses; verb-final tendency in subordinate clauses",
+    tenseAspect: "morphological tense with periphrastic aspect usage",
+    articles: "definite and indefinite articles",
+    formality: "weakly grammaticalized (U/je distinction)",
+  },
+  arabic: {
+    sentence: "VSO or SVO depending on style and emphasis",
+    tenseAspect: "perfect vs imperfect with mood distinctions",
+    articles: "definite article only",
+    formality: "moderately grammaticalized",
+  },
+  korean: {
+    sentence: "SOV, verb-final, topic-prominent tendencies",
+    tenseAspect: "suffix-based tense/aspect with endings",
+    articles: "no true article system; particles/case markers instead",
+    formality: "highly grammaticalized",
+  },
+  japanese: {
+    sentence: "SOV, verb-final, topic-prominent tendencies",
+    tenseAspect: "past/non-past with aspect auxiliaries",
+    articles: "no true article system; particles and context instead",
+    formality: "highly grammaticalized",
+  },
+  hindi: {
+    sentence: "SOV with postpositions and flexible topicalization",
+    tenseAspect: "tense + aspect + agreement interactions",
+    articles: "no true article system; demonstrative-like determiners instead",
+    formality: "moderately grammaticalized",
+  },
+  chinese: {
+    sentence: "SVO with topic-prominent discourse patterns",
+    tenseAspect: "no tense inflection; aspect particles and time adverbs",
+    articles: "no true article system; classifiers/measure words instead",
+    formality: "weakly grammaticalized (mostly lexical/pragmatic)",
   },
 };
 
@@ -188,6 +268,15 @@ const NON_LATIN_SCRIPT_REGEX = {
   hindi: /[\u0900-\u097F]/u,
 };
 
+const SECTION_FORBIDDEN_PATTERNS = {
+  chinese: {
+    "Formality & Style": [/时间副词/u, /完成体/u, /量词/u, /主谓宾/u],
+  },
+  hindi: {
+    "Formality & Style": [/वाक्य संरचना/u, /संज्ञा की/u],
+  },
+};
+
 const hasEnglishSourceMarkers = (card) =>
   !!normalize(card?.sourceTitle) ||
   !!normalize(card?.sourceExample) ||
@@ -196,6 +285,194 @@ const hasEnglishSourceMarkers = (card) =>
     card.mistakes.some(
       (mistake) => !!normalize(mistake?.sourceWrong) || !!normalize(mistake?.sourceFix)
     ));
+
+const normalizeRuleOrder = (value) => {
+  if (Array.isArray(value)) {
+    return value
+      .map((item) => normalize(item))
+      .filter(Boolean)
+      .slice(0, 6);
+  }
+  const raw = normalize(value);
+  if (!raw) {
+    return [];
+  }
+  return raw
+    .split(/\s*(?:\+|→|->|>|\/|\|)\s*/g)
+    .map((item) => normalize(item))
+    .filter(Boolean)
+    .slice(0, 6);
+};
+
+const sanitizeExampleHighlights = (highlights, exampleText = "") => {
+  if (!Array.isArray(highlights)) {
+    return [];
+  }
+  const normalizedExample = normalize(exampleText);
+  return highlights
+    .map((entry) => ({
+      label: normalize(entry?.label || entry?.slot || ""),
+      text: normalize(entry?.text || ""),
+    }))
+    .filter((entry) => entry.label && entry.text)
+    .filter((entry) =>
+      normalizedExample ? normalizedExample.includes(entry.text) : true
+    )
+    .slice(0, 6);
+};
+
+const uniqueNonEmpty = (list) => {
+  const seen = new Set();
+  const output = [];
+  for (const raw of list) {
+    const value = normalize(raw);
+    if (!value) {
+      continue;
+    }
+    const key = normalizeKey(value);
+    if (seen.has(key)) {
+      continue;
+    }
+    seen.add(key);
+    output.push(value);
+  }
+  return output;
+};
+
+const deriveSlotLabel = (text) => {
+  const raw = normalize(text);
+  if (!raw) {
+    return "";
+  }
+  const compact = raw
+    .split(/[,:;()]/)[0]
+    .split(/\s+/)
+    .slice(0, 4)
+    .join(" ")
+    .trim();
+  return compact || raw.slice(0, 24).trim();
+};
+
+const splitExampleIntoSegments = (exampleText, segmentCount) => {
+  const example = normalize(exampleText);
+  if (!example || !Number.isFinite(segmentCount) || segmentCount < 1) {
+    return [];
+  }
+  const segments = [];
+  let start = 0;
+  for (let i = 0; i < segmentCount; i += 1) {
+    let end =
+      i === segmentCount - 1
+        ? example.length
+        : Math.round(((i + 1) * example.length) / segmentCount);
+    if (/\s/.test(example) && end < example.length) {
+      const prevSpace = example.lastIndexOf(" ", end);
+      const nextSpace = example.indexOf(" ", end);
+      const prevDistance = prevSpace > start ? Math.abs(end - prevSpace) : Number.POSITIVE_INFINITY;
+      const nextDistance = nextSpace > end ? Math.abs(nextSpace - end) : Number.POSITIVE_INFINITY;
+      if (prevDistance <= nextDistance && Number.isFinite(prevDistance)) {
+        end = prevSpace;
+      } else if (Number.isFinite(nextDistance)) {
+        end = nextSpace;
+      }
+    }
+    if (end <= start) {
+      end = Math.min(example.length, start + 1);
+    }
+    let part = example.slice(start, end).trim();
+    if (!part) {
+      part = example.slice(start, Math.min(example.length, start + 1)).trim();
+    }
+    if (!part && start < example.length) {
+      part = example.slice(start).trim();
+    }
+    if (part) {
+      segments.push(part);
+      const nextIndex = example.indexOf(part, start);
+      start = nextIndex >= 0 ? nextIndex + part.length : end;
+    } else {
+      segments.push(example);
+      start = example.length;
+    }
+  }
+  return segments.slice(0, segmentCount);
+};
+
+const alignExampleHighlights = (ruleOrder, rawHighlights, exampleText) => {
+  const example = normalize(exampleText);
+  if (!ruleOrder.length || !example) {
+    return [];
+  }
+  const pool = [...rawHighlights];
+  const usedIndexes = new Set();
+  const matchedTexts = ruleOrder.map((slot) => {
+    const slotKey = normalizeKey(slot);
+    let pickedIndex = pool.findIndex((entry, idx) => {
+      if (usedIndexes.has(idx)) {
+        return false;
+      }
+      const entryKey = normalizeKey(entry.label);
+      return entryKey === slotKey || entryKey.includes(slotKey) || slotKey.includes(entryKey);
+    });
+    if (pickedIndex < 0) {
+      pickedIndex = pool.findIndex((_, idx) => !usedIndexes.has(idx));
+    }
+    if (pickedIndex < 0) {
+      return "";
+    }
+    usedIndexes.add(pickedIndex);
+    return normalize(pool[pickedIndex].text);
+  });
+
+  const fallbackSegments = splitExampleIntoSegments(example, ruleOrder.length);
+  const finalHighlights = [];
+  let fromIndex = 0;
+  for (let i = 0; i < ruleOrder.length; i += 1) {
+    const slotLabel = ruleOrder[i];
+    const minTailChars = ruleOrder.length - i - 1;
+    const candidate = normalize(matchedTexts[i]);
+    let text = "";
+    if (candidate) {
+      const candidateIndex = example.indexOf(candidate, fromIndex);
+      if (
+        candidateIndex >= 0 &&
+        example.length - (candidateIndex + candidate.length) >= minTailChars
+      ) {
+        text = candidate;
+        fromIndex = candidateIndex + candidate.length;
+      }
+    }
+    if (!text) {
+      const fallback = normalize(fallbackSegments[i]);
+      let fallbackIndex = fallback ? example.indexOf(fallback, fromIndex) : -1;
+      if (
+        fallback &&
+        fallbackIndex >= 0 &&
+        example.length - (fallbackIndex + fallback.length) >= minTailChars
+      ) {
+        text = fallback;
+        fromIndex = fallbackIndex + fallback.length;
+      } else {
+        const maxEnd = Math.max(fromIndex + 1, example.length - minTailChars);
+        let snippet = example.slice(fromIndex, maxEnd).trim();
+        if (!snippet) {
+          snippet = example.slice(fromIndex, Math.min(example.length, fromIndex + 1)).trim();
+        }
+        if (!snippet) {
+          const safeStart = Math.max(0, example.length - (minTailChars + 1));
+          const safeEnd = Math.max(safeStart + 1, example.length - minTailChars);
+          snippet = example.slice(safeStart, safeEnd).trim();
+          fromIndex = safeStart;
+        }
+        text = snippet || example.slice(0, 1);
+        const snippetIndex = example.indexOf(text, fromIndex);
+        fromIndex = (snippetIndex >= 0 ? snippetIndex : fromIndex) + text.length;
+      }
+    }
+    finalHighlights.push({ label: slotLabel, text });
+  }
+  return finalHighlights;
+};
 
 const cleanCard = (card) => {
   const points = (Array.isArray(card?.points) ? card.points : [])
@@ -209,16 +486,37 @@ const cleanCard = (card) => {
     }))
     .filter((mistake) => mistake.wrong && mistake.fix)
     .slice(0, 1);
+  const example = normalize(card?.example);
+  let ruleOrder = normalizeRuleOrder(card?.ruleOrder);
+  const sanitizedHighlights = sanitizeExampleHighlights(card?.exampleHighlights, example);
+  if (ruleOrder.length < 2) {
+    ruleOrder = uniqueNonEmpty(sanitizedHighlights.map((entry) => entry.label)).slice(0, 6);
+  }
+  if (ruleOrder.length < 2) {
+    ruleOrder = uniqueNonEmpty(points.map((point) => deriveSlotLabel(point))).slice(0, 6);
+  }
+  if (ruleOrder.length < 2 && example) {
+    ruleOrder = splitExampleIntoSegments(example, 2).map((segment) => deriveSlotLabel(segment));
+  }
+  ruleOrder = uniqueNonEmpty(ruleOrder).slice(0, 6);
+  const exampleHighlights = alignExampleHighlights(ruleOrder, sanitizedHighlights, example);
   return {
     title: normalize(card?.title),
     points,
-    example: normalize(card?.example),
+    example,
+    ruleOrder,
+    exampleHighlights,
     mistakes,
   };
 };
 
 const flattenCardText = (card) => {
   const parts = [card.title, card.example];
+  card.ruleOrder.forEach((item) => parts.push(item));
+  card.exampleHighlights.forEach((entry) => {
+    parts.push(entry.label);
+    parts.push(entry.text);
+  });
   card.points.forEach((point) => parts.push(point));
   card.mistakes.forEach((mistake) => {
     parts.push(mistake.wrong);
@@ -227,7 +525,12 @@ const flattenCardText = (card) => {
   return parts.join(" ");
 };
 
-const validateSectionPayload = (payload, expectedCount, worldKey) => {
+const hasSubstantiveText = (value) =>
+  /[A-Za-z0-9\u00C0-\u024F\u0370-\u03FF\u0400-\u04FF\u0590-\u05FF\u0600-\u06FF\u0900-\u097F\u3040-\u30FF\u3400-\u9FFF\uAC00-\uD7AF]/u.test(
+    normalize(value)
+  );
+
+const validateSectionPayload = (payload, expectedCount, worldKey, sectionName = "") => {
   if (!payload || typeof payload !== "object") {
     return "Payload is not an object";
   }
@@ -259,11 +562,54 @@ const validateSectionPayload = (payload, expectedCount, worldKey) => {
     if (!card.example) {
       return `Card ${index + 1}: missing example`;
     }
+    if (!Array.isArray(card.ruleOrder) || card.ruleOrder.length < 2) {
+      return `Card ${index + 1}: missing ruleOrder`;
+    }
+    if (!Array.isArray(card.exampleHighlights) || card.exampleHighlights.length < 2) {
+      return `Card ${index + 1}: missing exampleHighlights`;
+    }
+    if (card.exampleHighlights.length !== card.ruleOrder.length) {
+      return `Card ${index + 1}: ruleOrder and exampleHighlights length mismatch`;
+    }
+    for (const highlight of card.exampleHighlights) {
+      if (!hasSubstantiveText(highlight.text)) {
+        return `Card ${index + 1}: highlight '${highlight.text}' is not substantive`;
+      }
+    }
+    let fromIndex = 0;
+    for (const highlight of card.exampleHighlights) {
+      const nextIndex = card.example.indexOf(highlight.text, fromIndex);
+      if (nextIndex < 0) {
+        return `Card ${index + 1}: highlight '${highlight.text}' not found in example`;
+      }
+      fromIndex = nextIndex + highlight.text.length;
+    }
     if (!Array.isArray(card.mistakes) || card.mistakes.length < 1) {
       return `Card ${index + 1}: missing mistakes`;
     }
 
     const text = flattenCardText(card);
+    if (sectionName === "Formality & Style") {
+      if (/\b(SVO|SOV|VSO|V2)\b/.test(text)) {
+        return `Card ${index + 1}: formality section contains sentence-order marker`;
+      }
+    }
+    const sectionForbidden =
+      SECTION_FORBIDDEN_PATTERNS?.[worldKey]?.[sectionName] || [];
+    for (const pattern of sectionForbidden) {
+      if (pattern.test(text)) {
+        return `Card ${index + 1}: contains section-forbidden pattern '${pattern}'`;
+      }
+    }
+    if (NON_LATIN_SCRIPT_REGEX[worldKey]) {
+      const latinChunks = text.match(/[A-Za-z]{4,}/g) || [];
+      const disallowedLatin = latinChunks.filter(
+        (token) => !["SVO", "SOV", "V2", "VSO"].includes(token)
+      );
+      if (disallowedLatin.length) {
+        return `Card ${index + 1}: contains non-allowed Latin token '${disallowedLatin[0]}'`;
+      }
+    }
     const forbidden = LANGUAGE_RULES[worldKey]?.forbiddenPatterns || [];
     for (const pattern of forbidden) {
       if (pattern.test(text)) {
@@ -287,7 +633,14 @@ const isNativeCardShape = (card, worldKey) => {
     return false;
   }
   const cleaned = cleanCard(card);
-  if (!cleaned.title || cleaned.points.length < 2 || !cleaned.example || cleaned.mistakes.length < 1) {
+  if (
+    !cleaned.title ||
+    cleaned.points.length < 2 ||
+    !cleaned.example ||
+    cleaned.ruleOrder.length < 2 ||
+    cleaned.exampleHighlights.length !== cleaned.ruleOrder.length ||
+    cleaned.mistakes.length < 1
+  ) {
     return false;
   }
   const forbidden = LANGUAGE_RULES[worldKey]?.forbiddenPatterns || [];
@@ -317,8 +670,95 @@ const tryParseJsonObject = (rawContent) => {
   }
 };
 
+const buildSectionLogicNotes = (worldKey, sectionName) => {
+  const profile = LANGUAGE_PROFILES[worldKey];
+  if (!profile) {
+    return [];
+  }
+  if (sectionName === "Sentence Structure") {
+    return [
+      `Respect this language profile for sentence order: ${profile.sentence}.`,
+      "Do not import another language's canonical order as the default rule.",
+    ];
+  }
+  if (sectionName === "Tenses & Aspect") {
+    return [
+      `Respect this language profile for tense/aspect: ${profile.tenseAspect}.`,
+      "If tense inflection is weak or absent, explain native alternatives clearly.",
+    ];
+  }
+  if (sectionName === "Nouns & Articles") {
+    return [
+      `Respect this language profile for noun/article system: ${profile.articles}.`,
+      "If there is no true article system, teach native determiners/classifiers/particles instead of forcing articles.",
+    ];
+  }
+  if (sectionName === "Formality & Style") {
+    return [
+      `Respect this language profile for formality: ${profile.formality}.`,
+      "Do not overstate politeness morphology in languages where it is mostly lexical/pragmatic.",
+    ];
+  }
+  return [];
+};
+
+const buildSectionConstraints = (worldKey, sectionName) => {
+  const profile = LANGUAGE_PROFILES[worldKey];
+  const constraints = [];
+  if (!profile) {
+    return constraints;
+  }
+  if (sectionName === "Sentence Structure") {
+    constraints.push(`Use this as baseline order logic: ${profile.sentence}.`);
+    if (/V2/i.test(profile.sentence)) {
+      constraints.push("Explicitly teach V2 in main clauses and verb-final tendency in subordinate clauses.");
+    }
+    if (/SOV/i.test(profile.sentence)) {
+      constraints.push("Explicitly teach verb-final clause structure in core examples.");
+    }
+    if (/VSO/i.test(profile.sentence)) {
+      constraints.push("Show how VSO and SVO differ in emphasis/register where relevant.");
+    }
+  }
+  if (sectionName === "Tenses & Aspect") {
+    constraints.push(`Use this tense/aspect logic: ${profile.tenseAspect}.`);
+    if (/no tense inflection/i.test(profile.tenseAspect)) {
+      constraints.push("Do not teach tense conjugation paradigms; teach aspect particles/adverbs instead.");
+    }
+    if (/perfect vs imperfect/i.test(profile.tenseAspect)) {
+      constraints.push("Teach perfect vs imperfect distinction explicitly in at least one card.");
+    }
+  }
+  if (sectionName === "Nouns & Articles") {
+    constraints.push(`Use this noun/article logic: ${profile.articles}.`);
+    if (/no true article system/i.test(profile.articles)) {
+      constraints.push("Never present this language as having a full definite/indefinite article paradigm.");
+      constraints.push("Teach the actual native system (particles, classifiers, determiners, or postpositions).");
+    }
+    if (/definite article only/i.test(profile.articles)) {
+      constraints.push("State that only definiteness marking is grammaticalized, not an indefinite article pair.");
+    }
+  }
+  if (sectionName === "Formality & Style") {
+    constraints.push(`Use this formality logic: ${profile.formality}.`);
+    constraints.push(
+      "This section must stay about politeness/register/style. Do not teach sentence order, tense morphology, or article systems here."
+    );
+    if (/highly grammaticalized/i.test(profile.formality)) {
+      constraints.push("Teach grammatical politeness mechanisms (speech levels, honorific forms, endings).");
+    } else if (/moderately grammaticalized/i.test(profile.formality)) {
+      constraints.push("Teach both grammatical and lexical politeness strategies without exaggeration.");
+    } else {
+      constraints.push("Teach register mostly through lexical/pragmatic choices; avoid inventing obligatory honorific morphology.");
+    }
+  }
+  return constraints;
+};
+
 const createPromptPayload = ({ worldKey, worldLanguage, sectionName, cardCount, draftCards = null }) => {
   const languageRules = LANGUAGE_RULES[worldKey] || { focus: [], avoid: [] };
+  const sectionLogicNotes = buildSectionLogicNotes(worldKey, sectionName);
+  const sectionConstraints = buildSectionConstraints(worldKey, sectionName);
   return {
     targetLanguage: worldLanguage,
     sectionName,
@@ -330,16 +770,24 @@ const createPromptPayload = ({ worldKey, worldLanguage, sectionName, cardCount, 
     sectionAdaptationHint:
       SECTION_ADAPTATION_HINTS[sectionName] ||
       "Adapt this section to native grammar logic instead of copying English categories.",
+    structuralProfile: LANGUAGE_PROFILES[worldKey] || null,
+    sectionLogicMustRespect: sectionLogicNotes,
     languageSpecificFocus: languageRules.focus,
     languageSpecificAvoid: languageRules.avoid,
     constraints: [
       "All text must be in target language only.",
       "Never rely on English-only grammar logic that does not naturally belong to the target language.",
+      "Do not include English glosses or parenthetical English translations. Allowed abbreviations: SVO, SOV, V2, VSO.",
       "Each card title must be concise, professional, and specific.",
       "Each card must include practical teaching points usable in real communication.",
+      "Each card must define ruleOrder as 2-6 ordered slots (e.g., subject + verb + object in target-language terms).",
+      "Each card must define exampleHighlights with the exact same number and order as ruleOrder.",
+      "Each exampleHighlights.text must be an exact substring of example, in left-to-right order.",
+      "Each exampleHighlights.text must contain real lexical content (letters/numbers), not only punctuation.",
       "Each card must include one realistic example sentence and one common mistake with corrected version.",
       "Do not output sourceTitle, sourceExample, sourcePoints, sourceWrong, or sourceFix.",
       "Avoid repetitive cards and avoid duplicate titles.",
+      ...sectionConstraints,
     ],
     outputSchema: {
       sectionLabel: "string",
@@ -348,6 +796,12 @@ const createPromptPayload = ({ worldKey, worldLanguage, sectionName, cardCount, 
           title: "string",
           points: ["string", "string", "string"],
           example: "string",
+          ruleOrder: ["string", "string", "string"],
+          exampleHighlights: [
+            { label: "string", text: "string" },
+            { label: "string", text: "string" },
+            { label: "string", text: "string" },
+          ],
           mistakes: [{ wrong: "string", fix: "string" }],
         },
       ],
@@ -412,7 +866,7 @@ const requestSection = async ({ worldKey, worldLanguage, sectionName, cardCount,
   if (!parsed) {
     throw new Error("Failed to parse JSON response");
   }
-  const validationError = validateSectionPayload(parsed, cardCount, worldKey);
+  const validationError = validateSectionPayload(parsed, cardCount, worldKey, sectionName);
   if (validationError) {
     throw new Error(validationError);
   }
@@ -475,7 +929,7 @@ const runForWorld = async (worldKey) => {
   data.grammar.examples = {};
   data.grammar.explanations = {};
 
-  for (const sectionName of GRAMMAR_SECTION_ORDER) {
+  for (const sectionName of TARGET_SECTIONS) {
     const targetCount = Array.isArray(GRAMMAR_SECTION_LISTS[sectionName])
       ? GRAMMAR_SECTION_LISTS[sectionName].length
       : 0;
@@ -516,7 +970,7 @@ const runForWorld = async (worldKey) => {
 
 const run = async () => {
   console.log(
-    `Native grammar generation start | model=${MODEL} | reviewPass=${REVIEW_PASS} | forceRewrite=${FORCE_REWRITE}`
+    `Native grammar generation start | model=${MODEL} | reviewPass=${REVIEW_PASS} | forceRewrite=${FORCE_REWRITE} | sections=${TARGET_SECTIONS.join(" | ")}`
   );
   for (const worldKey of REQUESTED_WORLD_KEYS) {
     await runForWorld(worldKey);

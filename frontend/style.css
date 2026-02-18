@@ -129,6 +129,51 @@ input {
   opacity: 1;
 }
 
+body.home-alt-luxe .home-fx-comets {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+body.home-alt-luxe .home-fx-comet {
+  position: absolute;
+  top: var(--c-top, 20%);
+  right: -28%;
+  width: var(--c-size, 96px);
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0),
+    rgba(188, 233, 255, 0.9) 34%,
+    rgba(133, 206, 255, 0.1)
+  );
+  opacity: 0;
+  transform: translate3d(0, 0, 0) rotate(-18deg);
+  filter: drop-shadow(0 0 10px rgba(160, 220, 255, 0.72));
+  animation: world-fx-comet-run var(--c-duration, 7s) cubic-bezier(0.35, 0.04, 0.22, 1) infinite;
+  animation-delay: var(--c-delay, 0s);
+}
+
+body.home-alt-luxe .home-fx-comet::after {
+  content: "";
+  position: absolute;
+  right: -2px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  transform: translateY(-50%);
+  border-radius: 999px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.95),
+    rgba(177, 227, 255, 0.25) 70%,
+    transparent 100%
+  );
+}
+
 /* --------------------------------------------------------------------------
    HEADER / NAVIGATION
    -------------------------------------------------------------------------- */
@@ -238,6 +283,171 @@ input {
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.2em;
+}
+
+.brand {
+  position: relative;
+  isolation: isolate;
+  cursor: pointer;
+}
+
+.brand-mark {
+  position: relative;
+  overflow: visible;
+  transform-origin: 50% 50%;
+  will-change: transform, box-shadow, filter;
+  --brand-spin-angle: 0deg;
+  --brand-tilt-x: 0deg;
+  --brand-tilt-y: 0deg;
+  --brand-scale: 1;
+  transform:
+    perspective(560px)
+    rotateX(var(--brand-tilt-x))
+    rotateY(var(--brand-tilt-y))
+    rotate(var(--brand-spin-angle))
+    scale(var(--brand-scale));
+  transition: filter 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+}
+
+.brand-mark::before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 38deg,
+    rgba(128, 214, 255, 0.5),
+    rgba(170, 145, 255, 0.24),
+    rgba(104, 244, 204, 0.44),
+    rgba(128, 214, 255, 0.5)
+  );
+  opacity: 0.24;
+  transform: scale(0.96);
+  filter: blur(0.3px);
+  transition: opacity 180ms ease, transform 180ms ease;
+  pointer-events: none;
+}
+
+.brand-mark::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: 50%;
+  border: 1px solid rgba(173, 235, 255, 0.26);
+  box-shadow:
+    inset 0 0 10px rgba(135, 214, 255, 0.22),
+    0 0 14px rgba(113, 207, 255, 0.26);
+  opacity: 0.42;
+  pointer-events: none;
+}
+
+.brand:hover .brand-mark,
+.brand.is-logo-active .brand-mark {
+  border-color: rgba(124, 220, 255, 0.76);
+  box-shadow:
+    0 0 20px rgba(88, 200, 255, 0.54),
+    0 0 34px rgba(132, 196, 255, 0.34);
+  filter: brightness(1.08);
+  --brand-scale: 1.03;
+}
+
+.brand:hover .brand-mark::before,
+.brand.is-logo-active .brand-mark::before {
+  opacity: 0.68;
+  transform: scale(1.05);
+}
+
+.brand.is-logo-spinning .brand-mark {
+  box-shadow:
+    0 0 0 1px rgba(184, 236, 255, 0.34),
+    0 0 26px rgba(111, 208, 255, 0.62),
+    0 0 42px rgba(144, 193, 255, 0.4);
+  filter: brightness(1.12) saturate(1.04);
+}
+
+.brand.is-logo-stop .brand-mark {
+  filter: brightness(1.08);
+}
+
+.brand.is-logo-breathing .brand-mark {
+  animation: homeLogoBreathGlow 4.9s ease-in-out infinite;
+}
+
+.brand.is-logo-breathing .brand-mark::before {
+  animation: homeLogoBreathRing 4.9s ease-in-out infinite;
+}
+
+.brand.is-logo-breathing .brand-mark::after {
+  animation: homeLogoBreathCore 4.9s ease-in-out infinite;
+}
+
+.brand.is-logo-burst .brand-mark {
+  box-shadow:
+    0 0 0 2px rgba(190, 236, 255, 0.36),
+    0 0 36px rgba(144, 214, 255, 0.7),
+    0 0 58px rgba(101, 210, 255, 0.5);
+  filter: brightness(1.16) saturate(1.08);
+}
+
+.brand.is-logo-burst .brand-mark::before {
+  opacity: 0.9;
+  transform: scale(1.1);
+}
+
+.brand.is-logo-burst .brand-mark::after {
+  border-color: rgba(210, 246, 255, 0.56);
+  opacity: 0.88;
+}
+
+@keyframes homeLogoBreathGlow {
+  0%,
+  100% {
+    filter: brightness(0.98);
+    box-shadow:
+      0 0 0 1px rgba(170, 230, 255, 0.1),
+      0 0 9px rgba(110, 196, 255, 0.14),
+      0 0 14px rgba(108, 194, 255, 0.1);
+  }
+  50% {
+    filter: brightness(1.06);
+    box-shadow:
+      0 0 0 1px rgba(184, 236, 255, 0.2),
+      0 0 15px rgba(124, 206, 255, 0.3),
+      0 0 24px rgba(130, 200, 255, 0.2);
+  }
+}
+
+@keyframes homeLogoBreathRing {
+  0%,
+  100% {
+    opacity: 0.18;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 0.46;
+    transform: scale(1.03);
+  }
+}
+
+@keyframes homeLogoBreathCore {
+  0%,
+  100% {
+    opacity: 0.26;
+  }
+  50% {
+    opacity: 0.52;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-mark {
+    transform: rotate(0deg) !important;
+  }
+  .brand.is-logo-breathing .brand-mark,
+  .brand.is-logo-breathing .brand-mark::before,
+  .brand.is-logo-breathing .brand-mark::after {
+    animation: none !important;
+  }
 }
 
 .nav-links {
@@ -1448,6 +1658,17 @@ body.world-page .section-title {
   line-height: 1.6;
 }
 
+.section-title p .letters-helper-main {
+  display: block;
+}
+
+.section-title p .letters-helper-translation {
+  display: block;
+  margin-top: 0.62rem;
+  font-size: 0.92em;
+  color: rgba(189, 214, 255, 0.62);
+}
+
 body:not(.world-page) .section-title {
   position: relative;
   max-width: 760px;
@@ -1765,6 +1986,24 @@ body:not(.world-page) .world-card:not(.coming-soon) > * {
   text-align: left;
   line-height: 1.12;
   letter-spacing: 0.01em;
+}
+
+.map-card h3 .map-title-main {
+  display: block;
+}
+
+.map-card h3 .map-title-translation {
+  display: block;
+  margin-top: 0.34rem;
+  font-size: 0.62em;
+  font-weight: 560;
+  line-height: 1.25;
+  color: rgba(203, 224, 255, 0.86);
+  letter-spacing: 0;
+}
+
+.map-card h3 .map-title-translation[hidden] {
+  display: none !important;
 }
 
 .map-card.map-letters {

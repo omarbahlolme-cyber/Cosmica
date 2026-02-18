@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-18T00:37:00.573Z",
+  "generatedAt": "2026-02-18T15:18:51.825Z",
   "worldLanguage": "swedish",
   "baseLanguages": [
     "albanian",
@@ -7318,6 +7318,25 @@
           "english": "resume"
         }
       }
+    },
+    "sectionLabels": {
+      "Greetings": "Hälsningar",
+      "Pronouns": "Pronomen",
+      "Verbs & Tenses": "Verb och Tider",
+      "Questions & Connectors": "Frågor och Kopplingar",
+      "Numbers & Counting": "Siffror och Räkning",
+      "Time, Date & Frequency": "Tid, Datum och Frekvens",
+      "Descriptions & Adjectives": "Beskrivningar och Adjektiv",
+      "Opinions & Preferences": "Åsikter och Preferenser",
+      "Weather & Seasons": "Väder och Årstider",
+      "Places & Directions": "Platser och Vägar",
+      "countries": "Länder",
+      "Feelings & States": "Känslor och Tillstånd",
+      "Family & Relationships": "Familj och Relationer",
+      "Food & Eating": "Mat och Ätande",
+      "Health & Body": "Hälsa och Kropp",
+      "Technology & Communication": "Teknik och Kommunikation",
+      "Work & School": "Arbete och Skola"
     }
   },
   "phrases": {
@@ -7598,18 +7617,21 @@
       },
       "jag lär mig svenska": {
         "source": "i am learning swedish",
+        "intent": "learn_world_language",
         "translations": {
           "english": "i am learning swedish"
         }
       },
       "jag talar svenska": {
         "source": "i speak swedish",
+        "intent": "speak_world_language",
         "translations": {
           "english": "i speak swedish"
         }
       },
       "jag talar inte svenska": {
         "source": "i do not speak swedish",
+        "intent": "not_speak_world_language",
         "translations": {
           "english": "i do not speak swedish"
         }
@@ -7746,6 +7768,7 @@
       },
       "talar du svenska?": {
         "source": "do you speak swedish",
+        "intent": "ask_speak_world_language",
         "translations": {
           "english": "do you speak swedish"
         }
@@ -9095,428 +9118,1087 @@
     "cards": {
       "Sentence Structure": [
         {
-          "title": "Huvudsatser och bisatser",
+          "title": "Grundläggande meningsstruktur",
           "points": [
-            "En huvudsats kan stå ensam.",
-            "En bisats behöver en huvudsats.",
-            "Bisatser inleds ofta med en konjunktion."
+            "Svenska meningar följer oftast SVO-ordning.",
+            "Subjektet kommer först, följt av verbet och sedan objektet.",
+            "Exempel: 'Jag äter äpplet.'"
           ],
-          "example": "Jag tycker att det är viktigt.",
+          "example": "Jag äter äpplet.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "verb",
+              "text": "äter"
+            },
+            {
+              "label": "objekt",
+              "text": "äpplet"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Att jag tycker det är viktigt.",
-              "fix": "Jag tycker att det är viktigt."
+              "wrong": "Äter jag äpplet.",
+              "fix": "Jag äter äpplet."
             }
           ]
         },
         {
-          "title": "Ordföljd i svenska meningar",
+          "title": "Verbets andra plats i huvudsats",
           "points": [
-            "Svenska har en fast ordföljd: subjekt - verb - objekt.",
-            "Vid frågor byts ordföljden ut.",
-            "Adverb placeras oftast före verbet."
+            "I huvudsatser måste verbet alltid komma på andra plats.",
+            "Detta gäller även när en annan fras inleder meningen.",
+            "Exempel: 'I dag äter jag äpplet.'"
           ],
-          "example": "Han läser en bok.",
+          "example": "I dag äter jag äpplet.",
+          "ruleOrder": [
+            "adverbial",
+            "verb",
+            "subjekt",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "adverbial",
+              "text": "I dag"
+            },
+            {
+              "label": "verb",
+              "text": "äter"
+            },
+            {
+              "label": "subjekt",
+              "text": "jag"
+            },
+            {
+              "label": "objekt",
+              "text": "äpplet"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "En bok läser han.",
-              "fix": "Han läser en bok."
+              "wrong": "Äter jag äpplet i dag.",
+              "fix": "I dag äter jag äpplet."
             }
           ]
         },
         {
-          "title": "Negation i meningar",
+          "title": "Negation i huvudsatser",
           "points": [
-            "Negation placeras före huvudverbet.",
-            "Använd 'inte' för att förneka.",
-            "Negationen påverkar meningsstrukturen."
+            "Negationen placeras före verbet i huvudsatser.",
+            "Detta påverkar meningsstrukturen.",
+            "Exempel: 'Jag äter inte äpplet.'"
           ],
-          "example": "Jag gillar inte kaffe.",
+          "example": "Jag äter inte äpplet.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "negation",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "verb",
+              "text": "äter"
+            },
+            {
+              "label": "negation",
+              "text": "inte"
+            },
+            {
+              "label": "objekt",
+              "text": "äpplet"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Jag inte gillar kaffe.",
-              "fix": "Jag gillar inte kaffe."
+              "wrong": "Inte äter jag äpplet.",
+              "fix": "Jag äter inte äpplet."
             }
           ]
         },
         {
-          "title": "Frågor och svar",
+          "title": "Frågesats med omvänd ordföljd",
           "points": [
-            "Frågor inleds ofta med ett frågeord.",
-            "Verbets placering ändras i frågor.",
-            "Svar kan vara korta eller fullständiga."
+            "I frågor placeras verbet alltid på andra plats.",
+            "Detta gäller även i ja/nej-frågor.",
+            "Exempel: 'Äter du äpplet?'"
           ],
-          "example": "Vad gör du?",
+          "example": "Äter du äpplet?",
+          "ruleOrder": [
+            "verb",
+            "subjekt",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "verb",
+              "text": "Äter"
+            },
+            {
+              "label": "subjekt",
+              "text": "du"
+            },
+            {
+              "label": "objekt",
+              "text": "äpplet"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Du gör vad?",
-              "fix": "Vad gör du?"
+              "wrong": "Du äter äpplet?",
+              "fix": "Äter du äpplet?"
             }
           ]
         },
         {
-          "title": "Användning av prepositioner",
+          "title": "Verb-final struktur i bisatser",
           "points": [
-            "Prepositioner används för att ange plats och tid.",
-            "De placeras före substantiv eller pronomen.",
-            "Vissa prepositioner kräver specifika kasus."
+            "I bisatser placeras verbet sist.",
+            "Detta skiljer sig från huvudsatser.",
+            "Exempel: 'Jag vet att du äter äpplet.'"
           ],
-          "example": "Boken ligger på bordet.",
+          "example": "Jag vet att du äter äpplet.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "att",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "verb",
+              "text": "vet"
+            },
+            {
+              "label": "att",
+              "text": "att"
+            },
+            {
+              "label": "objekt",
+              "text": "du äter äpplet"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Boken ligger bordet på.",
-              "fix": "Boken ligger på bordet."
+              "wrong": "Jag vet du äter äpplet.",
+              "fix": "Jag vet att du äter äpplet."
             }
           ]
         }
       ],
       "Verbs": [
         {
-          "title": "Presens av 'att vara'",
+          "title": "Grundläggande verbkonjugation",
           "points": [
-            "Jag är",
-            "Du är",
-            "Han/hon/den/det är"
+            "Verb böjs efter subjektets person.",
+            "Regelbundna verb följer specifika mönster.",
+            "Oregelbundna verb måste läras individuellt."
           ],
-          "example": "Vi är glada.",
+          "example": "Jag äter en smörgås.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "verb",
+              "text": "äter"
+            },
+            {
+              "label": "objekt",
+              "text": "en smörgås"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Vi är glad.",
-              "fix": "Vi är glada."
+              "wrong": "Jag äter smörgås.",
+              "fix": "Jag äter en smörgås."
             }
           ]
         },
         {
-          "title": "Preteritum av 'att göra'",
+          "title": "Presens och preteritum",
           "points": [
-            "Jag gjorde",
-            "Du gjorde",
-            "Han/hon/den/det gjorde"
+            "Presens används för nuvarande handlingar.",
+            "Preteritum används för avslutade handlingar.",
+            "Tidsadverb kan hjälpa till att klargöra tid."
           ],
-          "example": "De gjorde sina läxor.",
+          "example": "Hon läste boken igår.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "objekt",
+            "adverb"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Hon"
+            },
+            {
+              "label": "verb",
+              "text": "läste"
+            },
+            {
+              "label": "objekt",
+              "text": "boken"
+            },
+            {
+              "label": "adverb",
+              "text": "igår"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "De gjorde sin läxor.",
-              "fix": "De gjorde sina läxor."
+              "wrong": "Hon läsa boken igår.",
+              "fix": "Hon läste boken igår."
             }
           ]
         },
         {
-          "title": "Futurum av 'att gå'",
+          "title": "Verbets placering i huvudsats",
           "points": [
-            "Jag ska gå",
-            "Du ska gå",
-            "Han/hon/den/det ska gå"
+            "Huvudsatser kräver att verbet kommer på andra plats.",
+            "Subjektet kan flyttas för att betona andra element.",
+            "Frågor och negationer påverkar ordningen."
           ],
-          "example": "Vi ska gå till parken.",
+          "example": "I parken spelar barnen fotboll.",
+          "ruleOrder": [
+            "adverbial",
+            "verb",
+            "subjekt",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "adverbial",
+              "text": "I parken"
+            },
+            {
+              "label": "verb",
+              "text": "spelar"
+            },
+            {
+              "label": "subjekt",
+              "text": "barnen"
+            },
+            {
+              "label": "objekt",
+              "text": "fotboll"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Vi ska gå till park.",
-              "fix": "Vi ska gå till parken."
+              "wrong": "Barnen spelar i parken fotboll.",
+              "fix": "I parken spelar barnen fotboll."
             }
           ]
         },
         {
-          "title": "Imperativ av 'att äta'",
+          "title": "Partiklar och verbpartiklar",
           "points": [
-            "Ät!",
-            "Ät du!",
-            "Låt oss äta!"
+            "Partiklar kan ändra betydelsen av verb.",
+            "Verben kan kombineras med olika partiklar.",
+            "Partiklar placeras oftast efter verbet."
           ],
-          "example": "Ät din middag.",
+          "example": "Hon stänger av TV:n.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "partikel",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Hon"
+            },
+            {
+              "label": "verb",
+              "text": "stänger"
+            },
+            {
+              "label": "partikel",
+              "text": "av"
+            },
+            {
+              "label": "objekt",
+              "text": "TV:n"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ät din middag nu.",
-              "fix": "Ät din middag."
+              "wrong": "Hon stänger TV:n av.",
+              "fix": "Hon stänger av TV:n."
             }
           ]
         },
         {
-          "title": "Perfekt av 'att se'",
+          "title": "Framtid med hjälpverb",
           "points": [
-            "Jag har sett",
-            "Du har sett",
-            "Han/hon/den/det har sett"
+            "Framtid uttrycks ofta med hjälpverbet 'ska'.",
+            "Huvudverbet står i grundform.",
+            "Tidsangivelser kan användas för att specificera."
           ],
-          "example": "Vi har sett filmen.",
+          "example": "Jag ska åka till Stockholm imorgon.",
+          "ruleOrder": [
+            "subjekt",
+            "hjälpverb",
+            "verb",
+            "adverb"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "hjälpverb",
+              "text": "ska"
+            },
+            {
+              "label": "verb",
+              "text": "åka"
+            },
+            {
+              "label": "adverb",
+              "text": "imorgon"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Vi har sett film.",
-              "fix": "Vi har sett filmen."
+              "wrong": "Jag ska åker till Stockholm imorgon.",
+              "fix": "Jag ska åka till Stockholm imorgon."
             }
           ]
         },
         {
-          "title": "Pluskvamperfekt av 'att skriva'",
+          "title": "Oregelbundna verb",
           "points": [
-            "Jag hade skrivit",
-            "Du hade skrivit",
-            "Han/hon/den/det hade skrivit"
+            "Oregelbundna verb har unika böjningsformer.",
+            "De måste memoriseras för korrekt användning.",
+            "Exempel inkluderar 'vara', 'ha' och 'gå'."
           ],
-          "example": "Hon hade skrivit ett brev.",
+          "example": "Vi har varit här förut.",
+          "ruleOrder": [
+            "subjekt",
+            "hjälpverb",
+            "verb",
+            "adverb"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Vi"
+            },
+            {
+              "label": "hjälpverb",
+              "text": "har"
+            },
+            {
+              "label": "verb",
+              "text": "varit"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Hon hade skrivit ett brev till.",
-              "fix": "Hon hade skrivit ett brev."
+              "wrong": "Vi har vara här förut.",
+              "fix": "Vi har varit här förut."
             }
           ]
         }
       ],
       "Tenses & Aspect": [
         {
-          "title": "Presens",
+          "title": "Presens och Preteritum",
           "points": [
-            "Används för att beskriva pågående handlingar.",
-            "Används för att uttrycka allmänna sanningar.",
-            "Används för framtida händelser med tidsangivelse."
+            "Används för att beskriva nuvarande och tidigare handlingar.",
+            "Presens används för pågående eller vanemässiga handlingar.",
+            "Preteritum används för avslutade handlingar i det förflutna."
           ],
-          "example": "Jag äter frukost varje morgon.",
+          "example": "Jag äter frukost varje morgon. Igår åt jag frukost klockan åtta.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "Verb",
+              "text": "äter"
+            },
+            {
+              "label": "Objekt",
+              "text": "frukost"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Jag äter frukost varje morgon igår.",
-              "fix": "Jag åt frukost varje morgon igår."
+              "wrong": "Jag äta frukost varje morgon.",
+              "fix": "Jag äter frukost varje morgon."
             }
           ]
         },
         {
-          "title": "Preteritum",
+          "title": "Perfekt och Pluskvamperfekt",
           "points": [
-            "Används för att beskriva avslutade handlingar i det förflutna.",
-            "Används för att berätta historier.",
-            "Används för att beskriva en serie händelser."
+            "Perfekt används för att beskriva handlingar som har påverkan på nuet.",
+            "Pluskvamperfekt används för att beskriva handlingar som inträffade före en annan handling i det förflutna.",
+            "Använd hjälpverbet 'ha' för att bilda dessa former."
           ],
-          "example": "Vi gick till parken igår.",
+          "example": "Jag har ätit frukost. Jag hade ätit frukost innan jag gick till jobbet.",
+          "ruleOrder": [
+            "Subjekt",
+            "Hjälpverb",
+            "Verb",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "Hjälpverb",
+              "text": "har"
+            },
+            {
+              "label": "Verb",
+              "text": "ätit"
+            },
+            {
+              "label": "Objekt",
+              "text": "frukost"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Vi går till parken igår.",
-              "fix": "Vi gick till parken igår."
+              "wrong": "Jag har äta frukost.",
+              "fix": "Jag har ätit frukost."
             }
           ]
         },
         {
-          "title": "Perfekt",
+          "title": "Futurum med 'ska' och 'kommer att'",
           "points": [
-            "Används för att beskriva handlingar som har relevans för nuet.",
-            "Används för att uttrycka erfarenheter.",
-            "Används med tidsangivelser som 'har' och 'aldrig'."
+            "Använd 'ska' för att uttrycka framtida planer eller avsikter.",
+            "Använd 'kommer att' för att uttrycka framtida händelser.",
+            "Båda formerna är vanliga i tal och skrift."
           ],
-          "example": "Jag har läst den boken.",
+          "example": "Jag ska äta frukost imorgon. Jag kommer att äta frukost klockan åtta.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Objekt",
+            "Tid"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "Verb",
+              "text": "ska"
+            },
+            {
+              "label": "Objekt",
+              "text": "äta"
+            },
+            {
+              "label": "Tid",
+              "text": "klockan åtta"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Jag läste den boken.",
-              "fix": "Jag har läst den boken."
+              "wrong": "Jag kommer äta frukost imorgon.",
+              "fix": "Jag kommer att äta frukost imorgon."
             }
           ]
         },
         {
-          "title": "Pluskvamperfekt",
+          "title": "Aspekt med Partiklar",
           "points": [
-            "Används för att beskriva handlingar som inträffade före en annan handling i det förflutna.",
-            "Används ofta i berättelser.",
-            "Används med 'hade' som hjälpverb."
+            "Använd partiklar för att uttrycka aspekt, som 'just', 'redan' och 'snart'.",
+            "Dessa partiklar ger mer information om tid och fullständighet.",
+            "De placeras ofta före huvudverbet."
           ],
-          "example": "Hon hade redan ätit när jag kom.",
+          "example": "Jag har just ätit frukost.",
+          "ruleOrder": [
+            "Subjekt",
+            "Hjälpverb",
+            "Partikel",
+            "Verb",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "Hjälpverb",
+              "text": "har"
+            },
+            {
+              "label": "Partikel",
+              "text": "just"
+            },
+            {
+              "label": "Verb",
+              "text": "ätit"
+            },
+            {
+              "label": "Objekt",
+              "text": "frukost"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Hon äter redan när jag kom.",
-              "fix": "Hon hade redan ätit när jag kom."
+              "wrong": "Jag just har ätit frukost.",
+              "fix": "Jag har just ätit frukost."
             }
           ]
         },
         {
-          "title": "Futurum",
+          "title": "Adverb för Tidsaspekt",
           "points": [
-            "Används för att beskriva framtida handlingar.",
-            "Används med hjälpverbet 'ska'.",
-            "Används för att uttrycka planer."
+            "Använd adverb som 'alltid', 'ibland', 'aldrig' för att ange frekvens.",
+            "Adverb placeras ofta före eller efter verbet.",
+            "De hjälper till att specificera tid och aspekt."
           ],
-          "example": "Jag ska resa till Stockholm nästa vecka.",
+          "example": "Jag äter alltid frukost.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Adverb",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "Verb",
+              "text": "äter"
+            },
+            {
+              "label": "Adverb",
+              "text": "alltid"
+            },
+            {
+              "label": "Objekt",
+              "text": "frukost"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Jag reser till Stockholm nästa vecka.",
-              "fix": "Jag ska resa till Stockholm nästa vecka."
+              "wrong": "Jag alltid äter frukost.",
+              "fix": "Jag äter alltid frukost."
             }
           ]
         },
         {
-          "title": "Presens particip",
+          "title": "Framtida Aspekt med 'hålla på att'",
           "points": [
-            "Används för att beskriva pågående handlingar som adjektiv.",
-            "Används för att bilda progressiva former.",
-            "Används ofta i kombination med 'vara'."
+            "Använd 'hålla på att' för att uttrycka en pågående framtida handling.",
+            "Detta uttryck ger en känsla av aktivitet.",
+            "Det används ofta i informell kommunikation."
           ],
-          "example": "Den springande hunden är snabb.",
+          "example": "Jag håller på att äta frukost imorgon.",
+          "ruleOrder": [
+            "Subjekt",
+            "Hjälpverb",
+            "Partikel",
+            "Verb",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "Hjälpverb",
+              "text": "håller"
+            },
+            {
+              "label": "Partikel",
+              "text": "på"
+            },
+            {
+              "label": "Verb",
+              "text": "äta"
+            },
+            {
+              "label": "Objekt",
+              "text": "frukost imorgon"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Den hunden springa är snabb.",
-              "fix": "Den springande hunden är snabb."
+              "wrong": "Jag håller äta frukost imorgon.",
+              "fix": "Jag håller på att äta frukost imorgon."
             }
           ]
         },
         {
-          "title": "Perfekt particip",
+          "title": "Imperfekt Aspekt med 'brukade'",
           "points": [
-            "Används för att beskriva avslutade handlingar som adjektiv.",
-            "Används i passiva konstruktioner.",
-            "Används ofta med 'vara' eller 'ha'."
+            "Använd 'brukade' för att beskriva vanor i det förflutna.",
+            "Det ger en känsla av upprepning eller regelbundenhet.",
+            "Det används ofta för att jämföra med nuvarande vanor."
           ],
-          "example": "Den lästa boken var intressant.",
+          "example": "Jag brukade äta frukost klockan åtta.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Objekt",
+            "Tid"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "Verb",
+              "text": "brukade"
+            },
+            {
+              "label": "Objekt",
+              "text": "äta"
+            },
+            {
+              "label": "Tid",
+              "text": "klockan åtta"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Den bok läste var intressant.",
-              "fix": "Den lästa boken var intressant."
+              "wrong": "Jag brukade äta frukost varje dag.",
+              "fix": "Jag brukade äta frukost klockan åtta."
             }
           ]
         },
         {
-          "title": "Futurum exaktum",
+          "title": "Kombinera Tider",
           "points": [
-            "Används för att beskriva en handling som kommer att vara avslutad vid en viss tidpunkt i framtiden.",
-            "Används med 'ska ha'.",
-            "Används för att uttrycka förväntningar."
+            "Använd olika tider i en mening för att beskriva komplexa händelser.",
+            "Var noga med att hålla tidsformerna konsekventa.",
+            "Detta kan involvera både presens och preteritum."
           ],
-          "example": "Jag ska ha avslutat arbetet innan deadline.",
+          "example": "Jag äter frukost medan jag tänker på dagen igår.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Objekt",
+            "Tid"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "Verb",
+              "text": "äter"
+            },
+            {
+              "label": "Objekt",
+              "text": "frukost"
+            },
+            {
+              "label": "Tid",
+              "text": "dagen igår"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Jag avsluta arbetet innan deadline.",
-              "fix": "Jag ska ha avslutat arbetet innan deadline."
+              "wrong": "Jag äta frukost medan jag tänker på dagen igår.",
+              "fix": "Jag äter frukost medan jag tänker på dagen igår."
             }
           ]
         },
         {
-          "title": "Imperfekt aspekt",
+          "title": "Negation i Tider",
           "points": [
-            "Används för att beskriva en pågående eller upprepande handling i det förflutna.",
-            "Används ofta i berättelser.",
-            "Används för att ge bakgrundsinformation."
+            "Negation placeras före verbet.",
+            "Använd 'inte' för att förneka handlingar.",
+            "Det kan påverka meningsstruktur och betydelse."
           ],
-          "example": "När jag var liten, lekte jag alltid ute.",
+          "example": "Jag äter inte frukost.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Negation",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "Verb",
+              "text": "äter"
+            },
+            {
+              "label": "Negation",
+              "text": "inte"
+            },
+            {
+              "label": "Objekt",
+              "text": "frukost"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "När jag var liten, leka jag alltid ute.",
-              "fix": "När jag var liten, lekte jag alltid ute."
+              "wrong": "Jag inte äter frukost.",
+              "fix": "Jag äter inte frukost."
             }
           ]
         },
         {
-          "title": "Perfekt aspekt",
+          "title": "Frasverb och Tidsaspekt",
           "points": [
-            "Används för att beskriva handlingar som har avslutats men har betydelse för nuet.",
-            "Används med 'har'.",
-            "Används för att uttrycka livserfarenheter."
+            "Frasverb kan förändra betydelsen av verbet.",
+            "Använd dem för att uttrycka olika aspekter.",
+            "De kan vara både informella och formella."
           ],
-          "example": "Jag har besökt Paris flera gånger.",
+          "example": "Jag har ätit upp frukosten.",
+          "ruleOrder": [
+            "Subjekt",
+            "Hjälpverb",
+            "Verb",
+            "Partikel",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "Hjälpverb",
+              "text": "har"
+            },
+            {
+              "label": "Verb",
+              "text": "ätit"
+            },
+            {
+              "label": "Partikel",
+              "text": "upp"
+            },
+            {
+              "label": "Objekt",
+              "text": "frukosten"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Jag besökte Paris flera gånger.",
-              "fix": "Jag har besökt Paris flera gånger."
+              "wrong": "Jag har äta upp frukosten.",
+              "fix": "Jag har ätit upp frukosten."
             }
           ]
         }
       ],
       "Nouns & Articles": [
         {
-          "title": "Bestämd artikel",
-          "points": [
-            "Den bestämda artikeln 'den' används för enskilda substantiv av utrum.",
-            "Den bestämda artikeln 'det' används för enskilda substantiv av neutrum.",
-            "Den bestämda artikeln 'de' används för plural substantiv."
-          ],
-          "example": "Hunden är snäll.",
-          "mistakes": [
-            {
-              "wrong": "Hunden är snälla.",
-              "fix": "Hunden är snäll."
-            }
-          ]
-        },
-        {
           "title": "Obestämd artikel",
           "points": [
-            "Den obestämda artikeln 'en' används för enskilda substantiv av utrum.",
-            "Den obestämda artikeln 'ett' används för enskilda substantiv av neutrum.",
-            "Obestämda artiklar används för att introducera nya substantiv."
+            "Används för att introducera nya substantiv.",
+            "Föregår substantiv i singular.",
+            "Används för att beskriva en ospecificerad mängd."
           ],
           "example": "Jag såg en katt.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "verb",
+              "text": "såg"
+            },
+            {
+              "label": "objekt",
+              "text": "en katt"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Jag såg katten.",
+              "wrong": "Jag såg katt.",
               "fix": "Jag såg en katt."
             }
           ]
         },
         {
-          "title": "Pluralformer",
+          "title": "Bestämd artikel",
           "points": [
-            "Plural av substantiv bildas oftast genom att lägga till '-er' eller '-ar'.",
-            "Vissa substantiv har oregelbundna pluralformer.",
-            "Pluralformen används för att referera till mer än en av något."
+            "Används för att referera till specifika substantiv.",
+            "Föregår substantiv i singular och plural.",
+            "Visar att substantivet är känt för lyssnaren."
           ],
-          "example": "Böckerna ligger på bordet.",
+          "example": "Katten sitter på mattan.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Katten"
+            },
+            {
+              "label": "verb",
+              "text": "sitter"
+            },
+            {
+              "label": "objekt",
+              "text": "på mattan"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Bokarna ligger på bordet.",
-              "fix": "Böckerna ligger på bordet."
+              "wrong": "Katten sitter på en matta.",
+              "fix": "Katten sitter på mattan."
             }
           ]
         },
         {
-          "title": "Substantivens genus",
+          "title": "Definit suffix",
           "points": [
-            "Substantiv kan vara av utrum eller neutrum.",
-            "Genus påverkar vilken bestämd artikel som används.",
-            "Det finns ingen direkt översättning för genus, det måste läras in."
+            "Används för att markera bestämdhet.",
+            "Förekommer i singular och plural.",
+            "Ändrar substantivets form."
           ],
-          "example": "En stol är bekväm.",
+          "example": "Huset är stort.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "predikativ"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Huset"
+            },
+            {
+              "label": "verb",
+              "text": "är"
+            },
+            {
+              "label": "predikativ",
+              "text": "stort"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "En bord är bekväm.",
-              "fix": "Ett bord är bekvämt."
+              "wrong": "Hus är stort.",
+              "fix": "Huset är stort."
             }
           ]
         },
         {
-          "title": "Sammanfogade substantiv",
+          "title": "Singular och plural",
           "points": [
-            "Substantiv kan sammanfogas för att bilda nya ord.",
-            "Den första delen av det sammanfogade substantivet bestämmer genus.",
-            "Sammanfogade substantiv kan vara långa och komplexa."
+            "Singular uttrycker en enhet; plural uttrycker flera.",
+            "Vanliga plural?ndelser ?r -or, -ar, -er och -n.",
+            "Best?md plural bildas ofta med ?ndelser som -na eller -en."
           ],
-          "example": "Skrivbordet är nytt.",
+          "example": "Katterna sover.",
+          "ruleOrder": [
+            "substantiv",
+            "verb"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "substantiv",
+              "text": "Katterna"
+            },
+            {
+              "label": "verb",
+              "text": "sover"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Skriv bords är nytt.",
-              "fix": "Skrivbordet är nytt."
+              "wrong": "Katterna soverr.",
+              "fix": "Katterna sover."
+            }
+          ],
+          "examplePairs": [
+            {
+              "example": "Katten sover.",
+              "exampleHighlights": [
+                {
+                  "label": "substantiv",
+                  "text": "Katten"
+                },
+                {
+                  "label": "verb",
+                  "text": "sover"
+                }
+              ],
+              "ruleOrder": [
+                "substantiv",
+                "verb"
+              ]
+            },
+            {
+              "example": "Katterna sover.",
+              "exampleHighlights": [
+                {
+                  "label": "substantiv",
+                  "text": "Katterna"
+                },
+                {
+                  "label": "verb",
+                  "text": "sover"
+                }
+              ],
+              "ruleOrder": [
+                "substantiv",
+                "verb"
+              ]
             }
           ]
         },
         {
-          "title": "Substantivets plural och bestämd form",
+          "title": "Bestämd plural",
           "points": [
-            "Den bestämda formen av plural substantiv läggs till '-na' eller '-orna'.",
-            "Det är viktigt att använda rätt form beroende på substantivets genus.",
-            "Felaktig användning kan leda till missförstånd."
+            "Används för att referera till specifika grupper av substantiv.",
+            "Föregår substantiv i plural.",
+            "Visar att substantivet är känt för lyssnaren."
           ],
-          "example": "Böckerna är intressanta.",
+          "example": "Katterna leker i trädgården.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Katterna"
+            },
+            {
+              "label": "verb",
+              "text": "leker"
+            },
+            {
+              "label": "objekt",
+              "text": "i trädgården"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Böckerna är intressant.",
-              "fix": "Böckerna är intressanta."
+              "wrong": "Katter leker i trädgården.",
+              "fix": "Katterna leker i trädgården."
             }
           ]
         },
         {
-          "title": "Obestämd plural",
+          "title": "Possessiva pronomen",
           "points": [
-            "Obestämd plural bildas oftast genom att lägga till '-or', '-ar' eller '-er'.",
-            "Obestämd plural används för att referera till flera av något utan att specificera.",
-            "Det är viktigt att känna till oregelbundna pluralformer."
+            "Används för att visa ägande.",
+            "Föregår substantiv.",
+            "Kan kombineras med bestämd artikel."
           ],
-          "example": "Det finns många träd i parken.",
+          "example": "Min katt är svart.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Min"
+            },
+            {
+              "label": "verb",
+              "text": "är"
+            },
+            {
+              "label": "objekt",
+              "text": "svart"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Det finns många träden i parken.",
-              "fix": "Det finns många träd i parken."
+              "wrong": "Katt är svart.",
+              "fix": "Min katt är svart."
+            }
+          ]
+        },
+        {
+          "title": "Kollektiva substantiv",
+          "points": [
+            "Används för att referera till grupper av individer.",
+            "Kan ta både bestämd och obestämd artikel.",
+            "Visar en enhetlig grupp."
+          ],
+          "example": "Folk är vänliga.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "predikativ"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Folk"
+            },
+            {
+              "label": "verb",
+              "text": "är"
+            },
+            {
+              "label": "predikativ",
+              "text": "vänliga"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "En folk är vänliga.",
+              "fix": "Folk är vänliga."
             }
           ]
         }
@@ -9525,105 +10207,233 @@
         {
           "title": "Personliga pronomen",
           "points": [
-            "Jag är glad.",
-            "Du är snäll.",
-            "Han är trött."
+            "Används för att referera till personer eller saker.",
+            "Böjs efter subjekt och objekt.",
+            "Kan vara enskilda eller plural."
           ],
-          "example": "Vi går till parken.",
-          "mistakes": [
+          "example": "Jag ser henne.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
             {
-              "wrong": "Vi går till parkena.",
-              "fix": "Vi går till parken."
+              "label": "subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "verb",
+              "text": "ser"
+            },
+            {
+              "label": "objekt",
+              "text": "henne"
             }
-          ]
-        },
-        {
-          "title": "Possessiva pronomen",
-          "points": [
-            "Min bok är här.",
-            "Din bil är röd.",
-            "Hans hund är stor."
           ],
-          "example": "Hennes klänning är vacker.",
           "mistakes": [
             {
-              "wrong": "Hennes klänning är vackra.",
-              "fix": "Hennes klänning är vacker."
+              "wrong": "Henne ser jag.",
+              "fix": "Jag ser henne."
             }
           ]
         },
         {
           "title": "Reflexiva pronomen",
           "points": [
-            "Jag ser mig själv i spegeln.",
-            "Du måste tro på dig själv.",
-            "Han skämtar om sig själv."
+            "Används för att referera tillbaka till subjektet.",
+            "Böjs efter subjektets person.",
+            "Vanligt i verb som kräver reflexiv användning."
           ],
-          "example": "Vi tvättar oss själva.",
+          "example": "Hon tvättar sig.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "reflexivt pronomen"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Hon"
+            },
+            {
+              "label": "verb",
+              "text": "tvättar"
+            },
+            {
+              "label": "reflexivt pronomen",
+              "text": "sig"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Vi tvättar oss själv.",
-              "fix": "Vi tvättar oss själva."
+              "wrong": "Hon tvättar.",
+              "fix": "Hon tvättar sig."
             }
           ]
         },
         {
           "title": "Demonstrativa pronomen",
           "points": [
-            "Den här boken är intressant.",
-            "Det där huset är gammalt.",
-            "De här blommorna är vackra."
+            "Används för att peka ut specifika saker.",
+            "Kan vara nära eller långt borta.",
+            "Böjs efter genus och numerus."
           ],
-          "example": "Den där filmen var bra.",
-          "mistakes": [
+          "example": "Den här boken är intressant.",
+          "ruleOrder": [
+            "demonstrativt pronomen",
+            "subjekt",
+            "verb"
+          ],
+          "exampleHighlights": [
             {
-              "wrong": "Den där filmen var braa.",
-              "fix": "Den där filmen var bra."
+              "label": "demonstrativt pronomen",
+              "text": "Den här"
+            },
+            {
+              "label": "subjekt",
+              "text": "boken"
+            },
+            {
+              "label": "verb",
+              "text": "är"
             }
-          ]
-        },
-        {
-          "title": "Interrogativa pronomen",
-          "points": [
-            "Vem är du?",
-            "Vad gör du?",
-            "När kommer han?"
           ],
-          "example": "Var är boken?",
           "mistakes": [
             {
-              "wrong": "Var är bokena?",
-              "fix": "Var är boken?"
+              "wrong": "Boken här är intressant.",
+              "fix": "Den här boken är intressant."
             }
           ]
         },
         {
           "title": "Indefinita pronomen",
           "points": [
-            "Någon ringde mig.",
-            "Ingen vet svaret.",
-            "Alla är välkomna."
+            "Används för att referera till obestämda personer eller saker.",
+            "Kan vara singular eller plural.",
+            "Används ofta i generella uttalanden."
           ],
-          "example": "Många gillar glass.",
+          "example": "Någon ringde på dörren.",
+          "ruleOrder": [
+            "indefinit pronomen",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "indefinit pronomen",
+              "text": "Någon"
+            },
+            {
+              "label": "verb",
+              "text": "ringde"
+            },
+            {
+              "label": "objekt",
+              "text": "på dörren"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Många gillar glassar.",
-              "fix": "Många gillar glass."
+              "wrong": "En ringde på dörren.",
+              "fix": "Någon ringde på dörren."
             }
           ]
         },
         {
-          "title": "Relativa pronomen",
+          "title": "Omission av pronomen (Pro-drop)",
           "points": [
-            "Som är min vän.",
-            "Vilken bok läser du?",
-            "Vars hund är det?"
+            "Pronomen kan utelämnas i vissa konstruktioner.",
+            "Vanligt i informellt tal.",
+            "Behåll tydlighet i kommunikationen."
           ],
-          "example": "Det är mannen som hjälper oss.",
+          "example": "Äter pizza.",
+          "ruleOrder": [
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "verb",
+              "text": "Äter"
+            },
+            {
+              "label": "objekt",
+              "text": "pizza"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Det är mannen som hjälper oss.",
-              "fix": "Det är mannen som hjälper oss."
+              "wrong": "Jag äter pizza.",
+              "fix": "Äter pizza."
+            }
+          ]
+        },
+        {
+          "title": "Hövlighet och pronomen",
+          "points": [
+            "Användning av formella och informella pronomen.",
+            "Skillnader i tilltal beroende på relation.",
+            "Viktigt i professionella sammanhang."
+          ],
+          "example": "Ni är välkomna.",
+          "ruleOrder": [
+            "formellt pronomen",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "formellt pronomen",
+              "text": "Ni"
+            },
+            {
+              "label": "verb",
+              "text": "är"
+            },
+            {
+              "label": "objekt",
+              "text": "välkomna"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Du är välkommen.",
+              "fix": "Ni är välkomna."
+            }
+          ]
+        },
+        {
+          "title": "Deiktiska pronomen",
+          "points": [
+            "Refererar till tid, plats eller person i kontext.",
+            "Används för att skapa tydlighet i kommunikationen.",
+            "Kan vara temporära eller permanenta referenser."
+          ],
+          "example": "Här är min vän.",
+          "ruleOrder": [
+            "deiktiskt pronomen",
+            "verb",
+            "subjekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "deiktiskt pronomen",
+              "text": "Här"
+            },
+            {
+              "label": "verb",
+              "text": "är"
+            },
+            {
+              "label": "subjekt",
+              "text": "min vän"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Min vän är här.",
+              "fix": "Här är min vän."
             }
           ]
         }
@@ -9632,15 +10442,161 @@
         {
           "title": "Adjektivets placering",
           "points": [
-            "Adjektiv placeras vanligtvis före substantivet.",
-            "I vissa fall kan adjektivet komma efter substantivet för att betona det.",
-            "Det är viktigt att använda rätt form av adjektivet beroende på substantivets genus och numerus."
+            "Adjektiv placeras före substantivet.",
+            "Exempel: en stor hund.",
+            "Undvik att placera adjektivet efter substantivet."
           ],
-          "example": "Den stora hunden sprang snabbt.",
+          "example": "Jag har en stor hund.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "adjektiv",
+            "substantiv"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "verb",
+              "text": "har"
+            },
+            {
+              "label": "adjektiv",
+              "text": "stor"
+            },
+            {
+              "label": "substantiv",
+              "text": "hund"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Hunden stor sprang snabbt.",
-              "fix": "Den stora hunden sprang snabbt."
+              "wrong": "Jag har hund stor.",
+              "fix": "Jag har en stor hund."
+            }
+          ]
+        },
+        {
+          "title": "Ordning av flera adjektiv",
+          "points": [
+            "Flera adjektiv följer en specifik ordning.",
+            "Allmän regel: ålder, färg, ursprung, material.",
+            "Exempel: en gammal röd bil."
+          ],
+          "example": "Jag såg en gammal röd bil.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "adjektiv1",
+            "adjektiv2",
+            "substantiv"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "verb",
+              "text": "såg"
+            },
+            {
+              "label": "adjektiv1",
+              "text": "gammal"
+            },
+            {
+              "label": "adjektiv2",
+              "text": "röd"
+            },
+            {
+              "label": "substantiv",
+              "text": "bil"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Jag såg en röd gammal bil.",
+              "fix": "Jag såg en gammal röd bil."
+            }
+          ]
+        },
+        {
+          "title": "Komparativ och superlativ",
+          "points": [
+            "Komparativ bildas med '-are'.",
+            "Superlativ bildas med '-ast'.",
+            "Exempel: snabbare, snabbast."
+          ],
+          "example": "Hon är snabbare än honom.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "komparativ",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Hon"
+            },
+            {
+              "label": "verb",
+              "text": "är"
+            },
+            {
+              "label": "komparativ",
+              "text": "snabbare"
+            },
+            {
+              "label": "objekt",
+              "text": "än honom"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Hon är snabbast än honom.",
+              "fix": "Hon är snabbare än honom."
+            }
+          ]
+        },
+        {
+          "title": "Intensifierande adverb",
+          "points": [
+            "Intensifierande adverb placeras före adjektivet.",
+            "Exempel: mycket, ganska, extremt.",
+            "Används för att förstärka betydelsen."
+          ],
+          "example": "Det är mycket kallt idag.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "intensifierande adverb",
+            "adjektiv"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Det"
+            },
+            {
+              "label": "verb",
+              "text": "är"
+            },
+            {
+              "label": "intensifierande adverb",
+              "text": "mycket"
+            },
+            {
+              "label": "adjektiv",
+              "text": "kallt"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Det är kallt mycket idag.",
+              "fix": "Det är mycket kallt idag."
             }
           ]
         },
@@ -9648,70 +10604,68 @@
           "title": "Adverbets placering",
           "points": [
             "Adverb placeras ofta efter verbet.",
-            "Adverb kan också placeras i början av meningen för att betona handlingen.",
-            "Det är viktigt att adverbets placering inte förvirrar meningsstrukturen."
+            "Exempel: Hon springer snabbt.",
+            "Undvik att placera adverb för långt från verbet."
           ],
-          "example": "Hon sjunger vackert.",
+          "example": "Han pratar snabbt.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "adverb"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Han"
+            },
+            {
+              "label": "verb",
+              "text": "pratar"
+            },
+            {
+              "label": "adverb",
+              "text": "snabbt"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Vackert hon sjunger.",
-              "fix": "Hon sjunger vackert."
+              "wrong": "Han snabbt pratar.",
+              "fix": "Han pratar snabbt."
             }
           ]
         },
         {
-          "title": "Bestämda och obestämda former",
+          "title": "Negation med 'inte'",
           "points": [
-            "Använd den bestämda formen när du refererar till något specifikt.",
-            "Den obestämda formen används för att referera till något allmänt.",
-            "Det är viktigt att känna till skillnaden för att undvika missförstånd."
-          ],
-          "example": "Jag såg en katt. Katt var söt.",
-          "mistakes": [
-            {
-              "wrong": "Jag såg katt. Katt var söt.",
-              "fix": "Jag såg en katt. Katt var söt."
-            }
-          ]
-        },
-        {
-          "title": "Komparativ och superlativ",
-          "points": [
-            "Komparativ används för att jämföra två saker.",
-            "Superlativ används för att beskriva något som är bäst eller mest.",
-            "Reglerna för komparativ och superlativ varierar beroende på adjektivets längd."
-          ],
-          "example": "Hon är smartare än honom. Hon är den smartaste i klassen.",
-          "mistakes": [
-            {
-              "wrong": "Hon är smartare än han. Hon är den smartaste i klass.",
-              "fix": "Hon är smartare än honom. Hon är den smartaste i klassen."
-            }
-          ]
-        },
-        {
-          "title": "Prepositioner med adjektiv",
-          "points": [
-            "Vissa adjektiv kräver specifika prepositioner.",
-            "Det är viktigt att lära sig vilka prepositioner som används med olika adjektiv.",
-            "Felaktig användning av prepositioner kan ändra meningen."
-          ],
-          "example": "Han är bra på matematik.",
-          "mistakes": [
-            {
-              "wrong": "Han är bra i matematik.",
-              "fix": "Han är bra på matematik."
-            }
-          ]
-        },
-        {
-          "title": "Negation med modifierare",
-          "points": [
-            "Negation placeras vanligtvis före verbet.",
-            "Det är viktigt att modifierare inte förvirrar negationen.",
-            "Använd rätt form av negationen beroende på sammanhanget."
+            "Negation placeras efter verbet.",
+            "Exempel: Jag förstår inte.",
+            "Använd 'inte' för att förneka."
           ],
           "example": "Jag gillar inte kaffe.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "negation",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "verb",
+              "text": "gillar"
+            },
+            {
+              "label": "negation",
+              "text": "inte"
+            },
+            {
+              "label": "objekt",
+              "text": "kaffe"
+            }
+          ],
           "mistakes": [
             {
               "wrong": "Jag inte gillar kaffe.",
@@ -9720,916 +10674,234 @@
           ]
         },
         {
-          "title": "Rangordning av modifierare",
+          "title": "Prepositioner och deras modifierare",
           "points": [
-            "När flera modifierare används, följ en specifik ordning.",
-            "Ordningen är: antal, åsikt, storlek, ålder, form, färg, ursprung, material, syfte.",
-            "Felaktig rangordning kan göra meningen otydlig."
+            "Prepositioner kan ha modifierare.",
+            "Exempel: på bordet.",
+            "Modifierare placeras före substantivet."
           ],
-          "example": "En liten röd bil.",
+          "example": "Boken ligger på det stora bordet.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "preposition",
+            "detalj",
+            "substantiv"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Boken"
+            },
+            {
+              "label": "verb",
+              "text": "ligger"
+            },
+            {
+              "label": "preposition",
+              "text": "på"
+            },
+            {
+              "label": "detalj",
+              "text": "det stora"
+            },
+            {
+              "label": "substantiv",
+              "text": "bordet"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "En röd liten bil.",
-              "fix": "En liten röd bil."
+              "wrong": "Boken ligger bordet på det stora.",
+              "fix": "Boken ligger på det stora bordet."
             }
           ]
         },
         {
-          "title": "Modifiering av substantiv",
+          "title": "Kombination av adjektiv och adverb",
           "points": [
-            "Substantiv kan modifieras med adjektiv för att ge mer information.",
-            "Det är viktigt att modifieraren överensstämmer med substantivets genus.",
-            "Felaktig modifiering kan leda till grammatiska fel."
+            "Adjektiv kan modifieras av adverb.",
+            "Exempel: väldigt vacker.",
+            "Adverb placeras före adjektivet."
           ],
-          "example": "Den gamla boken är intressant.",
+          "example": "Hon är väldigt vacker.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "adverb",
+            "adjektiv"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Hon"
+            },
+            {
+              "label": "verb",
+              "text": "är"
+            },
+            {
+              "label": "adverb",
+              "text": "väldigt"
+            },
+            {
+              "label": "adjektiv",
+              "text": "vacker"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Boken gamla är intressant.",
-              "fix": "Den gamla boken är intressant."
+              "wrong": "Hon är vacker väldigt.",
+              "fix": "Hon är väldigt vacker."
             }
           ]
         },
         {
-          "title": "Sammansatta adjektiv",
+          "title": "Särskilda fall av modifiering",
           "points": [
-            "Sammansatta adjektiv kan bildas genom att kombinera två eller flera adjektiv.",
-            "Det är viktigt att använda bindestreck för att undvika förvirring.",
-            "Felaktig användning av bindestreck kan ändra betydelsen."
+            "Vissa substantiv kan modifieras med specifika adjektiv.",
+            "Exempel: en gammal vän.",
+            "Var noga med att använda rätt adjektiv."
           ],
-          "example": "Det är en högteknologisk lösning.",
+          "example": "Han är en gammal vän.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "artikel",
+            "adjektiv",
+            "substantiv"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Han"
+            },
+            {
+              "label": "verb",
+              "text": "är"
+            },
+            {
+              "label": "artikel",
+              "text": "en"
+            },
+            {
+              "label": "adjektiv",
+              "text": "gammal"
+            },
+            {
+              "label": "substantiv",
+              "text": "vän"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Det är en hög teknologisk lösning.",
-              "fix": "Det är en högteknologisk lösning."
+              "wrong": "Han är vän gammal.",
+              "fix": "Han är en gammal vän."
             }
           ]
         },
         {
-          "title": "Adjektivets böjning",
+          "title": "Negativa och positiva modifierare",
           "points": [
-            "Adjektiv böjs efter substantivets genus och numerus.",
-            "Det är viktigt att använda rätt böjning för att vara grammatiskt korrekt.",
-            "Felaktig böjning kan leda till missförstånd."
+            "Använd positiva modifierare för att förstärka.",
+            "Negativa modifierare används för att förneka.",
+            "Exempel: inte, sällan."
           ],
-          "example": "Den snälla hunden.",
+          "example": "Hon är inte alltid glad.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "negation",
+            "adverb",
+            "adjektiv"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Hon"
+            },
+            {
+              "label": "verb",
+              "text": "är"
+            },
+            {
+              "label": "negation",
+              "text": "inte"
+            },
+            {
+              "label": "adverb",
+              "text": "alltid"
+            },
+            {
+              "label": "adjektiv",
+              "text": "glad"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Den snäll hund.",
-              "fix": "Den snälla hunden."
+              "wrong": "Hon alltid är inte glad.",
+              "fix": "Hon är inte alltid glad."
             }
           ]
         }
       ],
       "Questions": [
         {
-          "title": "Ja/Nej-frågor",
+          "title": "Enkla ja/nej-frågor",
           "points": [
-            "Används för att be om bekräftelse.",
-            "Inleds med hjälpverb eller frågeord.",
-            "Svarar med 'ja' eller 'nej'."
+            "Använd V2-ordning.",
+            "Börja med verbet.",
+            "Använd intonation för att markera frågor."
           ],
-          "example": "Är du trött?",
+          "example": "Är du glad?",
+          "ruleOrder": [
+            "verb",
+            "subject"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "verb",
+              "text": "Är"
+            },
+            {
+              "label": "subject",
+              "text": "du"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Du är trött?",
-              "fix": "Är du trött?"
+              "wrong": "Du är glad?",
+              "fix": "Är du glad?"
             }
           ]
         },
         {
           "title": "Frågor med frågeord",
           "points": [
-            "Används för att få specifik information.",
-            "Inleds med ett frågeord som 'vad', 'var', 'när', 'hur'.",
-            "Följd av verb och subjekt."
+            "Frågeord placeras i början.",
+            "Följ V2-regeln.",
+            "Använd korrekt frågeord beroende på information."
           ],
           "example": "Vad gör du?",
-          "mistakes": [
-            {
-              "wrong": "Gör vad du?",
-              "fix": "Vad gör du?"
-            }
-          ]
-        },
-        {
-          "title": "Indirekta frågor",
-          "points": [
-            "Används för att ställa frågor utan att direkt fråga.",
-            "Inleds ofta med 'om' eller 'vad'.",
-            "Följd av en bisats."
+          "ruleOrder": [
+            "questionWord",
+            "verb",
+            "subject"
           ],
-          "example": "Jag undrar om du kommer.",
-          "mistakes": [
+          "exampleHighlights": [
             {
-              "wrong": "Jag undrar du kommer?",
-              "fix": "Jag undrar om du kommer."
-            }
-          ]
-        },
-        {
-          "title": "Frågor i presens",
-          "points": [
-            "Används för att fråga om nuvarande tillstånd eller handlingar.",
-            "Strukturen är subjekt + verb + objekt.",
-            "Kan inkludera tidsadverbial."
-          ],
-          "example": "Äter du lunch nu?",
-          "mistakes": [
+              "label": "questionWord",
+              "text": "Vad"
+            },
             {
-              "wrong": "Du äter lunch nu?",
-              "fix": "Äter du lunch nu?"
-            }
-          ]
-        },
-        {
-          "title": "Frågor i perfekt",
-          "points": [
-            "Används för att fråga om avslutade handlingar.",
-            "Strukturen är subjekt + har + verb i supinum.",
-            "Kan inkludera tidsadverbial."
-          ],
-          "example": "Har du sett filmen?",
-          "mistakes": [
+              "label": "verb",
+              "text": "gör"
+            },
             {
-              "wrong": "Du har sett filmen?",
-              "fix": "Har du sett filmen?"
+              "label": "subject",
+              "text": "du"
             }
-          ]
-        },
-        {
-          "title": "Frågor med 'vilken'",
-          "points": [
-            "Används för att fråga om specifika val.",
-            "Inleds med 'vilken' följt av substantiv.",
-            "Kan vara singular eller plural."
           ],
-          "example": "Vilken bok läser du?",
-          "mistakes": [
-            {
-              "wrong": "Du läser vilken bok?",
-              "fix": "Vilken bok läser du?"
-            }
-          ]
-        },
-        {
-          "title": "Frågor med 'hur mycket'",
-          "points": [
-            "Används för att fråga om mängd eller pris.",
-            "Inleds med 'hur mycket' följt av substantiv.",
-            "Kan vara i singular eller plural."
-          ],
-          "example": "Hur mycket kostar det?",
-          "mistakes": [
-            {
-              "wrong": "Det kostar hur mycket?",
-              "fix": "Hur mycket kostar det?"
-            }
-          ]
-        }
-      ],
-      "Negation": [
-        {
-          "title": "Negation med 'inte'",
-          "points": [
-            "Används för att förneka verb.",
-            "Placerad efter verbet i huvudsatsen.",
-            "Kan användas med olika tempus."
-          ],
-          "example": "Jag äter inte äpplet.",
-          "mistakes": [
-            {
-              "wrong": "Jag inte äter äpplet.",
-              "fix": "Jag äter inte äpplet."
-            }
-          ]
-        },
-        {
-          "title": "Negation med 'inget'",
-          "points": [
-            "Används för att förneka substantiv.",
-            "Kan stå som subjekt eller objekt.",
-            "Kräver obestämd form av substantivet."
-          ],
-          "example": "Jag har inget pengar.",
-          "mistakes": [
-            {
-              "wrong": "Jag har inga pengar.",
-              "fix": "Jag har inget pengar."
-            }
-          ]
-        },
-        {
-          "title": "Dubbel negation",
-          "points": [
-            "Undvik dubbel negation i svenska.",
-            "Kan leda till förvirring.",
-            "Använd en enkel negation istället."
-          ],
-          "example": "Ingen vill inte komma.",
-          "mistakes": [
-            {
-              "wrong": "Ingen vill inte komma.",
-              "fix": "Ingen vill komma."
-            }
-          ]
-        },
-        {
-          "title": "Negation med 'aldrig'",
-          "points": [
-            "Används för att uttrycka att något aldrig händer.",
-            "Placerad före verbet.",
-            "Kan användas med olika tempus."
-          ],
-          "example": "Jag har aldrig sett den filmen.",
-          "mistakes": [
-            {
-              "wrong": "Aldrig har jag sett den filmen.",
-              "fix": "Jag har aldrig sett den filmen."
-            }
-          ]
-        },
-        {
-          "title": "Negation med 'ingen'",
-          "points": [
-            "Används för att förneka existensen av substantiv.",
-            "Står ofta i subjektposition.",
-            "Kräver obestämd form av substantivet."
-          ],
-          "example": "Ingen har kommit.",
-          "mistakes": [
-            {
-              "wrong": "Ingen har inte kommit.",
-              "fix": "Ingen har kommit."
-            }
-          ]
-        },
-        {
-          "title": "Negation med 'inte längre'",
-          "points": [
-            "Används för att uttrycka att något inte längre är sant.",
-            "Placerad efter verbet.",
-            "Kan användas med olika tempus."
-          ],
-          "example": "Jag bor inte längre här.",
-          "mistakes": [
-            {
-              "wrong": "Jag inte bor längre här.",
-              "fix": "Jag bor inte längre här."
-            }
-          ]
-        }
-      ],
-      "Connections": [
-        {
-          "title": "Prepositioner",
-          "points": [
-            "Användning av prepositioner i svenska.",
-            "Vanliga prepositioner och deras betydelser.",
-            "Prepositioner i olika sammanhang."
-          ],
-          "example": "Jag går till skolan.",
-          "mistakes": [
-            {
-              "wrong": "Jag går på skolan.",
-              "fix": "Jag går till skolan."
-            }
-          ]
-        },
-        {
-          "title": "Satsdelar",
-          "points": [
-            "Identifiera subjekt, predikat och objekt.",
-            "Skillnaden mellan huvudsats och bisats.",
-            "Satsdelarnas funktion i en mening."
-          ],
-          "example": "Hunden jagar katten.",
-          "mistakes": [
-            {
-              "wrong": "Hunden katten jagar.",
-              "fix": "Hunden jagar katten."
-            }
-          ]
-        },
-        {
-          "title": "Verbformer",
-          "points": [
-            "Olika verbformer i svenska.",
-            "Hur man böjer verb i presens, preteritum och supinum.",
-            "Oregelbundna verb och deras former."
-          ],
-          "example": "Jag har ätit.",
-          "mistakes": [
-            {
-              "wrong": "Jag har äta.",
-              "fix": "Jag har ätit."
-            }
-          ]
-        },
-        {
-          "title": "Adjektiv och deras böjning",
-          "points": [
-            "Böjning av adjektiv i genus och numerus.",
-            "Komparativ och superlativ former.",
-            "Användning av adjektiv i olika sammanhang."
-          ],
-          "example": "Den stora hunden är snäll.",
-          "mistakes": [
-            {
-              "wrong": "Den stor hund är snäll.",
-              "fix": "Den stora hunden är snäll."
-            }
-          ]
-        },
-        {
-          "title": "Frågesatser",
-          "points": [
-            "Hur man bildar frågor i svenska.",
-            "Skillnader mellan ja/nej-frågor och frågeord-frågor.",
-            "Intonation och ordföljd i frågor."
-          ],
-          "example": "Äter du lunch?",
-          "mistakes": [
-            {
-              "wrong": "Du äter lunch?",
-              "fix": "Äter du lunch?"
-            }
-          ]
-        },
-        {
-          "title": "Negation",
-          "points": [
-            "Hur man negerar satser.",
-            "Användning av 'inte' och 'inga'.",
-            "Negationens placering i meningen."
-          ],
-          "example": "Jag vill inte gå.",
-          "mistakes": [
-            {
-              "wrong": "Jag inte vill gå.",
-              "fix": "Jag vill inte gå."
-            }
-          ]
-        },
-        {
-          "title": "Konjunktioner",
-          "points": [
-            "Användning av konjunktioner för att binda satser.",
-            "Skillnaden mellan samordnande och underordnande konjunktioner.",
-            "Exempel på vanliga konjunktioner."
-          ],
-          "example": "Jag gillar kaffe och te.",
-          "mistakes": [
-            {
-              "wrong": "Jag gillar kaffe men te.",
-              "fix": "Jag gillar kaffe och te."
-            }
-          ]
-        }
-      ],
-      "Conditions": [
-        {
-          "title": "Om-satser",
-          "points": [
-            "Används för att uttrycka villkor.",
-            "Inleds med 'om'.",
-            "Följt av en huvudsats."
-          ],
-          "example": "Om det regnar, stannar vi hemma.",
-          "mistakes": [
-            {
-              "wrong": "Om regnar det, stannar vi hemma.",
-              "fix": "Om det regnar, stannar vi hemma."
-            }
-          ]
-        },
-        {
-          "title": "Förutsättningar",
-          "points": [
-            "Används för att uttrycka hypotetiska situationer.",
-            "Kan inledas med 'om' eller 'skulle'.",
-            "Huvudsatsen beskriver resultatet."
-          ],
-          "example": "Om jag hade pengar, skulle jag resa.",
-          "mistakes": [
-            {
-              "wrong": "Om jag hade pengar, jag skulle resa.",
-              "fix": "Om jag hade pengar, skulle jag resa."
-            }
-          ]
-        },
-        {
-          "title": "Konditionalsatser",
-          "points": [
-            "Används för att beskriva villkorliga handlingar.",
-            "Innehåller ofta 'om' och 'då'.",
-            "Då-satsen uttrycker konsekvensen."
-          ],
-          "example": "Om du studerar, då klarar du provet.",
-          "mistakes": [
-            {
-              "wrong": "Om du studerar då klarar du provet.",
-              "fix": "Om du studerar, då klarar du provet."
-            }
-          ]
-        },
-        {
-          "title": "Konditionella verbformer",
-          "points": [
-            "Används för att uttrycka osäkerhet.",
-            "Inkluderar ofta 'skulle' eller 'kunde'.",
-            "Används i hypotetiska situationer."
-          ],
-          "example": "Jag skulle gå om jag hade tid.",
-          "mistakes": [
-            {
-              "wrong": "Jag gå om jag skulle ha tid.",
-              "fix": "Jag skulle gå om jag hade tid."
-            }
-          ]
-        },
-        {
-          "title": "Negativa villkor",
-          "points": [
-            "Används för att uttrycka negativa villkor.",
-            "Inleds med 'om inte'.",
-            "Följt av en huvudsats."
-          ],
-          "example": "Om inte du kommer, går vi utan dig.",
-          "mistakes": [
-            {
-              "wrong": "Om du inte kommer, vi går utan dig.",
-              "fix": "Om inte du kommer, går vi utan dig."
-            }
-          ]
-        },
-        {
-          "title": "Villkor med tidsuttryck",
-          "points": [
-            "Används för att kombinera villkor med tid.",
-            "Inleds med 'när' eller 'så snart som'.",
-            "Beskriver en framtida händelse."
-          ],
-          "example": "När jag är klar, ringer jag dig.",
-          "mistakes": [
-            {
-              "wrong": "När jag klar är, ringer jag dig.",
-              "fix": "När jag är klar, ringer jag dig."
-            }
-          ]
-        }
-      ],
-      "Voice & Focus": [
-        {
-          "title": "Aktiv och Passiv Röst",
-          "points": [
-            "Aktiv röst används för att betona subjektet.",
-            "Passiv röst används för att betona objektet.",
-            "I svenskan är aktiv röst vanligare i vardagligt tal."
-          ],
-          "example": "Katten jagar musen.",
-          "mistakes": [
-            {
-              "wrong": "Musen jagas av katten.",
-              "fix": "Musen blir jagad av katten."
-            }
-          ]
-        },
-        {
-          "title": "Fokuspartiklar",
-          "points": [
-            "Fokuspartiklar som 'bara' och 'endast' används för att betona specifika delar av en mening.",
-            "De placeras vanligtvis före det ord de betonar.",
-            "Användning av fokuspartiklar kan förändra meningsbetydelsen."
-          ],
-          "example": "Jag vill bara ha en kopp kaffe.",
-          "mistakes": [
-            {
-              "wrong": "Jag bara vill ha en kopp kaffe.",
-              "fix": "Jag vill ha bara en kopp kaffe."
-            }
-          ]
-        },
-        {
-          "title": "Ordföljd i Frågor",
-          "points": [
-            "I svenska frågor placeras verbet före subjektet.",
-            "Detta skiljer sig från påståendesatser.",
-            "Rätt ordföljd är viktig för att undvika missförstånd."
-          ],
-          "example": "Kommer du till festen?",
-          "mistakes": [
-            {
-              "wrong": "Du kommer till festen?",
-              "fix": "Kommer du till festen?"
-            }
-          ]
-        },
-        {
-          "title": "Betoning i Meningen",
-          "points": [
-            "Betoning kan ändra meningsbetydelsen.",
-            "Det är viktigt att betona rätt ord för klarhet.",
-            "I svenskan är det vanligt att betona det sista ordet."
-          ],
-          "example": "Jag älskar verkligen choklad.",
-          "mistakes": [
-            {
-              "wrong": "Jag verkligen älskar choklad.",
-              "fix": "Jag älskar verkligen choklad."
-            }
-          ]
-        },
-        {
-          "title": "Subjekt och Objekt",
-          "points": [
-            "Subjektet är den som utför handlingen.",
-            "Objektet är den som påverkas av handlingen.",
-            "Korrekt identifiering av subjekt och objekt är avgörande för meningsbyggnaden."
-          ],
-          "example": "Läraren hjälper eleverna.",
-          "mistakes": [
-            {
-              "wrong": "Eleverna hjälper läraren.",
-              "fix": "Läraren hjälper eleverna."
-            }
-          ]
-        }
-      ],
-      "Modality": [
-        {
-          "title": "Möjlighet",
-          "points": [
-            "kan",
-            "måste",
-            "får"
-          ],
-          "example": "Jag kan simma.",
-          "mistakes": [
-            {
-              "wrong": "Jag kan simma inte.",
-              "fix": "Jag kan inte simma."
-            }
-          ]
-        },
-        {
-          "title": "Nödvändighet",
-          "points": [
-            "måste",
-            "bör",
-            "ska"
-          ],
-          "example": "Du måste studera för provet.",
-          "mistakes": [
-            {
-              "wrong": "Du måste inte studera för provet.",
-              "fix": "Du behöver studera för provet."
-            }
-          ]
-        },
-        {
-          "title": "Tillåtelse",
-          "points": [
-            "får",
-            "kan",
-            "må"
-          ],
-          "example": "Du får gå ut nu.",
-          "mistakes": [
-            {
-              "wrong": "Du får inte gå ut nu.",
-              "fix": "Du får gå ut nu."
-            }
-          ]
-        },
-        {
-          "title": "Önskan",
-          "points": [
-            "vill",
-            "skulle vilja",
-            "önskar"
-          ],
-          "example": "Jag vill ha en ny telefon.",
-          "mistakes": [
-            {
-              "wrong": "Jag vill inte ha en ny telefon.",
-              "fix": "Jag vill ha en ny telefon."
-            }
-          ]
-        },
-        {
-          "title": "Förmåga",
-          "points": [
-            "kan",
-            "klarar av",
-            "är kapabel att"
-          ],
-          "example": "Han kan spela piano.",
-          "mistakes": [
-            {
-              "wrong": "Han kan inte spela piano.",
-              "fix": "Han kan spela piano."
-            }
-          ]
-        },
-        {
-          "title": "Trolighet",
-          "points": [
-            "kan",
-            "troligen",
-            "antagligen"
-          ],
-          "example": "Det kan regna imorgon.",
-          "mistakes": [
-            {
-              "wrong": "Det kan inte regna imorgon.",
-              "fix": "Det kan regna imorgon."
-            }
-          ]
-        },
-        {
-          "title": "Råd",
-          "points": [
-            "bör",
-            "skulle",
-            "kan"
-          ],
-          "example": "Du bör äta mer grönsaker.",
-          "mistakes": [
-            {
-              "wrong": "Du bör inte äta mer grönsaker.",
-              "fix": "Du bör äta mer grönsaker."
-            }
-          ]
-        },
-        {
-          "title": "Avsikt",
-          "points": [
-            "ska",
-            "kommer att",
-            "planerar att"
-          ],
-          "example": "Jag ska träffa min vän imorgon.",
-          "mistakes": [
-            {
-              "wrong": "Jag ska inte träffa min vän imorgon.",
-              "fix": "Jag ska träffa min vän imorgon."
-            }
-          ]
-        }
-      ],
-      "Reported Speech": [
-        {
-          "title": "Direkt tal till återberättad tal",
-          "points": [
-            "Vid återberättad tal används ofta 'att'.",
-            "Verbets tempus kan ändras beroende på kontext.",
-            "Pronomen kan behöva justeras."
-          ],
-          "example": "Hon sa att hon skulle komma.",
-          "mistakes": [
-            {
-              "wrong": "Hon sa: 'Jag kommer.'",
-              "fix": "Hon sa att hon skulle komma."
-            }
-          ]
-        },
-        {
-          "title": "Frågor i återberättad tal",
-          "points": [
-            "Frågor blir påståenden i återberättad tal.",
-            "Frågeord kan behöva justeras.",
-            "Inga frågetecken används."
-          ],
-          "example": "Han frågade om jag ville följa med.",
-          "mistakes": [
-            {
-              "wrong": "Han frågade: 'Vill du följa med?'",
-              "fix": "Han frågade om jag ville följa med."
-            }
-          ]
-        },
-        {
-          "title": "Negation i återberättad tal",
-          "points": [
-            "Negationer placeras före verbet.",
-            "Det är viktigt att bevara meningsstrukturen.",
-            "Använd 'inte' för att uttrycka negation."
-          ],
-          "example": "De sa att de inte skulle gå.",
-          "mistakes": [
-            {
-              "wrong": "De sa: 'Vi går inte.'",
-              "fix": "De sa att de inte skulle gå."
-            }
-          ]
-        },
-        {
-          "title": "Tidsadverbial i återberättad tal",
-          "points": [
-            "Tidsadverbial kan behöva ändras.",
-            "Nu blir till då.",
-            "Idag blir till den dagen."
-          ],
-          "example": "Hon sa att hon skulle ringa idag.",
-          "mistakes": [
-            {
-              "wrong": "Hon sa: 'Jag ringer idag.'",
-              "fix": "Hon sa att hon skulle ringa den dagen."
-            }
-          ]
-        },
-        {
-          "title": "Platsadverbial i återberättad tal",
-          "points": [
-            "Platsadverbial kan också behöva justeras.",
-            "Här blir till där.",
-            "Där blir till hit."
-          ],
-          "example": "Han sa att han var här.",
-          "mistakes": [
-            {
-              "wrong": "Han sa: 'Jag är här.'",
-              "fix": "Han sa att han var där."
-            }
-          ]
-        },
-        {
-          "title": "Förändringar av pronomen i återberättad tal",
-          "points": [
-            "Pronomen ändras beroende på talaren.",
-            "Jag blir till han/hon.",
-            "Vi blir till de."
-          ],
-          "example": "De sa att de älskade oss.",
-          "mistakes": [
-            {
-              "wrong": "De sa: 'Vi älskar er.'",
-              "fix": "De sa att de älskade oss."
-            }
-          ]
-        }
-      ],
-      "Formality & Style": [
-        {
-          "title": "Formell hälsning",
-          "points": [
-            "Använd 'Herr' eller 'Fru' i formella sammanhang.",
-            "Undvik att använda förnamn i professionella e-postmeddelanden.",
-            "Använd alltid korrekt titel."
-          ],
-          "example": "Bästa Herr Andersson,",
-          "mistakes": [
-            {
-              "wrong": "Hej Andersson,",
-              "fix": "Bästa Herr Andersson,"
-            }
-          ]
-        },
-        {
-          "title": "Artighet i förfrågningar",
-          "points": [
-            "Använd 'vänligen' för att göra en förfrågan mer artig.",
-            "Undvik imperativform i formella sammanhang.",
-            "Använd 'skulle kunna' istället för 'kan'."
-          ],
-          "example": "Skulle du kunna skicka mig rapporten, vänligen?",
-          "mistakes": [
-            {
-              "wrong": "Skicka mig rapporten.",
-              "fix": "Skulle du kunna skicka mig rapporten, vänligen?"
-            }
-          ]
-        },
-        {
-          "title": "Undvik slang",
-          "points": [
-            "Använd formellt språk i affärskommunikation.",
-            "Undvik förkortningar och slanguttryck.",
-            "Använd fullständiga meningar."
-          ],
-          "example": "Jag ser fram emot vårt möte.",
-          "mistakes": [
-            {
-              "wrong": "Ser fram emot mötet.",
-              "fix": "Jag ser fram emot vårt möte."
-            }
-          ]
-        },
-        {
-          "title": "Korrekt avslutning",
-          "points": [
-            "Använd 'Med vänliga hälsningar' i formella e-postmeddelanden.",
-            "Undvik avslutningar som 'Hälsningar' i professionella sammanhang.",
-            "Använd alltid ditt namn efter avslutningen."
-          ],
-          "example": "Med vänliga hälsningar, Anna Svensson",
-          "mistakes": [
-            {
-              "wrong": "Hälsningar, Anna",
-              "fix": "Med vänliga hälsningar, Anna Svensson"
-            }
-          ]
-        },
-        {
-          "title": "Användning av passiv form",
-          "points": [
-            "Passiv form används för att betona handlingen snarare än subjektet.",
-            "Undvik att använda passiv form för vardagliga situationer.",
-            "Använd aktiv form för att göra språket mer direkt."
-          ],
-          "example": "Rapporten skrevs av teamet.",
-          "mistakes": [
-            {
-              "wrong": "Teamet skrev rapporten.",
-              "fix": "Rapporten skrevs av teamet."
-            }
-          ]
-        },
-        {
-          "title": "Korrekt användning av tempus",
-          "points": [
-            "Använd presens för aktuella händelser.",
-            "Använd perfekt för avslutade handlingar.",
-            "Använd futurum för framtida händelser."
-          ],
-          "example": "Jag har avslutat uppgiften.",
-          "mistakes": [
-            {
-              "wrong": "Jag avslutade uppgiften.",
-              "fix": "Jag har avslutat uppgiften."
-            }
-          ]
-        },
-        {
-          "title": "Formell struktur",
-          "points": [
-            "Använd tydlig och logisk struktur i texten.",
-            "Dela upp texten i stycken för att öka läsbarheten.",
-            "Använd rubriker för att organisera information."
-          ],
-          "example": "I denna rapport kommer vi att diskutera...",
-          "mistakes": [
-            {
-              "wrong": "Vi diskuterar i denna rapport...",
-              "fix": "I denna rapport kommer vi att diskutera..."
-            }
-          ]
-        }
-      ],
-      "Discourse & Flow": [
-        {
-          "title": "Användning av konjunktioner",
-          "points": [
-            "Koppla ihop satser effektivt.",
-            "Använd rätt konjunktion för att undvika förvirring.",
-            "Var medveten om ordföljden efter konjunktioner."
-          ],
-          "example": "Jag gillar att läsa, men jag har inte tid.",
-          "mistakes": [
-            {
-              "wrong": "Jag gillar att läsa men jag har inte tid.",
-              "fix": "Jag gillar att läsa, men jag har inte tid."
-            }
-          ]
-        },
-        {
-          "title": "Satsdelar och deras ordning",
-          "points": [
-            "Satsdelar ska placeras i rätt ordning.",
-            "Subjektet kommer före predikatet.",
-            "Objektet följer efter predikatet."
-          ],
-          "example": "Katten jagar musen.",
-          "mistakes": [
-            {
-              "wrong": "Jagar musen katten.",
-              "fix": "Katten jagar musen."
-            }
-          ]
-        },
-        {
-          "title": "Användning av pronomen",
-          "points": [
-            "Pronomen ska överensstämma med substantivets genus.",
-            "Var noga med att använda rätt kasus.",
-            "Undvik otydlig referens."
-          ],
-          "example": "Hon gav honom boken.",
-          "mistakes": [
-            {
-              "wrong": "Hon gav boken honom.",
-              "fix": "Hon gav honom boken."
-            }
-          ]
-        },
-        {
-          "title": "Frågeord och deras placering",
-          "points": [
-            "Frågeord inleder ofta en fråga.",
-            "Ordföljden kan ändras i frågor.",
-            "Var tydlig med vad du frågar om."
-          ],
-          "example": "Vad gör du?",
           "mistakes": [
             {
               "wrong": "Du gör vad?",
@@ -10638,92 +10910,2140 @@
           ]
         },
         {
-          "title": "Användning av tidsadverb",
+          "title": "Alternativa frågor",
           "points": [
-            "Tidsadverb placeras ofta före verbet.",
-            "Var tydlig med tidpunkten.",
-            "Undvik dubbel tidsangivelse."
+            "Använd 'eller' för att ge alternativ.",
+            "Följ V2-ordning.",
+            "Intonation markerar valet."
           ],
-          "example": "Jag ska åka till Stockholm imorgon.",
+          "example": "Vill du ha kaffe eller te?",
+          "ruleOrder": [
+            "verb",
+            "subject",
+            "object",
+            "or"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "verb",
+              "text": "Vill"
+            },
+            {
+              "label": "subject",
+              "text": "du"
+            },
+            {
+              "label": "object",
+              "text": "kaffe"
+            },
+            {
+              "label": "or",
+              "text": "eller"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Imorgon ska jag åka till Stockholm.",
-              "fix": "Jag ska åka till Stockholm imorgon."
+              "wrong": "Vill du ha kaffe te?",
+              "fix": "Vill du ha kaffe eller te?"
             }
           ]
         },
         {
-          "title": "Koppling av meningar",
+          "title": "Formella frågor",
           "points": [
-            "Använd rätt bindeord för att koppla meningar.",
-            "Variera dina bindeord för bättre flyt.",
-            "Undvik onödiga upprepningar."
+            "Använd 'ni' för formell tilltal.",
+            "Följ V2-ordning.",
+            "Var artig och tydlig."
           ],
-          "example": "Jag vill gå ut, men det regnar.",
+          "example": "Skulle ni kunna hjälpa mig?",
+          "ruleOrder": [
+            "verb",
+            "subject",
+            "object"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "verb",
+              "text": "Skulle"
+            },
+            {
+              "label": "subject",
+              "text": "ni"
+            },
+            {
+              "label": "object",
+              "text": "hjälpa mig"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Jag vill gå ut men det regnar.",
-              "fix": "Jag vill gå ut, men det regnar."
+              "wrong": "Ni kan hjälpa mig?",
+              "fix": "Skulle ni kunna hjälpa mig?"
             }
           ]
         },
         {
-          "title": "Användning av passiv form",
+          "title": "Frågor med prepositioner",
           "points": [
-            "Passiv form används för att fokusera på handlingen.",
-            "Var medveten om verbets böjning.",
-            "Undvik passiv form om aktiv form är tydligare."
+            "Prepositioner placeras i slutet.",
+            "Följ V2-ordning.",
+            "Var tydlig med prepositionens betydelse."
           ],
-          "example": "Boken läses av många.",
+          "example": "Vem pratar du med?",
+          "ruleOrder": [
+            "questionWord",
+            "verb",
+            "subject",
+            "preposition"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "questionWord",
+              "text": "Vem"
+            },
+            {
+              "label": "verb",
+              "text": "pratar"
+            },
+            {
+              "label": "subject",
+              "text": "du"
+            },
+            {
+              "label": "preposition",
+              "text": "med"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Många läser boken.",
-              "fix": "Boken läses av många."
+              "wrong": "Du pratar vem med?",
+              "fix": "Vem pratar du med?"
             }
           ]
         },
         {
-          "title": "Negation i meningar",
+          "title": "Negativa frågor",
           "points": [
-            "Negation placeras före verbet.",
-            "Var tydlig med vad som negeras.",
-            "Undvik dubbel negation."
+            "Använd 'inte' för negation.",
+            "Följ V2-ordning.",
+            "Intonation kan variera."
           ],
-          "example": "Jag ser inte filmen.",
+          "example": "Är du inte trött?",
+          "ruleOrder": [
+            "verb",
+            "subject",
+            "negation"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "verb",
+              "text": "Är"
+            },
+            {
+              "label": "subject",
+              "text": "du"
+            },
+            {
+              "label": "negation",
+              "text": "inte"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Jag inte ser filmen.",
-              "fix": "Jag ser inte filmen."
+              "wrong": "Du är trött inte?",
+              "fix": "Är du inte trött?"
             }
           ]
         },
         {
-          "title": "Användning av reflexiva pronomen",
+          "title": "Frågor med flera verb",
           "points": [
-            "Reflexiva pronomen används för att visa att subjektet gör något mot sig själv.",
-            "Var noga med att använda rätt form.",
-            "Undvik förvirring med andra pronomen."
+            "Använd V2-ordning för första verbet.",
+            "Följ med hjälpverb.",
+            "Var tydlig med verbens funktion."
           ],
-          "example": "Hon tvättar sig.",
+          "example": "Kan du hjälpa mig att förstå?",
+          "ruleOrder": [
+            "modalVerb",
+            "subject",
+            "verb",
+            "object"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "modalVerb",
+              "text": "Kan"
+            },
+            {
+              "label": "subject",
+              "text": "du"
+            },
+            {
+              "label": "verb",
+              "text": "hjälpa"
+            },
+            {
+              "label": "object",
+              "text": "mig"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Hon tvättar honom.",
-              "fix": "Hon tvättar sig."
+              "wrong": "Du kan hjälpa mig förstå?",
+              "fix": "Kan du hjälpa mig att förstå?"
+            }
+          ]
+        }
+      ],
+      "Negation": [
+        {
+          "title": "Grundläggande negation",
+          "points": [
+            "Negation uttrycks med 'inte'.",
+            "Placerar 'inte' efter verbet.",
+            "Används för att förneka påståenden."
+          ],
+          "example": "Jag äter inte äpplet.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "inte",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "verb",
+              "text": "äter"
+            },
+            {
+              "label": "inte",
+              "text": "inte"
+            },
+            {
+              "label": "objekt",
+              "text": "äpplet"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Jag inte äter äpplet.",
+              "fix": "Jag äter inte äpplet."
             }
           ]
         },
         {
-          "title": "Korrekt användning av prepositioner",
+          "title": "Negation med hjälpverb",
           "points": [
-            "Prepositioner anger relationer mellan ord.",
-            "Använd rätt preposition för att undvika missförstånd.",
-            "Var medveten om fasta uttryck."
+            "Negation med hjälpverb följer samma mönster.",
+            "Huvudverbet förblir i infinitiv.",
+            "Används för att förneka framtida handlingar."
           ],
-          "example": "Boken ligger på bordet.",
+          "example": "Jag kommer inte att äta äpplet.",
+          "ruleOrder": [
+            "subjekt",
+            "hjälpverb",
+            "inte",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "hjälpverb",
+              "text": "kommer"
+            },
+            {
+              "label": "inte",
+              "text": "inte"
+            },
+            {
+              "label": "verb",
+              "text": "äta"
+            },
+            {
+              "label": "objekt",
+              "text": "äpplet"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Boken ligger i bordet.",
-              "fix": "Boken ligger på bordet."
+              "wrong": "Jag kommer äta inte äpplet.",
+              "fix": "Jag kommer inte att äta äpplet."
+            }
+          ]
+        },
+        {
+          "title": "Dubbla negationer",
+          "points": [
+            "Undvik dubbla negationer i svenska.",
+            "En negation räcker för att förneka.",
+            "Dubbla negationer kan leda till förvirring."
+          ],
+          "example": "Jag ser inte något.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "inte",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "verb",
+              "text": "ser"
+            },
+            {
+              "label": "inte",
+              "text": "inte"
+            },
+            {
+              "label": "objekt",
+              "text": "något"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Jag ser inte ingenting.",
+              "fix": "Jag ser inte något."
+            }
+          ]
+        },
+        {
+          "title": "Negation med 'aldrig'",
+          "points": [
+            "'Aldrig' används för att uttrycka total negation.",
+            "Placerar 'aldrig' före verbet.",
+            "Används för att förneka upprepade handlingar."
+          ],
+          "example": "Jag äter aldrig äpplet.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "aldrig",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "verb",
+              "text": "äter"
+            },
+            {
+              "label": "aldrig",
+              "text": "aldrig"
+            },
+            {
+              "label": "objekt",
+              "text": "äpplet"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Aldrig jag äter äpplet.",
+              "fix": "Jag äter aldrig äpplet."
+            }
+          ]
+        },
+        {
+          "title": "Negation i frågor",
+          "points": [
+            "Negation kan användas i frågor.",
+            "Placerar 'inte' efter verbet.",
+            "Används för att bekräfta eller förneka."
+          ],
+          "example": "Äter du inte äpplet?",
+          "ruleOrder": [
+            "verb",
+            "subjekt",
+            "inte",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "verb",
+              "text": "Äter"
+            },
+            {
+              "label": "subjekt",
+              "text": "du"
+            },
+            {
+              "label": "inte",
+              "text": "inte"
+            },
+            {
+              "label": "objekt",
+              "text": "äpplet"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Äter inte du äpplet?",
+              "fix": "Äter du inte äpplet?"
+            }
+          ]
+        },
+        {
+          "title": "Negation med 'ingen'",
+          "points": [
+            "'Ingen' används för att förneka existens.",
+            "Används med substantiv i obestämd form.",
+            "Indikerar att inget finns."
+          ],
+          "example": "Jag har ingen aning.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "ingen",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "verb",
+              "text": "har"
+            },
+            {
+              "label": "ingen",
+              "text": "ingen"
+            },
+            {
+              "label": "objekt",
+              "text": "aning"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Jag har inte aning.",
+              "fix": "Jag har ingen aning."
+            }
+          ]
+        }
+      ],
+      "Connections": [
+        {
+          "title": "Och",
+          "points": [
+            "Används för att koppla samman två likvärdiga satser.",
+            "Skapar flyt i texten genom att undvika upprepning.",
+            "Används ofta i både tal och skrift."
+          ],
+          "example": "Jag gillar att läsa, och jag älskar att skriva.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "verb",
+              "text": "gillar"
+            },
+            {
+              "label": "objekt",
+              "text": "att läsa"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Jag gillar att läsa och älskar att skriva.",
+              "fix": "Jag gillar att läsa, och jag älskar att skriva."
+            }
+          ]
+        },
+        {
+          "title": "Men",
+          "points": [
+            "Används för att uttrycka kontrast mellan två idéer.",
+            "Viktigt för att visa motsägelser.",
+            "Används i både formella och informella sammanhang."
+          ],
+          "example": "Jag gillar att läsa, men jag har inte tid.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "verb",
+              "text": "gillar"
+            },
+            {
+              "label": "objekt",
+              "text": "att läsa"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Jag gillar att läsa men har inte tid.",
+              "fix": "Jag gillar att läsa, men jag har inte tid."
+            }
+          ]
+        },
+        {
+          "title": "Eftersom",
+          "points": [
+            "Används för att ange orsak.",
+            "Skapar komplexa satser som förklarar varför något händer.",
+            "Vanligt i både tal och skrift."
+          ],
+          "example": "Jag stannade hemma eftersom det regnade.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "verb",
+              "text": "stannade"
+            },
+            {
+              "label": "objekt",
+              "text": "hemma"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Jag stannade hemma eftersom regnade.",
+              "fix": "Jag stannade hemma eftersom det regnade."
+            }
+          ]
+        },
+        {
+          "title": "Så",
+          "points": [
+            "Används för att uttrycka resultat.",
+            "Kopplar orsak och verkan.",
+            "Används ofta i berättande."
+          ],
+          "example": "Det var kallt, så jag tog på mig en jacka.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Det"
+            },
+            {
+              "label": "verb",
+              "text": "var"
+            },
+            {
+              "label": "objekt",
+              "text": "kallt"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Det var kallt så jag tog på mig en jacka.",
+              "fix": "Det var kallt, så jag tog på mig en jacka."
+            }
+          ]
+        },
+        {
+          "title": "Trots att",
+          "points": [
+            "Används för att uttrycka motstridiga idéer.",
+            "Skapar en komplex mening med en kontrast.",
+            "Vanligt i formella och akademiska texter."
+          ],
+          "example": "Trots att det regnade, gick vi ut.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "vi"
+            },
+            {
+              "label": "verb",
+              "text": "ut"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Trots att regnade, gick vi ut.",
+              "fix": "Trots att det regnade, gick vi ut."
+            }
+          ]
+        },
+        {
+          "title": "Därför att",
+          "points": [
+            "Används för att ge en förklaring.",
+            "Kopplar en åtgärd till dess orsak.",
+            "Används i både tal och skrift."
+          ],
+          "example": "Jag gick hem därför att jag var trött.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "verb",
+              "text": "gick"
+            },
+            {
+              "label": "objekt",
+              "text": "hem"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Jag gick hem därför jag var trött.",
+              "fix": "Jag gick hem därför att jag var trött."
+            }
+          ]
+        },
+        {
+          "title": "Om",
+          "points": [
+            "Används för att ställa villkor.",
+            "Skapar hypotetiska situationer.",
+            "Vanligt i både tal och skrift."
+          ],
+          "example": "Om det regnar, stannar vi inne.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "vi"
+            },
+            {
+              "label": "verb",
+              "text": "inne"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Om regnar, stannar vi inne.",
+              "fix": "Om det regnar, stannar vi inne."
+            }
+          ]
+        }
+      ],
+      "Conditions": [
+        {
+          "title": "Enkla villkor",
+          "points": [
+            "Använd 'om' för att uttrycka villkor.",
+            "Satsens struktur är viktig för tydlighet.",
+            "Använd presens för allmänna sanningar."
+          ],
+          "example": "Om det regnar, stannar vi hemma.",
+          "ruleOrder": [
+            "om",
+            "subjekt",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "om",
+              "text": "Om"
+            },
+            {
+              "label": "subjekt",
+              "text": "det"
+            },
+            {
+              "label": "verb",
+              "text": "regnar"
+            },
+            {
+              "label": "objekt",
+              "text": "hemma"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Om regnar det, stannar vi hemma.",
+              "fix": "Om det regnar, stannar vi hemma."
+            }
+          ]
+        },
+        {
+          "title": "Konditionell framtid",
+          "points": [
+            "Använd 'skulle' för att uttrycka hypotetiska situationer.",
+            "Kombinera med presens för att beskriva framtida konsekvenser.",
+            "Var noga med att använda rätt verbform."
+          ],
+          "example": "Om jag hade pengar, skulle jag resa.",
+          "ruleOrder": [
+            "om",
+            "subjekt",
+            "verb",
+            "skulle"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "om",
+              "text": "Om"
+            },
+            {
+              "label": "subjekt",
+              "text": "jag"
+            },
+            {
+              "label": "verb",
+              "text": "skulle"
+            },
+            {
+              "label": "skulle",
+              "text": "jag resa"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Om jag hade pengar, jag skulle resa.",
+              "fix": "Om jag hade pengar, skulle jag resa."
+            }
+          ]
+        },
+        {
+          "title": "Konditionell med imperativ",
+          "points": [
+            "Använd imperativ för att ge råd under villkor.",
+            "Strukturen kan variera beroende på kontext.",
+            "Tydlighet är avgörande för förståelse."
+          ],
+          "example": "Om du vill ha hjälp, fråga mig.",
+          "ruleOrder": [
+            "om",
+            "subjekt",
+            "verb",
+            "imperativ"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "om",
+              "text": "Om"
+            },
+            {
+              "label": "subjekt",
+              "text": "du"
+            },
+            {
+              "label": "verb",
+              "text": "fråga"
+            },
+            {
+              "label": "imperativ",
+              "text": "mig"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Om du vill ha hjälp, du fråga mig.",
+              "fix": "Om du vill ha hjälp, fråga mig."
+            }
+          ]
+        },
+        {
+          "title": "Konditionell med subjunktiv",
+          "points": [
+            "Använd subjunktiv för att uttrycka osäkerhet.",
+            "Detta används sällan i moderna svenska men är viktigt i vissa kontexter.",
+            "Var medveten om skillnader i form."
+          ],
+          "example": "Om jag vore rik, skulle jag hjälpa andra.",
+          "ruleOrder": [
+            "om",
+            "subjekt",
+            "vara",
+            "skulle",
+            "verb"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "om",
+              "text": "Om"
+            },
+            {
+              "label": "subjekt",
+              "text": "jag"
+            },
+            {
+              "label": "vara",
+              "text": "vore"
+            },
+            {
+              "label": "skulle",
+              "text": "jag hjälpa"
+            },
+            {
+              "label": "verb",
+              "text": "andra"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Om jag är rik, skulle jag hjälpa andra.",
+              "fix": "Om jag vore rik, skulle jag hjälpa andra."
+            }
+          ]
+        },
+        {
+          "title": "Konditionell med framtidsform",
+          "points": [
+            "Använd framtidsform för att uttrycka framtida villkor.",
+            "Kombinera med 'om' för att skapa tydliga villkor.",
+            "Var noga med att använda rätt tempus."
+          ],
+          "example": "Om det blir soligt, kommer vi att gå ut.",
+          "ruleOrder": [
+            "om",
+            "subjekt",
+            "verb",
+            "komma",
+            "att"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "om",
+              "text": "Om"
+            },
+            {
+              "label": "subjekt",
+              "text": "det"
+            },
+            {
+              "label": "verb",
+              "text": "blir"
+            },
+            {
+              "label": "komma",
+              "text": "kommer"
+            },
+            {
+              "label": "att",
+              "text": "gå ut"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Om det blir soligt, vi kommer att gå ut.",
+              "fix": "Om det blir soligt, kommer vi att gå ut."
+            }
+          ]
+        },
+        {
+          "title": "Konditionell med flera villkor",
+          "points": [
+            "Använd flera 'om' för att uttrycka komplexa villkor.",
+            "Var tydlig med varje del av villkoret.",
+            "Strukturen kan bli mer komplicerad."
+          ],
+          "example": "Om det regnar och jag är hemma, stannar jag inne.",
+          "ruleOrder": [
+            "om",
+            "subjekt",
+            "verb",
+            "och"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "om",
+              "text": "Om"
+            },
+            {
+              "label": "subjekt",
+              "text": "jag"
+            },
+            {
+              "label": "verb",
+              "text": "är"
+            },
+            {
+              "label": "och",
+              "text": "jag inne"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Om det regnar och hemma jag är, stannar jag inne.",
+              "fix": "Om det regnar och jag är hemma, stannar jag inne."
+            }
+          ]
+        }
+      ],
+      "Voice & Focus": [
+        {
+          "title": "Grundläggande ordföljd",
+          "points": [
+            "Svenska har SVO-struktur.",
+            "Verbet kommer alltid på andra plats i huvudsatser.",
+            "Fokus kan skapas genom att flytta fraser."
+          ],
+          "example": "Jag äter äpplet.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "verb",
+              "text": "äter"
+            },
+            {
+              "label": "objekt",
+              "text": "äpplet"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Äter jag äpplet.",
+              "fix": "Jag äter äpplet."
+            }
+          ]
+        },
+        {
+          "title": "Användning av fokuspartiklar",
+          "points": [
+            "Fokuspartiklar som 'just' kan ändra betydelsen.",
+            "De placeras före verbet.",
+            "Används för att betona specifika delar av meningen."
+          ],
+          "example": "Jag just äter äpplet.",
+          "ruleOrder": [
+            "subjekt",
+            "fokuspartikel",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "fokuspartikel",
+              "text": "just"
+            },
+            {
+              "label": "verb",
+              "text": "äter"
+            },
+            {
+              "label": "objekt",
+              "text": "äpplet"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Äter just jag äpplet.",
+              "fix": "Jag just äter äpplet."
+            }
+          ]
+        },
+        {
+          "title": "Passiv konstruktion",
+          "points": [
+            "Passiv används för att fokusera på handlingen.",
+            "Skapas med hjälp av 'bli' och perfekt particip.",
+            "Används ofta i formella sammanhang."
+          ],
+          "example": "Äpplet blev ätet av mig.",
+          "ruleOrder": [
+            "objekt",
+            "verb",
+            "agent"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "objekt",
+              "text": "Äpplet"
+            },
+            {
+              "label": "verb",
+              "text": "blev ätet"
+            },
+            {
+              "label": "agent",
+              "text": "av mig"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Jag blev äpplet ätet.",
+              "fix": "Äpplet blev ätet av mig."
+            }
+          ]
+        },
+        {
+          "title": "Fokus genom omställning",
+          "points": [
+            "Omställning av ordningen kan ge fokus.",
+            "Används för att framhäva olika delar av meningen.",
+            "Kan ändra betydelsen av hela meningen."
+          ],
+          "example": "Äpplet äter jag.",
+          "ruleOrder": [
+            "objekt",
+            "verb",
+            "subjekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "objekt",
+              "text": "Äpplet"
+            },
+            {
+              "label": "verb",
+              "text": "äter"
+            },
+            {
+              "label": "subjekt",
+              "text": "jag"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Jag äter äpplet.",
+              "fix": "Äpplet äter jag."
+            }
+          ]
+        },
+        {
+          "title": "Kombination av fokus och passiv",
+          "points": [
+            "Fokus kan kombineras med passiv konstruktion.",
+            "Används för att betona resultatet av en handling.",
+            "Vanligt i akademiska och formella texter."
+          ],
+          "example": "Äpplet blev ätet av mig just.",
+          "ruleOrder": [
+            "objekt",
+            "verb",
+            "agent",
+            "fokuspartikel"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "objekt",
+              "text": "Äpplet"
+            },
+            {
+              "label": "verb",
+              "text": "blev ätet"
+            },
+            {
+              "label": "agent",
+              "text": "av mig"
+            },
+            {
+              "label": "fokuspartikel",
+              "text": "just"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Just blev äpplet ätet av mig.",
+              "fix": "Äpplet blev ätet av mig just."
+            }
+          ]
+        }
+      ],
+      "Modality": [
+        {
+          "title": "Obligation med 'måste'",
+          "points": [
+            "Används för att uttrycka nödvändighet.",
+            "Föregås av subjektet.",
+            "Används i vardagligt tal."
+          ],
+          "example": "Jag måste gå till skolan.",
+          "ruleOrder": [
+            "subjekt",
+            "måste",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "måste",
+              "text": "måste"
+            },
+            {
+              "label": "verb",
+              "text": "gå till skolan"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Måste jag gå till skolan?",
+              "fix": "Jag måste gå till skolan."
+            }
+          ]
+        },
+        {
+          "title": "Möjlighet med 'kan'",
+          "points": [
+            "Används för att uttrycka förmåga eller möjlighet.",
+            "Föregås av subjektet.",
+            "Kan användas i frågor."
+          ],
+          "example": "Jag kan simma.",
+          "ruleOrder": [
+            "subjekt",
+            "kan",
+            "verb"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "kan",
+              "text": "kan"
+            },
+            {
+              "label": "verb",
+              "text": "simma"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Kan jag simma?",
+              "fix": "Jag kan simma."
+            }
+          ]
+        },
+        {
+          "title": "Förmåga med 'kan'",
+          "points": [
+            "Används för att uttrycka kapacitet.",
+            "Föregås av subjektet.",
+            "Används i både positiva och negativa meningar."
+          ],
+          "example": "Hon kan tala tre språk.",
+          "ruleOrder": [
+            "subjekt",
+            "kan",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Hon"
+            },
+            {
+              "label": "kan",
+              "text": "kan"
+            },
+            {
+              "label": "verb",
+              "text": "tala tre språk"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Hon kan inte tala tre språk.",
+              "fix": "Hon kan tala tre språk."
+            }
+          ]
+        },
+        {
+          "title": "Sannolikhet med 'kan'",
+          "points": [
+            "Används för att uttrycka osäkerhet.",
+            "Föregås av subjektet.",
+            "Används ofta i hypotetiska situationer."
+          ],
+          "example": "Det kan regna imorgon.",
+          "ruleOrder": [
+            "subjekt",
+            "kan",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Det"
+            },
+            {
+              "label": "kan",
+              "text": "kan"
+            },
+            {
+              "label": "verb",
+              "text": "regna imorgon"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Det kan inte regna imorgon.",
+              "fix": "Det kan regna imorgon."
+            }
+          ]
+        },
+        {
+          "title": "Säkerhet med 'måste'",
+          "points": [
+            "Används för att uttrycka hög säkerhet.",
+            "Föregås av subjektet.",
+            "Används för att dra slutsatser."
+          ],
+          "example": "Han måste vara hemma nu.",
+          "ruleOrder": [
+            "subjekt",
+            "måste",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Han"
+            },
+            {
+              "label": "måste",
+              "text": "måste"
+            },
+            {
+              "label": "verb",
+              "text": "vara hemma nu"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Han måste inte vara hemma nu.",
+              "fix": "Han måste vara hemma nu."
+            }
+          ]
+        },
+        {
+          "title": "Tillåtelse med 'får'",
+          "points": [
+            "Används för att uttrycka tillåtelse.",
+            "Föregås av subjektet.",
+            "Används i både formella och informella sammanhang."
+          ],
+          "example": "Du får gå ut nu.",
+          "ruleOrder": [
+            "subjekt",
+            "får",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Du"
+            },
+            {
+              "label": "får",
+              "text": "får"
+            },
+            {
+              "label": "verb",
+              "text": "gå ut nu"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Du får inte gå ut nu.",
+              "fix": "Du får gå ut nu."
+            }
+          ]
+        },
+        {
+          "title": "Osäkerhet med 'kan'",
+          "points": [
+            "Används för att uttrycka tvekan.",
+            "Föregås av subjektet.",
+            "Används ofta i frågor."
+          ],
+          "example": "Kan det vara sant?",
+          "ruleOrder": [
+            "kan",
+            "subjekt",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "kan",
+              "text": "Kan"
+            },
+            {
+              "label": "subjekt",
+              "text": "det"
+            },
+            {
+              "label": "verb",
+              "text": "vara sant"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Det kan vara sant?",
+              "fix": "Kan det vara sant?"
+            }
+          ]
+        },
+        {
+          "title": "Nödvändighet med 'måste'",
+          "points": [
+            "Används för att uttrycka krav.",
+            "Föregås av subjektet.",
+            "Används i både formella och informella sammanhang."
+          ],
+          "example": "Vi måste slutföra projektet.",
+          "ruleOrder": [
+            "subjekt",
+            "måste",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Vi"
+            },
+            {
+              "label": "måste",
+              "text": "måste"
+            },
+            {
+              "label": "verb",
+              "text": "slutföra projektet"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Vi måste inte slutföra projektet.",
+              "fix": "Vi måste slutföra projektet."
+            }
+          ]
+        }
+      ],
+      "Reported Speech": [
+        {
+          "title": "Direkt återberättande",
+          "points": [
+            "Använd citat för att återge exakt vad någon sa.",
+            "Citat inleds ofta med ett kolon.",
+            "Använd alltid citationstecken."
+          ],
+          "example": "Hon sa: \"Jag kommer imorgon.\"",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Hon"
+            },
+            {
+              "label": "verb",
+              "text": "sa"
+            },
+            {
+              "label": "objekt",
+              "text": "Jag kommer imorgon"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Hon sa, Jag kommer imorgon.",
+              "fix": "Hon sa: \"Jag kommer imorgon.\""
+            }
+          ]
+        },
+        {
+          "title": "Indirekt återberättande med att",
+          "points": [
+            "Använd 'att' för att återge vad någon sa.",
+            "Ingen förändring av verbets tid i många fall.",
+            "Vanligt att använda subjektet i bisatsen."
+          ],
+          "example": "Hon sa att hon skulle komma imorgon.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "komplement"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Hon"
+            },
+            {
+              "label": "verb",
+              "text": "sa"
+            },
+            {
+              "label": "komplement",
+              "text": "att hon skulle komma imorgon"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Hon sa hon skulle komma imorgon.",
+              "fix": "Hon sa att hon skulle komma imorgon."
+            }
+          ]
+        },
+        {
+          "title": "Backshift i indirekt tal",
+          "points": [
+            "Ändra verbets tid vid återberättande.",
+            "Använd preteritum för att referera till tidigare händelser.",
+            "Var medveten om tidsskillnader."
+          ],
+          "example": "Hon sa att hon kom igår.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "komplement"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Hon"
+            },
+            {
+              "label": "verb",
+              "text": "sa"
+            },
+            {
+              "label": "komplement",
+              "text": "att hon kom igår"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Hon sa att hon kommer igår.",
+              "fix": "Hon sa att hon kom igår."
+            }
+          ]
+        },
+        {
+          "title": "Användning av quotatives",
+          "points": [
+            "Inkludera uttryck som 'som sa' för att introducera återberättande.",
+            "Används för att ge mer kontext.",
+            "Kan föregå både direkt och indirekt tal."
+          ],
+          "example": "Som hon sa, \"Det är viktigt att studera.\"",
+          "ruleOrder": [
+            "komplement",
+            "subjekt",
+            "verb"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "komplement",
+              "text": "Som hon sa"
+            },
+            {
+              "label": "subjekt",
+              "text": "är viktigt"
+            },
+            {
+              "label": "verb",
+              "text": "att studera"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Som hon sa: Det är viktigt att studera.",
+              "fix": "Som hon sa, \"Det är viktigt att studera.\""
+            }
+          ]
+        },
+        {
+          "title": "Indirekt tal utan att",
+          "points": [
+            "Ibland kan 'att' utelämnas i informellt tal.",
+            "Används ofta i vardagligt språk.",
+            "Var försiktig med tydlighet."
+          ],
+          "example": "Hon sa hon skulle komma.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "komplement"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Hon"
+            },
+            {
+              "label": "verb",
+              "text": "sa"
+            },
+            {
+              "label": "komplement",
+              "text": "hon skulle komma"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Hon sa att hon skulle komma.",
+              "fix": "Hon sa hon skulle komma."
+            }
+          ]
+        },
+        {
+          "title": "Frågor i indirekt tal",
+          "points": [
+            "Frågor omformuleras till påståenden.",
+            "Inga frågetecken används.",
+            "Ordningen kan förändras."
+          ],
+          "example": "Hon frågade om jag ville följa med.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "komplement"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Hon"
+            },
+            {
+              "label": "verb",
+              "text": "frågade"
+            },
+            {
+              "label": "komplement",
+              "text": "om jag ville följa med"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Hon frågade, vill du följa med?",
+              "fix": "Hon frågade om jag ville följa med."
+            }
+          ]
+        }
+      ],
+      "Formality & Style": [
+        {
+          "title": "Hälsningar i olika sammanhang",
+          "points": [
+            "Använd 'Hej' för informella hälsningar.",
+            "Använd 'God morgon' för mer formella sammanhang.",
+            "Var medveten om att hälsningar kan påverka intrycket du ger."
+          ],
+          "example": "Hej, hur mår du?",
+          "ruleOrder": [
+            "hälsning",
+            "subjekt",
+            "verb"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "hälsning",
+              "text": "Hej"
+            },
+            {
+              "label": "subjekt",
+              "text": "du"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Morgon hej, hur du mår?",
+              "fix": "God morgon, hur mår du?"
+            }
+          ]
+        },
+        {
+          "title": "Artiklar och formell språkbruk",
+          "points": [
+            "Använd bestämd artikel för att visa respekt.",
+            "Undvik obestämda artiklar i formella sammanhang.",
+            "Var medveten om att artikelanvändning kan påverka tonen."
+          ],
+          "example": "Lärare är viktig.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Lärare"
+            },
+            {
+              "label": "verb",
+              "text": "är"
+            },
+            {
+              "label": "objekt",
+              "text": "viktig"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "En lärare är viktigt.",
+              "fix": "Lärare är viktig."
+            }
+          ]
+        },
+        {
+          "title": "Användning av titlar",
+          "points": [
+            "Använd titlar som 'Herr' eller 'Fru' i formella sammanhang.",
+            "Undvik att använda förnamn om du inte är säker på relationen.",
+            "Titlar visar respekt och erkännande."
+          ],
+          "example": "Herr Svensson, kan jag hjälpa dig?",
+          "ruleOrder": [
+            "titel",
+            "namn",
+            "verb"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "titel",
+              "text": "Herr"
+            },
+            {
+              "label": "namn",
+              "text": "Svensson"
+            },
+            {
+              "label": "verb",
+              "text": "kan"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Svensson, kan jag hjälpa dig?",
+              "fix": "Herr Svensson, kan jag hjälpa dig?"
+            }
+          ]
+        },
+        {
+          "title": "Formell vs. informell avslutning",
+          "points": [
+            "Använd 'Med vänliga hälsningar' i formella brev.",
+            "Använd 'Hälsningar' i informella meddelanden.",
+            "Avslutningen kan påverka hur mottagaren uppfattar meddelandet."
+          ],
+          "example": "Med vänliga hälsningar, Anna.",
+          "ruleOrder": [
+            "avslutning",
+            "namn"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "avslutning",
+              "text": "Med vänliga hälsningar"
+            },
+            {
+              "label": "namn",
+              "text": "Anna"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Hälsningar, Anna.",
+              "fix": "Med vänliga hälsningar, Anna."
+            }
+          ]
+        },
+        {
+          "title": "Frågor i olika register",
+          "points": [
+            "Använd 'Kan du...' för informella frågor.",
+            "Använd 'Skulle ni kunna...' för formella frågor.",
+            "Frågeformen kan påverka hur din begäran uppfattas."
+          ],
+          "example": "Kan du hjälpa mig?",
+          "ruleOrder": [
+            "frågeord",
+            "subjekt",
+            "verb"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "frågeord",
+              "text": "Kan"
+            },
+            {
+              "label": "subjekt",
+              "text": "du"
+            },
+            {
+              "label": "verb",
+              "text": "hjälpa"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Hjälpa mig kan du?",
+              "fix": "Kan du hjälpa mig?"
+            }
+          ]
+        },
+        {
+          "title": "Anpassning av språk efter publik",
+          "points": [
+            "Använd enklare språk med vänner.",
+            "Använd mer komplext språk med kollegor.",
+            "Att anpassa språket visar medvetenhet om sociala normer."
+          ],
+          "example": "Vad tycker du om filmen?",
+          "ruleOrder": [
+            "frågeord",
+            "subjekt",
+            "verb"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "frågeord",
+              "text": "Vad"
+            },
+            {
+              "label": "subjekt",
+              "text": "du"
+            },
+            {
+              "label": "verb",
+              "text": "filmen"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Filmen, vad du tycker?",
+              "fix": "Vad tycker du om filmen?"
+            }
+          ]
+        },
+        {
+          "title": "Hänvisningar och referenser",
+          "points": [
+            "Använd 'den' eller 'det' för att referera till något specifikt.",
+            "Använd 'något' eller 'någon' för mer allmänna referenser.",
+            "Referenser kan påverka hur tydlig din kommunikation är."
+          ],
+          "example": "Jag såg den filmen.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "referens"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "verb",
+              "text": "såg"
+            },
+            {
+              "label": "referens",
+              "text": "den filmen"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Jag såg filmen den.",
+              "fix": "Jag såg den filmen."
+            }
+          ]
+        }
+      ],
+      "Discourse & Flow": [
+        {
+          "title": "Användning av 'och'",
+          "points": [
+            "Använd 'och' för att koppla samman två idéer.",
+            "Det skapar en smidig övergång mellan satser.",
+            "Undvik överanvändning för att inte göra texten tung."
+          ],
+          "example": "Jag gillar att läsa böcker och titta på filmer.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "verb",
+              "text": "gillar"
+            },
+            {
+              "label": "objekt",
+              "text": "att läsa böcker och titta på filmer"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Jag gillar att läsa böcker, titta på filmer.",
+              "fix": "Jag gillar att läsa böcker och titta på filmer."
+            }
+          ]
+        },
+        {
+          "title": "Användning av 'men'",
+          "points": [
+            "Använd 'men' för att visa kontrast.",
+            "Det hjälper till att klargöra skillnader mellan idéer.",
+            "Var försiktig så att det inte blir för många kontraster."
+          ],
+          "example": "Jag gillar kaffe, men jag föredrar te.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "verb",
+              "text": "gillar"
+            },
+            {
+              "label": "objekt",
+              "text": "kaffe, men jag föredrar te"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Jag gillar kaffe men föredrar te.",
+              "fix": "Jag gillar kaffe, men jag föredrar te."
+            }
+          ]
+        },
+        {
+          "title": "Användning av 'eftersom'",
+          "points": [
+            "Använd 'eftersom' för att ge orsaker.",
+            "Det skapar en logisk koppling mellan satser.",
+            "Undvik att använda för många orsaker i en mening."
+          ],
+          "example": "Jag stannade hemma eftersom det regnade.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "verb",
+              "text": "stannade"
+            },
+            {
+              "label": "objekt",
+              "text": "hemma eftersom det regnade"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Jag stannade hemma, eftersom regnade.",
+              "fix": "Jag stannade hemma eftersom det regnade."
+            }
+          ]
+        },
+        {
+          "title": "Användning av 'därför att'",
+          "points": [
+            "Använd 'därför att' för att förklara skäl.",
+            "Det ger en tydlig struktur till argumentationen.",
+            "Var noga med att inte överanvända."
+          ],
+          "example": "Jag gick tidigt därför att jag var trött.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "verb",
+              "text": "gick"
+            },
+            {
+              "label": "objekt",
+              "text": "tidigt därför att jag var trött"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Jag gick tidigt, därför att jag trött.",
+              "fix": "Jag gick tidigt därför att jag var trött."
+            }
+          ]
+        },
+        {
+          "title": "Användning av 'trots att'",
+          "points": [
+            "Använd 'trots att' för att visa motstridiga idéer.",
+            "Det skapar djup i texten.",
+            "Var försiktig så att det inte blir för komplicerat."
+          ],
+          "example": "Trots att det regnade gick vi ut.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "vi"
+            },
+            {
+              "label": "verb",
+              "text": "ut"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Trots det regnade, vi gick ut.",
+              "fix": "Trots att det regnade gick vi ut."
+            }
+          ]
+        },
+        {
+          "title": "Användning av 'även om'",
+          "points": [
+            "Använd 'även om' för att uttrycka villkor.",
+            "Det visar att något kan hända oavsett omständigheterna.",
+            "Undvik att använda för många villkor i en mening."
+          ],
+          "example": "Även om jag är trött kommer jag att gå.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "jag"
+            },
+            {
+              "label": "verb",
+              "text": "är"
+            },
+            {
+              "label": "objekt",
+              "text": "trött kommer jag att gå"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Även jag är trött, kommer att gå.",
+              "fix": "Även om jag är trött kommer jag att gå."
+            }
+          ]
+        },
+        {
+          "title": "Användning av 'för att'",
+          "points": [
+            "Använd 'för att' för att ange syfte.",
+            "Det hjälper till att klargöra intentioner.",
+            "Var noga med att inte blanda syften."
+          ],
+          "example": "Jag studerar för att lära mig svenska.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "objekt",
+              "text": "för att lära mig svenska"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Jag studerar, för att lära mig svenska.",
+              "fix": "Jag studerar för att lära mig svenska."
+            }
+          ]
+        },
+        {
+          "title": "Användning av 'så att'",
+          "points": [
+            "Använd 'så att' för att uttrycka resultat.",
+            "Det skapar en klar koppling mellan handlingar.",
+            "Var noga med att inte överanvända."
+          ],
+          "example": "Jag tränar så att jag kan bli starkare.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "verb",
+              "text": "tränar"
+            },
+            {
+              "label": "objekt",
+              "text": "så att jag kan bli starkare"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Jag tränar, så att kan bli starkare.",
+              "fix": "Jag tränar så att jag kan bli starkare."
+            }
+          ]
+        },
+        {
+          "title": "Användning av 'om'",
+          "points": [
+            "Använd 'om' för att ställa frågor eller uttrycka osäkerhet.",
+            "Det är en viktig del av hypotetiska situationer.",
+            "Var noga med att inte blanda ihop med andra konjunktioner."
+          ],
+          "example": "Jag undrar om du kommer.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "verb",
+              "text": "undrar"
+            },
+            {
+              "label": "objekt",
+              "text": "om du kommer"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Jag undrar, du kommer.",
+              "fix": "Jag undrar om du kommer."
+            }
+          ]
+        },
+        {
+          "title": "Användning av 'liksom'",
+          "points": [
+            "Använd 'liksom' för att ge exempel.",
+            "Det hjälper till att förtydliga idéer.",
+            "Var försiktig så att det inte blir för många exempel."
+          ],
+          "example": "Jag gillar sporter som fotboll och tennis.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Jag"
+            },
+            {
+              "label": "verb",
+              "text": "gillar"
+            },
+            {
+              "label": "objekt",
+              "text": "sporter som fotboll och tennis"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Jag gillar sporter, som fotboll och tennis.",
+              "fix": "Jag gillar sporter som fotboll och tennis."
             }
           ]
         }
@@ -10732,18 +13052,18 @@
     "sectionLabels": {
       "Sentence Structure": "Meningsstruktur",
       "Verbs": "Verben",
-      "Tenses & Aspect": "Tider och aspekt",
+      "Tenses & Aspect": "Tider och Aspekt",
       "Nouns & Articles": "Substantiv och artiklar",
-      "Pronouns & Reference": "Pronomen och referens",
+      "Pronouns & Reference": "Pronomen & Referens",
       "Modifiers": "Modifierare",
       "Questions": "Frågor",
-      "Negation": "Negation",
+      "Negation": "Nekande former",
       "Connections": "Anslutningar",
       "Conditions": "Villkor",
       "Voice & Focus": "Röst och Fokus",
-      "Modality": "Modality",
-      "Reported Speech": "Återberättad tal",
-      "Formality & Style": "Formellhet och stil",
+      "Modality": "Modala verb",
+      "Reported Speech": "Återberättande tal",
+      "Formality & Style": "Formell och informell stil",
       "Discourse & Flow": "Diskurs och Flöde"
     }
   },

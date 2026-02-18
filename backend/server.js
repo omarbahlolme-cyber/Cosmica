@@ -4,6 +4,7 @@
    ========================================================================== */
 const path = require("path");
 const crypto = require("crypto");
+const fs = require("fs");
 const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
@@ -164,6 +165,7 @@ const corsOptions = {
     }
     return callback(new Error("Not allowed by CORS"));
   },
+  credentials: true,
 };
 
 /* --------------------------------------------------------------------------
@@ -221,6 +223,31 @@ const ttsLimiter = createLimiter({
   windowMs: 5 * 60 * 1000,
   max: 180,
   scope: "tts",
+});
+const authSignupLimiter = createLimiter({
+  windowMs: 60 * 60 * 1000,
+  max: 20,
+  scope: "auth-signup",
+});
+const authLoginLimiter = createLimiter({
+  windowMs: 15 * 60 * 1000,
+  max: 50,
+  scope: "auth-login",
+});
+const authSessionLimiter = createLimiter({
+  windowMs: 5 * 60 * 1000,
+  max: 120,
+  scope: "auth-session",
+});
+const accountMutationLimiter = createLimiter({
+  windowMs: 10 * 60 * 1000,
+  max: 120,
+  scope: "account-mutation",
+});
+const progressLimiter = createLimiter({
+  windowMs: 5 * 60 * 1000,
+  max: 300,
+  scope: "progress",
 });
 
 /* --------------------------------------------------------------------------
@@ -483,6 +510,858 @@ const sendViaResend = async ({ from, to, replyTo, subject, text }) => {
     return { ok: false, error: error.message || "Resend request failed" };
   }
 };
+
+/* --------------------------------------------------------------------------
+   AUTH + ACCOUNT DATA STORE
+   Lightweight file-backed persistence for accounts, sessions, and progress.
+   -------------------------------------------------------------------------- */
+const AUTH_DATA_ROOT = path.join(__dirname, "data");
+const AUTH_STORE_FILE = path.join(AUTH_DATA_ROOT, "accounts.json");
+const AUTH_STORE_SCHEMA_VERSION = 1;
+const AUTH_COOKIE_NAME = "cosmica_session";
+const SESSION_TTL_MS = 1000 * 60 * 60 * 24 * 30;
+const MAX_SESSIONS_PER_USER = 6;
+const MAX_USER_DATA_SERIALIZED_CHARS = 120000;
+const MAX_PROGRESS_SERIALIZED_CHARS = 220000;
+const PASSWORD_HASH_ITERATIONS = Math.max(
+  120000,
+  Number(process.env.AUTH_PASSWORD_ITERATIONS || 210000)
+);
+const PASSWORD_HASH_KEYLEN = 64;
+const PASSWORD_HASH_DIGEST = "sha512";
+
+const isPlainObject = (value) =>
+  Boolean(value) && Object.prototype.toString.call(value) === "[object Object]";
+
+const createDefaultUserData = () => ({
+  settings: {
+    baseLanguage: "",
+  },
+  profile: {},
+});
+
+const createDefaultProgress = () => ({
+  totals: {
+    xp: 0,
+    completedSections: 0,
+    lastActivityAt: null,
+  },
+  worlds: {},
+  recentEvents: [],
+  updatedAt: null,
+});
+
+const createEmptyAuthStore = () => ({
+  schemaVersion: AUTH_STORE_SCHEMA_VERSION,
+  updatedAt: new Date().toISOString(),
+  users: {},
+  emailIndex: {},
+  sessions: {},
+});
+
+const cloneObjectSafely = (value, fallbackValue, maxSerializedChars) => {
+  if (!isPlainObject(value)) {
+    return typeof fallbackValue === "function" ? fallbackValue() : fallbackValue;
+  }
+  try {
+    const serialized = JSON.stringify(value);
+    if (!serialized || serialized.length > maxSerializedChars) {
+      return typeof fallbackValue === "function" ? fallbackValue() : fallbackValue;
+    }
+    const parsed = JSON.parse(serialized);
+    return isPlainObject(parsed)
+      ? parsed
+      : typeof fallbackValue === "function"
+        ? fallbackValue()
+        : fallbackValue;
+  } catch {
+    return typeof fallbackValue === "function" ? fallbackValue() : fallbackValue;
+  }
+};
+
+const normalizeEmail = (value) => String(value || "").trim().toLowerCase();
+const sanitizeDisplayName = (value, email = "") => {
+  const explicit = String(value || "")
+    .trim()
+    .replace(/\s+/g, " ")
+    .slice(0, 60);
+  if (explicit) {
+    return explicit;
+  }
+  const fallback = String(email || "")
+    .split("@")[0]
+    .trim()
+    .slice(0, 30);
+  return fallback || "Explorer";
+};
+
+const normalizeUserData = (value) => {
+  const base = createDefaultUserData();
+  const candidate = cloneObjectSafely(value, createDefaultUserData, MAX_USER_DATA_SERIALIZED_CHARS);
+  const settings = isPlainObject(candidate.settings) ? candidate.settings : {};
+  base.settings.baseLanguage = String(settings.baseLanguage || "").trim().slice(0, 40);
+  base.profile = isPlainObject(candidate.profile)
+    ? cloneObjectSafely(candidate.profile, () => ({}), 20000)
+    : {};
+  return base;
+};
+
+const normalizeProgress = (value) => {
+  const fallback = createDefaultProgress();
+  const candidate = cloneObjectSafely(value, createDefaultProgress, MAX_PROGRESS_SERIALIZED_CHARS);
+  const totals = isPlainObject(candidate.totals) ? candidate.totals : {};
+  fallback.totals.xp = Number.isFinite(totals.xp) ? Math.max(0, Math.round(Number(totals.xp))) : 0;
+  fallback.totals.completedSections = Number.isFinite(totals.completedSections)
+    ? Math.max(0, Math.round(Number(totals.completedSections)))
+    : 0;
+  fallback.totals.lastActivityAt =
+    typeof totals.lastActivityAt === "string" && totals.lastActivityAt ? totals.lastActivityAt : null;
+  fallback.worlds = isPlainObject(candidate.worlds)
+    ? cloneObjectSafely(candidate.worlds, () => ({}), MAX_PROGRESS_SERIALIZED_CHARS - 5000)
+    : {};
+  fallback.recentEvents = Array.isArray(candidate.recentEvents)
+    ? candidate.recentEvents.slice(-50).map((event) => ({
+        worldKey: String(event?.worldKey || "").slice(0, 40),
+        mapKey: String(event?.mapKey || "").slice(0, 20),
+        sectionKey: String(event?.sectionKey || "").slice(0, 120),
+        status: String(event?.status || "").slice(0, 20),
+        xpDelta: Number.isFinite(event?.xpDelta) ? Math.round(Number(event.xpDelta)) : 0,
+        timestamp: String(event?.timestamp || "").slice(0, 40),
+      }))
+    : [];
+  fallback.updatedAt = typeof candidate.updatedAt === "string" && candidate.updatedAt ? candidate.updatedAt : null;
+  return fallback;
+};
+
+const normalizeUserRecord = (candidate, fallbackUserId) => {
+  if (!isPlainObject(candidate)) {
+    return null;
+  }
+  const id = String(candidate.id || fallbackUserId || "").trim();
+  const email = normalizeEmail(candidate.email);
+  const password = isPlainObject(candidate.password) ? candidate.password : {};
+  const passwordSalt = String(password.salt || "").trim();
+  const passwordHash = String(password.hash || "").trim();
+  if (!id || !email || !passwordSalt || !passwordHash) {
+    return null;
+  }
+  return {
+    id,
+    email,
+    displayName: sanitizeDisplayName(candidate.displayName, email),
+    password: {
+      salt: passwordSalt,
+      hash: passwordHash,
+      iterations: Number(password.iterations) || PASSWORD_HASH_ITERATIONS,
+      keylen: Number(password.keylen) || PASSWORD_HASH_KEYLEN,
+      digest: String(password.digest || PASSWORD_HASH_DIGEST),
+    },
+    createdAt: String(candidate.createdAt || new Date().toISOString()),
+    updatedAt: String(candidate.updatedAt || new Date().toISOString()),
+    lastLoginAt: candidate.lastLoginAt ? String(candidate.lastLoginAt) : null,
+    data: normalizeUserData(candidate.data),
+    progress: normalizeProgress(candidate.progress),
+  };
+};
+
+const normalizeAuthStore = (candidate) => {
+  const normalized = createEmptyAuthStore();
+  if (!isPlainObject(candidate)) {
+    return normalized;
+  }
+  const users = isPlainObject(candidate.users) ? candidate.users : {};
+  Object.entries(users).forEach(([userId, record]) => {
+    const user = normalizeUserRecord(record, userId);
+    if (!user) {
+      return;
+    }
+    normalized.users[user.id] = user;
+    normalized.emailIndex[user.email] = user.id;
+  });
+
+  const sessions = isPlainObject(candidate.sessions) ? candidate.sessions : {};
+  Object.entries(sessions).forEach(([sessionHash, session]) => {
+    if (!isPlainObject(session)) {
+      return;
+    }
+    const userId = String(session.userId || "").trim();
+    const expiresAt = String(session.expiresAt || "").trim();
+    if (!userId || !expiresAt || !normalized.users[userId]) {
+      return;
+    }
+    normalized.sessions[sessionHash] = {
+      userId,
+      createdAt: String(session.createdAt || new Date().toISOString()),
+      updatedAt: String(session.updatedAt || session.createdAt || new Date().toISOString()),
+      expiresAt,
+      userAgentHash: String(session.userAgentHash || ""),
+      ipHash: String(session.ipHash || ""),
+    };
+  });
+
+  normalized.schemaVersion =
+    Number(candidate.schemaVersion) > 0 ? Number(candidate.schemaVersion) : AUTH_STORE_SCHEMA_VERSION;
+  normalized.updatedAt = String(candidate.updatedAt || new Date().toISOString());
+  return normalized;
+};
+
+const writeAuthStoreSync = (store) => {
+  if (!fs.existsSync(AUTH_DATA_ROOT)) {
+    fs.mkdirSync(AUTH_DATA_ROOT, { recursive: true });
+  }
+  fs.writeFileSync(AUTH_STORE_FILE, JSON.stringify(store, null, 2), "utf8");
+};
+
+const loadAuthStoreFromDisk = () => {
+  try {
+    if (!fs.existsSync(AUTH_DATA_ROOT)) {
+      fs.mkdirSync(AUTH_DATA_ROOT, { recursive: true });
+    }
+    if (!fs.existsSync(AUTH_STORE_FILE)) {
+      const initialStore = createEmptyAuthStore();
+      writeAuthStoreSync(initialStore);
+      return initialStore;
+    }
+    const raw = fs.readFileSync(AUTH_STORE_FILE, "utf8");
+    const parsed = raw.trim() ? JSON.parse(raw) : createEmptyAuthStore();
+    const normalized = normalizeAuthStore(parsed);
+    writeAuthStoreSync(normalized);
+    return normalized;
+  } catch (error) {
+    console.error("[auth-store] Failed to read auth store, resetting:", error?.message || error);
+    const fallback = createEmptyAuthStore();
+    try {
+      writeAuthStoreSync(fallback);
+    } catch {}
+    return fallback;
+  }
+};
+
+let authStore = loadAuthStoreFromDisk();
+let authStorePersistQueue = Promise.resolve();
+
+const queuePersistAuthStore = () => {
+  const payload = JSON.stringify(authStore, null, 2);
+  authStorePersistQueue = authStorePersistQueue
+    .catch(() => {})
+    .then(async () => {
+      await fs.promises.mkdir(AUTH_DATA_ROOT, { recursive: true });
+      const tmpPath = `${AUTH_STORE_FILE}.tmp`;
+      await fs.promises.writeFile(tmpPath, payload, "utf8");
+      await fs.promises.rename(tmpPath, AUTH_STORE_FILE);
+    })
+    .catch((error) => {
+      reportServerError("auth-store-persist", error);
+    });
+  return authStorePersistQueue;
+};
+
+const markAuthStoreDirty = () => {
+  authStore.updatedAt = new Date().toISOString();
+  void queuePersistAuthStore();
+};
+
+const hashText = (value) => crypto.createHash("sha256").update(String(value || "")).digest("hex");
+const hashSessionToken = (token) => hashText(token);
+
+const parseCookieHeader = (headerValue) => {
+  const result = {};
+  String(headerValue || "")
+    .split(";")
+    .map((part) => part.trim())
+    .filter(Boolean)
+    .forEach((cookiePart) => {
+      const index = cookiePart.indexOf("=");
+      if (index < 1) {
+        return;
+      }
+      const key = cookiePart.slice(0, index).trim();
+      const value = cookiePart.slice(index + 1).trim();
+      if (!key) {
+        return;
+      }
+      try {
+        result[key] = decodeURIComponent(value);
+      } catch {
+        result[key] = value;
+      }
+    });
+  return result;
+};
+
+const serializeCookie = (name, value, options = {}) => {
+  const parts = [`${name}=${encodeURIComponent(value)}`];
+  parts.push(`Path=${options.path || "/"}`);
+  if (Number.isFinite(options.maxAgeSec)) {
+    parts.push(`Max-Age=${Math.max(0, Math.floor(options.maxAgeSec))}`);
+  }
+  if (options.expires instanceof Date) {
+    parts.push(`Expires=${options.expires.toUTCString()}`);
+  }
+  if (options.httpOnly !== false) {
+    parts.push("HttpOnly");
+  }
+  if (options.sameSite) {
+    parts.push(`SameSite=${options.sameSite}`);
+  }
+  if (options.secure) {
+    parts.push("Secure");
+  }
+  return parts.join("; ");
+};
+
+const shouldUseSecureAuthCookie = (req) =>
+  isProduction && !isLocalHost(req.headers.host || "") && isSecureRequest(req);
+
+const setAuthSessionCookie = (req, res, rawToken) => {
+  const cookie = serializeCookie(AUTH_COOKIE_NAME, rawToken, {
+    path: "/",
+    maxAgeSec: Math.floor(SESSION_TTL_MS / 1000),
+    sameSite: "Lax",
+    secure: shouldUseSecureAuthCookie(req),
+    httpOnly: true,
+  });
+  res.append("Set-Cookie", cookie);
+};
+
+const clearAuthSessionCookie = (req, res) => {
+  const cookie = serializeCookie(AUTH_COOKIE_NAME, "", {
+    path: "/",
+    maxAgeSec: 0,
+    expires: new Date(0),
+    sameSite: "Lax",
+    secure: shouldUseSecureAuthCookie(req),
+    httpOnly: true,
+  });
+  res.append("Set-Cookie", cookie);
+};
+
+const pruneExpiredSessions = () => {
+  const nowMs = Date.now();
+  let removedCount = 0;
+  Object.entries(authStore.sessions).forEach(([sessionHash, session]) => {
+    const expiryMs = Date.parse(String(session?.expiresAt || ""));
+    const sessionUserId = String(session?.userId || "");
+    if (!Number.isFinite(expiryMs) || expiryMs <= nowMs || !authStore.users[sessionUserId]) {
+      delete authStore.sessions[sessionHash];
+      removedCount += 1;
+    }
+  });
+  if (removedCount > 0) {
+    markAuthStoreDirty();
+  }
+  return removedCount;
+};
+
+const trimUserSessions = (userId, keepLatest = MAX_SESSIONS_PER_USER) => {
+  const sessions = Object.entries(authStore.sessions)
+    .filter(([, session]) => String(session?.userId || "") === userId)
+    .sort((a, b) => Date.parse(String(b[1]?.createdAt || "")) - Date.parse(String(a[1]?.createdAt || "")));
+  if (sessions.length <= keepLatest) {
+    return;
+  }
+  sessions.slice(keepLatest).forEach(([sessionHash]) => {
+    delete authStore.sessions[sessionHash];
+  });
+};
+
+const createSessionForUser = (userId, req) => {
+  const rawToken = crypto.randomBytes(32).toString("base64url");
+  const tokenHash = hashSessionToken(rawToken);
+  const now = new Date();
+  const expiresAt = new Date(now.getTime() + SESSION_TTL_MS).toISOString();
+  authStore.sessions[tokenHash] = {
+    userId,
+    createdAt: now.toISOString(),
+    updatedAt: now.toISOString(),
+    expiresAt,
+    userAgentHash: hashText(req.get("user-agent") || ""),
+    ipHash: hashText(req.ip || ""),
+  };
+  trimUserSessions(userId);
+  markAuthStoreDirty();
+  return rawToken;
+};
+
+const removeSessionByHash = (sessionHash) => {
+  if (!sessionHash || !authStore.sessions[sessionHash]) {
+    return;
+  }
+  delete authStore.sessions[sessionHash];
+  markAuthStoreDirty();
+};
+
+const removeAllSessionsForUser = (userId) => {
+  let removed = false;
+  Object.entries(authStore.sessions).forEach(([sessionHash, session]) => {
+    if (String(session?.userId || "") === userId) {
+      delete authStore.sessions[sessionHash];
+      removed = true;
+    }
+  });
+  if (removed) {
+    markAuthStoreDirty();
+  }
+};
+
+const derivePasswordHash = (password, salt, iterations, keylen, digest) =>
+  new Promise((resolve, reject) => {
+    crypto.pbkdf2(password, salt, iterations, keylen, digest, (error, derived) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      resolve(derived.toString("hex"));
+    });
+  });
+
+const buildPasswordRecord = async (plainPassword) => {
+  const salt = crypto.randomBytes(16).toString("hex");
+  const hash = await derivePasswordHash(
+    plainPassword,
+    salt,
+    PASSWORD_HASH_ITERATIONS,
+    PASSWORD_HASH_KEYLEN,
+    PASSWORD_HASH_DIGEST
+  );
+  return {
+    salt,
+    hash,
+    iterations: PASSWORD_HASH_ITERATIONS,
+    keylen: PASSWORD_HASH_KEYLEN,
+    digest: PASSWORD_HASH_DIGEST,
+  };
+};
+
+const verifyPasswordAgainstRecord = async (plainPassword, passwordRecord) => {
+  if (!plainPassword || !isPlainObject(passwordRecord)) {
+    return false;
+  }
+  const iterations = Number(passwordRecord.iterations) || PASSWORD_HASH_ITERATIONS;
+  const keylen = Number(passwordRecord.keylen) || PASSWORD_HASH_KEYLEN;
+  const digest = String(passwordRecord.digest || PASSWORD_HASH_DIGEST);
+  const expectedHash = String(passwordRecord.hash || "").trim();
+  const salt = String(passwordRecord.salt || "").trim();
+  if (!expectedHash || !salt) {
+    return false;
+  }
+  const computedHash = await derivePasswordHash(plainPassword, salt, iterations, keylen, digest);
+  const expected = Buffer.from(expectedHash, "hex");
+  const computed = Buffer.from(computedHash, "hex");
+  if (expected.length !== computed.length) {
+    return false;
+  }
+  return crypto.timingSafeEqual(expected, computed);
+};
+
+const isValidEmail = (email) => {
+  if (!email || email.length > 160) {
+    return false;
+  }
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+};
+
+const isValidPassword = (password) =>
+  typeof password === "string" && password.length >= 8 && password.length <= 128;
+
+const cloneForResponse = (value) => {
+  try {
+    return JSON.parse(JSON.stringify(value));
+  } catch {
+    return null;
+  }
+};
+
+const toPublicUser = (userRecord) => ({
+  id: userRecord.id,
+  email: userRecord.email,
+  displayName: userRecord.displayName,
+  createdAt: userRecord.createdAt,
+  updatedAt: userRecord.updatedAt,
+  lastLoginAt: userRecord.lastLoginAt || null,
+});
+
+const getAuthContext = (req) => {
+  const cookies = parseCookieHeader(req.headers.cookie || "");
+  const rawToken = String(cookies[AUTH_COOKIE_NAME] || "");
+  if (!rawToken) {
+    return null;
+  }
+  const sessionHash = hashSessionToken(rawToken);
+  const session = authStore.sessions[sessionHash];
+  if (!session) {
+    return null;
+  }
+  const expiresMs = Date.parse(String(session.expiresAt || ""));
+  if (!Number.isFinite(expiresMs) || expiresMs <= Date.now()) {
+    delete authStore.sessions[sessionHash];
+    markAuthStoreDirty();
+    return null;
+  }
+  const user = authStore.users[String(session.userId || "")];
+  if (!user) {
+    delete authStore.sessions[sessionHash];
+    markAuthStoreDirty();
+    return null;
+  }
+  return {
+    sessionHash,
+    session,
+    user,
+  };
+};
+
+app.use("/api", (req, res, next) => {
+  pruneExpiredSessions();
+  const authContext = getAuthContext(req);
+  req.auth = authContext;
+  req.authUser = authContext ? authContext.user : null;
+  next();
+});
+
+const requireAuthenticatedUser = (req, res, next) => {
+  if (!req.authUser) {
+    return res.status(401).json({ error: "Authentication required" });
+  }
+  return next();
+};
+
+const normalizeWorldKey = (value) =>
+  String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9-]/g, "")
+    .slice(0, 40);
+const normalizeMapKey = (value) =>
+  String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z]/g, "")
+    .slice(0, 20);
+const normalizeSectionKey = (value) => String(value || "").trim().slice(0, 120);
+const ALLOWED_PROGRESS_MAP_KEYS = new Set(["letters", "words", "phrases", "grammar"]);
+const ALLOWED_PROGRESS_STATUS = new Set(["started", "completed", "reviewed"]);
+
+const ensureProgressContainers = (progress, worldKey, mapKey) => {
+  if (!isPlainObject(progress.worlds[worldKey])) {
+    progress.worlds[worldKey] = { maps: {} };
+  }
+  if (!isPlainObject(progress.worlds[worldKey].maps)) {
+    progress.worlds[worldKey].maps = {};
+  }
+  if (!isPlainObject(progress.worlds[worldKey].maps[mapKey])) {
+    progress.worlds[worldKey].maps[mapKey] = {
+      sections: {},
+      completedCount: 0,
+      updatedAt: null,
+    };
+  }
+  if (!isPlainObject(progress.worlds[worldKey].maps[mapKey].sections)) {
+    progress.worlds[worldKey].maps[mapKey].sections = {};
+  }
+};
+
+const trackProgressEventForUser = (userRecord, payload) => {
+  const worldKey = normalizeWorldKey(payload.worldKey);
+  const mapKey = normalizeMapKey(payload.mapKey);
+  const sectionKey = normalizeSectionKey(payload.sectionKey);
+  const status = String(payload.status || "started").trim().toLowerCase();
+  const scoreRaw = Number(payload.score);
+  const xpDeltaRaw = Number(payload.xpDelta);
+
+  if (!worldKey || !mapKey || !sectionKey) {
+    return { ok: false, error: "Missing worldKey, mapKey, or sectionKey" };
+  }
+  if (!ALLOWED_PROGRESS_MAP_KEYS.has(mapKey)) {
+    return { ok: false, error: "Invalid mapKey" };
+  }
+  if (!ALLOWED_PROGRESS_STATUS.has(status)) {
+    return { ok: false, error: "Invalid status" };
+  }
+
+  const score = Number.isFinite(scoreRaw) ? Math.max(0, Math.min(100, Math.round(scoreRaw))) : null;
+  const xpDelta = Number.isFinite(xpDeltaRaw) ? Math.max(-1000, Math.min(5000, Math.round(xpDeltaRaw))) : 0;
+  const now = new Date().toISOString();
+
+  userRecord.progress = normalizeProgress(userRecord.progress);
+  const progress = userRecord.progress;
+  ensureProgressContainers(progress, worldKey, mapKey);
+  const mapProgress = progress.worlds[worldKey].maps[mapKey];
+  const previous = isPlainObject(mapProgress.sections[sectionKey]) ? mapProgress.sections[sectionKey] : null;
+
+  mapProgress.sections[sectionKey] = {
+    status,
+    score,
+    lastUpdatedAt: now,
+    firstCompletedAt:
+      status === "completed"
+        ? previous?.firstCompletedAt || now
+        : previous?.firstCompletedAt || null,
+  };
+
+  if (status === "completed" && previous?.status !== "completed") {
+    mapProgress.completedCount = Math.max(0, Number(mapProgress.completedCount || 0) + 1);
+    progress.totals.completedSections = Math.max(0, Number(progress.totals.completedSections || 0) + 1);
+  }
+
+  progress.totals.xp = Math.max(0, Number(progress.totals.xp || 0) + xpDelta);
+  progress.totals.lastActivityAt = now;
+  mapProgress.updatedAt = now;
+  progress.updatedAt = now;
+  progress.recentEvents.push({
+    worldKey,
+    mapKey,
+    sectionKey,
+    status,
+    xpDelta,
+    timestamp: now,
+  });
+  progress.recentEvents = progress.recentEvents.slice(-50);
+  userRecord.updatedAt = now;
+  markAuthStoreDirty();
+
+  return {
+    ok: true,
+    progress,
+    event: {
+      worldKey,
+      mapKey,
+      sectionKey,
+      status,
+      xpDelta,
+      score,
+      timestamp: now,
+    },
+  };
+};
+
+/* --------------------------------------------------------------------------
+   ROUTE: AUTH + ACCOUNT + PROGRESS
+   -------------------------------------------------------------------------- */
+app.post("/api/auth/signup", authSignupLimiter, async (req, res) => {
+  const email = normalizeEmail(req.body?.email);
+  const password = String(req.body?.password || "");
+  const displayName = sanitizeDisplayName(req.body?.displayName, email);
+  const baseLanguage = String(req.body?.baseLanguage || "").trim().slice(0, 40);
+
+  if (!isValidEmail(email)) {
+    return res.status(400).json({ error: "Invalid email" });
+  }
+  if (!isValidPassword(password)) {
+    return res.status(400).json({ error: "Password must be 8-128 characters" });
+  }
+  if (authStore.emailIndex[email]) {
+    return res.status(409).json({ error: "Account already exists" });
+  }
+
+  try {
+    const passwordRecord = await buildPasswordRecord(password);
+    const userId = crypto.randomUUID();
+    const now = new Date().toISOString();
+    authStore.users[userId] = {
+      id: userId,
+      email,
+      displayName,
+      password: passwordRecord,
+      createdAt: now,
+      updatedAt: now,
+      lastLoginAt: now,
+      data: {
+        settings: {
+          baseLanguage,
+        },
+        profile: {},
+      },
+      progress: createDefaultProgress(),
+    };
+    authStore.emailIndex[email] = userId;
+    const sessionToken = createSessionForUser(userId, req);
+    setAuthSessionCookie(req, res, sessionToken);
+
+    return res.status(201).json({
+      ok: true,
+      user: toPublicUser(authStore.users[userId]),
+      data: cloneForResponse(authStore.users[userId].data),
+      progress: cloneForResponse(authStore.users[userId].progress),
+    });
+  } catch (error) {
+    reportServerError("auth-signup", error, {
+      requestId: req.requestId,
+      method: req.method,
+      path: req.originalUrl,
+    });
+    return res.status(500).json({ error: "Failed to create account" });
+  }
+});
+
+app.post("/api/auth/login", authLoginLimiter, async (req, res) => {
+  const email = normalizeEmail(req.body?.email);
+  const password = String(req.body?.password || "");
+  if (!isValidEmail(email) || !isValidPassword(password)) {
+    return res.status(400).json({ error: "Invalid email or password" });
+  }
+
+  const userId = authStore.emailIndex[email];
+  const userRecord = userId ? authStore.users[userId] : null;
+  if (!userRecord) {
+    return res.status(401).json({ error: "Invalid email or password" });
+  }
+
+  try {
+    const validPassword = await verifyPasswordAgainstRecord(password, userRecord.password);
+    if (!validPassword) {
+      return res.status(401).json({ error: "Invalid email or password" });
+    }
+
+    userRecord.lastLoginAt = new Date().toISOString();
+    userRecord.updatedAt = userRecord.lastLoginAt;
+    markAuthStoreDirty();
+    const sessionToken = createSessionForUser(userRecord.id, req);
+    setAuthSessionCookie(req, res, sessionToken);
+
+    return res.json({
+      ok: true,
+      user: toPublicUser(userRecord),
+      data: cloneForResponse(normalizeUserData(userRecord.data)),
+      progress: cloneForResponse(normalizeProgress(userRecord.progress)),
+    });
+  } catch (error) {
+    reportServerError("auth-login", error, {
+      requestId: req.requestId,
+      method: req.method,
+      path: req.originalUrl,
+    });
+    return res.status(500).json({ error: "Login failed" });
+  }
+});
+
+app.post("/api/auth/logout", authSessionLimiter, (req, res) => {
+  if (req.auth?.sessionHash) {
+    removeSessionByHash(req.auth.sessionHash);
+  }
+  clearAuthSessionCookie(req, res);
+  return res.json({ ok: true });
+});
+
+app.get("/api/auth/me", authSessionLimiter, requireAuthenticatedUser, (req, res) => {
+  const userRecord = req.authUser;
+  return res.json({
+    ok: true,
+    user: toPublicUser(userRecord),
+    data: cloneForResponse(normalizeUserData(userRecord.data)),
+    progress: cloneForResponse(normalizeProgress(userRecord.progress)),
+  });
+});
+
+app.delete("/api/auth/account", authSessionLimiter, requireAuthenticatedUser, async (req, res) => {
+  const password = String(req.body?.password || "");
+  if (!isValidPassword(password)) {
+    return res.status(400).json({ error: "Password is required" });
+  }
+
+  const userRecord = req.authUser;
+  try {
+    const validPassword = await verifyPasswordAgainstRecord(password, userRecord.password);
+    if (!validPassword) {
+      return res.status(401).json({ error: "Invalid password" });
+    }
+
+    delete authStore.emailIndex[userRecord.email];
+    delete authStore.users[userRecord.id];
+    removeAllSessionsForUser(userRecord.id);
+    clearAuthSessionCookie(req, res);
+    markAuthStoreDirty();
+    return res.json({ ok: true });
+  } catch (error) {
+    reportServerError("auth-delete-account", error, {
+      requestId: req.requestId,
+      method: req.method,
+      path: req.originalUrl,
+    });
+    return res.status(500).json({ error: "Failed to delete account" });
+  }
+});
+
+app.get("/api/account/data", authSessionLimiter, requireAuthenticatedUser, (req, res) => {
+  const userRecord = req.authUser;
+  userRecord.data = normalizeUserData(userRecord.data);
+  return res.json({
+    ok: true,
+    data: cloneForResponse(userRecord.data),
+  });
+});
+
+app.put(
+  "/api/account/data",
+  accountMutationLimiter,
+  requireAuthenticatedUser,
+  (req, res) => {
+    const incoming = req.body?.data;
+    if (!isPlainObject(incoming)) {
+      return res.status(400).json({ error: "data must be an object" });
+    }
+    let serialized = "";
+    try {
+      serialized = JSON.stringify(incoming);
+    } catch {
+      return res.status(400).json({ error: "data must be JSON-serializable" });
+    }
+    if (serialized.length > MAX_USER_DATA_SERIALIZED_CHARS) {
+      return res.status(413).json({ error: "data payload too large" });
+    }
+    req.authUser.data = normalizeUserData(incoming);
+    req.authUser.updatedAt = new Date().toISOString();
+    markAuthStoreDirty();
+    return res.json({
+      ok: true,
+      data: cloneForResponse(req.authUser.data),
+    });
+  }
+);
+
+app.get("/api/progress", progressLimiter, requireAuthenticatedUser, (req, res) => {
+  req.authUser.progress = normalizeProgress(req.authUser.progress);
+  return res.json({
+    ok: true,
+    progress: cloneForResponse(req.authUser.progress),
+  });
+});
+
+app.put("/api/progress", progressLimiter, requireAuthenticatedUser, (req, res) => {
+  const incoming = req.body?.progress;
+  if (!isPlainObject(incoming)) {
+    return res.status(400).json({ error: "progress must be an object" });
+  }
+  let serialized = "";
+  try {
+    serialized = JSON.stringify(incoming);
+  } catch {
+    return res.status(400).json({ error: "progress must be JSON-serializable" });
+  }
+  if (serialized.length > MAX_PROGRESS_SERIALIZED_CHARS) {
+    return res.status(413).json({ error: "progress payload too large" });
+  }
+  req.authUser.progress = normalizeProgress(incoming);
+  req.authUser.progress.updatedAt = new Date().toISOString();
+  req.authUser.updatedAt = req.authUser.progress.updatedAt;
+  markAuthStoreDirty();
+  return res.json({
+    ok: true,
+    progress: cloneForResponse(req.authUser.progress),
+  });
+});
+
+app.post("/api/progress/track", progressLimiter, requireAuthenticatedUser, (req, res) => {
+  const trackResult = trackProgressEventForUser(req.authUser, req.body || {});
+  if (!trackResult.ok) {
+    return res.status(400).json({ error: trackResult.error || "Invalid progress payload" });
+  }
+  return res.json({
+    ok: true,
+    event: trackResult.event,
+    progress: cloneForResponse(trackResult.progress),
+  });
+});
 
 /* --------------------------------------------------------------------------
    ROUTE: FEEDBACK SUBMISSION

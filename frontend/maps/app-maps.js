@@ -2855,6 +2855,28 @@ const buildMapUnavailableState = (mapType) => {
   return wrapper;
 };
 
+const createSectionFilterButton = (title, value, sourceTitle = title) => {
+  const button = document.createElement("button");
+  button.className = "words-filter";
+  button.type = "button";
+  button.dataset.filter = value;
+  const normalizedSourceTitle = String(sourceTitle || title || "").trim();
+  if (normalizedSourceTitle) {
+    button.dataset.sourceTitle = normalizedSourceTitle;
+    button.dataset.baseTitle = normalizedSourceTitle;
+  }
+  const main = document.createElement("span");
+  main.className = "words-filter-main";
+  main.textContent = String(title || "").trim();
+  const translation = document.createElement("span");
+  translation.className = "words-filter-translation";
+  translation.hidden = true;
+  translation.setAttribute("dir", "auto");
+  button.appendChild(main);
+  button.appendChild(translation);
+  return button;
+};
+
 const renderWordsSections = () => {
   const container = document.getElementById("wordsSections");
   const controls = document.getElementById("wordsControls");
@@ -2929,16 +2951,7 @@ const renderWordsSections = () => {
     const list = document.createElement("div");
     list.className = "words-controls-list";
 
-    const makeButton = (title, value) => {
-      const button = document.createElement("button");
-      button.className = "words-filter";
-      button.type = "button";
-      button.dataset.filter = value;
-      button.textContent = title;
-      return button;
-    };
-
-    const allButton = makeButton("All sections", "all");
+    const allButton = createSectionFilterButton("All", "all", "All");
     allButton.classList.add("is-all");
     allButton.classList.add("is-active");
     list.appendChild(allButton);
@@ -2947,8 +2960,10 @@ const renderWordsSections = () => {
     }
 
     WORD_SECTION_ORDER.forEach((sectionName) => {
-      const displayName = sectionName === "countries" ? "Countries" : sectionName;
-      list.appendChild(makeButton(displayName, sectionName));
+      const displayName =
+        getWorldSectionLabelFromPack("words", sectionName) ||
+        (sectionName === "countries" ? "Countries" : sectionName);
+      list.appendChild(createSectionFilterButton(displayName, sectionName, sectionName));
     });
 
     const applyFilter = (filter) => {
@@ -3083,16 +3098,7 @@ const renderPhrasesSections = () => {
     const list = document.createElement("div");
     list.className = "words-controls-list";
 
-    const makeButton = (title, value) => {
-      const button = document.createElement("button");
-      button.className = "words-filter";
-      button.type = "button";
-      button.dataset.filter = value;
-      button.textContent = title;
-      return button;
-    };
-
-    const allButton = makeButton("All sections", "all");
+    const allButton = createSectionFilterButton("All", "all", "All");
     allButton.classList.add("is-all");
     allButton.classList.add("is-active");
     list.appendChild(allButton);
@@ -3101,7 +3107,9 @@ const renderPhrasesSections = () => {
     }
 
     PHRASE_SECTION_ORDER.forEach((sectionName) => {
-      list.appendChild(makeButton(sectionName, sectionName));
+      const displayName =
+        getWorldSectionLabelFromPack("phrases", sectionName) || sectionName;
+      list.appendChild(createSectionFilterButton(displayName, sectionName, sectionName));
     });
 
     const applyFilter = (filter) => {
@@ -3241,26 +3249,16 @@ const renderGrammarSections = () => {
   document.body.classList.remove("maps-loading");
 
   if (controls) {
-    const grammarUi = getGrammarUiLabels();
     const eyebrow = document.createElement("div");
     eyebrow.className = "words-controls-eyebrow";
-    eyebrow.textContent = grammarUi.grammar;
+    eyebrow.textContent = "Grammar";
     const label = document.createElement("div");
     label.className = "words-controls-label";
-    label.textContent = grammarUi.chooseSection;
+    label.textContent = "Choose a section";
     const list = document.createElement("div");
     list.className = "words-controls-list";
 
-    const makeButton = (title, value) => {
-      const button = document.createElement("button");
-      button.className = "words-filter";
-      button.type = "button";
-      button.dataset.filter = value;
-      button.textContent = title;
-      return button;
-    };
-
-    const allButton = makeButton(grammarUi.allSections, "all");
+    const allButton = createSectionFilterButton("All", "all", "All");
     allButton.classList.add("is-all");
     allButton.classList.add("is-active");
     list.appendChild(allButton);
@@ -3269,7 +3267,13 @@ const renderGrammarSections = () => {
     }
 
     GRAMMAR_SECTION_ORDER.forEach((sectionName) => {
-      list.appendChild(makeButton(getWorldGrammarSectionLabel(sectionName), sectionName));
+      list.appendChild(
+        createSectionFilterButton(
+          getWorldGrammarSectionLabel(sectionName),
+          sectionName,
+          sectionName
+        )
+      );
     });
 
     const applyFilter = (filter) => {
@@ -3405,11 +3409,38 @@ const buildAltGrammarExample = (() => {
   };
 })();
 
+const GRAMMAR_EXPLANATION_TEMPLATES = {
+  english: (title) =>
+    `This card explains ${title} and how to form it clearly in real sentences.`,
+  french: (title) =>
+    `Cette carte explique ${title} et son usage correct dans des phrases reelles.`,
+  german: (title) =>
+    `Diese Karte erklaert ${title} und zeigt die korrekte Verwendung in echten Saetzen.`,
+  spanish: (title) =>
+    `Esta tarjeta explica ${title} y muestra su uso correcto en oraciones reales.`,
+  portuguese: (title) =>
+    `Este card explica ${title} e mostra o uso correto em frases reais.`,
+  dutch: (title) =>
+    `Deze kaart legt ${title} uit en toont correct gebruik in echte zinnen.`,
+  swedish: (title) =>
+    `Det har kortet forklarar ${title} och visar korrekt anvandning i riktiga meningar.`,
+  arabic: (title) =>
+    `تشرح هذه البطاقة ${title} وتوضح الاستخدام الصحيح في جمل حقيقية.`,
+  chinese: (title) =>
+    `这张卡片讲解${title}，并展示在真实句子中的正确用法。`,
+  japanese: (title) =>
+    `このカードでは${title}を説明し、実際の文での正しい使い方を示します。`,
+  korean: (title) =>
+    `이 카드는 ${title}을 설명하고 실제 문장에서의 올바른 사용을 보여 줍니다.`,
+  hindi: (title) =>
+    `यह कार्ड ${title} को समझाता है और वास्तविक वाक्यों में इसका सही प्रयोग दिखाता है।`,
+};
+
 const buildGrammarExplanation = (card) => {
-  if (WORLD_KEY === "french") {
-    return `Cette carte explique ${card.title} et son usage correct dans des phrases réelles.`;
-  }
-  return `This card explains ${card.title} and how to form it clearly in real sentences.`;
+  const title = String(card?.title || card?.sourceTitle || "").trim() || "this topic";
+  const buildExplanation =
+    GRAMMAR_EXPLANATION_TEMPLATES[WORLD_KEY] || GRAMMAR_EXPLANATION_TEMPLATES.english;
+  return buildExplanation(title);
 };
 
 const normalizeTranslationLookupKey = (value) =>
@@ -4293,9 +4324,16 @@ const buildNounExamples = (card) => {
   if (title.includes("plural forms")) {
     return [
       {
-        labels: ["Plural noun: boxes"],
-        base: "The boxes are heavy.",
-        expanded: "The boxes are heavy.",
+        variantLabel: "Singular",
+        labels: ["Singular noun: child", "Verb: is"],
+        base: "The child is here.",
+        expanded: "The child is here.",
+      },
+      {
+        variantLabel: "Plural",
+        labels: ["Plural noun: children", "Verb: are"],
+        base: "The children are here.",
+        expanded: "The children are here.",
       },
     ];
   }
@@ -4940,7 +4978,18 @@ const buildConnectionExamples = (card) => {
   return null;
 };
 
-const getExampleLabelClass = (label) => {
+const SLOT_COLOR_VARIANT_COUNT = 6;
+
+const getSlotColorClass = (prefix, index = 0) => {
+  const safeIndex = Number.isFinite(index) ? Math.max(0, Math.floor(index)) : 0;
+  const variant = (safeIndex % SLOT_COLOR_VARIANT_COUNT) + 1;
+  return `${prefix}-slot-${variant}`;
+};
+
+const getExampleLabelClass = (label, index = 0, options = {}) => {
+  if (options?.colorByOrder) {
+    return getSlotColorClass("label", index);
+  }
   const type = normalizeLabelType(label);
   switch (type) {
     case "time":
@@ -5120,6 +5169,9 @@ const getExampleLabelClass = (label) => {
     case "sentence":
       return "label-sentence";
     default:
+      if (WORLD_KEY !== "english") {
+        return getSlotColorClass("label", index);
+      }
       return "label-generic";
   }
 };
@@ -5321,6 +5373,12 @@ const localizeGrammarChipLabel = (labelText) => {
   return map[text] || text;
 };
 
+const formatGrammarChipLabel = (value) =>
+  String(value || "")
+    .replace(/\s*\+\s*/g, " + ")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+
 const normalizeLabelType = (label) => {
   const key = label.split(":")[0]?.trim().toLowerCase();
   if (key.includes("sentence 1")) return "sentence-1";
@@ -5419,6 +5477,46 @@ const normalizeLabelType = (label) => {
 const escapeRegExp = (value) =>
   value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
+const hasLetterOrNumber = (value) => /[\p{L}\p{N}]/u.test(String(value || ""));
+
+const isBoundaryChar = (char) => {
+  if (!char) {
+    return true;
+  }
+  return !/[\p{L}\p{N}]/u.test(char);
+};
+
+const findPhraseMatchSpan = (sentence, phrase, fromIndex = 0) => {
+  const source = String(sentence || "");
+  const target = String(phrase || "").trim();
+  if (!source || !target) {
+    return null;
+  }
+  const sourceLower = source.toLocaleLowerCase();
+  const targetLower = target.toLocaleLowerCase();
+  const starts = [];
+  const preferredStart = Math.max(0, Number(fromIndex) || 0);
+  starts.push(preferredStart);
+  if (preferredStart > 0) {
+    starts.push(0);
+  }
+  const shouldCheckBoundary = /\s/u.test(source) && hasLetterOrNumber(target);
+  for (const searchStart of starts) {
+    let at = sourceLower.indexOf(targetLower, searchStart);
+    while (at >= 0) {
+      const before = source[at - 1] || "";
+      const after = source[at + target.length] || "";
+      const isBoundaryMatch =
+        !shouldCheckBoundary || (isBoundaryChar(before) && isBoundaryChar(after));
+      if (isBoundaryMatch) {
+        return { start: at, end: at + target.length };
+      }
+      at = sourceLower.indexOf(targetLower, at + 1);
+    }
+  }
+  return null;
+};
+
 const buildWordBoundaryPattern = (phrase) => {
   const escaped = escapeRegExp(phrase);
   const startsWord = /^\w/.test(phrase);
@@ -5428,27 +5526,59 @@ const buildWordBoundaryPattern = (phrase) => {
   return new RegExp(`${prefix}${escaped}${suffix}`, "i");
 };
 
-const applyGrammarHighlights = (sentence, labels = []) => {
-  let output = sentence;
-  labels.forEach((label) => {
+const applyGrammarHighlights = (sentence, labels = [], options = {}) => {
+  const source = String(sentence || "");
+  const ranges = [];
+  let cursor = 0;
+  labels.forEach((label, index) => {
     const parts = label.split(":");
     if (parts.length < 2) {
       return;
     }
     const phrase = parts.slice(1).join(":").trim();
-    if (!phrase) {
+    if (!phrase || !hasLetterOrNumber(phrase)) {
       return;
     }
     const type = normalizeLabelType(label);
-    const pattern = buildWordBoundaryPattern(phrase);
-    if (!pattern.test(output)) {
+    const useSlotColors =
+      !!options?.colorByOrder || (WORLD_KEY !== "english" && type === "generic");
+    const highlightClass = useSlotColors
+      ? getSlotColorClass("highlight", index)
+      : `highlight-${type}`;
+    let match = findPhraseMatchSpan(source, phrase, cursor);
+    if (!match) {
+      match = findPhraseMatchSpan(source, phrase, 0);
+    }
+    if (!match) {
       return;
     }
-    output = output.replace(
-      pattern,
-      (match) => `<span class="highlight highlight-${type}">${match}</span>`
+    const overlaps = ranges.some(
+      (existing) => match.start < existing.end && match.end > existing.start
     );
+    if (overlaps) {
+      return;
+    }
+    ranges.push({
+      ...match,
+      className: highlightClass,
+    });
+    cursor = match.end;
   });
+  if (!ranges.length) {
+    return source;
+  }
+  ranges.sort((a, b) => a.start - b.start);
+  let output = "";
+  let cursorOut = 0;
+  ranges.forEach((range) => {
+    output += source.slice(cursorOut, range.start);
+    output += `<span class="highlight ${range.className}">${source.slice(
+      range.start,
+      range.end
+    )}</span>`;
+    cursorOut = range.end;
+  });
+  output += source.slice(cursorOut);
   return output;
 };
 
@@ -5852,7 +5982,620 @@ const stripLabelPhrases = (sentence, labels) => {
   return output;
 };
 
+const trimHighlightEdges = (value) =>
+  String(value || "")
+    .trim()
+    .replace(/^[\s\p{P}\p{S}]+|[\s\p{P}\p{S}]+$/gu, "")
+    .trim();
+
+const buildRuleOrderFallbackLabels = (ruleOrder, sentence) => {
+  const slots = (Array.isArray(ruleOrder) ? ruleOrder : [])
+    .map((item) => String(item || "").trim())
+    .filter(Boolean);
+  const source = String(sentence || "").trim();
+  if (slots.length < 2 || !source) {
+    return [];
+  }
+  if (!/\s/u.test(source)) {
+    return [];
+  }
+  const cleaned = source.replace(/[\s\p{P}\p{S}]+$/gu, "").trim();
+  const words = cleaned.split(/\s+/).filter((part) => hasLetterOrNumber(part));
+  if (words.length < 2) {
+    return [];
+  }
+  const labels = [];
+  if (words.length >= slots.length) {
+    for (let i = 0; i < slots.length - 1; i += 1) {
+      labels.push(`${slots[i]}: ${words[i]}`);
+    }
+    labels.push(`${slots[slots.length - 1]}: ${words.slice(slots.length - 1).join(" ")}`);
+    return labels;
+  }
+  for (let i = 0; i < words.length - 1 && i < slots.length; i += 1) {
+    labels.push(`${slots[i]}: ${words[i]}`);
+  }
+  labels.push(
+    `${slots[Math.min(slots.length - 1, words.length - 1)]}: ${words[words.length - 1]}`
+  );
+  return labels;
+};
+
+const buildRuleDrivenExampleItem = (payload, fallbackRuleOrder = []) => {
+  const expanded = String(payload?.example || payload?.expanded || "").trim();
+  if (!expanded) {
+    return null;
+  }
+  const ruleOrder = Array.isArray(payload?.ruleOrder)
+    ? payload.ruleOrder.map((item) => String(item || "").trim()).filter(Boolean)
+    : Array.isArray(fallbackRuleOrder)
+      ? fallbackRuleOrder.map((item) => String(item || "").trim()).filter(Boolean)
+    : [];
+  const highlights = Array.isArray(payload?.exampleHighlights)
+    ? payload.exampleHighlights
+        .map((entry) => ({
+          label: String(entry?.label || "").trim(),
+          text: trimHighlightEdges(entry?.text),
+        }))
+        .filter((entry) => entry.label && entry.text && hasLetterOrNumber(entry.text))
+    : [];
+  if (ruleOrder.length < 2) {
+    return null;
+  }
+
+  const labels = [];
+  let cursor = 0;
+  for (let i = 0; i < ruleOrder.length; i += 1) {
+    const entry = highlights[i];
+    const text = String(entry?.text || "").trim();
+    if (!text) {
+      continue;
+    }
+    const span = findPhraseMatchSpan(expanded, text, cursor);
+    if (!span) {
+      continue;
+    }
+    const slot = ruleOrder[i] || entry?.label || `Part ${i + 1}`;
+    const phrase = expanded.slice(span.start, span.end);
+    labels.push(`${slot}: ${phrase}`);
+    cursor = span.end;
+  }
+  const dedupedLabels = [];
+  const seen = new Set();
+  labels.forEach((label) => {
+    const parts = label.split(":");
+    const phrase = parts.slice(1).join(":").trim().toLocaleLowerCase();
+    if (!phrase || seen.has(phrase)) {
+      return;
+    }
+    seen.add(phrase);
+    dedupedLabels.push(label);
+  });
+  let finalLabels = dedupedLabels;
+  if (finalLabels.length < 2) {
+    finalLabels = buildRuleOrderFallbackLabels(ruleOrder, expanded);
+  }
+  if (finalLabels.length < 2) {
+    return null;
+  }
+  let base = stripLabelPhrases(expanded, finalLabels);
+  if (!base || base.trim().length < 2) {
+    base = expanded;
+  }
+  const variantLabel = String(payload?.variantLabel || "").trim();
+  return {
+    base,
+    expanded,
+    labels: finalLabels,
+    colorByOrder: WORLD_KEY !== "english",
+    variantLabel: variantLabel || "",
+  };
+};
+
+const SINGULAR_PLURAL_TITLE_TOKENS = {
+  english: ["singular", "plural"],
+  french: ["singulier", "pluriel"],
+  german: ["singular", "plural"],
+  spanish: ["singular", "plural"],
+  portuguese: ["singular", "plural"],
+  dutch: ["enkelvoud", "meervoud"],
+  swedish: ["singular", "plural"],
+  arabic: ["المفرد", "الجمع"],
+  chinese: ["单数", "复数"],
+  japanese: ["単数", "複数"],
+  korean: ["단수", "복수"],
+  hindi: ["एकवचन", "बहुवचन"],
+};
+
+const SINGULAR_PLURAL_VARIANT_LABELS = {
+  english: { singular: "Singular", plural: "Plural" },
+  french: { singular: "Singulier", plural: "Pluriel" },
+  german: { singular: "Singular", plural: "Plural" },
+  spanish: { singular: "Singular", plural: "Plural" },
+  portuguese: { singular: "Singular", plural: "Plural" },
+  dutch: { singular: "Enkelvoud", plural: "Meervoud" },
+  swedish: { singular: "Singular", plural: "Plural" },
+  arabic: { singular: "المفرد", plural: "الجمع" },
+  chinese: { singular: "单数", plural: "复数" },
+  japanese: { singular: "単数", plural: "複数" },
+  korean: { singular: "단수", plural: "복수" },
+  hindi: { singular: "एकवचन", plural: "बहुवचन" },
+};
+
+const isSingularPluralCardTitle = (cardData) => {
+  const source = String(cardData?.sourceTitle || cardData?.title || "").trim();
+  if (!source) {
+    return false;
+  }
+  const lower = source.toLowerCase();
+  const tokens = SINGULAR_PLURAL_TITLE_TOKENS[WORLD_KEY] || SINGULAR_PLURAL_TITLE_TOKENS.english;
+  return Array.isArray(tokens) && tokens.every((token) => lower.includes(String(token).toLowerCase()));
+};
+
+const applySingularPluralVariantLabels = (pairs, cardData) => {
+  if (!Array.isArray(pairs) || pairs.length !== 2 || !isSingularPluralCardTitle(cardData)) {
+    return pairs;
+  }
+  const labels = SINGULAR_PLURAL_VARIANT_LABELS[WORLD_KEY] || SINGULAR_PLURAL_VARIANT_LABELS.english;
+  return pairs.map((item, index) => {
+    const existing = String(item?.variantLabel || "").trim();
+    if (existing) {
+      return item;
+    }
+    return {
+      ...item,
+      variantLabel: index === 0 ? labels.singular : labels.plural,
+    };
+  });
+};
+
+const formatExampleVariantLabel = (value) => {
+  const label = String(value || "").trim();
+  if (!label) {
+    return "";
+  }
+  return label.endsWith(":") ? label : `${label}:`;
+};
+
+const buildRuleDrivenExamplePair = (cardData) => {
+  const sharedRuleOrder = Array.isArray(cardData?.ruleOrder)
+    ? cardData.ruleOrder.map((item) => String(item || "").trim()).filter(Boolean)
+    : [];
+  const explicitPairs = Array.isArray(cardData?.examplePairs)
+    ? cardData.examplePairs.filter((entry) => entry && typeof entry === "object")
+    : [];
+  if (explicitPairs.length) {
+    const builtPairs = explicitPairs
+      .map((entry) => buildRuleDrivenExampleItem(entry, sharedRuleOrder))
+      .filter(Boolean);
+    if (builtPairs.length === explicitPairs.length) {
+      return applySingularPluralVariantLabels(builtPairs, cardData);
+    }
+  }
+  const single = buildRuleDrivenExampleItem(cardData, sharedRuleOrder);
+  if (!single) {
+    return null;
+  }
+  return applySingularPluralVariantLabels([single], cardData);
+};
+
+const normalizeGrammarTextKey = (value) =>
+  String(value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
+
+const parseGrammarExampleLabels = (labels = []) =>
+  (Array.isArray(labels) ? labels : [])
+    .map((labelText) => {
+      const raw = String(labelText || "");
+      const idx = raw.indexOf(":");
+      if (idx < 0) {
+        return null;
+      }
+      const slot = raw.slice(0, idx).trim();
+      const phrase = raw.slice(idx + 1).trim();
+      if (!slot || !phrase) {
+        return null;
+      }
+      return { slot, phrase };
+    })
+    .filter(Boolean);
+
+const normalizeSlotCategory = (slot) => {
+  const key = normalizeGrammarTextKey(slot);
+  const has = (tokens) => tokens.some((token) => key.includes(token));
+  if (
+    has([
+      "subject",
+      "sujet",
+      "subjekt",
+      "sujeto",
+      "sujeito",
+      "onderwerp",
+      "주어",
+      "主语",
+      "主語",
+      "فاعل",
+      "विषय",
+    ])
+  ) {
+    return "subject";
+  }
+  if (
+    has([
+      "verb",
+      "verbe",
+      "verbo",
+      "werkwoord",
+      "동사",
+      "谓语",
+      "動詞",
+      "فعل",
+      "क्रिया",
+    ])
+  ) {
+    return "verb";
+  }
+  if (
+    has([
+      "object",
+      "objet",
+      "objekt",
+      "objeto",
+      "voorwerp",
+      "目的語",
+      "宾语",
+      "목적어",
+      "مفعول",
+      "वस्तु",
+      "complement",
+      "compl",
+      "補語",
+      "보어",
+    ])
+  ) {
+    return "object";
+  }
+  if (has(["time", "temps", "zeit", "tiempo", "tempo", "tijd", "tid", "时间", "時", "시간", "وقت", "زمان", "समय"])) {
+    return "time";
+  }
+  if (has(["place", "lieu", "ort", "lugar", "plaats", "plats", "場所", "地点", "장소", "مكان", "स्थान"])) {
+    return "place";
+  }
+  if (has(["connector", "connecteur", "conector", "conjunction", "link", "接続", "连接", "연결", "ربط", "समुच्चय"])) {
+    return "connector";
+  }
+  if (has(["clause", "proposition", "satz", "oracion", "oração", "从句", "節", "절", "جملة", "उपवाक्य"])) {
+    return "clause";
+  }
+  if (has(["noun", "nom", "nomen", "sustantivo", "substantivo", "substantiv", "名词", "名詞", "명사", "اسم", "संज्ञा"])) {
+    return "noun";
+  }
+  return "generic";
+};
+
+const GRAMMAR_VARIANT_POOLS = {
+  english: {
+    subject: ["They", "We", "The student", "My friend"],
+    verb: ["reads", "writes", "checks", "visits"],
+    object: ["the lesson", "a message", "the plan", "the report"],
+    time: ["today", "tomorrow", "this evening", "right now"],
+    place: ["at home", "at school", "in the office", "at the park"],
+    connector: ["because", "but", "and", "so"],
+    clause: ["it is raining", "we are ready", "the class starts", "time is short"],
+    noun: ["students", "books", "ideas", "tickets"],
+    generic: ["another example", "a similar sentence", "this pattern"],
+  },
+  french: {
+    subject: ["Nous", "Ils", "Le professeur", "Mon ami"],
+    verb: ["lisons", "regardent", "ecrit", "prepare"],
+    object: ["la lecon", "un message", "le plan", "le rapport"],
+    time: ["aujourd'hui", "demain", "ce soir", "maintenant"],
+    place: ["a la maison", "a l'ecole", "au bureau", "au parc"],
+    connector: ["parce que", "mais", "et", "donc"],
+    clause: ["il pleut", "nous sommes prets", "le cours commence", "le temps manque"],
+    noun: ["eleves", "livres", "idees", "billets"],
+    generic: ["un autre exemple", "une phrase similaire", "ce schema"],
+  },
+  german: {
+    subject: ["Wir", "Sie", "Der Lehrer", "Meine Freundin"],
+    verb: ["lesen", "sehen", "schreibt", "plant"],
+    object: ["die Lektion", "eine Nachricht", "den Plan", "den Bericht"],
+    time: ["heute", "morgen", "heute Abend", "jetzt"],
+    place: ["zu Hause", "in der Schule", "im Buro", "im Park"],
+    connector: ["weil", "aber", "und", "deshalb"],
+    clause: ["es regnet", "wir sind bereit", "der Kurs beginnt", "die Zeit ist knapp"],
+    noun: ["Schuler", "Bucher", "Ideen", "Tickets"],
+    generic: ["ein anderes Beispiel", "ein ahnlicher Satz", "dieses Muster"],
+  },
+  spanish: {
+    subject: ["Nosotros", "Ellos", "La profesora", "Mi amigo"],
+    verb: ["leemos", "miran", "escribe", "prepara"],
+    object: ["la leccion", "un mensaje", "el plan", "el informe"],
+    time: ["hoy", "manana", "esta noche", "ahora"],
+    place: ["en casa", "en la escuela", "en la oficina", "en el parque"],
+    connector: ["porque", "pero", "y", "asi que"],
+    clause: ["esta lloviendo", "estamos listos", "la clase empieza", "falta tiempo"],
+    noun: ["estudiantes", "libros", "ideas", "boletos"],
+    generic: ["otro ejemplo", "una frase similar", "este patron"],
+  },
+  portuguese: {
+    subject: ["Nos", "Eles", "A professora", "Meu amigo"],
+    verb: ["lemos", "veem", "escreve", "prepara"],
+    object: ["a licao", "uma mensagem", "o plano", "o relatorio"],
+    time: ["hoje", "amanha", "esta noite", "agora"],
+    place: ["em casa", "na escola", "no escritorio", "no parque"],
+    connector: ["porque", "mas", "e", "entao"],
+    clause: ["esta chovendo", "estamos prontos", "a aula comeca", "o tempo e curto"],
+    noun: ["alunos", "livros", "ideias", "bilhetes"],
+    generic: ["outro exemplo", "uma frase parecida", "este padrao"],
+  },
+  dutch: {
+    subject: ["Wij", "Zij", "De leraar", "Mijn vriend"],
+    verb: ["lezen", "kijken", "schrijft", "plant"],
+    object: ["de les", "een bericht", "het plan", "het rapport"],
+    time: ["vandaag", "morgen", "vanavond", "nu"],
+    place: ["thuis", "op school", "op kantoor", "in het park"],
+    connector: ["omdat", "maar", "en", "dus"],
+    clause: ["het regent", "we zijn klaar", "de les begint", "de tijd is kort"],
+    noun: ["studenten", "boeken", "ideeen", "tickets"],
+    generic: ["een ander voorbeeld", "een vergelijkbare zin", "dit patroon"],
+  },
+  swedish: {
+    subject: ["Vi", "De", "Lararen", "Min van"],
+    verb: ["laser", "ser", "skriver", "planerar"],
+    object: ["lektionen", "ett meddelande", "planen", "rapporten"],
+    time: ["idag", "imorgon", "ikvall", "nu"],
+    place: ["hemma", "i skolan", "pa kontoret", "i parken"],
+    connector: ["eftersom", "men", "och", "sa"],
+    clause: ["det regnar", "vi ar redo", "lektionen borjar", "tiden ar kort"],
+    noun: ["studenter", "bocker", "ideer", "biljetter"],
+    generic: ["ett annat exempel", "en liknande mening", "detta monster"],
+  },
+  arabic: {
+    subject: ["الطالبة", "نحن", "هم", "المعلم"],
+    verb: ["يقرأ", "يكتب", "يشاهد", "يذهب"],
+    object: ["الكتاب", "الرسالة", "الدرس", "التقرير"],
+    time: ["اليوم", "غدا", "الآن", "مساء"],
+    place: ["في البيت", "في المدرسة", "في المكتب", "في الحديقة"],
+    connector: ["لأن", "لكن", "و", "ثم"],
+    clause: ["الجو ممطر", "نحن جاهزون", "الدرس يبدأ", "الوقت قصير"],
+    noun: ["طلاب", "كتب", "أفكار", "تذاكر"],
+    generic: ["مثال آخر", "جملة مشابهة", "هذا النمط"],
+  },
+  chinese: {
+    subject: ["他", "她", "我们", "学生"],
+    verb: ["看", "写", "学", "买"],
+    object: ["书", "报告", "电影", "作业"],
+    time: ["今天", "明天", "现在", "今晚"],
+    place: ["在家", "在学校", "在办公室", "在公园"],
+    connector: ["因为", "但是", "而且", "所以"],
+    clause: ["今天下雨", "我们准备好了", "课程开始了", "时间不够"],
+    noun: ["学生", "书", "想法", "票"],
+    generic: ["另一个例子", "类似句子", "这个模式"],
+  },
+  japanese: {
+    subject: ["彼は", "彼女は", "私たちは", "学生は"],
+    verb: ["読みます", "書きます", "見ます", "行きます"],
+    object: ["本を", "手紙を", "映画を", "宿題を"],
+    time: ["今日", "明日", "今", "今夜"],
+    place: ["家で", "学校で", "会社で", "公園で"],
+    connector: ["でも", "そして", "だから", "ので"],
+    clause: ["雨が降っています", "準備ができています", "授業が始まります", "時間が足りません"],
+    noun: ["学生", "本", "考え", "切符"],
+    generic: ["別の例", "似た文", "この型"],
+  },
+  korean: {
+    subject: ["그는", "그녀는", "우리는", "학생은"],
+    verb: ["읽는다", "쓴다", "본다", "간다"],
+    object: ["책을", "편지를", "영화를", "숙제를"],
+    time: ["오늘", "내일", "지금", "오늘 밤"],
+    place: ["집에서", "학교에서", "회사에서", "공원에서"],
+    connector: ["왜냐하면", "하지만", "그리고", "그래서"],
+    clause: ["비가 온다", "우리는 준비됐다", "수업이 시작된다", "시간이 부족하다"],
+    noun: ["학생들", "책", "생각", "표"],
+    generic: ["다른 예시", "비슷한 문장", "이 패턴"],
+  },
+  hindi: {
+    subject: ["वह", "वे", "हम", "शिक्षक"],
+    verb: ["पढ़ता है", "लिखता है", "देखता है", "जाता है"],
+    object: ["किताब", "संदेश", "रिपोर्ट", "फिल्म"],
+    time: ["आज", "कल", "अभी", "शाम को"],
+    place: ["घर में", "स्कूल में", "दफ्तर में", "पार्क में"],
+    connector: ["क्योंकि", "लेकिन", "और", "इसलिए"],
+    clause: ["बारिश हो रही है", "हम तैयार हैं", "कक्षा शुरू होती है", "समय कम है"],
+    noun: ["छात्र", "किताबें", "विचार", "टिकट"],
+    generic: ["एक और उदाहरण", "मिलता-जुलता वाक्य", "यह पैटर्न"],
+  },
+};
+
+const pickVariantPhraseForLabel = (slot, originalPhrase, seed = 0) => {
+  const category = normalizeSlotCategory(slot);
+  const pools = GRAMMAR_VARIANT_POOLS[WORLD_KEY] || GRAMMAR_VARIANT_POOLS.english;
+  const list = pools[category] || pools.generic || [];
+  if (!Array.isArray(list) || !list.length) {
+    return "";
+  }
+  const normalizedOriginal = normalizeGrammarTextKey(originalPhrase);
+  const start = Math.abs(Number(seed) || 0) % list.length;
+  for (let offset = 0; offset < list.length; offset += 1) {
+    const candidate = String(list[(start + offset) % list.length] || "").trim();
+    if (!candidate) {
+      continue;
+    }
+    if (normalizeGrammarTextKey(candidate) !== normalizedOriginal) {
+      return candidate;
+    }
+  }
+  return "";
+};
+
+const splitTrailingPunctuation = (phrase) => {
+  const value = String(phrase || "");
+  const match = value.match(/^(.*?)([.!?。！？،؛]+)?$/u);
+  if (!match) {
+    return { core: value, suffix: "" };
+  }
+  return {
+    core: String(match[1] || "").trim(),
+    suffix: String(match[2] || ""),
+  };
+};
+
+const replaceLabelPhrasesInSentence = (sentence, originalPhrases = [], nextPhrases = []) => {
+  const source = String(sentence || "");
+  if (!source || originalPhrases.length !== nextPhrases.length || !originalPhrases.length) {
+    return "";
+  }
+  let cursor = 0;
+  let output = "";
+  for (let i = 0; i < originalPhrases.length; i += 1) {
+    const oldPhrase = String(originalPhrases[i] || "");
+    const newPhrase = String(nextPhrases[i] || "");
+    if (!oldPhrase || !newPhrase) {
+      return "";
+    }
+    let at = source.indexOf(oldPhrase, cursor);
+    if (at < 0) {
+      at = source.indexOf(oldPhrase);
+    }
+    if (at < 0) {
+      return "";
+    }
+    output += source.slice(cursor, at) + newPhrase;
+    cursor = at + oldPhrase.length;
+  }
+  output += source.slice(cursor);
+  return output;
+};
+
+const buildAdditionalExampleFromItem = (primaryItem, seed = 0) => {
+  if (!primaryItem || typeof primaryItem !== "object") {
+    return null;
+  }
+  const expanded = String(primaryItem.expanded || "").trim();
+  if (!expanded) {
+    return null;
+  }
+  const parsedLabels = parseGrammarExampleLabels(primaryItem.labels);
+  if (!parsedLabels.length) {
+    return null;
+  }
+  const preferredIndices = [];
+  const fallbackIndices = [];
+  parsedLabels.forEach((part, index) => {
+    const category = normalizeSlotCategory(part.slot);
+    if (["object", "place", "time", "clause", "noun", "generic"].includes(category)) {
+      preferredIndices.push(index);
+    } else {
+      fallbackIndices.push(index);
+    }
+  });
+  const orderedIndices = [...preferredIndices, ...fallbackIndices];
+  for (const targetIndex of orderedIndices) {
+    const updatedPhrases = parsedLabels.map((part, index) => {
+      if (index !== targetIndex) {
+        return part.phrase;
+      }
+      const { core, suffix } = splitTrailingPunctuation(part.phrase);
+      const replacement = pickVariantPhraseForLabel(part.slot, core, seed + index + 17);
+      if (!replacement) {
+        return part.phrase;
+      }
+      return `${replacement}${suffix}`;
+    });
+    const sentenceVariant = replaceLabelPhrasesInSentence(
+      expanded,
+      parsedLabels.map((part) => part.phrase),
+      updatedPhrases
+    );
+    if (!sentenceVariant || normalizeGrammarTextKey(sentenceVariant) === normalizeGrammarTextKey(expanded)) {
+      continue;
+    }
+    const labels = parsedLabels.map(
+      (part, index) => `${part.slot}: ${String(updatedPhrases[index] || "").trim()}`
+    );
+    let base = stripLabelPhrases(sentenceVariant, labels);
+    if (!base || base.trim().length < 2) {
+      base = sentenceVariant;
+    }
+    return {
+      ...primaryItem,
+      base,
+      expanded: sentenceVariant,
+      labels,
+      variantLabel: "",
+    };
+  }
+  return null;
+};
+
+const ensureTwoGrammarExamples = (examples, cardData, sectionName, index) => {
+  const source = Array.isArray(examples) ? examples.filter(Boolean) : [];
+  const unique = [];
+  const seen = new Set();
+  source.forEach((item) => {
+    const key = normalizeGrammarTextKey(item?.expanded);
+    if (!key || seen.has(key)) {
+      return;
+    }
+    seen.add(key);
+    unique.push(item);
+  });
+  if (unique.length >= 2) {
+    return unique.slice(0, 2);
+  }
+  const primary = unique[0] || null;
+  if (primary) {
+    const extra = buildAdditionalExampleFromItem(primary, Number(index) || 0);
+    const extraKey = normalizeGrammarTextKey(extra?.expanded);
+    if (extra && extraKey && !seen.has(extraKey)) {
+      seen.add(extraKey);
+      unique.push(extra);
+    }
+  }
+  if (unique.length < 2) {
+    const fallbackExpanded = String(
+      cardData?.example || buildAltGrammarExample(cardData, Number(index || 0) + 71)
+    ).trim();
+    if (fallbackExpanded) {
+      const labels = buildLabelsForCard(
+        {
+          ...cardData,
+          section: sectionName || cardData?.section || "",
+        },
+        fallbackExpanded
+      );
+      const fallbackItem = buildAdditionalExampleFromItem(
+        {
+          base: fallbackExpanded,
+          expanded: fallbackExpanded,
+          labels,
+          colorByOrder: !!cardData?.ruleOrder?.length && WORLD_KEY !== "english",
+        },
+        Number(index || 0) + 131
+      );
+      const fallbackKey = normalizeGrammarTextKey(fallbackItem?.expanded);
+      if (fallbackItem && fallbackKey && !seen.has(fallbackKey)) {
+        seen.add(fallbackKey);
+        unique.push(fallbackItem);
+      }
+    }
+  }
+  return unique.slice(0, 2);
+};
+
 const buildGenericExamplePairs = (cardData, index, sectionName = "") => {
+  const strictPairs = buildRuleDrivenExamplePair(cardData);
+  if (strictPairs) {
+    return strictPairs;
+  }
+  if (WORLD_KEY !== "english") {
+    const expanded = cardData.example || buildAltGrammarExample(cardData, index);
+    return [{ base: expanded, expanded, labels: [] }];
+  }
   const exampleA = cardData.example || buildAltGrammarExample(cardData, index);
   const examples = [exampleA];
   return examples.map((expanded) => {
@@ -5871,11 +6614,22 @@ const buildGenericExamplePairs = (cardData, index, sectionName = "") => {
   });
 };
 
-
 const buildGrammarHowItWorks = (card) => {
   const sourceTitle = String(card.sourceTitle || card.title || "");
   const title = sourceTitle.toLowerCase();
-  if (title.includes("adding details")) {
+  const explicitOrder = Array.isArray(card?.ruleOrder)
+    ? card.ruleOrder.map((item) => String(item || "").trim()).filter(Boolean)
+    : [];
+  if (explicitOrder.length >= 2) {
+    const expandedPoints = (card.points || []).map(expandGrammarPoint);
+    const orderText = explicitOrder.join(" + ");
+    return {
+      order: orderText,
+      bullets: expandedPoints,
+      template: orderText,
+    };
+  }
+  if (WORLD_KEY === "english" && title.includes("adding details")) {
     return {
       order: "(time) + (place)",
       bullets: [
@@ -5886,6 +6640,12 @@ const buildGrammarHowItWorks = (card) => {
     };
   }
   const expandedPoints = (card.points || []).map(expandGrammarPoint);
+  if (WORLD_KEY !== "english") {
+    return {
+      bullets: expandedPoints,
+      template: null,
+    };
+  }
   const template = GRAMMAR_TEMPLATES[sourceTitle] || null;
   return {
     bullets: expandedPoints,
@@ -6324,22 +7084,77 @@ const GRAMMAR_MISTAKES = {
   },
 };
 
-const buildGrammarMistakes = (card) => {
+const buildMistakeFromExample = (exampleItem) => {
+  const fix = String(exampleItem?.expanded || "").trim();
+  if (!fix) {
+    return null;
+  }
+  const parts = parseGrammarExampleLabels(exampleItem?.labels);
+  if (parts.length < 2) {
+    return null;
+  }
+  const first = String(parts[0]?.phrase || "").trim();
+  const second = String(parts[1]?.phrase || "").trim();
+  if (!first || !second || normalizeGrammarTextKey(first) === normalizeGrammarTextKey(second)) {
+    return null;
+  }
+  const firstAt = fix.indexOf(first);
+  const secondAt = fix.indexOf(second, firstAt + first.length);
+  if (firstAt < 0 || secondAt < 0) {
+    return null;
+  }
+  const wrong =
+    fix.slice(0, firstAt) +
+    second +
+    fix.slice(firstAt + first.length, secondAt) +
+    first +
+    fix.slice(secondAt + second.length);
+  if (!wrong || normalizeGrammarTextKey(wrong) === normalizeGrammarTextKey(fix)) {
+    return null;
+  }
+  return { wrong, fix };
+};
+
+const buildGrammarMistakes = (card, examples = []) => {
+  const unique = [];
+  const seen = new Set();
+  const pushMistake = (entry) => {
+    const wrong = String(entry?.wrong || "").trim();
+    const fix = String(entry?.fix || "").trim();
+    if (!wrong || !fix) {
+      return;
+    }
+    const key = `${normalizeGrammarTextKey(wrong)}|||${normalizeGrammarTextKey(fix)}`;
+    if (seen.has(key)) {
+      return;
+    }
+    seen.add(key);
+    unique.push({ wrong, fix });
+  };
   if (Array.isArray(card.mistakes) && card.mistakes.length) {
-    return card.mistakes;
+    pushMistake(card.mistakes[0]);
   }
   const sourceTitle = String(card.sourceTitle || card.title || "");
   const title = sourceTitle.toLowerCase();
   const pair = GRAMMAR_MISTAKES[title];
-  if (pair) {
-    return [pair];
+  if (unique.length === 0 && pair) {
+    pushMistake(pair);
   }
-  return [
-    {
+  if (unique.length === 0) {
+    pushMistake({
       wrong: "She not explain well.",
       fix: "She did not explain well.",
-    },
-  ];
+    });
+  }
+  if (unique.length < 2) {
+    const preferredExample =
+      examples[Math.min(unique.length, Math.max(0, examples.length - 1))] || examples[0];
+    const generatedMistake = buildMistakeFromExample(preferredExample);
+    if (generatedMistake) {
+      pushMistake(generatedMistake);
+    }
+  }
+  return unique.slice(0, 2);
 };
 
 const getGrammarUiLabels = () => {
@@ -6373,6 +7188,73 @@ const getGrammarUiLabels = () => {
     phrase: "Phrase:",
     order: "Order:",
   };
+};
+
+const getWordsUiLabels = () => {
+  const labels = {
+    french: {
+      words: "Mots",
+      chooseSection: "Choisissez une section",
+      allSections: "Toutes les sections",
+    },
+    german: {
+      words: "Wörter",
+      chooseSection: "Abschnitt wählen",
+      allSections: "Alle Abschnitte",
+    },
+    spanish: {
+      words: "Palabras",
+      chooseSection: "Elige una sección",
+      allSections: "Todas las secciones",
+    },
+    portuguese: {
+      words: "Palavras",
+      chooseSection: "Escolha uma seção",
+      allSections: "Todas as seções",
+    },
+    dutch: {
+      words: "Woorden",
+      chooseSection: "Kies een sectie",
+      allSections: "Alle secties",
+    },
+    swedish: {
+      words: "Ord",
+      chooseSection: "Välj en sektion",
+      allSections: "Alla sektioner",
+    },
+    arabic: {
+      words: "كلمات",
+      chooseSection: "اختر قسمًا",
+      allSections: "كل الأقسام",
+    },
+    chinese: {
+      words: "词汇",
+      chooseSection: "选择一个部分",
+      allSections: "所有部分",
+    },
+    japanese: {
+      words: "単語",
+      chooseSection: "セクションを選択",
+      allSections: "すべてのセクション",
+    },
+    korean: {
+      words: "단어",
+      chooseSection: "섹션 선택",
+      allSections: "모든 섹션",
+    },
+    hindi: {
+      words: "शब्द",
+      chooseSection: "एक अनुभाग चुनें",
+      allSections: "सभी अनुभाग",
+    },
+  };
+  return (
+    labels[WORLD_KEY] || {
+      words: "Words",
+      chooseSection: "Choose a section",
+      allSections: "All sections",
+    }
+  );
 };
 
 /* ==========================================================================
@@ -6433,13 +7315,10 @@ const renderGrammarModal = (section, index) => {
   const explanationTranslation = shouldTranslateExplanation
     ? resolveGrammarExplanation(section, explanation, grammarTranslationLanguage)
     : "";
-  const mistakes = buildGrammarMistakes(cardData);
   const howItWorks = buildGrammarHowItWorks(cardData);
-  const examples = [cardData.example, buildAltGrammarExample(cardData, index)];
   const shouldCapPhrase = true;
   const grammarUi = getGrammarUiLabels();
 
-  let renderedExamples = "";
   const shouldUseTemplateExamples = WORLD_KEY === "english";
   const structureExamples =
     shouldUseTemplateExamples && section === "Sentence Structure"
@@ -6500,73 +7379,47 @@ const renderGrammarModal = (section, index) => {
     conditionExamples ||
     voiceExamples ||
     modalityExamples;
-  if (activeExamples) {
-    const item = activeExamples[0];
-    const expandedText =
-      shouldCapPhrase && item.expanded
-        ? item.expanded.charAt(0).toUpperCase() + item.expanded.slice(1)
-        : item.expanded;
-    let exampleTranslation = "";
-    if (shouldTranslateExplanation) {
-      const baseTranslation = resolveGrammarTranslation(
-        section,
-        item.base,
-        grammarTranslationLanguage
-      );
-      const expandedTranslation = resolveGrammarTranslation(
-        section,
-        item.expanded,
-        grammarTranslationLanguage
-      );
-      exampleTranslation = expandedTranslation || baseTranslation;
-    }
-    renderedExamples = `
-      <div class="grammar-example">
-        <div class="grammar-example-labels">
-          ${item.labels
-            .map((label) => `<span class="grammar-label ${getExampleLabelClass(label)}">${localizeGrammarChipLabel(getExampleLabelText(label))}</span>`)
-            .join("")}
-        </div>
-        <div class="grammar-example-expanded">${grammarUi.phrase} ${applyGrammarHighlights(expandedText, item.labels)}</div>
-        ${exampleTranslation ? `<div class="grammar-translation">${exampleTranslation}</div>` : ""}
-      </div>
-    `;
-  } else {
-    const genericPairs = buildGenericExamplePairs(cardData, index, section);
-    renderedExamples = genericPairs
-      .map((item) => {
-        const expandedText =
-          shouldCapPhrase && item.expanded
-            ? item.expanded.charAt(0).toUpperCase() + item.expanded.slice(1)
-            : item.expanded;
-        let exampleTranslation = "";
-        if (shouldTranslateExplanation) {
-          const baseTranslation = resolveGrammarTranslation(
-            section,
-            item.base,
-            grammarTranslationLanguage
-          );
-          const expandedTranslation = resolveGrammarTranslation(
-            section,
-            item.expanded,
-            grammarTranslationLanguage
-          );
-          exampleTranslation = expandedTranslation || baseTranslation;
-        }
-        return `
-          <div class="grammar-example">
-            <div class="grammar-example-labels">
-              ${item.labels
-                .map((label) => `<span class="grammar-label ${getExampleLabelClass(label)}">${localizeGrammarChipLabel(getExampleLabelText(label))}</span>`)
+  const rawExamples = activeExamples || buildGenericExamplePairs(cardData, index, section);
+  const exampleItems = ensureTwoGrammarExamples(rawExamples, cardData, section, index);
+  const mistakes = buildGrammarMistakes(cardData, exampleItems);
+  const renderedExamples = exampleItems
+    .map((item) => {
+      const labels = Array.isArray(item?.labels) ? item.labels : [];
+      const expandedText =
+        shouldCapPhrase && item.expanded
+          ? item.expanded.charAt(0).toUpperCase() + item.expanded.slice(1)
+          : item.expanded;
+      let exampleTranslation = "";
+      if (shouldTranslateExplanation) {
+        const baseTranslation = resolveGrammarTranslation(
+          section,
+          item.base,
+          grammarTranslationLanguage
+        );
+        const expandedTranslation = resolveGrammarTranslation(
+          section,
+          item.expanded,
+          grammarTranslationLanguage
+        );
+        exampleTranslation = expandedTranslation || baseTranslation;
+      }
+      return `
+        <div class="grammar-example">
+          ${item.variantLabel ? `<div class="grammar-example-variant">${formatExampleVariantLabel(item.variantLabel)}</div>` : ""}
+          <div class="grammar-example-labels">
+            ${labels
+                .map(
+                  (label, labelIndex) =>
+                    `<span class="grammar-label ${getExampleLabelClass(label, labelIndex, { colorByOrder: !!item.colorByOrder })}">${formatGrammarChipLabel(localizeGrammarChipLabel(getExampleLabelText(label)))}</span>`
+                )
                 .join("")}
-            </div>
-            <div class="grammar-example-expanded">${grammarUi.phrase} ${applyGrammarHighlights(expandedText, item.labels)}</div>
-            ${exampleTranslation ? `<div class="grammar-translation">${exampleTranslation}</div>` : ""}
           </div>
-        `;
-      })
-      .join("");
-  }
+          <div class="grammar-example-expanded">${grammarUi.phrase} ${applyGrammarHighlights(expandedText, labels, { colorByOrder: !!item.colorByOrder })}</div>
+          ${exampleTranslation ? `<div class="grammar-translation">${exampleTranslation}</div>` : ""}
+        </div>
+      `;
+    })
+    .join("");
 
   modalBody.innerHTML = `
     <div class="grammar-modal-header">
@@ -6577,7 +7430,6 @@ const renderGrammarModal = (section, index) => {
     <div class="grammar-modal-grid">
       <div class="grammar-block">
         <h4>${grammarUi.rules}</h4>
-        ${howItWorks.order ? `<div class="grammar-order">${grammarUi.order} ${howItWorks.order}</div>` : ""}
         <ul>
           ${(howItWorks.bullets || []).map((item) => `<li>${item}</li>`).join("")}
         </ul>
@@ -7174,6 +8026,32 @@ const buildRuntimeSectionTitleCacheKey = (mapType, sectionTitle, baseLanguage) =
   return `${WORLD_KEY}|${mapKey}|${langKey}|${titleKey}`;
 };
 
+const isInvalidRuntimeTitleTranslation = (value) => {
+  const text = String(value || "").trim();
+  if (!text) {
+    return true;
+  }
+  if (/^\?+(?:\s+\?+)*$/.test(text)) {
+    return true;
+  }
+  const lower = text.toLowerCase();
+  if (
+    lower.includes("appears to be in a different language") ||
+    lower.includes("does not translate directly into english") ||
+    lower.includes("please provide a clear text for translation")
+  ) {
+    return true;
+  }
+  if (
+    text.startsWith("[") &&
+    text.endsWith("]") &&
+    (lower.includes("translation") || lower.includes("text appears"))
+  ) {
+    return true;
+  }
+  return false;
+};
+
 const cacheRuntimeSectionTitleTranslation = (
   mapType,
   sectionTitle,
@@ -7181,17 +8059,27 @@ const cacheRuntimeSectionTitleTranslation = (
   translation
 ) => {
   const cacheKey = buildRuntimeSectionTitleCacheKey(mapType, sectionTitle, baseLanguage);
-  if (!cacheKey || !translation) {
+  const text = String(translation || "").trim();
+  if (!cacheKey || !text || isInvalidRuntimeTitleTranslation(text)) {
     return;
   }
-  runtimeSectionTitleTranslationCache.set(cacheKey, String(translation).trim());
+  runtimeSectionTitleTranslationCache.set(cacheKey, text);
   persistRuntimeSectionTitleTranslationCache();
 };
 
 const getRuntimeSectionTitleTranslation = (mapType, sectionTitle, baseLanguage) => {
   const cacheKey = buildRuntimeSectionTitleCacheKey(mapType, sectionTitle, baseLanguage);
   const value = runtimeSectionTitleTranslationCache.get(cacheKey);
-  return typeof value === "string" ? value : "";
+  if (typeof value !== "string") {
+    return "";
+  }
+  const text = value.trim();
+  if (!text || isInvalidRuntimeTitleTranslation(text)) {
+    runtimeSectionTitleTranslationCache.delete(cacheKey);
+    persistRuntimeSectionTitleTranslationCache();
+    return "";
+  }
+  return text;
 };
 
 const requestRuntimeSectionTitleTranslation = async (mapType, sectionTitleText, baseLanguage) => {
@@ -7252,7 +8140,7 @@ const requestRuntimeSectionTitleTranslation = async (mapType, sectionTitleText, 
       const translated = String(data?.translation || data?.content || "")
         .replace(/^["'`]|["'`]$/g, "")
         .trim();
-      if (!translated) {
+      if (!translated || isInvalidRuntimeTitleTranslation(translated)) {
         throw new Error("Empty section title translation response");
       }
       cacheRuntimeSectionTitleTranslation(mapKey, sectionTitle, langKey, translated);
@@ -7285,6 +8173,117 @@ const requestRuntimeSectionTitleTranslation = async (mapType, sectionTitleText, 
 
   runtimeSectionTitleTranslationRequests.set(cacheKey, request);
   return request;
+};
+
+const ensureFilterButtonMainText = (button, text) => {
+  if (!button) {
+    return;
+  }
+  const normalized = String(text || "").trim();
+  let mainNode = button.querySelector(".words-filter-main");
+  if (!mainNode) {
+    mainNode = document.createElement("span");
+    mainNode.className = "words-filter-main";
+    const currentText = String(button.textContent || "").trim();
+    button.textContent = "";
+    mainNode.textContent = normalized || currentText;
+    button.appendChild(mainNode);
+  } else if (normalized) {
+    mainNode.textContent = normalized;
+  }
+  let translationNode = button.querySelector(".words-filter-translation");
+  if (!translationNode) {
+    translationNode = document.createElement("span");
+    translationNode.className = "words-filter-translation";
+    translationNode.hidden = true;
+    translationNode.setAttribute("dir", "auto");
+    button.appendChild(translationNode);
+  }
+};
+
+const setFilterButtonTranslationText = (button, translation) => {
+  if (!button) {
+    return;
+  }
+  ensureFilterButtonMainText(button, "");
+  const translationNode = button.querySelector(".words-filter-translation");
+  if (!translationNode) {
+    return;
+  }
+  const normalized = String(translation || "").trim();
+  if (!normalized) {
+    translationNode.textContent = "";
+    translationNode.hidden = true;
+    button.classList.remove("has-translation");
+    return;
+  }
+  translationNode.textContent = normalized;
+  translationNode.hidden = false;
+  button.classList.add("has-translation");
+};
+
+const applySectionFilterButtonTranslations = (mapType) => {
+  const mapKey = String(mapType || "").trim().toLowerCase();
+  if (!["words", "phrases", "grammar"].includes(mapKey)) {
+    return;
+  }
+
+  const controls =
+    mapKey === "words"
+      ? document.getElementById("wordsControls")
+      : mapKey === "phrases"
+        ? document.getElementById("phrasesControls")
+        : document.getElementById("grammarControls");
+  if (!controls) {
+    return;
+  }
+
+  const baseLanguage = String(localStorage.getItem("cosmicaBaseLanguage") || "")
+    .trim()
+    .toLowerCase();
+
+  controls.querySelectorAll(".words-filter").forEach((button) => {
+    ensureFilterButtonMainText(button, "");
+    if (button.dataset.filter === "all") {
+      ensureFilterButtonMainText(button, "All");
+      setFilterButtonTranslationText(button, "");
+      return;
+    }
+    const mainText = String(
+      button.querySelector(".words-filter-main")?.textContent || ""
+    ).trim();
+    const sourceTitle = String(
+      button.dataset.baseTitle || button.dataset.sourceTitle || mainText
+    ).trim();
+
+    if (!sourceTitle || !baseLanguage || isWorldNativeBaseLanguage(baseLanguage)) {
+      setFilterButtonTranslationText(button, "");
+      return;
+    }
+
+    const cached = getRuntimeSectionTitleTranslation(mapKey, sourceTitle, baseLanguage);
+    if (cached) {
+      setFilterButtonTranslationText(button, cached);
+      return;
+    }
+
+    if (baseLanguage === "english") {
+      setFilterButtonTranslationText(button, sourceTitle);
+      return;
+    }
+
+    const requestKey = `${mapKey}|filter|${sourceTitle}|${baseLanguage}|${Date.now()}`;
+    button.dataset.filterTranslationRequest = requestKey;
+    setFilterButtonTranslationText(button, "");
+    requestRuntimeSectionTitleTranslation(mapKey, sourceTitle, baseLanguage).then(
+      (translated) => {
+        if (button.dataset.filterTranslationRequest !== requestKey) {
+          return;
+        }
+        setFilterButtonTranslationText(button, translated);
+      }
+    );
+  });
 };
 
 const applySectionTitleTranslations = (mapType) => {
@@ -7324,6 +8323,12 @@ const applySectionTitleTranslations = (mapType) => {
       translationNode.setAttribute("dir", "auto");
       heading.appendChild(document.createTextNode(" "));
       heading.appendChild(translationNode);
+    }
+
+    if (isNonEnglishWorld && mapKey === "grammar") {
+      translationNode.textContent = "";
+      translationNode.hidden = true;
+      return;
     }
 
     if (!baseLanguage || isWorldNativeBaseLanguage(baseLanguage)) {
@@ -7836,6 +8841,7 @@ refreshMapsForBaseLanguage = () => {
     }
     if (isWordsPage) {
       applySectionTitleTranslations("words");
+      applySectionFilterButtonTranslations("words");
     }
     if (isPhrasesPage) {
       applyWorldSectionTitleLabels("phrases");
@@ -7845,10 +8851,12 @@ refreshMapsForBaseLanguage = () => {
     }
     if (isPhrasesPage) {
       applySectionTitleTranslations("phrases");
+      applySectionFilterButtonTranslations("phrases");
     }
     if (isGrammarPage) {
       applyWorldSectionTitleLabels("grammar");
       applySectionTitleTranslations("grammar");
+      applySectionFilterButtonTranslations("grammar");
       applyGrammarCardTitleTranslations();
       prewarmGrammarExplanationTranslations();
     }
@@ -7937,6 +8945,7 @@ if (!shouldRenderLoadingSkeleton && isWordsPage && document.querySelector(".word
 if (!shouldRenderLoadingSkeleton && isWordsPage) {
   applyWorldSectionTitleLabels("words");
   applySectionTitleTranslations("words");
+  applySectionFilterButtonTranslations("words");
 }
 if (!shouldRenderLoadingSkeleton && isPhrasesPage && document.querySelector(".phrase-card")) {
   applyPhraseTranslations();
@@ -7944,10 +8953,12 @@ if (!shouldRenderLoadingSkeleton && isPhrasesPage && document.querySelector(".ph
 if (!shouldRenderLoadingSkeleton && isPhrasesPage) {
   applyWorldSectionTitleLabels("phrases");
   applySectionTitleTranslations("phrases");
+  applySectionFilterButtonTranslations("phrases");
 }
 if (!shouldRenderLoadingSkeleton && isGrammarPage) {
   applyWorldSectionTitleLabels("grammar");
   applySectionTitleTranslations("grammar");
+  applySectionFilterButtonTranslations("grammar");
   applyGrammarCardTitleTranslations();
 }
 if (isWordsPage) {
@@ -8016,6 +9027,7 @@ if (needsMapTranslations) {
         if (isWordsPage) {
           applyWorldSectionTitleLabels("words");
           applySectionTitleTranslations("words");
+          applySectionFilterButtonTranslations("words");
         }
         if (isPhrasesPage && document.querySelector(".phrase-card")) {
           applyPhraseTranslations();
@@ -8023,10 +9035,12 @@ if (needsMapTranslations) {
         if (isPhrasesPage) {
           applyWorldSectionTitleLabels("phrases");
           applySectionTitleTranslations("phrases");
+          applySectionFilterButtonTranslations("phrases");
         }
         if (isGrammarPage) {
           applyWorldSectionTitleLabels("grammar");
           applySectionTitleTranslations("grammar");
+          applySectionFilterButtonTranslations("grammar");
           applyGrammarCardTitleTranslations();
           prewarmGrammarExplanationTranslations();
           const overlay = ensureGrammarOverlay();

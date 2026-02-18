@@ -155,6 +155,86 @@ const WORLD_NAME = isWorldLandingPage
   ? document.body.dataset.world || "English"
   : urlParams.get("world") || document.body.dataset.world || "English";
 const WORLD_KEY = WORLD_NAME.toLowerCase();
+const WORLD_MAP_TITLE_TRANSLATIONS = {
+  english: {
+    letters: "Letters",
+    words: "Words",
+    phrases: "Phrases",
+    grammar: "Grammar",
+  },
+  french: {
+    letters: "Lettres",
+    words: "Mots",
+    phrases: "Phrases",
+    grammar: "Grammaire",
+  },
+  german: {
+    letters: "Buchstaben",
+    words: "Worter",
+    phrases: "Phrasen",
+    grammar: "Grammatik",
+  },
+  spanish: {
+    letters: "Letras",
+    words: "Palabras",
+    phrases: "Frases",
+    grammar: "Gramatica",
+  },
+  portuguese: {
+    letters: "Letras",
+    words: "Palavras",
+    phrases: "Frases",
+    grammar: "Gramatica",
+  },
+  dutch: {
+    letters: "Letters",
+    words: "Woorden",
+    phrases: "Zinnen",
+    grammar: "Grammatica",
+  },
+  swedish: {
+    letters: "Bokstaver",
+    words: "Ord",
+    phrases: "Fraser",
+    grammar: "Grammatik",
+  },
+  arabic: {
+    letters: "حروف",
+    words: "كلمات",
+    phrases: "عبارات",
+    grammar: "قواعد",
+  },
+  chinese: {
+    letters: "字母",
+    words: "词汇",
+    phrases: "短语",
+    grammar: "语法",
+  },
+  japanese: {
+    letters: "文字",
+    words: "単語",
+    phrases: "フレーズ",
+    grammar: "文法",
+  },
+  korean: {
+    letters: "문자",
+    words: "단어",
+    phrases: "구문",
+    grammar: "문법",
+  },
+  hindi: {
+    letters: "अक्षर",
+    words: "शब्द",
+    phrases: "वाक्यांश",
+    grammar: "व्याकरण",
+  },
+};
+const MAP_TITLE_ENGLISH = {
+  letters: "Letters",
+  words: "Words",
+  phrases: "Phrases",
+  grammar: "Grammar",
+};
 const BASE_MAP_TRANSLATION_FILE = "maps/translations.json";
 const WORLD_TRANSLATION_FILES = {
   english: BASE_MAP_TRANSLATION_FILE,
@@ -220,6 +300,47 @@ const WORLD_TTS_CONFIG = {
     voice: "hi-IN-Wavenet-A",
   },
 };
+
+const applyWorldMapBilingualTitles = () => {
+  if (!document.body.classList.contains("world-page")) {
+    return;
+  }
+  const nativeSet = WORLD_MAP_TITLE_TRANSLATIONS[WORLD_KEY] || WORLD_MAP_TITLE_TRANSLATIONS.english;
+  document.querySelectorAll(".world-maps .map-card").forEach((card) => {
+    const heading = card.querySelector("h3");
+    if (!heading) {
+      return;
+    }
+    const mapType = ["letters", "words", "phrases", "grammar"].find((key) =>
+      card.classList.contains(`map-${key}`)
+    );
+    if (!mapType) {
+      return;
+    }
+    let mainNode = heading.querySelector(".map-title-main");
+    if (!mainNode) {
+      mainNode = document.createElement("span");
+      mainNode.className = "map-title-main";
+      const currentText = String(heading.textContent || "").trim();
+      mainNode.textContent = currentText || MAP_TITLE_ENGLISH[mapType] || mapType;
+      heading.textContent = "";
+      heading.appendChild(mainNode);
+    }
+    let translationNode = heading.querySelector(".map-title-translation");
+    if (!translationNode) {
+      translationNode = document.createElement("span");
+      translationNode.className = "map-title-translation";
+      heading.appendChild(translationNode);
+    }
+    mainNode.textContent = MAP_TITLE_ENGLISH[mapType] || mainNode.textContent;
+    const nativeTitle = String(nativeSet?.[mapType] || "").trim();
+    translationNode.textContent = nativeTitle;
+    translationNode.hidden = !nativeTitle;
+    translationNode.setAttribute("dir", "auto");
+  });
+};
+
+applyWorldMapBilingualTitles();
 const WORLD_TRANSLATION_FILE =
   WORLD_TRANSLATION_FILES[WORLD_KEY] || BASE_MAP_TRANSLATION_FILE;
 const WORLD_TTS_LANGUAGE_CODE =
@@ -393,6 +514,151 @@ const cpuThreadCount = Number(navigator.hardwareConcurrency || 0);
 const isLowPowerDevice =
   (deviceMemoryGb > 0 && deviceMemoryGb <= 4) ||
   (cpuThreadCount > 0 && cpuThreadCount <= 4);
+
+/* ==========================================================================
+   AUTH + PROGRESS API CLIENT
+   Exposed globally for upcoming account UI and gamification flows.
+   ========================================================================== */
+const createCosmicaAuthClient = () => {
+  const parseJsonResponse = async (response) => {
+    try {
+      return await response.json();
+    } catch {
+      return null;
+    }
+  };
+
+  const request = async (endpoint, options = {}) => {
+    const method = options.method || "GET";
+    const headers = {
+      Accept: "application/json",
+      ...(options.headers || {}),
+    };
+    const fetchOptions = {
+      method,
+      credentials: "include",
+      cache: "no-store",
+      ...options,
+      headers,
+    };
+    if (Object.prototype.hasOwnProperty.call(options, "body")) {
+      headers["Content-Type"] = "application/json";
+      fetchOptions.body = JSON.stringify(options.body);
+    }
+
+    const response = await fetch(endpoint, fetchOptions);
+    const payload = await parseJsonResponse(response);
+    if (!response.ok) {
+      const message =
+        (payload && typeof payload.error === "string" && payload.error) ||
+        `Request failed (${response.status})`;
+      const error = new Error(message);
+      error.status = response.status;
+      error.payload = payload;
+      throw error;
+    }
+    return payload || {};
+  };
+
+  const requestOrNullOnUnauthorized = async (endpoint, options = {}) => {
+    try {
+      return await request(endpoint, options);
+    } catch (error) {
+      if (Number(error?.status) === 401) {
+        return null;
+      }
+      throw error;
+    }
+  };
+
+  const applyBaseLanguageFromAuthPayload = (payload) => {
+    const baseLanguage = String(payload?.data?.settings?.baseLanguage || "")
+      .trim()
+      .toLowerCase();
+    if (!baseLanguage) {
+      return;
+    }
+    try {
+      localStorage.setItem("cosmicaBaseLanguage", baseLanguage);
+    } catch {}
+  };
+
+  return {
+    signUp: async ({ email, password, displayName = "", baseLanguage = "" } = {}) => {
+      const payload = await request("/api/auth/signup", {
+        method: "POST",
+        body: { email, password, displayName, baseLanguage },
+      });
+      applyBaseLanguageFromAuthPayload(payload);
+      return payload;
+    },
+    logIn: async ({ email, password } = {}) => {
+      const payload = await request("/api/auth/login", {
+        method: "POST",
+        body: { email, password },
+      });
+      applyBaseLanguageFromAuthPayload(payload);
+      return payload;
+    },
+    logOut: () =>
+      request("/api/auth/logout", {
+        method: "POST",
+      }),
+    getSession: async () => {
+      const payload = await requestOrNullOnUnauthorized("/api/auth/me");
+      if (payload) {
+        applyBaseLanguageFromAuthPayload(payload);
+      }
+      return payload;
+    },
+    deleteAccount: ({ password } = {}) =>
+      request("/api/auth/account", {
+        method: "DELETE",
+        body: { password },
+      }),
+    getAccountData: () => requestOrNullOnUnauthorized("/api/account/data"),
+    setAccountData: (data) =>
+      request("/api/account/data", {
+        method: "PUT",
+        body: { data },
+      }),
+    getProgress: () => requestOrNullOnUnauthorized("/api/progress"),
+    setProgress: (progress) =>
+      request("/api/progress", {
+        method: "PUT",
+        body: { progress },
+      }),
+    trackProgress: ({ worldKey, mapKey, sectionKey, status, score, xpDelta } = {}) =>
+      request("/api/progress/track", {
+        method: "POST",
+        body: { worldKey, mapKey, sectionKey, status, score, xpDelta },
+      }),
+    syncBaseLanguageToAccount: async (baseLanguage = "") => {
+      const accountDataResponse = await requestOrNullOnUnauthorized("/api/account/data");
+      if (!accountDataResponse) {
+        return null;
+      }
+      const currentData =
+        accountDataResponse && accountDataResponse.data && typeof accountDataResponse.data === "object"
+          ? accountDataResponse.data
+          : {};
+      const nextData = {
+        ...currentData,
+        settings:
+          currentData.settings && typeof currentData.settings === "object"
+            ? { ...currentData.settings }
+            : {},
+      };
+      nextData.settings.baseLanguage = String(baseLanguage || "").trim().toLowerCase();
+      return request("/api/account/data", {
+        method: "PUT",
+        body: { data: nextData },
+      });
+    },
+  };
+};
+
+window.cosmicaAuth = createCosmicaAuthClient();
 
 /* ==========================================================================
    MIMI CHAT CONFIGURATION
@@ -1440,6 +1706,113 @@ const setupLettersTitleTranslation = async () => {
   cache.set(cacheKey, translated);
   persistLettersTitleTranslationCache();
   translationNode.textContent = `(${translated})`;
+  translationNode.hidden = false;
+};
+
+const LETTERS_HELPER_NATIVE_TEXT = Object.freeze({
+  english: "Tap a letter to hear clear pronunciation.",
+  french: "Appuie sur une lettre pour entendre une prononciation claire.",
+  german: "Tippe auf einen Buchstaben, um eine klare Aussprache zu hören.",
+  spanish: "Toca una letra para escuchar una pronunciación clara.",
+  portuguese: "Toque em uma letra para ouvir uma pronúncia clara.",
+  dutch: "Tik op een letter om een duidelijke uitspraak te horen.",
+  swedish: "Tryck på en bokstav för att höra ett tydligt uttal.",
+  arabic: "اضغط على حرف لسماع نطق واضح.",
+  chinese: "点击一个字母以听到清晰发音。",
+  japanese: "文字をタップすると、はっきりした発音を聞けます。",
+  korean: "문자를 탭하면 또렷한 발음을 들을 수 있습니다.",
+  hindi: "स्पष्ट उच्चारण सुनने के लिए किसी अक्षर पर टैप करें।",
+});
+
+const isInvalidLettersHelperTranslation = (value) => {
+  const text = String(value || "").trim();
+  if (!text) {
+    return true;
+  }
+  const lower = text.toLowerCase();
+  if (
+    lower.includes("appears to be in a different language") ||
+    lower.includes("does not translate directly into english") ||
+    lower.includes("please provide a clear text for translation")
+  ) {
+    return true;
+  }
+  if (
+    text.startsWith("[") &&
+    text.endsWith("]") &&
+    (lower.includes("translation") || lower.includes("text appears"))
+  ) {
+    return true;
+  }
+  return false;
+};
+
+const setupLettersHelperTranslation = async () => {
+  if (!document.body.classList.contains("letters-page")) {
+    return;
+  }
+  const helperParagraph = document.querySelector(".letters-grid-section .section-title p");
+  if (!helperParagraph) {
+    return;
+  }
+
+  let mainNode = helperParagraph.querySelector(".letters-helper-main");
+  let translationNode = helperParagraph.querySelector(".letters-helper-translation");
+  if (!mainNode) {
+    const existing = String(helperParagraph.textContent || "").replace(/\s+/g, " ").trim();
+    helperParagraph.textContent = "";
+    mainNode = document.createElement("span");
+    mainNode.className = "letters-helper-main";
+    mainNode.textContent = existing;
+    helperParagraph.appendChild(mainNode);
+  }
+  if (!translationNode) {
+    translationNode = document.createElement("span");
+    translationNode.className = "letters-helper-translation";
+    translationNode.setAttribute("dir", "auto");
+    translationNode.hidden = true;
+    helperParagraph.appendChild(translationNode);
+  }
+
+  const nativeText =
+    LETTERS_HELPER_NATIVE_TEXT[WORLD_KEY] ||
+    String(mainNode.textContent || "").replace(/\s+/g, " ").trim();
+  if (nativeText) {
+    mainNode.textContent = nativeText;
+  }
+
+  const selectedBaseLanguage = String(
+    localStorage.getItem("cosmicaBaseLanguage") || ""
+  )
+    .trim()
+    .toLowerCase();
+  if (!selectedBaseLanguage || selectedBaseLanguage === WORLD_KEY) {
+    translationNode.textContent = "";
+    translationNode.hidden = true;
+    return;
+  }
+
+  const cache = readLettersTitleTranslationCache();
+  const cacheKey = `helper::${WORLD_KEY}::${selectedBaseLanguage}::${nativeText.toLowerCase()}`;
+  const cached = String(cache.get(cacheKey) || "").trim();
+  if (cached && !isInvalidLettersHelperTranslation(cached)) {
+    translationNode.textContent = cached;
+    translationNode.hidden = false;
+    return;
+  }
+
+  const translated = String(
+    (await requestLettersTitleTranslation(nativeText, selectedBaseLanguage)) || ""
+  ).trim();
+  if (!translated || isInvalidLettersHelperTranslation(translated)) {
+    translationNode.textContent = "";
+    translationNode.hidden = true;
+    return;
+  }
+
+  cache.set(cacheKey, translated);
+  persistLettersTitleTranslationCache();
+  translationNode.textContent = translated;
   translationNode.hidden = false;
 };
 
@@ -3975,6 +4348,9 @@ if (languagePills.length) {
     } else {
       localStorage.removeItem("cosmicaBaseLanguage");
     }
+    if (window.cosmicaAuth && typeof window.cosmicaAuth.syncBaseLanguageToAccount === "function") {
+      void window.cosmicaAuth.syncBaseLanguageToAccount(selected).catch(() => {});
+    }
     document.body.classList.add("language-picked");
     languageSection?.classList.remove("is-visible");
     if (document.body.classList.contains("world-page")) {
@@ -4916,9 +5292,197 @@ const setupWebVitalsReporting = () => {
 };
 
 const setupHomeAltInteractivity = () => {
+  const homeBrand = document.querySelector(".nav .brand");
+  if (homeBrand && homeBrand.dataset.logoFxBound !== "1") {
+    homeBrand.dataset.logoFxBound = "1";
+    const homeBrandMark = homeBrand.querySelector(".brand-mark");
+    if (homeBrandMark) {
+      let brandBurstTimer = 0;
+      let spinRaf = 0;
+      let spinAngleDeg = 0;
+      let spinStartAngleDeg = 0;
+      let spinTargetAngleDeg = 0;
+      let spinStartTs = 0;
+      let spinPhase = "idle";
+      const LOGO_SPIN_DURATION_MS = 1900;
+      const LOGO_SPIN_EXTRA_ROTATIONS = 3;
+      let logoStopTimer = 0;
+      let tiltRaf = 0;
+      let tiltCurrentX = 0;
+      let tiltCurrentY = 0;
+      let tiltTargetX = 0;
+      let tiltTargetY = 0;
+
+      const updateLogoSpin = () => {
+        homeBrandMark.style.setProperty("--brand-spin-angle", `${spinAngleDeg.toFixed(2)}deg`);
+      };
+
+      const triggerBrandBurst = (durationMs = 500) => {
+        homeBrand.classList.remove("is-logo-burst");
+        void homeBrand.offsetWidth;
+        homeBrand.classList.add("is-logo-burst");
+        window.clearTimeout(brandBurstTimer);
+        brandBurstTimer = window.setTimeout(() => {
+          homeBrand.classList.remove("is-logo-burst");
+        }, durationMs);
+      };
+
+      const finishLogoSpinStop = () => {
+        spinPhase = "idle";
+        spinAngleDeg = spinTargetAngleDeg;
+        updateLogoSpin();
+        homeBrand.classList.remove("is-logo-spinning");
+        homeBrand.classList.add("is-logo-stop");
+        window.clearTimeout(logoStopTimer);
+        logoStopTimer = window.setTimeout(() => {
+          homeBrand.classList.remove("is-logo-stop");
+          if (!prefersReducedMotion) {
+            homeBrand.classList.add("is-logo-breathing");
+          }
+        }, 180);
+        if (spinRaf) {
+          window.cancelAnimationFrame(spinRaf);
+          spinRaf = 0;
+        }
+      };
+
+      const animateLogoSpin = (ts) => {
+        spinRaf = 0;
+        if (spinPhase !== "spinning") {
+          return;
+        }
+        const elapsedMs = Math.max(0, ts - spinStartTs);
+        const progress = Math.max(0, Math.min(1, elapsedMs / LOGO_SPIN_DURATION_MS));
+        // Fast at the start, smooth and slow near the end.
+        const eased = 1 - Math.pow(1 - progress, 4);
+        spinAngleDeg =
+          spinStartAngleDeg + (spinTargetAngleDeg - spinStartAngleDeg) * eased;
+        updateLogoSpin();
+        if (progress >= 1) {
+          finishLogoSpinStop();
+          return;
+        }
+        spinRaf = window.requestAnimationFrame(animateLogoSpin);
+      };
+
+      const triggerLogoSpin = (_intensity = 1) => {
+        if (prefersReducedMotion) {
+          triggerBrandBurst(280);
+          return;
+        }
+        spinStartAngleDeg = spinAngleDeg;
+        spinTargetAngleDeg =
+          Math.ceil(spinStartAngleDeg / 360) * 360 + LOGO_SPIN_EXTRA_ROTATIONS * 360;
+        if (Math.abs(spinTargetAngleDeg - spinStartAngleDeg) < 0.2) {
+          spinTargetAngleDeg += 360;
+        }
+        spinStartTs = performance.now();
+        spinPhase = "spinning";
+        homeBrand.classList.add("is-logo-spinning");
+        homeBrand.classList.remove("is-logo-stop");
+        homeBrand.classList.remove("is-logo-breathing");
+        if (spinRaf) {
+          window.cancelAnimationFrame(spinRaf);
+        }
+        spinRaf = window.requestAnimationFrame(animateLogoSpin);
+      };
+
+      const applyBrandTilt = () => {
+        tiltRaf = 0;
+        tiltCurrentX += (tiltTargetX - tiltCurrentX) * 0.22;
+        tiltCurrentY += (tiltTargetY - tiltCurrentY) * 0.22;
+        homeBrandMark.style.setProperty("--brand-tilt-x", `${tiltCurrentY.toFixed(2)}deg`);
+        homeBrandMark.style.setProperty("--brand-tilt-y", `${tiltCurrentX.toFixed(2)}deg`);
+        if (
+          Math.abs(tiltTargetX - tiltCurrentX) > 0.08 ||
+          Math.abs(tiltTargetY - tiltCurrentY) > 0.08
+        ) {
+          tiltRaf = window.requestAnimationFrame(applyBrandTilt);
+        }
+      };
+
+      const queueBrandTilt = () => {
+        if (!tiltRaf) {
+          tiltRaf = window.requestAnimationFrame(applyBrandTilt);
+        }
+      };
+
+      const setBrandTiltFromPointer = (event) => {
+        const rect = homeBrand.getBoundingClientRect();
+        if (!rect.width || !rect.height) {
+          return;
+        }
+        const px = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+        const py = ((event.clientY - rect.top) / rect.height) * 2 - 1;
+        tiltTargetX = Math.max(-11, Math.min(11, px * 8));
+        tiltTargetY = Math.max(-10, Math.min(10, -py * 7));
+        queueBrandTilt();
+      };
+
+      homeBrand.addEventListener("pointerenter", (event) => {
+        if (event.pointerType !== "mouse") {
+          return;
+        }
+        homeBrand.classList.add("is-logo-active");
+        setBrandTiltFromPointer(event);
+        triggerLogoSpin(0.8);
+      });
+      homeBrand.addEventListener("pointermove", (event) => {
+        if (event.pointerType !== "mouse") {
+          return;
+        }
+        setBrandTiltFromPointer(event);
+      });
+      homeBrand.addEventListener("pointerleave", () => {
+        homeBrand.classList.remove("is-logo-active");
+        tiltTargetX = 0;
+        tiltTargetY = 0;
+        queueBrandTilt();
+      });
+      homeBrand.addEventListener("pointerdown", (event) => {
+        if (event.pointerType === "mouse" && event.button !== 0) {
+          return;
+        }
+        triggerBrandBurst(620);
+        triggerLogoSpin(1.2);
+      });
+      homeBrand.addEventListener("click", () => {
+        triggerLogoSpin(1.1);
+      });
+
+      if (!prefersReducedMotion) {
+        window.setTimeout(() => {
+          triggerLogoSpin(0.95);
+        }, 320);
+      }
+    }
+  }
+
   if (!document.body.classList.contains("home-alt-luxe")) {
     return;
   }
+
+  const setupHomeMeteors = () => {
+    if (document.querySelector(".home-fx-comets")) {
+      return;
+    }
+    const layer = document.createElement("div");
+    layer.className = "home-fx-comets";
+    layer.setAttribute("aria-hidden", "true");
+    const cometCount = prefersReducedMotion ? 2 : 4;
+    for (let i = 0; i < cometCount; i += 1) {
+      const comet = document.createElement("span");
+      comet.className = "home-fx-comet";
+      comet.style.setProperty("--c-top", `${(8 + Math.random() * 56).toFixed(2)}%`);
+      comet.style.setProperty("--c-size", `${(78 + Math.random() * 44).toFixed(2)}px`);
+      comet.style.setProperty("--c-delay", `${(Math.random() * 8).toFixed(2)}s`);
+      comet.style.setProperty("--c-duration", `${(5.2 + Math.random() * 3.8).toFixed(2)}s`);
+      layer.appendChild(comet);
+    }
+    document.body.appendChild(layer);
+  };
+
+  setupHomeMeteors();
 
   const interactiveSurfaces = Array.from(
     document.querySelectorAll(
@@ -5275,6 +5839,7 @@ const initializeCommonShell = () => {
   document.querySelectorAll(".reveal").forEach((el) => observeRevealElement(el));
   setupHomeAltInteractivity();
   void setupLettersTitleTranslation();
+  void setupLettersHelperTranslation();
   setupLetterRomanization();
   setupSpeechCards();
   setupBackToTopButton();

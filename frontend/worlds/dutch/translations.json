@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-18T00:34:20.518Z",
+  "generatedAt": "2026-02-18T15:18:51.748Z",
   "worldLanguage": "dutch",
   "baseLanguages": [
     "albanian",
@@ -7306,6 +7306,25 @@
           "english": "degree"
         }
       }
+    },
+    "sectionLabels": {
+      "Greetings": "Groeten",
+      "Pronouns": "Voornaamwoorden",
+      "Verbs & Tenses": "Werkwoorden & Tijden",
+      "Questions & Connectors": "Vragen & Verbindingen",
+      "Numbers & Counting": "Getallen & Tellen",
+      "Time, Date & Frequency": "Tijd, Datum & Frequentie",
+      "Descriptions & Adjectives": "Beschrijvingen & Bijvoeglijke Naamwoorden",
+      "Opinions & Preferences": "Meningen & Voorkeuren",
+      "Weather & Seasons": "Weer & Seizoenen",
+      "Places & Directions": "Plaatsen & Richtingen",
+      "countries": "landen",
+      "Feelings & States": "Gevoelens & Toestanden",
+      "Family & Relationships": "Familie & Relaties",
+      "Food & Eating": "Voedsel & Eten",
+      "Health & Body": "Gezondheid & Lichaam",
+      "Technology & Communication": "Technologie & Communicatie",
+      "Work & School": "Werk & School"
     }
   },
   "phrases": {
@@ -9117,428 +9136,1024 @@
     "cards": {
       "Sentence Structure": [
         {
-          "title": "Basiszin",
+          "title": "Basisstructuur van de zin",
           "points": [
-            "Een basiszin bestaat uit een onderwerp en een werkwoord.",
-            "De volgorde is meestal onderwerp-werkwoord-object.",
-            "Bijvoorbeeld: 'De kat (onderwerp) eet (werkwoord) de muis (object).'"
+            "De basisstructuur van een Nederlandse zin is onderwerp + werkwoord + lijdend voorwerp.",
+            "In hoofdzinnen staat het werkwoord op de tweede positie (V2).",
+            "Voorbeelden zijn cruciaal voor het begrijpen van de structuur."
           ],
-          "example": "De hond speelt met de bal.",
+          "example": "De kat eet de muis.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "lijdend voorwerp"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "De kat"
+            },
+            {
+              "label": "werkwoord",
+              "text": "eet"
+            },
+            {
+              "label": "lijdend voorwerp",
+              "text": "de muis"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Met de bal speelt de hond.",
-              "fix": "De hond speelt met de bal."
+              "wrong": "Eet de kat de muis.",
+              "fix": "De kat eet de muis."
             }
           ]
         },
         {
-          "title": "Bijvoeglijke naamwoorden",
+          "title": "Werkwoord op tweede plaats",
           "points": [
-            "Bijvoeglijke naamwoorden komen voor het zelfstandig naamwoord.",
-            "Ze moeten overeenkomen in geslacht en getal.",
-            "Bijvoorbeeld: 'De grote hond' en 'De grote honden.'"
+            "In hoofdzinnen staat het werkwoord altijd op de tweede positie.",
+            "Het onderwerp kan voorafgaan aan het werkwoord of achter een ander zinsdeel komen.",
+            "Dit is essentieel voor correcte zinsstructuur."
           ],
-          "example": "De mooie bloemen bloeien.",
+          "example": "Vandaag gaat hij naar school.",
+          "ruleOrder": [
+            "tijd",
+            "werkwoord",
+            "onderwerp",
+            "plaats"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "tijd",
+              "text": "Vandaag"
+            },
+            {
+              "label": "werkwoord",
+              "text": "gaat"
+            },
+            {
+              "label": "onderwerp",
+              "text": "hij"
+            },
+            {
+              "label": "plaats",
+              "text": "naar school"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "De bloemen mooie bloeien.",
-              "fix": "De mooie bloemen bloeien."
+              "wrong": "Hij naar school gaat vandaag.",
+              "fix": "Vandaag gaat hij naar school."
             }
           ]
         },
         {
-          "title": "Vraagzinnen",
+          "title": "Bijzinstructuur",
           "points": [
-            "Vraagzinnen beginnen vaak met een vraagwoord.",
-            "De volgorde is vaak werkwoord-onderwerp.",
-            "Bijvoorbeeld: 'Waar ga je naartoe?'"
+            "In bijzinnen staat het werkwoord meestal aan het einde van de zin.",
+            "Bijzinnen worden vaak ingeleid door een voegwoord.",
+            "Dit verschilt van hoofdzinnen waar de V2-regel geldt."
           ],
-          "example": "Wat eet je vandaag?",
+          "example": "Ik weet dat hij morgen komt.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "voegwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Ik"
+            },
+            {
+              "label": "werkwoord",
+              "text": "weet"
+            },
+            {
+              "label": "voegwoord",
+              "text": "dat"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Eet je vandaag wat?",
-              "fix": "Wat eet je vandaag?"
+              "wrong": "Ik weet hij komt morgen.",
+              "fix": "Ik weet dat hij morgen komt."
             }
           ]
         },
         {
-          "title": "Negatie",
+          "title": "Complexe zinnen",
           "points": [
-            "Negatie wordt vaak gevormd met 'niet' of 'geen'.",
-            "Plaats 'niet' meestal achter het werkwoord.",
-            "Bijvoorbeeld: 'Ik zie het niet.'"
+            "Complexe zinnen combineren hoofdzinnen en bijzinnen.",
+            "Zorg ervoor dat de volgorde van werkwoorden correct is.",
+            "Gebruik voegwoorden om de zinnen te verbinden."
           ],
-          "example": "Ik begrijp het niet.",
+          "example": "Als het regent, blijf ik thuis.",
+          "ruleOrder": [
+            "voegwoord",
+            "onderwerp",
+            "werkwoord",
+            "plaats"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "voegwoord",
+              "text": "Als"
+            },
+            {
+              "label": "onderwerp",
+              "text": "ik"
+            },
+            {
+              "label": "werkwoord",
+              "text": "thuis"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ik niet begrijp het.",
-              "fix": "Ik begrijp het niet."
+              "wrong": "Ik blijf thuis als het regent.",
+              "fix": "Als het regent, blijf ik thuis."
             }
           ]
         },
         {
-          "title": "Tijdsaanduidingen",
+          "title": "Inversie in vragen",
           "points": [
-            "Tijdsaanduidingen komen vaak aan het begin of het einde van de zin.",
-            "Ze kunnen ook voor het werkwoord staan.",
-            "Bijvoorbeeld: 'Vandaag ga ik naar de winkel.'"
+            "In vragen komt het werkwoord voor het onderwerp.",
+            "Dit is een belangrijke afwijking van de standaard volgorde.",
+            "Zorg ervoor dat je de juiste vraagstructuur gebruikt."
           ],
-          "example": "Morgen ga ik naar school.",
+          "example": "Komt hij morgen?",
+          "ruleOrder": [
+            "werkwoord",
+            "onderwerp",
+            "tijd"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "werkwoord",
+              "text": "Komt"
+            },
+            {
+              "label": "onderwerp",
+              "text": "hij"
+            },
+            {
+              "label": "tijd",
+              "text": "morgen"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ga ik morgen naar school.",
-              "fix": "Morgen ga ik naar school."
+              "wrong": "Hij komt morgen?",
+              "fix": "Komt hij morgen?"
             }
           ]
         }
       ],
       "Verbs": [
         {
-          "title": "Tegenwoordige tijd",
+          "title": "Basisvorm van werkwoorden",
           "points": [
-            "De tegenwoordige tijd wordt gebruikt voor acties die nu plaatsvinden.",
-            "Bij regelmatige werkwoorden eindigt de stam op -t voor hij/zij/het.",
-            "Onregelmatige werkwoorden hebben vaak een andere stam."
+            "De basisvorm eindigt meestal op -en.",
+            "Gebruik de infinitief voor instructies.",
+            "Verander de stam voor vervoegingen."
           ],
-          "example": "Ik loop naar school.",
+          "example": "Ik wil leren.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "object"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Ik"
+            },
+            {
+              "label": "werkwoord",
+              "text": "wil"
+            },
+            {
+              "label": "object",
+              "text": "leren"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Hij loop naar school.",
-              "fix": "Hij loopt naar school."
+              "wrong": "Ik wil leert.",
+              "fix": "Ik wil leren."
+            }
+          ]
+        },
+        {
+          "title": "Tegenwoordige tijd",
+          "points": [
+            "Vervoeg werkwoorden afhankelijk van het onderwerp.",
+            "Gebruik -t voor jij, hij, zij, het.",
+            "Gebruik -en voor wij, jullie, zij."
+          ],
+          "example": "Jij loopt snel.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "bijwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Jij"
+            },
+            {
+              "label": "werkwoord",
+              "text": "loopt"
+            },
+            {
+              "label": "bijwoord",
+              "text": "snel"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Jij loop snel.",
+              "fix": "Jij loopt snel."
             }
           ]
         },
         {
           "title": "Verleden tijd",
           "points": [
-            "De verleden tijd beschrijft acties die in het verleden hebben plaatsgevonden.",
-            "Regelmatige werkwoorden krijgen -de of -te in de verleden tijd.",
+            "Gebruik -de of -te voor regelmatige werkwoorden.",
+            "Let op de stam van het werkwoord.",
             "Onregelmatige werkwoorden hebben unieke vormen."
           ],
-          "example": "Wij speelden in het park.",
+          "example": "Hij speelde gitaar.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "object"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Hij"
+            },
+            {
+              "label": "werkwoord",
+              "text": "speelde"
+            },
+            {
+              "label": "object",
+              "text": "gitaar"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Wij speelden in het park.",
-              "fix": "Wij speelden in het park."
+              "wrong": "Hij speel gitaar.",
+              "fix": "Hij speelde gitaar."
             }
           ]
         },
         {
           "title": "Toekomende tijd",
           "points": [
-            "De toekomende tijd geeft aan dat iets in de toekomst zal gebeuren.",
-            "Gebruik 'zullen' + infinitief om de toekomende tijd te vormen.",
-            "Bijvoorbeeld: Ik zal gaan."
+            "Gebruik 'gaan' + infinitief voor toekomstige acties.",
+            "De structuur is eenvoudig en duidelijk.",
+            "Kan ook met 'zullen' + infinitief."
           ],
-          "example": "Zij zullen morgen komen.",
+          "example": "Wij gaan naar het feest.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "plaats"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Wij"
+            },
+            {
+              "label": "werkwoord",
+              "text": "gaan"
+            },
+            {
+              "label": "plaats",
+              "text": "naar het feest"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Zij zal morgen komen.",
-              "fix": "Zij zullen morgen komen."
+              "wrong": "Wij ga naar het feest.",
+              "fix": "Wij gaan naar het feest."
             }
           ]
         },
         {
-          "title": "Imperatief",
+          "title": "Modale werkwoorden",
           "points": [
-            "De imperatief wordt gebruikt om een bevel of verzoek te geven.",
-            "Gebruik de stam van het werkwoord zonder onderwerp.",
-            "Bijvoorbeeld: Loop snel!"
+            "Modale werkwoorden geven mogelijkheid of noodzaak aan.",
+            "Ze worden gevolgd door een infinitief.",
+            "Voorbeelden zijn kunnen, moeten, willen."
           ],
-          "example": "Kom hier!",
+          "example": "Zij kan goed zingen.",
+          "ruleOrder": [
+            "onderwerp",
+            "modaal werkwoord",
+            "werkwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Zij"
+            },
+            {
+              "label": "modaal werkwoord",
+              "text": "kan"
+            },
+            {
+              "label": "werkwoord",
+              "text": "zingen"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Komt hier!",
-              "fix": "Kom hier!"
+              "wrong": "Zij kan goed zing.",
+              "fix": "Zij kan goed zingen."
             }
           ]
         },
         {
-          "title": "Voltooid deelwoord",
+          "title": "Passieve vorm",
           "points": [
-            "Het voltooid deelwoord wordt gebruikt in de voltooide tijden.",
-            "Het wordt gevormd met 'hebben' of 'zijn' + voltooid deelwoord.",
-            "Bijvoorbeeld: Ik heb gegeten."
+            "Gebruik 'worden' + voltooid deelwoord voor passieve zinnen.",
+            "De focus ligt op de actie, niet op de uitvoerder.",
+            "Gebruik 'door' om de uitvoerder aan te geven."
           ],
-          "example": "Hij heeft gefietst.",
-          "mistakes": [
+          "example": "De brief wordt geschreven door de leraar.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "door",
+            "uitvoerder"
+          ],
+          "exampleHighlights": [
             {
-              "wrong": "Hij heeft fiets.",
-              "fix": "Hij heeft gefietst."
+              "label": "onderwerp",
+              "text": "De brief"
+            },
+            {
+              "label": "werkwoord",
+              "text": "wordt geschreven"
+            },
+            {
+              "label": "door",
+              "text": "door"
+            },
+            {
+              "label": "uitvoerder",
+              "text": "de leraar"
             }
-          ]
-        },
-        {
-          "title": "Onregelmatige werkwoorden",
-          "points": [
-            "Onregelmatige werkwoorden volgen geen vast patroon.",
-            "Het is belangrijk om deze vormen uit het hoofd te leren.",
-            "Bijvoorbeeld: zijn, hebben, gaan."
           ],
-          "example": "Wij zijn naar huis gegaan.",
           "mistakes": [
             {
-              "wrong": "Wij zijn naar huis gaan.",
-              "fix": "Wij zijn naar huis gegaan."
+              "wrong": "De brief is geschreven door de leraar.",
+              "fix": "De brief wordt geschreven door de leraar."
             }
           ]
         }
       ],
       "Tenses & Aspect": [
         {
-          "title": "Tegenwoordige tijd",
+          "title": "Tegenwoordige Tijd",
           "points": [
-            "Gebruik voor feiten en gewoonten.",
-            "Vorm: stam + uitgang.",
-            "Bijvoorbeeld: Ik loop."
+            "Gebruik de tegenwoordige tijd voor actuele gebeurtenissen.",
+            "V2-structuur in hoofdzin.",
+            "Let op de vervoeging van regelmatige werkwoorden."
           ],
-          "example": "Hij werkt elke dag.",
+          "example": "Ik loop naar school.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "plaats"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Ik"
+            },
+            {
+              "label": "werkwoord",
+              "text": "loop"
+            },
+            {
+              "label": "plaats",
+              "text": "naar school"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Hij werk elke dag.",
-              "fix": "Hij werkt elke dag."
+              "wrong": "Ik loopt naar school.",
+              "fix": "Ik loop naar school."
             }
           ]
         },
         {
-          "title": "Verleden tijd",
+          "title": "Verleden Tijd",
           "points": [
-            "Gebruik voor afgeronde acties in het verleden.",
-            "Vorm: stam + -de/-te of -d/-t.",
-            "Bijvoorbeeld: Ik liep."
+            "Gebruik de verleden tijd voor afgeronde acties.",
+            "Let op onregelmatige werkwoorden.",
+            "V2-structuur blijft behouden."
           ],
-          "example": "Zij speelde gisteren.",
+          "example": "Hij at een appel.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "object"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Hij"
+            },
+            {
+              "label": "werkwoord",
+              "text": "at"
+            },
+            {
+              "label": "object",
+              "text": "een appel"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Zij speel gisteren.",
-              "fix": "Zij speelde gisteren."
+              "wrong": "Hij eet een appel.",
+              "fix": "Hij at een appel."
             }
           ]
         },
         {
-          "title": "Toekomende tijd",
+          "title": "Toekomende Tijd",
           "points": [
-            "Gebruik voor toekomstige acties.",
-            "Vorm: gaan + infinitief.",
-            "Bijvoorbeeld: Ik ga lopen."
+            "Gebruik 'zullen' voor toekomstige acties.",
+            "Periphrastische constructie met 'gaan'.",
+            "V2-structuur blijft behouden."
           ],
-          "example": "Wij gaan morgen winkelen.",
+          "example": "Wij zullen morgen gaan wandelen.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "tijd"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Wij"
+            },
+            {
+              "label": "werkwoord",
+              "text": "zullen"
+            },
+            {
+              "label": "tijd",
+              "text": "morgen"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Wij ga morgen winkelen.",
-              "fix": "Wij gaan morgen winkelen."
+              "wrong": "Wij gaat morgen wandelen.",
+              "fix": "Wij zullen morgen gaan wandelen."
             }
           ]
         },
         {
-          "title": "Voltooid tegenwoordige tijd",
+          "title": "Voltooid Tegenwoordige Tijd",
           "points": [
-            "Gebruik voor acties die in het verleden zijn begonnen en nog steeds relevant zijn.",
-            "Vorm: hebben/zijn + voltooid deelwoord.",
-            "Bijvoorbeeld: Ik heb gelopen."
+            "Gebruik voor acties die in het verleden zijn begonnen en nu relevant zijn.",
+            "Vereist 'hebben' of 'zijn' + voltooid deelwoord.",
+            "Let op de juiste vorm van 'hebben' of 'zijn'."
           ],
-          "example": "Hij heeft de les geleerd.",
+          "example": "Zij heeft het boek gelezen.",
+          "ruleOrder": [
+            "onderwerp",
+            "hulpwerkwoord",
+            "voltooid deelwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Zij"
+            },
+            {
+              "label": "hulpwerkwoord",
+              "text": "heeft"
+            },
+            {
+              "label": "voltooid deelwoord",
+              "text": "gelezen"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Hij heb de les geleerd.",
-              "fix": "Hij heeft de les geleerd."
+              "wrong": "Zij heeft het boek lees.",
+              "fix": "Zij heeft het boek gelezen."
             }
           ]
         },
         {
-          "title": "Voltooid verleden tijd",
+          "title": "Voltooid Verleden Tijd",
           "points": [
-            "Gebruik voor acties die voor een bepaald moment in het verleden zijn afgerond.",
-            "Vorm: hadden/was + voltooid deelwoord.",
-            "Bijvoorbeeld: Ik had gelopen."
+            "Gebruik voor acties die vóór een andere actie in het verleden zijn gebeurd.",
+            "Vereist 'had' + voltooid deelwoord.",
+            "Let op de juiste vorm van 'hebben'."
           ],
-          "example": "Zij had het boek gelezen.",
+          "example": "Hij had het huis schoongemaakt.",
+          "ruleOrder": [
+            "onderwerp",
+            "hulpwerkwoord",
+            "voltooid deelwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Hij"
+            },
+            {
+              "label": "hulpwerkwoord",
+              "text": "had"
+            },
+            {
+              "label": "voltooid deelwoord",
+              "text": "schoongemaakt"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Zij had het boek lezen.",
-              "fix": "Zij had het boek gelezen."
+              "wrong": "Hij had het huis schoonmaken.",
+              "fix": "Hij had het huis schoongemaakt."
             }
           ]
         },
         {
-          "title": "Toekomstige voltooide tijd",
+          "title": "Toekomstige Voltooid Tijd",
           "points": [
-            "Gebruik voor acties die in de toekomst zullen zijn afgerond.",
-            "Vorm: zullen + hebben/zijn + voltooid deelwoord.",
-            "Bijvoorbeeld: Ik zal gelopen hebben."
+            "Gebruik voor acties die vóór een toekomstige actie zullen zijn voltooid.",
+            "Vereist 'zullen hebben' + voltooid deelwoord.",
+            "Let op de juiste vorm van 'hebben'."
           ],
-          "example": "Hij zal de taak voltooid hebben.",
+          "example": "Wij zullen het project hebben afgerond.",
+          "ruleOrder": [
+            "onderwerp",
+            "hulpwerkwoord",
+            "voltooid deelwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Wij"
+            },
+            {
+              "label": "hulpwerkwoord",
+              "text": "zullen"
+            },
+            {
+              "label": "voltooid deelwoord",
+              "text": "afgerond"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Hij zal de taak voltooid heb.",
-              "fix": "Hij zal de taak voltooid hebben."
+              "wrong": "Wij zullen het project hebben afronden.",
+              "fix": "Wij zullen het project hebben afgerond."
             }
           ]
         },
         {
-          "title": "Onvoltooid verleden toekomende tijd",
+          "title": "Aspect met aan het-constructie",
           "points": [
-            "Gebruik voor acties die in de toekomst zullen plaatsvinden vóór een ander moment.",
-            "Vorm: zouden + infinitief.",
-            "Bijvoorbeeld: Ik zou lopen."
+            "Gebruik om een lopende actie aan te geven.",
+            "Vereist 'aan het' + infinitief.",
+            "Zet het onderwerp voor het hulpwerkwoord."
           ],
-          "example": "Zij zou het project afronden.",
+          "example": "Ik ben aan het studeren.",
+          "ruleOrder": [
+            "onderwerp",
+            "hulpwerkwoord",
+            "infinitief"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Ik"
+            },
+            {
+              "label": "hulpwerkwoord",
+              "text": "ben"
+            },
+            {
+              "label": "infinitief",
+              "text": "studeren"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Zij zou het project afronde.",
-              "fix": "Zij zou het project afronden."
+              "wrong": "Ik ben aan studeren.",
+              "fix": "Ik ben aan het studeren."
             }
           ]
         },
         {
-          "title": "Tegenwoordige tijd continu",
+          "title": "Aspect met bezig met-constructie",
           "points": [
-            "Gebruik voor acties die nu aan de gang zijn.",
-            "Vorm: zijn + aan het + infinitief.",
-            "Bijvoorbeeld: Ik ben aan het lopen."
+            "Gebruik om aan te geven dat je met iets bezig bent.",
+            "Vereist 'bezig met' + infinitief.",
+            "Zet het onderwerp voor de constructie."
           ],
-          "example": "Hij is aan het studeren.",
+          "example": "Zij is bezig met het koken.",
+          "ruleOrder": [
+            "onderwerp",
+            "hulpwerkwoord",
+            "infinitief"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Zij"
+            },
+            {
+              "label": "hulpwerkwoord",
+              "text": "is"
+            },
+            {
+              "label": "infinitief",
+              "text": "koken"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Hij is aan het studeer.",
-              "fix": "Hij is aan het studeren."
+              "wrong": "Zij is bezig het koken.",
+              "fix": "Zij is bezig met het koken."
             }
           ]
         },
         {
-          "title": "Verleden tijd continu",
+          "title": "Gebruik van tijdsaanduidingen",
           "points": [
-            "Gebruik voor acties die in het verleden aan de gang waren.",
-            "Vorm: waren + aan het + infinitief.",
-            "Bijvoorbeeld: Ik was aan het lopen."
+            "Gebruik tijdsaanduidingen om de tijd van de actie te verduidelijken.",
+            "Plaats tijdsaanduidingen vaak aan het begin of einde van de zin.",
+            "Zorg voor duidelijkheid in de context."
           ],
-          "example": "Zij was aan het werken.",
+          "example": "Morgen ga ik naar de markt.",
+          "ruleOrder": [
+            "tijdsaanduiding",
+            "onderwerp",
+            "werkwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "tijdsaanduiding",
+              "text": "Morgen"
+            },
+            {
+              "label": "onderwerp",
+              "text": "ik"
+            },
+            {
+              "label": "werkwoord",
+              "text": "de markt"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Zij was aan het werk.",
-              "fix": "Zij was aan het werken."
+              "wrong": "Ik ga morgen naar de markt.",
+              "fix": "Morgen ga ik naar de markt."
             }
           ]
         },
         {
-          "title": "Toekomstige tijd continu",
+          "title": "Gebruik van bijwoorden voor aspect",
           "points": [
-            "Gebruik voor acties die in de toekomst aan de gang zullen zijn.",
-            "Vorm: zullen + aan het + infinitief.",
-            "Bijvoorbeeld: Ik zal aan het lopen zijn."
+            "Gebruik bijwoorden om de duur of frequentie van een actie aan te geven.",
+            "Plaats bijwoorden meestal voor het werkwoord.",
+            "Zorg voor variatie in gebruik."
           ],
-          "example": "Wij zullen aan het reizen zijn.",
+          "example": "Hij studeert vaak in de bibliotheek.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "bijwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Hij"
+            },
+            {
+              "label": "werkwoord",
+              "text": "studeert"
+            },
+            {
+              "label": "bijwoord",
+              "text": "vaak"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Wij zullen aan het reis zijn.",
-              "fix": "Wij zullen aan het reizen zijn."
+              "wrong": "Hij vaak studeert in de bibliotheek.",
+              "fix": "Hij studeert vaak in de bibliotheek."
             }
           ]
         }
       ],
       "Nouns & Articles": [
         {
-          "title": "Bepaalde en Onbepaalde Artikelen",
+          "title": "Onbepaalde Artikelen",
           "points": [
-            "Het gebruik van 'de' en 'het'.",
-            "Het verschil tussen 'een' en 'de'.",
-            "De rol van artikelen in zinnen."
+            "Gebruik 'een' voor onbepaalde zelfstandige naamwoorden.",
+            "Onbepaalde artikelen introduceren nieuwe informatie.",
+            "Onbepaalde artikelen zijn niet specifiek."
           ],
-          "example": "De hond blaft.",
+          "example": "Ik heb een boek gekocht.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "object"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Ik"
+            },
+            {
+              "label": "werkwoord",
+              "text": "heb"
+            },
+            {
+              "label": "object",
+              "text": "een boek"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Een hond blaft.",
+              "wrong": "Ik heb boek gekocht.",
+              "fix": "Ik heb een boek gekocht."
+            }
+          ]
+        },
+        {
+          "title": "Bepaalde Artikelen",
+          "points": [
+            "Gebruik 'de' of 'het' voor bepaalde zelfstandige naamwoorden.",
+            "Bepaalde artikelen verwijzen naar specifieke informatie.",
+            "De keuze tussen 'de' en 'het' hangt af van het geslacht."
+          ],
+          "example": "De hond blaft.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "object"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "De hond"
+            },
+            {
+              "label": "werkwoord",
+              "text": "blaft"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Hond blaft.",
               "fix": "De hond blaft."
             }
           ]
         },
         {
-          "title": "Meervoudsvormen van Zelfstandige Naamwoorden",
+          "title": "Geslacht van Zelfstandige Naamwoorden",
           "points": [
-            "Regelmatige meervoudsvormen.",
-            "Uitzonderingen op de regels.",
-            "Het gebruik van 'de' en 'het' in meervoud."
+            "Zelfstandige naamwoorden hebben een geslacht: de (m/v) of het (onzijdig).",
+            "Het geslacht beïnvloedt het gebruik van artikelen.",
+            "Leer de geslachten van zelfstandige naamwoorden."
           ],
-          "example": "De katten spelen.",
+          "example": "De tafel is mooi.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "bijvoeglijk naamwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "De tafel"
+            },
+            {
+              "label": "werkwoord",
+              "text": "is"
+            },
+            {
+              "label": "bijvoeglijk naamwoord",
+              "text": "mooi"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "De katten speelt.",
-              "fix": "De katten spelen."
+              "wrong": "Het tafel is mooi.",
+              "fix": "De tafel is mooi."
+            }
+          ]
+        },
+        {
+          "title": "Enkelvoud en meervoud",
+          "points": [
+            "Enkelvoud benoemt ??n entiteit; meervoud benoemt meerdere entiteiten.",
+            "Meervoud wordt vaak gevormd met -en of -s, soms met spellingaanpassing.",
+            "In het meervoud is het bepaalde lidwoord meestal \"de\"."
+          ],
+          "example": "De boeken zijn nieuw.",
+          "ruleOrder": [
+            "lidwoord",
+            "zelfstandig naamwoord",
+            "werkwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "lidwoord",
+              "text": "De"
+            },
+            {
+              "label": "zelfstandig naamwoord",
+              "text": "boeken"
+            },
+            {
+              "label": "werkwoord",
+              "text": "zijn"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Het boeken is nieuw.",
+              "fix": "De boeken zijn nieuw."
+            }
+          ],
+          "examplePairs": [
+            {
+              "example": "Het boek is nieuw.",
+              "exampleHighlights": [
+                {
+                  "label": "lidwoord",
+                  "text": "Het"
+                },
+                {
+                  "label": "zelfstandig naamwoord",
+                  "text": "boek"
+                },
+                {
+                  "label": "werkwoord",
+                  "text": "is"
+                }
+              ],
+              "ruleOrder": [
+                "lidwoord",
+                "zelfstandig naamwoord",
+                "werkwoord"
+              ]
+            },
+            {
+              "example": "De boeken zijn nieuw.",
+              "exampleHighlights": [
+                {
+                  "label": "lidwoord",
+                  "text": "De"
+                },
+                {
+                  "label": "zelfstandig naamwoord",
+                  "text": "boeken"
+                },
+                {
+                  "label": "werkwoord",
+                  "text": "zijn"
+                }
+              ],
+              "ruleOrder": [
+                "lidwoord",
+                "zelfstandig naamwoord",
+                "werkwoord"
+              ]
             }
           ]
         },
         {
           "title": "Bezittelijke Voornaamwoorden",
           "points": [
-            "Gebruik van 'mijn', 'jouw', 'zijn', 'haar'.",
-            "De plaatsing van bezittelijke voornaamwoorden.",
-            "Verschil tussen enkelvoud en meervoud."
+            "Gebruik bezittelijke voornaamwoorden voor eigendom.",
+            "Ze komen voor het zelfstandig naamwoord.",
+            "Pas de vorm aan op basis van geslacht en aantal."
           ],
-          "example": "Mijn boek is op tafel.",
+          "example": "Mijn boek is nieuw.",
+          "ruleOrder": [
+            "bezittelijk voornaamwoord",
+            "onderwerp",
+            "werkwoord",
+            "bijvoeglijk naamwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "bezittelijk voornaamwoord",
+              "text": "Mijn"
+            },
+            {
+              "label": "onderwerp",
+              "text": "boek"
+            },
+            {
+              "label": "werkwoord",
+              "text": "is"
+            },
+            {
+              "label": "bijvoeglijk naamwoord",
+              "text": "nieuw"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Jouw boek zijn op tafel.",
-              "fix": "Jouw boek is op tafel."
+              "wrong": "Mijn boeken is nieuw.",
+              "fix": "Mijn boek is nieuw."
             }
           ]
         },
         {
-          "title": "Zelfstandige Naamwoorden met een Lidwoord",
+          "title": "Deelwoorden en Artikelen",
           "points": [
-            "Het juiste lidwoord kiezen.",
-            "De invloed van geslacht op het lidwoord.",
-            "Het gebruik van lidwoorden in zinnen."
+            "Deelwoorden kunnen met artikelen worden gebruikt.",
+            "Ze geven extra informatie over het zelfstandig naamwoord.",
+            "Let op de juiste plaatsing in de zin."
           ],
-          "example": "Het meisje leest een boek.",
+          "example": "De lopende man is snel.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "bijvoeglijk naamwoord",
+            "zelfstandig naamwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "De lopende man"
+            },
+            {
+              "label": "werkwoord",
+              "text": "is"
+            },
+            {
+              "label": "bijvoeglijk naamwoord",
+              "text": "snel"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "De meisje leest een boek.",
-              "fix": "Het meisje leest een boek."
+              "wrong": "De man lopende is snel.",
+              "fix": "De lopende man is snel."
             }
           ]
         },
         {
-          "title": "Onregelmatige Meervoudsvormen",
+          "title": "Noun-Phrase Structuren",
           "points": [
-            "Lijst van onregelmatige meervouden.",
-            "Het herkennen van onregelmatige vormen.",
-            "Voorbeelden in zinnen."
+            "Gebruik bijvoeglijke naamwoorden voor specificiteit.",
+            "Bijvoeglijke naamwoorden komen voor het zelfstandig naamwoord.",
+            "Zorg voor overeenstemming in geslacht en getal."
           ],
-          "example": "De mannen werken hard.",
-          "mistakes": [
+          "example": "Een grote hond blaft.",
+          "ruleOrder": [
+            "onderwerp",
+            "bijvoeglijk naamwoord",
+            "werkwoord",
+            "object"
+          ],
+          "exampleHighlights": [
             {
-              "wrong": "De mannelijke werken hard.",
-              "fix": "De mannen werken hard."
+              "label": "onderwerp",
+              "text": "Een"
+            },
+            {
+              "label": "bijvoeglijk naamwoord",
+              "text": "grote"
+            },
+            {
+              "label": "werkwoord",
+              "text": "hond"
+            },
+            {
+              "label": "object",
+              "text": "blaft"
             }
-          ]
-        },
-        {
-          "title": "Samenstellingen van Zelfstandige Naamwoorden",
-          "points": [
-            "Hoe samenstellingen worden gevormd.",
-            "De betekenis van samengestelde woorden.",
-            "Voorbeelden van samenstellingen."
           ],
-          "example": "De tandarts helpt de patiënten.",
           "mistakes": [
             {
-              "wrong": "De tandarts helpen de patiënten.",
-              "fix": "De tandarts helpt de patiënten."
-            }
-          ]
-        },
-        {
-          "title": "Abstracte en Concrete Zelfstandige Naamwoorden",
-          "points": [
-            "Het verschil tussen abstract en concreet.",
-            "Voorbeelden van beide soorten.",
-            "Gebruik in zinnen."
-          ],
-          "example": "Liefde is belangrijk.",
-          "mistakes": [
-            {
-              "wrong": "Liefde zijn belangrijk.",
-              "fix": "Liefde is belangrijk."
+              "wrong": "Een hond grote blaft.",
+              "fix": "Een grote hond blaft."
             }
           ]
         }
@@ -9547,364 +10162,852 @@
         {
           "title": "Persoonlijke voornaamwoorden",
           "points": [
-            "Ik ga naar de winkel.",
-            "Jij hebt het boek gelezen.",
-            "Zij zijn vrienden."
+            "Gebruik persoonlijke voornaamwoorden om naar mensen of dingen te verwijzen.",
+            "Zorg ervoor dat het voornaamwoord overeenkomt met het geslacht en het aantal.",
+            "Plaats het voornaamwoord voor het werkwoord in V2-structuren."
           ],
-          "example": "Hij gaat naar school.",
+          "example": "Ik zie hem in het park.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "object"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Ik"
+            },
+            {
+              "label": "werkwoord",
+              "text": "zie"
+            },
+            {
+              "label": "object",
+              "text": "hem"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Hij gaan naar school.",
-              "fix": "Hij gaat naar school."
+              "wrong": "Hem zie ik in het park.",
+              "fix": "Ik zie hem in het park."
             }
           ]
         },
         {
           "title": "Bezittelijke voornaamwoorden",
           "points": [
-            "Mijn huis is groot.",
-            "Jouw auto is snel.",
-            "Haar fiets is nieuw."
+            "Gebruik bezittelijke voornaamwoorden om eigendom aan te geven.",
+            "Zorg voor overeenstemming met het zelfstandig naamwoord.",
+            "Plaats het bezittelijk voornaamwoord voor het zelfstandig naamwoord."
           ],
-          "example": "Zijn boek is interessant.",
+          "example": "Dit is mijn boek.",
+          "ruleOrder": [
+            "onderwerp",
+            "bezittelijk voornaamwoord",
+            "zelfstandig naamwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Dit"
+            },
+            {
+              "label": "bezittelijk voornaamwoord",
+              "text": "mijn"
+            },
+            {
+              "label": "zelfstandig naamwoord",
+              "text": "boek"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Jou boek is interessant.",
-              "fix": "Jouw boek is interessant."
+              "wrong": "Dit is boek mijn.",
+              "fix": "Dit is mijn boek."
             }
           ]
         },
         {
           "title": "Aanwijzende voornaamwoorden",
           "points": [
-            "Deze appel is lekker.",
-            "Die hond is groot.",
-            "Dat huis is oud."
+            "Gebruik aanwijzende voornaamwoorden om specifieke dingen aan te wijzen.",
+            "Zorg ervoor dat het voornaamwoord overeenkomt met het geslacht en het aantal.",
+            "Plaats het aanwijzend voornaamwoord voor het zelfstandig naamwoord."
           ],
-          "example": "Dit boek is van mij.",
+          "example": "Dat is de auto.",
+          "ruleOrder": [
+            "onderwerp",
+            "aanwijzend voornaamwoord",
+            "zelfstandig naamwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Dat"
+            },
+            {
+              "label": "aanwijzend voornaamwoord",
+              "text": "is"
+            },
+            {
+              "label": "zelfstandig naamwoord",
+              "text": "de auto"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Die boek is van mij.",
-              "fix": "Dit boek is van mij."
+              "wrong": "Dat de auto is.",
+              "fix": "Dat is de auto."
             }
           ]
         },
         {
           "title": "Wederkerende voornaamwoorden",
           "points": [
-            "Ik was me elke ochtend.",
-            "Jij moet jezelf helpen.",
-            "Zij vergist zich soms."
+            "Gebruik wederkerende voornaamwoorden voor acties die op de spreker terugkomen.",
+            "Plaats het wederkerend voornaamwoord direct na het werkwoord.",
+            "Zorg voor overeenstemming met het onderwerp."
           ],
-          "example": "Hij scheert zich elke week.",
+          "example": "Hij wast zich elke ochtend.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "wederkerend voornaamwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Hij"
+            },
+            {
+              "label": "werkwoord",
+              "text": "wast"
+            },
+            {
+              "label": "wederkerend voornaamwoord",
+              "text": "zich"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Hij scheert zich elke week.",
-              "fix": "Hij scheert zichzelf elke week."
+              "wrong": "Hij zich wast elke ochtend.",
+              "fix": "Hij wast zich elke ochtend."
             }
           ]
         },
         {
-          "title": "Onbepaalde voornaamwoorden",
+          "title": "Omissie van voornaamwoorden (pro-drop)",
           "points": [
-            "Iedereen is welkom.",
-            "Iemand heeft mijn pen geleend.",
-            "Niets is onmogelijk."
+            "In het Nederlands kunnen voornaamwoorden soms weggelaten worden.",
+            "Dit gebeurt vaak in informele spraak.",
+            "Zorg ervoor dat de context duidelijk is."
           ],
-          "example": "Iedereen heeft het gehoord.",
+          "example": "Ga je mee?",
+          "ruleOrder": [
+            "werkwoord",
+            "onderwerp"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "werkwoord",
+              "text": "Ga"
+            },
+            {
+              "label": "onderwerp",
+              "text": "je"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Iemand heeft de pen geleend.",
-              "fix": "Iemand heeft mijn pen geleend."
+              "wrong": "Ga mee?",
+              "fix": "Ga je mee?"
             }
           ]
         },
         {
-          "title": "Betrekkelijke voornaamwoorden",
+          "title": "Deixis en context",
           "points": [
-            "De man die daar staat, is mijn vader.",
-            "Het boek dat ik lees, is spannend.",
-            "De vrouw met wie ik praat, is mijn lerares."
+            "Deixis verwijst naar woorden die afhankelijk zijn van de context.",
+            "Gebruik 'hier' en 'daar' om locaties aan te geven.",
+            "Wees bewust van de tijd en plaats in communicatie."
           ],
-          "example": "De jongen die speelt, is mijn broer.",
+          "example": "Hier is mijn huis.",
+          "ruleOrder": [
+            "bijwoord",
+            "werkwoord",
+            "onderwerp"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "bijwoord",
+              "text": "Hier"
+            },
+            {
+              "label": "werkwoord",
+              "text": "is"
+            },
+            {
+              "label": "onderwerp",
+              "text": "mijn huis"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "De jongen wat speelt, is mijn broer.",
-              "fix": "De jongen die speelt, is mijn broer."
+              "wrong": "Is hier mijn huis.",
+              "fix": "Hier is mijn huis."
             }
           ]
         },
         {
-          "title": "Vraagwoorden",
+          "title": "Formele en informele aanspreekvormen",
           "points": [
-            "Wie is dat?",
-            "Wat doe je?",
-            "Waar ga je naartoe?"
+            "Gebruik 'u' voor formele situaties en 'je' voor informele.",
+            "Wees voorzichtig met de keuze van aanspreekvorm.",
+            "Het gebruik van 'u' kan respect tonen."
           ],
-          "example": "Wanneer komt hij?",
+          "example": "Kunt u mij helpen?",
+          "ruleOrder": [
+            "werkwoord",
+            "onderwerp",
+            "object"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "werkwoord",
+              "text": "Kunt"
+            },
+            {
+              "label": "onderwerp",
+              "text": "u"
+            },
+            {
+              "label": "object",
+              "text": "mij helpen"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Wat komt hij?",
-              "fix": "Wanneer komt hij?"
+              "wrong": "Kun je mij helpen?",
+              "fix": "Kunt u mij helpen?"
             }
           ]
         }
       ],
       "Modifiers": [
         {
-          "title": "Bijvoeglijke naamwoorden",
+          "title": "Basis van bijvoeglijke naamwoorden",
           "points": [
-            "Plaatsing voor het zelfstandig naamwoord",
-            "Overeenstemming in geslacht en getal",
-            "Gebruik van trappen van vergelijking"
+            "Bijvoeglijke naamwoorden staan voor het zelfstandig naamwoord.",
+            "Gebruik de juiste vorm van het bijvoeglijk naamwoord.",
+            "Bijvoeglijke naamwoorden kunnen intensiteit uitdrukken."
           ],
           "example": "De grote hond blaft.",
+          "ruleOrder": [
+            "bepaler",
+            "bijvoeglijk naamwoord",
+            "zelfstandig naamwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "bepaler",
+              "text": "De"
+            },
+            {
+              "label": "bijvoeglijk naamwoord",
+              "text": "grote"
+            },
+            {
+              "label": "zelfstandig naamwoord",
+              "text": "hond"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "De hond grote blaft.",
+              "wrong": "De hond groot blaft.",
               "fix": "De grote hond blaft."
             }
           ]
         },
         {
-          "title": "Bijwoorden",
+          "title": "Plaatsing van bijwoorden",
           "points": [
-            "Plaatsing van bijwoorden",
-            "Verschillende soorten bijwoorden",
-            "Bijwoorden van frequentie"
+            "Bijwoorden staan vaak na het werkwoord.",
+            "Ze kunnen ook voor het werkwoord staan voor nadruk.",
+            "Let op de volgorde bij samengestelde zinnen."
           ],
           "example": "Hij loopt snel.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "bijwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Hij"
+            },
+            {
+              "label": "werkwoord",
+              "text": "loopt"
+            },
+            {
+              "label": "bijwoord",
+              "text": "snel"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Hij snel loopt.",
+              "wrong": "Snel loopt hij.",
               "fix": "Hij loopt snel."
             }
           ]
         },
         {
-          "title": "Voorzetsels",
+          "title": "Vergelijkingen maken",
           "points": [
-            "Gebruik van voorzetsels in zinnen",
-            "Voorzetsels met de juiste naamvallen",
-            "Combinatie van voorzetsels"
+            "Gebruik 'als' voor vergelijkingen.",
+            "Gebruik 'meer' voor intensiteit.",
+            "Let op de juiste volgorde van woorden."
           ],
-          "example": "De kat zit op de tafel.",
+          "example": "Zij is groter dan hij.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "vergelijking"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Zij"
+            },
+            {
+              "label": "werkwoord",
+              "text": "is"
+            },
+            {
+              "label": "vergelijking",
+              "text": "groter dan hij"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "De kat zit de tafel op.",
-              "fix": "De kat zit op de tafel."
+              "wrong": "Zij groter is dan hij.",
+              "fix": "Zij is groter dan hij."
             }
           ]
         },
         {
-          "title": "Lidwoorden",
+          "title": "Intensiteit met 'heel' en 'erg'",
           "points": [
-            "Bepaalde en onbepaalde lidwoorden",
-            "Gebruik in verschillende contexten",
-            "Overeenstemming met zelfstandig naamwoord"
+            "Gebruik 'heel' voor positieve intensiteit.",
+            "Gebruik 'erg' voor negatieve intensiteit.",
+            "Plaats deze woorden voor het bijvoeglijk naamwoord."
           ],
-          "example": "Een boek ligt op de tafel.",
+          "example": "Het is heel koud buiten.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "bijwoord",
+            "bijvoeglijk naamwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Het"
+            },
+            {
+              "label": "werkwoord",
+              "text": "is"
+            },
+            {
+              "label": "bijwoord",
+              "text": "heel"
+            },
+            {
+              "label": "bijvoeglijk naamwoord",
+              "text": "koud"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "De boek ligt op de tafel.",
-              "fix": "Een boek ligt op de tafel."
+              "wrong": "Het is koud heel buiten.",
+              "fix": "Het is heel koud buiten."
             }
           ]
         },
         {
-          "title": "Telwoorden",
+          "title": "Superlatieven gebruiken",
           "points": [
-            "Basis telwoorden",
-            "Ordinale telwoorden",
-            "Gebruik in zinnen"
+            "Gebruik 'de' voor de superlatief.",
+            "Plaats 'meest' voor het bijvoeglijk naamwoord.",
+            "Let op de juiste vorm van het bijvoeglijk naamwoord."
           ],
-          "example": "Hij heeft drie honden.",
+          "example": "Hij is de slimste van de klas.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "superlatief"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Hij"
+            },
+            {
+              "label": "werkwoord",
+              "text": "is"
+            },
+            {
+              "label": "superlatief",
+              "text": "de slimste van de klas"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Hij heeft drie hond.",
-              "fix": "Hij heeft drie honden."
+              "wrong": "Hij is slimste de van de klas.",
+              "fix": "Hij is de slimste van de klas."
             }
           ]
         },
         {
-          "title": "Bijvoeglijke naamwoorden in trappen van vergelijking",
+          "title": "Bijwoorden van frequentie",
           "points": [
-            "Vergrotende trap",
-            "Overtreffende trap",
-            "Gebruik in context"
+            "Plaats bijwoorden van frequentie voor het werkwoord.",
+            "Gebruik 'altijd', 'soms', 'nooit'.",
+            "Let op de context van de zin."
           ],
-          "example": "Deze auto is sneller dan die.",
+          "example": "Zij gaat vaak naar de winkel.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "bijwoord",
+            "voorzetsel",
+            "zelfstandig naamwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Zij"
+            },
+            {
+              "label": "werkwoord",
+              "text": "gaat"
+            },
+            {
+              "label": "bijwoord",
+              "text": "vaak"
+            },
+            {
+              "label": "voorzetsel",
+              "text": "naar"
+            },
+            {
+              "label": "zelfstandig naamwoord",
+              "text": "de winkel"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Deze auto is snel dan die.",
-              "fix": "Deze auto is sneller dan die."
+              "wrong": "Zij vaak gaat naar de winkel.",
+              "fix": "Zij gaat vaak naar de winkel."
             }
           ]
         },
         {
-          "title": "Grammaticale congruentie",
+          "title": "Bijvoeglijke naamwoorden in de verleden tijd",
           "points": [
-            "Overeenstemming tussen onderwerp en werkwoord",
-            "Overeenstemming tussen bijvoeglijke naamwoorden en zelfstandige naamwoorden",
-            "Complexe zinnen"
+            "Gebruik de juiste vorm van het bijvoeglijk naamwoord.",
+            "Plaats het bijvoeglijk naamwoord voor het zelfstandig naamwoord.",
+            "Let op de tijdsvorm van de zin."
           ],
-          "example": "De kinderen spelen in het park.",
+          "example": "De oude man vertelde een verhaal.",
+          "ruleOrder": [
+            "bepaler",
+            "bijvoeglijk naamwoord",
+            "zelfstandig naamwoord",
+            "werkwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "bepaler",
+              "text": "De"
+            },
+            {
+              "label": "bijvoeglijk naamwoord",
+              "text": "oude"
+            },
+            {
+              "label": "zelfstandig naamwoord",
+              "text": "man"
+            },
+            {
+              "label": "werkwoord",
+              "text": "vertelde"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "De kind spelen in het park.",
-              "fix": "De kinderen spelen in het park."
+              "wrong": "De man oude vertelde een verhaal.",
+              "fix": "De oude man vertelde een verhaal."
             }
           ]
         },
         {
-          "title": "Afleidingen en samenstellingen",
+          "title": "Bijwoorden van plaats",
           "points": [
-            "Gebruik van voorvoegsels",
-            "Gebruik van achtervoegsels",
-            "Samenstellingen in de Nederlandse taal"
+            "Plaats bijwoorden van plaats na het werkwoord.",
+            "Gebruik 'hier', 'daar', 'ergens'.",
+            "Let op de context van de zin."
           ],
-          "example": "De afwasmachine is kapot.",
+          "example": "Hij woont daar.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "bijwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Hij"
+            },
+            {
+              "label": "werkwoord",
+              "text": "woont"
+            },
+            {
+              "label": "bijwoord",
+              "text": "daar"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "De afwas machine is kapot.",
-              "fix": "De afwasmachine is kapot."
+              "wrong": "Daar woont hij.",
+              "fix": "Hij woont daar."
             }
           ]
         },
         {
-          "title": "Negatie",
+          "title": "Adjectieven met 'meer' en 'minder'",
           "points": [
-            "Gebruik van 'niet' en 'geen'",
-            "Plaatsing van negaties in de zin",
-            "Negatie in verschillende zinsstructuren"
+            "Gebruik 'meer' voor positieve vergelijkingen.",
+            "Gebruik 'minder' voor negatieve vergelijkingen.",
+            "Plaats deze woorden voor het bijvoeglijk naamwoord."
           ],
-          "example": "Ik zie de hond niet.",
+          "example": "Zij is meer geïnteresseerd dan hij.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "meer/minder",
+            "bijvoeglijk naamwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Zij"
+            },
+            {
+              "label": "werkwoord",
+              "text": "is"
+            },
+            {
+              "label": "meer/minder",
+              "text": "meer"
+            },
+            {
+              "label": "bijvoeglijk naamwoord",
+              "text": "geïnteresseerd"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ik zie niet de hond.",
-              "fix": "Ik zie de hond niet."
+              "wrong": "Zij is geïnteresseerd meer dan hij.",
+              "fix": "Zij is meer geïnteresseerd dan hij."
             }
           ]
         },
         {
-          "title": "Vraagzinnen",
+          "title": "Intensiteit met 'zeer' en 'uiterst'",
           "points": [
-            "Structuur van vraagzinnen",
-            "Gebruik van vraagwoorden",
-            "Inversie in vraagzinnen"
+            "Gebruik 'zeer' voor sterke intensiteit.",
+            "Gebruik 'uiterst' voor de hoogste intensiteit.",
+            "Plaats deze woorden voor het bijvoeglijk naamwoord."
           ],
-          "example": "Waar is de winkel?",
+          "example": "Het is uiterst belangrijk.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "bijwoord",
+            "bijvoeglijk naamwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Het"
+            },
+            {
+              "label": "werkwoord",
+              "text": "is"
+            },
+            {
+              "label": "bijwoord",
+              "text": "uiterst"
+            },
+            {
+              "label": "bijvoeglijk naamwoord",
+              "text": "belangrijk"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Waar de winkel is?",
-              "fix": "Waar is de winkel?"
+              "wrong": "Het is belangrijk uiterst.",
+              "fix": "Het is uiterst belangrijk."
             }
           ]
         }
       ],
       "Questions": [
         {
-          "title": "Ja/Nee Vragen",
+          "title": "Basisvraagstructuur",
           "points": [
-            "Gebruik 'ja' of 'nee' als antwoord.",
+            "Gebruik de juiste woordvolgorde.",
+            "Begin met een vraagwoord indien nodig.",
+            "Zorg voor een vraagteken aan het einde."
+          ],
+          "example": "Wat doe je morgen?",
+          "ruleOrder": [
+            "vraagwoord",
+            "werkwoord",
+            "onderwerp",
+            "rest"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "vraagwoord",
+              "text": "Wat"
+            },
+            {
+              "label": "werkwoord",
+              "text": "doe"
+            },
+            {
+              "label": "onderwerp",
+              "text": "je"
+            },
+            {
+              "label": "rest",
+              "text": "morgen"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Doe je wat morgen?",
+              "fix": "Wat doe je morgen?"
+            }
+          ]
+        },
+        {
+          "title": "Ja/Nee-vragen",
+          "points": [
             "Begin met een werkwoord.",
-            "Zorg voor de juiste woordvolgorde."
+            "Gebruik een vraagteken.",
+            "Wees duidelijk en beknopt."
           ],
-          "example": "Kom je morgen naar het feest?",
+          "example": "Ga je naar het feest?",
+          "ruleOrder": [
+            "werkwoord",
+            "onderwerp",
+            "rest"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "werkwoord",
+              "text": "Ga"
+            },
+            {
+              "label": "onderwerp",
+              "text": "je"
+            },
+            {
+              "label": "rest",
+              "text": "naar het feest"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Jij komt morgen naar het feest?",
-              "fix": "Kom jij morgen naar het feest?"
+              "wrong": "Je gaat naar het feest?",
+              "fix": "Ga je naar het feest?"
             }
           ]
         },
         {
-          "title": "W-vragen",
+          "title": "Vraagwoorden",
           "points": [
-            "Begin met een vraagwoord.",
-            "Zet het werkwoord na het onderwerp.",
-            "Gebruik de juiste intonatie."
+            "Gebruik vraagwoorden voor specifieke informatie.",
+            "Plaats het vraagwoord aan het begin.",
+            "Pas de rest van de zin aan."
           ],
-          "example": "Wat eet je graag?",
+          "example": "Waar is de bibliotheek?",
+          "ruleOrder": [
+            "vraagwoord",
+            "werkwoord",
+            "onderwerp",
+            "rest"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "vraagwoord",
+              "text": "Waar"
+            },
+            {
+              "label": "werkwoord",
+              "text": "is"
+            },
+            {
+              "label": "onderwerp",
+              "text": "de bibliotheek"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Eet je wat graag?",
-              "fix": "Wat eet je graag?"
+              "wrong": "De bibliotheek is waar?",
+              "fix": "Waar is de bibliotheek?"
             }
           ]
         },
         {
-          "title": "Indirecte Vragen",
+          "title": "Indirecte vragen",
           "points": [
-            "Begin met een inleidende zin.",
-            "Gebruik een vraagwoord.",
-            "Zorg voor de juiste volgorde."
+            "Gebruik een inleidende zin.",
+            "Pas de woordvolgorde aan.",
+            "Gebruik geen vraagteken aan het einde."
           ],
-          "example": "Ik vraag me af waar hij is.",
+          "example": "Ik vraag me af waar de bibliotheek is.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "rest"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Ik"
+            },
+            {
+              "label": "werkwoord",
+              "text": "vraag me af waar de bibliotheek is"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ik vraag waar is hij.",
-              "fix": "Ik vraag me af waar hij is."
+              "wrong": "Ik vraag waar is de bibliotheek.",
+              "fix": "Ik vraag me af waar de bibliotheek is."
             }
           ]
         },
         {
-          "title": "Keuzevragen",
+          "title": "Formele vragen",
           "points": [
-            "Gebruik 'of' om keuzes aan te geven.",
-            "Zorg voor een duidelijke structuur.",
-            "Bevestig de keuze met een vraagwoord."
+            "Gebruik 'U' voor formele aanspreking.",
+            "Zorg voor een beleefde toon.",
+            "Pas de structuur aan voor formaliteit."
           ],
-          "example": "Wil je koffie of thee?",
+          "example": "Kunt u mij helpen?",
+          "ruleOrder": [
+            "werkwoord",
+            "onderwerp",
+            "rest"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "werkwoord",
+              "text": "Kunt"
+            },
+            {
+              "label": "onderwerp",
+              "text": "u"
+            },
+            {
+              "label": "rest",
+              "text": "mij helpen"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Wil je koffie of je thee?",
-              "fix": "Wil je koffie of thee?"
+              "wrong": "Je kunt mij helpen?",
+              "fix": "Kunt u mij helpen?"
             }
           ]
         },
         {
-          "title": "Vraagzinnen met 'wie'",
+          "title": "Informele vragen",
           "points": [
-            "Gebruik 'wie' voor personen.",
-            "Plaats het werkwoord na het onderwerp.",
-            "Zorg voor de juiste intonatie."
+            "Gebruik 'je' voor informele aanspreking.",
+            "Wees direct en eenvoudig.",
+            "Vraag met een natuurlijke toon."
           ],
-          "example": "Wie komt er naar het feest?",
+          "example": "Kun je mij helpen?",
+          "ruleOrder": [
+            "werkwoord",
+            "onderwerp",
+            "rest"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "werkwoord",
+              "text": "Kun"
+            },
+            {
+              "label": "onderwerp",
+              "text": "je"
+            },
+            {
+              "label": "rest",
+              "text": "mij helpen"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Wie komt naar het feest?",
-              "fix": "Wie komt er naar het feest?"
+              "wrong": "Je kunt helpen mij?",
+              "fix": "Kun je mij helpen?"
             }
           ]
         },
         {
-          "title": "Vraagzinnen met 'waarom'",
+          "title": "Complexe vragen",
           "points": [
-            "Begin met 'waarom'.",
-            "Gebruik de juiste volgorde.",
-            "Zorg voor een volledige zin."
+            "Gebruik meerdere vraagwoorden.",
+            "Zorg voor duidelijke structuur.",
+            "Vermijd verwarring in de zin."
           ],
-          "example": "Waarom ben je laat?",
-          "mistakes": [
+          "example": "Wat denk je dat hij gaat doen?",
+          "ruleOrder": [
+            "vraagwoord",
+            "onderwerp",
+            "werkwoord",
+            "rest"
+          ],
+          "exampleHighlights": [
             {
-              "wrong": "Waarom je bent laat?",
-              "fix": "Waarom ben je laat?"
+              "label": "vraagwoord",
+              "text": "Wat"
+            },
+            {
+              "label": "onderwerp",
+              "text": "je"
+            },
+            {
+              "label": "werkwoord",
+              "text": "hij gaat"
+            },
+            {
+              "label": "rest",
+              "text": "doen"
             }
-          ]
-        },
-        {
-          "title": "Vraagzinnen met 'hoeveel'",
-          "points": [
-            "Gebruik 'hoeveel' voor aantallen.",
-            "Plaats het werkwoord na het onderwerp.",
-            "Zorg voor een duidelijke structuur."
           ],
-          "example": "Hoeveel kost dit boek?",
           "mistakes": [
             {
-              "wrong": "Hoeveel dit boek kost?",
-              "fix": "Hoeveel kost dit boek?"
+              "wrong": "Wat denk je wat hij gaat doen?",
+              "fix": "Wat denk je dat hij gaat doen?"
             }
           ]
         }
@@ -9915,13 +11018,32 @@
           "points": [
             "Gebruik 'niet' om een werkwoord of bijvoeglijk naamwoord te ontkennen.",
             "Plaats 'niet' meestal na het werkwoord.",
-            "Gebruik 'niet' om een hele zin te ontkennen."
+            "Let op de positie van 'niet' in de zin."
           ],
-          "example": "Ik zie de hond niet.",
+          "example": "Ik zie het niet.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "niet"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Ik"
+            },
+            {
+              "label": "werkwoord",
+              "text": "zie"
+            },
+            {
+              "label": "niet",
+              "text": "niet"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ik niet zie de hond.",
-              "fix": "Ik zie de hond niet."
+              "wrong": "Ik niet zie het.",
+              "fix": "Ik zie het niet."
             }
           ]
         },
@@ -9930,9 +11052,33 @@
           "points": [
             "Gebruik 'geen' om een zelfstandig naamwoord te ontkennen.",
             "Plaats 'geen' voor het zelfstandig naamwoord.",
-            "Gebruik 'geen' in plaats van 'niet' voor onbepaalde zaken."
+            "Gebruik 'geen' in plaats van 'niet' voor onbepaalde hoeveelheden."
           ],
           "example": "Ik heb geen geld.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "geen",
+            "zelfstandig naamwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Ik"
+            },
+            {
+              "label": "werkwoord",
+              "text": "heb"
+            },
+            {
+              "label": "geen",
+              "text": "geen"
+            },
+            {
+              "label": "zelfstandig naamwoord",
+              "text": "geld"
+            }
+          ],
           "mistakes": [
             {
               "wrong": "Ik heb niet geld.",
@@ -9941,595 +11087,1498 @@
           ]
         },
         {
-          "title": "Dubbele negatie",
+          "title": "Dubbele negatie vermijden",
           "points": [
-            "Vermijd dubbele negaties in het Nederlands.",
-            "Een enkele negatie is voldoende om een zin te ontkennen.",
-            "Dubbele negaties kunnen de betekenis verwarren."
+            "Vermijd het gebruik van twee negaties in dezelfde zin.",
+            "Gebruik alleen 'niet' of 'geen' om verwarring te voorkomen.",
+            "Controleer je zinnen op dubbele negaties."
           ],
-          "example": "Ik heb niets gezegd.",
+          "example": "Ik zie niets.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "niets"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Ik"
+            },
+            {
+              "label": "werkwoord",
+              "text": "zie"
+            },
+            {
+              "label": "niets",
+              "text": "niets"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ik heb niet niets gezegd.",
-              "fix": "Ik heb niets gezegd."
+              "wrong": "Ik zie niet niets.",
+              "fix": "Ik zie niets."
             }
           ]
         },
         {
-          "title": "Negatie met 'nooit'",
+          "title": "Negatie in de verleden tijd",
           "points": [
-            "Gebruik 'nooit' om iets te ontkennen dat nooit gebeurt.",
-            "Plaats 'nooit' voor het werkwoord.",
-            "Gebruik 'nooit' om een tijdsaspect te benadrukken."
+            "Plaats 'niet' of 'geen' na het hulpwerkwoord in de verleden tijd.",
+            "Let op de tijdsvorm van het werkwoord.",
+            "Gebruik 'niet' voor werkwoorden en 'geen' voor zelfstandige naamwoorden."
           ],
-          "example": "Ik ga nooit naar het feest.",
+          "example": "Hij heeft het niet gedaan.",
+          "ruleOrder": [
+            "onderwerp",
+            "hulpwerkwoord",
+            "negatie",
+            "werkwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Hij"
+            },
+            {
+              "label": "hulpwerkwoord",
+              "text": "heeft"
+            },
+            {
+              "label": "negatie",
+              "text": "niet"
+            },
+            {
+              "label": "werkwoord",
+              "text": "gedaan"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ik ga niet naar het feest nooit.",
-              "fix": "Ik ga nooit naar het feest."
+              "wrong": "Hij heeft niet gedaan het.",
+              "fix": "Hij heeft het niet gedaan."
             }
           ]
         },
         {
-          "title": "Negatie in vragen",
+          "title": "Negatie in bijzin",
           "points": [
-            "Gebruik 'niet' in vragen om ontkenning aan te geven.",
-            "Plaats 'niet' meestal aan het einde van de vraag.",
+            "Plaats 'niet' aan het einde van de bijzin.",
+            "Let op de volgorde van de woorden in de bijzin.",
+            "Gebruik 'niet' om de bijzin te ontkennen."
+          ],
+          "example": "Ik denk dat hij het niet wil.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "dat",
+            "negatie"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Ik"
+            },
+            {
+              "label": "werkwoord",
+              "text": "denk"
+            },
+            {
+              "label": "dat",
+              "text": "dat"
+            },
+            {
+              "label": "negatie",
+              "text": "niet"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Ik denk dat niet hij het wil.",
+              "fix": "Ik denk dat hij het niet wil."
+            }
+          ]
+        },
+        {
+          "title": "Negatie met vraagzinnen",
+          "points": [
+            "Gebruik 'niet' of 'geen' in vraagzinnen voor ontkenning.",
+            "Plaats 'niet' voor het werkwoord in de vraag.",
             "Zorg ervoor dat de vraag duidelijk blijft."
           ],
-          "example": "Kom je niet naar het feest?",
-          "mistakes": [
-            {
-              "wrong": "Kom je naar het feest niet?",
-              "fix": "Kom je niet naar het feest?"
-            }
-          ]
-        },
-        {
-          "title": "Negatie met 'geen enkele'",
-          "points": [
-            "Gebruik 'geen enkele' om te benadrukken dat er niets is.",
-            "Plaats 'geen enkele' voor het zelfstandig naamwoord.",
-            "Het geeft een sterke ontkenning aan."
+          "example": "Wil je het niet doen?",
+          "ruleOrder": [
+            "werkwoord",
+            "onderwerp",
+            "negatie"
           ],
-          "example": "Er is geen enkele reden om te twijfelen.",
+          "exampleHighlights": [
+            {
+              "label": "werkwoord",
+              "text": "Wil"
+            },
+            {
+              "label": "onderwerp",
+              "text": "je"
+            },
+            {
+              "label": "negatie",
+              "text": "niet"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Er is niet enige reden om te twijfelen.",
-              "fix": "Er is geen enkele reden om te twijfelen."
+              "wrong": "Wil je niet het doen?",
+              "fix": "Wil je het niet doen?"
             }
           ]
         }
       ],
       "Connections": [
         {
-          "title": "Tegenwoordige tijd",
+          "title": "Basiswoordvolgorde",
           "points": [
-            "Gebruik van de tegenwoordige tijd.",
-            "Regelmatige werkwoorden.",
-            "Onregelmatige werkwoorden."
+            "Gebruik de volgorde onderwerp + werkwoord + lijdend voorwerp.",
+            "Zorg ervoor dat het werkwoord altijd op de tweede plaats staat in hoofdzinnen.",
+            "Let op de plaats van het lijdend voorwerp in de zin."
           ],
-          "example": "Ik loop naar school.",
+          "example": "Ik eet een appel.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "lijdend voorwerp"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Ik"
+            },
+            {
+              "label": "werkwoord",
+              "text": "eet"
+            },
+            {
+              "label": "lijdend voorwerp",
+              "text": "een appel"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ik loopte naar school.",
-              "fix": "Ik loop naar school."
+              "wrong": "Eet ik een appel.",
+              "fix": "Ik eet een appel."
             }
           ]
         },
         {
-          "title": "Verleden tijd",
+          "title": "Gebruik van de verleden tijd",
           "points": [
-            "Vorming van de verleden tijd.",
-            "Gebruik van 'hebben' en 'zijn'.",
-            "Onregelmatige werkwoorden."
+            "Vorm de verleden tijd met een hulpwerkwoord.",
+            "Let op de juiste vervoeging van het hoofdwerkwoord.",
+            "Gebruik 'hebben' of 'zijn' afhankelijk van het werkwoord."
           ],
-          "example": "Hij at een appel.",
+          "example": "Ik heb een boek gelezen.",
+          "ruleOrder": [
+            "onderwerp",
+            "hulpwerkwoord",
+            "hoofdwerkwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Ik"
+            },
+            {
+              "label": "hulpwerkwoord",
+              "text": "heb"
+            },
+            {
+              "label": "hoofdwerkwoord",
+              "text": "gelezen"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Hij eet een appel.",
-              "fix": "Hij at een appel."
+              "wrong": "Ik was een boek gelezen.",
+              "fix": "Ik heb een boek gelezen."
             }
           ]
         },
         {
-          "title": "Toekomende tijd",
+          "title": "Subordinerende zinnen",
           "points": [
-            "Vorming van de toekomende tijd.",
-            "Gebruik van 'zullen'.",
-            "Toekomstige plannen."
+            "Plaats het werkwoord aan het einde van de bijzin.",
+            "Gebruik verbindingswoorden zoals 'omdat', 'terwijl', en 'wanneer'.",
+            "Zorg ervoor dat de hoofdzin en de bijzin goed zijn verbonden."
           ],
-          "example": "Wij zullen morgen naar het feest gaan.",
+          "example": "Ik blijf thuis omdat het regent.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "bijzin"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Ik"
+            },
+            {
+              "label": "werkwoord",
+              "text": "blijf"
+            },
+            {
+              "label": "bijzin",
+              "text": "omdat het regent"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Wij gaat morgen naar het feest.",
-              "fix": "Wij zullen morgen naar het feest gaan."
+              "wrong": "Omdat het regent ik blijf thuis.",
+              "fix": "Ik blijf thuis omdat het regent."
             }
           ]
         },
         {
-          "title": "De onbepaalde wijs",
+          "title": "Gebruik van voegwoorden",
           "points": [
-            "Gebruik van de infinitief.",
-            "Werkwoorden in zinnen.",
-            "Infinitiefconstructies."
+            "Voegwoorden verbinden zinnen en maken ze complexer.",
+            "Gebruik 'en', 'maar', en 'of' om zinnen te combineren.",
+            "Let op de juiste volgorde van de zinnen."
           ],
-          "example": "Zwemmen is gezond.",
+          "example": "Ik ga naar de winkel en ik koop brood.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "voegwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Ik"
+            },
+            {
+              "label": "werkwoord",
+              "text": "ga"
+            },
+            {
+              "label": "voegwoord",
+              "text": "en"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Zwemmen is gezond voor jou.",
-              "fix": "Zwemmen is gezond."
+              "wrong": "Ik ga naar de winkel ik koop brood.",
+              "fix": "Ik ga naar de winkel en ik koop brood."
             }
           ]
         },
         {
-          "title": "De gebiedende wijs",
+          "title": "Indirecte rede",
           "points": [
-            "Vorming van de gebiedende wijs.",
-            "Gebruik in instructies.",
-            "Directe opdrachten."
+            "Gebruik 'dat' om indirecte rede in te leiden.",
+            "Zorg ervoor dat de volgorde van de woorden correct is.",
+            "Let op de tijd van de werkwoorden."
           ],
-          "example": "Kom hier!",
+          "example": "Hij zegt dat hij morgen komt.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "dat"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Hij"
+            },
+            {
+              "label": "werkwoord",
+              "text": "zegt"
+            },
+            {
+              "label": "dat",
+              "text": "dat"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Kom hier toe!",
-              "fix": "Kom hier!"
+              "wrong": "Hij zegt dat morgen komt hij.",
+              "fix": "Hij zegt dat hij morgen komt."
             }
           ]
         },
         {
-          "title": "De voorwaardelijke wijs",
+          "title": "Voorwaardelijke zinnen",
           "points": [
-            "Gebruik van 'zou' en 'als'.",
-            "Hypothetische situaties.",
-            "Voorwaarden in zinnen."
+            "Gebruik 'als' om voorwaardelijke zinnen te vormen.",
+            "Zorg ervoor dat de volgorde van de zinnen logisch is.",
+            "Let op de tijd van de werkwoorden in beide zinnen."
           ],
-          "example": "Als ik tijd had, zou ik gaan.",
+          "example": "Als het regent, blijf ik binnen.",
+          "ruleOrder": [
+            "als",
+            "onderwerp",
+            "werkwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "als",
+              "text": "Als"
+            },
+            {
+              "label": "onderwerp",
+              "text": "het"
+            },
+            {
+              "label": "werkwoord",
+              "text": "regent"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Als ik tijd heb, zou ik gaan.",
-              "fix": "Als ik tijd had, zou ik gaan."
+              "wrong": "Blijf ik binnen als het regent.",
+              "fix": "Als het regent, blijf ik binnen."
             }
           ]
         },
         {
-          "title": "De lijdende vorm",
+          "title": "Relatieve zinnen",
           "points": [
-            "Vorming van de lijdende vorm.",
-            "Gebruik in zinnen.",
-            "Actieve versus passieve zinnen."
+            "Gebruik 'die' of 'dat' om relatieve zinnen te vormen.",
+            "Zorg ervoor dat de relatie tussen de zinnen duidelijk is.",
+            "Let op de juiste volgorde van de woorden."
           ],
-          "example": "De brief werd geschreven door haar.",
+          "example": "De man die daar staat, is mijn vader.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "relatief pronomen"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "De man"
+            },
+            {
+              "label": "werkwoord",
+              "text": "is"
+            },
+            {
+              "label": "relatief pronomen",
+              "text": "mijn vader"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "De brief is geschreven door haar.",
-              "fix": "De brief werd geschreven door haar."
+              "wrong": "De man is mijn vader die daar staat.",
+              "fix": "De man die daar staat, is mijn vader."
             }
           ]
         }
       ],
       "Conditions": [
         {
-          "title": "Als-zinnen",
+          "title": "Basisvoorwaarde met 'als'",
           "points": [
-            "Als het regent, neem een paraplu mee.",
-            "Als je tijd hebt, kunnen we samen lunchen.",
-            "Als ik klaar ben, bel ik je."
+            "Gebruik 'als' voor voorwaarden.",
+            "V2-structuur in de hoofdzin.",
+            "Gebruik de tegenwoordige tijd voor realistische situaties."
           ],
-          "example": "Als het koud is, draag ik een jas.",
+          "example": "Als het regent, neem ik een paraplu.",
+          "ruleOrder": [
+            "als",
+            "onderwerp",
+            "werkwoord",
+            "object"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "als",
+              "text": "Als het regent"
+            },
+            {
+              "label": "onderwerp",
+              "text": "ik"
+            },
+            {
+              "label": "werkwoord",
+              "text": "een paraplu"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Als ik koud ben, ik draag een jas.",
-              "fix": "Als ik koud ben, draag ik een jas."
+              "wrong": "Als ik een paraplu neem, het regent.",
+              "fix": "Als het regent, neem ik een paraplu."
             }
           ]
         },
         {
-          "title": "Tenzij",
+          "title": "Voorwaarde met 'zou'",
           "points": [
-            "Ik ga niet naar het feest, tenzij jij ook gaat.",
-            "Hij komt niet, tenzij ze hem uitnodigen.",
-            "We gaan niet zwemmen, tenzij het warm is."
+            "Gebruik 'zou' voor hypothetische situaties.",
+            "V2-structuur in de hoofdzin.",
+            "Combineer met de verleden tijd voor onwerkelijke situaties."
           ],
-          "example": "Ik blijf thuis, tenzij het mooi weer is.",
+          "example": "Als ik rijk was, zou ik een huis kopen.",
+          "ruleOrder": [
+            "als",
+            "onderwerp",
+            "werkwoord",
+            "zou"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "als",
+              "text": "Als ik rijk was"
+            },
+            {
+              "label": "onderwerp",
+              "text": "ik"
+            },
+            {
+              "label": "werkwoord",
+              "text": "huis"
+            },
+            {
+              "label": "zou",
+              "text": "kopen"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ik ga niet naar het feest tenzij jij ook gaat.",
-              "fix": "Ik ga niet naar het feest, tenzij jij ook gaat."
+              "wrong": "Als ik rijk ben, zou ik een huis kopen.",
+              "fix": "Als ik rijk was, zou ik een huis kopen."
             }
           ]
         },
         {
-          "title": "Als...dan",
+          "title": "Voorwaarden met 'tenzij'",
           "points": [
-            "Als je hard werkt, dan krijg je goede resultaten.",
-            "Als het morgen mooi weer is, dan gaan we fietsen.",
-            "Als ik tijd heb, dan help ik je."
+            "Gebruik 'tenzij' om uitzonderingen aan te geven.",
+            "V2-structuur in de hoofdzin.",
+            "Plaats de uitzondering aan het einde van de zin."
           ],
-          "example": "Als het sneeuwt, dan blijven we binnen.",
+          "example": "Ik ga naar het feest, tenzij het regent.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "object",
+            "tenzij",
+            "voorwaarde"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Ik"
+            },
+            {
+              "label": "werkwoord",
+              "text": "ga"
+            },
+            {
+              "label": "object",
+              "text": "naar het feest"
+            },
+            {
+              "label": "tenzij",
+              "text": "tenzij het regent"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Als het regent dan neem ik een paraplu.",
-              "fix": "Als het regent, dan neem ik een paraplu."
+              "wrong": "Ik ga niet naar het feest tenzij het regent.",
+              "fix": "Ik ga naar het feest, tenzij het regent."
             }
           ]
         },
         {
-          "title": "Of...of",
+          "title": "Complexe voorwaarden met 'als' en 'zou'",
           "points": [
-            "Je kunt kiezen: of je gaat naar de film, of je blijft thuis.",
-            "Hij moet kiezen: of hij studeert, of hij werkt.",
-            "We gaan of naar het strand, of naar het park."
+            "Combineer 'als' en 'zou' voor complexe voorwaarden.",
+            "Gebruik de verleden tijd voor de voorwaarde.",
+            "V2-structuur in de hoofdzin."
           ],
-          "example": "Je kunt het boek lezen of de film kijken.",
+          "example": "Als ik meer tijd had, zou ik vaker lezen.",
+          "ruleOrder": [
+            "als",
+            "onderwerp",
+            "werkwoord",
+            "zou"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "als",
+              "text": "Als ik meer tijd had"
+            },
+            {
+              "label": "onderwerp",
+              "text": "ik"
+            },
+            {
+              "label": "werkwoord",
+              "text": "vaker"
+            },
+            {
+              "label": "zou",
+              "text": "lezen"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Je kunt kiezen of je gaat naar de film of je blijft thuis.",
-              "fix": "Je kunt kiezen: of je gaat naar de film, of je blijft thuis."
+              "wrong": "Als ik meer tijd heb, zou ik vaker lezen.",
+              "fix": "Als ik meer tijd had, zou ik vaker lezen."
             }
           ]
         },
         {
-          "title": "Wanneer",
+          "title": "Voorwaarden met 'ook al'",
           "points": [
-            "Wanneer je klaar bent, laat het me weten.",
-            "Wanneer het begint te regenen, gaan we naar binnen.",
-            "Wanneer ik thuis kom, kook ik avondeten."
+            "Gebruik 'ook al' voor concessieve voorwaarden.",
+            "V2-structuur in de hoofdzin.",
+            "Plaats de concessie aan het begin van de zin."
           ],
-          "example": "Wanneer je wilt, kunnen we gaan.",
+          "example": "Ook al regent het, ik ga naar buiten.",
+          "ruleOrder": [
+            "ook al",
+            "onderwerp",
+            "werkwoord",
+            "object"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "ook al",
+              "text": "Ook al regent het"
+            },
+            {
+              "label": "onderwerp",
+              "text": "ik"
+            },
+            {
+              "label": "werkwoord",
+              "text": "ga"
+            },
+            {
+              "label": "object",
+              "text": "naar buiten"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Wanneer ik thuis kom ik kook avondeten.",
-              "fix": "Wanneer ik thuis kom, kook ik avondeten."
+              "wrong": "Ik ga naar buiten ook al het regent.",
+              "fix": "Ook al regent het, ik ga naar buiten."
             }
           ]
         },
         {
-          "title": "Zonder",
+          "title": "Voorwaarden met 'mits'",
           "points": [
-            "Zonder jou is het niet leuk.",
-            "Zonder geld kan ik niets kopen.",
-            "Zonder hulp kan ik het niet doen."
+            "Gebruik 'mits' voor voorwaarden die afhankelijk zijn van een voorwaarde.",
+            "V2-structuur in de hoofdzin.",
+            "Plaats de voorwaarde aan het einde van de zin."
           ],
-          "example": "Zonder water kan ik niet overleven.",
+          "example": "Ik kom, mits je me ophaalt.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "object",
+            "mits",
+            "voorwaarde"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Ik"
+            },
+            {
+              "label": "werkwoord",
+              "text": "kom"
+            },
+            {
+              "label": "object",
+              "text": "mits"
+            },
+            {
+              "label": "mits",
+              "text": "je me ophaalt"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Zonder jou is het niet leuk.",
-              "fix": "Zonder jou is het niet leuk."
+              "wrong": "Ik kom mits je me ophaalt.",
+              "fix": "Ik kom, mits je me ophaalt."
             }
           ]
         }
       ],
       "Voice & Focus": [
         {
-          "title": "Actieve en passieve stem",
+          "title": "Basisstructuur van zinnen",
           "points": [
-            "De actieve stem benadrukt de handelende persoon.",
-            "De passieve stem legt de nadruk op de actie zelf.",
-            "In het Nederlands is de passieve vorm vaak met 'worden' of 'zijn' en het voltooid deelwoord."
+            "De basisstructuur is onderwerp + werkwoord + lijdend voorwerp.",
+            "Gebruik de V2-structuur in hoofdzinnen.",
+            "Zorg ervoor dat het onderwerp altijd voor het werkwoord staat."
           ],
-          "example": "De leraar corrigeert de fouten. (actief) / De fouten worden gecorrigeerd door de leraar. (passief)",
+          "example": "De hond eet de brokken.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "lijdend voorwerp"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "De hond"
+            },
+            {
+              "label": "werkwoord",
+              "text": "eet"
+            },
+            {
+              "label": "lijdend voorwerp",
+              "text": "de brokken"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "De fouten corrigeert door de leraar.",
-              "fix": "De fouten worden gecorrigeerd door de leraar."
+              "wrong": "Eet de hond de brokken.",
+              "fix": "De hond eet de brokken."
             }
           ]
         },
         {
           "title": "Focus op het onderwerp",
           "points": [
-            "Het onderwerp van de zin is vaak het belangrijkste element.",
-            "In het Nederlands kan de volgorde van de zin veranderen voor nadruk.",
-            "De focus kan ook door intonatie worden aangegeven."
+            "Plaats het onderwerp aan het begin voor nadruk.",
+            "Gebruik intonatie om de focus aan te geven.",
+            "Vermijd onnodige herhaling van het onderwerp."
           ],
-          "example": "Johan eet de appel. (focus op Johan) / De appel eet Johan. (focus op de appel)",
+          "example": "De kat, die met de bal speelt, is schattig.",
+          "ruleOrder": [
+            "onderwerp",
+            "bijzin",
+            "werkwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "De kat"
+            },
+            {
+              "label": "bijzin",
+              "text": "die met de bal speelt"
+            },
+            {
+              "label": "werkwoord",
+              "text": "is"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Eet de appel Johan.",
-              "fix": "Johan eet de appel."
+              "wrong": "De kat is schattig die met de bal speelt.",
+              "fix": "De kat, die met de bal speelt, is schattig."
             }
           ]
         },
         {
-          "title": "Inversie bij vragen",
+          "title": "Passieve zinnen",
           "points": [
-            "Bij vragen komt het werkwoord voor het onderwerp.",
-            "Dit is een belangrijke structuur in het Nederlands.",
-            "Inversie kan ook gebruikt worden voor nadruk."
+            "Gebruik de passieve vorm om de actie te benadrukken.",
+            "De focus ligt op de ontvanger van de actie.",
+            "Vermijd passieve constructies als de actieve vorm duidelijker is."
           ],
-          "example": "Eet Johan de appel? (vraag) / Johan eet de appel. (verklaring)",
+          "example": "De brief wordt door de leraar geschreven.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "door + agent"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "De brief"
+            },
+            {
+              "label": "werkwoord",
+              "text": "wordt"
+            },
+            {
+              "label": "door + agent",
+              "text": "door de leraar geschreven"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Johan eet de appel?",
-              "fix": "Eet Johan de appel?"
+              "wrong": "De leraar schrijft de brief.",
+              "fix": "De brief wordt door de leraar geschreven."
             }
           ]
         },
         {
-          "title": "Nadruk met 'zelf'",
+          "title": "Nadruk op tijd",
           "points": [
-            "Het woord 'zelf' kan gebruikt worden om nadruk te leggen.",
-            "Het komt vaak voor in zinnen om de handelende persoon te benadrukken.",
-            "Dit kan ook de betekenis van de zin veranderen."
+            "Plaats tijdsaanduidingen aan het begin voor nadruk.",
+            "Gebruik bijwoorden om de tijd te verduidelijken.",
+            "Vermijd ambiguïteit door tijdsstructuren duidelijk te maken."
           ],
-          "example": "Johan zelf heeft de appel gegeten. (nadruk op Johan) / Johan heeft de appel gegeten.",
+          "example": "Gisteren heeft hij de wedstrijd gewonnen.",
+          "ruleOrder": [
+            "tijd",
+            "onderwerp",
+            "werkwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "tijd",
+              "text": "Gisteren"
+            },
+            {
+              "label": "onderwerp",
+              "text": "hij"
+            },
+            {
+              "label": "werkwoord",
+              "text": "gewonnen"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Zelf heeft Johan de appel gegeten.",
-              "fix": "Johan zelf heeft de appel gegeten."
+              "wrong": "Hij heeft de wedstrijd gisteren gewonnen.",
+              "fix": "Gisteren heeft hij de wedstrijd gewonnen."
             }
           ]
         },
         {
-          "title": "Gebruik van 'doen' voor nadruk",
+          "title": "Complexe zinnen en focus",
           "points": [
-            "'Doen' kan gebruikt worden om een actie te benadrukken.",
-            "Dit geeft extra kracht aan de uitspraak.",
-            "Het is een informele manier om nadruk te leggen."
+            "Gebruik bijwoorden om extra informatie te geven.",
+            "Zorg voor duidelijke verbindingen tussen zinnen.",
+            "Vermijd te lange zinnen die de focus verwateren."
           ],
-          "example": "Johan doet de appel echt eten. (nadruk op de actie) / Johan eet de appel.",
+          "example": "Omdat het regende, bleef hij thuis.",
+          "ruleOrder": [
+            "omdat + bijzin",
+            "onderwerp",
+            "werkwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "omdat + bijzin",
+              "text": "Omdat het regende"
+            },
+            {
+              "label": "onderwerp",
+              "text": "bleef hij"
+            },
+            {
+              "label": "werkwoord",
+              "text": "thuis"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Johan de appel eet echt doen.",
-              "fix": "Johan doet de appel echt eten."
+              "wrong": "Hij bleef thuis omdat het regende.",
+              "fix": "Omdat het regende, bleef hij thuis."
             }
           ]
         }
       ],
       "Modality": [
         {
-          "title": "Mogelijkheid uitdrukken",
+          "title": "Verplichting (Obligation)",
           "points": [
-            "Gebruik 'kunnen' voor mogelijkheid.",
-            "Vermijd het gebruik van 'moeten' voor mogelijkheid.",
-            "Gebruik 'misschien' voor onzekerheid."
+            "Gebruik 'moeten' voor verplichtingen.",
+            "V2-structuur in hoofdzinnen.",
+            "Verplichtingen kunnen ook in de verleden tijd worden uitgedrukt."
           ],
-          "example": "Ik kan morgen komen.",
+          "example": "Je moet je huiswerk maken.",
+          "ruleOrder": [
+            "subject",
+            "moeten",
+            "object"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subject",
+              "text": "Je"
+            },
+            {
+              "label": "moeten",
+              "text": "moet"
+            },
+            {
+              "label": "object",
+              "text": "huiswerk maken"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ik moet morgen komen.",
+              "wrong": "Je moet maken huiswerk.",
+              "fix": "Je moet huiswerk maken."
+            }
+          ]
+        },
+        {
+          "title": "Mogelijkheid (Possibility)",
+          "points": [
+            "Gebruik 'kunnen' voor mogelijkheden.",
+            "V2-structuur in hoofdzinnen.",
+            "Mogelijkheden kunnen ook in de verleden tijd worden uitgedrukt."
+          ],
+          "example": "Ik kan morgen komen.",
+          "ruleOrder": [
+            "subject",
+            "kunnen",
+            "object"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subject",
+              "text": "Ik"
+            },
+            {
+              "label": "kunnen",
+              "text": "kan"
+            },
+            {
+              "label": "object",
+              "text": "morgen komen"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Ik kan komen morgen.",
               "fix": "Ik kan morgen komen."
             }
           ]
         },
         {
-          "title": "Verplichtingen aangeven",
+          "title": "Vermogen (Ability)",
           "points": [
-            "Gebruik 'moeten' voor verplichtingen.",
-            "Vermijd het gebruik van 'kunnen' voor verplichtingen.",
-            "Gebruik 'dienen te' voor formele verplichtingen."
+            "Gebruik 'kunnen' voor vaardigheden.",
+            "V2-structuur in hoofdzinnen.",
+            "Vaardigheden kunnen ook in de verleden tijd worden uitgedrukt."
           ],
-          "example": "Je moet je huiswerk maken.",
+          "example": "Zij kan goed zingen.",
+          "ruleOrder": [
+            "subject",
+            "kunnen",
+            "object"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subject",
+              "text": "Zij"
+            },
+            {
+              "label": "kunnen",
+              "text": "kan"
+            },
+            {
+              "label": "object",
+              "text": "goed zingen"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Je kan je huiswerk maken.",
-              "fix": "Je moet je huiswerk maken."
+              "wrong": "Zij kan zingen goed.",
+              "fix": "Zij kan goed zingen."
             }
           ]
         },
         {
-          "title": "Toestemming vragen",
+          "title": "Zekerheid (Certainty)",
           "points": [
-            "Gebruik 'mogen' voor toestemming.",
-            "Vermijd het gebruik van 'kunnen' voor toestemming.",
-            "Gebruik 'is het goed als' voor informele toestemming."
+            "Gebruik 'zullen' voor toekomstige zekerheid.",
+            "V2-structuur in hoofdzinnen.",
+            "Zekerheid kan ook in de verleden tijd worden uitgedrukt."
           ],
-          "example": "Mag ik je boek lenen?",
+          "example": "Wij zullen winnen.",
+          "ruleOrder": [
+            "subject",
+            "zullen",
+            "object"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subject",
+              "text": "Wij"
+            },
+            {
+              "label": "zullen",
+              "text": "zullen"
+            },
+            {
+              "label": "object",
+              "text": "winnen"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Kan ik je boek lenen?",
-              "fix": "Mag ik je boek lenen?"
+              "wrong": "Wij winnen zullen.",
+              "fix": "Wij zullen winnen."
             }
           ]
         },
         {
-          "title": "Wens uitdrukken",
+          "title": "Sprekerhouding (Speaker Stance)",
           "points": [
-            "Gebruik 'willen' voor wensen.",
-            "Vermijd het gebruik van 'kunnen' voor wensen.",
-            "Gebruik 'ik zou graag' voor beleefde wensen."
+            "Gebruik 'misschien' voor onzekerheid.",
+            "V2-structuur in hoofdzinnen.",
+            "Sprekerhouding kan de betekenis van de zin veranderen."
           ],
-          "example": "Ik wil een nieuwe fiets.",
+          "example": "Misschien ga ik naar het feest.",
+          "ruleOrder": [
+            "adverb",
+            "subject",
+            "verb",
+            "object"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "adverb",
+              "text": "Misschien"
+            },
+            {
+              "label": "subject",
+              "text": "ik"
+            },
+            {
+              "label": "verb",
+              "text": "naar het"
+            },
+            {
+              "label": "object",
+              "text": "feest"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ik kan een nieuwe fiets.",
-              "fix": "Ik wil een nieuwe fiets."
+              "wrong": "Ik ga misschien naar het feest.",
+              "fix": "Misschien ga ik naar het feest."
             }
           ]
         },
         {
-          "title": "Aanbevelingen doen",
+          "title": "Onzekerheid (Uncertainty)",
           "points": [
-            "Gebruik 'zou moeten' voor aanbevelingen.",
-            "Vermijd het gebruik van 'moeten' voor aanbevelingen.",
-            "Gebruik 'het is beter om' voor suggesties."
+            "Gebruik 'mogelijk' voor onzekere situaties.",
+            "V2-structuur in hoofdzinnen.",
+            "Onzekerheid kan ook in de verleden tijd worden uitgedrukt."
           ],
-          "example": "Je zou meer moeten oefenen.",
+          "example": "Het is mogelijk dat hij komt.",
+          "ruleOrder": [
+            "subject",
+            "verb",
+            "object"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subject",
+              "text": "Het"
+            },
+            {
+              "label": "verb",
+              "text": "is"
+            },
+            {
+              "label": "object",
+              "text": "mogelijk dat hij komt"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Je moet meer oefenen.",
-              "fix": "Je zou meer moeten oefenen."
+              "wrong": "Mogelijk dat hij komt is het.",
+              "fix": "Het is mogelijk dat hij komt."
             }
           ]
         },
         {
-          "title": "Onzekerheid uitdrukken",
+          "title": "Verplichte keuze (Mandatory Choice)",
           "points": [
-            "Gebruik 'zou kunnen' voor onzekerheid.",
-            "Vermijd het gebruik van 'moeten' voor onzekerheid.",
-            "Gebruik 'misschien' om twijfel aan te geven."
+            "Gebruik 'moeten' voor keuzes die verplicht zijn.",
+            "V2-structuur in hoofdzinnen.",
+            "Verplichte keuzes kunnen ook in de verleden tijd worden uitgedrukt."
           ],
-          "example": "Het zou kunnen regenen.",
+          "example": "Je moet kiezen tussen de opties.",
+          "ruleOrder": [
+            "subject",
+            "moeten",
+            "verb",
+            "object"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subject",
+              "text": "Je"
+            },
+            {
+              "label": "moeten",
+              "text": "moet"
+            },
+            {
+              "label": "verb",
+              "text": "kiezen"
+            },
+            {
+              "label": "object",
+              "text": "tussen de opties"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Het moet regenen.",
-              "fix": "Het zou kunnen regenen."
+              "wrong": "Je kiezen moet tussen de opties.",
+              "fix": "Je moet kiezen tussen de opties."
             }
           ]
         },
         {
-          "title": "Veronderstellingen maken",
+          "title": "Optionele mogelijkheid (Optional Possibility)",
           "points": [
-            "Gebruik 'zou zijn' voor veronderstellingen.",
-            "Vermijd het gebruik van 'kan zijn' voor veronderstellingen.",
-            "Gebruik 'ik denk dat' voor persoonlijke veronderstellingen."
+            "Gebruik 'kunnen' voor opties die mogelijk zijn.",
+            "V2-structuur in hoofdzinnen.",
+            "Optionele mogelijkheden kunnen ook in de verleden tijd worden uitgedrukt."
           ],
-          "example": "Hij zou ziek kunnen zijn.",
-          "mistakes": [
+          "example": "Je kunt kiezen wat je wilt.",
+          "ruleOrder": [
+            "subject",
+            "kunnen",
+            "verb",
+            "object"
+          ],
+          "exampleHighlights": [
             {
-              "wrong": "Hij kan ziek zijn.",
-              "fix": "Hij zou ziek kunnen zijn."
+              "label": "subject",
+              "text": "Je"
+            },
+            {
+              "label": "kunnen",
+              "text": "kunt"
+            },
+            {
+              "label": "verb",
+              "text": "kiezen"
+            },
+            {
+              "label": "object",
+              "text": "wat je wilt"
             }
-          ]
-        },
-        {
-          "title": "Verlangen uitdrukken",
-          "points": [
-            "Gebruik 'verlangen naar' voor verlangen.",
-            "Vermijd het gebruik van 'willen' voor verlangen.",
-            "Gebruik 'ik hoop' voor hoopvolle verlangens."
           ],
-          "example": "Ik verlang naar vakantie.",
           "mistakes": [
             {
-              "wrong": "Ik wil vakantie.",
-              "fix": "Ik verlang naar vakantie."
+              "wrong": "Je kiezen kunt wat je wilt.",
+              "fix": "Je kunt kiezen wat je wilt."
             }
           ]
         }
       ],
       "Reported Speech": [
         {
-          "title": "Directe Rede naar Indirecte Rede",
+          "title": "Directe Citaat",
           "points": [
-            "Gebruik 'dat' om de zin te introduceren.",
-            "Verander de werkwoordstijd indien nodig.",
-            "Pas de persoonlijke voornaamwoorden aan."
+            "Gebruik aanhalingstekens voor directe citaten.",
+            "Volg de volgorde van de woorden in de originele zin.",
+            "Directe citaten behouden de oorspronkelijke tijd."
           ],
-          "example": "Hij zei dat hij morgen zou komen.",
+          "example": "Hij zei: 'Ik ga naar de winkel.'",
+          "ruleOrder": [
+            "onderwerp",
+            "zei",
+            "aanhaling",
+            "inhoud"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Hij"
+            },
+            {
+              "label": "zei",
+              "text": "zei"
+            },
+            {
+              "label": "aanhaling",
+              "text": "naar de"
+            },
+            {
+              "label": "inhoud",
+              "text": "winkel"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Hij zei hij komt morgen.",
-              "fix": "Hij zei dat hij morgen zou komen."
+              "wrong": "Hij zei 'Ik ga naar de winkel.'",
+              "fix": "Hij zei: 'Ik ga naar de winkel.'"
             }
           ]
         },
         {
-          "title": "Vragen in de Gerapporteerde Rede",
+          "title": "Indirecte Citaat",
           "points": [
-            "Gebruik 'of' voor ja/nee vragen.",
-            "Voor vraagwoorden, behoud het vraagwoord.",
-            "Verander de volgorde van de zinnen."
+            "Gebruik een complementizer zoals 'dat'.",
+            "Pas de tijdsvorm aan indien nodig.",
+            "Houd de volgorde van de zin aan."
           ],
-          "example": "Zij vroeg of ik naar het feest ging.",
+          "example": "Hij zei dat hij naar de winkel ging.",
+          "ruleOrder": [
+            "onderwerp",
+            "zei",
+            "dat",
+            "ging"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Hij"
+            },
+            {
+              "label": "zei",
+              "text": "zei"
+            },
+            {
+              "label": "dat",
+              "text": "dat"
+            },
+            {
+              "label": "ging",
+              "text": "ging"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Zij vroeg ga jij naar het feest?",
-              "fix": "Zij vroeg of ik naar het feest ging."
+              "wrong": "Hij zei dat hij naar de winkel gaat.",
+              "fix": "Hij zei dat hij naar de winkel ging."
             }
           ]
         },
         {
-          "title": "Bevelen in de Gerapporteerde Rede",
+          "title": "Tijdsvormverandering",
           "points": [
-            "Gebruik 'te' voor bevelen.",
-            "Verander de zinstructuur.",
-            "Pas de tijd aan indien nodig."
+            "Verander de tegenwoordige tijd naar de verleden tijd.",
+            "Verander de toekomstige tijd naar de verleden tijd.",
+            "Pas de tijd aan op basis van de context."
           ],
-          "example": "Hij vroeg me om te helpen.",
+          "example": "Zij zegt dat ze morgen komt.",
+          "ruleOrder": [
+            "onderwerp",
+            "zegt",
+            "dat",
+            "kwam"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Zij"
+            },
+            {
+              "label": "zegt",
+              "text": "zegt"
+            },
+            {
+              "label": "dat",
+              "text": "dat"
+            },
+            {
+              "label": "kwam",
+              "text": "ze"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Hij zei help mij.",
-              "fix": "Hij vroeg me om te helpen."
+              "wrong": "Zij zegt dat ze morgen zal komen.",
+              "fix": "Zij zei dat ze morgen kwam."
             }
           ]
         },
         {
-          "title": "Tijdsaanduidingen in de Gerapporteerde Rede",
+          "title": "Veranderde Voornaamwoorden",
           "points": [
-            "Pas tijdsaanduidingen aan.",
-            "Gebruik de juiste tijdsvorm.",
-            "Verander de context indien nodig."
+            "Pas voornaamwoorden aan op basis van de spreker.",
+            "Gebruik de juiste vorm afhankelijk van de context.",
+            "Let op de verschillen tussen direct en indirect."
           ],
-          "example": "Ze zei dat ze gisteren was gekomen.",
+          "example": "Hij zei dat ik het moest doen.",
+          "ruleOrder": [
+            "onderwerp",
+            "zei",
+            "dat",
+            "ik",
+            "moest",
+            "doen"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Hij"
+            },
+            {
+              "label": "zei",
+              "text": "zei"
+            },
+            {
+              "label": "dat",
+              "text": "dat"
+            },
+            {
+              "label": "ik",
+              "text": "ik"
+            },
+            {
+              "label": "moest",
+              "text": "moest"
+            },
+            {
+              "label": "doen",
+              "text": "doen"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ze zei dat ze komt gisteren.",
-              "fix": "Ze zei dat ze gisteren was gekomen."
+              "wrong": "Hij zei dat jij het moest doen.",
+              "fix": "Hij zei dat ik het moest doen."
             }
           ]
         },
         {
-          "title": "Indirecte Rede met 'zeggen' en 'vragen'",
+          "title": "Gebruik van Quotatieven",
           "points": [
-            "Gebruik 'zeggen' voor mededelingen.",
-            "Gebruik 'vragen' voor vragen.",
-            "Pas de structuur aan voor duidelijkheid."
+            "Gebruik 'dat' voor indirecte citaten.",
+            "Gebruik 'zoals' voor vergelijkingen.",
+            "Vermijd overbodige woorden."
           ],
-          "example": "Hij zegt dat hij het boek heeft gelezen.",
+          "example": "Hij zei dat het regende.",
+          "ruleOrder": [
+            "onderwerp",
+            "zei",
+            "dat",
+            "regende"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Hij"
+            },
+            {
+              "label": "zei",
+              "text": "zei"
+            },
+            {
+              "label": "dat",
+              "text": "dat"
+            },
+            {
+              "label": "regende",
+              "text": "regende"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Hij zegt hij heeft het boek gelezen.",
-              "fix": "Hij zegt dat hij het boek heeft gelezen."
+              "wrong": "Hij zei zoals het regende.",
+              "fix": "Hij zei dat het regende."
             }
           ]
         },
         {
-          "title": "Complexe Zinnen in de Gerapporteerde Rede",
+          "title": "Complexe Zinnen",
           "points": [
-            "Combineer zinnen voor meer complexiteit.",
-            "Gebruik verbindingswoorden.",
-            "Zorg voor logische volgorde."
+            "Gebruik meerdere zinnen voor complexiteit.",
+            "Zorg voor duidelijke verwijzingen.",
+            "Houd de volgorde van de zinnen logisch."
           ],
-          "example": "Ze vertelde dat ze het examen had gehaald omdat ze hard had gestudeerd.",
+          "example": "Hij zei dat ze, als het regende, niet zouden komen.",
+          "ruleOrder": [
+            "onderwerp",
+            "zei",
+            "dat",
+            "als",
+            "het"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Hij"
+            },
+            {
+              "label": "zei",
+              "text": "zei"
+            },
+            {
+              "label": "dat",
+              "text": "dat"
+            },
+            {
+              "label": "als",
+              "text": "als"
+            },
+            {
+              "label": "het",
+              "text": "het"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ze vertelde ze heeft examen gehaald omdat ze studeerde.",
-              "fix": "Ze vertelde dat ze het examen had gehaald omdat ze hard had gestudeerd."
+              "wrong": "Hij zei dat ze niet komen als het regende.",
+              "fix": "Hij zei dat ze, als het regende, niet zouden komen."
             }
           ]
         }
       ],
       "Formality & Style": [
         {
-          "title": "Formele vs. informele aanspreekvormen",
+          "title": "Informele Groeten",
           "points": [
-            "Gebruik 'u' in formele situaties.",
-            "Gebruik 'je' of 'jij' in informele situaties.",
-            "Wees bewust van de context en de relatie."
+            "Gebruik 'je' voor informele interacties.",
+            "Veel gebruikt onder vrienden en leeftijdsgenoten.",
+            "Voorbeeld: 'Hoe gaat het?'"
           ],
-          "example": "U heeft een mooie presentatie gegeven.",
+          "example": "Hey, hoe gaat het?",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "object"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Hey"
+            },
+            {
+              "label": "werkwoord",
+              "text": "gaat"
+            },
+            {
+              "label": "object",
+              "text": "het"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Je heeft een mooie presentatie gegeven.",
-              "fix": "U heeft een mooie presentatie gegeven."
+              "wrong": "Hoe gaat U?",
+              "fix": "Hoe gaat het?"
             }
           ]
         },
         {
-          "title": "Gebruik van 'u' in zakelijke communicatie",
+          "title": "Formele Groeten",
           "points": [
-            "Altijd 'u' gebruiken in e-mails naar onbekenden.",
-            "Vermijd 'je' in professionele correspondentie.",
-            "Respect tonen door formele aanspreekvormen."
+            "Gebruik 'U' voor formele situaties.",
+            "Geschikt in professionele omgevingen.",
+            "Voorbeeld: 'Hoe gaat het met u?'"
           ],
-          "example": "Ik waardeer uw feedback.",
+          "example": "Goedemiddag, hoe gaat het met u?",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "object"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Goedemiddag"
+            },
+            {
+              "label": "werkwoord",
+              "text": "gaat"
+            },
+            {
+              "label": "object",
+              "text": "het"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ik waardeer je feedback.",
-              "fix": "Ik waardeer uw feedback."
+              "wrong": "Hoe gaat het met je?",
+              "fix": "Hoe gaat het met u?"
             }
           ]
         },
         {
-          "title": "Informele afsluitingen",
+          "title": "Beleefde Verzoeken",
           "points": [
-            "Gebruik 'Met vriendelijke groet' in formele e-mails.",
-            "Gebruik 'Groetjes' in informele e-mails.",
-            "Afsluitingen moeten passen bij de relatie."
+            "Gebruik 'zou u' voor beleefde verzoeken.",
+            "Verzacht het verzoek, waardoor het formeler klinkt.",
+            "Voorbeeld: 'Zou u mij kunnen helpen?'"
           ],
-          "example": "Met vriendelijke groet, Jan.",
+          "example": "Zou u mij kunnen helpen, alstublieft?",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "object"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "u"
+            },
+            {
+              "label": "werkwoord",
+              "text": "helpen"
+            },
+            {
+              "label": "object",
+              "text": "alstublieft"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Kun je mij helpen?",
+              "fix": "Zou u mij kunnen helpen?"
+            }
+          ]
+        },
+        {
+          "title": "Informele Afscheid",
+          "points": [
+            "Gebruik 'doei' voor informele afscheid.",
+            "Veel gebruikt onder vrienden en familie.",
+            "Voorbeeld: 'Doei, tot ziens!'"
+          ],
+          "example": "Doei, tot de volgende keer!",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "object"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Doei"
+            },
+            {
+              "label": "werkwoord",
+              "text": "tot"
+            },
+            {
+              "label": "object",
+              "text": "de volgende keer"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Tot ziens, U!",
+              "fix": "Doei, tot de volgende keer!"
+            }
+          ]
+        },
+        {
+          "title": "Formele Afscheid",
+          "points": [
+            "Gebruik 'met vriendelijke groet' voor formele afscheid.",
+            "Geschikt in zakelijke correspondentie.",
+            "Voorbeeld: 'Met vriendelijke groet, Jan.'"
+          ],
+          "example": "Met vriendelijke groet, mevrouw Jansen.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "object"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "groet"
+            },
+            {
+              "label": "werkwoord",
+              "text": "mevrouw Jansen"
+            }
+          ],
           "mistakes": [
             {
               "wrong": "Groetjes, Jan.",
@@ -10538,214 +12587,408 @@
           ]
         },
         {
-          "title": "Formele zinsstructuren",
+          "title": "Dankbaarheid Uitdrukken",
           "points": [
-            "Gebruik de lijdende vorm voor formaliteit.",
-            "Vermijd spreektaal in officiële documenten.",
-            "Zorg voor een duidelijke en nette formulering."
+            "Gebruik 'dank u' voor formele dank.",
+            "Toont respect in formele contexten.",
+            "Voorbeeld: 'Dank u voor uw hulp.'"
           ],
-          "example": "De beslissing is genomen door de commissie.",
+          "example": "Dank u voor uw tijd en aandacht.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "object"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "u"
+            },
+            {
+              "label": "werkwoord",
+              "text": "voor uw tijd"
+            },
+            {
+              "label": "object",
+              "text": "aandacht"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "De commissie heeft de beslissing genomen.",
-              "fix": "De beslissing is genomen door de commissie."
+              "wrong": "Dank je voor je hulp.",
+              "fix": "Dank u voor uw hulp."
             }
           ]
         },
         {
-          "title": "Vermijden van afkortingen in formele teksten",
+          "title": "Informele Complimenten",
           "points": [
-            "Schrijf volledige woorden in formele communicatie.",
-            "Afkortingen kunnen onduidelijk zijn.",
-            "Zorg voor helderheid en professionaliteit."
+            "Gebruik 'je' voor informele complimenten.",
+            "Veel gebruikt onder vrienden en leeftijdsgenoten.",
+            "Voorbeeld: 'Je ziet er goed uit!'"
           ],
-          "example": "Dit is een belangrijk document.",
-          "mistakes": [
+          "example": "Je hebt een mooie jurk aan!",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "object"
+          ],
+          "exampleHighlights": [
             {
-              "wrong": "Dit is een belangrijk doc.",
-              "fix": "Dit is een belangrijk document."
+              "label": "onderwerp",
+              "text": "hebt"
+            },
+            {
+              "label": "werkwoord",
+              "text": "een mooie jurk"
+            },
+            {
+              "label": "object",
+              "text": "aan"
             }
-          ]
-        },
-        {
-          "title": "Gebruik van passieve constructies",
-          "points": [
-            "Passieve zinnen zijn vaak formeler.",
-            "Vermijd overmatig gebruik in informele teksten.",
-            "Zorg voor variatie in zinsstructuren."
           ],
-          "example": "Het rapport is goedgekeurd door de manager.",
           "mistakes": [
             {
-              "wrong": "De manager heeft het rapport goedgekeurd.",
-              "fix": "Het rapport is goedgekeurd door de manager."
-            }
-          ]
-        },
-        {
-          "title": "Formele en informele woordkeuze",
-          "points": [
-            "Kies woorden die passen bij de context.",
-            "Vermijd jargon in formele communicatie.",
-            "Gebruik eenvoudige taal voor helderheid."
-          ],
-          "example": "Dit is een uitstekende gelegenheid.",
-          "mistakes": [
-            {
-              "wrong": "Dit is een toffe kans.",
-              "fix": "Dit is een uitstekende gelegenheid."
+              "wrong": "U ziet er goed uit!",
+              "fix": "Je ziet er goed uit!"
             }
           ]
         }
       ],
       "Discourse & Flow": [
         {
-          "title": "Gebruik van verbindingswoorden",
+          "title": "Cohesieve Apparaten",
           "points": [
-            "Verbindingen maken tussen zinnen.",
-            "Het verbeteren van de leesbaarheid.",
-            "Het creëren van een vloeiende tekst."
+            "Gebruik van verbindingswoorden om zinnen te koppelen.",
+            "Versterkt de samenhang in teksten.",
+            "Voorbeelden zijn 'en', 'maar', 'omdat'."
           ],
-          "example": "Ik ga naar de winkel. Ik koop melk.",
+          "example": "Ik ga naar de winkel, omdat ik melk nodig heb.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "voorwerp"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Ik"
+            },
+            {
+              "label": "werkwoord",
+              "text": "ga"
+            },
+            {
+              "label": "voorwerp",
+              "text": "naar de winkel"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ik ga naar de winkel en ik koop melk.",
-              "fix": "Ik ga naar de winkel om melk te kopen."
+              "wrong": "Ik ga naar de winkel omdat melk nodig heb.",
+              "fix": "Ik ga naar de winkel omdat ik melk nodig heb."
             }
           ]
         },
         {
-          "title": "Zinsstructuur bij opsommingen",
+          "title": "Informatiedoorstroming",
           "points": [
-            "Duidelijke opsommingen maken.",
-            "Gebruik van komma's en 'en'.",
-            "Vermijden van verwarring."
+            "Gebruik van verwijzende woorden om informatie door te geven.",
+            "Helpt om herhaling te vermijden.",
+            "Voorbeelden zijn 'dit', 'dat', 'deze'."
           ],
-          "example": "Ik heb appels, peren en bananen gekocht.",
+          "example": "Dit boek is interessant, maar dat is saai.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "voorwerp"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Dit boek"
+            },
+            {
+              "label": "werkwoord",
+              "text": "is"
+            },
+            {
+              "label": "voorwerp",
+              "text": "interessant"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ik heb appels peren en bananen gekocht.",
-              "fix": "Ik heb appels, peren en bananen gekocht."
+              "wrong": "Dit boek is interessant maar dat saai is.",
+              "fix": "Dit boek is interessant, maar dat is saai."
             }
           ]
         },
         {
-          "title": "Tijdsaanduidingen in zinnen",
+          "title": "Tijdsaanduidingen",
           "points": [
-            "Tijdsaanduidingen correct plaatsen.",
-            "Vermijden van ambiguïteit.",
-            "Duidelijkheid in tijdsverloop."
+            "Gebruik van tijdsaanduidingen voor chronologische volgorde.",
+            "Versterkt de logica in de tekst.",
+            "Voorbeelden zijn 'eerder', 'later', 'toen'."
           ],
-          "example": "Gisteren heb ik een boek gelezen.",
+          "example": "Later ga ik naar het feest.",
+          "ruleOrder": [
+            "bijwoord",
+            "onderwerp",
+            "werkwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "bijwoord",
+              "text": "Later"
+            },
+            {
+              "label": "onderwerp",
+              "text": "ik"
+            },
+            {
+              "label": "werkwoord",
+              "text": "het feest"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ik heb gisteren een boek gelezen.",
-              "fix": "Gisteren heb ik een boek gelezen."
+              "wrong": "Ik ga later naar het feest.",
+              "fix": "Later ga ik naar het feest."
             }
           ]
         },
         {
-          "title": "Gebruik van bijwoorden",
+          "title": "Contrastieve Structuren",
           "points": [
-            "Bijwoorden correct positioneren.",
-            "Het versterken van de betekenis.",
-            "Vermijden van onduidelijkheid."
+            "Gebruik van contrast om verschillen aan te geven.",
+            "Helpt bij het verduidelijken van standpunten.",
+            "Voorbeelden zijn 'aan de andere kant', 'terwijl'."
           ],
-          "example": "Hij loopt snel.",
+          "example": "Aan de andere kant is het ook duur.",
+          "ruleOrder": [
+            "bijwoord",
+            "onderwerp",
+            "werkwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "bijwoord",
+              "text": "Aan de andere kant"
+            },
+            {
+              "label": "onderwerp",
+              "text": "het"
+            },
+            {
+              "label": "werkwoord",
+              "text": "ook duur"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Hij snel loopt.",
-              "fix": "Hij loopt snel."
+              "wrong": "Het is ook duur aan de andere kant.",
+              "fix": "Aan de andere kant is het ook duur."
             }
           ]
         },
         {
-          "title": "Indirecte rede",
+          "title": "Voorwaardelijke Zinnen",
           "points": [
-            "Correcte formulering van indirecte rede.",
-            "Vermijden van directe citaten.",
-            "Duidelijkheid in communicatie."
+            "Gebruik van voorwaardelijke structuren voor hypothetische situaties.",
+            "Versterkt de argumentatie.",
+            "Voorbeelden zijn 'als', 'indien'."
           ],
-          "example": "Hij zei dat hij morgen komt.",
+          "example": "Als het regent, blijf ik thuis.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "voorwerp"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "ik"
+            },
+            {
+              "label": "werkwoord",
+              "text": "thuis"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Hij zei hij komt morgen.",
-              "fix": "Hij zei dat hij morgen komt."
+              "wrong": "Ik blijf thuis als het regent.",
+              "fix": "Als het regent, blijf ik thuis."
             }
           ]
         },
         {
-          "title": "Gebruik van voegwoorden",
+          "title": "Samenvattende Structuren",
           "points": [
-            "Voegwoorden voor complexere zinnen.",
-            "Vermijden van fragmenten.",
-            "Verbindingen tussen ideeën."
+            "Gebruik van samenvattende woorden voor overzicht.",
+            "Helpt bij het afsluiten van ideeën.",
+            "Voorbeelden zijn 'samengevat', 'kortom'."
           ],
-          "example": "Ik ga naar het feest omdat ik vrienden wil zien.",
+          "example": "Kortom, we moeten harder werken.",
+          "ruleOrder": [
+            "bijwoord",
+            "onderwerp",
+            "werkwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "bijwoord",
+              "text": "Kortom"
+            },
+            {
+              "label": "onderwerp",
+              "text": "we"
+            },
+            {
+              "label": "werkwoord",
+              "text": "moeten"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ik ga naar het feest ik wil vrienden zien.",
-              "fix": "Ik ga naar het feest omdat ik vrienden wil zien."
+              "wrong": "We moeten harder werken kortom.",
+              "fix": "Kortom, we moeten harder werken."
             }
           ]
         },
         {
-          "title": "Zinsafsluitingen",
+          "title": "Verduidelijkende Zinnen",
           "points": [
-            "Correcte afsluiting van zinnen.",
-            "Vermijden van onafgebroken zinnen.",
-            "Duidelijkheid in boodschap."
+            "Gebruik van verduidelijkende woorden om uitleg te geven.",
+            "Versterkt de helderheid van de boodschap.",
+            "Voorbeelden zijn 'namelijk', 'dat wil zeggen'."
           ],
-          "example": "Dat was een interessante film.",
+          "example": "Dat wil zeggen, we hebben meer tijd nodig.",
+          "ruleOrder": [
+            "bijwoord",
+            "onderwerp",
+            "werkwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "bijwoord",
+              "text": "Dat wil zeggen"
+            },
+            {
+              "label": "onderwerp",
+              "text": "we"
+            },
+            {
+              "label": "werkwoord",
+              "text": "hebben"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Dat was een interessante film",
-              "fix": "Dat was een interessante film."
+              "wrong": "We hebben meer tijd nodig dat wil zeggen.",
+              "fix": "Dat wil zeggen, we hebben meer tijd nodig."
             }
           ]
         },
         {
-          "title": "Gebruik van de verleden tijd",
+          "title": "Tegenstellende Structuren",
           "points": [
-            "Verleden tijd correct toepassen.",
-            "Vermijden van tijdsconflicten.",
-            "Duidelijkheid in narratief."
+            "Gebruik van tegenstellende woorden voor contrast.",
+            "Helpt bij het benadrukken van verschillen.",
+            "Voorbeelden zijn 'maar', 'echter'."
           ],
-          "example": "Hij speelde gitaar tijdens het feest.",
+          "example": "Ik wil gaan, maar ik heb geen tijd.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "voorwerp"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Ik"
+            },
+            {
+              "label": "werkwoord",
+              "text": "wil"
+            },
+            {
+              "label": "voorwerp",
+              "text": "gaan"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Hij speelt gitaar tijdens het feest.",
-              "fix": "Hij speelde gitaar tijdens het feest."
+              "wrong": "Ik wil gaan maar heb geen tijd.",
+              "fix": "Ik wil gaan, maar ik heb geen tijd."
             }
           ]
         },
         {
-          "title": "Vragende zinnen",
+          "title": "Conclusieve Structuren",
           "points": [
-            "Correcte formulering van vragen.",
-            "Vermijden van onduidelijkheid.",
-            "Duidelijkheid in communicatie."
+            "Gebruik van conclusieve woorden om een punt te maken.",
+            "Helpt bij het afronden van een argument.",
+            "Voorbeelden zijn 'dus', 'daarom'."
           ],
-          "example": "Kom je naar het feestje?",
+          "example": "Dus moeten we nu beslissen.",
+          "ruleOrder": [
+            "bijwoord",
+            "onderwerp",
+            "werkwoord"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "bijwoord",
+              "text": "Dus"
+            },
+            {
+              "label": "onderwerp",
+              "text": "we"
+            },
+            {
+              "label": "werkwoord",
+              "text": "beslissen"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Kom je naar het feestje",
-              "fix": "Kom je naar het feestje?"
+              "wrong": "We moeten nu beslissen dus.",
+              "fix": "Dus moeten we nu beslissen."
             }
           ]
         },
         {
-          "title": "Gebruik van negaties",
+          "title": "Vergelijkende Structuren",
           "points": [
-            "Negaties correct toepassen.",
-            "Vermijden van dubbele negaties.",
-            "Duidelijkheid in boodschap."
+            "Gebruik van vergelijkende woorden om overeenkomsten aan te geven.",
+            "Helpt bij het maken van vergelijkingen.",
+            "Voorbeelden zijn 'zoals', 'evenals'."
           ],
-          "example": "Ik heb niets gezien.",
+          "example": "Hij is sterk zoals een leeuw.",
+          "ruleOrder": [
+            "onderwerp",
+            "werkwoord",
+            "voorwerp"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "onderwerp",
+              "text": "Hij"
+            },
+            {
+              "label": "werkwoord",
+              "text": "is"
+            },
+            {
+              "label": "voorwerp",
+              "text": "sterk"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ik heb niet gezien niets.",
-              "fix": "Ik heb niets gezien."
+              "wrong": "Hij is sterk zoals een leeuw is.",
+              "fix": "Hij is sterk zoals een leeuw."
             }
           ]
         }
@@ -10760,13 +13003,13 @@
       "Modifiers": "Modificatoren",
       "Questions": "Vragen",
       "Negation": "Negatie",
-      "Connections": "Verbverbindingen",
+      "Connections": "Verbondenheid",
       "Conditions": "Voorwaarden",
       "Voice & Focus": "Stem & Focus",
-      "Modality": "Modaliteit",
-      "Reported Speech": "Gerapporteerde Rede",
-      "Formality & Style": "Formality & Stijl",
-      "Discourse & Flow": "Discours & Stroom"
+      "Modality": "Modale Werkwoorden",
+      "Reported Speech": "Gerapporteerde Spraak",
+      "Formality & Style": "Formele en Informele Stijl",
+      "Discourse & Flow": "Discours en Stroom"
     }
   },
   "worldSource": {

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-18T00:28:45.240Z",
+  "generatedAt": "2026-02-18T15:18:51.815Z",
   "worldLanguage": "spanish",
   "baseLanguages": [
     "albanian",
@@ -7348,6 +7348,25 @@
           "english": "degree"
         }
       }
+    },
+    "sectionLabels": {
+      "Greetings": "Saludos",
+      "Pronouns": "Pronombres",
+      "Verbs & Tenses": "Verbos y Tiempos",
+      "Questions & Connectors": "Preguntas y Conectores",
+      "Numbers & Counting": "Números y Conteo",
+      "Time, Date & Frequency": "Tiempo, Fecha y Frecuencia",
+      "Descriptions & Adjectives": "Descripciones y Adjetivos",
+      "Opinions & Preferences": "Opiniones y Preferencias",
+      "Weather & Seasons": "Clima y Estaciones",
+      "Places & Directions": "Lugares y Direcciones",
+      "countries": "países",
+      "Feelings & States": "Sentimientos y Estados",
+      "Family & Relationships": "Familia y Relaciones",
+      "Food & Eating": "Comida y Comedor",
+      "Health & Body": "Salud y Cuerpo",
+      "Technology & Communication": "Tecnología y Comunicación",
+      "Work & School": "Trabajo y Escuela"
     }
   },
   "phrases": {
@@ -7628,18 +7647,21 @@
       },
       "estoy aprendiendo español": {
         "source": "i am learning spanish",
+        "intent": "learn_world_language",
         "translations": {
           "english": "i am learning spanish"
         }
       },
       "hablo español": {
         "source": "i speak spanish",
+        "intent": "speak_world_language",
         "translations": {
           "english": "i speak spanish"
         }
       },
       "no hablo español": {
         "source": "i do not speak spanish",
+        "intent": "not_speak_world_language",
         "translations": {
           "english": "i do not speak spanish"
         }
@@ -7776,6 +7798,7 @@
       },
       "¿hablas español?": {
         "source": "do you speak spanish",
+        "intent": "ask_speak_world_language",
         "translations": {
           "english": "do you speak spanish"
         }
@@ -9215,169 +9238,373 @@
     "cards": {
       "Sentence Structure": [
         {
-          "title": "Orden Canónico de la Oración",
+          "title": "Orden básico de la oración",
           "points": [
-            "El sujeto generalmente precede al verbo.",
-            "El complemento directo sigue al verbo.",
-            "Ejemplo: 'Juan come manzanas.'"
+            "La estructura básica de la oración en español es Sujeto + Verbo + Objeto.",
+            "Este orden es el más común en la comunicación diaria.",
+            "Se puede cambiar el orden para enfatizar diferentes partes de la oración."
           ],
-          "example": "María estudia español.",
+          "example": "Juan come manzanas.",
+          "ruleOrder": [
+            "Sujeto",
+            "Verbo",
+            "Objeto"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Sujeto",
+              "text": "Juan"
+            },
+            {
+              "label": "Verbo",
+              "text": "come"
+            },
+            {
+              "label": "Objeto",
+              "text": "manzanas"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Estudia María español.",
-              "fix": "María estudia español."
+              "wrong": "Come Juan manzanas.",
+              "fix": "Juan come manzanas."
             }
           ]
         },
         {
-          "title": "Uso de Adjetivos",
+          "title": "Flexibilidad del Orden",
           "points": [
-            "Los adjetivos suelen ir después del sustantivo.",
-            "Pueden preceder al sustantivo para enfatizar.",
-            "Ejemplo: 'La casa grande es hermosa.'"
+            "El español permite cambiar el orden de los elementos para dar énfasis.",
+            "El contexto puede determinar el orden más natural.",
+            "Es común omitir el sujeto si es claro por el verbo."
           ],
-          "example": "El coche rojo es rápido.",
+          "example": "Comen los niños manzanas.",
+          "ruleOrder": [
+            "Verbo",
+            "Sujeto",
+            "Objeto"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Verbo",
+              "text": "Comen"
+            },
+            {
+              "label": "Sujeto",
+              "text": "los niños"
+            },
+            {
+              "label": "Objeto",
+              "text": "manzanas"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Rojo coche es rápido.",
-              "fix": "El coche rojo es rápido."
+              "wrong": "Los niños manzanas comen.",
+              "fix": "Comen los niños manzanas."
             }
           ]
         },
         {
-          "title": "Formación de Oraciones Interrogativas",
+          "title": "Uso de Pronombres",
           "points": [
-            "Las preguntas suelen comenzar con un pronombre interrogativo.",
-            "El verbo puede preceder al sujeto.",
-            "Ejemplo: '¿Dónde está el libro?'"
+            "Los pronombres pueden ser omitidos en español (pro-drop).",
+            "Es importante saber cuándo es necesario incluir el pronombre.",
+            "La omisión del pronombre puede hacer la oración más fluida."
           ],
-          "example": "¿Cuándo vamos al cine?",
+          "example": "Voy al mercado.",
+          "ruleOrder": [
+            "Verbo",
+            "Objeto"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Verbo",
+              "text": "Voy"
+            },
+            {
+              "label": "Objeto",
+              "text": "al mercado"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "¿Vamos al cine cuándo?",
-              "fix": "¿Cuándo vamos al cine?"
+              "wrong": "Yo voy al mercado.",
+              "fix": "Voy al mercado."
             }
           ]
         },
         {
-          "title": "Uso de Pronombres Relativos",
+          "title": "Artículos Definidos e Indefinidos",
           "points": [
-            "Los pronombres relativos conectan cláusulas.",
-            "El más común es 'que'.",
-            "Ejemplo: 'El libro que leí es interesante.'"
+            "Los artículos definen la especificidad del sustantivo.",
+            "El uso correcto de 'el', 'la', 'un', 'una' es crucial.",
+            "Los artículos pueden cambiar el significado de la oración."
           ],
-          "example": "La chica que canta es mi hermana.",
+          "example": "La casa es grande.",
+          "ruleOrder": [
+            "Artículo",
+            "Sustantivo",
+            "Verbo",
+            "Adjetivo"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Artículo",
+              "text": "La"
+            },
+            {
+              "label": "Sustantivo",
+              "text": "casa"
+            },
+            {
+              "label": "Verbo",
+              "text": "es"
+            },
+            {
+              "label": "Adjetivo",
+              "text": "grande"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "La chica, que canta, es mi hermana.",
-              "fix": "La chica que canta es mi hermana."
+              "wrong": "Casa es grande.",
+              "fix": "La casa es grande."
             }
           ]
         },
         {
-          "title": "Estructuras de Oraciones Complejas",
+          "title": "Distinción de Formalidad",
           "points": [
-            "Las oraciones complejas incluyen cláusulas independientes y dependientes.",
-            "El uso de conectores es clave para la fluidez.",
-            "Ejemplo: 'Aunque estaba cansado, fui a la fiesta.'"
+            "El uso de 'tú' y 'usted' marca la formalidad en la conversación.",
+            "Es importante elegir el pronombre correcto según el contexto.",
+            "La elección del pronombre puede afectar la percepción del hablante."
           ],
-          "example": "Si estudias, aprobarás el examen.",
+          "example": "¿Tú quieres comer?",
+          "ruleOrder": [
+            "Pronombre",
+            "Verbo",
+            "Objeto"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Pronombre",
+              "text": "Tú"
+            },
+            {
+              "label": "Verbo",
+              "text": "quieres"
+            },
+            {
+              "label": "Objeto",
+              "text": "comer"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Si estudias aprobarás el examen.",
-              "fix": "Si estudias, aprobarás el examen."
+              "wrong": "¿Usted quiere comer?",
+              "fix": "¿Tú quieres comer?"
             }
           ]
         }
       ],
       "Verbs": [
         {
-          "title": "Presente de Indicativo",
+          "title": "Presente de indicativo",
           "points": [
-            "Se utiliza para expresar acciones habituales y verdades generales.",
-            "Las terminaciones varían según la conjugación: -ar, -er, -ir.",
-            "La primera persona singular termina en -o."
+            "Uso del presente para acciones habituales.",
+            "Conjugación regular e irregular.",
+            "Importancia del sujeto en la oración."
           ],
-          "example": "Yo hablo español todos los días.",
+          "example": "Yo como manzanas todos los días.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "objeto"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Yo"
+            },
+            {
+              "label": "verbo",
+              "text": "como"
+            },
+            {
+              "label": "objeto",
+              "text": "manzanas"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Yo habla español todos los días.",
-              "fix": "Yo hablo español todos los días."
+              "wrong": "Yo come manzanas.",
+              "fix": "Yo como manzanas."
             }
           ]
         },
         {
-          "title": "Pretérito Perfecto Compuesto",
+          "title": "Pretérito perfecto",
           "points": [
-            "Se usa para acciones completadas en el pasado reciente.",
-            "Se forma con el verbo auxiliar 'haber' y el participio pasado.",
-            "El participio pasado de 'hablar' es 'hablado'."
+            "Uso del pretérito perfecto para acciones pasadas recientes.",
+            "Uso del auxiliar 'haber'.",
+            "Concordancia entre sujeto y participio."
           ],
-          "example": "He hablado con ella sobre el proyecto.",
+          "example": "He comido manzanas hoy.",
+          "ruleOrder": [
+            "sujeto",
+            "auxiliar",
+            "participio"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "He"
+            },
+            {
+              "label": "auxiliar",
+              "text": "comido"
+            },
+            {
+              "label": "participio",
+              "text": "manzanas"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "He habla con ella sobre el proyecto.",
-              "fix": "He hablado con ella sobre el proyecto."
+              "wrong": "He comer manzanas hoy.",
+              "fix": "He comido manzanas hoy."
             }
           ]
         },
         {
-          "title": "Futuro Simple",
+          "title": "Futuro simple",
           "points": [
-            "Indica acciones que ocurrirán en el futuro.",
-            "Se forma añadiendo terminaciones al infinitivo.",
-            "Las terminaciones son: -é, -ás, -á, -emos, -éis, -án."
+            "Formación del futuro simple con terminaciones específicas.",
+            "Uso para expresar acciones futuras.",
+            "Importancia de la claridad temporal."
           ],
-          "example": "Mañana comeré en un restaurante.",
+          "example": "Mañana comeré manzanas.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "objeto"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Mañana"
+            },
+            {
+              "label": "verbo",
+              "text": "comeré"
+            },
+            {
+              "label": "objeto",
+              "text": "manzanas"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Mañana comeré en un restaurante.",
-              "fix": "Mañana comeré en un restaurante."
+              "wrong": "Mañana come manzanas.",
+              "fix": "Mañana comeré manzanas."
             }
           ]
         },
         {
-          "title": "Condicional Simple",
+          "title": "Condicional simple",
           "points": [
-            "Se utiliza para expresar acciones hipotéticas o deseos.",
-            "Se forma añadiendo terminaciones al infinitivo.",
-            "Las terminaciones son: -ía, -ías, -ía, -íamos, -íais, -ían."
+            "Uso del condicional para expresar hipótesis.",
+            "Terminaciones específicas para conjugaciones.",
+            "Concordancia con el sujeto."
           ],
-          "example": "Si tuviera tiempo, viajaría más.",
+          "example": "Si tuviera tiempo, comería manzanas.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "objeto"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Si tuviera tiempo"
+            },
+            {
+              "label": "verbo",
+              "text": "comería"
+            },
+            {
+              "label": "objeto",
+              "text": "manzanas"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Si tuviera tiempo, viajo más.",
-              "fix": "Si tuviera tiempo, viajaría más."
+              "wrong": "Si tuviera tiempo, come manzanas.",
+              "fix": "Si tuviera tiempo, comería manzanas."
             }
           ]
         },
         {
-          "title": "Subjuntivo Presente",
+          "title": "Subjuntivo presente",
           "points": [
-            "Expresa deseos, dudas o situaciones hipotéticas.",
-            "La conjugación varía según la persona y el verbo.",
-            "Se utiliza en oraciones que requieren un cambio de sujeto."
+            "Uso del subjuntivo para deseos y dudas.",
+            "Conjugaciones irregulares comunes.",
+            "Importancia de la expresión de la subjetividad."
           ],
-          "example": "Espero que vengas a la fiesta.",
+          "example": "Espero que tú comas manzanas.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "objeto"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "tú"
+            },
+            {
+              "label": "verbo",
+              "text": "comas"
+            },
+            {
+              "label": "objeto",
+              "text": "manzanas"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Espero que vienes a la fiesta.",
-              "fix": "Espero que vengas a la fiesta."
+              "wrong": "Espero que tú comes manzanas.",
+              "fix": "Espero que tú comas manzanas."
             }
           ]
         },
         {
-          "title": "Gerundio y Participio",
+          "title": "Imperativo afirmativo",
           "points": [
-            "El gerundio indica una acción en progreso.",
-            "Se forma con la terminación -ando o -iendo.",
-            "El participio se usa en tiempos compuestos."
+            "Uso del imperativo para dar órdenes.",
+            "Formas regulares e irregulares.",
+            "Importancia del contexto y la relación con el oyente."
           ],
-          "example": "Estoy estudiando para el examen.",
+          "example": "Come manzanas.",
+          "ruleOrder": [
+            "verbo",
+            "objeto"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "verbo",
+              "text": "Come"
+            },
+            {
+              "label": "objeto",
+              "text": "manzanas"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Estoy estudiar para el examen.",
-              "fix": "Estoy estudiando para el examen."
+              "wrong": "Coma manzanas.",
+              "fix": "Come manzanas."
             }
           ]
         }
@@ -9387,29 +9614,67 @@
           "title": "Presente Simple",
           "points": [
             "Se utiliza para acciones habituales.",
-            "Indica hechos generales o verdades universales.",
-            "Estructura: sujeto + verbo en presente."
+            "Conjugación regular en -ar, -er, -ir.",
+            "Ejemplo: 'Yo como manzanas.'"
           ],
-          "example": "Yo como manzanas todos los días.",
+          "example": "Yo como manzanas.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "objeto"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Yo"
+            },
+            {
+              "label": "verbo",
+              "text": "como"
+            },
+            {
+              "label": "objeto",
+              "text": "manzanas"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Yo como manzana todos los días.",
-              "fix": "Yo como manzanas todos los días."
+              "wrong": "Yo come manzanas.",
+              "fix": "Yo como manzanas."
             }
           ]
         },
         {
           "title": "Pretérito Perfecto Compuesto",
           "points": [
-            "Se usa para acciones completadas en el pasado reciente.",
-            "Estructura: haber + participio pasado.",
-            "Indica relevancia en el presente."
+            "Indica acciones completadas en el pasado reciente.",
+            "Usa 'haber' + participio pasado.",
+            "Ejemplo: 'He comido manzanas.'"
           ],
-          "example": "He estudiado para el examen.",
+          "example": "He comido manzanas.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo auxiliar",
+            "participio"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "He"
+            },
+            {
+              "label": "verbo auxiliar",
+              "text": "comido"
+            },
+            {
+              "label": "participio",
+              "text": "manzanas"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "He estudiar para el examen.",
-              "fix": "He estudiado para el examen."
+              "wrong": "He come manzanas.",
+              "fix": "He comido manzanas."
             }
           ]
         },
@@ -9417,226 +9682,572 @@
           "title": "Imperfecto",
           "points": [
             "Describe acciones habituales en el pasado.",
-            "Se utiliza para establecer contexto o descripciones.",
-            "Estructura: raíz del verbo + terminaciones específicas."
+            "Conjugación en -aba, -ía.",
+            "Ejemplo: 'Yo comía manzanas.'"
           ],
-          "example": "Cuando era niño, jugaba en el parque.",
+          "example": "Yo comía manzanas.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "objeto"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Yo"
+            },
+            {
+              "label": "verbo",
+              "text": "comía"
+            },
+            {
+              "label": "objeto",
+              "text": "manzanas"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Cuando fui niño, jugaba en el parque.",
-              "fix": "Cuando era niño, jugaba en el parque."
+              "wrong": "Yo comí manzanas.",
+              "fix": "Yo comía manzanas."
             }
           ]
         },
         {
           "title": "Futuro Simple",
           "points": [
-            "Se usa para acciones que ocurrirán en el futuro.",
-            "Estructura: sujeto + verbo en futuro.",
-            "Puede expresar promesas o predicciones."
+            "Indica acciones que ocurrirán.",
+            "Conjugación regular añadiendo -é, -ás, -á.",
+            "Ejemplo: 'Yo comeré manzanas.'"
           ],
-          "example": "Mañana iré al cine.",
-          "mistakes": [
+          "example": "Yo comeré manzanas.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "objeto"
+          ],
+          "exampleHighlights": [
             {
-              "wrong": "Mañana voy al cine.",
-              "fix": "Mañana iré al cine."
+              "label": "sujeto",
+              "text": "Yo"
+            },
+            {
+              "label": "verbo",
+              "text": "comeré"
+            },
+            {
+              "label": "objeto",
+              "text": "manzanas"
             }
-          ]
-        },
-        {
-          "title": "Pretérito Indefinido",
-          "points": [
-            "Indica acciones completadas en un tiempo específico en el pasado.",
-            "Estructura: raíz del verbo + terminaciones del pretérito.",
-            "No se usa para acciones habituales."
           ],
-          "example": "Ayer compré un coche nuevo.",
           "mistakes": [
             {
-              "wrong": "Ayer comprando un coche nuevo.",
-              "fix": "Ayer compré un coche nuevo."
-            }
-          ]
-        },
-        {
-          "title": "Futuro Compuesto",
-          "points": [
-            "Se utiliza para acciones que habrán ocurrido en el futuro.",
-            "Estructura: haber en futuro + participio pasado.",
-            "Indica una acción futura completada."
-          ],
-          "example": "Para el próximo año, habré terminado mis estudios.",
-          "mistakes": [
-            {
-              "wrong": "Para el próximo año, he terminado mis estudios.",
-              "fix": "Para el próximo año, habré terminado mis estudios."
+              "wrong": "Yo come manzanas.",
+              "fix": "Yo comeré manzanas."
             }
           ]
         },
         {
           "title": "Condicional Simple",
           "points": [
-            "Se usa para expresar acciones hipotéticas o deseos.",
-            "Estructura: sujeto + verbo en condicional.",
-            "Indica cortesía o sugerencias."
+            "Expresa acciones hipotéticas.",
+            "Conjugación añadiendo -ía.",
+            "Ejemplo: 'Yo comería manzanas.'"
           ],
-          "example": "Me gustaría viajar a España.",
+          "example": "Yo comería manzanas.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "objeto"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Yo"
+            },
+            {
+              "label": "verbo",
+              "text": "comería"
+            },
+            {
+              "label": "objeto",
+              "text": "manzanas"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Me gustaría viajo a España.",
-              "fix": "Me gustaría viajar a España."
+              "wrong": "Yo como manzanas.",
+              "fix": "Yo comería manzanas."
             }
           ]
         },
         {
-          "title": "Pretérito Pluscuamperfecto",
+          "title": "Pretérito Indefinido",
           "points": [
-            "Se usa para acciones que ocurrieron antes de otra acción pasada.",
-            "Estructura: haber en imperfecto + participio pasado.",
-            "Indica un pasado anterior a otro pasado."
+            "Describe acciones completadas en el pasado.",
+            "Conjugación en -é, -í, -ó.",
+            "Ejemplo: 'Yo comí manzanas.'"
           ],
-          "example": "Cuando llegué, ya había salido.",
+          "example": "Yo comí manzanas.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "objeto"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Yo"
+            },
+            {
+              "label": "verbo",
+              "text": "comí"
+            },
+            {
+              "label": "objeto",
+              "text": "manzanas"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Cuando llegué, ya salí.",
-              "fix": "Cuando llegué, ya había salido."
+              "wrong": "Yo comía manzanas.",
+              "fix": "Yo comí manzanas."
             }
           ]
         },
         {
-          "title": "Presente Progresivo",
+          "title": "Futuro Compuesto",
           "points": [
-            "Se utiliza para acciones que están ocurriendo en este momento.",
-            "Estructura: estar + gerundio.",
-            "Indica continuidad en el tiempo."
+            "Indica acciones que habrán ocurrido.",
+            "Usa 'haber' en futuro + participio.",
+            "Ejemplo: 'Habré comido manzanas.'"
           ],
-          "example": "Estoy estudiando español ahora.",
+          "example": "Habré comido manzanas.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo auxiliar",
+            "participio"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Habré"
+            },
+            {
+              "label": "verbo auxiliar",
+              "text": "comido"
+            },
+            {
+              "label": "participio",
+              "text": "manzanas"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Soy estudiando español ahora.",
-              "fix": "Estoy estudiando español ahora."
+              "wrong": "Habré come manzanas.",
+              "fix": "Habré comido manzanas."
             }
           ]
         },
         {
           "title": "Pasado Progresivo",
           "points": [
-            "Describe acciones que estaban en progreso en un momento específico del pasado.",
-            "Estructura: estar en pretérito + gerundio.",
-            "Indica simultaneidad con otra acción."
+            "Describe acciones en progreso en el pasado.",
+            "Usa 'estar' + gerundio.",
+            "Ejemplo: 'Estaba comiendo manzanas.'"
           ],
-          "example": "Estaba leyendo cuando sonó el teléfono.",
+          "example": "Estaba comiendo manzanas.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo auxiliar",
+            "gerundio"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Estaba"
+            },
+            {
+              "label": "verbo auxiliar",
+              "text": "comiendo"
+            },
+            {
+              "label": "gerundio",
+              "text": "manzanas"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Era leyendo cuando sonó el teléfono.",
-              "fix": "Estaba leyendo cuando sonó el teléfono."
+              "wrong": "Estuve comiendo manzanas.",
+              "fix": "Estaba comiendo manzanas."
+            }
+          ]
+        },
+        {
+          "title": "Condicional Compuesto",
+          "points": [
+            "Expresa acciones hipotéticas en el pasado.",
+            "Usa 'haber' en condicional + participio.",
+            "Ejemplo: 'Habría comido manzanas.'"
+          ],
+          "example": "Habría comido manzanas.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo auxiliar",
+            "participio"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Habría"
+            },
+            {
+              "label": "verbo auxiliar",
+              "text": "comido"
+            },
+            {
+              "label": "participio",
+              "text": "manzanas"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Habría come manzanas.",
+              "fix": "Habría comido manzanas."
+            }
+          ]
+        },
+        {
+          "title": "Presente Progresivo",
+          "points": [
+            "Describe acciones en progreso en el presente.",
+            "Usa 'estar' + gerundio.",
+            "Ejemplo: 'Estoy comiendo manzanas.'"
+          ],
+          "example": "Estoy comiendo manzanas.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo auxiliar",
+            "gerundio"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Estoy"
+            },
+            {
+              "label": "verbo auxiliar",
+              "text": "comiendo"
+            },
+            {
+              "label": "gerundio",
+              "text": "manzanas"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Soy comiendo manzanas.",
+              "fix": "Estoy comiendo manzanas."
             }
           ]
         }
       ],
       "Nouns & Articles": [
         {
-          "title": "Género de los Sustantivos",
+          "title": "Uso del artículo definido",
           "points": [
-            "Los sustantivos en español tienen género: masculino o femenino.",
-            "Generalmente, los sustantivos que terminan en -o son masculinos y los que terminan en -a son femeninos.",
-            "Conocer el género es fundamental para usar los artículos correctamente."
+            "El artículo definido 'el' se usa para referirse a algo específico.",
+            "Se utiliza con sustantivos singulares y plurales.",
+            "Ejemplo: 'el perro' (el perro específico)."
           ],
-          "example": "El perro es un animal leal.",
+          "example": "El perro está en el jardín.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "complemento"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "El perro"
+            },
+            {
+              "label": "verbo",
+              "text": "está"
+            },
+            {
+              "label": "complemento",
+              "text": "en el jardín"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "La perro es un animal leal.",
-              "fix": "El perro es un animal leal."
+              "wrong": "Perro está en jardín.",
+              "fix": "El perro está en el jardín."
             }
           ]
         },
         {
-          "title": "Uso de Artículos Definidos",
+          "title": "Uso del artículo indefinido",
           "points": [
-            "Los artículos definidos son 'el', 'la', 'los', 'las'.",
-            "Se utilizan para referirse a algo específico.",
-            "El artículo debe concordar en género y número con el sustantivo."
+            "El artículo indefinido 'un' se usa para referirse a algo no específico.",
+            "Se utiliza con sustantivos singulares.",
+            "Ejemplo: 'un gato' (cualquier gato)."
           ],
-          "example": "La casa es grande.",
+          "example": "Un gato está en la casa.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "complemento"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Un gato"
+            },
+            {
+              "label": "verbo",
+              "text": "está"
+            },
+            {
+              "label": "complemento",
+              "text": "en la casa"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "El casa es grande.",
-              "fix": "La casa es grande."
+              "wrong": "Gato está en casa.",
+              "fix": "Un gato está en la casa."
             }
           ]
         },
         {
-          "title": "Uso de Artículos Indefinidos",
+          "title": "Singular y plural",
           "points": [
-            "Los artículos indefinidos son 'un', 'una', 'unos', 'unas'.",
-            "Se utilizan para referirse a algo no específico.",
-            "Al igual que los definidos, deben concordar en género y número."
+            "El singular nombra una unidad; el plural nombra dos o m?s.",
+            "La mayor?a de sustantivos forma plural con -s o -es.",
+            "Art?culo y sustantivo concuerdan en n?mero: el/un -> los/unos."
           ],
-          "example": "Quiero una manzana.",
+          "example": "Los libros están en la mesa.",
+          "ruleOrder": [
+            "artículo",
+            "sustantivo",
+            "verbo",
+            "complemento"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "artículo",
+              "text": "Los"
+            },
+            {
+              "label": "sustantivo",
+              "text": "libros"
+            },
+            {
+              "label": "verbo",
+              "text": "están"
+            },
+            {
+              "label": "complemento",
+              "text": "en la mesa"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Quiero un manzana.",
-              "fix": "Quiero una manzana."
+              "wrong": "El libros está en la mesa.",
+              "fix": "Los libros están en la mesa."
+            }
+          ],
+          "examplePairs": [
+            {
+              "example": "El libro está en la mesa.",
+              "exampleHighlights": [
+                {
+                  "label": "artículo",
+                  "text": "El"
+                },
+                {
+                  "label": "sustantivo",
+                  "text": "libro"
+                },
+                {
+                  "label": "verbo",
+                  "text": "está"
+                },
+                {
+                  "label": "complemento",
+                  "text": "en la mesa"
+                }
+              ],
+              "ruleOrder": [
+                "artículo",
+                "sustantivo",
+                "verbo",
+                "complemento"
+              ]
+            },
+            {
+              "example": "Los libros están en la mesa.",
+              "exampleHighlights": [
+                {
+                  "label": "artículo",
+                  "text": "Los"
+                },
+                {
+                  "label": "sustantivo",
+                  "text": "libros"
+                },
+                {
+                  "label": "verbo",
+                  "text": "están"
+                },
+                {
+                  "label": "complemento",
+                  "text": "en la mesa"
+                }
+              ],
+              "ruleOrder": [
+                "artículo",
+                "sustantivo",
+                "verbo",
+                "complemento"
+              ]
             }
           ]
         },
         {
-          "title": "Formación del Plural",
+          "title": "Artículos y adjetivos",
           "points": [
-            "Para formar el plural, generalmente se añade -s o -es.",
-            "Los sustantivos que terminan en consonante suelen requerir -es.",
-            "Es esencial para la concordancia con los artículos."
+            "Los adjetivos concuerdan en género y número con el sustantivo.",
+            "El artículo se coloca antes del adjetivo.",
+            "Ejemplo: 'la casa blanca' (la casa específica que es blanca)."
           ],
-          "example": "Los gatos son muy curiosos.",
+          "example": "La casa blanca es hermosa.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "complemento"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "La casa blanca"
+            },
+            {
+              "label": "verbo",
+              "text": "es"
+            },
+            {
+              "label": "complemento",
+              "text": "hermosa"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "El gatos son muy curiosos.",
-              "fix": "Los gatos son muy curiosos."
+              "wrong": "Casa blanca es hermosa.",
+              "fix": "La casa blanca es hermosa."
             }
           ]
         },
         {
-          "title": "Sustantivos Irregulares",
+          "title": "Sustantivos contables e incontables",
           "points": [
-            "Algunos sustantivos tienen formas plurales irregulares.",
-            "Es importante memorizar estas excepciones.",
-            "Ejemplos incluyen 'el hombre' - 'los hombres' y 'la mujer' - 'las mujeres'."
+            "Los sustantivos contables tienen formas plurales y se usan con artículos.",
+            "Los incontables no tienen plural y se usan sin artículo o con 'un poco de'.",
+            "Ejemplo: 'agua' (incontable)."
           ],
-          "example": "Las mujeres son fuertes.",
+          "example": "Necesito agua para la fiesta.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "complemento"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Necesito"
+            },
+            {
+              "label": "verbo",
+              "text": "agua"
+            },
+            {
+              "label": "complemento",
+              "text": "para la fiesta"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Las mueres son fuertes.",
-              "fix": "Las mujeres son fuertes."
+              "wrong": "Necesito un agua.",
+              "fix": "Necesito agua."
             }
           ]
         },
         {
-          "title": "Diminutivos en Sustantivos",
+          "title": "Uso de artículos en expresiones de cantidad",
           "points": [
-            "Los diminutivos se forman añadiendo -ito o -ita.",
-            "Se utilizan para expresar cariño o tamaño pequeño.",
-            "Ejemplo: 'perrito' significa 'perro pequeño'."
+            "Se utilizan artículos con expresiones de cantidad como 'mucho', 'poco'.",
+            "Ejemplo: 'muchos amigos' (un grupo específico de amigos).",
+            "El artículo se adapta al sustantivo."
           ],
-          "example": "El perrito juega en el jardín.",
+          "example": "Tengo muchos amigos en la ciudad.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "complemento"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Tengo"
+            },
+            {
+              "label": "verbo",
+              "text": "muchos amigos"
+            },
+            {
+              "label": "complemento",
+              "text": "en la ciudad"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "El perro juega en el jardín.",
-              "fix": "El perrito juega en el jardín."
+              "wrong": "Tengo mucho amigos.",
+              "fix": "Tengo muchos amigos."
             }
           ]
         },
         {
-          "title": "Sustantivos Colectivos",
+          "title": "Artículos en preguntas",
           "points": [
-            "Los sustantivos colectivos se refieren a un grupo de elementos.",
-            "Ejemplos incluyen 'flota' para un grupo de barcos.",
-            "Se utilizan para simplificar la referencia a grupos."
+            "Los artículos se utilizan en preguntas para especificar el sustantivo.",
+            "Ejemplo: '¿El libro está aquí?' (pregunta sobre un libro específico).",
+            "La estructura de la pregunta sigue el mismo orden."
           ],
-          "example": "La flota de barcos llegó al puerto.",
+          "example": "¿El libro está en la mesa?",
+          "ruleOrder": [
+            "verbo",
+            "sujeto",
+            "complemento"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "verbo",
+              "text": "El libro"
+            },
+            {
+              "label": "sujeto",
+              "text": "está en"
+            },
+            {
+              "label": "complemento",
+              "text": "la mesa"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Los flota de barcos llegó al puerto.",
-              "fix": "La flota de barcos llegó al puerto."
+              "wrong": "¿Libro está en mesa?",
+              "fix": "¿El libro está en la mesa?"
             }
           ]
         }
@@ -9645,563 +10256,1282 @@
         {
           "title": "Pronombres personales sujetos",
           "points": [
-            "Yo",
-            "Tú",
-            "Él/Ella/Usted"
+            "Los pronombres sujetos son esenciales para la claridad.",
+            "Se pueden omitir en contextos informales.",
+            "El uso de pronombres varía según el contexto."
           ],
-          "example": "Yo voy al mercado.",
+          "example": "Yo como manzanas.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "objeto"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Yo"
+            },
+            {
+              "label": "verbo",
+              "text": "como"
+            },
+            {
+              "label": "objeto",
+              "text": "manzanas"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Voy al mercado.",
-              "fix": "Yo voy al mercado."
+              "wrong": "Como manzanas.",
+              "fix": "Yo como manzanas."
             }
           ]
         },
         {
           "title": "Pronombres de objeto directo",
           "points": [
-            "Me",
-            "Te",
-            "Lo/La"
+            "Los pronombres de objeto directo reemplazan al objeto.",
+            "Se colocan antes del verbo conjugado.",
+            "Son importantes para la economía del lenguaje."
           ],
-          "example": "Ella me ve.",
+          "example": "La veo en el parque.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "objeto directo"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "La"
+            },
+            {
+              "label": "verbo",
+              "text": "veo"
+            },
+            {
+              "label": "objeto directo",
+              "text": "en el parque"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ella ve a mí.",
-              "fix": "Ella me ve."
+              "wrong": "Veo la en el parque.",
+              "fix": "La veo en el parque."
             }
           ]
         },
         {
           "title": "Pronombres de objeto indirecto",
           "points": [
-            "Me",
-            "Te",
-            "Le"
+            "Indican a quién se dirige la acción.",
+            "Se colocan antes del verbo o se pueden adjuntar.",
+            "Distinguir entre le, les, me, te, nos."
           ],
-          "example": "Él me da un libro.",
+          "example": "Le doy un libro a Juan.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "objeto indirecto",
+            "objeto directo"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "doy"
+            },
+            {
+              "label": "verbo",
+              "text": "un"
+            },
+            {
+              "label": "objeto indirecto",
+              "text": "libro a"
+            },
+            {
+              "label": "objeto directo",
+              "text": "Juan"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Él da un libro a mí.",
-              "fix": "Él me da un libro."
+              "wrong": "Doy un libro a Juan.",
+              "fix": "Le doy un libro a Juan."
             }
           ]
         },
         {
-          "title": "Pronombres posesivos",
+          "title": "Pronombres reflexivos",
           "points": [
-            "Mi",
-            "Tu",
-            "Su"
+            "Indican que la acción recae sobre el sujeto.",
+            "Se usan con verbos reflexivos.",
+            "Son importantes en la formación de oraciones."
           ],
-          "example": "Este es mi coche.",
+          "example": "Me lavo las manos.",
+          "ruleOrder": [
+            "sujeto",
+            "pronombre reflexivo",
+            "verbo",
+            "objeto"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "lavo"
+            },
+            {
+              "label": "pronombre reflexivo",
+              "text": "las"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Este es el coche de yo.",
-              "fix": "Este es mi coche."
+              "wrong": "Lavo las manos.",
+              "fix": "Me lavo las manos."
             }
           ]
         },
         {
-          "title": "Pronombres demostrativos",
+          "title": "Deixis temporal",
           "points": [
-            "Este",
-            "Ese",
-            "Aquel"
+            "Los pronombres pueden indicar tiempo.",
+            "El uso de 'este', 'ese', 'aquel' es crucial.",
+            "Distinguir entre presente, pasado y futuro."
           ],
-          "example": "Ese es mi amigo.",
+          "example": "Este libro es interesante.",
+          "ruleOrder": [
+            "deixis",
+            "sujeto",
+            "verbo",
+            "adjetivo"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "deixis",
+              "text": "Este"
+            },
+            {
+              "label": "sujeto",
+              "text": "libro"
+            },
+            {
+              "label": "verbo",
+              "text": "es"
+            },
+            {
+              "label": "adjetivo",
+              "text": "interesante"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Este es mi amigo.",
-              "fix": "Ese es mi amigo."
+              "wrong": "Ese libro es interesante.",
+              "fix": "Este libro es interesante."
             }
           ]
         },
         {
-          "title": "Pronombres relativos",
+          "title": "Omisión de pronombres",
           "points": [
-            "Que",
-            "Cual",
-            "Quien"
+            "La omisión es común en el español hablado.",
+            "Se entiende el sujeto por la conjugación del verbo.",
+            "Evitar confusiones en contextos formales."
           ],
-          "example": "El libro que leí es interesante.",
+          "example": "Voy al cine.",
+          "ruleOrder": [
+            "verbo",
+            "objeto"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "verbo",
+              "text": "Voy"
+            },
+            {
+              "label": "objeto",
+              "text": "al cine"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "El libro el cual leí es interesante.",
-              "fix": "El libro que leí es interesante."
+              "wrong": "Yo voy al cine.",
+              "fix": "Voy al cine."
             }
           ]
         },
         {
-          "title": "Pronombres indefinidos",
+          "title": "Distinciones de cortesía",
           "points": [
-            "Alguien",
-            "Nadie",
-            "Algo"
+            "El uso de 'tú' y 'usted' marca formalidad.",
+            "Es importante en contextos sociales.",
+            "El uso incorrecto puede ser ofensivo."
           ],
-          "example": "Alguien me llamó.",
+          "example": "¿Usted quiere café?",
+          "ruleOrder": [
+            "pronombre",
+            "verbo",
+            "objeto"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "pronombre",
+              "text": "Usted"
+            },
+            {
+              "label": "verbo",
+              "text": "quiere"
+            },
+            {
+              "label": "objeto",
+              "text": "café"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Nadie me llamó.",
-              "fix": "Alguien me llamó."
+              "wrong": "¿Tú quieres café?",
+              "fix": "¿Usted quiere café?"
             }
           ]
         }
       ],
       "Modifiers": [
         {
-          "title": "Adjetivos calificativos",
+          "title": "Posición de adjetivos",
           "points": [
-            "Los adjetivos deben concordar en género y número con el sustantivo.",
-            "Ejemplo: 'La casa roja' (femenino, singular).",
-            "Ejemplo incorrecto: 'El casa roja'."
+            "Los adjetivos generalmente siguen al sustantivo.",
+            "Adjetivos de cantidad y demostrativos preceden al sustantivo.",
+            "La posición puede cambiar el significado."
           ],
-          "example": "La casa roja es hermosa.",
+          "example": "El coche rojo es rápido.",
+          "ruleOrder": [
+            "sustantivo",
+            "adjetivo"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sustantivo",
+              "text": "coche"
+            },
+            {
+              "label": "adjetivo",
+              "text": "rojo"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "El casa roja es hermosa.",
-              "fix": "La casa roja es hermosa."
+              "wrong": "El rojo coche es rápido.",
+              "fix": "El coche rojo es rápido."
+            }
+          ]
+        },
+        {
+          "title": "Orden de adjetivos",
+          "points": [
+            "Los adjetivos se ordenan por tipo: cantidad, opinión, tamaño, edad, forma, color, origen, material, propósito.",
+            "El orden afecta la claridad y el estilo.",
+            "Ejemplo: tres grandes casas azules."
+          ],
+          "example": "Tres grandes casas azules.",
+          "ruleOrder": [
+            "cantidad",
+            "adjetivo de opinión",
+            "adjetivo de tamaño",
+            "sustantivo"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "cantidad",
+              "text": "Tres"
+            },
+            {
+              "label": "adjetivo de opinión",
+              "text": "grandes"
+            },
+            {
+              "label": "adjetivo de tamaño",
+              "text": "casas"
+            },
+            {
+              "label": "sustantivo",
+              "text": "azules"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Grandes tres casas azules.",
+              "fix": "Tres grandes casas azules."
+            }
+          ]
+        },
+        {
+          "title": "Comparativos",
+          "points": [
+            "Se forma con 'más' + adjetivo o 'menos' + adjetivo.",
+            "El adjetivo debe concordar en género y número.",
+            "Ejemplo: más alto que."
+          ],
+          "example": "Juan es más alto que Pedro.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "comparativo"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Juan"
+            },
+            {
+              "label": "verbo",
+              "text": "es"
+            },
+            {
+              "label": "comparativo",
+              "text": "más alto que Pedro"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Juan es alto que Pedro.",
+              "fix": "Juan es más alto que Pedro."
+            }
+          ]
+        },
+        {
+          "title": "Superlativos",
+          "points": [
+            "Se forma con 'el más' o 'el menos' + adjetivo.",
+            "Indica el grado máximo o mínimo de una cualidad.",
+            "Ejemplo: el más inteligente."
+          ],
+          "example": "María es la más inteligente de la clase.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "artículo",
+            "superlativo"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "María"
+            },
+            {
+              "label": "verbo",
+              "text": "es"
+            },
+            {
+              "label": "artículo",
+              "text": "la"
+            },
+            {
+              "label": "superlativo",
+              "text": "más inteligente de la clase"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "María es más inteligente de la clase.",
+              "fix": "María es la más inteligente de la clase."
+            }
+          ]
+        },
+        {
+          "title": "Intensificadores",
+          "points": [
+            "Se utilizan para aumentar el grado de un adjetivo.",
+            "Ejemplo: muy, bastante, extremadamente.",
+            "Colocación antes del adjetivo."
+          ],
+          "example": "Es muy interesante.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "intensificador",
+            "adjetivo"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Es"
+            },
+            {
+              "label": "verbo",
+              "text": "muy"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Es interesante muy.",
+              "fix": "Es muy interesante."
             }
           ]
         },
         {
           "title": "Adverbios de modo",
           "points": [
-            "Los adverbios de modo describen cómo se realiza una acción.",
-            "Ejemplo: 'Ella canta bien'.",
-            "Ejemplo incorrecto: 'Ella canta bueno'."
+            "Describen cómo se realiza una acción.",
+            "Generalmente se colocan después del verbo.",
+            "Ejemplo: rápidamente, lentamente."
           ],
-          "example": "Ella canta bien.",
-          "mistakes": [
+          "example": "Ella corre rápidamente.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "adverbio"
+          ],
+          "exampleHighlights": [
             {
-              "wrong": "Ella canta bueno.",
-              "fix": "Ella canta bien."
+              "label": "sujeto",
+              "text": "Ella"
+            },
+            {
+              "label": "verbo",
+              "text": "corre"
+            },
+            {
+              "label": "adverbio",
+              "text": "rápidamente"
             }
-          ]
-        },
-        {
-          "title": "Adjetivos posesivos",
-          "points": [
-            "Los adjetivos posesivos indican pertenencia.",
-            "Ejemplo: 'Mi libro es interesante'.",
-            "Ejemplo incorrecto: 'Yo libro es interesante'."
           ],
-          "example": "Mi libro es interesante.",
           "mistakes": [
             {
-              "wrong": "Yo libro es interesante.",
-              "fix": "Mi libro es interesante."
-            }
-          ]
-        },
-        {
-          "title": "Adjetivos demostrativos",
-          "points": [
-            "Los adjetivos demostrativos indican la ubicación de un sustantivo.",
-            "Ejemplo: 'Ese coche es rápido'.",
-            "Ejemplo incorrecto: 'Ese coches es rápido'."
-          ],
-          "example": "Ese coche es rápido.",
-          "mistakes": [
-            {
-              "wrong": "Ese coches es rápido.",
-              "fix": "Ese coche es rápido."
-            }
-          ]
-        },
-        {
-          "title": "Adverbios de frecuencia",
-          "points": [
-            "Los adverbios de frecuencia indican cuán a menudo ocurre algo.",
-            "Ejemplo: 'Ella siempre llega temprano'.",
-            "Ejemplo incorrecto: 'Ella siempre llega temprana'."
-          ],
-          "example": "Ella siempre llega temprano.",
-          "mistakes": [
-            {
-              "wrong": "Ella siempre llega temprana.",
-              "fix": "Ella siempre llega temprano."
-            }
-          ]
-        },
-        {
-          "title": "Adjetivos comparativos",
-          "points": [
-            "Los adjetivos comparativos se utilizan para comparar dos cosas.",
-            "Ejemplo: 'Este libro es más interesante que el otro'.",
-            "Ejemplo incorrecto: 'Este libro es más interesante que otro'."
-          ],
-          "example": "Este libro es más interesante que el otro.",
-          "mistakes": [
-            {
-              "wrong": "Este libro es más interesante que otro.",
-              "fix": "Este libro es más interesante que el otro."
-            }
-          ]
-        },
-        {
-          "title": "Adjetivos superlativos",
-          "points": [
-            "Los adjetivos superlativos expresan el grado máximo de una cualidad.",
-            "Ejemplo: 'Es el más alto de la clase'.",
-            "Ejemplo incorrecto: 'Es el alto de la clase'."
-          ],
-          "example": "Es el más alto de la clase.",
-          "mistakes": [
-            {
-              "wrong": "Es el alto de la clase.",
-              "fix": "Es el más alto de la clase."
-            }
-          ]
-        },
-        {
-          "title": "Adverbios de lugar",
-          "points": [
-            "Los adverbios de lugar indican dónde ocurre la acción.",
-            "Ejemplo: 'El perro está aquí'.",
-            "Ejemplo incorrecto: 'El perro está aquí'."
-          ],
-          "example": "El perro está aquí.",
-          "mistakes": [
-            {
-              "wrong": "El perro está allí.",
-              "fix": "El perro está aquí."
+              "wrong": "Ella rápidamente corre.",
+              "fix": "Ella corre rápidamente."
             }
           ]
         },
         {
           "title": "Adverbios de tiempo",
           "points": [
-            "Los adverbios de tiempo indican cuándo ocurre la acción.",
-            "Ejemplo: 'Llegaré mañana'.",
-            "Ejemplo incorrecto: 'Llegaré mañana'."
+            "Indican cuándo ocurre la acción.",
+            "Pueden ir al principio o al final de la oración.",
+            "Ejemplo: hoy, mañana, ayer."
           ],
-          "example": "Llegaré mañana.",
+          "example": "Mañana iremos al cine.",
+          "ruleOrder": [
+            "adverbio",
+            "verbo",
+            "sujeto",
+            "complemento"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "adverbio",
+              "text": "Mañana"
+            },
+            {
+              "label": "verbo",
+              "text": "iremos"
+            },
+            {
+              "label": "sujeto",
+              "text": "al"
+            },
+            {
+              "label": "complemento",
+              "text": "cine"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Llegaré ayer.",
-              "fix": "Llegaré mañana."
+              "wrong": "Iremos mañana al cine.",
+              "fix": "Mañana iremos al cine."
             }
           ]
         },
         {
-          "title": "Modificadores en oraciones compuestas",
+          "title": "Adverbios de lugar",
           "points": [
-            "Los modificadores pueden aparecer en oraciones compuestas para clarificar.",
-            "Ejemplo: 'El coche que compré es rojo'.",
-            "Ejemplo incorrecto: 'El coche compré es rojo'."
+            "Indican dónde ocurre la acción.",
+            "Generalmente se colocan después del verbo.",
+            "Ejemplo: aquí, allí, cerca."
           ],
-          "example": "El coche que compré es rojo.",
+          "example": "El libro está aquí.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "adverbio"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "El libro"
+            },
+            {
+              "label": "verbo",
+              "text": "está"
+            },
+            {
+              "label": "adverbio",
+              "text": "aquí"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "El coche compré es rojo.",
-              "fix": "El coche que compré es rojo."
+              "wrong": "Aquí está el libro.",
+              "fix": "El libro está aquí."
+            }
+          ]
+        },
+        {
+          "title": "Adverbios de frecuencia",
+          "points": [
+            "Indican con qué frecuencia ocurre la acción.",
+            "Se colocan antes del verbo principal.",
+            "Ejemplo: siempre, a veces, nunca."
+          ],
+          "example": "Siempre estudio por la mañana.",
+          "ruleOrder": [
+            "adverbio",
+            "verbo",
+            "sujeto"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "adverbio",
+              "text": "Siempre"
+            },
+            {
+              "label": "verbo",
+              "text": "estudio"
+            },
+            {
+              "label": "sujeto",
+              "text": "por la mañana"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Estudio siempre por la mañana.",
+              "fix": "Siempre estudio por la mañana."
+            }
+          ]
+        },
+        {
+          "title": "Modificadores de sustantivos",
+          "points": [
+            "Los modificadores pueden ser adjetivos o frases adjetivas.",
+            "Aportan información adicional sobre el sustantivo.",
+            "Ejemplo: la casa blanca de mi abuela."
+          ],
+          "example": "La casa blanca de mi abuela es grande.",
+          "ruleOrder": [
+            "artículo",
+            "sustantivo",
+            "modificador"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "artículo",
+              "text": "La"
+            },
+            {
+              "label": "sustantivo",
+              "text": "casa"
+            },
+            {
+              "label": "modificador",
+              "text": "es grande"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "La blanca casa de mi abuela es grande.",
+              "fix": "La casa blanca de mi abuela es grande."
             }
           ]
         }
       ],
       "Questions": [
         {
-          "title": "Uso de 'qué' y 'cuál'",
+          "title": "¿Qué es?",
           "points": [
-            "Se utiliza 'qué' para definiciones o explicaciones.",
-            "Se utiliza 'cuál' para elegir entre opciones.",
-            "Ambos pueden ser usados en preguntas."
+            "Uso de 'qué' para preguntar por definiciones.",
+            "Estructura básica: pregunta directa.",
+            "Intonación ascendente al final."
           ],
-          "example": "¿Qué es un perro? / ¿Cuál prefieres, el perro o el gato?",
+          "example": "¿Qué es un perro?",
+          "ruleOrder": [
+            "qué",
+            "es",
+            "un",
+            "perro"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "qué",
+              "text": "Qué"
+            },
+            {
+              "label": "es",
+              "text": "es"
+            },
+            {
+              "label": "un",
+              "text": "un"
+            },
+            {
+              "label": "perro",
+              "text": "perro"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "¿Cuál es tu nombre?",
-              "fix": "¿Qué es tu nombre?"
+              "wrong": "¿Qué un perro es?",
+              "fix": "¿Qué es un perro?"
             }
           ]
         },
         {
-          "title": "Formación de preguntas con 'por qué'",
+          "title": "¿Dónde vives?",
           "points": [
-            "Se usa 'por qué' para preguntar la razón.",
-            "Siempre se escribe separado y con tilde.",
-            "No se confunde con 'porque' que es una conjunción."
+            "Uso de 'dónde' para preguntar por lugares.",
+            "Estructura: pronombre interrogativo + verbo.",
+            "Intonación ascendente."
           ],
-          "example": "¿Por qué llegaste tarde?",
+          "example": "¿Dónde vives?",
+          "ruleOrder": [
+            "dónde",
+            "vives"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "dónde",
+              "text": "Dónde"
+            },
+            {
+              "label": "vives",
+              "text": "vives"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "¿Porque llegaste tarde?",
-              "fix": "¿Por qué llegaste tarde?"
+              "wrong": "¿Vives dónde?",
+              "fix": "¿Dónde vives?"
             }
           ]
         },
         {
-          "title": "Preguntas indirectas",
+          "title": "¿Cuándo es la reunión?",
           "points": [
-            "Las preguntas indirectas no llevan signos de interrogación.",
-            "Se introducen con frases como 'me pregunto' o 'no sé'.",
-            "El verbo puede ir en subjuntivo."
+            "Uso de 'cuándo' para preguntar por tiempo.",
+            "Estructura: pronombre interrogativo + verbo + sujeto.",
+            "Intonación ascendente."
           ],
-          "example": "No sé si vendrá.",
+          "example": "¿Cuándo es la reunión?",
+          "ruleOrder": [
+            "cuándo",
+            "es",
+            "la",
+            "reunión"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "cuándo",
+              "text": "Cuándo"
+            },
+            {
+              "label": "es",
+              "text": "es"
+            },
+            {
+              "label": "la",
+              "text": "la"
+            },
+            {
+              "label": "reunión",
+              "text": "reunión"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Me pregunto: ¿vendrá?",
-              "fix": "Me pregunto si vendrá."
+              "wrong": "¿Es la reunión cuándo?",
+              "fix": "¿Cuándo es la reunión?"
             }
           ]
         },
         {
-          "title": "Uso de 'dónde' y 'adónde'",
+          "title": "¿Por qué estudias español?",
           "points": [
-            "'Dónde' se usa para preguntar por un lugar.",
-            "'Adónde' se usa para preguntar hacia un destino.",
-            "Ambos pueden ser usados en contextos diferentes."
+            "Uso de 'por qué' para preguntar por razones.",
+            "Estructura: pronombre interrogativo + verbo + sujeto.",
+            "Intonación ascendente."
           ],
-          "example": "¿Dónde está el libro? / ¿Adónde vas?",
+          "example": "¿Por qué estudias español?",
+          "ruleOrder": [
+            "por qué",
+            "estudias",
+            "español"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "por qué",
+              "text": "Por qué"
+            },
+            {
+              "label": "estudias",
+              "text": "estudias"
+            },
+            {
+              "label": "español",
+              "text": "español"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "¿Adónde está el libro?",
-              "fix": "¿Dónde está el libro?"
+              "wrong": "¿Estudias español por qué?",
+              "fix": "¿Por qué estudias español?"
             }
           ]
         },
         {
-          "title": "Preguntas con 'quién'",
+          "title": "¿Quién viene a la fiesta?",
           "points": [
-            "'Quién' se usa para preguntar por personas.",
-            "Puede ser singular o plural.",
-            "Se puede usar en preguntas directas e indirectas."
+            "Uso de 'quién' para preguntar por personas.",
+            "Estructura: pronombre interrogativo + verbo + complemento.",
+            "Intonación ascendente."
           ],
-          "example": "¿Quién es tu amigo? / No sé quién vino.",
+          "example": "¿Quién viene a la fiesta?",
+          "ruleOrder": [
+            "quién",
+            "viene",
+            "a",
+            "la",
+            "fiesta"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "quién",
+              "text": "Quién"
+            },
+            {
+              "label": "viene",
+              "text": "viene"
+            },
+            {
+              "label": "a",
+              "text": "a"
+            },
+            {
+              "label": "la",
+              "text": "la"
+            },
+            {
+              "label": "fiesta",
+              "text": "fiesta"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "¿Quienes son tus amigos?",
-              "fix": "¿Quiénes son tus amigos?"
+              "wrong": "¿Viene quién a la fiesta?",
+              "fix": "¿Quién viene a la fiesta?"
             }
           ]
         },
         {
-          "title": "Preguntas con 'cuánto'",
+          "title": "¿Cuál prefieres?",
           "points": [
-            "'Cuánto' se usa para preguntar por cantidades.",
-            "Puede referirse a dinero, tiempo, o cantidad.",
-            "Se debe concordar en género y número."
+            "Uso de 'cuál' para elegir entre opciones.",
+            "Estructura: pronombre interrogativo + verbo.",
+            "Intonación ascendente."
           ],
-          "example": "¿Cuánto cuesta esto? / ¿Cuántas manzanas compraste?",
+          "example": "¿Cuál prefieres?",
+          "ruleOrder": [
+            "cuál",
+            "prefieres"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "cuál",
+              "text": "Cuál"
+            },
+            {
+              "label": "prefieres",
+              "text": "prefieres"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "¿Cuanta agua necesitas?",
-              "fix": "¿Cuánta agua necesitas?"
+              "wrong": "¿Prefieres cuál?",
+              "fix": "¿Cuál prefieres?"
             }
           ]
         },
         {
-          "title": "Uso de 'cómo'",
+          "title": "¿Cuánto cuesta esto?",
           "points": [
-            "'Cómo' se usa para preguntar por la manera o el estado.",
-            "Puede referirse a situaciones o acciones.",
-            "Es importante en preguntas sobre salud o estado emocional."
+            "Uso de 'cuánto' para preguntar por cantidades.",
+            "Estructura: pronombre interrogativo + verbo + sujeto.",
+            "Intonación ascendente."
           ],
-          "example": "¿Cómo estás? / ¿Cómo se hace esto?",
+          "example": "¿Cuánto cuesta esto?",
+          "ruleOrder": [
+            "cuánto",
+            "cuesta",
+            "esto"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "cuánto",
+              "text": "Cuánto"
+            },
+            {
+              "label": "cuesta",
+              "text": "cuesta"
+            },
+            {
+              "label": "esto",
+              "text": "esto"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "¿Como te llamas?",
-              "fix": "¿Cómo te llamas?"
+              "wrong": "¿Cuesta cuánto esto?",
+              "fix": "¿Cuánto cuesta esto?"
             }
           ]
         }
       ],
       "Negation": [
         {
-          "title": "Uso de 'no' con verbos",
+          "title": "Negación básica con 'no'",
           "points": [
-            "La negación básica en español se forma con 'no'.",
-            "Se coloca antes del verbo.",
-            "Es importante recordar que 'no' se usa para negar afirmaciones."
+            "Usa 'no' antes del verbo.",
+            "Se niega la acción principal.",
+            "Estructura simple y clara."
           ],
-          "example": "No tengo hambre.",
+          "example": "No quiero ir al cine.",
+          "ruleOrder": [
+            "sujeto",
+            "no",
+            "verbo",
+            "complemento"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "No quiero"
+            },
+            {
+              "label": "no",
+              "text": "ir"
+            },
+            {
+              "label": "verbo",
+              "text": "al"
+            },
+            {
+              "label": "complemento",
+              "text": "cine"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Tengo no hambre.",
-              "fix": "No tengo hambre."
+              "wrong": "Quiero no ir al cine.",
+              "fix": "No quiero ir al cine."
             }
           ]
         },
         {
-          "title": "Negación de sustantivos",
+          "title": "Negación con adverbios",
           "points": [
-            "Para negar sustantivos, se utiliza 'ningún' o 'ninguna'.",
-            "Se usa 'ninguno' para referirse a un sustantivo masculino singular.",
-            "Asegúrate de concordar en género y número."
+            "Coloca 'nunca' o 'jamás' antes del verbo.",
+            "Expresa una negación absoluta.",
+            "Útil para enfatizar."
           ],
-          "example": "No tengo ningún libro.",
+          "example": "Nunca como carne.",
+          "ruleOrder": [
+            "sujeto",
+            "nunca",
+            "verbo",
+            "complemento"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Nunca"
+            },
+            {
+              "label": "nunca",
+              "text": "como"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "No tengo libro ninguno.",
-              "fix": "No tengo ningún libro."
+              "wrong": "Como nunca carne.",
+              "fix": "Nunca como carne."
             }
           ]
         },
         {
-          "title": "Negación con adjetivos",
+          "title": "Negación con 'ninguno/a'",
           "points": [
-            "Los adjetivos también pueden ser negados con 'no'.",
-            "Se coloca 'no' antes del adjetivo.",
-            "Esto cambia el significado de la oración."
+            "Usa 'ninguno/a' para negar sustantivos.",
+            "Concuerda en género y número.",
+            "Ideal para expresar ausencia."
           ],
-          "example": "La casa no es grande.",
+          "example": "No tengo ninguna idea.",
+          "ruleOrder": [
+            "sujeto",
+            "no",
+            "verbo",
+            "ninguna",
+            "sustantivo"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "No tengo"
+            },
+            {
+              "label": "no",
+              "text": "ninguna"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "La casa es no grande.",
-              "fix": "La casa no es grande."
+              "wrong": "Tengo ninguna idea.",
+              "fix": "No tengo ninguna idea."
             }
           ]
         },
         {
-          "title": "Uso de 'nunca'",
+          "title": "Negación con 'sin'",
           "points": [
-            "'Nunca' se utiliza para expresar la negación de tiempo.",
-            "Se coloca antes del verbo.",
-            "Es más enfático que 'no'."
+            "Usa 'sin' para expresar la falta de algo.",
+            "Se combina con sustantivos.",
+            "Estructura más compleja."
           ],
-          "example": "Nunca voy al cine.",
+          "example": "Vivo sin preocupaciones.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "sin",
+            "sustantivo"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Vivo"
+            },
+            {
+              "label": "verbo",
+              "text": "sin"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Voy nunca al cine.",
-              "fix": "Nunca voy al cine."
+              "wrong": "Sin preocupaciones vivo.",
+              "fix": "Vivo sin preocupaciones."
             }
           ]
         },
         {
-          "title": "Negación con 'tampoco'",
+          "title": "Negación con 'a nadie'",
           "points": [
-            "'Tampoco' se usa para negar algo que ya ha sido negado.",
-            "Se coloca al final de la oración o antes del verbo.",
-            "Es equivalente a 'neither' en inglés."
+            "Usa 'a nadie' para negar la acción hacia personas.",
+            "Se coloca después del verbo.",
+            "Expresa exclusión."
           ],
-          "example": "No me gusta el chocolate, tampoco el helado.",
+          "example": "No le hablo a nadie.",
+          "ruleOrder": [
+            "sujeto",
+            "no",
+            "verbo",
+            "a",
+            "nadie"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "No le"
+            },
+            {
+              "label": "no",
+              "text": "hablo"
+            },
+            {
+              "label": "verbo",
+              "text": "a"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "No me gusta el chocolate, el helado tampoco.",
-              "fix": "No me gusta el chocolate, tampoco el helado."
+              "wrong": "A nadie no le hablo.",
+              "fix": "No le hablo a nadie."
             }
           ]
         },
         {
-          "title": "Negación en preguntas",
+          "title": "Negación con 'nada'",
           "points": [
-            "En preguntas, 'no' se coloca después del verbo.",
-            "Esto es diferente a las afirmaciones.",
-            "Es importante para la claridad en la comunicación."
+            "Usa 'nada' para negar la existencia de cosas.",
+            "Se coloca después del verbo.",
+            "Enfatiza la ausencia total."
           ],
-          "example": "¿No quieres venir?",
+          "example": "No tengo nada que decir.",
+          "ruleOrder": [
+            "sujeto",
+            "no",
+            "verbo",
+            "nada",
+            "complemento"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "No tengo"
+            },
+            {
+              "label": "no",
+              "text": "nada que"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "¿Quieres no venir?",
-              "fix": "¿No quieres venir?"
+              "wrong": "Nada que decir no tengo.",
+              "fix": "No tengo nada que decir."
             }
           ]
         }
       ],
       "Connections": [
         {
-          "title": "Uso de los pronombres de objeto directo",
+          "title": "Uso de conectores básicos",
           "points": [
-            "Los pronombres de objeto directo reemplazan a los sustantivos.",
-            "Se colocan antes del verbo conjugado o después de un infinitivo.",
-            "Es importante concordar en género y número."
+            "Los conectores unen ideas y oraciones.",
+            "Facilitan la fluidez en la comunicación.",
+            "Ejemplos comunes incluyen 'y', 'pero', 'porque'."
           ],
-          "example": "Yo lo veo.",
+          "example": "Quiero ir al cine, pero está lloviendo.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "conector"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Quiero"
+            },
+            {
+              "label": "verbo",
+              "text": "ir"
+            },
+            {
+              "label": "conector",
+              "text": "pero"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Yo veo él.",
-              "fix": "Yo lo veo."
+              "wrong": "Quiero ir al cine, está lloviendo.",
+              "fix": "Quiero ir al cine, pero está lloviendo."
             }
           ]
         },
         {
-          "title": "El uso de 'ser' y 'estar'",
+          "title": "Conectores de contraste",
           "points": [
-            "Ser se usa para características permanentes.",
-            "Estar se usa para estados temporales.",
-            "Es fundamental entender el contexto."
+            "Los conectores de contraste muestran diferencias.",
+            "Ejemplos incluyen 'sin embargo', 'aunque'.",
+            "Son útiles para argumentar o presentar puntos de vista."
           ],
-          "example": "Ella es alta.",
+          "example": "Me gusta el café, aunque prefiero el té.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "conector"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Me gusta"
+            },
+            {
+              "label": "verbo",
+              "text": "el café"
+            },
+            {
+              "label": "conector",
+              "text": "aunque"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ella está alta.",
-              "fix": "Ella es alta."
+              "wrong": "Me gusta el café, prefiero el té.",
+              "fix": "Me gusta el café, aunque prefiero el té."
             }
           ]
         },
         {
-          "title": "Concordancia de género y número",
+          "title": "Conectores de causa y efecto",
           "points": [
-            "Los adjetivos deben concordar con el sustantivo en género y número.",
-            "El artículo también debe concordar.",
-            "Ejemplo: el coche rojo, la casa roja."
+            "Indican relaciones de causa y efecto.",
+            "Ejemplos incluyen 'porque', 'por lo tanto'.",
+            "Ayudan a explicar razones detrás de acciones."
           ],
-          "example": "Las flores son hermosas.",
+          "example": "Estudié mucho, por lo tanto, aprobé el examen.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "conector"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Estudié"
+            },
+            {
+              "label": "verbo",
+              "text": "mucho"
+            },
+            {
+              "label": "conector",
+              "text": "por lo tanto"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Las flores son hermoso.",
-              "fix": "Las flores son hermosas."
+              "wrong": "Estudié mucho, aprobé el examen.",
+              "fix": "Estudié mucho, por lo tanto, aprobé el examen."
             }
           ]
         },
         {
-          "title": "Uso de los tiempos verbales",
+          "title": "Uso de oraciones compuestas",
           "points": [
-            "El presente se usa para acciones habituales.",
-            "El pretérito se usa para acciones completadas.",
-            "El futuro se usa para acciones que ocurrirán."
+            "Las oraciones compuestas combinan ideas complejas.",
+            "Permiten expresar pensamientos más elaborados.",
+            "Utilizan conectores para unir cláusulas."
           ],
-          "example": "Mañana iré al cine.",
+          "example": "Salí a correr porque necesitaba ejercicio y me sentí mejor.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "conector"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Salí"
+            },
+            {
+              "label": "verbo",
+              "text": "a correr"
+            },
+            {
+              "label": "conector",
+              "text": "porque"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ayer voy al cine.",
-              "fix": "Ayer fui al cine."
+              "wrong": "Salí a correr necesitaba ejercicio.",
+              "fix": "Salí a correr porque necesitaba ejercicio."
             }
           ]
         },
         {
-          "title": "Construcción de oraciones negativas",
+          "title": "Oraciones subordinadas",
           "points": [
-            "Se utiliza 'no' antes del verbo.",
-            "Es importante mantener la estructura correcta.",
-            "Ejemplo: No tengo dinero."
+            "Las oraciones subordinadas dependen de una principal.",
+            "Se introducen con conectores como 'que', 'cuando'.",
+            "Añaden información adicional."
           ],
-          "example": "No quiero ir.",
+          "example": "Ella dijo que vendría mañana.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "conector"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Ella"
+            },
+            {
+              "label": "verbo",
+              "text": "dijo"
+            },
+            {
+              "label": "conector",
+              "text": "que"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Quiero no ir.",
-              "fix": "No quiero ir."
+              "wrong": "Ella dijo vendría mañana.",
+              "fix": "Ella dijo que vendría mañana."
             }
           ]
         },
         {
-          "title": "Uso de los adverbios",
+          "title": "Uso de 'aunque' en oraciones complejas",
           "points": [
-            "Los adverbios modifican verbos, adjetivos o otros adverbios.",
-            "Pueden indicar tiempo, lugar o modo.",
-            "Ejemplo: Ella corre rápidamente."
+            "El 'aunque' introduce una idea que contrasta con la principal.",
+            "Es útil para expresar concesiones.",
+            "Se puede usar en diferentes posiciones en la oración."
           ],
-          "example": "Él habla lentamente.",
+          "example": "Aunque estaba cansado, fui a la fiesta.",
+          "ruleOrder": [
+            "conector",
+            "sujeto",
+            "verbo"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "conector",
+              "text": "Aunque"
+            },
+            {
+              "label": "sujeto",
+              "text": "estaba"
+            },
+            {
+              "label": "verbo",
+              "text": "cansado"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Él habla lentemente.",
-              "fix": "Él habla lentamente."
+              "wrong": "Estaba cansado, fui a la fiesta.",
+              "fix": "Aunque estaba cansado, fui a la fiesta."
             }
           ]
         },
         {
-          "title": "Formación de preguntas",
+          "title": "Uso de 'si' en oraciones condicionales",
           "points": [
-            "Las preguntas en español suelen comenzar con una palabra interrogativa.",
-            "El verbo generalmente sigue al sujeto.",
-            "Es importante la entonación."
+            "Las oraciones condicionales expresan situaciones hipotéticas.",
+            "Se introducen con 'si'.",
+            "Son esenciales para expresar posibilidades."
           ],
-          "example": "¿Dónde está el libro?",
+          "example": "Si llueve, no saldré.",
+          "ruleOrder": [
+            "conector",
+            "sujeto",
+            "verbo"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "conector",
+              "text": "Si"
+            },
+            {
+              "label": "sujeto",
+              "text": "llueve"
+            },
+            {
+              "label": "verbo",
+              "text": "no saldré"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "¿El libro dónde está?",
-              "fix": "¿Dónde está el libro?"
+              "wrong": "Llueve, no saldré.",
+              "fix": "Si llueve, no saldré."
             }
           ]
         }
@@ -10211,639 +11541,1427 @@
           "title": "Condicional simple",
           "points": [
             "Se utiliza para expresar situaciones hipotéticas.",
-            "Se forma con el verbo en condicional.",
-            "Ejemplo: 'Si tuviera dinero, viajaría.'"
+            "Forma: verbo en condicional simple.",
+            "Ejemplo: 'Yo comería si tuviera hambre.'"
           ],
-          "example": "Si llueve, no saldré.",
-          "mistakes": [
+          "example": "Yo comería si tuviera hambre.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "complemento"
+          ],
+          "exampleHighlights": [
             {
-              "wrong": "Si llueve, no salgo.",
-              "fix": "Si llueve, no saldré."
+              "label": "sujeto",
+              "text": "Yo"
+            },
+            {
+              "label": "verbo",
+              "text": "comería"
+            },
+            {
+              "label": "complemento",
+              "text": "si tuviera hambre"
             }
-          ]
-        },
-        {
-          "title": "Condicional perfecto",
-          "points": [
-            "Se utiliza para expresar acciones que habrían ocurrido.",
-            "Se forma con el verbo haber en condicional + participio.",
-            "Ejemplo: 'Si hubiera sabido, habría venido.'"
           ],
-          "example": "Si hubieras estudiado, habrías pasado el examen.",
           "mistakes": [
             {
-              "wrong": "Si hubieras estudiado, pasaste el examen.",
-              "fix": "Si hubieras estudiado, habrías pasado el examen."
+              "wrong": "Yo comer si tuviera hambre.",
+              "fix": "Yo comería si tuviera hambre."
             }
           ]
         },
         {
           "title": "Condicional compuesto",
           "points": [
-            "Se usa para expresar acciones futuras en relación a un pasado.",
-            "Se forma con el verbo en condicional + que + subjuntivo.",
-            "Ejemplo: 'Si supiera que vendrías, te habría esperado.'"
+            "Se usa para situaciones hipotéticas en el pasado.",
+            "Forma: haber en condicional + participio pasado.",
+            "Ejemplo: 'Yo habría comido si hubiera tenido hambre.'"
           ],
-          "example": "Si supieras que vendría, me habrías llamado.",
+          "example": "Yo habría comido si hubiera tenido hambre.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo auxiliar",
+            "participio",
+            "complemento"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Yo"
+            },
+            {
+              "label": "verbo auxiliar",
+              "text": "habría"
+            },
+            {
+              "label": "participio",
+              "text": "comido"
+            },
+            {
+              "label": "complemento",
+              "text": "si hubiera tenido hambre"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Si supieras que vendría, me llamaste.",
-              "fix": "Si supieras que vendría, me habrías llamado."
+              "wrong": "Yo habría comer si hubiera tenido hambre.",
+              "fix": "Yo habría comido si hubiera tenido hambre."
             }
           ]
         },
         {
-          "title": "Condicional en oraciones negativas",
+          "title": "Condicional de cortesía",
           "points": [
-            "Se utiliza para expresar negaciones en situaciones hipotéticas.",
-            "Se forma con 'no' antes del verbo en condicional.",
-            "Ejemplo: 'Si no tuviera miedo, lo haría.'"
+            "Se utiliza para hacer solicitudes o preguntas de manera educada.",
+            "Forma: verbo en condicional simple.",
+            "Ejemplo: '¿Podrías ayudarme, por favor?'"
           ],
-          "example": "Si no llueve, iré al parque.",
+          "example": "¿Podrías ayudarme, por favor?",
+          "ruleOrder": [
+            "verbo",
+            "sujeto",
+            "complemento"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "verbo",
+              "text": "Podrías"
+            },
+            {
+              "label": "sujeto",
+              "text": "ayudarme, por favor"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Si no llueve, voy al parque.",
-              "fix": "Si no llueve, iré al parque."
+              "wrong": "¿Puedes ayudarme, por favor?",
+              "fix": "¿Podrías ayudarme, por favor?"
             }
           ]
         },
         {
-          "title": "Condicional en preguntas",
-          "points": [
-            "Se utiliza para formular preguntas hipotéticas.",
-            "Se forma con el verbo en condicional al inicio.",
-            "Ejemplo: '¿Qué harías si ganaras la lotería?'"
-          ],
-          "example": "¿Qué harías si tuvieras un mes de vacaciones?",
-          "mistakes": [
-            {
-              "wrong": "¿Qué haces si tuvieras un mes de vacaciones?",
-              "fix": "¿Qué harías si tuvieras un mes de vacaciones?"
-            }
-          ]
-        },
-        {
-          "title": "Condicional en oraciones subordinadas",
+          "title": "Condicional en oraciones complejas",
           "points": [
             "Se utiliza en oraciones subordinadas para expresar condiciones.",
-            "Se forma con 'si' + verbo en subjuntivo.",
-            "Ejemplo: 'Si estudiaras más, tendrías mejores notas.'"
+            "Ejemplo: 'Si tuviera tiempo, viajaría más.'",
+            "Importante: la cláusula condicional debe estar clara."
           ],
-          "example": "Si trabajas duro, conseguirás lo que quieres.",
+          "example": "Si tuviera tiempo, viajaría más.",
+          "ruleOrder": [
+            "si",
+            "sujeto",
+            "verbo",
+            "complemento"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "si",
+              "text": "Si"
+            },
+            {
+              "label": "sujeto",
+              "text": "viajaría"
+            },
+            {
+              "label": "verbo",
+              "text": "más"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Si trabajas duro, conseguirás lo que quieres.",
-              "fix": "Si trabajas duro, conseguirías lo que quieres."
+              "wrong": "Si tengo tiempo, viajaría más.",
+              "fix": "Si tuviera tiempo, viajaría más."
+            }
+          ]
+        },
+        {
+          "title": "Condicional con subjuntivo",
+          "points": [
+            "Se usa en situaciones hipotéticas que dependen de una condición.",
+            "Ejemplo: 'Si fuera rico, compraría una casa.'",
+            "El subjuntivo se utiliza en la cláusula condicional."
+          ],
+          "example": "Si fuera rico, compraría una casa.",
+          "ruleOrder": [
+            "si",
+            "sujeto",
+            "verbo subjuntivo",
+            "verbo condicional"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "si",
+              "text": "Si"
+            },
+            {
+              "label": "sujeto",
+              "text": "fuera"
+            },
+            {
+              "label": "verbo subjuntivo",
+              "text": "compraría"
+            },
+            {
+              "label": "verbo condicional",
+              "text": "una casa"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Si soy rico, compraría una casa.",
+              "fix": "Si fuera rico, compraría una casa."
+            }
+          ]
+        },
+        {
+          "title": "Condicional en el discurso indirecto",
+          "points": [
+            "Se utiliza para reportar lo que alguien dijo en forma condicional.",
+            "Ejemplo: 'Ella dijo que vendría si pudiera.'",
+            "Importante: mantener la concordancia de tiempos."
+          ],
+          "example": "Ella dijo que vendría si pudiera.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "complemento"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Ella"
+            },
+            {
+              "label": "verbo",
+              "text": "dijo"
+            },
+            {
+              "label": "complemento",
+              "text": "que vendría si pudiera"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Ella dice que vendrá si puede.",
+              "fix": "Ella dijo que vendría si pudiera."
             }
           ]
         }
       ],
       "Voice & Focus": [
         {
-          "title": "Voz activa",
+          "title": "Enfoque en el Sujeto",
           "points": [
-            "El sujeto realiza la acción.",
-            "Es más directa y clara.",
-            "Usada en la mayoría de las oraciones."
+            "El sujeto puede ser omitido si es claro por el contexto.",
+            "El orden SVO es común pero flexible.",
+            "El énfasis puede cambiar con la reordenación."
           ],
-          "example": "El perro come la comida.",
+          "example": "Yo como manzanas.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "objeto"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Yo"
+            },
+            {
+              "label": "verbo",
+              "text": "como"
+            },
+            {
+              "label": "objeto",
+              "text": "manzanas"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "La comida es comida por el perro.",
-              "fix": "El perro come la comida."
+              "wrong": "Como manzanas.",
+              "fix": "Yo como manzanas."
             }
           ]
         },
         {
-          "title": "Voz pasiva",
+          "title": "Enfoque en el Objeto",
           "points": [
-            "El sujeto recibe la acción.",
-            "Se forma con 'ser' + participio.",
-            "Usada para enfatizar la acción o el objeto."
+            "El objeto puede ser enfatizado al colocarlo al inicio.",
+            "Se puede usar la inversión para dar prominencia.",
+            "El contexto debe aclarar el sujeto."
           ],
-          "example": "La comida fue comida por el perro.",
+          "example": "Manzanas como yo.",
+          "ruleOrder": [
+            "objeto",
+            "verbo",
+            "sujeto"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "objeto",
+              "text": "Manzanas"
+            },
+            {
+              "label": "verbo",
+              "text": "como"
+            },
+            {
+              "label": "sujeto",
+              "text": "yo"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "El perro fue comido la comida.",
-              "fix": "La comida fue comida por el perro."
+              "wrong": "Como yo manzanas.",
+              "fix": "Manzanas como yo."
             }
           ]
         },
         {
-          "title": "Enfoque en el sujeto",
+          "title": "Uso del Pasivo",
           "points": [
-            "El sujeto es el foco de la oración.",
-            "Se utiliza para dar importancia al agente.",
-            "Común en narraciones y descripciones."
+            "El pasivo se usa para enfatizar la acción sobre el sujeto.",
+            "No es necesario siempre usar el pasivo en español.",
+            "El sujeto puede ser omitido en contextos claros."
           ],
-          "example": "Juan pintó el cuadro.",
+          "example": "Las manzanas fueron comidas.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "objeto"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Las manzanas"
+            },
+            {
+              "label": "verbo",
+              "text": "fueron comidas"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "El cuadro fue pintado por Juan.",
-              "fix": "Juan pintó el cuadro."
+              "wrong": "Fueron comidas las manzanas.",
+              "fix": "Las manzanas fueron comidas."
             }
           ]
         },
         {
-          "title": "Enfoque en el objeto",
+          "title": "Enfoque en el Verbo",
           "points": [
-            "El objeto es el foco de la oración.",
-            "Se utiliza para resaltar el resultado.",
-            "Común en contextos donde el objeto es más relevante."
+            "El verbo puede ser el foco de la oración.",
+            "Reordenar puede cambiar el significado o énfasis.",
+            "El uso de adverbios puede ayudar a clarificar."
           ],
-          "example": "El cuadro fue pintado por Juan.",
+          "example": "Como rápidamente manzanas.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "adverbio",
+            "objeto"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Como"
+            },
+            {
+              "label": "verbo",
+              "text": "rápidamente"
+            },
+            {
+              "label": "adverbio",
+              "text": "manzanas"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Juan pintó el cuadro fue.",
-              "fix": "El cuadro fue pintado por Juan."
+              "wrong": "Rápidamente como manzanas.",
+              "fix": "Como rápidamente manzanas."
             }
           ]
         },
         {
-          "title": "Cambio de enfoque",
+          "title": "Uso de Pronombres",
           "points": [
-            "Se puede cambiar el enfoque de la oración.",
-            "Permite variedad en la expresión.",
-            "Importante para evitar la repetición."
+            "Los pronombres pueden sustituir al sujeto u objeto.",
+            "El uso correcto de pronombres es clave para la claridad.",
+            "Los pronombres pueden ser omitidos en contextos claros."
           ],
-          "example": "La casa fue construida por los obreros.",
+          "example": "Las como.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "objeto"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Las"
+            },
+            {
+              "label": "verbo",
+              "text": "como"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Los obreros construyeron la casa fue.",
-              "fix": "La casa fue construida por los obreros."
+              "wrong": "Yo las como.",
+              "fix": "Las como."
             }
           ]
         }
       ],
       "Modality": [
         {
-          "title": "Uso del subjuntivo en deseos",
+          "title": "Obligación con 'deber'",
           "points": [
-            "Expresar deseos y esperanzas.",
-            "Usar el subjuntivo después de verbos como 'esperar' y 'desear'.",
-            "Ejemplos comunes incluyen 'ojalá' y 'que'."
+            "Se utiliza para expresar obligación.",
+            "Se conjuga según el sujeto.",
+            "Puede usarse en formas afirmativas y negativas."
           ],
-          "example": "Espero que vengas a la fiesta.",
+          "example": "Debo estudiar para el examen.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "complemento"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Debo"
+            },
+            {
+              "label": "verbo",
+              "text": "estudiar"
+            },
+            {
+              "label": "complemento",
+              "text": "para el examen"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Espero que tú vienes a la fiesta.",
-              "fix": "Espero que tú vengas a la fiesta."
+              "wrong": "Debo estudiar el examen.",
+              "fix": "Debo estudiar para el examen."
             }
           ]
         },
         {
-          "title": "Condicional para situaciones hipotéticas",
+          "title": "Posibilidad con 'poder'",
           "points": [
-            "Utilizar el condicional para expresar situaciones que no son reales.",
-            "Formar el condicional con el infinitivo más las terminaciones adecuadas.",
-            "Ejemplo: 'Yo iría si tuviera tiempo.'"
+            "Indica capacidad o permiso.",
+            "Se conjuga según el sujeto.",
+            "Puede expresar duda o certeza."
           ],
-          "example": "Si tuviera dinero, viajaría por el mundo.",
+          "example": "Puedo ir al cine esta noche.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "complemento"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Puedo"
+            },
+            {
+              "label": "verbo",
+              "text": "ir"
+            },
+            {
+              "label": "complemento",
+              "text": "al cine esta noche"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Si yo tendría dinero, viajaría por el mundo.",
-              "fix": "Si yo tuviera dinero, viajaría por el mundo."
+              "wrong": "Puedo ir cine esta noche.",
+              "fix": "Puedo ir al cine esta noche."
             }
           ]
         },
         {
-          "title": "Uso del indicativo en certezas",
+          "title": "Habilidad con 'saber'",
           "points": [
-            "El indicativo se utiliza para expresar hechos y certezas.",
-            "Es común en oraciones afirmativas y negativas.",
-            "Ejemplo: 'Sé que él viene mañana.'"
+            "Expresa conocimiento o habilidad.",
+            "Se utiliza en contextos de competencia.",
+            "Puede ser seguido de un infinitivo."
           ],
-          "example": "Ella sabe que el examen es el lunes.",
+          "example": "Sé tocar la guitarra.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "complemento"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Sé"
+            },
+            {
+              "label": "verbo",
+              "text": "tocar"
+            },
+            {
+              "label": "complemento",
+              "text": "la guitarra"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ella sabe que el examen es lunes.",
-              "fix": "Ella sabe que el examen es el lunes."
+              "wrong": "Sé tocar guitarra.",
+              "fix": "Sé tocar la guitarra."
             }
           ]
         },
         {
-          "title": "Imperativo para órdenes y consejos",
+          "title": "Certeza con 'deber de'",
           "points": [
-            "El imperativo se usa para dar órdenes o hacer sugerencias.",
-            "Se conjuga de manera diferente según la persona.",
-            "Ejemplo: 'Haz tu tarea.'"
+            "Indica una suposición fuerte.",
+            "Se usa para deducir algo.",
+            "Se puede usar en afirmaciones."
           ],
-          "example": "Ven aquí y escucha.",
+          "example": "Debes de estar cansado.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "complemento"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Debes"
+            },
+            {
+              "label": "verbo",
+              "text": "de estar"
+            },
+            {
+              "label": "complemento",
+              "text": "cansado"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ven aquí y escucha a mí.",
-              "fix": "Ven aquí y escúchame."
+              "wrong": "Debes estar cansado.",
+              "fix": "Debes de estar cansado."
             }
           ]
         },
         {
-          "title": "Uso del futuro para predicciones",
+          "title": "Duda con 'quizás'",
           "points": [
-            "El futuro se utiliza para hablar de acciones que sucederán.",
-            "Formar el futuro con el infinitivo más las terminaciones.",
-            "Ejemplo: 'Mañana lloverá.'"
+            "Expresa incertidumbre.",
+            "Se puede usar al inicio o en medio de la oración.",
+            "A menudo se combina con el subjuntivo."
           ],
-          "example": "El próximo año viajaré a España.",
+          "example": "Quizás venga a la fiesta.",
+          "ruleOrder": [
+            "adverbio",
+            "verbo",
+            "complemento"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "adverbio",
+              "text": "Quizás"
+            },
+            {
+              "label": "verbo",
+              "text": "venga"
+            },
+            {
+              "label": "complemento",
+              "text": "a la fiesta"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "El próximo año yo viajaré a España.",
-              "fix": "El próximo año viajaré a España."
+              "wrong": "Quizás viene a la fiesta.",
+              "fix": "Quizás venga a la fiesta."
             }
           ]
         },
         {
-          "title": "Subjuntivo en situaciones de duda",
+          "title": "Permiso con 'poder'",
           "points": [
-            "Usar el subjuntivo para expresar duda o incertidumbre.",
-            "Común después de frases como 'no creo que' o 'dudo que'.",
-            "Ejemplo: 'No creo que él venga.'"
+            "Se usa para solicitar o conceder permiso.",
+            "La forma cambia según el contexto.",
+            "Puede ser formal o informal."
           ],
-          "example": "Dudo que ellos tengan tiempo.",
+          "example": "¿Puedo salir temprano?",
+          "ruleOrder": [
+            "verbo",
+            "sujeto",
+            "complemento"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "verbo",
+              "text": "Puedo"
+            },
+            {
+              "label": "sujeto",
+              "text": "salir"
+            },
+            {
+              "label": "complemento",
+              "text": "temprano"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Dudo que ellos tienen tiempo.",
-              "fix": "Dudo que ellos tengan tiempo."
+              "wrong": "¿salir Puedo temprano?",
+              "fix": "¿Puedo salir temprano?"
             }
           ]
         },
         {
-          "title": "Condicional perfecto para acciones pasadas",
+          "title": "Consejo con 'deberías'",
           "points": [
-            "Usar el condicional perfecto para hablar de acciones que podrían haber ocurrido.",
-            "Se forma con 'haber' en condicional más el participio pasado.",
-            "Ejemplo: 'Habría ido si me hubieras invitado.'"
+            "Indica recomendación.",
+            "Se usa en situaciones de consejo.",
+            "La forma cambia según el sujeto."
           ],
-          "example": "Si hubiera sabido, habría venido.",
+          "example": "Deberías descansar más.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "complemento"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Deberías"
+            },
+            {
+              "label": "verbo",
+              "text": "descansar"
+            },
+            {
+              "label": "complemento",
+              "text": "más"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Si yo hubiera sabido, yo habría venido.",
-              "fix": "Si hubiera sabido, habría venido."
+              "wrong": "Deberías descansar.",
+              "fix": "Deberías descansar más."
             }
           ]
         },
         {
-          "title": "Imperativo negativo",
+          "title": "Preferencia con 'preferir'",
           "points": [
-            "El imperativo negativo se utiliza para prohibiciones.",
-            "Se forma con 'no' antes del verbo en su forma tú o usted.",
-            "Ejemplo: 'No hables en clase.'"
+            "Expresa una elección o preferencia.",
+            "Se conjuga según el sujeto.",
+            "Puede ser seguido de un infinitivo."
           ],
-          "example": "No comas eso.",
+          "example": "Prefiero comer pizza.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "complemento"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Prefiero"
+            },
+            {
+              "label": "verbo",
+              "text": "comer"
+            },
+            {
+              "label": "complemento",
+              "text": "pizza"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "No tú comes eso.",
-              "fix": "No comas eso."
+              "wrong": "Prefiero pizza.",
+              "fix": "Prefiero comer pizza."
             }
           ]
         }
       ],
       "Reported Speech": [
         {
-          "title": "Informar sobre una afirmación",
+          "title": "Introducción al Discurso Reportado",
           "points": [
-            "La estructura básica es: verbo de decir + que + oración.",
-            "El tiempo verbal puede cambiar al pasado.",
-            "Es importante mantener la concordancia de tiempos."
+            "El discurso reportado se utiliza para transmitir lo que alguien ha dicho.",
+            "Se puede usar con o sin cambios de tiempo verbal.",
+            "Es común usar conectores como 'que' para introducir la cita."
           ],
-          "example": "Ella dijo que estaba cansada.",
+          "example": "Ella dijo que vendría mañana.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "complemento"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Ella"
+            },
+            {
+              "label": "verbo",
+              "text": "dijo"
+            },
+            {
+              "label": "complemento",
+              "text": "que vendría mañana"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ella dice que está cansada.",
-              "fix": "Ella dijo que estaba cansada."
+              "wrong": "Ella dijo que vendré mañana.",
+              "fix": "Ella dijo que vendría mañana."
             }
           ]
         },
         {
-          "title": "Informar sobre una pregunta",
+          "title": "Uso de 'que' en el Discurso Reportado",
           "points": [
-            "Se utiliza el verbo de preguntar + si/cuándo/dónde + oración.",
-            "No se usan signos de interrogación.",
-            "El tiempo verbal también puede cambiar."
+            "El conector 'que' es esencial para introducir el discurso reportado.",
+            "Se puede omitir 'que' en contextos informales.",
+            "El uso de 'que' ayuda a clarificar la relación entre las ideas."
           ],
-          "example": "Él preguntó si venía a la fiesta.",
+          "example": "Él mencionó que estaba cansado.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "que",
+            "complemento"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Él"
+            },
+            {
+              "label": "verbo",
+              "text": "mencionó"
+            },
+            {
+              "label": "que",
+              "text": "que"
+            },
+            {
+              "label": "complemento",
+              "text": "estaba cansado"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Él pregunta si viene a la fiesta.",
-              "fix": "Él preguntó si venía a la fiesta."
+              "wrong": "Él mencionó estaba cansado.",
+              "fix": "Él mencionó que estaba cansado."
             }
           ]
         },
         {
-          "title": "Informar sobre un mandato",
+          "title": "Cambio de Tiempo Verbal en el Discurso Reportado",
           "points": [
-            "Se usa el verbo de ordenar + que + oración.",
-            "El imperativo se transforma en subjuntivo.",
-            "La intención del hablante se mantiene."
+            "Los tiempos verbales suelen cambiar al reportar.",
+            "El presente puede cambiar al pasado.",
+            "El cambio de tiempo depende del contexto temporal."
           ],
-          "example": "Ella ordenó que vinieran temprano.",
+          "example": "Ella dice que tiene hambre. → Ella dijo que tenía hambre.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "que",
+            "complemento"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Ella"
+            },
+            {
+              "label": "verbo",
+              "text": "dijo"
+            },
+            {
+              "label": "que",
+              "text": "que"
+            },
+            {
+              "label": "complemento",
+              "text": "tenía hambre"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ella ordena que vengan temprano.",
-              "fix": "Ella ordenó que vinieran temprano."
+              "wrong": "Ella dice que tenía hambre.",
+              "fix": "Ella dijo que tenía hambre."
             }
           ]
         },
         {
-          "title": "Cambios en los pronombres",
+          "title": "Discurso Reportado en Preguntas",
           "points": [
-            "Los pronombres deben ajustarse al contexto.",
-            "El pronombre de la primera persona cambia a la tercera.",
-            "Es importante mantener la claridad en la referencia."
+            "Las preguntas se transforman en afirmaciones en el discurso reportado.",
+            "Se utiliza 'si' para preguntas cerradas.",
+            "El orden de las palabras cambia al reportar preguntas."
           ],
-          "example": "Él dijo que yo lo llamaría.",
+          "example": "¿Vienes a la fiesta? → Ella preguntó si venías a la fiesta.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "si",
+            "complemento"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Ella"
+            },
+            {
+              "label": "verbo",
+              "text": "preguntó"
+            },
+            {
+              "label": "si",
+              "text": "si"
+            },
+            {
+              "label": "complemento",
+              "text": "venías a la fiesta"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Él dice que yo lo llamo.",
-              "fix": "Él dijo que yo lo llamaría."
+              "wrong": "Ella preguntó si vienes a la fiesta.",
+              "fix": "Ella preguntó si venías a la fiesta."
             }
           ]
         },
         {
-          "title": "Uso de tiempos verbales",
+          "title": "Discurso Reportado con Verbos Modales",
           "points": [
-            "El presente puede cambiar a pasado.",
-            "El futuro puede cambiar a condicional.",
-            "Es fundamental respetar la secuencia temporal."
+            "Los verbos modales pueden cambiar en el discurso reportado.",
+            "El contexto determina el cambio de significado.",
+            "Es importante mantener la intención original."
           ],
-          "example": "Ella dijo que iría al cine.",
+          "example": "Él puede hacerlo. → Ella dijo que podía hacerlo.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "que",
+            "complemento"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Ella"
+            },
+            {
+              "label": "verbo",
+              "text": "dijo"
+            },
+            {
+              "label": "que",
+              "text": "que"
+            },
+            {
+              "label": "complemento",
+              "text": "podía hacerlo"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ella dice que irá al cine.",
-              "fix": "Ella dijo que iría al cine."
+              "wrong": "Ella dijo que puede hacerlo.",
+              "fix": "Ella dijo que podía hacerlo."
             }
           ]
         },
         {
-          "title": "Informar sobre sentimientos",
+          "title": "Discurso Reportado con Adjetivos",
           "points": [
-            "Se utiliza el verbo sentir + que + oración.",
-            "Los tiempos verbales deben concordar.",
-            "Es importante transmitir la emoción original."
+            "Los adjetivos también pueden cambiar en el discurso reportado.",
+            "Es importante mantener la concordancia con el sujeto.",
+            "Los cambios dependen del contexto."
           ],
-          "example": "Él sintió que no lo entendían.",
+          "example": "La película es interesante. → Ella dijo que la película era interesante.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "que",
+            "complemento"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Ella"
+            },
+            {
+              "label": "verbo",
+              "text": "dijo"
+            },
+            {
+              "label": "que",
+              "text": "que"
+            },
+            {
+              "label": "complemento",
+              "text": "la película era interesante"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Él siente que no lo entienden.",
-              "fix": "Él sintió que no lo entendían."
+              "wrong": "Ella dijo que la película es interesante.",
+              "fix": "Ella dijo que la película era interesante."
             }
           ]
         }
       ],
       "Formality & Style": [
         {
-          "title": "Uso del 'tú' y 'usted'",
+          "title": "Uso de 'tú' y 'usted'",
           "points": [
-            "El 'tú' se utiliza en situaciones informales.",
-            "El 'usted' se utiliza en situaciones formales.",
-            "Es importante elegir correctamente para mostrar respeto."
+            "El uso de 'tú' es informal y se emplea entre amigos y familiares.",
+            "El uso de 'usted' es formal y se utiliza en situaciones que requieren respeto.",
+            "La elección entre 'tú' y 'usted' depende del contexto social."
           ],
-          "example": "¿Tú puedes ayudarme con esto?",
+          "example": "¿Tú quieres ir al cine? / ¿Usted quiere ir al cine?",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "objeto"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Tú quieres"
+            },
+            {
+              "label": "verbo",
+              "text": "Usted quiere"
+            },
+            {
+              "label": "objeto",
+              "text": "ir al cine"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "¿Usted puede ayudarme con esto, amigo?",
-              "fix": "¿Tú puedes ayudarme con esto, amigo?"
+              "wrong": "¿Tú quiere ir al cine?",
+              "fix": "¿Tú quieres ir al cine?"
             }
           ]
         },
         {
-          "title": "Uso de 'vosotros' en España",
+          "title": "Saludo formal e informal",
           "points": [
-            "Se utiliza 'vosotros' para dirigirse a un grupo en situaciones informales.",
-            "En América Latina, se usa 'ustedes' en su lugar.",
-            "Es esencial conocer el contexto geográfico."
+            "Los saludos formales son más apropiados en contextos profesionales.",
+            "Los saludos informales son comunes entre amigos y familiares.",
+            "Adaptar el saludo al contexto es clave para una comunicación efectiva."
           ],
-          "example": "¿Vosotros venís a la fiesta?",
+          "example": "Hola, ¿cómo estás? / Buenas tardes, ¿cómo está usted?",
+          "ruleOrder": [
+            "saludo",
+            "pregunta"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "saludo",
+              "text": "Hola, ¿cómo estás"
+            },
+            {
+              "label": "pregunta",
+              "text": "Buenas tardes, ¿cómo está usted"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "¿Ustedes venís a la fiesta?",
-              "fix": "¿Vosotros venís a la fiesta?"
+              "wrong": "Hola, ¿cómo está?",
+              "fix": "Hola, ¿cómo estás?"
             }
           ]
         },
         {
-          "title": "Formas de cortesía",
+          "title": "Despedidas formales e informales",
           "points": [
-            "Usar 'por favor' y 'gracias' es fundamental.",
-            "La cortesía varía según el contexto social.",
-            "Evitar el uso excesivo puede parecer descortés."
+            "Las despedidas formales son importantes en situaciones de negocios.",
+            "Las despedidas informales son más relajadas y amistosas.",
+            "Conocer el contexto ayuda a elegir la despedida adecuada."
           ],
-          "example": "¿Me podrías ayudar, por favor?",
+          "example": "Adiós, cuídate. / Hasta luego, que tenga un buen día.",
+          "ruleOrder": [
+            "despedida",
+            "deseo"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "despedida",
+              "text": "Adiós, cuídate"
+            },
+            {
+              "label": "deseo",
+              "text": "Hasta luego, que tenga un buen día"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "¿Me podrías ayudar?",
-              "fix": "¿Me podrías ayudar, por favor?"
+              "wrong": "Adiós, que tenga un buen día.",
+              "fix": "Hasta luego, que tenga un buen día."
             }
           ]
         },
         {
-          "title": "Uso de adjetivos en contextos formales",
+          "title": "Preguntas formales",
           "points": [
-            "Los adjetivos deben concordar en género y número.",
-            "En contextos formales, se prefieren adjetivos más elaborados.",
-            "Evitar superlativos excesivos es recomendable."
+            "Las preguntas formales requieren un lenguaje más cuidadoso.",
+            "Usar 'usted' en preguntas muestra respeto.",
+            "La formulación de preguntas puede variar según el contexto."
           ],
-          "example": "El libro es interesante.",
+          "example": "¿Podría ayudarme, por favor? / ¿Puedes ayudarme?",
+          "ruleOrder": [
+            "verbo",
+            "sujeto",
+            "objeto"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "verbo",
+              "text": "Podría ayudarme, por favor"
+            },
+            {
+              "label": "sujeto",
+              "text": "Puedes ayudarme"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "El libro es muy interesante.",
-              "fix": "El libro es un tanto interesante."
+              "wrong": "¿Puedes ayudarme, por favor?",
+              "fix": "¿Podría ayudarme, por favor?"
             }
           ]
         },
         {
-          "title": "Evitando el lenguaje coloquial",
+          "title": "Uso de títulos y apellidos",
           "points": [
-            "El lenguaje coloquial puede ser inapropiado en situaciones formales.",
-            "Es mejor usar un vocabulario más neutro.",
-            "Conocer el público es clave."
+            "Usar títulos como 'Señor' o 'Señora' es una muestra de respeto.",
+            "En contextos informales, se pueden usar nombres de pila.",
+            "La elección del título depende del nivel de confianza."
           ],
-          "example": "Me mola este lugar.",
+          "example": "Señor Pérez, ¿cómo está? / Juan, ¿cómo estás?",
+          "ruleOrder": [
+            "título",
+            "apellido",
+            "pregunta"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "título",
+              "text": "Señor Pérez, ¿cómo está"
+            },
+            {
+              "label": "apellido",
+              "text": "Juan, ¿cómo estás"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Me encanta este lugar.",
-              "fix": "Este lugar es muy agradable."
+              "wrong": "Señor, ¿cómo estás?",
+              "fix": "Señor Pérez, ¿cómo está?"
             }
           ]
         },
         {
-          "title": "Uso de la primera persona en contextos formales",
+          "title": "Expresiones de cortesía",
           "points": [
-            "Evitar el uso excesivo de la primera persona.",
-            "En contextos formales, se prefiere la voz pasiva.",
-            "La objetividad es valorada."
+            "Incluir 'por favor' y 'gracias' es esencial en la comunicación.",
+            "Las expresiones de cortesía varían según el contexto social.",
+            "Ser cortés mejora las relaciones interpersonales."
           ],
-          "example": "Yo creo que es importante.",
+          "example": "¿Me podría pasar la sal, por favor? / Pásame la sal.",
+          "ruleOrder": [
+            "verbo",
+            "objeto",
+            "cortesía"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "verbo",
+              "text": "Me podría pasar la sal, por favor"
+            },
+            {
+              "label": "objeto",
+              "text": "Pásame la sal"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Yo pienso que es fundamental.",
-              "fix": "Se considera fundamental."
+              "wrong": "¿Me pasa la sal?",
+              "fix": "¿Me podría pasar la sal, por favor?"
             }
           ]
         },
         {
-          "title": "Estructuras de oraciones complejas",
+          "title": "Modismos y su uso",
           "points": [
-            "Las oraciones complejas son comunes en escritos formales.",
-            "Usar conectores adecuados mejora la claridad.",
-            "La variedad en la estructura es esencial."
+            "Los modismos pueden ser informales y no siempre son apropiados.",
+            "Conocer el contexto ayuda a decidir cuándo usarlos.",
+            "Los modismos pueden enriquecer la comunicación."
           ],
-          "example": "El informe fue presentado.",
+          "example": "Estar en las nubes / No dar pie con bola.",
+          "ruleOrder": [
+            "expresión",
+            "significado"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "expresión",
+              "text": "Estar en las nubes"
+            },
+            {
+              "label": "significado",
+              "text": "No dar pie con bola"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Presenté el informe.",
-              "fix": "El informe fue presentado."
+              "wrong": "Estar en la luna.",
+              "fix": "Estar en las nubes."
             }
           ]
         }
       ],
       "Discourse & Flow": [
         {
-          "title": "Uso de conectores",
+          "title": "Uso de conectores básicos",
           "points": [
-            "Los conectores son fundamentales para la cohesión del texto.",
-            "Ayudan a establecer relaciones entre ideas.",
-            "El uso adecuado de conectores mejora la fluidez del discurso."
+            "Los conectores ayudan a unir ideas.",
+            "Ejemplos comunes: y, pero, porque.",
+            "Usar conectores mejora la fluidez."
           ],
-          "example": "Me gusta el chocolate, pero no puedo comerlo mucho.",
+          "example": "Me gusta el chocolate y la vainilla.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "objeto"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Me"
+            },
+            {
+              "label": "verbo",
+              "text": "gusta"
+            },
+            {
+              "label": "objeto",
+              "text": "el chocolate y la vainilla"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Me gusta el chocolate, y no puedo comerlo mucho.",
-              "fix": "Me gusta el chocolate, pero no puedo comerlo mucho."
+              "wrong": "Me gusta chocolate y vainilla.",
+              "fix": "Me gusta el chocolate y la vainilla."
             }
           ]
         },
         {
-          "title": "Estructura de oraciones compuestas",
+          "title": "Uso de marcadores de discurso",
           "points": [
-            "Las oraciones compuestas permiten expresar ideas complejas.",
-            "Se forman uniendo oraciones simples con conectores.",
-            "El orden de las oraciones puede afectar el significado."
+            "Los marcadores organizan el discurso.",
+            "Ejemplos: primero, luego, finalmente.",
+            "Mejoran la claridad y estructura."
           ],
-          "example": "Ella estudia mucho porque quiere sacar buenas notas.",
+          "example": "Primero, fui al mercado; luego, cociné.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "complemento"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "fui"
+            },
+            {
+              "label": "verbo",
+              "text": "al mercado"
+            },
+            {
+              "label": "complemento",
+              "text": "luego, cociné"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ella estudia mucho, quiere sacar buenas notas.",
-              "fix": "Ella estudia mucho porque quiere sacar buenas notas."
+              "wrong": "Primero fui al mercado luego cociné.",
+              "fix": "Primero, fui al mercado; luego, cociné."
             }
           ]
         },
         {
-          "title": "Uso de pronombres relativos",
+          "title": "Conectores de contraste",
           "points": [
-            "Los pronombres relativos conectan oraciones y aportan información adicional.",
-            "Ejemplos incluyen 'que', 'cual', 'cuyo'.",
-            "El uso correcto evita ambigüedades."
+            "Indican oposición entre ideas.",
+            "Ejemplos: sin embargo, aunque.",
+            "Importantes para argumentar."
           ],
-          "example": "El libro que leí es interesante.",
+          "example": "Quería ir; sin embargo, estaba cansado.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "complemento"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Quería"
+            },
+            {
+              "label": "verbo",
+              "text": "ir"
+            },
+            {
+              "label": "complemento",
+              "text": "sin embargo, estaba cansado"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "El libro leí es interesante.",
-              "fix": "El libro que leí es interesante."
+              "wrong": "Quería ir sin embargo estaba cansado.",
+              "fix": "Quería ir; sin embargo, estaba cansado."
             }
           ]
         },
         {
-          "title": "Elipsis en el discurso",
+          "title": "Uso de conectores de causa",
           "points": [
-            "La elipsis permite omitir información redundante.",
-            "Facilita la fluidez del discurso.",
-            "Es importante que la omisión no genere confusión."
+            "Explican razones o causas.",
+            "Ejemplos: porque, ya que.",
+            "Fundamentales para la argumentación."
           ],
-          "example": "Yo prefiero el té, ella el café.",
+          "example": "No fui a la fiesta porque estaba enfermo.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "objeto"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "No fui"
+            },
+            {
+              "label": "verbo",
+              "text": "a la fiesta"
+            },
+            {
+              "label": "objeto",
+              "text": "porque estaba enfermo"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Yo prefiero el té, ella prefiere el café.",
-              "fix": "Yo prefiero el té, ella el café."
+              "wrong": "No fui a fiesta porque estaba enfermo.",
+              "fix": "No fui a la fiesta porque estaba enfermo."
+            }
+          ]
+        },
+        {
+          "title": "Estructura de oraciones complejas",
+          "points": [
+            "Combinar oraciones mejora la expresión.",
+            "Usar subordinadas y coordinadas.",
+            "Enriquece el discurso."
+          ],
+          "example": "Aunque llovía, salí a correr.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "complemento"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "salí"
+            },
+            {
+              "label": "verbo",
+              "text": "a correr"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Aunque llovía salí a correr.",
+              "fix": "Aunque llovía, salí a correr."
+            }
+          ]
+        },
+        {
+          "title": "Uso de pronombres de referencia",
+          "points": [
+            "Los pronombres evitan repeticiones.",
+            "Ejemplos: él, ella, eso.",
+            "Facilitan la fluidez del discurso."
+          ],
+          "example": "María compró un libro; ella lo leyó.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "objeto"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "María"
+            },
+            {
+              "label": "verbo",
+              "text": "compró"
+            },
+            {
+              "label": "objeto",
+              "text": "un libro"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "María compró un libro; María lo leyó.",
+              "fix": "María compró un libro; ella lo leyó."
+            }
+          ]
+        },
+        {
+          "title": "Estructura de preguntas complejas",
+          "points": [
+            "Las preguntas complejas requieren claridad.",
+            "Usar conectores y pronombres.",
+            "Importante para la comunicación efectiva."
+          ],
+          "example": "¿Por qué no viniste, aunque te invité?",
+          "ruleOrder": [
+            "verbo",
+            "sujeto",
+            "complemento"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "verbo",
+              "text": "viniste"
+            },
+            {
+              "label": "sujeto",
+              "text": "te invité"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "¿Por qué no viniste aunque te invité?",
+              "fix": "¿Por qué no viniste, aunque te invité?"
+            }
+          ]
+        },
+        {
+          "title": "Uso de elipsis en el discurso",
+          "points": [
+            "La elipsis evita redundancias.",
+            "Ejemplo: 'Yo tengo un perro; él, un gato.'",
+            "Mejora la economía del lenguaje."
+          ],
+          "example": "Tengo un perro; él, un gato.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "objeto"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "Tengo un perro"
+            },
+            {
+              "label": "verbo",
+              "text": "él"
+            },
+            {
+              "label": "objeto",
+              "text": "un gato"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Tengo un perro; yo tengo un gato.",
+              "fix": "Tengo un perro; él, un gato."
             }
           ]
         },
         {
           "title": "Uso de la voz pasiva",
           "points": [
-            "La voz pasiva se utiliza para enfatizar la acción sobre el sujeto.",
-            "Es común en contextos formales.",
-            "La estructura es diferente a la voz activa."
+            "La voz pasiva cambia el enfoque.",
+            "Ejemplo: 'El libro fue leído por María.'",
+            "Útil para enfatizar el objeto."
           ],
-          "example": "La carta fue escrita por María.",
+          "example": "El libro fue escrito por el autor.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "complemento"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujeto",
+              "text": "El libro"
+            },
+            {
+              "label": "verbo",
+              "text": "fue escrito"
+            },
+            {
+              "label": "complemento",
+              "text": "por el autor"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "María escribió la carta.",
-              "fix": "La carta fue escrita por María."
+              "wrong": "El libro escribió por el autor.",
+              "fix": "El libro fue escrito por el autor."
             }
           ]
         },
         {
-          "title": "Concordancia en el discurso",
+          "title": "Uso de la voz activa",
           "points": [
-            "La concordancia asegura que los elementos de la oración coincidan en género y número.",
-            "Es esencial para la claridad del mensaje.",
-            "Errores de concordancia pueden cambiar el significado."
+            "La voz activa es más directa.",
+            "Ejemplo: 'María escribió el libro.'",
+            "Preferida en la comunicación clara."
           ],
-          "example": "Las casas son grandes.",
-          "mistakes": [
+          "example": "El autor escribió la novela.",
+          "ruleOrder": [
+            "sujeto",
+            "verbo",
+            "objeto"
+          ],
+          "exampleHighlights": [
             {
-              "wrong": "La casas son grandes.",
-              "fix": "Las casas son grandes."
+              "label": "sujeto",
+              "text": "El autor"
+            },
+            {
+              "label": "verbo",
+              "text": "escribió"
+            },
+            {
+              "label": "objeto",
+              "text": "la novela"
             }
-          ]
-        },
-        {
-          "title": "Uso de adverbios de modo",
-          "points": [
-            "Los adverbios de modo describen cómo se realiza la acción.",
-            "Pueden modificar verbos, adjetivos o incluso otros adverbios.",
-            "Su posición en la oración puede variar."
           ],
-          "example": "Ella corre rápidamente.",
           "mistakes": [
             {
-              "wrong": "Ella rápidamente corre.",
-              "fix": "Ella corre rápidamente."
-            }
-          ]
-        },
-        {
-          "title": "Frases subordinadas",
-          "points": [
-            "Las frases subordinadas añaden información a la oración principal.",
-            "Pueden ser sustantivas, adjetivas o adverbiales.",
-            "El uso correcto mejora la complejidad del discurso."
-          ],
-          "example": "Cuando llegues, avísame.",
-          "mistakes": [
-            {
-              "wrong": "Cuando tú llegues, avísame.",
-              "fix": "Cuando llegues, avísame."
-            }
-          ]
-        },
-        {
-          "title": "Uso de la repetición",
-          "points": [
-            "La repetición puede enfatizar una idea o crear ritmo.",
-            "Es útil en discursos persuasivos.",
-            "Demasiada repetición puede resultar redundante."
-          ],
-          "example": "Es importante, muy importante, que estudies.",
-          "mistakes": [
-            {
-              "wrong": "Es importante que estudies, importante.",
-              "fix": "Es importante, muy importante, que estudies."
-            }
-          ]
-        },
-        {
-          "title": "El uso de la interrogación indirecta",
-          "points": [
-            "Las interrogaciones indirectas se utilizan para hacer preguntas de manera más sutil.",
-            "Se introducen con frases como 'no sé' o 'me pregunto'.",
-            "Ayudan a mantener un tono más formal."
-          ],
-          "example": "No sé si vendrá.",
-          "mistakes": [
-            {
-              "wrong": "No sé, vendrá.",
-              "fix": "No sé si vendrá."
+              "wrong": "La novela fue escrita por el autor.",
+              "fix": "El autor escribió la novela."
             }
           ]
         }
@@ -10862,9 +12980,9 @@
       "Conditions": "Condiciones",
       "Voice & Focus": "Voz y Enfoque",
       "Modality": "Modalidad",
-      "Reported Speech": "Estilo Indirecto",
+      "Reported Speech": "Discurso Reportado",
       "Formality & Style": "Formalidad y Estilo",
-      "Discourse & Flow": "Discurso y Fluidez"
+      "Discourse & Flow": "Discurso & Fluidez"
     }
   },
   "worldSource": {

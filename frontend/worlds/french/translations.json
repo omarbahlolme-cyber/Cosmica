@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-18T05:53:42.101Z",
+  "generatedAt": "2026-02-18T13:03:48.289Z",
   "worldLanguage": "french",
   "baseLanguages": [
     "albanian",
@@ -6196,6 +6196,25 @@
           "english": "degree"
         }
       }
+    },
+    "sectionLabels": {
+      "Greetings": "Salutations",
+      "Pronouns": "Pronoms",
+      "Verbs & Tenses": "Verbes & Temps",
+      "Questions & Connectors": "Questions & Connecteurs",
+      "Numbers & Counting": "Nombres & Comptage",
+      "Time, Date & Frequency": "Temps, Date & Fréquence",
+      "Descriptions & Adjectives": "Descriptions & Adjectifs",
+      "Opinions & Preferences": "Opinions & Préférences",
+      "Weather & Seasons": "Météo & Saisons",
+      "Places & Directions": "Lieux & Directions",
+      "countries": "pays",
+      "Feelings & States": "Sentiments & États",
+      "Family & Relationships": "Famille & Relations",
+      "Food & Eating": "Nourriture & Repas",
+      "Health & Body": "Santé & Corps",
+      "Technology & Communication": "Technologie & Communication",
+      "Work & School": "Travail & École"
     }
   },
   "phrases": {
@@ -7979,364 +7998,836 @@
     "cards": {
       "Sentence Structure": [
         {
-          "title": "Ordre canonique des mots",
+          "title": "Ordre de base de la phrase",
           "points": [
-            "Le sujet précède le verbe.",
-            "Le complément d'objet direct suit le verbe.",
-            "Les adjectifs se placent généralement avant le nom."
+            "La structure de phrase en français suit généralement l'ordre Sujet-Verbe-Objet.",
+            "Chaque phrase doit avoir un sujet explicite.",
+            "Cet ordre est essentiel pour la clarté de la communication."
           ],
           "example": "Marie mange une pomme.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "objet"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Marie"
+            },
+            {
+              "label": "verbe",
+              "text": "mange"
+            },
+            {
+              "label": "objet",
+              "text": "une pomme"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Mange Marie une pomme.",
+              "wrong": "Mange une pomme Marie.",
               "fix": "Marie mange une pomme."
             }
           ]
         },
         {
-          "title": "Placement des adverbes",
+          "title": "Utilisation des articles définis",
           "points": [
-            "Les adverbes modifient le verbe et se placent souvent après celui-ci.",
-            "Ils peuvent également être placés au début de la phrase pour insister.",
-            "Attention à la position des adverbes de fréquence."
+            "Les articles définis précisent un nom particulier.",
+            "Ils sont essentiels pour indiquer la spécificité.",
+            "Utilisez 'le', 'la', 'les' selon le genre et le nombre."
           ],
-          "example": "Il parle souvent français.",
+          "example": "Le chat dort sur le canapé.",
+          "ruleOrder": [
+            "article défini",
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "article défini",
+              "text": "Le"
+            },
+            {
+              "label": "sujet",
+              "text": "chat"
+            },
+            {
+              "label": "verbe",
+              "text": "dort"
+            },
+            {
+              "label": "complément",
+              "text": "sur le canapé"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Il souvent parle français.",
-              "fix": "Il parle souvent français."
+              "wrong": "Chat dort sur canapé.",
+              "fix": "Le chat dort sur le canapé."
             }
           ]
         },
         {
-          "title": "Formation des phrases négatives",
+          "title": "Utilisation des articles indéfinis",
           "points": [
-            "La négation se forme avec 'ne' et 'pas'.",
-            "Le 'ne' précède le verbe et 'pas' le suit.",
-            "Attention à l'élision du 'ne' dans le langage familier."
+            "Les articles indéfinis introduisent un nom non spécifique.",
+            "Utilisez 'un', 'une', 'des' pour parler de manière générale.",
+            "Ils sont importants pour la fluidité de la conversation."
           ],
-          "example": "Je ne comprends pas.",
+          "example": "Une fille joue dans le parc.",
+          "ruleOrder": [
+            "article indéfini",
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "article indéfini",
+              "text": "Une"
+            },
+            {
+              "label": "sujet",
+              "text": "fille"
+            },
+            {
+              "label": "verbe",
+              "text": "joue"
+            },
+            {
+              "label": "complément",
+              "text": "dans le parc"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Je comprends pas.",
-              "fix": "Je ne comprends pas."
+              "wrong": "Fille joue dans parc.",
+              "fix": "Une fille joue dans le parc."
             }
           ]
         },
         {
-          "title": "Construction des phrases interrogatives",
+          "title": "Distinction de formalité (tu/vous)",
           "points": [
-            "Les questions peuvent être formées par inversion du sujet et du verbe.",
-            "On peut aussi utiliser 'est-ce que' pour poser des questions.",
-            "L'intonation peut également signaler une question."
+            "Utilisez 'tu' pour un registre informel.",
+            "Utilisez 'vous' pour un registre formel ou pluriel.",
+            "Cette distinction est cruciale dans la communication sociale."
           ],
-          "example": "Vas-tu au cinéma ?",
+          "example": "Tu aimes le chocolat ?",
+          "ruleOrder": [
+            "sujet informel",
+            "verbe",
+            "objet"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet informel",
+              "text": "Tu"
+            },
+            {
+              "label": "verbe",
+              "text": "aimes"
+            },
+            {
+              "label": "objet",
+              "text": "le chocolat"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Tu vas au cinéma ?",
-              "fix": "Vas-tu au cinéma ?"
+              "wrong": "Vous aimes le chocolat ?",
+              "fix": "Tu aimes le chocolat ?"
             }
           ]
         },
         {
-          "title": "Utilisation des propositions subordonnées",
+          "title": "Formes composées",
           "points": [
-            "Les subordonnées complètent le sens d'une phrase principale.",
-            "Elles commencent souvent par des conjonctions comme 'que', 'si', ou 'quand'.",
-            "Attention à l'accord des temps entre la principale et la subordonnée."
+            "Les temps composés utilisent l'auxiliaire 'avoir' ou 'être'.",
+            "Ils expriment des actions passées ou des états.",
+            "La structure est essentielle pour la précision temporelle."
           ],
-          "example": "Je pense qu'il viendra demain.",
+          "example": "Elle a mangé une pomme.",
+          "ruleOrder": [
+            "sujet",
+            "auxiliaire",
+            "participe passé",
+            "objet"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Elle"
+            },
+            {
+              "label": "auxiliaire",
+              "text": "a"
+            },
+            {
+              "label": "participe passé",
+              "text": "mangé"
+            },
+            {
+              "label": "objet",
+              "text": "une pomme"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Je pense il viendra demain.",
-              "fix": "Je pense qu'il viendra demain."
+              "wrong": "Elle mangé une pomme.",
+              "fix": "Elle a mangé une pomme."
             }
           ]
         }
       ],
       "Verbs": [
         {
-          "title": "Conjugaison des verbes réguliers -ER",
+          "title": "Présent de l'indicatif",
           "points": [
-            "Les verbes réguliers en -ER sont les plus fréquents en français.",
-            "La terminaison pour 'je' est -e, pour 'tu' c'est -es, pour 'il/elle/on' c'est -e.",
-            "Exemple : 'Je parle' (I speak)."
+            "Utilisé pour exprimer des actions habituelles.",
+            "Conjugaison régulière selon le groupe du verbe.",
+            "Accord du verbe avec le sujet."
           ],
-          "example": "Je parle français tous les jours.",
+          "example": "Je mange une pomme.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "objet"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Je"
+            },
+            {
+              "label": "verbe",
+              "text": "mange"
+            },
+            {
+              "label": "objet",
+              "text": "une pomme"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Je parl.",
-              "fix": "Je parle."
+              "wrong": "Je mangez une pomme.",
+              "fix": "Je mange une pomme."
             }
           ]
         },
         {
-          "title": "Conjugaison des verbes réguliers -IR",
+          "title": "Passé composé",
           "points": [
-            "Les verbes réguliers en -IR suivent un modèle de conjugaison particulier.",
-            "La terminaison pour 'je' est -is, pour 'tu' c'est -is, pour 'il/elle/on' c'est -it.",
-            "Exemple : 'Je finis' (I finish)."
+            "Utilisé pour exprimer des actions achevées.",
+            "Formé avec un auxiliaire et le participe passé.",
+            "Accord du participe passé avec le sujet si l'auxiliaire est 'être'."
           ],
-          "example": "Je finis mes devoirs avant le dîner.",
+          "example": "Elle est allée au marché.",
+          "ruleOrder": [
+            "sujet",
+            "auxiliaire",
+            "participe passé"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Elle"
+            },
+            {
+              "label": "auxiliaire",
+              "text": "est"
+            },
+            {
+              "label": "participe passé",
+              "text": "allée"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Je fin.",
-              "fix": "Je finis."
+              "wrong": "Elle est allé au marché.",
+              "fix": "Elle est allée au marché."
             }
           ]
         },
         {
-          "title": "Conjugaison des verbes réguliers -RE",
+          "title": "Futur simple",
           "points": [
-            "Les verbes en -RE ont des terminaisons spécifiques.",
-            "La terminaison pour 'je' est -s, pour 'tu' c'est -s, pour 'il/elle/on' c'est -d.",
-            "Exemple : 'Je vends' (I sell)."
+            "Utilisé pour exprimer des actions à venir.",
+            "Formé avec l'infinitif du verbe et des terminaisons spécifiques.",
+            "Pas d'accord avec le sujet."
           ],
-          "example": "Je vends des livres au marché.",
+          "example": "Nous partirons demain.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Nous"
+            },
+            {
+              "label": "verbe",
+              "text": "partirons"
+            },
+            {
+              "label": "complément",
+              "text": "demain"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Je vend.",
-              "fix": "Je vends."
+              "wrong": "Nous partirais demain.",
+              "fix": "Nous partirons demain."
             }
           ]
         },
         {
-          "title": "Les verbes pronominaux",
+          "title": "Imparfait",
           "points": [
-            "Les verbes pronominaux se conjuguent avec un pronom réfléchi.",
-            "Le pronom change selon le sujet : je me, tu te, il/elle/on se.",
-            "Exemple : 'Je me lève' (I get up)."
+            "Utilisé pour décrire des actions passées habituelles.",
+            "Formé avec le radical du verbe et des terminaisons spécifiques.",
+            "Accord du verbe avec le sujet."
           ],
-          "example": "Je me lève tôt le matin.",
+          "example": "Ils jouaient au parc.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Ils"
+            },
+            {
+              "label": "verbe",
+              "text": "jouaient"
+            },
+            {
+              "label": "complément",
+              "text": "au parc"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Je lève.",
-              "fix": "Je me lève."
+              "wrong": "Ils jouait au parc.",
+              "fix": "Ils jouaient au parc."
             }
           ]
         },
         {
-          "title": "Le passé composé",
+          "title": "Conditionnel présent",
           "points": [
-            "Le passé composé se forme avec un auxiliaire (avoir ou être) et le participe passé.",
-            "Le choix de l'auxiliaire dépend du verbe.",
-            "Exemple : 'J'ai mangé' (I ate)."
+            "Utilisé pour exprimer des actions conditionnelles.",
+            "Formé avec le radical du futur et des terminaisons spécifiques.",
+            "Accord du verbe avec le sujet."
           ],
-          "example": "J'ai mangé au restaurant hier soir.",
+          "example": "Je voudrais un café.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Je"
+            },
+            {
+              "label": "verbe",
+              "text": "voudrais"
+            },
+            {
+              "label": "complément",
+              "text": "un café"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Je ai mangé.",
-              "fix": "J'ai mangé."
+              "wrong": "Je voudrait un café.",
+              "fix": "Je voudrais un café."
             }
           ]
         },
         {
-          "title": "Les verbes irréguliers - Avoir et Être",
+          "title": "Subjonctif présent",
           "points": [
-            "Les verbes 'avoir' et 'être' sont essentiels pour former d'autres temps.",
-            "Ils ont des conjugaisons irrégulières.",
-            "Exemple : 'J'ai' et 'Je suis' (I have and I am)."
+            "Utilisé pour exprimer des souhaits ou des doutes.",
+            "Formé avec le radical du verbe et des terminaisons spécifiques.",
+            "Accord du verbe avec le sujet."
           ],
-          "example": "Je suis étudiant et j'ai un livre.",
+          "example": "Il faut que tu viennes.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "tu"
+            },
+            {
+              "label": "verbe",
+              "text": "viennes"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Je suis un étudiant.",
-              "fix": "Je suis étudiant."
+              "wrong": "Il faut que tu viens.",
+              "fix": "Il faut que tu viennes."
             }
           ]
         }
       ],
       "Tenses & Aspect": [
         {
-          "title": "Le Présent Simple",
+          "title": "Présent de l'indicatif",
           "points": [
-            "Exprime des actions habituelles ou des vérités générales.",
-            "Utilisé pour décrire des états permanents.",
-            "Formé par la conjugaison des verbes au présent."
+            "Utilisé pour des actions habituelles.",
+            "Indique une vérité générale.",
+            "Exprime une action en cours."
           ],
-          "example": "Je mange une pomme chaque jour.",
+          "example": "Je mange une pomme.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "objet"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Je"
+            },
+            {
+              "label": "verbe",
+              "text": "mange"
+            },
+            {
+              "label": "objet",
+              "text": "une pomme"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Je mangeait une pomme chaque jour.",
-              "fix": "Je mange une pomme chaque jour."
+              "wrong": "Je mange le pomme.",
+              "fix": "Je mange la pomme."
             }
           ]
         },
         {
-          "title": "Le Passé Composé",
+          "title": "Passé composé",
           "points": [
-            "Décrit des actions terminées dans le passé.",
-            "Formé avec l'auxiliaire 'avoir' ou 'être' et le participe passé.",
-            "Indique une action précise dans le temps."
+            "Utilisé pour des actions complètes.",
+            "Formé avec un auxiliaire et le participe passé.",
+            "Indique une action passée avec un lien au présent."
           ],
-          "example": "Elle a fini ses devoirs hier.",
+          "example": "J'ai mangé une pomme.",
+          "ruleOrder": [
+            "sujet",
+            "auxiliaire",
+            "participe passé"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "J"
+            },
+            {
+              "label": "auxiliaire",
+              "text": "ai"
+            },
+            {
+              "label": "participe passé",
+              "text": "mangé"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Elle a finie ses devoirs hier.",
-              "fix": "Elle a fini ses devoirs hier."
+              "wrong": "J'ai mangé le pomme.",
+              "fix": "J'ai mangé la pomme."
             }
           ]
         },
         {
-          "title": "L'Imparfait",
+          "title": "Imparfait",
           "points": [
-            "Utilisé pour des actions habituelles ou des descriptions dans le passé.",
-            "Indique une durée ou une répétition.",
-            "Formé par la racine du verbe au présent et les terminaisons spécifiques."
+            "Utilisé pour des actions habituelles dans le passé.",
+            "Exprime une description ou un état.",
+            "Indique une action inachevée."
           ],
-          "example": "Quand j'étais jeune, je jouais au foot.",
+          "example": "Je mangeais une pomme.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "objet"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Je"
+            },
+            {
+              "label": "verbe",
+              "text": "mangeais"
+            },
+            {
+              "label": "objet",
+              "text": "une pomme"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Quand j'étais jeune, je joue au foot.",
-              "fix": "Quand j'étais jeune, je jouais au foot."
+              "wrong": "Je mangeais le pomme.",
+              "fix": "Je mangeais la pomme."
             }
           ]
         },
         {
-          "title": "Le Futur Proche",
+          "title": "Futur proche",
           "points": [
-            "Exprime une action imminente.",
+            "Utilisé pour des actions imminentes.",
             "Formé avec 'aller' + infinitif.",
-            "Indique une intention ou un plan."
+            "Exprime une intention."
           ],
-          "example": "Je vais partir en vacances demain.",
+          "example": "Je vais manger une pomme.",
+          "ruleOrder": [
+            "sujet",
+            "aller",
+            "infinitif"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Je"
+            },
+            {
+              "label": "aller",
+              "text": "vais"
+            },
+            {
+              "label": "infinitif",
+              "text": "manger"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Je vais partir en vacance demain.",
-              "fix": "Je vais partir en vacances demain."
+              "wrong": "Je vais mangé une pomme.",
+              "fix": "Je vais manger une pomme."
             }
           ]
         },
         {
-          "title": "Le Futur Simple",
+          "title": "Futur simple",
           "points": [
-            "Utilisé pour des actions qui se produiront dans le futur.",
-            "Formé par la base du verbe + terminaisons du futur.",
-            "Indique une certitude ou une promesse."
+            "Utilisé pour des actions futures.",
+            "Formé par des terminaisons spécifiques.",
+            "Exprime une promesse ou une prévision."
           ],
-          "example": "Nous irons au cinéma ce soir.",
+          "example": "Je mangerai une pomme.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "objet"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Je"
+            },
+            {
+              "label": "verbe",
+              "text": "mangerai"
+            },
+            {
+              "label": "objet",
+              "text": "une pomme"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Nous iront au cinéma ce soir.",
-              "fix": "Nous irons au cinéma ce soir."
+              "wrong": "Je mangerai le pomme.",
+              "fix": "Je mangerai la pomme."
             }
           ]
         },
         {
-          "title": "Le Conditionnel Présent",
+          "title": "Conditionnel présent",
           "points": [
-            "Exprime des souhaits ou des hypothèses.",
-            "Formé par la base du verbe au futur + terminaisons de l'imparfait.",
-            "Indique une condition non réalisée."
+            "Utilisé pour des actions hypothétiques.",
+            "Exprime un souhait ou une politesse.",
+            "Formé avec le radical du futur + terminaisons."
           ],
-          "example": "Si j'avais de l'argent, j'achèterais une voiture.",
+          "example": "Je mangerais une pomme.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "objet"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Je"
+            },
+            {
+              "label": "verbe",
+              "text": "mangerais"
+            },
+            {
+              "label": "objet",
+              "text": "une pomme"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Si j'aurais de l'argent, j'achèterais une voiture.",
-              "fix": "Si j'avais de l'argent, j'achèterais une voiture."
+              "wrong": "Je mangerais le pomme.",
+              "fix": "Je mangerais la pomme."
             }
           ]
         },
         {
-          "title": "Le Passé Récent",
-          "points": [
-            "Exprime une action qui vient de se produire.",
-            "Formé avec 'venir de' + infinitif.",
-            "Indique une action récente."
-          ],
-          "example": "Je viens de terminer mon livre.",
-          "mistakes": [
-            {
-              "wrong": "Je viens terminé mon livre.",
-              "fix": "Je viens de terminer mon livre."
-            }
-          ]
-        },
-        {
-          "title": "Le Plus-que-parfait",
+          "title": "Plus-que-parfait",
           "points": [
             "Utilisé pour des actions antérieures à une autre action passée.",
             "Formé avec l'auxiliaire à l'imparfait + participe passé.",
-            "Indique une antériorité."
+            "Exprime une action achevée avant une autre."
           ],
-          "example": "Elle avait déjà mangé quand je suis arrivé.",
+          "example": "J'avais mangé une pomme.",
+          "ruleOrder": [
+            "sujet",
+            "auxiliaire",
+            "participe passé"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "J"
+            },
+            {
+              "label": "auxiliaire",
+              "text": "avais"
+            },
+            {
+              "label": "participe passé",
+              "text": "mangé"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Elle a déjà mangé quand je suis arrivé.",
-              "fix": "Elle avait déjà mangé quand je suis arrivé."
+              "wrong": "J'avais mangé le pomme.",
+              "fix": "J'avais mangé la pomme."
             }
           ]
         },
         {
-          "title": "Le Futur Antérieur",
+          "title": "Futur antérieur",
           "points": [
-            "Exprime une action qui sera terminée dans le futur.",
-            "Formé avec l'auxiliaire au futur + participe passé.",
-            "Indique une action future achevée."
+            "Utilisé pour des actions futures achevées avant une autre action future.",
+            "Formé avec 'avoir' ou 'être' au futur + participe passé.",
+            "Exprime une prévision d'achèvement."
           ],
-          "example": "Quand tu arriveras, j'aurai déjà fini mes devoirs.",
+          "example": "J'aurai mangé une pomme.",
+          "ruleOrder": [
+            "sujet",
+            "auxiliaire",
+            "participe passé"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "J"
+            },
+            {
+              "label": "auxiliaire",
+              "text": "aurai"
+            },
+            {
+              "label": "participe passé",
+              "text": "mangé"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Quand tu arriveras, j'ai déjà fini mes devoirs.",
-              "fix": "Quand tu arriveras, j'aurai déjà fini mes devoirs."
+              "wrong": "J'aurai mangé le pomme.",
+              "fix": "J'aurai mangé la pomme."
             }
           ]
         },
         {
-          "title": "Les Adverbes de Temps",
+          "title": "Subjonctif présent",
           "points": [
-            "Précisent le moment d'une action.",
-            "Peuvent modifier le sens d'une phrase.",
-            "Exemples incluent 'hier', 'demain', 'souvent'."
+            "Utilisé pour exprimer le doute, le désir ou l'émotion.",
+            "Formé par des terminaisons spécifiques.",
+            "Souvent introduit par 'que'."
           ],
-          "example": "Je vais souvent au musée.",
+          "example": "Il faut que je mange une pomme.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "objet"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "je"
+            },
+            {
+              "label": "verbe",
+              "text": "mange"
+            },
+            {
+              "label": "objet",
+              "text": "une pomme"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Je vais souvent au musé.",
-              "fix": "Je vais souvent au musée."
+              "wrong": "Il faut que je mangé une pomme.",
+              "fix": "Il faut que je mange une pomme."
+            }
+          ]
+        },
+        {
+          "title": "Passé récent",
+          "points": [
+            "Utilisé pour des actions très récentes.",
+            "Formé avec 'venir de' + infinitif.",
+            "Exprime une action qui vient de se produire."
+          ],
+          "example": "Je viens de manger une pomme.",
+          "ruleOrder": [
+            "sujet",
+            "venir",
+            "de",
+            "infinitif"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Je"
+            },
+            {
+              "label": "venir",
+              "text": "viens"
+            },
+            {
+              "label": "de",
+              "text": "de"
+            },
+            {
+              "label": "infinitif",
+              "text": "manger"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Je viens de mangé une pomme.",
+              "fix": "Je viens de manger une pomme."
             }
           ]
         }
       ],
       "Nouns & Articles": [
         {
-          "title": "Les articles définis",
+          "title": "Articles définis",
           "points": [
-            "Utilisés pour désigner un nom spécifique.",
-            "S'accordent en genre et en nombre avec le nom.",
-            "Exemples : le (masculin singulier), la (féminin singulier), les (pluriel)."
+            "Utilisé pour désigner un nom spécifique.",
+            "S'accorde en genre et en nombre avec le nom.",
+            "Exemples : le, la, les."
           ],
-          "example": "Le chat est sur le toit.",
+          "example": "Le chat est sur la table.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Le chat"
+            },
+            {
+              "label": "verbe",
+              "text": "est"
+            },
+            {
+              "label": "complément",
+              "text": "sur la table"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "La chat est sur le toit.",
-              "fix": "Le chat est sur le toit."
+              "wrong": "La chat est sur la table.",
+              "fix": "Le chat est sur la table."
             }
           ]
         },
         {
-          "title": "Les articles indéfinis",
+          "title": "Articles indéfinis",
           "points": [
-            "Utilisés pour désigner un nom non spécifique.",
-            "S'accordent également en genre et en nombre.",
-            "Exemples : un (masculin singulier), une (féminin singulier), des (pluriel)."
+            "Utilisé pour désigner un nom non spécifique.",
+            "S'accorde en genre et en nombre avec le nom.",
+            "Exemples : un, une, des."
           ],
           "example": "Une pomme est sur la table.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Une pomme"
+            },
+            {
+              "label": "verbe",
+              "text": "est"
+            },
+            {
+              "label": "complément",
+              "text": "sur la table"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Des pomme est sur la table.",
+              "wrong": "Un pomme est sur la table.",
               "fix": "Une pomme est sur la table."
             }
           ]
         },
         {
-          "title": "L'accord des noms et des articles",
+          "title": "Accord des articles",
           "points": [
-            "Les articles doivent s'accorder avec le nom en genre et en nombre.",
-            "Attention aux exceptions et aux noms composés.",
-            "Pratiquez avec des exemples variés."
+            "Les articles doivent s'accorder en genre et en nombre.",
+            "Attention aux exceptions et aux irrégularités.",
+            "Pratiquez avec des noms variés."
           ],
           "example": "Les enfants jouent dans le parc.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Les enfants"
+            },
+            {
+              "label": "verbe",
+              "text": "jouent"
+            },
+            {
+              "label": "complément",
+              "text": "dans le parc"
+            }
+          ],
           "mistakes": [
             {
               "wrong": "Les enfant jouent dans le parc.",
@@ -8345,62 +8836,199 @@
           ]
         },
         {
-          "title": "Les articles partitifs",
+          "title": "Usage des articles avec les adjectifs",
           "points": [
-            "Utilisés pour parler d'une quantité indéfinie.",
-            "Exemples : du (masculin), de la (féminin), des (pluriel).",
-            "Souvent utilisés avec des aliments ou des boissons."
+            "Les articles précèdent les adjectifs et les noms.",
+            "L'adjectif s'accorde avec le nom en genre et en nombre.",
+            "Exemple : le grand chien."
           ],
-          "example": "Je veux du pain.",
+          "example": "La belle maison est à vendre.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "La belle maison"
+            },
+            {
+              "label": "verbe",
+              "text": "est"
+            },
+            {
+              "label": "complément",
+              "text": "à vendre"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Je veux le pain.",
-              "fix": "Je veux du pain."
+              "wrong": "Le belle maison est à vendre.",
+              "fix": "La belle maison est à vendre."
             }
           ]
         },
         {
-          "title": "Les noms collectifs",
+          "title": "Articles dans des expressions courantes",
           "points": [
-            "Désignent un ensemble d'individus ou d'objets.",
-            "Peuvent être utilisés avec des articles définis ou indéfinis.",
-            "Exemples : une foule, une équipe."
+            "Certains noms sont souvent utilisés avec des articles spécifiques.",
+            "Exemples : à la maison, au travail.",
+            "Connaître ces expressions aide à la fluidité."
           ],
-          "example": "Une équipe de foot a gagné le match.",
+          "example": "Je vais au cinéma ce soir.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Je"
+            },
+            {
+              "label": "verbe",
+              "text": "vais"
+            },
+            {
+              "label": "complément",
+              "text": "au cinéma ce soir"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Une équipes de foot a gagné le match.",
-              "fix": "Une équipe de foot a gagné le match."
+              "wrong": "Je vais à le cinéma ce soir.",
+              "fix": "Je vais au cinéma ce soir."
             }
           ]
         },
         {
-          "title": "Les noms composés",
+          "title": "Articles et possession",
           "points": [
-            "Formés de deux mots ou plus.",
-            "L'accord peut varier selon le premier élément.",
-            "Exemples : un porte-monnaie, une salle de classe."
+            "Les articles peuvent indiquer la possession.",
+            "Utilisez 'de' pour montrer à qui appartient quelque chose.",
+            "Exemple : le livre de Marie."
           ],
-          "example": "Le porte-monnaie est sur la table.",
+          "example": "C'est le stylo de Paul.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "C'est"
+            },
+            {
+              "label": "verbe",
+              "text": "le stylo"
+            },
+            {
+              "label": "complément",
+              "text": "de Paul"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Le porte-monnaies est sur la table.",
-              "fix": "Le porte-monnaie est sur la table."
+              "wrong": "C'est le stylo à Paul.",
+              "fix": "C'est le stylo de Paul."
             }
           ]
         },
         {
-          "title": "L'usage des déterminants",
+          "title": "Singulier et pluriel",
           "points": [
-            "Les déterminants précèdent les noms et indiquent le genre et le nombre.",
-            "Incluent les articles, les adjectifs démonstratifs, et possessifs.",
-            "Exemples : ce, cette, mon, ma."
+            "Le singulier d?signe une seule entit?, le pluriel plusieurs.",
+            "La plupart des noms prennent -s au pluriel; certains prennent -x (ex. -eau, -au, -eu).",
+            "Les articles s'accordent: le/la/un/une -> les/des."
           ],
-          "example": "Cette voiture est rapide.",
+          "example": "Les livres sont sur la table.",
+          "ruleOrder": [
+            "article",
+            "nom",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "article",
+              "text": "Les"
+            },
+            {
+              "label": "nom",
+              "text": "livres"
+            },
+            {
+              "label": "verbe",
+              "text": "sont"
+            },
+            {
+              "label": "complément",
+              "text": "sur la table"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ce voiture est rapide.",
-              "fix": "Cette voiture est rapide."
+              "wrong": "Les livre est sur la table.",
+              "fix": "Les livres sont sur la table."
+            }
+          ],
+          "examplePairs": [
+            {
+              "example": "Le livre est sur la table.",
+              "exampleHighlights": [
+                {
+                  "label": "article",
+                  "text": "Le"
+                },
+                {
+                  "label": "nom",
+                  "text": "livre"
+                },
+                {
+                  "label": "verbe",
+                  "text": "est"
+                },
+                {
+                  "label": "complément",
+                  "text": "sur la table"
+                }
+              ],
+              "ruleOrder": [
+                "article",
+                "nom",
+                "verbe",
+                "complément"
+              ]
+            },
+            {
+              "example": "Les livres sont sur la table.",
+              "exampleHighlights": [
+                {
+                  "label": "article",
+                  "text": "Les"
+                },
+                {
+                  "label": "nom",
+                  "text": "livres"
+                },
+                {
+                  "label": "verbe",
+                  "text": "sont"
+                },
+                {
+                  "label": "complément",
+                  "text": "sur la table"
+                }
+              ],
+              "ruleOrder": [
+                "article",
+                "nom",
+                "verbe",
+                "complément"
+              ]
             }
           ]
         }
@@ -8409,105 +9037,225 @@
         {
           "title": "Pronoms sujets",
           "points": [
-            "Les pronoms sujets remplacent les noms pour éviter la répétition.",
-            "Ils sont indispensables pour la clarté des phrases.",
-            "Ils s'accordent en genre et en nombre avec le nom qu'ils remplacent."
+            "Utilisés pour remplacer un nom sujet.",
+            "Exemples : je, tu, il, elle, nous, vous, ils, elles.",
+            "Importants pour éviter la répétition."
           ],
-          "example": "Je vais au marché.",
+          "example": "Je mange une pomme.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "objet"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Je"
+            },
+            {
+              "label": "verbe",
+              "text": "mange"
+            },
+            {
+              "label": "objet",
+              "text": "une pomme"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Va au marché.",
-              "fix": "Il va au marché."
+              "wrong": "Mange une pomme.",
+              "fix": "Je mange une pomme."
             }
           ]
         },
         {
           "title": "Pronoms objets directs",
           "points": [
-            "Les pronoms objets directs remplacent des noms d'objets.",
-            "Ils se placent avant le verbe conjugué.",
-            "Ils sont cruciaux pour éviter la répétition dans les phrases."
+            "Remplacent un nom qui reçoit l'action du verbe.",
+            "Exemples : me, te, le, la, nous, vous, les.",
+            "Utilisés pour simplifier les phrases."
           ],
-          "example": "Je le vois souvent.",
+          "example": "Je le vois.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "objet direct"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Je"
+            },
+            {
+              "label": "verbe",
+              "text": "vois"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Je vois le souvent.",
-              "fix": "Je le vois souvent."
+              "wrong": "Je vois le.",
+              "fix": "Je le vois."
             }
           ]
         },
         {
           "title": "Pronoms réfléchis",
           "points": [
-            "Indiquent que le sujet effectue une action sur lui-même.",
-            "Essentiels dans les verbes pronominaux.",
-            "S'accordent avec le sujet en genre et en nombre."
+            "Indiquent que le sujet fait l'action sur lui-même.",
+            "Exemples : me, te, se, nous, vous.",
+            "Utilisés avec des verbes réfléchis."
           ],
-          "example": "Elle se lave les mains.",
+          "example": "Elle se lave.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "objet réfléchi"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Elle"
+            },
+            {
+              "label": "verbe",
+              "text": "se lave"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Elle lave les mains.",
-              "fix": "Elle se lave les mains."
+              "wrong": "Elle lave.",
+              "fix": "Elle se lave."
             }
           ]
         },
         {
           "title": "Pronoms relatifs",
           "points": [
-            "Introduisent des propositions subordonnées.",
-            "Permettent de relier des idées et d'éviter la répétition.",
-            "Comprennent 'qui', 'que', 'dont', etc."
+            "Connectent une proposition subordonnée à un nom.",
+            "Exemples : qui, que, dont, où.",
+            "Essentiels pour la complexité des phrases."
           ],
-          "example": "C'est la femme qui parle.",
+          "example": "La fille qui chante est talentueuse.",
+          "ruleOrder": [
+            "nom",
+            "pronom relatif",
+            "verbe"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "nom",
+              "text": "La fille"
+            },
+            {
+              "label": "pronom relatif",
+              "text": "qui"
+            },
+            {
+              "label": "verbe",
+              "text": "chante"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "C'est la femme que parle.",
-              "fix": "C'est la femme qui parle."
+              "wrong": "La fille chante est talentueuse.",
+              "fix": "La fille qui chante est talentueuse."
             }
           ]
         },
         {
-          "title": "Pronoms indéfinis",
+          "title": "Pronoms démonstratifs",
           "points": [
-            "Remplacent des noms de manière vague ou générale.",
-            "Utilisés pour parler de quantités ou de personnes non spécifiées.",
-            "Comprennent 'quelqu'un', 'quelque chose', 'aucun', etc."
+            "Désignent une chose ou une personne spécifique.",
+            "Exemples : ce, cet, cette, ces.",
+            "Utilisés pour préciser."
           ],
-          "example": "Quelqu'un a sonné à la porte.",
+          "example": "Cette voiture est rapide.",
+          "ruleOrder": [
+            "pronom démonstratif",
+            "nom",
+            "verbe"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "pronom démonstratif",
+              "text": "Cette"
+            },
+            {
+              "label": "nom",
+              "text": "voiture"
+            },
+            {
+              "label": "verbe",
+              "text": "est rapide"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Aucun a sonné à la porte.",
-              "fix": "Quelqu'un a sonné à la porte."
+              "wrong": "Voiture est rapide.",
+              "fix": "Cette voiture est rapide."
             }
           ]
         },
         {
-          "title": "Omission des pronoms (pro-drop)",
+          "title": "Omission des pronoms",
           "points": [
-            "En français, les pronoms sujets peuvent être omis dans certaines situations.",
-            "Cela se produit souvent dans le langage familier.",
-            "Savoir quand omettre un pronom est essentiel pour sonner naturel."
+            "En français, les pronoms sujets peuvent être omis.",
+            "Surtout dans le langage familier.",
+            "Exemple : 'Mange' au lieu de 'Je mange'."
           ],
-          "example": "Mange souvent des fruits.",
+          "example": "Mange une pomme.",
+          "ruleOrder": [
+            "verbe",
+            "objet"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "verbe",
+              "text": "Mange"
+            },
+            {
+              "label": "objet",
+              "text": "une pomme"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Je mange souvent des fruits.",
-              "fix": "Mange souvent des fruits."
+              "wrong": "Je mange une pomme.",
+              "fix": "Mange une pomme."
             }
           ]
         },
         {
-          "title": "Politesse et pronoms",
+          "title": "Politesse avec pronoms",
           "points": [
-            "Utilisation de 'vous' pour montrer du respect ou de la distance.",
-            "Le 'tu' est utilisé dans des contextes familiers.",
-            "Choisir le bon pronom est essentiel pour une communication efficace."
+            "Utilisation de 'vous' pour montrer du respect.",
+            "Différent de 'tu' qui est informel.",
+            "Important dans les contextes formels."
           ],
-          "example": "Comment allez-vous ?",
+          "example": "Vous êtes très aimable.",
+          "ruleOrder": [
+            "pronom de politesse",
+            "verbe",
+            "adjectif"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "pronom de politesse",
+              "text": "Vous"
+            },
+            {
+              "label": "verbe",
+              "text": "êtes"
+            },
+            {
+              "label": "adjectif",
+              "text": "aimable"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Comment tu vas ?",
-              "fix": "Comment allez-vous ?"
+              "wrong": "Tu es très aimable.",
+              "fix": "Vous êtes très aimable."
             }
           ]
         }
@@ -8517,59 +9265,57 @@
           "title": "Position des adjectifs",
           "points": [
             "Les adjectifs se placent généralement après le nom.",
-            "Certains adjectifs se placent avant le nom (beau, grand, petit, etc.).",
-            "La position peut changer le sens de l'adjectif."
+            "Certains adjectifs se placent avant le nom.",
+            "L'ordre des adjectifs peut changer le sens."
           ],
-          "example": "Une voiture rouge est garée devant la maison.",
+          "example": "Une maison rouge.",
+          "ruleOrder": [
+            "nom",
+            "adjectif"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "nom",
+              "text": "maison"
+            },
+            {
+              "label": "adjectif",
+              "text": "rouge"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Une rouge voiture est garée devant la maison.",
-              "fix": "Une voiture rouge est garée devant la maison."
+              "wrong": "Une rouge maison.",
+              "fix": "Une maison rouge."
             }
           ]
         },
         {
-          "title": "Ordre des adjectifs",
+          "title": "Adjectifs de couleur",
           "points": [
-            "L'ordre des adjectifs suit une hiérarchie : opinion, taille, âge, forme, couleur, origine, matériau, but.",
-            "Exemple : une belle petite voiture rouge.",
-            "Respecter cet ordre aide à la clarté."
+            "Les adjectifs de couleur se placent après le nom.",
+            "Ils s'accordent en genre et en nombre.",
+            "Attention à l'accord des adjectifs."
           ],
-          "example": "C'est une magnifique grande maison ancienne.",
-          "mistakes": [
+          "example": "Des voitures bleues.",
+          "ruleOrder": [
+            "nom",
+            "adjectif"
+          ],
+          "exampleHighlights": [
             {
-              "wrong": "C'est une grande magnifique maison ancienne.",
-              "fix": "C'est une magnifique grande maison ancienne."
+              "label": "nom",
+              "text": "voitures"
+            },
+            {
+              "label": "adjectif",
+              "text": "bleues"
             }
-          ]
-        },
-        {
-          "title": "Adjectifs comparatifs",
-          "points": [
-            "Utilisez 'plus... que' pour les comparaisons supérieures.",
-            "Utilisez 'moins... que' pour les comparaisons inférieures.",
-            "Les adjectifs irréguliers doivent être mémorisés."
           ],
-          "example": "Mon frère est plus grand que moi.",
           "mistakes": [
             {
-              "wrong": "Mon frère est plus grand que je.",
-              "fix": "Mon frère est plus grand que moi."
-            }
-          ]
-        },
-        {
-          "title": "Adjectifs superlatifs",
-          "points": [
-            "Utilisez 'le plus...' pour exprimer le superlatif positif.",
-            "Utilisez 'le moins...' pour exprimer le superlatif négatif.",
-            "Attention aux exceptions."
-          ],
-          "example": "C'est le meilleur restaurant de la ville.",
-          "mistakes": [
-            {
-              "wrong": "C'est le restaurant meilleur de la ville.",
-              "fix": "C'est le meilleur restaurant de la ville."
+              "wrong": "Des bleues voitures.",
+              "fix": "Des voitures bleues."
             }
           ]
         },
@@ -8577,89 +9323,302 @@
           "title": "Adverbes de manière",
           "points": [
             "Les adverbes se placent généralement après le verbe.",
-            "Ils modifient le verbe en précisant comment l'action est réalisée.",
-            "Exemple : Il court rapidement."
+            "Ils décrivent comment une action est réalisée.",
+            "L'ordre des adverbes peut varier."
           ],
-          "example": "Elle chante merveilleusement bien.",
+          "example": "Il court rapidement.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "adverbe"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Il"
+            },
+            {
+              "label": "verbe",
+              "text": "court"
+            },
+            {
+              "label": "adverbe",
+              "text": "rapidement"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Elle merveilleusement chante bien.",
-              "fix": "Elle chante merveilleusement bien."
+              "wrong": "Il rapidement court.",
+              "fix": "Il court rapidement."
+            }
+          ]
+        },
+        {
+          "title": "Comparatifs",
+          "points": [
+            "Utilisez 'plus... que' pour comparer.",
+            "L'adjectif doit s'accorder avec le nom.",
+            "Attention à l'ordre des mots."
+          ],
+          "example": "Marie est plus grande que Sophie.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "comparatif",
+            "adjectif"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Marie"
+            },
+            {
+              "label": "verbe",
+              "text": "est"
+            },
+            {
+              "label": "comparatif",
+              "text": "plus grande"
+            },
+            {
+              "label": "adjectif",
+              "text": "que Sophie"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Marie est grande plus que Sophie.",
+              "fix": "Marie est plus grande que Sophie."
+            }
+          ]
+        },
+        {
+          "title": "Superlatifs",
+          "points": [
+            "Utilisez 'le plus...' pour exprimer le superlatif.",
+            "L'adjectif doit s'accorder avec le nom.",
+            "Position fixe dans la phrase."
+          ],
+          "example": "C'est le plus beau tableau.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "article",
+            "superlatif",
+            "nom"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "C'est"
+            },
+            {
+              "label": "verbe",
+              "text": "le"
+            },
+            {
+              "label": "article",
+              "text": "plus beau"
+            },
+            {
+              "label": "superlatif",
+              "text": "tableau"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "C'est beau le plus tableau.",
+              "fix": "C'est le plus beau tableau."
             }
           ]
         },
         {
           "title": "Adverbes de fréquence",
           "points": [
-            "Les adverbes de fréquence se placent avant le verbe principal.",
+            "Les adverbes de fréquence se placent avant le verbe.",
             "Ils indiquent la régularité d'une action.",
-            "Exemple : Je vais souvent au cinéma."
+            "L'ordre peut varier selon le contexte."
           ],
-          "example": "Nous mangeons toujours ensemble.",
+          "example": "Il mange souvent des fruits.",
+          "ruleOrder": [
+            "sujet",
+            "adverbe",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Il"
+            },
+            {
+              "label": "adverbe",
+              "text": "souvent"
+            },
+            {
+              "label": "verbe",
+              "text": "des"
+            },
+            {
+              "label": "complément",
+              "text": "fruits"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Nous toujours mangeons ensemble.",
-              "fix": "Nous mangeons toujours ensemble."
+              "wrong": "Il souvent mange des fruits.",
+              "fix": "Il mange souvent des fruits."
             }
           ]
         },
         {
-          "title": "Comparatifs d'égalité",
+          "title": "Adjectifs démonstratifs",
           "points": [
-            "Utilisez 'aussi... que' pour exprimer l'égalité.",
-            "Cette structure est essentielle pour les comparaisons.",
-            "Exemple : Elle est aussi intelligente que lui."
+            "Utilisez 'ce', 'cette', 'ces' pour montrer quelque chose.",
+            "Ils s'accordent en genre et en nombre.",
+            "Position fixe avant le nom."
           ],
-          "example": "Il est aussi rapide que son frère.",
+          "example": "Cette voiture est rapide.",
+          "ruleOrder": [
+            "adjectif",
+            "nom",
+            "verbe"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "adjectif",
+              "text": "Cette"
+            },
+            {
+              "label": "nom",
+              "text": "voiture"
+            },
+            {
+              "label": "verbe",
+              "text": "est"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Il est aussi rapide que frère.",
-              "fix": "Il est aussi rapide que son frère."
+              "wrong": "Voiture cette est rapide.",
+              "fix": "Cette voiture est rapide."
             }
           ]
         },
         {
-          "title": "Adjectifs intensificateurs",
+          "title": "Adjectifs indéfinis",
           "points": [
-            "Utilisez 'très', 'extrêmement', 'tellement' pour intensifier un adjectif.",
-            "Ces mots modifient la force de l'adjectif.",
-            "Exemple : C'est très intéressant."
+            "Utilisez 'quelque', 'plusieurs' pour exprimer une quantité indéfinie.",
+            "Ils s'accordent avec le nom.",
+            "Position fixe avant le nom."
           ],
-          "example": "Ce film est extrêmement captivant.",
+          "example": "Il a plusieurs amis.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "adjectif",
+            "nom"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Il"
+            },
+            {
+              "label": "verbe",
+              "text": "a"
+            },
+            {
+              "label": "adjectif",
+              "text": "plusieurs"
+            },
+            {
+              "label": "nom",
+              "text": "amis"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ce film est captivant extrêmement.",
-              "fix": "Ce film est extrêmement captivant."
+              "wrong": "Il a amis plusieurs.",
+              "fix": "Il a plusieurs amis."
             }
           ]
         },
         {
-          "title": "Adverbes de lieu",
+          "title": "Adverbes de temps",
           "points": [
-            "Les adverbes de lieu précisent où se déroule l'action.",
-            "Ils se placent souvent après le verbe.",
-            "Exemple : Il est là."
+            "Les adverbes de temps se placent souvent en début ou en fin de phrase.",
+            "Ils indiquent quand une action se produit.",
+            "L'ordre peut varier selon le contexte."
           ],
-          "example": "Elle est ici pour la réunion.",
+          "example": "Demain, il partira en voyage.",
+          "ruleOrder": [
+            "adverbe",
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "adverbe",
+              "text": "Demain"
+            },
+            {
+              "label": "sujet",
+              "text": "il"
+            },
+            {
+              "label": "verbe",
+              "text": "partira"
+            },
+            {
+              "label": "complément",
+              "text": "en voyage"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Elle ici est pour la réunion.",
-              "fix": "Elle est ici pour la réunion."
+              "wrong": "Il demain partira en voyage.",
+              "fix": "Demain, il partira en voyage."
             }
           ]
         },
         {
           "title": "Adjectifs possessifs",
           "points": [
-            "Les adjectifs possessifs s'accordent en genre et en nombre avec le nom qu'ils modifient.",
-            "Ils indiquent la possession.",
-            "Exemple : C'est mon livre."
+            "Utilisez 'mon', 'ton', 'son' pour exprimer la possession.",
+            "Ils s'accordent avec le nom.",
+            "Position fixe avant le nom."
           ],
-          "example": "C'est notre maison.",
+          "example": "Mon livre est sur la table.",
+          "ruleOrder": [
+            "adjectif",
+            "nom",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "adjectif",
+              "text": "Mon"
+            },
+            {
+              "label": "nom",
+              "text": "livre"
+            },
+            {
+              "label": "verbe",
+              "text": "est"
+            },
+            {
+              "label": "complément",
+              "text": "sur la table"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "C'est maison notre.",
-              "fix": "C'est notre maison."
+              "wrong": "Livre mon est sur la table.",
+              "fix": "Mon livre est sur la table."
             }
           ]
         }
@@ -8668,41 +9627,98 @@
         {
           "title": "Questions fermées",
           "points": [
-            "Utiliser l'intonation montante à la fin de la phrase.",
-            "Les questions fermées se répondent par oui ou non.",
-            "Exemple de structure : verbe + sujet."
+            "Utilisez l'intonation montante.",
+            "Commencez par le sujet ou le verbe.",
+            "Utilisez 'est-ce que' pour former des questions."
           ],
-          "example": "Tu viens ?",
+          "example": "Est-ce que tu viens ce soir ?",
+          "ruleOrder": [
+            "est-ce que",
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "est-ce que",
+              "text": "Est-ce que"
+            },
+            {
+              "label": "sujet",
+              "text": "tu"
+            },
+            {
+              "label": "verbe",
+              "text": "viens"
+            },
+            {
+              "label": "complément",
+              "text": "ce soir"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Tu viens.",
-              "fix": "Tu viens ?"
+              "wrong": "Tu viens ce soir est-ce que ?",
+              "fix": "Est-ce que tu viens ce soir ?"
             }
           ]
         },
         {
           "title": "Questions ouvertes",
           "points": [
-            "Utiliser des mots interrogatifs comme 'qui', 'quoi', 'où', 'quand', 'pourquoi'.",
-            "Ces questions demandent des réponses plus détaillées.",
-            "La structure est généralement : mot interrogatif + verbe + sujet."
+            "Utilisez des mots interrogatifs.",
+            "Placez le mot interrogatif en début de phrase.",
+            "Suivez avec le verbe et le sujet."
           ],
           "example": "Où vas-tu ?",
+          "ruleOrder": [
+            "mot interrogatif",
+            "verbe",
+            "sujet"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "mot interrogatif",
+              "text": "Où"
+            },
+            {
+              "label": "verbe",
+              "text": "vas"
+            },
+            {
+              "label": "sujet",
+              "text": "tu"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Où tu vas ?",
+              "wrong": "Vas-tu où ?",
               "fix": "Où vas-tu ?"
             }
           ]
         },
         {
-          "title": "Inversion du sujet",
+          "title": "Inversion sujet-verbe",
           "points": [
-            "Pour former une question, inverser le sujet et le verbe.",
-            "Utiliser un trait d'union entre le verbe et le sujet.",
-            "Cette structure est plus formelle."
+            "Utilisez l'inversion pour des questions formelles.",
+            "Le verbe précède le sujet.",
+            "Ajoutez un trait d'union entre le verbe et le sujet."
           ],
           "example": "Aimes-tu le chocolat ?",
+          "ruleOrder": [
+            "verbe",
+            "sujet"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "verbe",
+              "text": "Aimes"
+            },
+            {
+              "label": "sujet",
+              "text": "tu"
+            }
+          ],
           "mistakes": [
             {
               "wrong": "Tu aimes le chocolat ?",
@@ -8711,443 +9727,1059 @@
           ]
         },
         {
-          "title": "Questions avec 'est-ce que'",
+          "title": "Questions avec 'qu'est-ce que'",
           "points": [
-            "Utiliser 'est-ce que' pour poser des questions sans inversion.",
-            "C'est une manière courante et accessible de poser des questions.",
-            "Peut être utilisé avec n'importe quel type de phrase."
+            "Utilisez 'qu'est-ce que' pour des questions ouvertes.",
+            "Suivez avec le sujet et le verbe.",
+            "C'est informel et courant."
           ],
-          "example": "Est-ce que tu viens ce soir ?",
+          "example": "Qu'est-ce que tu fais ?",
+          "ruleOrder": [
+            "qu'est-ce que",
+            "sujet",
+            "verbe"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "qu'est-ce que",
+              "text": "Qu'est-ce que"
+            },
+            {
+              "label": "sujet",
+              "text": "tu"
+            },
+            {
+              "label": "verbe",
+              "text": "fais"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Tu viens ce soir ?",
-              "fix": "Est-ce que tu viens ce soir ?"
+              "wrong": "Tu fais qu'est-ce ?",
+              "fix": "Qu'est-ce que tu fais ?"
+            }
+          ]
+        },
+        {
+          "title": "Questions avec 'qui'",
+          "points": [
+            "Utilisez 'qui' pour demander une personne.",
+            "Le verbe suit 'qui' dans les questions.",
+            "Peut être utilisé avec ou sans inversion."
+          ],
+          "example": "Qui vient à la fête ?",
+          "ruleOrder": [
+            "qui",
+            "verbe",
+            "sujet"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "qui",
+              "text": "Qui"
+            },
+            {
+              "label": "verbe",
+              "text": "vient"
+            },
+            {
+              "label": "sujet",
+              "text": "à la fête"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Vient qui à la fête ?",
+              "fix": "Qui vient à la fête ?"
+            }
+          ]
+        },
+        {
+          "title": "Questions avec 'quoi'",
+          "points": [
+            "Utilisez 'quoi' pour demander des choses.",
+            "Peut être utilisé en début ou fin de question.",
+            "Utilisez 'qu'est-ce que' pour plus de formalité."
+          ],
+          "example": "Quoi de neuf ?",
+          "ruleOrder": [
+            "quoi",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "quoi",
+              "text": "Quoi"
+            },
+            {
+              "label": "complément",
+              "text": "de neuf"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "De neuf quoi ?",
+              "fix": "Quoi de neuf ?"
             }
           ]
         },
         {
           "title": "Questions indirectes",
           "points": [
-            "Les questions indirectes ne nécessitent pas d'inversion.",
-            "Utiliser des phrases comme 'Je me demande' ou 'Je voudrais savoir'.",
-            "Pas de point d'interrogation à la fin."
+            "Utilisez 'si' pour les questions indirectes.",
+            "Pas d'inversion dans les questions indirectes.",
+            "Utilisez le verbe à l'infinitif."
           ],
-          "example": "Je me demande où il est.",
-          "mistakes": [
+          "example": "Je me demande si tu viens.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "si"
+          ],
+          "exampleHighlights": [
             {
-              "wrong": "Je me demande où est-il.",
-              "fix": "Je me demande où il est."
+              "label": "sujet",
+              "text": "Je"
+            },
+            {
+              "label": "verbe",
+              "text": "me demande"
+            },
+            {
+              "label": "si",
+              "text": "si"
             }
-          ]
-        },
-        {
-          "title": "Questions formelles",
-          "points": [
-            "Utiliser des formules de politesse comme 'pourriez-vous'.",
-            "Important dans un contexte professionnel ou avec des inconnus.",
-            "La structure reste similaire mais plus respectueuse."
           ],
-          "example": "Pourriez-vous m'aider ?",
           "mistakes": [
             {
-              "wrong": "Tu peux m'aider ?",
-              "fix": "Pourriez-vous m'aider ?"
-            }
-          ]
-        },
-        {
-          "title": "Questions avec particules",
-          "points": [
-            "Utiliser des particules comme 'bien' ou 'non' pour renforcer la question.",
-            "Ces particules ajoutent une nuance à la question.",
-            "Souvent utilisées dans la conversation informelle."
-          ],
-          "example": "Tu viens, non ?",
-          "mistakes": [
-            {
-              "wrong": "Tu viens ?",
-              "fix": "Tu viens, non ?"
+              "wrong": "Je me demande viens-tu ?",
+              "fix": "Je me demande si tu viens."
             }
           ]
         }
       ],
       "Negation": [
         {
-          "title": "Négation de base : ne... pas",
+          "title": "Négation simple avec 'ne... pas'",
           "points": [
-            "Utiliser 'ne' et 'pas' pour former une négation simple.",
+            "Utiliser 'ne' et 'pas' pour former la négation.",
             "Placer 'ne' avant le verbe et 'pas' après.",
-            "Cette structure est essentielle pour la communication quotidienne."
+            "Utiliser cette structure pour des phrases simples."
           ],
-          "example": "Je ne mange pas de chocolat.",
+          "example": "Je ne mange pas de pommes.",
+          "ruleOrder": [
+            "sujet",
+            "ne",
+            "verbe",
+            "pas",
+            "objet"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Je"
+            },
+            {
+              "label": "ne",
+              "text": "ne"
+            },
+            {
+              "label": "verbe",
+              "text": "mange"
+            },
+            {
+              "label": "pas",
+              "text": "pas"
+            },
+            {
+              "label": "objet",
+              "text": "de pommes"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Je mange pas de chocolat.",
-              "fix": "Je ne mange pas de chocolat."
+              "wrong": "Je mange pas de pommes.",
+              "fix": "Je ne mange pas de pommes."
             }
           ]
         },
         {
-          "title": "Négation avec 'jamais'",
+          "title": "Négation avec 'ne... jamais'",
           "points": [
-            "Remplacer 'pas' par 'jamais' pour exprimer une négation absolue.",
-            "Utiliser 'ne' avec 'jamais' pour maintenir la structure.",
-            "C'est utile pour parler d'actions qui ne se produisent jamais."
+            "Utiliser 'ne' et 'jamais' pour exprimer une négation permanente.",
+            "Placer 'ne' avant le verbe et 'jamais' après.",
+            "Utiliser cette structure pour des phrases au présent."
           ],
-          "example": "Je ne vais jamais au cinéma.",
+          "example": "Il ne mange jamais de chocolat.",
+          "ruleOrder": [
+            "sujet",
+            "ne",
+            "verbe",
+            "jamais",
+            "objet"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Il"
+            },
+            {
+              "label": "ne",
+              "text": "ne"
+            },
+            {
+              "label": "verbe",
+              "text": "mange"
+            },
+            {
+              "label": "jamais",
+              "text": "jamais"
+            },
+            {
+              "label": "objet",
+              "text": "de chocolat"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Je ne vais jamais au ciné.",
-              "fix": "Je ne vais jamais au cinéma."
+              "wrong": "Il ne mange pas de chocolat.",
+              "fix": "Il ne mange jamais de chocolat."
             }
           ]
         },
         {
-          "title": "Négation avec 'rien'",
+          "title": "Négation avec 'ne... rien'",
           "points": [
-            "Utiliser 'rien' pour exprimer l'absence de quelque chose.",
-            "La structure est 'ne... rien'.",
-            "C'est courant dans des contextes où l'on parle de ce qui n'existe pas."
+            "Utiliser 'ne' et 'rien' pour exprimer l'absence totale.",
+            "Placer 'ne' avant le verbe et 'rien' après.",
+            "Utiliser cette structure pour des phrases au passé."
           ],
-          "example": "Je ne vois rien.",
+          "example": "Elle n'a rien dit.",
+          "ruleOrder": [
+            "sujet",
+            "ne",
+            "auxiliaire",
+            "rien",
+            "verbe"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Elle"
+            },
+            {
+              "label": "ne",
+              "text": "n"
+            },
+            {
+              "label": "auxiliaire",
+              "text": "a"
+            },
+            {
+              "label": "rien",
+              "text": "rien"
+            },
+            {
+              "label": "verbe",
+              "text": "dit"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Je vois rien.",
-              "fix": "Je ne vois rien."
+              "wrong": "Elle a rien dit.",
+              "fix": "Elle n'a rien dit."
             }
           ]
         },
         {
-          "title": "Négation avec 'personne'",
+          "title": "Négation avec 'ne... personne'",
           "points": [
-            "Utiliser 'ne... personne' pour exprimer qu'il n'y a pas de personnes.",
+            "Utiliser 'ne' et 'personne' pour exprimer l'absence de personnes.",
             "Placer 'ne' avant le verbe et 'personne' après.",
-            "C'est souvent utilisé dans des contextes sociaux."
+            "Utiliser cette structure pour des phrases au futur."
           ],
-          "example": "Je ne connais personne ici.",
+          "example": "Nous ne verrons personne.",
+          "ruleOrder": [
+            "sujet",
+            "ne",
+            "verbe",
+            "personne"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Nous"
+            },
+            {
+              "label": "ne",
+              "text": "ne"
+            },
+            {
+              "label": "verbe",
+              "text": "verrons"
+            },
+            {
+              "label": "personne",
+              "text": "personne"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Je connais personne ici.",
-              "fix": "Je ne connais personne ici."
+              "wrong": "Nous verrons personne.",
+              "fix": "Nous ne verrons personne."
             }
           ]
         },
         {
-          "title": "Négation avec 'aucun'",
+          "title": "Négation avec 'ne... aucun(e)'",
           "points": [
-            "Utiliser 'ne... aucun' pour exprimer l'absence totale.",
-            "La structure est 'ne... aucun(e)'.",
-            "C'est utile pour des contextes formels ou emphatiques."
+            "Utiliser 'ne' et 'aucun' pour exprimer l'absence totale d'objets.",
+            "Placer 'ne' avant le verbe et 'aucun' après.",
+            "Utiliser cette structure pour des phrases au conditionnel."
           ],
-          "example": "Je n'ai aucune idée.",
+          "example": "Il ne reste aucun livre.",
+          "ruleOrder": [
+            "sujet",
+            "ne",
+            "verbe",
+            "reste",
+            "aucun"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Il"
+            },
+            {
+              "label": "ne",
+              "text": "ne"
+            },
+            {
+              "label": "verbe",
+              "text": "reste"
+            },
+            {
+              "label": "reste",
+              "text": "aucun"
+            },
+            {
+              "label": "aucun",
+              "text": "livre"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Je n'ai idée.",
-              "fix": "Je n'ai aucune idée."
+              "wrong": "Il reste aucun livre.",
+              "fix": "Il ne reste aucun livre."
             }
           ]
         },
         {
-          "title": "Négation double : 'ni... ni'",
+          "title": "Négation avec 'ne... que'",
           "points": [
-            "Utiliser 'ni... ni' pour exprimer une double négation.",
-            "Cette structure renforce la négation dans une phrase.",
-            "C'est souvent utilisé pour énumérer des options non choisies."
+            "Utiliser 'ne' et 'que' pour exprimer une restriction.",
+            "Placer 'ne' avant le verbe et 'que' après.",
+            "Utiliser cette structure pour des phrases au passé composé."
           ],
-          "example": "Je n'aime ni le chocolat ni les bonbons.",
+          "example": "Elle n'a que des amis.",
+          "ruleOrder": [
+            "sujet",
+            "ne",
+            "auxiliaire",
+            "que",
+            "objet"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Elle"
+            },
+            {
+              "label": "ne",
+              "text": "n"
+            },
+            {
+              "label": "auxiliaire",
+              "text": "a"
+            },
+            {
+              "label": "que",
+              "text": "que"
+            },
+            {
+              "label": "objet",
+              "text": "des amis"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Je n'aime pas le chocolat ni les bonbons.",
-              "fix": "Je n'aime ni le chocolat ni les bonbons."
+              "wrong": "Elle a que des amis.",
+              "fix": "Elle n'a que des amis."
             }
           ]
         }
       ],
       "Connections": [
         {
-          "title": "Utilisation de 'et' pour lier des idées",
+          "title": "Utilisation de 'et'",
           "points": [
-            "Utilisez 'et' pour ajouter des informations.",
-            "Évitez de commencer une phrase par 'et'.",
-            "Utilisez-le pour créer des phrases plus fluides."
+            "Utiliser 'et' pour lier deux idées.",
+            "Éviter les répétitions inutiles.",
+            "Faciliter la fluidité des phrases."
           ],
-          "example": "J'aime le chocolat et je préfère le noir.",
+          "example": "Je mange une pomme et je bois de l'eau.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément",
+            "et"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Je"
+            },
+            {
+              "label": "verbe",
+              "text": "mange"
+            },
+            {
+              "label": "complément",
+              "text": "une pomme"
+            },
+            {
+              "label": "et",
+              "text": "de l'eau"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Et je vais au cinéma.",
-              "fix": "Je vais au cinéma."
+              "wrong": "Je mange une pomme, et je bois de l'eau.",
+              "fix": "Je mange une pomme et je bois de l'eau."
             }
           ]
         },
         {
-          "title": "Utilisation de 'mais' pour exprimer un contraste",
+          "title": "Utilisation de 'mais'",
           "points": [
-            "Utilisez 'mais' pour introduire une opposition.",
-            "Évitez de l'utiliser à la fin d'une phrase.",
-            "Il peut être utilisé pour nuancer une idée."
+            "Utiliser 'mais' pour exprimer un contraste.",
+            "Clarifier les oppositions entre deux idées.",
+            "Rendre le discours plus nuancé."
           ],
-          "example": "J'aime le café, mais je préfère le thé.",
+          "example": "Je veux sortir, mais il pleut.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément",
+            "mais"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Je"
+            },
+            {
+              "label": "verbe",
+              "text": "veux"
+            },
+            {
+              "label": "complément",
+              "text": "sortir"
+            },
+            {
+              "label": "mais",
+              "text": "il pleut"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "J'aime le café, mais.",
-              "fix": "J'aime le café, mais je préfère le thé."
+              "wrong": "Je veux sortir mais, il pleut.",
+              "fix": "Je veux sortir, mais il pleut."
             }
           ]
         },
         {
-          "title": "Utilisation de 'parce que' pour expliquer une raison",
+          "title": "Utilisation de 'parce que'",
           "points": [
-            "Utilisez 'parce que' pour donner des justifications.",
-            "Évitez de l'utiliser sans un sujet clair.",
-            "C'est essentiel pour développer des arguments."
+            "Utiliser 'parce que' pour donner une raison.",
+            "Expliquer les causes d'une action.",
+            "Rendre les arguments plus convaincants."
           ],
-          "example": "Je suis en retard parce que le bus était plein.",
+          "example": "Je reste à la maison parce qu'il pleut.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément",
+            "parce que"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Je"
+            },
+            {
+              "label": "verbe",
+              "text": "reste"
+            },
+            {
+              "label": "complément",
+              "text": "à la maison"
+            },
+            {
+              "label": "parce que",
+              "text": "qu'il pleut"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Je suis en retard parce que.",
-              "fix": "Je suis en retard parce que le bus était plein."
+              "wrong": "Je reste à la maison, parce qu'il pleut.",
+              "fix": "Je reste à la maison parce qu'il pleut."
             }
           ]
         },
         {
-          "title": "Utilisation de 'donc' pour conclure une idée",
+          "title": "Utilisation de 'si'",
           "points": [
-            "Utilisez 'donc' pour tirer une conclusion.",
-            "Évitez de l'utiliser sans une prémisse claire.",
-            "C'est utile pour structurer un discours."
+            "Utiliser 'si' pour poser des conditions.",
+            "Introduire des hypothèses.",
+            "Rendre les phrases plus dynamiques."
           ],
-          "example": "Il pleut, donc nous restons à la maison.",
+          "example": "Si tu viens, je serai heureux.",
+          "ruleOrder": [
+            "si",
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "si",
+              "text": "Si"
+            },
+            {
+              "label": "sujet",
+              "text": "tu"
+            },
+            {
+              "label": "verbe",
+              "text": "viens"
+            },
+            {
+              "label": "complément",
+              "text": "heureux"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Il pleut, donc.",
-              "fix": "Il pleut, donc nous restons à la maison."
+              "wrong": "Si tu viens je serai heureux.",
+              "fix": "Si tu viens, je serai heureux."
             }
           ]
         },
         {
-          "title": "Utilisation de 'si' pour les conditions",
+          "title": "Utilisation de 'donc'",
           "points": [
-            "Utilisez 'si' pour introduire des conditions.",
-            "Évitez de l'utiliser sans un verbe conjugué.",
-            "C'est essentiel pour formuler des hypothèses."
+            "Utiliser 'donc' pour exprimer une conséquence.",
+            "Relier des idées logiquement.",
+            "Clarifier le raisonnement."
           ],
-          "example": "Si tu veux, nous pouvons y aller ensemble.",
+          "example": "Il pleut, donc je prends un parapluie.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément",
+            "donc"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Il"
+            },
+            {
+              "label": "verbe",
+              "text": "pleut"
+            },
+            {
+              "label": "complément",
+              "text": "je prends un"
+            },
+            {
+              "label": "donc",
+              "text": "parapluie"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Si tu veux.",
-              "fix": "Si tu veux, nous pouvons y aller ensemble."
+              "wrong": "Il pleut donc, je prends un parapluie.",
+              "fix": "Il pleut, donc je prends un parapluie."
             }
           ]
         },
         {
-          "title": "Utilisation de 'alors' pour indiquer une conséquence",
+          "title": "Utilisation de 'alors'",
           "points": [
-            "Utilisez 'alors' pour montrer une conséquence.",
-            "Évitez de l'utiliser sans un contexte clair.",
-            "C'est utile pour lier des idées logiquement."
+            "Utiliser 'alors' pour indiquer une suite d'événements.",
+            "Clarifier la chronologie.",
+            "Rendre le discours plus fluide."
           ],
-          "example": "Il a étudié, alors il a réussi l'examen.",
+          "example": "Il a fini ses devoirs, alors il peut jouer.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément",
+            "alors"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Il"
+            },
+            {
+              "label": "verbe",
+              "text": "a fini"
+            },
+            {
+              "label": "complément",
+              "text": "ses devoirs"
+            },
+            {
+              "label": "alors",
+              "text": "il peut jouer"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Il a étudié, alors.",
-              "fix": "Il a étudié, alors il a réussi l'examen."
+              "wrong": "Il a fini ses devoirs alors, il peut jouer.",
+              "fix": "Il a fini ses devoirs, alors il peut jouer."
             }
           ]
         },
         {
-          "title": "Utilisation de 'tandis que' pour comparer",
+          "title": "Utilisation de 'tandis que'",
           "points": [
-            "Utilisez 'tandis que' pour établir des comparaisons.",
-            "Évitez de l'utiliser sans un sujet clair.",
-            "C'est utile pour nuancer des idées."
+            "Utiliser 'tandis que' pour comparer deux actions.",
+            "Mettre en évidence des différences.",
+            "Rendre le discours plus complexe."
           ],
-          "example": "Tandis que je préfère le thé, mon ami aime le café.",
+          "example": "Je lis un livre tandis que mon frère regarde la télévision.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément",
+            "tandis que"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Je"
+            },
+            {
+              "label": "verbe",
+              "text": "lis"
+            },
+            {
+              "label": "complément",
+              "text": "un livre"
+            },
+            {
+              "label": "tandis que",
+              "text": "mon frère regarde la télévision"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Tandis que je préfère.",
-              "fix": "Tandis que je préfère le thé, mon ami aime le café."
+              "wrong": "Je lis un livre, tandis que mon frère regarde la télévision.",
+              "fix": "Je lis un livre tandis que mon frère regarde la télévision."
             }
           ]
         }
       ],
       "Conditions": [
         {
-          "title": "Le conditionnel présent",
+          "title": "Conditionnel présent",
           "points": [
-            "Utilisé pour exprimer un souhait ou une hypothèse.",
-            "Formé en ajoutant des terminaisons spécifiques aux verbes à l'infinitif.",
-            "Exemple : 'Je voudrais un café.'"
+            "Utilisé pour exprimer une condition possible.",
+            "Formé avec le verbe à l'infinitif + terminaisons de l'imparfait.",
+            "Exemple : Si j'avais de l'argent, j'achèterais une voiture."
           ],
-          "example": "Si j'avais de l'argent, je voyagerais.",
+          "example": "Si j'avais de l'argent, j'achèterais une voiture.",
+          "ruleOrder": [
+            "si + présent",
+            "conditionnel"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "si + présent",
+              "text": "Si j'avais de l'argent"
+            },
+            {
+              "label": "conditionnel",
+              "text": "j'achèterais une voiture"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Si j'ai de l'argent, je voyagerais.",
-              "fix": "Si j'avais de l'argent, je voyagerais."
+              "wrong": "Si j'ai de l'argent, j'achète une voiture.",
+              "fix": "Si j'avais de l'argent, j'achèterais une voiture."
             }
           ]
         },
         {
-          "title": "Le conditionnel passé",
+          "title": "Conditionnel passé",
           "points": [
-            "Exprime une action qui aurait pu se produire dans le passé.",
-            "Formé avec l'auxiliaire au conditionnel présent + participe passé.",
-            "Exemple : 'J'aurais aimé te voir.'"
+            "Utilisé pour exprimer une condition non réalisée dans le passé.",
+            "Formé avec l'auxiliaire au conditionnel + participe passé.",
+            "Exemple : Si j'avais su, je ne serais pas venu."
           ],
-          "example": "Si j'avais su, je serais venu.",
+          "example": "Si j'avais su, je ne serais pas venu.",
+          "ruleOrder": [
+            "si + plus-que-parfait",
+            "conditionnel passé"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "si + plus-que-parfait",
+              "text": "Si j'avais su"
+            },
+            {
+              "label": "conditionnel passé",
+              "text": "je ne serais pas venu"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Si j'ai su, je serais venu.",
-              "fix": "Si j'avais su, je serais venu."
+              "wrong": "Si j'ai su, je ne viens pas.",
+              "fix": "Si j'avais su, je ne serais pas venu."
             }
           ]
         },
         {
-          "title": "Les phrases conditionnelles de type 1",
+          "title": "Conditionnel avec 'si' et futur",
           "points": [
-            "Utilisées pour des situations réelles et possibles.",
-            "Formées avec 'si' + présent de l'indicatif et futur simple.",
-            "Exemple : 'Si tu étudies, tu réussiras.'"
+            "Utilisé pour exprimer une condition future.",
+            "Formé avec 'si' + futur simple et conditionnel.",
+            "Exemple : Si tu étudies, tu réussiras."
           ],
-          "example": "Si elle part, elle arrivera à temps.",
+          "example": "Si tu étudies, tu réussiras.",
+          "ruleOrder": [
+            "si + futur",
+            "conditionnel"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "si + futur",
+              "text": "Si tu étudies"
+            },
+            {
+              "label": "conditionnel",
+              "text": "tu réussiras"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Si elle part, elle arriverait à temps.",
-              "fix": "Si elle part, elle arrivera à temps."
+              "wrong": "Si tu étudieras, tu réussis.",
+              "fix": "Si tu étudies, tu réussiras."
             }
           ]
         },
         {
-          "title": "Les phrases conditionnelles de type 2",
+          "title": "Conditionnel avec 'au cas où'",
           "points": [
-            "Utilisées pour des situations hypothétiques ou peu probables.",
-            "Formées avec 'si' + imparfait de l'indicatif et conditionnel présent.",
-            "Exemple : 'Si j'étais riche, je voyagerais.'"
+            "Utilisé pour exprimer une précaution.",
+            "Formé avec 'au cas où' + conditionnel.",
+            "Exemple : Au cas où il pleuvrait, prends un parapluie."
           ],
-          "example": "Si nous avions un jardin, nous ferions des barbecues.",
+          "example": "Au cas où il pleuvrait, prends un parapluie.",
+          "ruleOrder": [
+            "au cas où",
+            "conditionnel"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "au cas où",
+              "text": "Au cas où il pleuvrait"
+            },
+            {
+              "label": "conditionnel",
+              "text": "prends un parapluie"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Si nous avons un jardin, nous ferions des barbecues.",
-              "fix": "Si nous avions un jardin, nous ferions des barbecues."
+              "wrong": "Au cas où il pleut, prends un parapluie.",
+              "fix": "Au cas où il pleuvrait, prends un parapluie."
             }
           ]
         },
         {
-          "title": "Les phrases conditionnelles de type 3",
+          "title": "Conditionnel avec 'si' et impératif",
           "points": [
-            "Utilisées pour des situations irréelles dans le passé.",
-            "Formées avec 'si' + plus-que-parfait et conditionnel passé.",
-            "Exemple : 'Si j'avais su, j'aurais agi différemment.'"
+            "Utilisé pour donner des conseils conditionnels.",
+            "Formé avec 'si' + présent et impératif.",
+            "Exemple : Si tu veux, fais-le maintenant."
           ],
-          "example": "Si elle avait étudié, elle aurait réussi.",
+          "example": "Si tu veux, fais-le maintenant.",
+          "ruleOrder": [
+            "si + présent",
+            "impératif"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "si + présent",
+              "text": "Si tu veux"
+            },
+            {
+              "label": "impératif",
+              "text": "fais-le maintenant"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Si elle a étudié, elle aurait réussi.",
-              "fix": "Si elle avait étudié, elle aurait réussi."
+              "wrong": "Si tu veux, fais maintenant.",
+              "fix": "Si tu veux, fais-le maintenant."
             }
           ]
         },
         {
-          "title": "Les nuances du conditionnel",
+          "title": "Conditionnel avec 'à condition que'",
           "points": [
-            "Peut exprimer la politesse ou le doute.",
-            "Utilisé dans des phrases pour atténuer une demande.",
-            "Exemple : 'Pourriez-vous m'aider ?'"
+            "Utilisé pour exprimer une condition stricte.",
+            "Formé avec 'à condition que' + subjonctif.",
+            "Exemple : À condition que tu sois prêt, nous partirons."
           ],
-          "example": "Je voudrais savoir si vous seriez d'accord.",
+          "example": "À condition que tu sois prêt, nous partirons.",
+          "ruleOrder": [
+            "à condition que",
+            "subjonctif"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "à condition que",
+              "text": "À condition que tu sois prêt"
+            },
+            {
+              "label": "subjonctif",
+              "text": "nous partirons"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Je veux savoir si vous êtes d'accord.",
-              "fix": "Je voudrais savoir si vous seriez d'accord."
+              "wrong": "À condition que tu es prêt, nous partons.",
+              "fix": "À condition que tu sois prêt, nous partirons."
             }
           ]
         }
       ],
       "Voice & Focus": [
         {
-          "title": "Voix active : Introduction",
+          "title": "Sujets et Verbes",
           "points": [
-            "Utiliser la voix active pour des phrases claires et directes.",
-            "La structure sujet-verbe-complément est fondamentale.",
-            "Favoriser la clarté et la concision dans la communication."
+            "Le sujet précède généralement le verbe dans une phrase simple.",
+            "Le verbe conjugué indique le temps de l'action.",
+            "Le sujet est souvent explicite en français."
           ],
-          "example": "Le chat mange la souris.",
+          "example": "Marie mange une pomme.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "objet"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Marie"
+            },
+            {
+              "label": "verbe",
+              "text": "mange"
+            },
+            {
+              "label": "objet",
+              "text": "une pomme"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "La souris est mangée par le chat.",
-              "fix": "Le chat mange la souris."
+              "wrong": "Mange Marie une pomme.",
+              "fix": "Marie mange une pomme."
             }
           ]
         },
         {
-          "title": "Voix passive : Utilisation",
+          "title": "Accord du Verbe",
           "points": [
-            "La voix passive met l'accent sur l'action plutôt que sur l'auteur.",
-            "Elle se forme avec 'être' suivi du participe passé.",
-            "Pratique dans des contextes formels ou lorsque l'auteur est inconnu."
+            "Le verbe s'accorde avec le sujet en nombre et en personne.",
+            "Attention aux verbes irréguliers.",
+            "La conjugaison est essentielle pour la clarté."
           ],
-          "example": "Le livre a été écrit par l'auteur.",
+          "example": "Les enfants jouent dans le parc.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Les enfants"
+            },
+            {
+              "label": "verbe",
+              "text": "jouent"
+            },
+            {
+              "label": "complément",
+              "text": "dans le parc"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "L'auteur a écrit le livre.",
-              "fix": "Le livre a été écrit par l'auteur."
+              "wrong": "L'enfant jouent dans le parc.",
+              "fix": "L'enfant joue dans le parc."
             }
           ]
         },
         {
-          "title": "Focalisation par inversion",
+          "title": "Mise en Évidence",
           "points": [
-            "L'inversion du sujet et du verbe crée de l'emphase.",
-            "Souvent utilisée dans les questions ou les phrases exclamatives.",
-            "Permet de mettre en avant un élément spécifique de la phrase."
+            "Utilisez l'inversion pour mettre en avant le verbe.",
+            "Les adverbes peuvent également servir à focaliser.",
+            "L'ordre des mots peut changer pour l'emphase."
           ],
-          "example": "Jamais je n'ai vu un tel spectacle !",
+          "example": "Jamais je n'ai vu un tel spectacle.",
+          "ruleOrder": [
+            "adverbe",
+            "sujet",
+            "verbe",
+            "objet"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "adverbe",
+              "text": "Jamais"
+            },
+            {
+              "label": "sujet",
+              "text": "je"
+            },
+            {
+              "label": "verbe",
+              "text": "n'ai vu"
+            },
+            {
+              "label": "objet",
+              "text": "un tel spectacle"
+            }
+          ],
           "mistakes": [
             {
               "wrong": "Je n'ai jamais vu un tel spectacle.",
-              "fix": "Jamais je n'ai vu un tel spectacle !"
+              "fix": "Jamais je n'ai vu un tel spectacle."
             }
           ]
         },
         {
-          "title": "Mise en avant avec 'c'est' et 'ce sont'",
+          "title": "Voix Passive",
           "points": [
-            "Utiliser 'c'est' pour introduire ou souligner une idée.",
-            "Utiliser 'ce sont' pour des sujets pluriels.",
-            "Pratique pour clarifier ou reformuler des informations."
+            "La voix passive se forme avec 'être' + participe passé.",
+            "Utilisez la voix passive pour mettre l'accent sur l'objet.",
+            "Attention à l'accord du participe passé."
           ],
-          "example": "C'est Marie qui a gagné le prix.",
+          "example": "La lettre a été écrite par Paul.",
+          "ruleOrder": [
+            "objet",
+            "verbe être",
+            "participe passé",
+            "par"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "objet",
+              "text": "La lettre"
+            },
+            {
+              "label": "verbe être",
+              "text": "a été"
+            },
+            {
+              "label": "participe passé",
+              "text": "écrite"
+            },
+            {
+              "label": "par",
+              "text": "par Paul"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Marie a gagné le prix.",
-              "fix": "C'est Marie qui a gagné le prix."
+              "wrong": "La lettre est écrite par Paul.",
+              "fix": "La lettre a été écrite par Paul."
             }
           ]
         },
         {
-          "title": "Éviter les ambiguïtés par la focalisation",
+          "title": "Focalisation par Inversion",
           "points": [
-            "Clarifier le sujet pour éviter les malentendus.",
-            "Utiliser des compléments pour préciser l'information.",
-            "La structure de la phrase doit guider la compréhension."
+            "L'inversion du sujet et du verbe souligne l'importance.",
+            "Utilisez cette structure pour les questions.",
+            "C'est une méthode formelle et emphatique."
           ],
-          "example": "C'est à Paul que j'ai donné le livre.",
+          "example": "Venez-vous à la fête ?",
+          "ruleOrder": [
+            "verbe",
+            "sujet",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "verbe",
+              "text": "Venez"
+            },
+            {
+              "label": "sujet",
+              "text": "vous"
+            },
+            {
+              "label": "complément",
+              "text": "à la fête"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "J'ai donné le livre à Paul.",
-              "fix": "C'est à Paul que j'ai donné le livre."
+              "wrong": "Vous venez à la fête ?",
+              "fix": "Venez-vous à la fête ?"
             }
           ]
         }
       ],
       "Modality": [
         {
-          "title": "L'obligation avec 'devoir'",
+          "title": "Obligation avec 'devoir'",
           "points": [
-            "Utilisé pour exprimer une obligation ou un devoir.",
+            "Utilisé pour exprimer une obligation.",
             "Conjuguer 'devoir' selon le sujet.",
             "Peut être utilisé au futur pour exprimer une obligation future."
           ],
-          "example": "Je dois finir mes devoirs avant demain.",
+          "example": "Je dois finir mes devoirs.",
+          "ruleOrder": [
+            "sujet",
+            "devoir",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Je"
+            },
+            {
+              "label": "devoir",
+              "text": "dois"
+            },
+            {
+              "label": "complément",
+              "text": "finir mes devoirs"
+            }
+          ],
           "mistakes": [
             {
               "wrong": "Je doit finir mes devoirs.",
@@ -9156,43 +10788,66 @@
           ]
         },
         {
-          "title": "La possibilité avec 'pouvoir'",
+          "title": "Possibilité avec 'pouvoir'",
           "points": [
             "Utilisé pour exprimer la capacité ou la possibilité.",
             "Conjuguer 'pouvoir' selon le sujet.",
-            "Peut être utilisé pour demander la permission."
+            "Peut être utilisé au passé pour exprimer une possibilité passée."
           ],
-          "example": "Je peux aller au cinéma ce soir.",
+          "example": "Je peux venir à la fête.",
+          "ruleOrder": [
+            "sujet",
+            "pouvoir",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Je"
+            },
+            {
+              "label": "pouvoir",
+              "text": "peux"
+            },
+            {
+              "label": "complément",
+              "text": "venir à la fête"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Je peut aller au cinéma.",
-              "fix": "Je peux aller au cinéma."
+              "wrong": "Je peut venir à la fête.",
+              "fix": "Je peux venir à la fête."
             }
           ]
         },
         {
-          "title": "L'incertitude avec 'peut-être'",
+          "title": "Capacité avec 'savoir'",
           "points": [
-            "Utilisé pour exprimer une possibilité incertaine.",
-            "Souvent suivi d'un verbe à l'infinitif.",
-            "Peut être utilisé pour adoucir une affirmation."
-          ],
-          "example": "Peut-être que je viendrai à la fête.",
-          "mistakes": [
-            {
-              "wrong": "Peut être que je viendrai à la fête.",
-              "fix": "Peut-être que je viendrai à la fête."
-            }
-          ]
-        },
-        {
-          "title": "La capacité avec 'savoir'",
-          "points": [
-            "Utilisé pour exprimer une compétence ou une connaissance.",
+            "Utilisé pour exprimer une compétence ou une capacité acquise.",
             "Conjuguer 'savoir' selon le sujet.",
-            "Peut être utilisé pour parler de ce que l'on sait faire."
+            "Peut être utilisé avec un infinitif pour indiquer ce que l'on sait faire."
           ],
           "example": "Je sais parler français.",
+          "ruleOrder": [
+            "sujet",
+            "savoir",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Je"
+            },
+            {
+              "label": "savoir",
+              "text": "sais"
+            },
+            {
+              "label": "complément",
+              "text": "parler français"
+            }
+          ],
           "mistakes": [
             {
               "wrong": "Je sais parler le français.",
@@ -9201,43 +10856,115 @@
           ]
         },
         {
-          "title": "La certitude avec 'certainement'",
+          "title": "Certitude avec 'être sûr'",
           "points": [
-            "Utilisé pour exprimer une certitude forte.",
-            "Peut être utilisé pour renforcer une affirmation.",
-            "Souvent placé avant le verbe."
+            "Utilisé pour exprimer la certitude ou la conviction.",
+            "Utiliser 'être sûr de' suivi d'un complément.",
+            "Peut être utilisé avec un infinitif pour exprimer une certitude sur une action."
           ],
-          "example": "Il viendra certainement à la réunion.",
+          "example": "Je suis sûr de réussir.",
+          "ruleOrder": [
+            "sujet",
+            "être",
+            "sûr",
+            "de",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Je"
+            },
+            {
+              "label": "être",
+              "text": "suis"
+            },
+            {
+              "label": "sûr",
+              "text": "sûr"
+            },
+            {
+              "label": "de",
+              "text": "de"
+            },
+            {
+              "label": "complément",
+              "text": "réussir"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Il viendra certain à la réunion.",
-              "fix": "Il viendra certainement à la réunion."
+              "wrong": "Je suis sûr que je vais réussir.",
+              "fix": "Je suis sûr de réussir."
             }
           ]
         },
         {
-          "title": "L'obligation personnelle avec 'il faut'",
+          "title": "Opinion avec 'penser'",
           "points": [
-            "Utilisé pour exprimer une nécessité générale.",
-            "Souvent suivi d'un verbe à l'infinitif.",
-            "Peut être utilisé pour donner des conseils."
+            "Utilisé pour exprimer une opinion ou un point de vue.",
+            "Conjuguer 'penser' selon le sujet.",
+            "Peut être suivi d'une proposition subordonnée."
           ],
-          "example": "Il faut étudier pour réussir.",
+          "example": "Je pense que c'est une bonne idée.",
+          "ruleOrder": [
+            "sujet",
+            "penser",
+            "que",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Je"
+            },
+            {
+              "label": "penser",
+              "text": "pense"
+            },
+            {
+              "label": "que",
+              "text": "que"
+            },
+            {
+              "label": "complément",
+              "text": "c'est une bonne idée"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Il faut étudier pour réussir.",
-              "fix": "Il faut étudier pour réussir."
+              "wrong": "Je pense c'est une bonne idée.",
+              "fix": "Je pense que c'est une bonne idée."
             }
           ]
         },
         {
-          "title": "La suggestion avec 'devrait'",
+          "title": "Suggestion avec 'devoir'",
           "points": [
-            "Utilisé pour exprimer une suggestion ou un conseil.",
-            "Conjuguer 'devoir' au conditionnel.",
-            "Peut être utilisé pour adoucir une recommandation."
+            "Utilisé pour faire une suggestion.",
+            "Peut être utilisé au conditionnel pour adoucir la suggestion.",
+            "Conjuguer 'devoir' selon le sujet."
           ],
           "example": "Tu devrais essayer ce restaurant.",
+          "ruleOrder": [
+            "sujet",
+            "devoir",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Tu"
+            },
+            {
+              "label": "devoir",
+              "text": "devrais"
+            },
+            {
+              "label": "complément",
+              "text": "essayer ce restaurant"
+            }
+          ],
           "mistakes": [
             {
               "wrong": "Tu doit essayer ce restaurant.",
@@ -9246,389 +10973,852 @@
           ]
         },
         {
-          "title": "L'hypothèse avec 'si'",
+          "title": "Doute avec 'douter'",
           "points": [
-            "Utilisé pour exprimer des conditions ou des hypothèses.",
-            "Souvent utilisé avec le conditionnel.",
-            "Peut introduire des situations irréelles."
+            "Utilisé pour exprimer le doute.",
+            "Utiliser 'douter de' suivi d'un complément.",
+            "Peut être utilisé avec un infinitif pour exprimer un doute sur une action."
           ],
-          "example": "Si j'avais de l'argent, je voyagerais.",
+          "example": "Je doute de sa sincérité.",
+          "ruleOrder": [
+            "sujet",
+            "douter",
+            "de",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Je"
+            },
+            {
+              "label": "douter",
+              "text": "doute"
+            },
+            {
+              "label": "de",
+              "text": "de"
+            },
+            {
+              "label": "complément",
+              "text": "sa sincérité"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Si j'ai de l'argent, je voyagerai.",
-              "fix": "Si j'avais de l'argent, je voyagerais."
+              "wrong": "Je doute sa sincérité.",
+              "fix": "Je doute de sa sincérité."
+            }
+          ]
+        },
+        {
+          "title": "Préférence avec 'préférer'",
+          "points": [
+            "Utilisé pour exprimer une préférence.",
+            "Conjuguer 'préférer' selon le sujet.",
+            "Peut être suivi d'un infinitif ou d'un nom."
+          ],
+          "example": "Je préfère lire plutôt que regarder la télévision.",
+          "ruleOrder": [
+            "sujet",
+            "préférer",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Je"
+            },
+            {
+              "label": "préférer",
+              "text": "préfère"
+            },
+            {
+              "label": "complément",
+              "text": "lire plutôt que regarder la télévision"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Je préfère lire que regarder la télévision.",
+              "fix": "Je préfère lire plutôt que regarder la télévision."
             }
           ]
         }
       ],
       "Reported Speech": [
         {
-          "title": "Introduction au Discours Indirect",
+          "title": "Introduction au discours indirect",
           "points": [
-            "Le discours indirect permet de rapporter les paroles d'autrui sans les citer directement.",
-            "Utilisez des verbes tels que 'dire', 'demander', ou 'expliquer' pour introduire le discours indirect.",
-            "Les vérités générales ne nécessitent pas de changement de temps."
+            "Utiliser 'que' pour introduire le discours indirect.",
+            "Pas de changement de temps pour les faits universels.",
+            "Le sujet doit être clairement identifié."
           ],
-          "example": "Il dit qu'il va au marché.",
+          "example": "Il dit que Marie vient demain.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Il"
+            },
+            {
+              "label": "verbe",
+              "text": "dit"
+            },
+            {
+              "label": "complément",
+              "text": "que Marie vient demain"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Il a dit, 'je vais au marché.'",
-              "fix": "Il a dit qu'il allait au marché."
+              "wrong": "Il dit Marie vient demain.",
+              "fix": "Il dit que Marie vient demain."
             }
           ]
         },
         {
-          "title": "Utilisation de 'que' dans le Discours Indirect",
+          "title": "Changement de temps dans le discours indirect",
           "points": [
-            "Le mot 'que' est essentiel pour introduire le discours indirect.",
-            "Ne pas omettre 'que' dans des phrases complexes est crucial pour la clarté.",
-            "Dans les questions indirectes, 'que' peut être remplacé par 'si'."
+            "Changer le temps du verbe si le verbe principal est au passé.",
+            "Utiliser le conditionnel pour des actions futures.",
+            "Attention aux exceptions pour les vérités générales."
           ],
-          "example": "Elle a demandé si je voulais venir.",
+          "example": "Il a dit que Marie viendrait demain.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Il"
+            },
+            {
+              "label": "verbe",
+              "text": "a dit"
+            },
+            {
+              "label": "complément",
+              "text": "que Marie viendrait demain"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Elle a demandé je voulais venir.",
-              "fix": "Elle a demandé si je voulais venir."
+              "wrong": "Il a dit que Marie vient demain.",
+              "fix": "Il a dit que Marie viendrait demain."
             }
           ]
         },
         {
-          "title": "Changement de Temps dans le Discours Indirect",
+          "title": "Utilisation de 'si' dans le discours indirect",
           "points": [
-            "Le temps du verbe peut changer en fonction du verbe principal.",
-            "Le passé simple se transforme en imparfait dans le discours indirect.",
-            "Le futur simple devient conditionnel présent."
+            "Utiliser 'si' pour rapporter des questions indirectes.",
+            "Le verbe doit être à l'infinitif dans la question.",
+            "Ne pas utiliser d'inversion dans le discours indirect."
           ],
-          "example": "Il a dit qu'il viendrait demain.",
+          "example": "Il se demande si Marie vient.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Il"
+            },
+            {
+              "label": "verbe",
+              "text": "se demande"
+            },
+            {
+              "label": "complément",
+              "text": "si Marie vient"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Il a dit qu'il vient demain.",
-              "fix": "Il a dit qu'il viendrait demain."
+              "wrong": "Il se demande est-ce que Marie vient.",
+              "fix": "Il se demande si Marie vient."
             }
           ]
         },
         {
-          "title": "Rapport de Questions en Discours Indirect",
+          "title": "Discours indirect avec des verbes d'opinion",
           "points": [
-            "Les questions directes se transforment en déclarations dans le discours indirect.",
-            "L'ordre des mots change, le verbe suit le sujet.",
-            "Utilisez 'si' pour les questions fermées."
+            "Utiliser 'que' après des verbes comme 'penser' ou 'croire'.",
+            "Le temps peut changer selon le contexte.",
+            "Clarifier le sujet pour éviter la confusion."
           ],
-          "example": "Il a demandé si j'avais fini mes devoirs.",
+          "example": "Elle pense que Pierre est parti.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Elle"
+            },
+            {
+              "label": "verbe",
+              "text": "pense"
+            },
+            {
+              "label": "complément",
+              "text": "que Pierre est parti"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Il a demandé, 'As-tu fini tes devoirs?'",
-              "fix": "Il a demandé si j'avais fini mes devoirs."
+              "wrong": "Elle pense Pierre est parti.",
+              "fix": "Elle pense que Pierre est parti."
             }
           ]
         },
         {
-          "title": "Rapport de Discours Direct avec des Modificateurs",
+          "title": "Rapport de discours indirect avec des verbes de déclaration",
           "points": [
-            "Les modificateurs comme 'ici' et 'maintenant' changent en 'là' et 'alors'.",
-            "Soyez attentif aux changements de contexte lors du passage au discours indirect.",
-            "Les pronoms peuvent également changer selon le contexte."
+            "Utiliser 'que' pour rapporter des déclarations.",
+            "Les temps doivent être ajustés selon le temps du verbe principal.",
+            "Éviter les répétitions dans le discours indirect."
           ],
-          "example": "Elle a dit qu'elle était ici.",
+          "example": "Il a déclaré que le projet est terminé.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Il"
+            },
+            {
+              "label": "verbe",
+              "text": "a déclaré"
+            },
+            {
+              "label": "complément",
+              "text": "que le projet est terminé"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Elle a dit, 'Je suis ici.'",
-              "fix": "Elle a dit qu'elle était là."
+              "wrong": "Il a déclaré le projet est terminé.",
+              "fix": "Il a déclaré que le projet est terminé."
             }
           ]
         },
         {
-          "title": "Nuances du Discours Indirect",
+          "title": "Nuances du discours indirect",
           "points": [
-            "Le discours indirect peut véhiculer des nuances de sens.",
-            "Utilisez des verbes comme 'croire' ou 'penser' pour exprimer des opinions.",
-            "Le ton peut varier selon le verbe utilisé."
+            "Utiliser des verbes de perception pour rapporter des actions.",
+            "Le temps peut rester au présent si l'action est toujours vraie.",
+            "Attention à la concordance des temps."
           ],
-          "example": "Il pense qu'il a raison.",
+          "example": "Il a vu que Marie souriait.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Il"
+            },
+            {
+              "label": "verbe",
+              "text": "a vu"
+            },
+            {
+              "label": "complément",
+              "text": "que Marie souriait"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Il a dit qu'il a raison.",
-              "fix": "Il pense qu'il a raison."
+              "wrong": "Il a vu Marie sourit.",
+              "fix": "Il a vu que Marie souriait."
             }
           ]
         }
       ],
       "Formality & Style": [
         {
-          "title": "Utilisation du 'vous' et 'tu'",
+          "title": "Utilisation de 'tu' et 'vous'",
           "points": [
-            "Le 'vous' est utilisé pour montrer du respect ou de la distance.",
-            "Le 'tu' est réservé aux amis ou aux contextes informels.",
-            "Le choix entre 'vous' et 'tu' peut influencer la dynamique de la conversation."
+            "Utilisez 'tu' pour des amis ou des personnes de votre âge.",
+            "Utilisez 'vous' pour des inconnus ou des situations formelles.",
+            "Le choix entre 'tu' et 'vous' peut influencer la perception de la relation."
           ],
-          "example": "Je vous remercie pour votre aide.",
+          "example": "Tu viens ce soir ?",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Tu"
+            },
+            {
+              "label": "verbe",
+              "text": "viens"
+            },
+            {
+              "label": "complément",
+              "text": "ce soir"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Je te remercie pour votre aide.",
-              "fix": "Je vous remercie pour votre aide."
+              "wrong": "Vous viens ce soir ?",
+              "fix": "Vous venez ce soir ?"
             }
           ]
         },
         {
           "title": "Formules de politesse",
           "points": [
-            "Commencer une conversation par 'Bonjour' ou 'Bonsoir' est essentiel.",
-            "Utiliser 's'il vous plaît' et 'merci' renforce la politesse.",
-            "Les formules de politesse varient selon le moment de la journée."
+            "Commencez par 'Bonjour' ou 'Bonsoir' selon le moment de la journée.",
+            "Terminez par 'S'il vous plaît' pour une demande polie.",
+            "Utilisez 'Merci' pour exprimer votre gratitude."
           ],
-          "example": "Bonsoir, comment allez-vous ?",
+          "example": "Bonjour, pourriez-vous m'aider, s'il vous plaît ?",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "vous"
+            },
+            {
+              "label": "verbe",
+              "text": "m'aider"
+            },
+            {
+              "label": "complément",
+              "text": "s'il vous plaît"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Salut, comment ça va ?",
-              "fix": "Bonsoir, comment allez-vous ?"
+              "wrong": "Merci de votre aide, vous êtes gentil.",
+              "fix": "Merci pour votre aide, vous êtes gentil."
             }
           ]
         },
         {
-          "title": "Honorifiques et titres",
+          "title": "Expressions de respect",
           "points": [
-            "Utiliser des titres comme 'Monsieur' ou 'Madame' montre du respect.",
-            "Les honorifiques sont souvent employés dans des contextes formels.",
-            "Ne pas utiliser de titres peut être perçu comme impoli."
+            "Utilisez 'Monsieur' ou 'Madame' pour montrer du respect.",
+            "Évitez les familiarités dans des contextes formels.",
+            "Adaptez votre langage selon le statut de l'interlocuteur."
           ],
-          "example": "Monsieur Dupont, pourriez-vous m'aider ?",
+          "example": "Madame, puis-je vous poser une question ?",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "je"
+            },
+            {
+              "label": "verbe",
+              "text": "vous poser une question"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Dupont, pourriez-vous m'aider ?",
-              "fix": "Monsieur Dupont, pourriez-vous m'aider ?"
+              "wrong": "Salut, je peux te poser une question ?",
+              "fix": "Bonjour, puis-je vous poser une question ?"
             }
           ]
         },
         {
-          "title": "Niveau de formalité dans les écrits",
+          "title": "Choix de vocabulaire formel",
           "points": [
-            "Les lettres formelles commencent par 'Cher Monsieur' ou 'Chère Madame'.",
-            "Évitez les contractions dans les écrits formels.",
-            "Utilisez un vocabulaire approprié au contexte."
+            "Privilégiez des termes comme 'demander' au lieu de 'demander à'.",
+            "Utilisez des synonymes plus formels pour des contextes professionnels.",
+            "Évitez le jargon familier dans des situations sérieuses."
           ],
-          "example": "Chère Madame, je vous écris pour exprimer ma gratitude.",
+          "example": "Je souhaiterais demander un rendez-vous.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "souhaiterais"
+            },
+            {
+              "label": "verbe",
+              "text": "demander un rendez-vous"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Salut, je voulais te dire merci.",
-              "fix": "Chère Madame, je vous écris pour exprimer ma gratitude."
+              "wrong": "Je veux un rendez-vous.",
+              "fix": "Je souhaiterais un rendez-vous."
             }
           ]
         },
         {
-          "title": "Expressions idiomatiques formelles",
+          "title": "Adaptation au contexte",
           "points": [
-            "Certaines expressions sont plus appropriées dans des contextes formels.",
-            "Évitez les expressions familières lors de discussions professionnelles.",
-            "Connaître les idiomes formels peut améliorer votre communication."
+            "Adaptez votre langage selon l'âge et le statut de l'interlocuteur.",
+            "Utilisez un registre plus soutenu dans des réunions d'affaires.",
+            "Soyez conscient des différences culturelles dans l'utilisation du langage."
           ],
-          "example": "Je vous prie de croire, Madame, en l'assurance de ma considération distinguée.",
+          "example": "Je vous remercie pour votre compréhension.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "vous remercie"
+            },
+            {
+              "label": "verbe",
+              "text": "pour votre compréhension"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Je pense que c'est cool.",
-              "fix": "Je vous prie de croire, Madame, en l'assurance de ma considération distinguée."
+              "wrong": "Merci pour ta compréhension.",
+              "fix": "Merci pour votre compréhension."
             }
           ]
         },
         {
-          "title": "Adaptation au contexte social",
+          "title": "Utilisation des titres",
           "points": [
-            "Adaptez votre langage selon le public (amis, collègues, supérieurs).",
-            "Les jeunes peuvent utiliser un langage plus décontracté.",
-            "Les contextes formels exigent un vocabulaire plus soutenu."
+            "Utilisez des titres comme 'Docteur' ou 'Professeur' pour montrer du respect.",
+            "Évitez d'utiliser des prénoms sans permission dans un cadre formel.",
+            "Les titres peuvent varier selon le contexte culturel."
           ],
-          "example": "Je suis honoré de vous rencontrer, Monsieur le Directeur.",
+          "example": "Docteur, avez-vous un moment ?",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "vous"
+            },
+            {
+              "label": "verbe",
+              "text": "un moment"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Enchanté de te voir, mec.",
-              "fix": "Je suis honoré de vous rencontrer, Monsieur le Directeur."
+              "wrong": "Salut, tu as un moment ?",
+              "fix": "Bonjour, avez-vous un moment ?"
             }
           ]
         },
         {
-          "title": "Éviter les familiarités excessives",
+          "title": "Expressions de gratitude",
           "points": [
-            "Utilisez un langage approprié pour éviter de paraître trop familier.",
-            "Les blagues et l'humour peuvent être mal interprétés dans un cadre formel.",
-            "Restez professionnel dans les échanges écrits et oraux."
+            "Utilisez 'Je vous remercie' pour une gratitude formelle.",
+            "Évitez les expressions trop familières dans des contextes professionnels.",
+            "Montrez de la reconnaissance pour des efforts ou des services."
           ],
-          "example": "Je vous remercie de votre compréhension.",
+          "example": "Je vous remercie pour votre aide précieuse.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "vous remercie"
+            },
+            {
+              "label": "verbe",
+              "text": "pour votre aide précieuse"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Merci de ta compréhension, c'est super.",
-              "fix": "Je vous remercie de votre compréhension."
+              "wrong": "Merci beaucoup pour ton aide.",
+              "fix": "Merci beaucoup pour votre aide."
             }
           ]
         }
       ],
       "Discourse & Flow": [
         {
-          "title": "Connecteurs logiques",
+          "title": "Utilisation de 'et' pour l'addition",
           "points": [
-            "Utiliser des connecteurs pour relier des idées.",
-            "Améliore la clarté des arguments.",
-            "Facilite la compréhension du discours."
+            "Introduit une idée supplémentaire.",
+            "Utilisé pour relier des phrases simples.",
+            "Facilite la fluidité du discours."
           ],
-          "example": "Il pleut aujourd'hui, donc nous resterons à l'intérieur.",
+          "example": "J'aime le chocolat et je préfère le noir.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "J'aime"
+            },
+            {
+              "label": "verbe",
+              "text": "le chocolat et je préfère le noir"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Il pleut aujourd'hui, nous resterons à l'intérieur.",
-              "fix": "Il pleut aujourd'hui, donc nous resterons à l'intérieur."
+              "wrong": "J'aime le chocolat, et je préfère le noir.",
+              "fix": "J'aime le chocolat et je préfère le noir."
             }
           ]
         },
         {
-          "title": "Marqueurs de contraste",
+          "title": "Utilisation de 'mais' pour le contraste",
           "points": [
-            "Introduire des idées opposées.",
-            "Utiliser 'mais', 'cependant', 'toutefois'.",
-            "Renforce l'argumentation."
+            "Introduit une idée opposée.",
+            "Utilisé pour nuancer le discours.",
+            "Permet d'exprimer des contradictions."
           ],
-          "example": "J'aime le chocolat, mais je préfère les fruits.",
+          "example": "J'aime le chocolat, mais je préfère le noir.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "J'aime"
+            },
+            {
+              "label": "verbe",
+              "text": "le chocolat, mais je préfère le noir"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "J'aime le chocolat je préfère les fruits.",
-              "fix": "J'aime le chocolat, mais je préfère les fruits."
+              "wrong": "J'aime le chocolat mais je préfère le noir.",
+              "fix": "J'aime le chocolat, mais je préfère le noir."
             }
           ]
         },
         {
-          "title": "Énoncés de cause et effet",
+          "title": "Utilisation de 'donc' pour la conséquence",
           "points": [
-            "Exprimer des relations de cause à effet.",
-            "Utiliser 'parce que', 'donc', 'ainsi'.",
-            "Clarifie les raisons derrière une action."
+            "Introduit une conclusion ou un résultat.",
+            "Renforce la logique du discours.",
+            "Facilite la compréhension des relations causales."
           ],
-          "example": "Il a étudié dur, donc il a réussi l'examen.",
+          "example": "Il pleut, donc je prends un parapluie.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Il"
+            },
+            {
+              "label": "verbe",
+              "text": "pleut"
+            },
+            {
+              "label": "complément",
+              "text": "donc je prends un parapluie"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Il a étudié dur il a réussi l'examen.",
-              "fix": "Il a étudié dur, donc il a réussi l'examen."
+              "wrong": "Il pleut donc je prends un parapluie.",
+              "fix": "Il pleut, donc je prends un parapluie."
             }
           ]
         },
         {
-          "title": "Séquences d'idées",
+          "title": "Utilisation de 'parce que' pour l'explication",
           "points": [
-            "Organiser les idées dans un ordre logique.",
-            "Utiliser 'd'abord', 'ensuite', 'finalement'.",
-            "Facilite la compréhension du récit."
+            "Introduit une cause.",
+            "Clarifie les raisons derrière une affirmation.",
+            "Améliore la cohérence du discours."
           ],
-          "example": "D'abord, nous avons visité le musée; ensuite, nous avons déjeuné.",
+          "example": "Je suis en retard parce que le bus est en panne.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Je"
+            },
+            {
+              "label": "verbe",
+              "text": "suis"
+            },
+            {
+              "label": "complément",
+              "text": "en retard parce que le bus est en panne"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Nous avons visité le musée nous avons déjeuné.",
-              "fix": "D'abord, nous avons visité le musée; ensuite, nous avons déjeuné."
+              "wrong": "suis Je en retard parce que le bus est en panne.",
+              "fix": "Je suis en retard parce que le bus est en panne."
             }
           ]
         },
         {
-          "title": "Références anaphoriques",
+          "title": "Utilisation de 'toutefois' pour la nuance",
           "points": [
-            "Utiliser des pronoms pour éviter la répétition.",
-            "Améliore la fluidité du texte.",
-            "Rend le discours plus naturel."
+            "Introduit une restriction ou une nuance.",
+            "Utilisé pour modérer une affirmation.",
+            "Ajoute de la sophistication au discours."
           ],
-          "example": "Marie a un chien. Elle l'adore.",
+          "example": "Il est talentueux, toutefois il doit travailler plus.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Il"
+            },
+            {
+              "label": "verbe",
+              "text": "est"
+            },
+            {
+              "label": "complément",
+              "text": "talentueux, toutefois il doit travailler plus"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Marie a un chien. Marie adore le chien.",
-              "fix": "Marie a un chien. Elle l'adore."
+              "wrong": "Il est talentueux toutefois il doit travailler plus.",
+              "fix": "Il est talentueux, toutefois il doit travailler plus."
             }
           ]
         },
         {
-          "title": "Énoncés conditionnels",
+          "title": "Utilisation de 'en revanche' pour la comparaison",
           "points": [
-            "Exprimer des conditions avec 'si'.",
-            "Utiliser pour des hypothèses.",
-            "Ajoute de la nuance au discours."
+            "Introduit une alternative ou une comparaison.",
+            "Utilisé pour mettre en contraste deux idées.",
+            "Rend le discours plus dynamique."
           ],
-          "example": "Si tu viens, nous irons au cinéma.",
+          "example": "Elle aime le thé, en revanche il préfère le café.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Elle"
+            },
+            {
+              "label": "verbe",
+              "text": "aime"
+            },
+            {
+              "label": "complément",
+              "text": "le thé, en revanche il préfère le café"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Tu viens nous irons au cinéma.",
-              "fix": "Si tu viens, nous irons au cinéma."
+              "wrong": "Elle aime le thé en revanche il préfère le café.",
+              "fix": "Elle aime le thé, en revanche il préfère le café."
             }
           ]
         },
         {
-          "title": "Expressions de concession",
+          "title": "Utilisation de 'en effet' pour la confirmation",
           "points": [
-            "Introduire des idées qui admettent une exception.",
-            "Utiliser 'bien que', 'malgré', 'quoique'.",
-            "Rend le discours plus complexe."
+            "Renforce une affirmation.",
+            "Utilisé pour valider une idée.",
+            "Ajoute de la clarté au discours."
           ],
-          "example": "Bien qu'il pleuve, nous sortirons.",
+          "example": "Il est très intelligent, en effet il a toujours de bonnes notes.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Il"
+            },
+            {
+              "label": "verbe",
+              "text": "est"
+            },
+            {
+              "label": "complément",
+              "text": "très intelligent, en effet il a toujours de bonnes notes"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Il pleut nous sortirons.",
-              "fix": "Bien qu'il pleuve, nous sortirons."
+              "wrong": "Il est très intelligent en effet il a toujours de bonnes notes.",
+              "fix": "Il est très intelligent, en effet il a toujours de bonnes notes."
             }
           ]
         },
         {
-          "title": "Transitions temporelles",
+          "title": "Utilisation de 'd'abord' pour l'ordre",
           "points": [
-            "Indiquer le passage du temps.",
-            "Utiliser 'avant', 'après', 'pendant'.",
-            "Clarifie la chronologie des événements."
+            "Introduit une première idée ou étape.",
+            "Utilisé pour structurer le discours.",
+            "Facilite la compréhension des séquences."
           ],
-          "example": "Après le dîner, nous avons regardé un film.",
+          "example": "D'abord, nous allons au marché.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "nous"
+            },
+            {
+              "label": "verbe",
+              "text": "allons"
+            },
+            {
+              "label": "complément",
+              "text": "au marché"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Nous avons regardé un film le dîner.",
-              "fix": "Après le dîner, nous avons regardé un film."
+              "wrong": "D'abord nous allons au marché.",
+              "fix": "D'abord, nous allons au marché."
             }
           ]
         },
         {
-          "title": "Clarification et reformulation",
+          "title": "Utilisation de 'ensuite' pour la continuité",
           "points": [
-            "Répéter ou reformuler pour clarifier.",
-            "Utiliser 'c'est-à-dire', 'en d'autres termes'.",
-            "Améliore la compréhension."
+            "Introduit une idée suivante.",
+            "Utilisé pour maintenir le flux du discours.",
+            "Rend le discours plus cohérent."
           ],
-          "example": "Il est très talentueux, c'est-à-dire qu'il excelle dans son domaine.",
+          "example": "Nous allons au marché, ensuite nous ferons les courses.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Nous"
+            },
+            {
+              "label": "verbe",
+              "text": "ferons les courses"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Il est très talentueux il excelle dans son domaine.",
-              "fix": "Il est très talentueux, c'est-à-dire qu'il excelle dans son domaine."
+              "wrong": "Nous allons au marché ensuite nous ferons les courses.",
+              "fix": "Nous allons au marché, ensuite nous ferons les courses."
             }
           ]
         },
         {
-          "title": "Énoncés d'opinion",
+          "title": "Utilisation de 'finalement' pour la conclusion",
           "points": [
-            "Exprimer des opinions avec 'je pense que', 'à mon avis'.",
-            "Ajoute une dimension personnelle au discours.",
-            "Facilite les discussions."
+            "Introduit une idée finale.",
+            "Utilisé pour clore un discours.",
+            "Rend le discours plus complet."
           ],
-          "example": "À mon avis, la lecture est essentielle.",
+          "example": "Nous avons visité Paris, finalement nous sommes allés à Lyon.",
+          "ruleOrder": [
+            "sujet",
+            "verbe",
+            "complément"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Nous"
+            },
+            {
+              "label": "verbe",
+              "text": "sommes"
+            },
+            {
+              "label": "complément",
+              "text": "allés à Lyon"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Je pense la lecture est essentielle.",
-              "fix": "À mon avis, la lecture est essentielle."
+              "wrong": "Nous avons visité Paris finalement nous sommes allés à Lyon.",
+              "fix": "Nous avons visité Paris, finalement nous sommes allés à Lyon."
             }
           ]
         }
       ]
     },
     "sectionLabels": {
-      "Sentence Structure": "Structure des phrases",
+      "Sentence Structure": "Structure de phrase",
       "Verbs": "Verbes",
       "Tenses & Aspect": "Temps et Aspect",
       "Nouns & Articles": "Noms & Articles",
-      "Pronouns & Reference": "Pronoms & Références",
+      "Pronouns & Reference": "Pronoms & Référence",
       "Modifiers": "Modificateurs",
-      "Questions": "Questions",
+      "Questions": "Interrogation",
       "Negation": "Négation",
-      "Connections": "Connections",
-      "Conditions": "Conditions",
-      "Voice & Focus": "Voix et Focalisation",
+      "Connections": "Connexions",
+      "Conditions": "Modes conditionnels",
+      "Voice & Focus": "Voix & Focalisation",
       "Modality": "Modalité",
-      "Reported Speech": "Discours Rapporté",
-      "Formality & Style": "Formality & Style",
-      "Discourse & Flow": "Discours et Cohésion"
+      "Reported Speech": "Discours Reporté",
+      "Formality & Style": "Formalité et Style",
+      "Discourse & Flow": "Discours et Cohérence"
     }
   },
   "worldSource": {

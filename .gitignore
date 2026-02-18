@@ -5,3 +5,4 @@ live_*.html
 live_*.js
 live_*.css
 tmp/
+backend/data/

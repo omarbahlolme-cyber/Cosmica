@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-18T06:03:03.608Z",
+  "generatedAt": "2026-02-18T15:18:51.764Z",
   "worldLanguage": "german",
   "baseLanguages": [
     "albanian",
@@ -9688,6 +9688,25 @@
           "english": "degree"
         }
       }
+    },
+    "sectionLabels": {
+      "Greetings": "Grüße",
+      "Pronouns": "Pronomen",
+      "Verbs & Tenses": "Verben & Zeiten",
+      "Questions & Connectors": "Fragen & Verbindungen",
+      "Numbers & Counting": "Zahlen & Zählen",
+      "Time, Date & Frequency": "Zeit, Datum & Häufigkeit",
+      "Descriptions & Adjectives": "Beschreibungen & Adjektive",
+      "Opinions & Preferences": "Meinungen & Vorlieben",
+      "Weather & Seasons": "Wetter & Jahreszeiten",
+      "Places & Directions": "Orte & Richtungen",
+      "countries": "Länder",
+      "Feelings & States": "Gefühle & Zustände",
+      "Family & Relationships": "Familie & Beziehungen",
+      "Food & Eating": "Essen & Ernährung",
+      "Health & Body": "Gesundheit & Körper",
+      "Technology & Communication": "Technologie & Kommunikation",
+      "Work & School": "Arbeit & Schule"
     }
   },
   "phrases": {
@@ -12459,77 +12478,192 @@
     "cards": {
       "Sentence Structure": [
         {
-          "title": "Einfacher Satz",
+          "title": "Verbzweitstellung im Hauptsatz",
           "points": [
-            "Ein einfacher Satz besteht aus Subjekt, Prädikat und Objekt.",
-            "Die Standardwortstellung ist Subjekt-Verb-Objekt.",
-            "Verwende klare und direkte Sprache für einfache Aussagen."
+            "Das Verb steht an zweiter Stelle.",
+            "Subjekt und Verb sind die Hauptbestandteile.",
+            "Der Rest des Satzes folgt nach dem Verb."
           ],
-          "example": "Der Hund spielt im Garten.",
+          "example": "Ich gehe heute ins Kino.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Zeitangabe",
+            "Ort"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "Verb",
+              "text": "gehe"
+            },
+            {
+              "label": "Zeitangabe",
+              "text": "heute"
+            },
+            {
+              "label": "Ort",
+              "text": "ins Kino"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Im Garten spielt der Hund.",
+              "wrong": "Heute ich gehe ins Kino.",
+              "fix": "Ich gehe heute ins Kino."
+            }
+          ]
+        },
+        {
+          "title": "Verb-final in Nebensätzen",
+          "points": [
+            "Das Verb steht am Ende des Satzes.",
+            "Nebensätze beginnen oft mit Konjunktionen.",
+            "Die Satzstruktur bleibt klar und verständlich."
+          ],
+          "example": "Ich weiß, dass du heute ins Kino gehst.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Konjunktion"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "Verb",
+              "text": "weiß"
+            },
+            {
+              "label": "Konjunktion",
+              "text": "dass"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Ich weiß, du gehst heute ins Kino.",
+              "fix": "Ich weiß, dass du heute ins Kino gehst."
+            }
+          ]
+        },
+        {
+          "title": "Artikel und Kasus",
+          "points": [
+            "Bestimmte und unbestimmte Artikel sind wichtig.",
+            "Der Kasus beeinflusst die Form des Artikels.",
+            "Richtige Verwendung ist entscheidend für die Klarheit."
+          ],
+          "example": "Der Hund spielt im Garten.",
+          "ruleOrder": [
+            "Artikel",
+            "Subjekt",
+            "Verb",
+            "Ort"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Artikel",
+              "text": "Der"
+            },
+            {
+              "label": "Subjekt",
+              "text": "Hund"
+            },
+            {
+              "label": "Verb",
+              "text": "spielt"
+            },
+            {
+              "label": "Ort",
+              "text": "im Garten"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Ein Hund spielt im Garten.",
               "fix": "Der Hund spielt im Garten."
             }
           ]
         },
         {
-          "title": "Fragen im Deutschen",
+          "title": "Formelle Anrede",
           "points": [
-            "Fragen werden häufig durch Inversion gebildet.",
-            "Das Verb steht an erster Stelle in Ja/Nein-Fragen.",
-            "W-Fragen beginnen mit einem Fragewort."
+            "Unterscheidung zwischen 'Sie' und 'du' ist wichtig.",
+            "Die Form der Anrede beeinflusst den Satzbau.",
+            "Höflichkeit kann die Wortstellung ändern."
           ],
-          "example": "Spielst du Fußball?",
-          "mistakes": [
+          "example": "Könnten Sie mir bitte helfen?",
+          "ruleOrder": [
+            "Verb",
+            "Subjekt",
+            "Objekt",
+            "Hilfsverb"
+          ],
+          "exampleHighlights": [
             {
-              "wrong": "Du spielst Fußball?",
-              "fix": "Spielst du Fußball?"
+              "label": "Verb",
+              "text": "Könnten"
+            },
+            {
+              "label": "Subjekt",
+              "text": "Sie"
+            },
+            {
+              "label": "Objekt",
+              "text": "mir"
+            },
+            {
+              "label": "Hilfsverb",
+              "text": "helfen"
             }
-          ]
-        },
-        {
-          "title": "Nebensätze",
-          "points": [
-            "Nebensätze beginnen oft mit einer Konjunktion wie 'weil' oder 'dass'.",
-            "Das Verb im Nebensatz steht am Ende.",
-            "Nebensätze können zusätzliche Informationen liefern oder Erklärungen geben."
           ],
-          "example": "Ich bleibe zu Hause, weil es regnet.",
           "mistakes": [
             {
-              "wrong": "Weil es regnet, ich bleibe zu Hause.",
-              "fix": "Ich bleibe zu Hause, weil es regnet."
+              "wrong": "Kannst du mir bitte helfen?",
+              "fix": "Könnten Sie mir bitte helfen?"
             }
           ]
         },
         {
           "title": "Satzverbindungen",
           "points": [
-            "Satzverbindungen verbinden zwei Hauptsätze mit einer Konjunktion.",
-            "Die Konjunktion beeinflusst die Wortstellung.",
-            "Verwende 'und', 'oder', 'aber' für einfache Verbindungen."
+            "Sätze können durch Konjunktionen verbunden werden.",
+            "Die Wortstellung bleibt in beiden Sätzen gleich.",
+            "Verwendung von 'und', 'oder', 'aber' ist üblich."
           ],
-          "example": "Ich mag Kaffee, aber ich trinke lieber Tee.",
-          "mistakes": [
+          "example": "Ich gehe ins Kino, und du bleibst zu Hause.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Ort",
+            "Konjunktion"
+          ],
+          "exampleHighlights": [
             {
-              "wrong": "Ich mag Kaffee aber ich trinke lieber Tee.",
-              "fix": "Ich mag Kaffee, aber ich trinke lieber Tee."
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "Verb",
+              "text": "gehe"
+            },
+            {
+              "label": "Ort",
+              "text": "ins Kino"
+            },
+            {
+              "label": "Konjunktion",
+              "text": "und"
             }
-          ]
-        },
-        {
-          "title": "Passivkonstruktionen",
-          "points": [
-            "Im Passiv ist das Subjekt der Handlung nicht aktiv.",
-            "Das Hilfsverb 'werden' wird verwendet, um das Passiv zu bilden.",
-            "Passiv wird oft verwendet, um den Fokus auf die Handlung zu legen."
           ],
-          "example": "Das Buch wird gelesen.",
           "mistakes": [
             {
-              "wrong": "Das Buch liest.",
-              "fix": "Das Buch wird gelesen."
+              "wrong": "Ich gehe ins Kino und bleibst zu Hause.",
+              "fix": "Ich gehe ins Kino, und du bleibst zu Hause."
             }
           ]
         }
@@ -12538,11 +12672,30 @@
         {
           "title": "Präsens - regelmäßige Verben",
           "points": [
-            "Regelmäßige Verben folgen einem klaren Muster in der Konjugation.",
-            "Endungen: -e, -st, -t, -en, -t, -en für die verschiedenen Personen.",
-            "Beispielverb: spielen (spielen)."
+            "Verben im Präsens enden auf -e, -st, -t, -en.",
+            "Die Endungen variieren je nach Subjekt.",
+            "Beispiel: 'Ich spiele', 'Du spielst', 'Er/Sie/Es spielt'."
           ],
           "example": "Ich spiele jeden Tag Fußball.",
+          "ruleOrder": [
+            "Subjekt",
+            "verb",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "verb",
+              "text": "spiele"
+            },
+            {
+              "label": "Objekt",
+              "text": "Fußball"
+            }
+          ],
           "mistakes": [
             {
               "wrong": "Ich spiel jeden Tag Fußball.",
@@ -12551,105 +12704,32 @@
           ]
         },
         {
-          "title": "Präsens - unregelmäßige Verben",
+          "title": "Präteritum - unregelmäßige Verben",
           "points": [
-            "Unregelmäßige Verben haben oft unvorhersehbare Veränderungen im Stamm.",
-            "Wichtige unregelmäßige Verben sind sein, haben und gehen.",
-            "Beispielverb: gehen (gehen)."
-          ],
-          "example": "Du gehst oft ins Kino.",
-          "mistakes": [
-            {
-              "wrong": "Du gehst oft ins Kinos.",
-              "fix": "Du gehst oft ins Kino."
-            }
-          ]
-        },
-        {
-          "title": "Perfekt - Bildung",
-          "points": [
-            "Das Perfekt wird mit dem Hilfsverb haben oder sein und dem Partizip II gebildet.",
-            "Die Wahl des Hilfsverbs hängt vom Verb ab.",
-            "Beispielverb: essen (essen)."
-          ],
-          "example": "Wir haben Pizza gegessen.",
-          "mistakes": [
-            {
-              "wrong": "Wir haben gegessen Pizza.",
-              "fix": "Wir haben Pizza gegessen."
-            }
-          ]
-        },
-        {
-          "title": "Präteritum - Verwendung",
-          "points": [
-            "Das Präteritum wird häufig in schriftlicher Sprache verwendet.",
-            "Es wird oft für Erzählungen oder Berichte genutzt.",
-            "Beispielverb: machen (machen)."
-          ],
-          "example": "Er machte seine Hausaufgaben.",
-          "mistakes": [
-            {
-              "wrong": "Er macht seine Hausaufgaben.",
-              "fix": "Er machte seine Hausaufgaben."
-            }
-          ]
-        },
-        {
-          "title": "Konjunktiv II - Wünsche und Unwirklichkeit",
-          "points": [
-            "Der Konjunktiv II wird verwendet, um Wünsche oder hypothetische Situationen auszudrücken.",
-            "Er wird oft mit 'würde' + Infinitiv gebildet.",
-            "Beispielverb: haben (haben)."
-          ],
-          "example": "Ich würde gerne reisen.",
-          "mistakes": [
-            {
-              "wrong": "Ich würde gern reisen.",
-              "fix": "Ich würde gerne reisen."
-            }
-          ]
-        },
-        {
-          "title": "Modalverben - Verwendung",
-          "points": [
-            "Modalverben ändern die Bedeutung des Hauptverbs und drücken Notwendigkeit, Möglichkeit oder Erlaubnis aus.",
-            "Wichtige Modalverben sind können, müssen, dürfen.",
-            "Beispielverb: können (können)."
-          ],
-          "example": "Sie kann gut schwimmen.",
-          "mistakes": [
-            {
-              "wrong": "Sie kann gut schwimmen.",
-              "fix": "Sie kann gut schwimmen."
-            }
-          ]
-        }
-      ],
-      "Tenses & Aspect": [
-        {
-          "title": "Präsens: Gegenwart ausdrücken",
-          "points": [
-            "Verwendung für regelmäßige Handlungen.",
-            "Ausdruck von allgemeinen Wahrheiten.",
-            "Präsens kann auch für zukünftige Ereignisse genutzt werden."
-          ],
-          "example": "Ich gehe jeden Tag zur Arbeit.",
-          "mistakes": [
-            {
-              "wrong": "Ich gehe jeden Tag zur die Arbeit.",
-              "fix": "Ich gehe jeden Tag zur Arbeit."
-            }
-          ]
-        },
-        {
-          "title": "Präteritum: Vergangenes erzählen",
-          "points": [
-            "Häufig in schriftlicher Sprache verwendet.",
-            "Ideal für Erzählungen und Berichte.",
-            "Verben mit unregelmäßigen Formen beachten."
+            "Unregelmäßige Verben zeigen oft unvorhersehbare Stammänderungen.",
+            "Das Präteritum wird häufig in der Schriftsprache verwendet.",
+            "Beispiel: 'Ich ging', 'Du gingst', 'Er/Sie/Es ging'."
           ],
           "example": "Ich ging gestern ins Kino.",
+          "ruleOrder": [
+            "Subjekt",
+            "verb",
+            "Zeitangabe"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "verb",
+              "text": "ging"
+            },
+            {
+              "label": "Zeitangabe",
+              "text": "gestern"
+            }
+          ],
           "mistakes": [
             {
               "wrong": "Ich gehe gestern ins Kino.",
@@ -12658,229 +12738,749 @@
           ]
         },
         {
-          "title": "Perfekt: Vollendete Handlungen",
+          "title": "Futur I - Bildung mit 'werden'",
           "points": [
-            "Häufig in der gesprochenen Sprache.",
-            "Bildung mit 'haben' oder 'sein' + Partizip II.",
-            "Verwendung für abgeschlossene Handlungen in der Vergangenheit."
+            "Das Futur I wird mit 'werden' und dem Infinitiv gebildet.",
+            "Es beschreibt zukünftige Handlungen.",
+            "Beispiel: 'Ich werde spielen'."
           ],
-          "example": "Ich habe das Buch gelesen.",
+          "example": "Ich werde morgen spielen.",
+          "ruleOrder": [
+            "Subjekt",
+            "werden",
+            "verb"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "werden",
+              "text": "werde"
+            },
+            {
+              "label": "verb",
+              "text": "spielen"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ich habe das Buch lese.",
+              "wrong": "Ich spiele morgen.",
+              "fix": "Ich werde morgen spielen."
+            }
+          ]
+        },
+        {
+          "title": "Perfekt - Bildung mit 'haben' oder 'sein'",
+          "points": [
+            "Das Perfekt wird mit 'haben' oder 'sein' und dem Partizip II gebildet.",
+            "Die Wahl zwischen 'haben' und 'sein' hängt vom Verb ab.",
+            "Beispiel: 'Ich habe gespielt', 'Ich bin gegangen'."
+          ],
+          "example": "Ich habe das Buch gelesen.",
+          "ruleOrder": [
+            "Subjekt",
+            "haben/sein",
+            "Partizip II"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "haben/sein",
+              "text": "habe"
+            },
+            {
+              "label": "Partizip II",
+              "text": "gelesen"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Ich bin das Buch gelesen.",
               "fix": "Ich habe das Buch gelesen."
             }
           ]
         },
         {
-          "title": "Plusquamperfekt: Vorvergangenheit",
+          "title": "Modalverben - Verwendung und Konjugation",
           "points": [
-            "Verwendung für Handlungen, die vor einer anderen in der Vergangenheit stattfanden.",
-            "Bildung mit 'hatte' oder 'war' + Partizip II.",
-            "Hilfreich für komplexe Erzählungen."
+            "Modalverben verändern die Bedeutung des Hauptverbs.",
+            "Sie stehen vor dem Hauptverb im Satz.",
+            "Beispiel: 'Ich kann spielen'."
           ],
-          "example": "Ich hatte das Buch schon gelesen, bevor ich den Film sah.",
+          "example": "Ich kann gut schwimmen.",
+          "ruleOrder": [
+            "Subjekt",
+            "modalverb",
+            "verb"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "modalverb",
+              "text": "kann"
+            },
+            {
+              "label": "verb",
+              "text": "schwimmen"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ich hatte das Buch schon lese.",
-              "fix": "Ich hatte das Buch schon gelesen."
+              "wrong": "Ich gut schwimmen kann.",
+              "fix": "Ich kann gut schwimmen."
+            }
+          ]
+        },
+        {
+          "title": "Trennbare Verben - Bedeutung und Struktur",
+          "points": [
+            "Trennbare Verben haben einen Präfix, der abgetrennt wird.",
+            "Das Präfix wird ans Ende des Satzes gestellt.",
+            "Beispiel: 'Ich stehe auf'."
+          ],
+          "example": "Ich stehe um 7 Uhr auf.",
+          "ruleOrder": [
+            "Subjekt",
+            "verb",
+            "Zeitangabe"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "verb",
+              "text": "stehe"
+            },
+            {
+              "label": "Zeitangabe",
+              "text": "um 7 Uhr"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Ich aufstehe um 7 Uhr.",
+              "fix": "Ich stehe um 7 Uhr auf."
+            }
+          ]
+        }
+      ],
+      "Tenses & Aspect": [
+        {
+          "title": "Präsens: Einfache Gegenwart",
+          "points": [
+            "Verwendet für aktuelle Handlungen.",
+            "Bildung: Stamm + Endungen.",
+            "V2-Stellung im Hauptsatz."
+          ],
+          "example": "Ich spiele jeden Tag Fußball.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "Verb",
+              "text": "spiele"
+            },
+            {
+              "label": "Objekt",
+              "text": "Fußball"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Ich spiele jeden Tag das Fußball.",
+              "fix": "Ich spiele jeden Tag Fußball."
+            }
+          ]
+        },
+        {
+          "title": "Perfekt: Abgeschlossene Handlungen",
+          "points": [
+            "Verwendet für vergangene Handlungen mit Bezug zur Gegenwart.",
+            "Bildung: haben/sein + Partizip II.",
+            "V2-Stellung im Hauptsatz."
+          ],
+          "example": "Ich habe gestern ein Buch gelesen.",
+          "ruleOrder": [
+            "Subjekt",
+            "Hilfsverb",
+            "Partizip"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "Hilfsverb",
+              "text": "habe"
+            },
+            {
+              "label": "Partizip",
+              "text": "gelesen"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Ich habe gestern ein Buch lesen.",
+              "fix": "Ich habe gestern ein Buch gelesen."
+            }
+          ]
+        },
+        {
+          "title": "Präteritum: Schriftliche Erzählungen",
+          "points": [
+            "Verwendet in schriftlichen Erzählungen.",
+            "Bildung: Stamm + Endungen.",
+            "V2-Stellung im Hauptsatz."
+          ],
+          "example": "Er spielte Fußball, als es regnete.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Er"
+            },
+            {
+              "label": "Verb",
+              "text": "spielte"
+            },
+            {
+              "label": "Objekt",
+              "text": "Fußball"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Er spielt Fußball, als es regnete.",
+              "fix": "Er spielte Fußball, als es regnete."
             }
           ]
         },
         {
           "title": "Futur I: Zukünftige Handlungen",
           "points": [
-            "Bildung mit 'werden' + Infinitiv.",
-            "Kann auch für Vermutungen in der Gegenwart verwendet werden.",
-            "Wichtig für Pläne und Vorhersagen."
+            "Verwendet für zukünftige Handlungen.",
+            "Bildung: werden + Infinitiv.",
+            "V2-Stellung im Hauptsatz."
           ],
           "example": "Ich werde morgen ins Kino gehen.",
+          "ruleOrder": [
+            "Subjekt",
+            "Hilfsverb",
+            "Infinitiv"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "Hilfsverb",
+              "text": "werde"
+            },
+            {
+              "label": "Infinitiv",
+              "text": "gehen"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ich werde morgen ins Kino gehe.",
+              "wrong": "werde Ich morgen ins Kino gehen.",
               "fix": "Ich werde morgen ins Kino gehen."
             }
           ]
         },
         {
-          "title": "Futur II: Vollendete Zukunft",
+          "title": "Plusquamperfekt: Vorvergangenheit",
           "points": [
-            "Verwendung für Handlungen, die zu einem bestimmten Zeitpunkt in der Zukunft abgeschlossen sein werden.",
-            "Bildung mit 'werden' + 'haben' oder 'sein' + Partizip II.",
-            "Nützlich für zukünftige Zeitangaben."
+            "Verwendet für Handlungen vor einer anderen Handlung in der Vergangenheit.",
+            "Bildung: hatten/sein + Partizip II.",
+            "V2-Stellung im Hauptsatz."
           ],
-          "example": "Bis morgen werde ich das Buch gelesen haben.",
+          "example": "Ich hatte das Buch gelesen, bevor ich ins Kino ging.",
+          "ruleOrder": [
+            "Subjekt",
+            "Hilfsverb",
+            "Partizip"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "Hilfsverb",
+              "text": "hatte"
+            },
+            {
+              "label": "Partizip",
+              "text": "gelesen"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Bis morgen werde ich das Buch lese haben.",
-              "fix": "Bis morgen werde ich das Buch gelesen haben."
+              "wrong": "Ich hatte das Buch lesen, bevor ich ins Kino ging.",
+              "fix": "Ich hatte das Buch gelesen, bevor ich ins Kino ging."
             }
           ]
         },
         {
-          "title": "Aspekt: Dauer und Vollständigkeit",
+          "title": "Futur II: Abgeschlossene zukünftige Handlungen",
           "points": [
-            "Unterscheidung zwischen abgeschlossenen und laufenden Handlungen.",
-            "Verwendung von Zeitadverbien zur Verdeutlichung.",
-            "Wichtige Rolle in der Erzählstruktur."
+            "Verwendet für Handlungen, die zu einem zukünftigen Zeitpunkt abgeschlossen sein werden.",
+            "Bildung: werden + Partizip II.",
+            "V2-Stellung im Hauptsatz."
           ],
-          "example": "Ich habe lange gearbeitet, bevor ich nach Hause ging.",
+          "example": "Ich werde das Buch gelesen haben.",
+          "ruleOrder": [
+            "Subjekt",
+            "Hilfsverb",
+            "Partizip"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "Hilfsverb",
+              "text": "werde"
+            },
+            {
+              "label": "Partizip",
+              "text": "gelesen"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ich habe lange arbeite, bevor ich nach Hause ging.",
-              "fix": "Ich habe lange gearbeitet, bevor ich nach Hause ging."
+              "wrong": "Ich werde das Buch lesen haben.",
+              "fix": "Ich werde das Buch gelesen haben."
             }
           ]
         },
         {
-          "title": "Partikeln: Zeitliche Nuancen",
+          "title": "Aspekt: Dauerhafte Handlungen",
           "points": [
-            "Verwendung von Partikeln zur zeitlichen Einordnung.",
-            "Häufige Partikeln: schon, noch, bereits.",
-            "Verändern den Aspekt der Handlung."
+            "Verwendet mit 'gerade' für Handlungen, die gerade stattfinden.",
+            "Bildung: Präsens + gerade.",
+            "V2-Stellung im Hauptsatz."
           ],
-          "example": "Ich habe das Buch schon gelesen.",
+          "example": "Ich bin gerade am Lernen.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Partizip"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "Verb",
+              "text": "bin"
+            },
+            {
+              "label": "Partizip",
+              "text": "Lernen"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ich habe das Buch noch gelesen.",
-              "fix": "Ich habe das Buch schon gelesen."
+              "wrong": "Ich bin gerade am lernen.",
+              "fix": "Ich bin gerade am Lernen."
             }
           ]
         },
         {
-          "title": "Adverbien: Zeitliche Präzision",
+          "title": "Aspekt: Wiederholte Handlungen",
           "points": [
-            "Adverbien helfen, den Zeitpunkt einer Handlung zu präzisieren.",
-            "Beispiele: heute, morgen, gestern.",
-            "Wichtig für klare Kommunikation."
+            "Verwendet mit 'immer' für wiederholte Handlungen.",
+            "Bildung: Präsens + immer.",
+            "V2-Stellung im Hauptsatz."
           ],
-          "example": "Gestern habe ich das Buch gelesen.",
+          "example": "Ich gehe immer joggen.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "Verb",
+              "text": "gehe"
+            },
+            {
+              "label": "Objekt",
+              "text": "joggen"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ich lese das Buch gestern.",
-              "fix": "Ich habe das Buch gestern gelesen."
+              "wrong": "gehe Ich immer joggen.",
+              "fix": "Ich gehe immer joggen."
             }
           ]
         },
         {
-          "title": "Periphrasen: Alternative Zeitformen",
+          "title": "Aspekt: Unvollendete Handlungen",
           "points": [
-            "Verwendung von Hilfsverben zur Bildung von Zeitformen.",
-            "Ermöglicht Flexibilität in der Ausdrucksweise.",
-            "Wichtig für informelle Sprache."
+            "Verwendet mit 'noch' für unvollendete Handlungen.",
+            "Bildung: Präsens + noch.",
+            "V2-Stellung im Hauptsatz."
           ],
-          "example": "Ich bin am Lesen.",
+          "example": "Ich lese noch das Buch.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "Verb",
+              "text": "lese"
+            },
+            {
+              "label": "Objekt",
+              "text": "das Buch"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ich bin lese.",
-              "fix": "Ich bin am Lesen."
+              "wrong": "lese Ich noch das Buch.",
+              "fix": "Ich lese noch das Buch."
+            }
+          ]
+        },
+        {
+          "title": "Aspekt: Geplante Handlungen",
+          "points": [
+            "Verwendet mit 'bald' für geplante Handlungen.",
+            "Bildung: Präsens + bald.",
+            "V2-Stellung im Hauptsatz."
+          ],
+          "example": "Ich gehe bald ins Kino.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "Verb",
+              "text": "gehe"
+            },
+            {
+              "label": "Objekt",
+              "text": "ins Kino"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "gehe Ich bald ins Kino.",
+              "fix": "Ich gehe bald ins Kino."
             }
           ]
         }
       ],
       "Nouns & Articles": [
         {
-          "title": "Der bestimmte Artikel",
+          "title": "Definite Articles",
           "points": [
-            "Der bestimmte Artikel kennzeichnet spezifische Nomen.",
-            "Er variiert je nach Geschlecht (der, die, das).",
-            "Die korrekte Verwendung ist entscheidend für die Grammatik."
+            "Der, die, das für spezifische Nomen.",
+            "Genus beeinflusst den Artikel.",
+            "Wichtige Rolle in der Satzstruktur."
           ],
-          "example": "Der Hund bellt laut.",
+          "example": "Der Hund bellt.",
+          "ruleOrder": [
+            "Nomen",
+            "Artikel",
+            "Verb"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Nomen",
+              "text": "Hund"
+            },
+            {
+              "label": "Artikel",
+              "text": "bellt"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Die Hund bellt laut.",
-              "fix": "Der Hund bellt laut."
+              "wrong": "Die Hund bellt.",
+              "fix": "Der Hund bellt."
             }
           ]
         },
         {
-          "title": "Der unbestimmte Artikel",
+          "title": "Indefinite Articles",
           "points": [
-            "Der unbestimmte Artikel zeigt an, dass das Nomen nicht spezifisch ist.",
-            "Er wird als 'ein' für maskuline und neutrale Nomen und 'eine' für feminine Nomen verwendet.",
-            "Er ist wichtig, um neue Nomen einzuführen."
+            "Ein, eine für unspezifische Nomen.",
+            "Genus beeinflusst den Artikel.",
+            "Verwendung in allgemeinen Aussagen."
           ],
-          "example": "Ich habe einen Apfel.",
+          "example": "Eine Katze schläft.",
+          "ruleOrder": [
+            "Nomen",
+            "Artikel",
+            "Verb"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Nomen",
+              "text": "Katze"
+            },
+            {
+              "label": "Artikel",
+              "text": "schläft"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ich habe die Apfel.",
-              "fix": "Ich habe einen Apfel."
+              "wrong": "Ein Katze schläft.",
+              "fix": "Eine Katze schläft."
             }
           ]
         },
         {
-          "title": "Nomen im Plural",
+          "title": "Noun Gender",
           "points": [
-            "Die Pluralform von Nomen wird unterschiedlich gebildet.",
-            "Häufige Endungen sind -e, -en, -n, -s.",
-            "Die Pluralformen sind wichtig für die Verständigung."
+            "Jedes Nomen hat ein Geschlecht.",
+            "Wichtige Rolle bei der Artikelwahl.",
+            "Männlich, weiblich, neutral."
           ],
-          "example": "Die Katzen sind verspielt.",
+          "example": "Das Mädchen ist klug.",
+          "ruleOrder": [
+            "Nomen",
+            "Artikel",
+            "Verb"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Nomen",
+              "text": "Mädchen"
+            },
+            {
+              "label": "Artikel",
+              "text": "ist klug"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Die Katze sind verspielt.",
-              "fix": "Die Katzen sind verspielt."
+              "wrong": "Der Mädchen ist klug.",
+              "fix": "Das Mädchen ist klug."
             }
           ]
         },
         {
-          "title": "Genus und Artikel",
+          "title": "Singular und Plural",
           "points": [
-            "Das Genus (männlich, weiblich, sächlich) bestimmt den Artikel.",
-            "Es gibt keine festen Regeln, daher ist das Lernen der Nomen wichtig.",
-            "Die Verwendung des richtigen Artikels ist entscheidend für die Grammatik."
+            "Singular bezeichnet ein Element, Plural mehrere Elemente.",
+            "Pluralformen folgen Mustern wie -e, -er, -n/-en, -s; oft mit Umlaut.",
+            "Der bestimmte Artikel im Nominativ Plural ist immer \"die\"."
           ],
-          "example": "Das Mädchen spielt im Park.",
+          "example": "Die Hunde spielen.",
+          "ruleOrder": [
+            "Artikel",
+            "Nomen",
+            "Verb"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Artikel",
+              "text": "Die"
+            },
+            {
+              "label": "Nomen",
+              "text": "Hunde"
+            },
+            {
+              "label": "Verb",
+              "text": "spielen"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Der Mädchen spielt im Park.",
-              "fix": "Das Mädchen spielt im Park."
+              "wrong": "Der Hunde spielt.",
+              "fix": "Die Hunde spielen."
+            }
+          ],
+          "examplePairs": [
+            {
+              "example": "Der Hund spielt.",
+              "exampleHighlights": [
+                {
+                  "label": "Artikel",
+                  "text": "Der"
+                },
+                {
+                  "label": "Nomen",
+                  "text": "Hund"
+                },
+                {
+                  "label": "Verb",
+                  "text": "spielt"
+                }
+              ],
+              "ruleOrder": [
+                "Artikel",
+                "Nomen",
+                "Verb"
+              ]
+            },
+            {
+              "example": "Die Hunde spielen.",
+              "exampleHighlights": [
+                {
+                  "label": "Artikel",
+                  "text": "Die"
+                },
+                {
+                  "label": "Nomen",
+                  "text": "Hunde"
+                },
+                {
+                  "label": "Verb",
+                  "text": "spielen"
+                }
+              ],
+              "ruleOrder": [
+                "Artikel",
+                "Nomen",
+                "Verb"
+              ]
             }
           ]
         },
         {
-          "title": "Possessivartikel",
+          "title": "Case System",
           "points": [
-            "Possessivartikel zeigen Besitz an (mein, dein, sein, ihr).",
-            "Sie passen sich dem Geschlecht und Fall des Nomen an.",
-            "Wichtig für die Ausdrucksweise von Beziehungen."
+            "Nomen ändern sich je nach Fall.",
+            "Nominativ, Akkusativ, Dativ, Genitiv.",
+            "Wichtige Rolle in der Satzstruktur."
           ],
-          "example": "Das ist mein Buch.",
+          "example": "Ich sehe den Hund.",
+          "ruleOrder": [
+            "Subjekt",
+            "Artikel + Nomen"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "Artikel + Nomen",
+              "text": "den Hund"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Das ist die Buch.",
-              "fix": "Das ist mein Buch."
+              "wrong": "Ich sehe die Hund.",
+              "fix": "Ich sehe den Hund."
             }
           ]
         },
         {
-          "title": "Der Dativ mit Nomen",
+          "title": "Possessive Articles",
           "points": [
-            "Der Dativ kennzeichnet den Empfänger einer Handlung.",
-            "Der Artikel verändert sich im Dativ (dem, der, dem).",
-            "Wichtig für die korrekte Satzstruktur."
+            "Mein, dein, sein für Besitz.",
+            "Genus des Nomen beeinflusst die Form.",
+            "Wichtige Rolle in der Kommunikation."
           ],
-          "example": "Ich gebe dem Mann das Geld.",
+          "example": "Mein Hund ist groß.",
+          "ruleOrder": [
+            "Besitz",
+            "Nomen",
+            "Verb"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Besitz",
+              "text": "Mein"
+            },
+            {
+              "label": "Nomen",
+              "text": "Hund"
+            },
+            {
+              "label": "Verb",
+              "text": "ist groß"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ich gebe die Mann das Geld.",
-              "fix": "Ich gebe dem Mann das Geld."
+              "wrong": "Dein Hund ist groß.",
+              "fix": "Mein Hund ist groß."
             }
           ]
         },
         {
-          "title": "Nomen mit Präpositionen",
+          "title": "Demonstrative Articles",
           "points": [
-            "Nomen können mit Präpositionen kombiniert werden, um Beziehungen auszudrücken.",
-            "Die Wahl der Präposition beeinflusst den Fall des Nomen.",
-            "Wichtig für die korrekte Verwendung in Sätzen."
+            "Dieser, diese, dieses für spezifische Nomen.",
+            "Wichtige Rolle in der Satzstruktur.",
+            "Hervorhebung von Nomen."
           ],
-          "example": "Ich gehe mit dem Freund ins Kino.",
+          "example": "Dieser Hund ist freundlich.",
+          "ruleOrder": [
+            "Artikel",
+            "Nomen",
+            "Verb"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Artikel",
+              "text": "Dieser"
+            },
+            {
+              "label": "Nomen",
+              "text": "Hund"
+            },
+            {
+              "label": "Verb",
+              "text": "ist freundlich"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ich gehe mit die Freund ins Kino.",
-              "fix": "Ich gehe mit dem Freund ins Kino."
+              "wrong": "Diese Hund ist freundlich.",
+              "fix": "Dieser Hund ist freundlich."
             }
           ]
         }
@@ -12889,105 +13489,238 @@
         {
           "title": "Personalpronomen im Nominativ",
           "points": [
-            "Verwendung der Personalpronomen als Subjekt.",
-            "Wichtige Pronomen: ich, du, er, sie, es, wir, ihr, sie.",
-            "Pronomen müssen mit Geschlecht und Zahl des Substantivs übereinstimmen."
+            "Verwende Personalpronomen zur Bezugnahme auf Subjekte.",
+            "Die Pronomen variieren je nach Person und Zahl.",
+            "Achte auf die richtige Verwendung im Satz."
           ],
-          "example": "Ich gehe ins Kino.",
+          "example": "Ich sehe dich.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "Verb",
+              "text": "sehe"
+            },
+            {
+              "label": "Objekt",
+              "text": "dich"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Er gehen ins Kino.",
-              "fix": "Er geht ins Kino."
+              "wrong": "Sehe ich dich.",
+              "fix": "Ich sehe dich."
             }
           ]
         },
         {
           "title": "Personalpronomen im Akkusativ",
           "points": [
-            "Personalpronomen als Objekt im Satz.",
-            "Wichtige Pronomen: mich, dich, ihn, sie, es, uns, euch, sie.",
-            "Achten Sie auf die korrekte Form im Akkusativ."
+            "Nutze Personalpronomen als direkte Objekte.",
+            "Achte auf die Form im Akkusativ.",
+            "Vermeide Verwirrung zwischen Nominativ und Akkusativ."
           ],
-          "example": "Ich sehe dich im Park.",
+          "example": "Ich sehe ihn.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "Verb",
+              "text": "sehe"
+            },
+            {
+              "label": "Objekt",
+              "text": "ihn"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ich sehe du im Park.",
-              "fix": "Ich sehe dich im Park."
+              "wrong": "Ich ihn sehe.",
+              "fix": "Ich sehe ihn."
             }
           ]
         },
         {
           "title": "Reflexivpronomen",
           "points": [
-            "Reflexivpronomen beziehen sich auf das Subjekt des Satzes.",
-            "Wichtige Pronomen: mich, dich, sich, uns, euch.",
-            "Verwendung in reflexiven Verben."
+            "Verwende Reflexivpronomen für Handlungen, die auf das Subjekt zurückfallen.",
+            "Achte auf die richtige Form je nach Person.",
+            "Reflexivpronomen sind oft notwendig in reflexiven Verben."
           ],
-          "example": "Ich wasche mich jeden Morgen.",
+          "example": "Ich wasche mich.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Reflexivpronomen"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "Verb",
+              "text": "wasche"
+            },
+            {
+              "label": "Reflexivpronomen",
+              "text": "mich"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ich wasche sich jeden Morgen.",
-              "fix": "Ich wasche mich jeden Morgen."
+              "wrong": "Ich mich wasche.",
+              "fix": "Ich wasche mich."
             }
           ]
         },
         {
           "title": "Demonstrativpronomen",
           "points": [
-            "Demonstrativpronomen zeigen auf bestimmte Dinge.",
-            "Wichtige Pronomen: dieser, diese, dieses.",
-            "Verwendung zur Hervorhebung im Gespräch."
+            "Nutze Demonstrativpronomen zur Hervorhebung spezifischer Objekte.",
+            "Sie können im Nominativ oder Akkusativ stehen.",
+            "Achte auf die Übereinstimmung in Geschlecht und Zahl."
           ],
-          "example": "Dieser Stuhl ist bequem.",
+          "example": "Dieses Buch ist interessant.",
+          "ruleOrder": [
+            "Demonstrativpronomen",
+            "Verb",
+            "Subjekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Demonstrativpronomen",
+              "text": "Dieses"
+            },
+            {
+              "label": "Verb",
+              "text": "ist"
+            },
+            {
+              "label": "Subjekt",
+              "text": "interessant"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Diese Stuhl ist bequem.",
-              "fix": "Dieser Stuhl ist bequem."
+              "wrong": "Buch dieses ist interessant.",
+              "fix": "Dieses Buch ist interessant."
             }
           ]
         },
         {
           "title": "Indefinitpronomen",
           "points": [
-            "Indefinitpronomen beziehen sich auf unbestimmte Personen oder Dinge.",
-            "Wichtige Pronomen: jemand, niemand, etwas, nichts.",
-            "Verwendung in allgemeinen Aussagen."
+            "Verwende Indefinitpronomen für unbestimmte Referenzen.",
+            "Sie sind nützlich, um allgemeine Aussagen zu machen.",
+            "Achte auf die korrekte Verwendung im Satz."
           ],
-          "example": "Jemand hat an der Tür geklopft.",
+          "example": "Jemand hat angerufen.",
+          "ruleOrder": [
+            "Indefinitpronomen",
+            "Verb",
+            "Subjekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Indefinitpronomen",
+              "text": "Jemand"
+            },
+            {
+              "label": "Verb",
+              "text": "hat"
+            },
+            {
+              "label": "Subjekt",
+              "text": "angerufen"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Niemand hat an der Tür geklopft.",
-              "fix": "Niemand hat an der Tür geklopft."
+              "wrong": "Hat jemand angerufen?",
+              "fix": "Jemand hat angerufen."
             }
           ]
         },
         {
-          "title": "Pronomen-Omission (Pro-Drop)",
+          "title": "Possessivpronomen",
           "points": [
-            "In der gesprochenen Sprache können Pronomen weggelassen werden.",
-            "Besonders häufig im Deutschen bei konjugierten Verben.",
-            "Vermeidung von Wiederholungen."
+            "Nutze Possessivpronomen zur Angabe von Besitz.",
+            "Sie stimmen in Geschlecht und Zahl mit dem Nomen überein.",
+            "Achte auf die richtige Form im Satz."
           ],
-          "example": "Gehe ins Kino? (statt 'Ich gehe ins Kino?')",
+          "example": "Das ist mein Auto.",
+          "ruleOrder": [
+            "Demonstrativpronomen",
+            "Verb",
+            "Possessivpronomen",
+            "Subjekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Demonstrativpronomen",
+              "text": "Das"
+            },
+            {
+              "label": "Verb",
+              "text": "ist"
+            },
+            {
+              "label": "Possessivpronomen",
+              "text": "mein"
+            },
+            {
+              "label": "Subjekt",
+              "text": "Auto"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ich gehe ins Kino? (zu formell)",
-              "fix": "Gehe ins Kino?"
+              "wrong": "Das Auto ist mein.",
+              "fix": "Das ist mein Auto."
             }
           ]
         },
         {
-          "title": "Höflichkeit und Pronomen",
+          "title": "Omission von Pronomen (Pro-Drop)",
           "points": [
-            "Verwendung von 'Sie' für formelle Anrede.",
-            "Unterscheidung zwischen 'du' und 'Sie' in der Kommunikation.",
-            "Wichtige Höflichkeitsformen in verschiedenen Kontexten."
+            "In der gesprochenen Sprache kann das Subjekt weggelassen werden.",
+            "Achte darauf, dass der Kontext klar bleibt.",
+            "Vermeide dies in formellen Texten."
           ],
-          "example": "Könnten Sie mir bitte helfen?",
+          "example": "Gehe nach Hause.",
+          "ruleOrder": [
+            "Verb",
+            "Adverb"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Verb",
+              "text": "Gehe"
+            },
+            {
+              "label": "Adverb",
+              "text": "nach Hause"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Kannst du mir bitte helfen?",
-              "fix": "Könnten Sie mir bitte helfen?"
+              "wrong": "Ich gehe nach Hause.",
+              "fix": "Gehe nach Hause."
             }
           ]
         }
@@ -12996,15 +13729,35 @@
         {
           "title": "Position der Adjektive",
           "points": [
-            "Adjektive stehen vor dem Nomen, das sie beschreiben.",
-            "Die Reihenfolge mehrerer Adjektive folgt: Meinung, Größe, Alter, Form, Farbe, Herkunft, Material, Zweck.",
-            "Beispiel: 'ein schöner, großer, alter Tisch'."
+            "Adjektive stehen vor dem Nomen.",
+            "Adjektive können durch Adverbien modifiziert werden.",
+            "Die Reihenfolge von Adjektiven ist wichtig."
           ],
-          "example": "Das ist ein schöner, roter Apfel.",
+          "example": "Der schnelle Hund läuft schnell.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "adjektiv",
+            "nomen"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Der schnelle Hund"
+            },
+            {
+              "label": "verb",
+              "text": "läuft"
+            },
+            {
+              "label": "adjektiv",
+              "text": "schnell"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Das ist ein roter, schöner Apfel.",
-              "fix": "Das ist ein schöner, roter Apfel."
+              "wrong": "Der Hund schnell läuft.",
+              "fix": "Der schnelle Hund läuft."
             }
           ]
         },
@@ -13012,134 +13765,337 @@
           "title": "Steigerung der Adjektive",
           "points": [
             "Adjektive können gesteigert werden: positiv, komparativ, superlativ.",
-            "Der Komparativ wird mit '-er' und 'als' gebildet.",
-            "Der Superlativ wird mit 'am ...-sten' gebildet."
+            "Der Komparativ wird oft mit 'als' verwendet.",
+            "Der Superlativ wird oft mit 'am' und 'sten' gebildet."
           ],
-          "example": "Dieser Apfel ist süßer als der andere.",
+          "example": "Mein Hund ist schneller als dein Hund.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "komparativ",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Mein Hund"
+            },
+            {
+              "label": "verb",
+              "text": "ist"
+            },
+            {
+              "label": "komparativ",
+              "text": "schneller als dein Hund"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Dieser Apfel ist der süßeste.",
-              "fix": "Dieser Apfel ist süßer als der andere."
+              "wrong": "Mein Hund ist schnell als dein Hund.",
+              "fix": "Mein Hund ist schneller als dein Hund."
             }
           ]
         },
         {
-          "title": "Intensität mit 'sehr' und 'zu'",
+          "title": "Intensivierung mit Adverbien",
           "points": [
-            "'Sehr' wird verwendet, um eine hohe Intensität auszudrücken.",
-            "'Zu' zeigt an, dass etwas übermäßig ist.",
-            "Beispiel: 'Das ist sehr interessant' vs. 'Das ist zu teuer'."
+            "Adverbien können Adjektive intensivieren.",
+            "Häufige Adverbien sind 'sehr', 'extrem', 'besonders'.",
+            "Die Position des Adverbs ist vor dem Adjektiv."
           ],
-          "example": "Das Buch ist sehr spannend.",
+          "example": "Der Hund ist sehr schnell.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "adverb",
+            "adjektiv"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Der Hund"
+            },
+            {
+              "label": "verb",
+              "text": "ist"
+            },
+            {
+              "label": "adverb",
+              "text": "sehr"
+            },
+            {
+              "label": "adjektiv",
+              "text": "schnell"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Das Buch ist zu spannend.",
-              "fix": "Das Buch ist sehr spannend."
+              "wrong": "Der Hund ist schnell sehr.",
+              "fix": "Der Hund ist sehr schnell."
             }
           ]
         },
         {
-          "title": "Adverbien der Häufigkeit",
+          "title": "Adjektiv- und Adverbposition",
           "points": [
-            "Adverbien wie 'immer', 'oft', 'manchmal' beschreiben, wie oft etwas passiert.",
-            "Sie stehen normalerweise vor dem Hauptverb.",
-            "Beispiel: 'Ich gehe oft ins Kino.'"
+            "Adverbien stehen nach dem Verb.",
+            "Adjektive stehen vor dem Nomen.",
+            "Die Position beeinflusst die Bedeutung."
           ],
-          "example": "Sie spielt manchmal Klavier.",
+          "example": "Der Hund läuft schnell.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "adverb"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Der Hund"
+            },
+            {
+              "label": "verb",
+              "text": "läuft"
+            },
+            {
+              "label": "adverb",
+              "text": "schnell"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Sie manchmal spielt Klavier.",
-              "fix": "Sie spielt manchmal Klavier."
+              "wrong": "Der schnell Hund läuft.",
+              "fix": "Der Hund läuft schnell."
             }
           ]
         },
         {
-          "title": "Adverbien der Art und Weise",
+          "title": "Negation von Adjektiven",
           "points": [
-            "Adverbien beschreiben, wie eine Handlung ausgeführt wird.",
-            "Sie stehen oft nach dem Verb oder am Satzende.",
-            "Beispiel: 'Er läuft schnell.'"
+            "Negation erfolgt durch 'nicht' oder 'kein'.",
+            "'Nicht' wird vor dem Adjektiv verwendet.",
+            "'Kein' wird vor dem Nomen verwendet."
           ],
-          "example": "Sie spricht leise.",
-          "mistakes": [
+          "example": "Der Hund ist nicht schnell.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "negation",
+            "adjektiv"
+          ],
+          "exampleHighlights": [
             {
-              "wrong": "Sie leise spricht.",
-              "fix": "Sie spricht leise."
+              "label": "subjekt",
+              "text": "Der Hund"
+            },
+            {
+              "label": "verb",
+              "text": "ist"
+            },
+            {
+              "label": "negation",
+              "text": "nicht"
+            },
+            {
+              "label": "adjektiv",
+              "text": "schnell"
             }
-          ]
-        },
-        {
-          "title": "Präpositionen mit Adjektiven",
-          "points": [
-            "Bestimmte Adjektive verlangen spezifische Präpositionen.",
-            "Beispiel: 'interessiert an', 'stolz auf'.",
-            "Die Präposition beeinflusst die Bedeutung."
           ],
-          "example": "Ich bin stolz auf meine Arbeit.",
           "mistakes": [
             {
-              "wrong": "Ich bin stolz für meine Arbeit.",
-              "fix": "Ich bin stolz auf meine Arbeit."
-            }
-          ]
-        },
-        {
-          "title": "Adjektive in der Negation",
-          "points": [
-            "Negationen verändern die Bedeutung von Adjektiven.",
-            "Beispiel: 'nicht schön' bedeutet 'hässlich'.",
-            "Die Position der Negation ist wichtig."
-          ],
-          "example": "Das Bild ist nicht schön.",
-          "mistakes": [
-            {
-              "wrong": "Das Bild ist schön nicht.",
-              "fix": "Das Bild ist nicht schön."
-            }
-          ]
-        },
-        {
-          "title": "Vergleichende Adverbien",
-          "points": [
-            "Adverbien können ebenfalls gesteigert werden.",
-            "Der Komparativ wird mit '-er' gebildet.",
-            "Beispiel: 'schneller', 'besser'."
-          ],
-          "example": "Er läuft schneller als ich.",
-          "mistakes": [
-            {
-              "wrong": "Er läuft mehr schnell als ich.",
-              "fix": "Er läuft schneller als ich."
+              "wrong": "Der Hund nicht ist schnell.",
+              "fix": "Der Hund ist nicht schnell."
             }
           ]
         },
         {
           "title": "Adverbiale Bestimmungen",
           "points": [
-            "Adverbiale Bestimmungen geben zusätzliche Informationen zu Ort, Zeit oder Grund.",
-            "Sie können am Satzanfang oder -ende stehen.",
-            "Beispiel: 'Gestern bin ich ins Kino gegangen.'"
+            "Adverbiale Bestimmungen geben zusätzliche Informationen.",
+            "Sie können Zeit, Ort oder Grund angeben.",
+            "Position ist flexibel, aber oft am Satzende."
           ],
-          "example": "Morgen gehe ich schwimmen.",
+          "example": "Der Hund läuft schnell im Park.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "adverb",
+            "ort"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Der Hund"
+            },
+            {
+              "label": "verb",
+              "text": "läuft"
+            },
+            {
+              "label": "adverb",
+              "text": "schnell"
+            },
+            {
+              "label": "ort",
+              "text": "im Park"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ich schwimmen gehe morgen.",
-              "fix": "Morgen gehe ich schwimmen."
+              "wrong": "Im Park läuft schnell der Hund.",
+              "fix": "Der Hund läuft schnell im Park."
             }
           ]
         },
         {
-          "title": "Intensität mit 'ganz' und 'voll'",
+          "title": "Kombination von Adjektiven",
           "points": [
-            "'Ganz' und 'voll' verstärken die Bedeutung von Adjektiven.",
-            "'Ganz' wird oft für positive Aussagen verwendet.",
-            "'Voll' kann auch negative Konnotationen haben."
+            "Mehrere Adjektive können kombiniert werden.",
+            "Die Reihenfolge folgt bestimmten Regeln.",
+            "Häufige Kombinationen sind möglich."
           ],
-          "example": "Das Essen ist ganz lecker.",
+          "example": "Der große, braune Hund läuft schnell.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "adjektive",
+            "nomen"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Der große, braune Hund"
+            },
+            {
+              "label": "verb",
+              "text": "läuft"
+            },
+            {
+              "label": "adjektive",
+              "text": "schnell"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Das Essen ist voll lecker.",
-              "fix": "Das Essen ist ganz lecker."
+              "wrong": "Der Hund braune große läuft schnell.",
+              "fix": "Der große, braune Hund läuft schnell."
+            }
+          ]
+        },
+        {
+          "title": "Adjektive in der Satzstellung",
+          "points": [
+            "Adjektive können in verschiedenen Satzstellungen verwendet werden.",
+            "Die Bedeutung kann sich ändern.",
+            "Beachte die V2-Regel."
+          ],
+          "example": "Schnell läuft der Hund.",
+          "ruleOrder": [
+            "adverb",
+            "verb",
+            "subjekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "adverb",
+              "text": "Schnell"
+            },
+            {
+              "label": "verb",
+              "text": "läuft"
+            },
+            {
+              "label": "subjekt",
+              "text": "der Hund"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Läuft der Hund schnell.",
+              "fix": "Schnell läuft der Hund."
+            }
+          ]
+        },
+        {
+          "title": "Adverbiale Intensivierung",
+          "points": [
+            "Intensivierung durch Adverbien verstärkt die Aussage.",
+            "Häufige Adverbien sind 'sehr', 'äußerst'.",
+            "Position ist vor dem Adjektiv."
+          ],
+          "example": "Der Hund ist äußerst schnell.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "adverb",
+            "adjektiv"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Der Hund"
+            },
+            {
+              "label": "verb",
+              "text": "ist"
+            },
+            {
+              "label": "adverb",
+              "text": "äußerst"
+            },
+            {
+              "label": "adjektiv",
+              "text": "schnell"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Der Hund ist schnell äußerst.",
+              "fix": "Der Hund ist äußerst schnell."
+            }
+          ]
+        },
+        {
+          "title": "Vergleich mit 'wie'",
+          "points": [
+            "Der Vergleich wird mit 'wie' gebildet.",
+            "Verwendung von Adjektiven im Vergleich.",
+            "Die Struktur ist wichtig."
+          ],
+          "example": "Der Hund ist so schnell wie der Wind.",
+          "ruleOrder": [
+            "subjekt",
+            "verb",
+            "adverb",
+            "adjektiv",
+            "vergleich"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "subjekt",
+              "text": "Der Hund"
+            },
+            {
+              "label": "verb",
+              "text": "ist"
+            },
+            {
+              "label": "adverb",
+              "text": "so"
+            },
+            {
+              "label": "adjektiv",
+              "text": "schnell"
+            },
+            {
+              "label": "vergleich",
+              "text": "wie der Wind"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Der Hund ist schnell wie der Wind so.",
+              "fix": "Der Hund ist so schnell wie der Wind."
             }
           ]
         }
@@ -13148,148 +14104,399 @@
         {
           "title": "Ja/Nein Fragen",
           "points": [
-            "Beginne mit dem Verb, gefolgt vom Subjekt.",
-            "Verwende Intonation am Ende der Frage.",
-            "Beispiel: 'Kommst du heute?'"
+            "Stelle die Frage mit dem Verb an erster Stelle.",
+            "Verwende die Intonation, um eine Frage zu kennzeichnen.",
+            "Beachte die formelle und informelle Ansprache."
           ],
-          "example": "Kommst du heute?",
+          "example": "Kommst du heute zur Party?",
+          "ruleOrder": [
+            "Verb",
+            "Subjekt",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Verb",
+              "text": "Kommst"
+            },
+            {
+              "label": "Subjekt",
+              "text": "du"
+            },
+            {
+              "label": "Objekt",
+              "text": "zur Party"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Du kommst heute?",
-              "fix": "Kommst du heute?"
+              "wrong": "Du kommst heute zur Party?",
+              "fix": "Kommst du heute zur Party?"
             }
           ]
         },
         {
           "title": "W-Fragen",
           "points": [
-            "Beginne mit einem Fragewort (wer, was, wo, wann, warum).",
-            "Das Verb folgt dem Subjekt.",
-            "Beispiel: 'Was machst du?'"
+            "Beginne die Frage mit einem W-Wort.",
+            "Das Verb folgt direkt nach dem W-Wort.",
+            "Achte auf die richtige Wortstellung."
           ],
-          "example": "Was machst du?",
+          "example": "Was machst du morgen?",
+          "ruleOrder": [
+            "W-Wort",
+            "Verb",
+            "Subjekt",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "W-Wort",
+              "text": "Was"
+            },
+            {
+              "label": "Verb",
+              "text": "machst"
+            },
+            {
+              "label": "Subjekt",
+              "text": "du"
+            },
+            {
+              "label": "Objekt",
+              "text": "morgen"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Was du machst?",
-              "fix": "Was machst du?"
+              "wrong": "Was du machst morgen?",
+              "fix": "Was machst du morgen?"
+            }
+          ]
+        },
+        {
+          "title": "Fragen mit Präpositionen",
+          "points": [
+            "Setze die Präposition an das Ende der Frage.",
+            "Achte auf die korrekte Verwendung der Artikel.",
+            "Verwende die formelle Ansprache bei Bedarf."
+          ],
+          "example": "Mit wem gehst du ins Kino?",
+          "ruleOrder": [
+            "Präposition",
+            "W-Wort",
+            "Verb",
+            "Subjekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Präposition",
+              "text": "Mit"
+            },
+            {
+              "label": "W-Wort",
+              "text": "wem"
+            },
+            {
+              "label": "Verb",
+              "text": "gehst"
+            },
+            {
+              "label": "Subjekt",
+              "text": "du"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Wem gehst du mit ins Kino?",
+              "fix": "Mit wem gehst du ins Kino?"
             }
           ]
         },
         {
           "title": "Indirekte Fragen",
           "points": [
-            "Verwende 'ob' für Ja/Nein Fragen.",
-            "Die Wortstellung bleibt wie im Aussagesatz.",
-            "Beispiel: 'Ich frage, ob du kommst.'"
+            "Verwende den Konjunktiv für indirekte Fragen.",
+            "Das Verb steht am Ende der indirekten Frage.",
+            "Achte auf den richtigen Satzbau."
           ],
-          "example": "Ich frage, ob du kommst.",
+          "example": "Ich weiß nicht, ob er kommt.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "er"
+            },
+            {
+              "label": "Verb",
+              "text": "kommt"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ich frage, dass du kommst.",
-              "fix": "Ich frage, ob du kommst."
+              "wrong": "Ich weiß nicht, kommt er?",
+              "fix": "Ich weiß nicht, ob er kommt."
             }
           ]
         },
         {
           "title": "Formelle Fragen",
           "points": [
-            "Verwende 'Sie' für Höflichkeit.",
-            "Beginne mit dem Verb oder Fragewort.",
-            "Beispiel: 'Haben Sie Zeit?'"
+            "Verwende 'Sie' für formelle Anrede.",
+            "Stelle die Frage höflich.",
+            "Achte auf die richtige Wortstellung."
           ],
-          "example": "Haben Sie Zeit?",
+          "example": "Könnten Sie mir bitte helfen?",
+          "ruleOrder": [
+            "Verb",
+            "Subjekt",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Verb",
+              "text": "Könnten"
+            },
+            {
+              "label": "Subjekt",
+              "text": "Sie"
+            },
+            {
+              "label": "Objekt",
+              "text": "helfen"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Hast du Zeit?",
-              "fix": "Haben Sie Zeit?"
+              "wrong": "Sie helfen mir bitte?",
+              "fix": "Könnten Sie mir bitte helfen?"
             }
           ]
         },
         {
-          "title": "Informelle Fragen",
+          "title": "Umgangssprachliche Fragen",
           "points": [
-            "Verwende 'du' für Freunde oder Bekannte.",
-            "Die Struktur bleibt gleich wie bei formellen Fragen.",
-            "Beispiel: 'Hast du Zeit?'"
+            "Verwende umgangssprachliche Ausdrücke.",
+            "Achte auf die Intonation.",
+            "Sei dir der informellen Ansprache bewusst."
           ],
-          "example": "Hast du Zeit?",
+          "example": "Geht's dir gut?",
+          "ruleOrder": [
+            "Verb",
+            "Subjekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Verb",
+              "text": "Geht's"
+            },
+            {
+              "label": "Subjekt",
+              "text": "dir"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Haben Sie Zeit?",
-              "fix": "Hast du Zeit?"
+              "wrong": "Dir geht's gut?",
+              "fix": "Geht's dir gut?"
             }
           ]
         },
         {
-          "title": "Fragen mit Partikeln",
+          "title": "Fragen zur Bestätigung",
           "points": [
-            "Verwende Partikeln wie 'denn' oder 'mal' für Betonung.",
-            "Sie können die Frage informeller machen.",
-            "Beispiel: 'Was machst du denn?'"
+            "Nutze 'oder' für Bestätigungsfragen.",
+            "Das Verb bleibt an zweiter Stelle.",
+            "Achte auf die richtige Satzmelodie."
           ],
-          "example": "Was machst du denn?",
-          "mistakes": [
+          "example": "Du kommst, oder?",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Objekt",
+            "Partikel"
+          ],
+          "exampleHighlights": [
             {
-              "wrong": "Was machst du?",
-              "fix": "Was machst du denn?"
+              "label": "Subjekt",
+              "text": "Du"
+            },
+            {
+              "label": "Verb",
+              "text": "kommst"
+            },
+            {
+              "label": "Objekt",
+              "text": "oder"
             }
-          ]
-        },
-        {
-          "title": "Intonation in Fragen",
-          "points": [
-            "Achte auf die steigende Intonation am Ende von Fragen.",
-            "Dies signalisiert, dass eine Antwort erwartet wird.",
-            "Beispiel: 'Kommst du mit?'"
           ],
-          "example": "Kommst du mit?",
           "mistakes": [
             {
-              "wrong": "Kommst du mit.",
-              "fix": "Kommst du mit?"
+              "wrong": "Kommst du, oder?",
+              "fix": "Du kommst, oder?"
             }
           ]
         }
       ],
       "Negation": [
         {
-          "title": "Nicht im Satz",
+          "title": "Einfache Negation mit 'nicht'",
           "points": [
-            "Verwenden Sie 'nicht', um Verben oder Adjektive zu negieren.",
-            "Platzieren Sie 'nicht' nach dem konjugierten Verb oder am Ende des Satzes.",
-            "Achten Sie auf die Position von 'nicht' in Fragen."
+            "Verwendet 'nicht' zur Verneinung von Verben.",
+            "Steht nach dem konjugierten Verb in Hauptsätzen.",
+            "Wird vor Adjektiven und Adverbien platziert."
           ],
-          "example": "Ich gehe nicht ins Kino.",
+          "example": "Ich gehe nicht zur Schule.",
+          "ruleOrder": [
+            "Subjekt",
+            "verb",
+            "nicht",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "verb",
+              "text": "gehe"
+            },
+            {
+              "label": "nicht",
+              "text": "nicht"
+            },
+            {
+              "label": "Objekt",
+              "text": "Schule"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ich nicht gehe ins Kino.",
-              "fix": "Ich gehe nicht ins Kino."
+              "wrong": "Ich nicht gehe zur Schule.",
+              "fix": "Ich gehe nicht zur Schule."
             }
           ]
         },
         {
-          "title": "Kein für Substantive",
+          "title": "Negation mit 'kein'",
           "points": [
-            "Verwenden Sie 'kein', um Substantive zu negieren.",
-            "Achten Sie auf den Kasus und die Zahl des Substantivs.",
-            "Benutzen Sie 'kein' anstelle von 'nicht' für unbestimmte Mengen."
+            "Verwendet 'kein' zur Verneinung von Nomen.",
+            "Passt sich dem Geschlecht und Fall des Nomens an.",
+            "Wird anstelle von unbestimmten Artikeln verwendet."
           ],
-          "example": "Ich habe kein Geld.",
+          "example": "Das ist kein Hund.",
+          "ruleOrder": [
+            "Subjekt",
+            "verb",
+            "kein",
+            "Nomen"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Das"
+            },
+            {
+              "label": "verb",
+              "text": "ist"
+            },
+            {
+              "label": "kein",
+              "text": "kein"
+            },
+            {
+              "label": "Nomen",
+              "text": "Hund"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ich habe nicht Geld.",
-              "fix": "Ich habe kein Geld."
+              "wrong": "Das ist nicht Hund.",
+              "fix": "Das ist kein Hund."
             }
           ]
         },
         {
-          "title": "Doppelte Negation",
+          "title": "Negation in Nebensätzen",
           "points": [
-            "Vermeiden Sie doppelte Negationen im Deutschen.",
-            "Eine doppelte Negation kann die Bedeutung umkehren.",
-            "Konzentrieren Sie sich auf eine klare Negation."
+            "In Nebensätzen steht 'nicht' am Ende.",
+            "Verwendet die Konjunktion 'dass' oder 'weil'.",
+            "Achte auf die Verbposition im Nebensatz."
+          ],
+          "example": "Ich weiß, dass du nicht kommst.",
+          "ruleOrder": [
+            "Subjekt",
+            "verb",
+            "dass",
+            "nicht",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "verb",
+              "text": "weiß,"
+            },
+            {
+              "label": "dass",
+              "text": "dass"
+            },
+            {
+              "label": "nicht",
+              "text": "du"
+            },
+            {
+              "label": "Objekt",
+              "text": "nicht kommst"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Ich weiß, dass nicht du kommst.",
+              "fix": "Ich weiß, dass du nicht kommst."
+            }
+          ]
+        },
+        {
+          "title": "Doppelte Negation vermeiden",
+          "points": [
+            "Vermeide die Verwendung von zwei Negationen in einem Satz.",
+            "Doppelte Negation kann zu Verwirrung führen.",
+            "Konzentriere dich auf eine klare Negation."
           ],
           "example": "Ich habe nichts gesagt.",
+          "ruleOrder": [
+            "Subjekt",
+            "verb",
+            "nichts",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "verb",
+              "text": "habe"
+            },
+            {
+              "label": "nichts",
+              "text": "nichts"
+            },
+            {
+              "label": "Objekt",
+              "text": "gesagt"
+            }
+          ],
           "mistakes": [
             {
               "wrong": "Ich habe nicht nichts gesagt.",
@@ -13298,182 +14505,451 @@
           ]
         },
         {
-          "title": "Negation in Fragen",
-          "points": [
-            "Verwenden Sie 'nicht' für negative Fragen.",
-            "Die Wortstellung bleibt wichtig in Fragen.",
-            "Achten Sie auf die Intonation bei negativen Fragen."
-          ],
-          "example": "Kommst du nicht zur Party?",
-          "mistakes": [
-            {
-              "wrong": "Kommst du zur Party nicht?",
-              "fix": "Kommst du nicht zur Party?"
-            }
-          ]
-        },
-        {
           "title": "Negation mit Modalverben",
           "points": [
-            "Setzen Sie 'nicht' vor das Modalverb.",
-            "Die Bedeutung kann sich je nach Position ändern.",
-            "Achten Sie auf die korrekte Verwendung von Modalverben."
+            "Modalverben können auch negiert werden.",
+            "Das 'nicht' steht nach dem Modalverb.",
+            "Achte auf die Verbposition im Satz."
           ],
-          "example": "Ich kann nicht kommen.",
+          "example": "Ich kann nicht schwimmen.",
+          "ruleOrder": [
+            "Subjekt",
+            "modalverb",
+            "nicht",
+            "verb"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "modalverb",
+              "text": "kann"
+            },
+            {
+              "label": "nicht",
+              "text": "nicht"
+            },
+            {
+              "label": "verb",
+              "text": "schwimmen"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ich nicht kann kommen.",
-              "fix": "Ich kann nicht kommen."
+              "wrong": "Ich nicht kann schwimmen.",
+              "fix": "Ich kann nicht schwimmen."
             }
           ]
         },
         {
-          "title": "Negation in der Vergangenheit",
+          "title": "Negation in Fragen",
           "points": [
-            "Verwenden Sie 'nicht' mit dem Hilfsverb in der Vergangenheit.",
-            "Achten Sie auf die korrekte Zeitform.",
-            "Vermeiden Sie Verwirrung durch falsche Negation."
+            "Fragen können auch negiert werden.",
+            "Das 'nicht' wird nach dem Hilfsverb platziert.",
+            "Achte auf die Satzstruktur."
           ],
-          "example": "Ich habe nicht gegessen.",
+          "example": "Kommst du nicht zur Party?",
+          "ruleOrder": [
+            "verb",
+            "Subjekt",
+            "nicht",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "verb",
+              "text": "Kommst"
+            },
+            {
+              "label": "Subjekt",
+              "text": "du"
+            },
+            {
+              "label": "nicht",
+              "text": "nicht"
+            },
+            {
+              "label": "Objekt",
+              "text": "zur Party"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ich nicht habe gegessen.",
-              "fix": "Ich habe nicht gegessen."
+              "wrong": "Kommst nicht du zur Party?",
+              "fix": "Kommst du nicht zur Party?"
             }
           ]
         }
       ],
       "Connections": [
         {
-          "title": "Und - Verbindung von Ideen",
+          "title": "Einfacher Satz mit 'und'",
           "points": [
-            "Verbindet zwei gleichwertige Ideen.",
-            "Häufig in alltäglichen Gesprächen.",
-            "Strukturiert Gedanken klar und verständlich."
+            "Verwenden Sie 'und', um zwei gleichwertige Sätze zu verbinden.",
+            "Achten Sie auf die richtige Wortstellung.",
+            "Vermeiden Sie übermäßige Komplexität."
           ],
-          "example": "Ich mag Kaffee und Tee.",
+          "example": "Ich gehe ins Kino und meine Schwester bleibt zu Hause.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Objekt",
+            "und"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "Verb",
+              "text": "gehe"
+            },
+            {
+              "label": "Objekt",
+              "text": "ins Kino"
+            },
+            {
+              "label": "und",
+              "text": "meine Schwester bleibt zu Hause"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ich mag Kaffee, und Tee.",
-              "fix": "Ich mag Kaffee und Tee."
+              "wrong": "Ich gehe ins Kino und bleibt meine Schwester zu Hause.",
+              "fix": "Ich gehe ins Kino und meine Schwester bleibt zu Hause."
             }
           ]
         },
         {
-          "title": "Oder - Alternativen anbieten",
+          "title": "Komplexer Satz mit 'weil'",
           "points": [
-            "Präsentiert Optionen und Wahlmöglichkeiten.",
-            "Wichtig für Entscheidungsfindungen.",
-            "Kann in Fragen und Aussagen verwendet werden."
-          ],
-          "example": "Möchtest du Kaffee oder Tee?",
-          "mistakes": [
-            {
-              "wrong": "Möchtest du Kaffee, oder Tee?",
-              "fix": "Möchtest du Kaffee oder Tee?"
-            }
-          ]
-        },
-        {
-          "title": "Weil - Kausale Verbindungen",
-          "points": [
-            "Gibt Gründe für Handlungen an.",
-            "Unterstützt Argumente und Erklärungen.",
-            "Kann den Satzbau komplexer gestalten."
+            "Verwenden Sie 'weil', um einen Nebensatz einzuleiten.",
+            "Das Verb steht am Ende des Nebensatzes.",
+            "Achten Sie auf die richtige Satzstruktur."
           ],
           "example": "Ich bleibe zu Hause, weil es regnet.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Objekt",
+            ",",
+            "weil"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "Verb",
+              "text": "bleibe"
+            },
+            {
+              "label": "Objekt",
+              "text": "zu Hause"
+            },
+            {
+              "label": ",",
+              "text": "weil es"
+            },
+            {
+              "label": "weil",
+              "text": "regnet"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ich bleibe zu Hause weil, es regnet.",
+              "wrong": "Ich bleibe zu Hause weil regnet es.",
               "fix": "Ich bleibe zu Hause, weil es regnet."
             }
           ]
         },
         {
-          "title": "Obwohl - Kontrastierende Ideen",
+          "title": "Satzverbindung mit 'oder'",
           "points": [
-            "Drückt Gegensätze und Widersprüche aus.",
-            "Wichtig für komplexe Satzstrukturen.",
-            "Zeigt Nuancen in Argumentationen."
+            "Verwenden Sie 'oder', um Alternativen zu bieten.",
+            "Die Struktur bleibt einfach und klar.",
+            "Vermeiden Sie unnötige Komplexität."
           ],
-          "example": "Obwohl es regnet, gehe ich spazieren.",
+          "example": "Möchtest du Tee oder Kaffee?",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Objekt",
+            "oder"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "du"
+            },
+            {
+              "label": "Verb",
+              "text": "Tee"
+            },
+            {
+              "label": "Objekt",
+              "text": "oder"
+            },
+            {
+              "label": "oder",
+              "text": "Kaffee"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Obwohl es regnet ich gehe spazieren.",
-              "fix": "Obwohl es regnet, gehe ich spazieren."
+              "wrong": "Möchtest du Tee oder du Kaffee?",
+              "fix": "Möchtest du Tee oder Kaffee?"
             }
           ]
         },
         {
-          "title": "Wenn - Bedingte Verbindungen",
+          "title": "Satzverknüpfung mit 'aber'",
           "points": [
-            "Drückt Bedingungen und Voraussetzungen aus.",
-            "Hilft, hypothetische Situationen zu formulieren.",
-            "Kann in verschiedenen Zeitformen verwendet werden."
+            "Verwenden Sie 'aber', um einen Gegensatz auszudrücken.",
+            "Achten Sie auf die richtige Satzstruktur.",
+            "Vermeiden Sie übermäßige Komplexität."
           ],
-          "example": "Wenn es sonnig ist, gehen wir schwimmen.",
+          "example": "Ich mag Pizza, aber ich esse lieber Pasta.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Objekt",
+            ",",
+            "aber"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "Verb",
+              "text": "mag"
+            },
+            {
+              "label": "Objekt",
+              "text": "Pizza"
+            },
+            {
+              "label": ",",
+              "text": "aber ich"
+            },
+            {
+              "label": "aber",
+              "text": "esse lieber Pasta"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Wenn es sonnig ist wir gehen schwimmen.",
-              "fix": "Wenn es sonnig ist, gehen wir schwimmen."
+              "wrong": "Ich mag Pizza aber esse lieber Pasta.",
+              "fix": "Ich mag Pizza, aber ich esse lieber Pasta."
             }
           ]
         },
         {
-          "title": "Damit - Zweckangabe",
+          "title": "Satzverbindung mit 'denn'",
           "points": [
-            "Beschreibt den Zweck einer Handlung.",
-            "Macht Absichten klar und verständlich.",
-            "Kann in formellen und informellen Kontexten verwendet werden."
+            "Verwenden Sie 'denn', um einen Grund anzugeben.",
+            "Der Satz bleibt in der Hauptsatzstruktur.",
+            "Achten Sie auf die richtige Verwendung."
           ],
-          "example": "Ich lerne Deutsch, damit ich in Deutschland arbeiten kann.",
+          "example": "Ich gehe nach Hause, denn ich bin müde.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Objekt",
+            ",",
+            "denn"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "Verb",
+              "text": "gehe"
+            },
+            {
+              "label": "Objekt",
+              "text": "nach Hause"
+            },
+            {
+              "label": ",",
+              "text": "denn ich"
+            },
+            {
+              "label": "denn",
+              "text": "bin müde"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ich lerne Deutsch damit, ich in Deutschland arbeiten kann.",
-              "fix": "Ich lerne Deutsch, damit ich in Deutschland arbeiten kann."
+              "wrong": "Ich gehe nach Hause denn ich bin müde.",
+              "fix": "Ich gehe nach Hause, denn ich bin müde."
             }
           ]
         },
         {
-          "title": "Sowohl ... als auch - Gleichwertige Alternativen",
+          "title": "Satzverknüpfung mit 'obwohl'",
           "points": [
-            "Betont zwei gleichwertige Elemente.",
-            "Zeigt die Vielfalt der Optionen.",
-            "Kann in verschiedenen Satzstrukturen eingesetzt werden."
+            "Verwenden Sie 'obwohl', um einen Gegensatz im Nebensatz auszudrücken.",
+            "Das Verb steht am Ende des Nebensatzes.",
+            "Achten Sie auf die richtige Satzstruktur."
           ],
-          "example": "Ich mag sowohl Kaffee als auch Tee.",
+          "example": "Ich gehe joggen, obwohl es regnet.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Objekt",
+            ",",
+            "obwohl"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "Verb",
+              "text": "gehe"
+            },
+            {
+              "label": "Objekt",
+              "text": "joggen"
+            },
+            {
+              "label": ",",
+              "text": "obwohl es"
+            },
+            {
+              "label": "obwohl",
+              "text": "regnet"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ich mag sowohl Kaffee, als auch Tee.",
-              "fix": "Ich mag sowohl Kaffee als auch Tee."
+              "wrong": "Ich gehe joggen obwohl regnet es.",
+              "fix": "Ich gehe joggen, obwohl es regnet."
+            }
+          ]
+        },
+        {
+          "title": "Satzverknüpfung mit 'sobald'",
+          "points": [
+            "Verwenden Sie 'sobald', um zeitliche Beziehungen auszudrücken.",
+            "Das Verb steht am Ende des Nebensatzes.",
+            "Achten Sie auf die richtige Satzstruktur."
+          ],
+          "example": "Ich komme, sobald ich fertig bin.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            ",",
+            "sobald"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "Verb",
+              "text": "komme"
+            },
+            {
+              "label": ",",
+              "text": "sobald ich"
+            },
+            {
+              "label": "sobald",
+              "text": "fertig bin"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Ich komme sobald ich fertig bin.",
+              "fix": "Ich komme, sobald ich fertig bin."
             }
           ]
         }
       ],
       "Conditions": [
         {
-          "title": "Einfache Bedingung (Wenn-Satz)",
+          "title": "Einfache Bedingung (Typ 1)",
           "points": [
             "Verwendung von 'wenn' für reale Bedingungen.",
-            "Präsens für die Bedingung und das Ergebnis.",
-            "Einfachheit in der Satzstruktur."
+            "Hauptsatz in V2-Stellung.",
+            "Verwendung des Präsens für die Bedingung und den Hauptsatz."
           ],
           "example": "Wenn es regnet, bleibe ich zu Hause.",
+          "ruleOrder": [
+            "wenn",
+            "subjekt",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "wenn",
+              "text": "Wenn"
+            },
+            {
+              "label": "subjekt",
+              "text": "es"
+            },
+            {
+              "label": "verb",
+              "text": "regnet,"
+            },
+            {
+              "label": "objekt",
+              "text": "bleibe ich zu Hause"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Wenn es regnet, ich bleibe zu Hause.",
-              "fix": "Wenn es regnet, bleibe ich zu Hause."
+              "wrong": "Wenn ich gehe, ich kaufe Brot.",
+              "fix": "Wenn ich gehe, kaufe ich Brot."
             }
           ]
         },
         {
-          "title": "Hypothetische Bedingung (Konjunktiv II)",
+          "title": "Hypothetische Bedingung (Typ 2)",
           "points": [
-            "Verwendung des Konjunktiv II für unrealistische Bedingungen.",
-            "Signalisiert Unwahrscheinlichkeit oder Irrealität.",
-            "Häufige Verwendung in höflichen Anfragen."
+            "Verwendung von 'wenn' für unrealistische Bedingungen.",
+            "Konjunktiv II im Hauptsatz.",
+            "Verwendung des Präteritums im Nebensatz."
           ],
           "example": "Wenn ich reich wäre, würde ich reisen.",
+          "ruleOrder": [
+            "wenn",
+            "subjekt",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "wenn",
+              "text": "Wenn"
+            },
+            {
+              "label": "subjekt",
+              "text": "ich"
+            },
+            {
+              "label": "verb",
+              "text": "reich"
+            },
+            {
+              "label": "objekt",
+              "text": "wäre, würde ich reisen"
+            }
+          ],
           "mistakes": [
             {
               "wrong": "Wenn ich reich bin, würde ich reisen.",
@@ -13482,139 +14958,335 @@
           ]
         },
         {
-          "title": "Konditionalsätze mit 'falls'",
+          "title": "Unrealistische Bedingung (Typ 3)",
           "points": [
-            "Verwendung von 'falls' für weniger wahrscheinliche Bedingungen.",
-            "Geeignet für formelle und informelle Kontexte.",
-            "Betont die Unsicherheit der Bedingung."
+            "Verwendung von 'wenn' für vergangene, unrealistische Bedingungen.",
+            "Konjunktiv II in der Vergangenheit im Nebensatz.",
+            "Verwendung von 'hätte' im Hauptsatz."
           ],
-          "example": "Falls du Zeit hast, komm vorbei.",
+          "example": "Wenn ich das gewusst hätte, wäre ich gekommen.",
+          "ruleOrder": [
+            "wenn",
+            "subjekt",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "wenn",
+              "text": "Wenn"
+            },
+            {
+              "label": "subjekt",
+              "text": "ich"
+            },
+            {
+              "label": "verb",
+              "text": "das"
+            },
+            {
+              "label": "objekt",
+              "text": "gewusst hätte, wäre ich gekommen"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Falls du Zeit hast, du kommst vorbei.",
-              "fix": "Falls du Zeit hast, komm vorbei."
+              "wrong": "Wenn ich das gewusst habe, bin ich gekommen.",
+              "fix": "Wenn ich das gewusst hätte, wäre ich gekommen."
             }
           ]
         },
         {
-          "title": "Bedingungen im Futur",
+          "title": "Bedingung mit Modalverben",
           "points": [
-            "Verwendung des Futurs für zukünftige Bedingungen.",
-            "Kombination von 'wenn' und Futur I.",
-            "Wichtig für Planungen und Vorhersagen."
+            "Verwendung von Modalverben in Bedingungen.",
+            "Konjunktiv II für hypothetische Situationen.",
+            "V2-Stellung im Hauptsatz."
           ],
-          "example": "Wenn ich morgen Zeit habe, werde ich dich anrufen.",
+          "example": "Wenn ich mehr Zeit hätte, könnte ich lernen.",
+          "ruleOrder": [
+            "wenn",
+            "subjekt",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "wenn",
+              "text": "Wenn"
+            },
+            {
+              "label": "subjekt",
+              "text": "ich"
+            },
+            {
+              "label": "verb",
+              "text": "mehr"
+            },
+            {
+              "label": "objekt",
+              "text": "Zeit hätte, könnte ich lernen"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Wenn ich morgen Zeit habe, ich werde dich anrufen.",
-              "fix": "Wenn ich morgen Zeit habe, werde ich dich anrufen."
+              "wrong": "Wenn ich mehr Zeit habe, kann ich lernen.",
+              "fix": "Wenn ich mehr Zeit hätte, könnte ich lernen."
             }
           ]
         },
         {
-          "title": "Gemischte Bedingungen",
+          "title": "Kombinierte Bedingungen",
           "points": [
-            "Kombination verschiedener Zeitformen in einem Satz.",
-            "Verwendung des Konjunktiv II für die Bedingung und Futur für das Ergebnis.",
-            "Komplexität in der Satzstruktur."
+            "Verwendung von mehreren Bedingungen in einem Satz.",
+            "Klarheit durch richtige Satzstruktur.",
+            "Verwendung von 'und' oder 'oder' zur Verknüpfung."
           ],
-          "example": "Wenn ich das gewusst hätte, wäre ich jetzt nicht hier.",
+          "example": "Wenn es morgen regnet oder schneit, bleibe ich zu Hause.",
+          "ruleOrder": [
+            "wenn",
+            "subjekt",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "wenn",
+              "text": "Wenn"
+            },
+            {
+              "label": "subjekt",
+              "text": "es"
+            },
+            {
+              "label": "verb",
+              "text": "morgen"
+            },
+            {
+              "label": "objekt",
+              "text": "regnet oder schneit, bleibe ich zu Hause"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Wenn ich das gewusst habe, würde ich jetzt nicht hier sein.",
-              "fix": "Wenn ich das gewusst hätte, wäre ich jetzt nicht hier."
+              "wrong": "Wenn es morgen regnet, oder schneit, bleibe ich zu Hause.",
+              "fix": "Wenn es morgen regnet oder schneit, bleibe ich zu Hause."
             }
           ]
         },
         {
-          "title": "Bedingungen mit 'sofern'",
+          "title": "Bedingungen mit Zeitangaben",
           "points": [
-            "Verwendung von 'sofern' für Bedingungen, die an eine andere Bedingung geknüpft sind.",
-            "Häufig in formellen Texten und Gesprächen.",
-            "Betont die Abhängigkeit der Bedingungen."
+            "Verwendung von Zeitangaben in Bedingungen.",
+            "Korrekte Verwendung von 'wenn' und 'als'.",
+            "Unterscheidung zwischen realen und hypothetischen Bedingungen."
           ],
-          "example": "Sofern du einverstanden bist, können wir beginnen.",
+          "example": "Wenn ich gestern gewusst hätte, wäre ich gekommen.",
+          "ruleOrder": [
+            "wenn",
+            "subjekt",
+            "verb",
+            "objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "wenn",
+              "text": "Wenn"
+            },
+            {
+              "label": "subjekt",
+              "text": "ich"
+            },
+            {
+              "label": "verb",
+              "text": "gestern"
+            },
+            {
+              "label": "objekt",
+              "text": "gewusst hätte, wäre ich gekommen"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Sofern du einverstanden bist, wir können beginnen.",
-              "fix": "Sofern du einverstanden bist, können wir beginnen."
+              "wrong": "Wenn ich wusste, bin ich gekommen.",
+              "fix": "Wenn ich gewusst hätte, wäre ich gekommen."
             }
           ]
         }
       ],
       "Voice & Focus": [
         {
-          "title": "Aktive Stimme verstehen",
+          "title": "Satzstruktur im Hauptsatz",
           "points": [
-            "Die aktive Stimme hebt das Subjekt der Handlung hervor.",
-            "Nutze die aktive Stimme für klare und direkte Kommunikation.",
-            "Aktive Sätze sind in der Alltagssprache weit verbreitet."
+            "Das Verb steht an zweiter Stelle (V2).",
+            "Subjekt und Verb sind die zentralen Elemente.",
+            "Objekte folgen dem Verb."
           ],
-          "example": "Der Lehrer erklärt die Grammatik.",
+          "example": "Ich esse einen Apfel.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "Verb",
+              "text": "esse"
+            },
+            {
+              "label": "Objekt",
+              "text": "einen Apfel"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Die Grammatik wird erklärt von dem Lehrer.",
-              "fix": "Der Lehrer erklärt die Grammatik."
+              "wrong": "Einen Apfel ich esse.",
+              "fix": "Ich esse einen Apfel."
+            }
+          ]
+        },
+        {
+          "title": "Satzstruktur im Nebensatz",
+          "points": [
+            "Das Verb steht am Ende des Satzes.",
+            "Nebensätze beginnen oft mit einer Konjunktion.",
+            "Die Struktur bleibt konsistent."
+          ],
+          "example": "Ich weiß, dass du einen Apfel isst.",
+          "ruleOrder": [
+            "Subjekt",
+            "Konjunktion",
+            "Objekt",
+            "Verb"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "Konjunktion",
+              "text": "dass"
+            },
+            {
+              "label": "Objekt",
+              "text": "du einen Apfel"
+            },
+            {
+              "label": "Verb",
+              "text": "isst"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Ich weiß, isst du einen Apfel.",
+              "fix": "Ich weiß, dass du einen Apfel isst."
             }
           ]
         },
         {
           "title": "Fokus durch Wortstellung",
           "points": [
-            "Die Wortstellung kann den Fokus im Satz beeinflussen.",
-            "Das wichtigste Element sollte an den Anfang des Satzes gestellt werden.",
-            "Fragen können ebenfalls den Fokus verändern."
+            "Die Wortstellung kann den Fokus verändern.",
+            "Verschiebe Elemente für Betonung.",
+            "Der Kontext beeinflusst die Interpretation."
           ],
-          "example": "Gestern hat Maria das Buch gelesen.",
+          "example": "Einen Apfel esse ich.",
+          "ruleOrder": [
+            "Objekt",
+            "Verb",
+            "Subjekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Objekt",
+              "text": "Einen Apfel"
+            },
+            {
+              "label": "Verb",
+              "text": "esse"
+            },
+            {
+              "label": "Subjekt",
+              "text": "ich"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Das Buch hat Maria gestern gelesen.",
-              "fix": "Gestern hat Maria das Buch gelesen."
+              "wrong": "Ich esse einen Apfel.",
+              "fix": "Einen Apfel esse ich."
             }
           ]
         },
         {
-          "title": "Passiv für Unbekanntes",
+          "title": "Passivkonstruktionen",
           "points": [
-            "Das Passiv wird verwendet, wenn der Handelnde unbekannt ist.",
-            "Es lenkt den Fokus auf die Handlung selbst.",
-            "Vermeide Passiv, wenn der Handelnde wichtig ist."
+            "Das Passiv wird mit 'werden' gebildet.",
+            "Der Fokus liegt auf der Handlung, nicht auf dem Handelnden.",
+            "Wird oft verwendet, um Unbekanntes zu betonen."
           ],
-          "example": "Das Buch wurde von vielen gelesen.",
+          "example": "Der Apfel wird gegessen.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Partizip"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Der Apfel"
+            },
+            {
+              "label": "Verb",
+              "text": "wird"
+            },
+            {
+              "label": "Partizip",
+              "text": "gegessen"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Viele lesen das Buch.",
-              "fix": "Das Buch wurde von vielen gelesen."
+              "wrong": "Gegessen wird der Apfel.",
+              "fix": "Der Apfel wird gegessen."
             }
           ]
         },
         {
-          "title": "Fokuspartikel verwenden",
+          "title": "Aktiv vs. Passiv",
           "points": [
-            "Fokuspartikel wie 'nur' oder 'auch' betonen bestimmte Teile des Satzes.",
-            "Sie helfen, Missverständnisse zu vermeiden.",
-            "Die Platzierung der Partikel ist entscheidend für die Bedeutung."
+            "Aktiv betont den Handelnden.",
+            "Passiv betont die Handlung oder das Ergebnis.",
+            "Beide Formen sind wichtig für den Ausdruck."
           ],
-          "example": "Nur Peter hat das Spiel gewonnen.",
-          "mistakes": [
+          "example": "Ich esse den Apfel. Der Apfel wird von mir gegessen.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Objekt"
+          ],
+          "exampleHighlights": [
             {
-              "wrong": "Peter hat nur das Spiel gewonnen.",
-              "fix": "Nur Peter hat das Spiel gewonnen."
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "Verb",
+              "text": "esse"
+            },
+            {
+              "label": "Objekt",
+              "text": "den Apfel"
             }
-          ]
-        },
-        {
-          "title": "Aktiv und Passiv unterscheiden",
-          "points": [
-            "Verstehe, wann es sinnvoll ist, zwischen aktiv und passiv zu wechseln.",
-            "Aktiv betont den Handelnden, passiv die Handlung.",
-            "Nutze beide Formen, um den Fokus zu variieren."
           ],
-          "example": "Die Stadt wird von Touristen besucht.",
           "mistakes": [
             {
-              "wrong": "Touristen besuchen die Stadt.",
-              "fix": "Die Stadt wird von Touristen besucht."
+              "wrong": "Der Apfel esse ich.",
+              "fix": "Ich esse den Apfel."
             }
           ]
         }
@@ -13623,120 +15295,307 @@
         {
           "title": "Müssen (Obligation)",
           "points": [
-            "Drückt eine Notwendigkeit oder Pflicht aus.",
-            "Wird häufig in formellen Kontexten verwendet.",
-            "Kann auch in der Vergangenheit verwendet werden."
+            "Verwendung zur Ausdruck von Notwendigkeit.",
+            "Stellt eine starke Verpflichtung dar.",
+            "Wird häufig in der Alltagssprache verwendet."
           ],
-          "example": "Ich muss morgen früh aufstehen.",
+          "example": "Ich muss morgen arbeiten.",
+          "ruleOrder": [
+            "Subjekt",
+            "müssen",
+            "Infinitiv"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "müssen",
+              "text": "muss"
+            },
+            {
+              "label": "Infinitiv",
+              "text": "arbeiten"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ich muss nicht vergessen, die Hausaufgaben.",
-              "fix": "Ich darf nicht vergessen, die Hausaufgaben."
+              "wrong": "Ich muss morgen arbeiten gehen.",
+              "fix": "Ich muss morgen arbeiten."
             }
           ]
         },
         {
-          "title": "Können (Ability)",
+          "title": "Können (Fähigkeit)",
           "points": [
-            "Zeigt die Fähigkeit oder Möglichkeit an.",
+            "Drückt die Fähigkeit oder Möglichkeit aus.",
             "Kann in verschiedenen Zeiten verwendet werden.",
-            "Wird oft in Fragen verwendet."
+            "Wird häufig in Fragen verwendet."
           ],
           "example": "Ich kann gut schwimmen.",
-          "mistakes": [
-            {
-              "wrong": "Ich kann nicht spielen Klavier.",
-              "fix": "Ich kann kein Klavier spielen."
-            }
-          ]
-        },
-        {
-          "title": "Dürfen (Permission)",
-          "points": [
-            "Fragt nach Erlaubnis oder gibt sie.",
-            "Kann in formellen und informellen Kontexten verwendet werden.",
-            "Wird oft in der negativen Form verwendet."
+          "ruleOrder": [
+            "Subjekt",
+            "können",
+            "Adverb",
+            "Infinitiv"
           ],
-          "example": "Darf ich hier sitzen?",
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "können",
+              "text": "kann"
+            },
+            {
+              "label": "Adverb",
+              "text": "gut"
+            },
+            {
+              "label": "Infinitiv",
+              "text": "schwimmen"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Du darfst nicht gehen jetzt.",
-              "fix": "Du darfst jetzt nicht gehen."
+              "wrong": "Ich kann gut schwimmen gehen.",
+              "fix": "Ich kann gut schwimmen."
             }
           ]
         },
         {
-          "title": "Wollen (Desire)",
+          "title": "Dürfen (Erlaubnis)",
+          "points": [
+            "Verwendet, um Erlaubnis auszudrücken.",
+            "Kann auch in negativen Sätzen verwendet werden.",
+            "Häufig in formellen Kontexten."
+          ],
+          "example": "Du darfst hier nicht rauchen.",
+          "ruleOrder": [
+            "Subjekt",
+            "dürfen",
+            "Adverb",
+            "Infinitiv"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Du"
+            },
+            {
+              "label": "dürfen",
+              "text": "darfst"
+            },
+            {
+              "label": "Adverb",
+              "text": "nicht"
+            },
+            {
+              "label": "Infinitiv",
+              "text": "rauchen"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Du darfst nicht hier rauchen.",
+              "fix": "Du darfst hier nicht rauchen."
+            }
+          ]
+        },
+        {
+          "title": "Wollen (Absicht)",
           "points": [
             "Drückt den Wunsch oder die Absicht aus.",
             "Kann in verschiedenen Zeitformen verwendet werden.",
-            "Häufig in persönlichen Aussagen."
+            "Wird oft in persönlichen Zielen verwendet."
           ],
-          "example": "Ich will ein neues Auto kaufen.",
+          "example": "Ich will nach Berlin fahren.",
+          "ruleOrder": [
+            "Subjekt",
+            "wollen",
+            "Adverb",
+            "Infinitiv"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "wollen",
+              "text": "will"
+            },
+            {
+              "label": "Adverb",
+              "text": "nach"
+            },
+            {
+              "label": "Infinitiv",
+              "text": "fahren"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ich will nicht gehen nach Hause.",
-              "fix": "Ich will nicht nach Hause gehen."
+              "wrong": "Ich will nach Berlin gehen fahren.",
+              "fix": "Ich will nach Berlin fahren."
             }
           ]
         },
         {
-          "title": "Sollen (Advice)",
+          "title": "Sollen (Empfehlung)",
           "points": [
-            "Gibt Ratschläge oder Empfehlungen.",
-            "Kann auch Verpflichtungen ausdrücken.",
-            "Häufig in der indirekten Rede."
-          ],
-          "example": "Du sollst mehr Wasser trinken.",
-          "mistakes": [
-            {
-              "wrong": "Du sollst nicht vergessen deine Medikamente.",
-              "fix": "Du solltest nicht vergessen, deine Medikamente zu nehmen."
-            }
-          ]
-        },
-        {
-          "title": "Mögen (Preference)",
-          "points": [
-            "Drückt Vorlieben oder Abneigungen aus.",
-            "Kann in Fragen verwendet werden.",
-            "Häufig in der Umgangssprache."
-          ],
-          "example": "Ich mag Schokolade.",
-          "mistakes": [
-            {
-              "wrong": "Ich mag nicht die Musik.",
-              "fix": "Ich mag die Musik nicht."
-            }
-          ]
-        },
-        {
-          "title": "Könnten (Polite Request)",
-          "points": [
-            "Verwendet für höfliche Bitten oder Vorschläge.",
-            "Kann Unsicherheit ausdrücken.",
+            "Verwendet, um Empfehlungen oder Ratschläge auszudrücken.",
+            "Kann auch in der indirekten Rede verwendet werden.",
             "Häufig in formellen Kontexten."
           ],
-          "example": "Könnten Sie mir bitte helfen?",
+          "example": "Du sollst mehr Wasser trinken.",
+          "ruleOrder": [
+            "Subjekt",
+            "sollen",
+            "Adverb",
+            "Infinitiv"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Du"
+            },
+            {
+              "label": "sollen",
+              "text": "sollst"
+            },
+            {
+              "label": "Adverb",
+              "text": "mehr"
+            },
+            {
+              "label": "Infinitiv",
+              "text": "trinken"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Könnten Sie mir helfen bitte?",
-              "fix": "Könnten Sie mir bitte helfen?"
+              "wrong": "Du sollst mehr Wasser trinken gehen.",
+              "fix": "Du sollst mehr Wasser trinken."
             }
           ]
         },
         {
-          "title": "Müssten (Hypothetical Obligation)",
+          "title": "Mögen (Vorliebe)",
           "points": [
-            "Drückt eine hypothetische Notwendigkeit aus.",
-            "Kann in Bedingungssätzen verwendet werden.",
-            "Häufig in Diskussionen über Möglichkeiten."
+            "Drückt Vorliebe oder Abneigung aus.",
+            "Kann in verschiedenen Zeitformen verwendet werden.",
+            "Häufig in persönlichen Vorlieben."
           ],
-          "example": "Wir müssten früher anfangen, um rechtzeitig fertig zu werden.",
+          "example": "Ich mag Schokolade.",
+          "ruleOrder": [
+            "Subjekt",
+            "mögen",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "mögen",
+              "text": "mag"
+            },
+            {
+              "label": "Objekt",
+              "text": "Schokolade"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Wir müssen früher anfangen, um rechtzeitig fertig zu sein.",
-              "fix": "Wir müssten früher anfangen, um rechtzeitig fertig zu werden."
+              "wrong": "Ich mag nicht Schokolade.",
+              "fix": "Ich mag Schokolade nicht."
+            }
+          ]
+        },
+        {
+          "title": "Müssen vs. Sollen",
+          "points": [
+            "Müssen zeigt eine starke Verpflichtung, während sollen eine Empfehlung ist.",
+            "Verwendung hängt vom Kontext ab.",
+            "Wichtig für die Unterscheidung in der Kommunikation."
+          ],
+          "example": "Ich muss gehen, aber du sollst bleiben.",
+          "ruleOrder": [
+            "Subjekt",
+            "müssen",
+            "Infinitiv",
+            "aber",
+            "sollen"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "müssen",
+              "text": "muss"
+            },
+            {
+              "label": "Infinitiv",
+              "text": "gehen"
+            },
+            {
+              "label": "aber",
+              "text": "du"
+            },
+            {
+              "label": "sollen",
+              "text": "sollst"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Ich muss gehen, aber du musst bleiben.",
+              "fix": "Ich muss gehen, aber du sollst bleiben."
+            }
+          ]
+        },
+        {
+          "title": "Könnte (Möglichkeit)",
+          "points": [
+            "Drückt eine Möglichkeit oder Hypothese aus.",
+            "Kann in verschiedenen Kontexten verwendet werden.",
+            "Häufig in hypothetischen Aussagen."
+          ],
+          "example": "Es könnte morgen regnen.",
+          "ruleOrder": [
+            "Subjekt",
+            "könnte",
+            "Adverb",
+            "Infinitiv"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Es"
+            },
+            {
+              "label": "könnte",
+              "text": "könnte"
+            },
+            {
+              "label": "Adverb",
+              "text": "morgen"
+            },
+            {
+              "label": "Infinitiv",
+              "text": "regnen"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Es könnte morgen regnen gehen.",
+              "fix": "Es könnte morgen regnen."
             }
           ]
         }
@@ -13745,11 +15604,35 @@
         {
           "title": "Einführung in die indirekte Rede",
           "points": [
-            "Die indirekte Rede wird verwendet, um die Worte einer anderen Person wiederzugeben.",
-            "Typische Einleitungswörter sind 'dass', 'ob' und 'wie'.",
-            "Der Konjunktiv wird oft verwendet, um die indirekte Rede zu kennzeichnen."
+            "Die indirekte Rede wird verwendet, um Aussagen wiederzugeben.",
+            "Verwende 'dass' als Komplementierer.",
+            "Achte auf die Verbposition in Nebensätzen."
           ],
           "example": "Er sagt, dass er morgen kommt.",
+          "ruleOrder": [
+            "Subjekt",
+            "verb",
+            "dass",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Er"
+            },
+            {
+              "label": "verb",
+              "text": "sagt"
+            },
+            {
+              "label": "dass",
+              "text": "dass"
+            },
+            {
+              "label": "Objekt",
+              "text": "kommt"
+            }
+          ],
           "mistakes": [
             {
               "wrong": "Er sagt, er kommt morgen.",
@@ -13758,336 +15641,754 @@
           ]
         },
         {
-          "title": "Verwendung des Konjunktivs I",
+          "title": "Verwendung von 'dass' in der indirekten Rede",
           "points": [
-            "Der Konjunktiv I wird häufig in der indirekten Rede verwendet.",
-            "Er wird gebildet, indem man die Stammformen des Verbs anpasst.",
-            "Er hilft, die Distanz zwischen dem Sprecher und dem Gesagten zu zeigen."
+            "'dass' leitet den Nebensatz ein.",
+            "Es ist wichtig für die Klarheit der Aussage.",
+            "Die Verbform bleibt im Konjunktiv bei Unsicherheit."
           ],
-          "example": "Sie behauptet, sie habe die Prüfung bestanden.",
+          "example": "Sie glaubt, dass er die Wahrheit sagt.",
+          "ruleOrder": [
+            "Subjekt",
+            "verb",
+            "dass",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Sie"
+            },
+            {
+              "label": "verb",
+              "text": "glaubt"
+            },
+            {
+              "label": "dass",
+              "text": "dass"
+            },
+            {
+              "label": "Objekt",
+              "text": "sagt"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Sie behauptet, sie hat die Prüfung bestanden.",
-              "fix": "Sie behauptet, sie habe die Prüfung bestanden."
+              "wrong": "Sie glaubt er sagt die Wahrheit.",
+              "fix": "Sie glaubt, dass er die Wahrheit sagt."
             }
           ]
         },
         {
-          "title": "Verwendung von 'dass' und 'ob'",
+          "title": "Konjunktiv in der indirekten Rede",
           "points": [
-            "'Dass' wird verwendet, um Aussagen wiederzugeben.",
-            "'Ob' wird verwendet, um Fragen wiederzugeben.",
-            "Die Wahl zwischen 'dass' und 'ob' beeinflusst die Struktur des Satzes."
+            "Der Konjunktiv wird verwendet, um Unsicherheit auszudrücken.",
+            "Er wird oft in der indirekten Rede verwendet.",
+            "Achte auf die richtige Konjugation des Verbs."
           ],
-          "example": "Er fragt, ob sie kommen kann.",
+          "example": "Er meinte, er wäre krank.",
+          "ruleOrder": [
+            "Subjekt",
+            "verb",
+            "dass",
+            "Adjektiv"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Er"
+            },
+            {
+              "label": "verb",
+              "text": "meinte"
+            },
+            {
+              "label": "dass",
+              "text": "wäre"
+            },
+            {
+              "label": "Adjektiv",
+              "text": "krank"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Er fragt, dass sie kommen kann.",
-              "fix": "Er fragt, ob sie kommen kann."
+              "wrong": "Er meinte, er ist krank.",
+              "fix": "Er meinte, er wäre krank."
             }
           ]
         },
         {
-          "title": "Rückverschiebung der Zeitformen",
+          "title": "Rückschritt in der indirekten Rede",
           "points": [
-            "In der indirekten Rede erfolgt oft eine Rückverschiebung der Zeitformen.",
-            "Präsens wird zu Präteritum, Perfekt zu Plusquamperfekt.",
-            "Diese Regel gilt nicht immer, besonders bei allgemeinen Wahrheiten."
+            "Rückschritt bedeutet, die Zeitform zu ändern.",
+            "Verwende die Vergangenheitsform für vergangene Aussagen.",
+            "Achte auf die Zeitform des Hauptsatzes."
           ],
-          "example": "Er sagt, dass er gestern gegangen ist.",
+          "example": "Sie sagte, dass sie das Buch gelesen hatte.",
+          "ruleOrder": [
+            "Subjekt",
+            "verb",
+            "dass",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Sie"
+            },
+            {
+              "label": "verb",
+              "text": "sagte"
+            },
+            {
+              "label": "dass",
+              "text": "gelesen hatte"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Er sagt, dass er gestern geht.",
-              "fix": "Er sagt, dass er gestern gegangen ist."
+              "wrong": "Sie sagt, dass sie das Buch liest.",
+              "fix": "Sie sagte, dass sie das Buch gelesen hatte."
             }
           ]
         },
         {
-          "title": "Indirekte Fragen",
+          "title": "Quotative in der indirekten Rede",
           "points": [
-            "Indirekte Fragen werden oft mit 'ob' oder 'wie' eingeleitet.",
-            "Die Wortstellung bleibt im Hauptsatz normal.",
-            "Indirekte Fragen erfordern keine Fragezeichen."
+            "Quotative werden verwendet, um direkte Zitate wiederzugeben.",
+            "Sie können auch in der indirekten Rede verwendet werden.",
+            "Achte auf die richtige Satzstruktur."
           ],
-          "example": "Sie fragt, wie es ihm geht.",
+          "example": "Er sagte: 'Ich komme später.'",
+          "ruleOrder": [
+            "Subjekt",
+            "verb",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Er"
+            },
+            {
+              "label": "verb",
+              "text": "sagte"
+            },
+            {
+              "label": "Objekt",
+              "text": "Ich komme später"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Sie fragt, wie geht es ihm.",
-              "fix": "Sie fragt, wie es ihm geht."
+              "wrong": "Er sagt, ich komme später.",
+              "fix": "Er sagte: 'Ich komme später.'"
             }
           ]
         },
         {
-          "title": "Komplexe Sätze in der indirekten Rede",
+          "title": "Indirekte Rede mit Modalverben",
           "points": [
-            "Komplexe Sätze können mehrere Nebensätze enthalten.",
-            "Die Struktur bleibt konsistent, auch bei längeren Sätzen.",
-            "Auf die richtige Verwendung von Kommas achten."
+            "Modalverben erfordern besondere Aufmerksamkeit.",
+            "Die Struktur bleibt ähnlich, aber das Modalverb ändert sich.",
+            "Achte auf die Bedeutung der Aussage."
           ],
-          "example": "Er sagt, dass sie, obwohl es regnet, morgen kommen wird.",
+          "example": "Sie meinte, sie könnte kommen.",
+          "ruleOrder": [
+            "Subjekt",
+            "verb",
+            "dass",
+            "modalverb"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Sie"
+            },
+            {
+              "label": "verb",
+              "text": "meinte"
+            },
+            {
+              "label": "dass",
+              "text": "könnte"
+            },
+            {
+              "label": "modalverb",
+              "text": "kommen"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Er sagt, dass sie obwohl es regnet morgen kommen wird.",
-              "fix": "Er sagt, dass sie, obwohl es regnet, morgen kommen wird."
+              "wrong": "Sie meint, sie kann kommen.",
+              "fix": "Sie meinte, sie könnte kommen."
             }
           ]
         }
       ],
       "Formality & Style": [
         {
-          "title": "Formelle Anrede",
+          "title": "Anredeformen im Deutschen",
           "points": [
-            "Verwenden Sie 'Sie' in formellen Situationen.",
-            "Nutzen Sie den Nachnamen in formellen Ansprachen.",
-            "Achten Sie auf Höflichkeit in geschäftlichen E-Mails."
+            "Verwendung von 'Sie' für formelle Anrede.",
+            "Verwendung von 'du' für informelle Anrede.",
+            "Kontextabhängige Wahl der Anrede."
+          ],
+          "example": "Könnten Sie mir bitte helfen?",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Sie"
+            },
+            {
+              "label": "Verb",
+              "text": "helfen"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Kannst du mir bitte helfen?",
+              "fix": "Könnten Sie mir bitte helfen?"
+            }
+          ]
+        },
+        {
+          "title": "Formelle vs. informelle Sprache",
+          "points": [
+            "Formelle Sprache in geschäftlichen Kontexten.",
+            "Informelle Sprache im Freundeskreis.",
+            "Bewusstsein für den Kontext ist entscheidend."
+          ],
+          "example": "Ich würde mich freuen, von Ihnen zu hören.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "Verb",
+              "text": "würde"
+            },
+            {
+              "label": "Objekt",
+              "text": "freuen"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Ich freue mich, von dir zu hören.",
+              "fix": "Ich würde mich freuen, von Ihnen zu hören."
+            }
+          ]
+        },
+        {
+          "title": "Höflichkeitsformeln",
+          "points": [
+            "Verwendung von Höflichkeitsformeln in der Kommunikation.",
+            "Wichtigkeit von 'bitte' und 'danke'.",
+            "Anpassung der Höflichkeit an den Gesprächspartner."
+          ],
+          "example": "Könnten Sie mir bitte das Buch geben?",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Sie"
+            },
+            {
+              "label": "Verb",
+              "text": "geben"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Gib mir das Buch.",
+              "fix": "Könnten Sie mir bitte das Buch geben?"
+            }
+          ]
+        },
+        {
+          "title": "Umgangssprache vs. Standardsprache",
+          "points": [
+            "Unterschiede zwischen Umgangssprache und Standardsprache.",
+            "Umgangssprache in informellen Gesprächen.",
+            "Standardsprache in formellen Situationen."
+          ],
+          "example": "Das ist echt cool!",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Das"
+            },
+            {
+              "label": "Verb",
+              "text": "ist"
+            },
+            {
+              "label": "Objekt",
+              "text": "cool"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Das ist sehr interessant.",
+              "fix": "Das ist echt cool!"
+            }
+          ]
+        },
+        {
+          "title": "Formelle E-Mails",
+          "points": [
+            "Struktur und Anrede in formellen E-Mails.",
+            "Verwendung von 'Sehr geehrte/r' für Anrede.",
+            "Abschlussformeln wie 'Mit freundlichen Grüßen'."
           ],
           "example": "Sehr geehrte Frau Müller, ich hoffe, es geht Ihnen gut.",
+          "ruleOrder": [
+            "Anrede",
+            "Subjekt",
+            "Verb"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Anrede",
+              "text": "Sehr geehrte Frau Müller"
+            },
+            {
+              "label": "Subjekt",
+              "text": "ich"
+            },
+            {
+              "label": "Verb",
+              "text": "hoffe"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Hallo Müller, wie geht's?",
-              "fix": "Sehr geehrte Frau Müller, wie geht es Ihnen?"
+              "wrong": "Hallo Frau Müller, wie geht's?",
+              "fix": "Sehr geehrte Frau Müller, ich hoffe, es geht Ihnen gut."
             }
           ]
         },
         {
-          "title": "Informelle Anrede",
+          "title": "Einfache Höflichkeit im Alltag",
           "points": [
-            "Verwenden Sie 'du' im Freundeskreis oder bei jüngeren Personen.",
-            "Nutzen Sie Vornamen in informellen Kontexten.",
-            "Achten Sie auf den Tonfall in persönlichen Gesprächen."
+            "Verwendung von 'Entschuldigung' und 'Bitte'.",
+            "Höflichkeit im täglichen Umgang.",
+            "Einfluss von Höflichkeit auf zwischenmenschliche Beziehungen."
           ],
-          "example": "Hey Max, hast du Lust, ins Kino zu gehen?",
+          "example": "Entschuldigung, könnten Sie mir helfen?",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Sie"
+            },
+            {
+              "label": "Verb",
+              "text": "mir helfen"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Du bist echt cool, Herr Schmidt!",
-              "fix": "Du bist echt cool, Max!"
+              "wrong": "Hilf mir!",
+              "fix": "Entschuldigung, könnten Sie mir helfen?"
             }
           ]
         },
         {
-          "title": "Höflichkeit in Anfragen",
+          "title": "Kulturelle Unterschiede in der Höflichkeit",
           "points": [
-            "Formulieren Sie Anfragen höflich mit 'Könnten Sie...'.",
-            "Verwenden Sie 'bitte' zur Verstärkung der Höflichkeit.",
-            "Vermeiden Sie Imperative in formellen Anfragen."
+            "Höflichkeit variiert zwischen Kulturen.",
+            "Wichtigkeit des kulturellen Kontexts.",
+            "Anpassung der Sprache an die Kultur des Gesprächspartners."
           ],
-          "example": "Könnten Sie mir bitte die Unterlagen zusenden?",
-          "mistakes": [
+          "example": "In Deutschland ist direkte Ansprache üblich.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Objekt"
+          ],
+          "exampleHighlights": [
             {
-              "wrong": "Schick mir die Unterlagen.",
-              "fix": "Könnten Sie mir bitte die Unterlagen zusenden?"
+              "label": "Subjekt",
+              "text": "In Deutschland"
+            },
+            {
+              "label": "Verb",
+              "text": "ist"
+            },
+            {
+              "label": "Objekt",
+              "text": "Ansprache üblich"
             }
-          ]
-        },
-        {
-          "title": "Umgang mit Höflichkeitsformen",
-          "points": [
-            "Nutzen Sie Höflichkeitsformen in geschäftlichen E-Mails.",
-            "Achten Sie auf den Kontext, um die richtige Form zu wählen.",
-            "Vermeiden Sie übermäßige Höflichkeit, die unnatürlich wirkt."
           ],
-          "example": "Ich wäre Ihnen sehr dankbar, wenn Sie mir helfen könnten.",
           "mistakes": [
             {
-              "wrong": "Ich brauche deine Hilfe.",
-              "fix": "Ich wäre Ihnen sehr dankbar, wenn Sie mir helfen könnten."
-            }
-          ]
-        },
-        {
-          "title": "Einsatz von Honorifics",
-          "points": [
-            "Verwenden Sie Titel wie 'Herr' oder 'Frau' in formellen Kontexten.",
-            "Achten Sie auf akademische Titel in der Ansprache.",
-            "Nutzen Sie Honorifics, um Respekt zu zeigen."
-          ],
-          "example": "Herr Doktor Schmidt, ich habe eine Frage zu Ihrem Vortrag.",
-          "mistakes": [
-            {
-              "wrong": "Schmidt, ich habe eine Frage.",
-              "fix": "Herr Doktor Schmidt, ich habe eine Frage zu Ihrem Vortrag."
-            }
-          ]
-        },
-        {
-          "title": "Formelle vs. Informelle Sprache",
-          "points": [
-            "Unterscheiden Sie zwischen formeller und informeller Sprache.",
-            "Verwenden Sie formelle Sprache in geschäftlichen Kontexten.",
-            "Achten Sie auf die Wortwahl in verschiedenen Situationen."
-          ],
-          "example": "Ich möchte Ihnen für Ihre Unterstützung danken.",
-          "mistakes": [
-            {
-              "wrong": "Danke für deine Hilfe.",
-              "fix": "Ich möchte Ihnen für Ihre Unterstützung danken."
-            }
-          ]
-        },
-        {
-          "title": "Umgang mit Dialekten",
-          "points": [
-            "Seien Sie sich der regionalen Unterschiede in der Sprache bewusst.",
-            "Vermeiden Sie Dialekte in formellen Situationen.",
-            "Nutzen Sie Hochdeutsch für klare Kommunikation."
-          ],
-          "example": "Ich spreche Hochdeutsch, um Missverständnisse zu vermeiden.",
-          "mistakes": [
-            {
-              "wrong": "Ich sag's dir später.",
-              "fix": "Ich werde es Ihnen später mitteilen."
+              "wrong": "In vielen Kulturen ist das unhöflich.",
+              "fix": "In Deutschland ist direkte Ansprache üblich."
             }
           ]
         }
       ],
       "Discourse & Flow": [
         {
-          "title": "Kohäsion durch Pronomen",
+          "title": "Kohäsive Geräte: und, aber",
           "points": [
-            "Verwenden Sie Pronomen, um Wiederholungen zu vermeiden.",
-            "Pronomen fördern den flüssigen Textfluss.",
-            "Stellen Sie sicher, dass das Pronomen eindeutig zugeordnet ist."
+            "Verwenden Sie 'und' für additive Informationen.",
+            "Verwenden Sie 'aber' für kontrastierende Informationen.",
+            "Kohäsive Geräte helfen, Gedanken zu verbinden."
           ],
-          "example": "Maria liebt ihren Hund. Sie geht oft mit ihm spazieren.",
+          "example": "Ich mag Äpfel, und ich mag Birnen, aber ich mag keine Bananen.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "Verb",
+              "text": "mag"
+            },
+            {
+              "label": "Objekt",
+              "text": "Äpfel"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Maria liebt Maria's Hund.",
-              "fix": "Maria liebt ihren Hund."
+              "wrong": "Ich mag Äpfel und ich mag Birnen aber ich mag keine Bananen.",
+              "fix": "Ich mag Äpfel, und ich mag Birnen, aber ich mag keine Bananen."
             }
           ]
         },
         {
-          "title": "Diskursmarker: jedoch",
+          "title": "Diskursmarker: zuerst, dann",
           "points": [
-            "Nutzen Sie 'jedoch', um einen Kontrast zu verdeutlichen.",
-            "Es wird häufig am Satzanfang verwendet.",
-            "Achten Sie auf die Satzstruktur nach 'jedoch'."
+            "Verwenden Sie 'zuerst' für den Beginn einer Sequenz.",
+            "Verwenden Sie 'dann' für die Fortsetzung.",
+            "Diskursmarker strukturieren den Textfluss."
           ],
-          "example": "Es regnete, jedoch gingen wir spazieren.",
+          "example": "Zuerst gehe ich ins Kino, dann gehe ich essen.",
+          "ruleOrder": [
+            "Adverb",
+            "Verb",
+            "Subjekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Adverb",
+              "text": "Zuerst"
+            },
+            {
+              "label": "Verb",
+              "text": "gehe"
+            },
+            {
+              "label": "Subjekt",
+              "text": "ich"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Es regnete jedoch wir gingen spazieren.",
-              "fix": "Es regnete, jedoch gingen wir spazieren."
+              "wrong": "Zuerst ich gehe ins Kino dann ich gehe essen.",
+              "fix": "Zuerst gehe ich ins Kino, dann gehe ich essen."
             }
           ]
         },
         {
-          "title": "Kohäsion durch Konjunktionen",
+          "title": "Information Flow: weil, dass",
           "points": [
-            "Konjunktionen verbinden Sätze und Gedanken.",
-            "Sie verbessern den Argumentationsfluss.",
-            "Variieren Sie die Konjunktionen für mehr Abwechslung."
+            "Verwenden Sie 'weil' für Begründungen.",
+            "Verwenden Sie 'dass' für Nebensätze.",
+            "Der Informationsfluss wird durch Konjunktionen gesteuert."
           ],
-          "example": "Ich mag Äpfel und esse sie oft.",
+          "example": "Ich bleibe zu Hause, weil es regnet.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "Verb",
+              "text": "bleibe"
+            },
+            {
+              "label": "Objekt",
+              "text": "zu Hause"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ich mag Äpfel ich esse sie oft.",
-              "fix": "Ich mag Äpfel und esse sie oft."
+              "wrong": "Ich bleibe zu Hause weil es regnet.",
+              "fix": "Ich bleibe zu Hause, weil es regnet."
             }
           ]
         },
         {
-          "title": "Diskursmarker: außerdem",
+          "title": "Kontrastierende Strukturen: jedoch, trotzdem",
           "points": [
-            "Verwenden Sie 'außerdem', um zusätzliche Informationen einzuführen.",
-            "Es zeigt, dass eine Idee die vorherige ergänzt.",
-            "Achten Sie auf die korrekte Satzstellung."
+            "Verwenden Sie 'jedoch' für formelle Kontraste.",
+            "Verwenden Sie 'trotzdem' für informelle Kontraste.",
+            "Kontrastierende Strukturen verbessern die Argumentation."
           ],
-          "example": "Ich liebe Schokolade. Außerdem esse ich gerne Kekse.",
+          "example": "Es regnet, trotzdem gehe ich spazieren.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Es"
+            },
+            {
+              "label": "Verb",
+              "text": "regnet"
+            },
+            {
+              "label": "Objekt",
+              "text": "ich spazieren"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ich liebe Schokolade außerdem esse ich gerne Kekse.",
-              "fix": "Ich liebe Schokolade. Außerdem esse ich gerne Kekse."
+              "wrong": "Es regnet trotzdem ich gehe spazieren.",
+              "fix": "Es regnet, trotzdem gehe ich spazieren."
             }
           ]
         },
         {
-          "title": "Kohäsion durch Zeitadverbien",
+          "title": "Zusammenfassende Strukturen: zusammenfassend, letztendlich",
           "points": [
-            "Zeitadverbien verdeutlichen den zeitlichen Fluss.",
-            "Sie geben dem Leser Orientierung.",
-            "Nutzen Sie sie, um Ereignisse klar zu strukturieren."
+            "Verwenden Sie 'zusammenfassend' für abschließende Gedanken.",
+            "Verwenden Sie 'letztendlich' für finale Ergebnisse.",
+            "Zusammenfassende Strukturen bieten Klarheit."
           ],
-          "example": "Zuerst gingen wir ins Kino, dann aßen wir zu Abend.",
+          "example": "Letztendlich ist es wichtig, zu lernen.",
+          "ruleOrder": [
+            "Adverb",
+            "Verb",
+            "Subjekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Adverb",
+              "text": "Letztendlich"
+            },
+            {
+              "label": "Verb",
+              "text": "ist"
+            },
+            {
+              "label": "Subjekt",
+              "text": "es"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Wir gingen ins Kino dann aßen wir zu Abend.",
-              "fix": "Zuerst gingen wir ins Kino, dann aßen wir zu Abend."
+              "wrong": "Letztendlich es ist wichtig zu lernen.",
+              "fix": "Letztendlich ist es wichtig, zu lernen."
             }
           ]
         },
         {
-          "title": "Diskursmarker: dennoch",
+          "title": "Kausale Verbindungen: denn, weil",
           "points": [
-            "Verwenden Sie 'dennoch', um eine unerwartete Wendung auszudrücken.",
-            "Es kann am Satzanfang oder in der Mitte stehen.",
-            "Achten Sie auf die logische Verbindung."
+            "Verwenden Sie 'denn' für Erklärungen.",
+            "Verwenden Sie 'weil' für Ursachen.",
+            "Kausale Verbindungen klären Zusammenhänge."
           ],
-          "example": "Es war kalt, dennoch gingen wir schwimmen.",
+          "example": "Ich gehe nach Hause, denn ich bin müde.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "Verb",
+              "text": "gehe"
+            },
+            {
+              "label": "Objekt",
+              "text": "nach Hause"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Es war kalt dennoch gingen wir schwimmen.",
-              "fix": "Es war kalt, dennoch gingen wir schwimmen."
+              "wrong": "Ich gehe nach Hause denn ich bin müde.",
+              "fix": "Ich gehe nach Hause, denn ich bin müde."
             }
           ]
         },
         {
-          "title": "Kohäsion durch Wiederholung",
+          "title": "Temporale Strukturen: während, bevor",
           "points": [
-            "Wiederholung kann für Klarheit notwendig sein.",
-            "Vermeiden Sie übermäßige Wiederholung, um Monotonie zu verhindern.",
-            "Nutzen Sie Synonyme, um Vielfalt zu schaffen."
+            "Verwenden Sie 'während' für gleichzeitige Handlungen.",
+            "Verwenden Sie 'bevor' für zeitliche Abfolgen.",
+            "Temporale Strukturen helfen, Zeitverhältnisse zu klären."
           ],
-          "example": "Der Hund ist freundlich. Der Hund spielt gerne.",
+          "example": "Während ich esse, schaue ich fern.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "ich"
+            },
+            {
+              "label": "Verb",
+              "text": "esse"
+            },
+            {
+              "label": "Objekt",
+              "text": "ich fern"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Der Hund ist freundlich. Er spielt gerne.",
-              "fix": "Der Hund ist freundlich. Der Hund spielt gerne."
+              "wrong": "Während ich esse schaue ich fern.",
+              "fix": "Während ich esse, schaue ich fern."
             }
           ]
         },
         {
-          "title": "Diskursmarker: zum Beispiel",
+          "title": "Konditionale Strukturen: wenn, falls",
           "points": [
-            "Nutzen Sie 'zum Beispiel', um Beispiele zu geben.",
-            "Es hilft, Argumente zu untermauern.",
-            "Stellen Sie sicher, dass das Beispiel relevant ist."
+            "Verwenden Sie 'wenn' für Bedingungen.",
+            "Verwenden Sie 'falls' für hypothetische Situationen.",
+            "Konditionale Strukturen schaffen Möglichkeiten."
           ],
-          "example": "Viele Tiere sind gefährdet, zum Beispiel der Tiger.",
+          "example": "Wenn es regnet, bleibe ich zu Hause.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "ich"
+            },
+            {
+              "label": "Verb",
+              "text": "zu Hause"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Viele Tiere sind gefährdet zum Beispiel der Tiger.",
-              "fix": "Viele Tiere sind gefährdet, zum Beispiel der Tiger."
+              "wrong": "Wenn es regnet ich bleibe zu Hause.",
+              "fix": "Wenn es regnet, bleibe ich zu Hause."
             }
           ]
         },
         {
-          "title": "Kohäsion durch Satzverknüpfung",
+          "title": "Ergänzende Strukturen: außerdem, zudem",
           "points": [
-            "Verknüpfen Sie Sätze, um komplexe Ideen auszudrücken.",
-            "Nutzen Sie Haupt- und Nebensätze effektiv.",
-            "Achten Sie auf die korrekte Satzstruktur."
+            "Verwenden Sie 'außerdem' für zusätzliche Informationen.",
+            "Verwenden Sie 'zudem' für formelle Ergänzungen.",
+            "Ergänzende Strukturen erweitern den Diskurs."
           ],
-          "example": "Ich lese ein Buch, weil ich mehr über Geschichte lernen möchte.",
+          "example": "Ich mag Kaffee, außerdem mag ich Tee.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Ich"
+            },
+            {
+              "label": "Verb",
+              "text": "mag"
+            },
+            {
+              "label": "Objekt",
+              "text": "Kaffee"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Ich lese ein Buch ich möchte mehr über Geschichte lernen.",
-              "fix": "Ich lese ein Buch, weil ich mehr über Geschichte lernen möchte."
+              "wrong": "Ich mag Kaffee außerdem ich mag Tee.",
+              "fix": "Ich mag Kaffee, außerdem mag ich Tee."
             }
           ]
         },
         {
-          "title": "Diskursmarker: schließlich",
+          "title": "Vergleichende Strukturen: wie, als",
           "points": [
-            "Verwenden Sie 'schließlich', um eine Schlussfolgerung einzuleiten.",
-            "Es zeigt das Ende einer Argumentation oder Erzählung.",
-            "Achten Sie auf den Kontext der Aussage."
+            "Verwenden Sie 'wie' für Gleichheit.",
+            "Verwenden Sie 'als' für Unterschiede.",
+            "Vergleichende Strukturen fördern das Verständnis."
           ],
-          "example": "Wir haben hart gearbeitet. Schließlich haben wir das Projekt abgeschlossen.",
+          "example": "Er ist so groß wie ich.",
+          "ruleOrder": [
+            "Subjekt",
+            "Verb",
+            "Objekt"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Subjekt",
+              "text": "Er"
+            },
+            {
+              "label": "Verb",
+              "text": "ist"
+            },
+            {
+              "label": "Objekt",
+              "text": "so groß"
+            }
+          ],
           "mistakes": [
             {
-              "wrong": "Wir haben hart gearbeitet schließlich haben wir das Projekt abgeschlossen.",
-              "fix": "Wir haben hart gearbeitet. Schließlich haben wir das Projekt abgeschlossen."
+              "wrong": "Er ist größer wie ich.",
+              "fix": "Er ist größer als ich."
             }
           ]
         }
@@ -14096,18 +16397,18 @@
     "sectionLabels": {
       "Sentence Structure": "Satzstruktur",
       "Verbs": "Verben",
-      "Tenses & Aspect": "Zeitformen & Aspekt",
-      "Nouns & Articles": "Nomen & Artikel",
-      "Pronouns & Reference": "Pronomen & Referenz",
+      "Tenses & Aspect": "Zeitformen und Aspekte",
+      "Nouns & Articles": "Nomen und Artikel",
+      "Pronouns & Reference": "Pronomen und Referenz",
       "Modifiers": "Modifier",
       "Questions": "Fragen",
-      "Negation": "Negation",
+      "Negation": "Verneinung",
       "Connections": "Verbindungen",
       "Conditions": "Bedingungen",
       "Voice & Focus": "Stimme & Fokus",
-      "Modality": "Modality",
+      "Modality": "Modale Verben",
       "Reported Speech": "Indirekte Rede",
-      "Formality & Style": "Formality & Style",
+      "Formality & Style": "Formell & Stil",
       "Discourse & Flow": "Diskurs & Fluss"
     }
   },
