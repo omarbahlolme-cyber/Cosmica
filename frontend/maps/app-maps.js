@@ -2457,14 +2457,242 @@ const getWorldGrammarSectionLabel = (section) => {
   return section;
 };
 
+const WORLD_SECTION_LABEL_FALLBACKS = {
+  french: {
+    phrases: {
+      Greetings: "Salutations",
+      Politeness: "Politesse",
+      Introductions: "Présentations",
+      Conversation: "Conversation",
+      Questions: "Questions",
+      Requests: "Demandes",
+      "Time & Plans": "Temps et plans",
+      Directions: "Directions",
+      Food: "Nourriture",
+      Shopping: "Achats",
+      Health: "Santé",
+      Feelings: "Sentiments",
+      Opinions: "Opinions",
+      "Work & Study": "Travail et études",
+      Problems: "Problèmes",
+      "Everyday Expressions": "Expressions quotidiennes",
+    },
+  },
+  german: {
+    phrases: {
+      Greetings: "Begrüßungen",
+      Politeness: "Höflichkeit",
+      Introductions: "Vorstellungen",
+      Conversation: "Konversation",
+      Questions: "Fragen",
+      Requests: "Bitten",
+      "Time & Plans": "Zeit und Pläne",
+      Directions: "Wegbeschreibung",
+      Food: "Essen",
+      Shopping: "Einkaufen",
+      Health: "Gesundheit",
+      Feelings: "Gefühle",
+      Opinions: "Meinungen",
+      "Work & Study": "Arbeit und Studium",
+      Problems: "Probleme",
+      "Everyday Expressions": "Alltägliche Ausdrücke",
+    },
+  },
+  spanish: {
+    phrases: {
+      Greetings: "Saludos",
+      Politeness: "Cortesía",
+      Introductions: "Presentaciones",
+      Conversation: "Conversación",
+      Questions: "Preguntas",
+      Requests: "Solicitudes",
+      "Time & Plans": "Tiempo y planes",
+      Directions: "Direcciones",
+      Food: "Comida",
+      Shopping: "Compras",
+      Health: "Salud",
+      Feelings: "Sentimientos",
+      Opinions: "Opiniones",
+      "Work & Study": "Trabajo y estudio",
+      Problems: "Problemas",
+      "Everyday Expressions": "Expresiones cotidianas",
+    },
+  },
+  portuguese: {
+    phrases: {
+      Greetings: "Saudações",
+      Politeness: "Cortesia",
+      Introductions: "Apresentações",
+      Conversation: "Conversa",
+      Questions: "Perguntas",
+      Requests: "Pedidos",
+      "Time & Plans": "Tempo e planos",
+      Directions: "Direções",
+      Food: "Comida",
+      Shopping: "Compras",
+      Health: "Saúde",
+      Feelings: "Sentimentos",
+      Opinions: "Opiniões",
+      "Work & Study": "Trabalho e estudo",
+      Problems: "Problemas",
+      "Everyday Expressions": "Expressões do dia a dia",
+    },
+  },
+  dutch: {
+    phrases: {
+      Greetings: "Begroetingen",
+      Politeness: "Beleefdheid",
+      Introductions: "Introducties",
+      Conversation: "Gesprek",
+      Questions: "Vragen",
+      Requests: "Verzoeken",
+      "Time & Plans": "Tijd en plannen",
+      Directions: "Richtingen",
+      Food: "Eten",
+      Shopping: "Winkelen",
+      Health: "Gezondheid",
+      Feelings: "Gevoelens",
+      Opinions: "Meningen",
+      "Work & Study": "Werk en studie",
+      Problems: "Problemen",
+      "Everyday Expressions": "Dagelijkse uitdrukkingen",
+    },
+  },
+  swedish: {
+    phrases: {
+      Greetings: "Hälsningar",
+      Politeness: "Hövlighet",
+      Introductions: "Presentationer",
+      Conversation: "Samtal",
+      Questions: "Frågor",
+      Requests: "Förfrågningar",
+      "Time & Plans": "Tid och planer",
+      Directions: "Vägbeskrivningar",
+      Food: "Mat",
+      Shopping: "Shopping",
+      Health: "Hälsa",
+      Feelings: "Känslor",
+      Opinions: "Åsikter",
+      "Work & Study": "Arbete och studier",
+      Problems: "Problem",
+      "Everyday Expressions": "Vardagliga uttryck",
+    },
+  },
+  arabic: {
+    phrases: {
+      Greetings: "تحيات",
+      Politeness: "لباقة",
+      Introductions: "تعارف",
+      Conversation: "محادثة",
+      Questions: "أسئلة",
+      Requests: "طلبات",
+      "Time & Plans": "الوقت والخطط",
+      Directions: "الاتجاهات",
+      Food: "الطعام",
+      Shopping: "التسوق",
+      Health: "الصحة",
+      Feelings: "المشاعر",
+      Opinions: "الآراء",
+      "Work & Study": "العمل والدراسة",
+      Problems: "المشكلات",
+      "Everyday Expressions": "تعبيرات يومية",
+    },
+  },
+  chinese: {
+    phrases: {
+      Greetings: "问候",
+      Politeness: "礼貌",
+      Introductions: "自我介绍",
+      Conversation: "对话",
+      Questions: "提问",
+      Requests: "请求",
+      "Time & Plans": "时间与计划",
+      Directions: "方向",
+      Food: "食物",
+      Shopping: "购物",
+      Health: "健康",
+      Feelings: "感受",
+      Opinions: "观点",
+      "Work & Study": "工作与学习",
+      Problems: "问题",
+      "Everyday Expressions": "日常表达",
+    },
+  },
+  japanese: {
+    phrases: {
+      Greetings: "挨拶",
+      Politeness: "丁寧表現",
+      Introductions: "自己紹介",
+      Conversation: "会話",
+      Questions: "質問",
+      Requests: "依頼",
+      "Time & Plans": "時間と予定",
+      Directions: "道案内",
+      Food: "食べ物",
+      Shopping: "買い物",
+      Health: "健康",
+      Feelings: "感情",
+      Opinions: "意見",
+      "Work & Study": "仕事と勉強",
+      Problems: "問題",
+      "Everyday Expressions": "日常表現",
+    },
+  },
+  korean: {
+    phrases: {
+      Greetings: "인사",
+      Politeness: "공손 표현",
+      Introductions: "자기소개",
+      Conversation: "대화",
+      Questions: "질문",
+      Requests: "요청",
+      "Time & Plans": "시간과 계획",
+      Directions: "길 안내",
+      Food: "음식",
+      Shopping: "쇼핑",
+      Health: "건강",
+      Feelings: "감정",
+      Opinions: "의견",
+      "Work & Study": "일과 학습",
+      Problems: "문제",
+      "Everyday Expressions": "일상 표현",
+    },
+  },
+  hindi: {
+    phrases: {
+      Greetings: "अभिवादन",
+      Politeness: "शिष्टाचार",
+      Introductions: "परिचय",
+      Conversation: "बातचीत",
+      Questions: "प्रश्न",
+      Requests: "अनुरोध",
+      "Time & Plans": "समय और योजनाएँ",
+      Directions: "दिशाएँ",
+      Food: "भोजन",
+      Shopping: "खरीदारी",
+      Health: "स्वास्थ्य",
+      Feelings: "भावनाएँ",
+      Opinions: "राय",
+      "Work & Study": "काम और अध्ययन",
+      Problems: "समस्याएँ",
+      "Everyday Expressions": "दैनिक अभिव्यक्तियाँ",
+    },
+  },
+};
+
 const getWorldSectionLabelFromPack = (mapType, section) => {
   const labels = WORLD_TRANSLATIONS?.[mapType]?.sectionLabels;
   if (!labels || typeof labels !== "object") {
-    return "";
+    const fallback = WORLD_SECTION_LABEL_FALLBACKS[WORLD_KEY]?.[mapType]?.[section];
+    return typeof fallback === "string" && fallback.trim() ? fallback.trim() : "";
   }
   const value = labels?.[section];
   if (typeof value === "string" && value.trim()) {
     return value.trim();
+  }
+  const fallback = WORLD_SECTION_LABEL_FALLBACKS[WORLD_KEY]?.[mapType]?.[section];
+  if (typeof fallback === "string" && fallback.trim()) {
+    return fallback.trim();
   }
   return "";
 };
@@ -2877,6 +3105,62 @@ const createSectionFilterButton = (title, value, sourceTitle = title) => {
   return button;
 };
 
+const trackMapSectionEvent = (mapKey, sectionKey, status = "started", score = null) => {
+  if (typeof window.cosmicaTrackLearningProgress !== "function") {
+    return;
+  }
+  const normalizedMap = String(mapKey || "").trim().toLowerCase();
+  const normalizedSection = String(sectionKey || "").trim();
+  if (!normalizedMap || !normalizedSection) {
+    return;
+  }
+  window.cosmicaTrackLearningProgress({
+    status,
+    mapKey: normalizedMap,
+    sectionKey: normalizedSection,
+    score,
+  });
+};
+
+const getTrackedSectionRecord = (mapKey, sectionKey) => {
+  if (!window.cosmicaGamification || typeof window.cosmicaGamification.getSectionProgress !== "function") {
+    return null;
+  }
+  return window.cosmicaGamification.getSectionProgress({
+    worldKey: WORLD_KEY,
+    mapKey,
+    sectionKey,
+  });
+};
+
+const isTrackedSectionCompleted = (mapKey, sectionKey) => {
+  const record = getTrackedSectionRecord(mapKey, sectionKey);
+  if (!record || typeof record !== "object") {
+    return false;
+  }
+  if (String(record.status || "").toLowerCase() === "completed") {
+    return true;
+  }
+  return Boolean(record.firstCompletedAt);
+};
+
+const updateCompleteButtonState = (button, mapKey, activeFilter) => {
+  if (!button) {
+    return;
+  }
+  const sectionKey = String(activeFilter || "all").trim();
+  if (!sectionKey || sectionKey === "all") {
+    button.disabled = true;
+    button.classList.remove("is-complete");
+    button.textContent = "Select a section to complete";
+    return;
+  }
+  const alreadyComplete = isTrackedSectionCompleted(mapKey, sectionKey);
+  button.disabled = false;
+  button.classList.toggle("is-complete", alreadyComplete);
+  button.textContent = alreadyComplete ? "Completed" : "Mark section complete";
+};
+
 const renderWordsSections = () => {
   const container = document.getElementById("wordsSections");
   const controls = document.getElementById("wordsControls");
@@ -2942,16 +3226,18 @@ const renderWordsSections = () => {
   document.body.classList.remove("maps-loading");
 
   if (controls) {
+    let activeFilter = "all";
+    const wordsUi = getWordsUiLabels();
     const eyebrow = document.createElement("div");
     eyebrow.className = "words-controls-eyebrow";
-    eyebrow.textContent = "Words";
+    eyebrow.textContent = wordsUi.words;
     const label = document.createElement("div");
     label.className = "words-controls-label";
-    label.textContent = "Choose a section";
+    label.textContent = wordsUi.chooseSection;
     const list = document.createElement("div");
     list.className = "words-controls-list";
 
-    const allButton = createSectionFilterButton("All", "all", "All");
+    const allButton = createSectionFilterButton(wordsUi.allSections, "all", "All");
     allButton.classList.add("is-all");
     allButton.classList.add("is-active");
     list.appendChild(allButton);
@@ -2967,6 +3253,7 @@ const renderWordsSections = () => {
     });
 
     const applyFilter = (filter) => {
+      activeFilter = String(filter || "all");
       if (document.body.classList.contains("words-page")) {
         document.body.dataset.wordsFilter = filter;
       }
@@ -2982,6 +3269,19 @@ const renderWordsSections = () => {
       updateWordsTopState();
     };
 
+    const completeButton = document.createElement("button");
+    completeButton.type = "button";
+    completeButton.className = "words-complete-section-btn";
+    completeButton.textContent = "Select a section to complete";
+    completeButton.disabled = true;
+    completeButton.addEventListener("click", () => {
+      if (!activeFilter || activeFilter === "all") {
+        return;
+      }
+      trackMapSectionEvent("words", activeFilter, "completed", 88);
+      updateCompleteButtonState(completeButton, "words", activeFilter);
+    });
+
     list.addEventListener("click", (event) => {
       const button = event.target.closest(".words-filter");
       if (!button) {
@@ -2991,6 +3291,10 @@ const renderWordsSections = () => {
       button.classList.add("is-active");
       const filter = button.dataset.filter || "all";
       applyFilter(filter);
+      if (filter !== "all") {
+        trackMapSectionEvent("words", filter, "started");
+      }
+      updateCompleteButtonState(completeButton, "words", filter);
       if (filter === "all") {
         const first = sections[0];
         if (first) {
@@ -3021,6 +3325,8 @@ const renderWordsSections = () => {
     controls.appendChild(eyebrow);
     controls.appendChild(label);
     controls.appendChild(list);
+    controls.appendChild(completeButton);
+    updateCompleteButtonState(completeButton, "words", activeFilter);
   }
 };
 
@@ -3089,16 +3395,18 @@ const renderPhrasesSections = () => {
   document.body.classList.remove("maps-loading");
 
   if (controls) {
+    let activeFilter = "all";
+    const phrasesUi = getPhrasesUiLabels();
     const eyebrow = document.createElement("div");
     eyebrow.className = "words-controls-eyebrow";
-    eyebrow.textContent = "Phrases";
+    eyebrow.textContent = phrasesUi.phrases;
     const label = document.createElement("div");
     label.className = "words-controls-label";
-    label.textContent = "Choose a section";
+    label.textContent = phrasesUi.chooseSection;
     const list = document.createElement("div");
     list.className = "words-controls-list";
 
-    const allButton = createSectionFilterButton("All", "all", "All");
+    const allButton = createSectionFilterButton(phrasesUi.allSections, "all", "All");
     allButton.classList.add("is-all");
     allButton.classList.add("is-active");
     list.appendChild(allButton);
@@ -3113,6 +3421,7 @@ const renderPhrasesSections = () => {
     });
 
     const applyFilter = (filter) => {
+      activeFilter = String(filter || "all");
       if (document.body.classList.contains("phrases-page")) {
         document.body.dataset.phrasesFilter = filter;
       }
@@ -3128,6 +3437,19 @@ const renderPhrasesSections = () => {
       updatePhrasesTopState();
     };
 
+    const completeButton = document.createElement("button");
+    completeButton.type = "button";
+    completeButton.className = "words-complete-section-btn";
+    completeButton.textContent = "Select a section to complete";
+    completeButton.disabled = true;
+    completeButton.addEventListener("click", () => {
+      if (!activeFilter || activeFilter === "all") {
+        return;
+      }
+      trackMapSectionEvent("phrases", activeFilter, "completed", 90);
+      updateCompleteButtonState(completeButton, "phrases", activeFilter);
+    });
+
     list.addEventListener("click", (event) => {
       const button = event.target.closest(".words-filter");
       if (!button) {
@@ -3137,6 +3459,10 @@ const renderPhrasesSections = () => {
       button.classList.add("is-active");
       const filter = button.dataset.filter || "all";
       applyFilter(filter);
+      if (filter !== "all") {
+        trackMapSectionEvent("phrases", filter, "started");
+      }
+      updateCompleteButtonState(completeButton, "phrases", filter);
       if (filter === "all") {
         const first = sections[0];
         if (first) {
@@ -3167,6 +3493,8 @@ const renderPhrasesSections = () => {
     controls.appendChild(eyebrow);
     controls.appendChild(label);
     controls.appendChild(list);
+    controls.appendChild(completeButton);
+    updateCompleteButtonState(completeButton, "phrases", activeFilter);
   }
 };
 
@@ -3249,16 +3577,18 @@ const renderGrammarSections = () => {
   document.body.classList.remove("maps-loading");
 
   if (controls) {
+    let activeFilter = "all";
+    const grammarUi = getGrammarUiLabels();
     const eyebrow = document.createElement("div");
     eyebrow.className = "words-controls-eyebrow";
-    eyebrow.textContent = "Grammar";
+    eyebrow.textContent = grammarUi.grammar;
     const label = document.createElement("div");
     label.className = "words-controls-label";
-    label.textContent = "Choose a section";
+    label.textContent = grammarUi.chooseSection;
     const list = document.createElement("div");
     list.className = "words-controls-list";
 
-    const allButton = createSectionFilterButton("All", "all", "All");
+    const allButton = createSectionFilterButton(grammarUi.allSections, "all", "All");
     allButton.classList.add("is-all");
     allButton.classList.add("is-active");
     list.appendChild(allButton);
@@ -3277,6 +3607,7 @@ const renderGrammarSections = () => {
     });
 
     const applyFilter = (filter) => {
+      activeFilter = String(filter || "all");
       if (document.body.classList.contains("grammar-page")) {
         document.body.dataset.grammarFilter = filter;
       }
@@ -3292,6 +3623,19 @@ const renderGrammarSections = () => {
       updateGrammarTopState();
     };
 
+    const completeButton = document.createElement("button");
+    completeButton.type = "button";
+    completeButton.className = "words-complete-section-btn";
+    completeButton.textContent = "Select a section to complete";
+    completeButton.disabled = true;
+    completeButton.addEventListener("click", () => {
+      if (!activeFilter || activeFilter === "all") {
+        return;
+      }
+      trackMapSectionEvent("grammar", activeFilter, "completed", 92);
+      updateCompleteButtonState(completeButton, "grammar", activeFilter);
+    });
+
     list.addEventListener("click", (event) => {
       const button = event.target.closest(".words-filter");
       if (!button) {
@@ -3301,6 +3645,10 @@ const renderGrammarSections = () => {
       button.classList.add("is-active");
       const filter = button.dataset.filter || "all";
       applyFilter(filter);
+      if (filter !== "all") {
+        trackMapSectionEvent("grammar", filter, "started");
+      }
+      updateCompleteButtonState(completeButton, "grammar", filter);
       if (filter === "all") {
         const first = sections[0];
         if (first) {
@@ -3331,6 +3679,8 @@ const renderGrammarSections = () => {
     controls.appendChild(eyebrow);
     controls.appendChild(label);
     controls.appendChild(list);
+    controls.appendChild(completeButton);
+    updateCompleteButtonState(completeButton, "grammar", activeFilter);
   }
 };
 
@@ -7158,12 +7508,8 @@ const buildGrammarMistakes = (card, examples = []) => {
 };
 
 const getGrammarUiLabels = () => {
-  const baseLanguage = String(localStorage.getItem("cosmicaBaseLanguage") || "")
-    .trim()
-    .toLowerCase();
-  const preferredLanguage = baseLanguage || WORLD_KEY;
-  if (preferredLanguage === "french") {
-    return {
+  const labels = {
+    french: {
       grammar: "Grammaire",
       chooseSection: "Choisissez une section",
       allSections: "Toutes les sections",
@@ -7174,20 +7520,142 @@ const getGrammarUiLabels = () => {
       fix: "Correction :",
       phrase: "Phrase :",
       order: "Ordre :",
-    };
-  }
-  return {
-    grammar: "Grammar",
-    chooseSection: "Choose a section",
-    allSections: "All sections",
-    rules: "Rules",
-    examples: "Examples",
-    commonMistakes: "Common mistakes",
-    wrong: "Wrong:",
-    fix: "Fix:",
-    phrase: "Phrase:",
-    order: "Order:",
+    },
+    german: {
+      grammar: "Grammatik",
+      chooseSection: "Abschnitt wählen",
+      allSections: "Alle Abschnitte",
+      rules: "Regeln",
+      examples: "Beispiele",
+      commonMistakes: "Häufige Fehler",
+      wrong: "Falsch:",
+      fix: "Korrektur:",
+      phrase: "Satz:",
+      order: "Reihenfolge:",
+    },
+    spanish: {
+      grammar: "Gramática",
+      chooseSection: "Elige una sección",
+      allSections: "Todas las secciones",
+      rules: "Reglas",
+      examples: "Ejemplos",
+      commonMistakes: "Errores comunes",
+      wrong: "Incorrecto:",
+      fix: "Corrección:",
+      phrase: "Frase:",
+      order: "Orden:",
+    },
+    portuguese: {
+      grammar: "Gramática",
+      chooseSection: "Escolha uma seção",
+      allSections: "Todas as seções",
+      rules: "Regras",
+      examples: "Exemplos",
+      commonMistakes: "Erros comuns",
+      wrong: "Incorreto:",
+      fix: "Correção:",
+      phrase: "Frase:",
+      order: "Ordem:",
+    },
+    dutch: {
+      grammar: "Grammatica",
+      chooseSection: "Kies een sectie",
+      allSections: "Alle secties",
+      rules: "Regels",
+      examples: "Voorbeelden",
+      commonMistakes: "Veelgemaakte fouten",
+      wrong: "Fout:",
+      fix: "Correctie:",
+      phrase: "Zin:",
+      order: "Volgorde:",
+    },
+    swedish: {
+      grammar: "Grammatik",
+      chooseSection: "Välj en sektion",
+      allSections: "Alla sektioner",
+      rules: "Regler",
+      examples: "Exempel",
+      commonMistakes: "Vanliga fel",
+      wrong: "Fel:",
+      fix: "Rättning:",
+      phrase: "Mening:",
+      order: "Ordföljd:",
+    },
+    arabic: {
+      grammar: "قواعد",
+      chooseSection: "اختر قسمًا",
+      allSections: "كل الأقسام",
+      rules: "القواعد",
+      examples: "أمثلة",
+      commonMistakes: "أخطاء شائعة",
+      wrong: "خطأ:",
+      fix: "تصحيح:",
+      phrase: "جملة:",
+      order: "الترتيب:",
+    },
+    chinese: {
+      grammar: "语法",
+      chooseSection: "选择一个部分",
+      allSections: "所有部分",
+      rules: "规则",
+      examples: "示例",
+      commonMistakes: "常见错误",
+      wrong: "错误:",
+      fix: "修正:",
+      phrase: "句子:",
+      order: "顺序:",
+    },
+    japanese: {
+      grammar: "文法",
+      chooseSection: "セクションを選択",
+      allSections: "すべてのセクション",
+      rules: "ルール",
+      examples: "例文",
+      commonMistakes: "よくある間違い",
+      wrong: "誤り:",
+      fix: "修正:",
+      phrase: "文:",
+      order: "順序:",
+    },
+    korean: {
+      grammar: "문법",
+      chooseSection: "섹션 선택",
+      allSections: "모든 섹션",
+      rules: "규칙",
+      examples: "예문",
+      commonMistakes: "자주 하는 실수",
+      wrong: "오류:",
+      fix: "수정:",
+      phrase: "문장:",
+      order: "순서:",
+    },
+    hindi: {
+      grammar: "व्याकरण",
+      chooseSection: "एक अनुभाग चुनें",
+      allSections: "सभी अनुभाग",
+      rules: "नियम",
+      examples: "उदाहरण",
+      commonMistakes: "सामान्य गलतियाँ",
+      wrong: "गलत:",
+      fix: "सुधार:",
+      phrase: "वाक्य:",
+      order: "क्रम:",
+    },
   };
+  return (
+    labels[WORLD_KEY] || {
+      grammar: "Grammar",
+      chooseSection: "Choose a section",
+      allSections: "All sections",
+      rules: "Rules",
+      examples: "Examples",
+      commonMistakes: "Common mistakes",
+      wrong: "Wrong:",
+      fix: "Fix:",
+      phrase: "Phrase:",
+      order: "Order:",
+    }
+  );
 };
 
 const getWordsUiLabels = () => {
@@ -7251,6 +7719,73 @@ const getWordsUiLabels = () => {
   return (
     labels[WORLD_KEY] || {
       words: "Words",
+      chooseSection: "Choose a section",
+      allSections: "All sections",
+    }
+  );
+};
+
+const getPhrasesUiLabels = () => {
+  const labels = {
+    french: {
+      phrases: "Phrases",
+      chooseSection: "Choisissez une section",
+      allSections: "Toutes les sections",
+    },
+    german: {
+      phrases: "Phrasen",
+      chooseSection: "Abschnitt wählen",
+      allSections: "Alle Abschnitte",
+    },
+    spanish: {
+      phrases: "Frases",
+      chooseSection: "Elige una sección",
+      allSections: "Todas las secciones",
+    },
+    portuguese: {
+      phrases: "Frases",
+      chooseSection: "Escolha uma seção",
+      allSections: "Todas as seções",
+    },
+    dutch: {
+      phrases: "Zinnen",
+      chooseSection: "Kies een sectie",
+      allSections: "Alle secties",
+    },
+    swedish: {
+      phrases: "Fraser",
+      chooseSection: "Välj en sektion",
+      allSections: "Alla sektioner",
+    },
+    arabic: {
+      phrases: "عبارات",
+      chooseSection: "اختر قسمًا",
+      allSections: "كل الأقسام",
+    },
+    chinese: {
+      phrases: "短语",
+      chooseSection: "选择一个部分",
+      allSections: "所有部分",
+    },
+    japanese: {
+      phrases: "フレーズ",
+      chooseSection: "セクションを選択",
+      allSections: "すべてのセクション",
+    },
+    korean: {
+      phrases: "구문",
+      chooseSection: "섹션 선택",
+      allSections: "모든 섹션",
+    },
+    hindi: {
+      phrases: "वाक्यांश",
+      chooseSection: "एक अनुभाग चुनें",
+      allSections: "सभी अनुभाग",
+    },
+  };
+  return (
+    labels[WORLD_KEY] || {
+      phrases: "Phrases",
       chooseSection: "Choose a section",
       allSections: "All sections",
     }
@@ -7505,6 +8040,9 @@ const openGrammarModal = (section, index) => {
   const overlay = ensureGrammarOverlay();
   if (!overlay) {
     return;
+  }
+  if (section) {
+    trackMapSectionEvent("grammar", section, "reviewed", 86);
   }
 
   const showModal = () => {

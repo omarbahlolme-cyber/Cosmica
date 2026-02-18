@@ -294,6 +294,36 @@ body.letters-page main {
   border-color: rgba(255, 210, 120, 0.6);
 }
 
+.words-complete-section-btn {
+  justify-self: start;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(129, 223, 255, 0.36);
+  background: linear-gradient(135deg, rgba(11, 21, 43, 0.78), rgba(14, 32, 58, 0.9));
+  color: #e9f5ff;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.words-complete-section-btn:hover:not(:disabled),
+.words-complete-section-btn:focus-visible:not(:disabled) {
+  transform: translateY(-1px);
+  border-color: rgba(131, 234, 192, 0.68);
+  box-shadow: 0 0 18px rgba(104, 225, 255, 0.22);
+}
+
+.words-complete-section-btn:disabled {
+  opacity: 0.58;
+  cursor: not-allowed;
+}
+
+.words-complete-section-btn.is-complete {
+  border-color: rgba(131, 234, 192, 0.74);
+  background: linear-gradient(135deg, rgba(12, 46, 43, 0.85), rgba(11, 60, 49, 0.88));
+}
+
 .words-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));

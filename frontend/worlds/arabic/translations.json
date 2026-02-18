@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-18T15:18:51.720Z",
+  "generatedAt": "2026-02-18T15:33:45.296Z",
   "worldLanguage": "arabic",
   "baseLanguages": [
     "albanian",
@@ -7915,6 +7915,24 @@
           "english": "let us try"
         }
       }
+    },
+    "sectionLabels": {
+      "Greetings": "تحيات",
+      "Politeness": "لباقة",
+      "Introductions": "تعارف",
+      "Conversation": "محادثة",
+      "Questions": "أسئلة",
+      "Requests": "طلبات",
+      "Time & Plans": "الوقت والخطط",
+      "Directions": "الاتجاهات",
+      "Food": "الطعام",
+      "Shopping": "التسوق",
+      "Health": "الصحة",
+      "Feelings": "المشاعر",
+      "Opinions": "الآراء",
+      "Work & Study": "العمل والدراسة",
+      "Problems": "المشكلات",
+      "Everyday Expressions": "تعبيرات يومية"
     }
   },
   "grammar": {
@@ -8650,8 +8668,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "جميل. الولد",
-              "fix": "الولد جميل."
+              "wrong": "جميلة الفتاة.",
+              "fix": "الفتاة جميلة."
             }
           ]
         },
@@ -10422,11 +10440,11 @@
           ],
           "exampleHighlights": [
             {
-              "label": "فاعل",
+              "label": "فعل",
               "text": "الذهاب"
             },
             {
-              "label": "مفعول به",
+              "label": "فاعل",
               "text": "الحفلة"
             }
           ],
@@ -11125,8 +11143,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "أحب أنا القراءة.",
-              "fix": "أنا أحب القراءة."
+              "wrong": "القراءة أحب، لذلك أذهب إلى المكتبة كل أسبوع.",
+              "fix": "أحب القراءة، لذلك أذهب إلى المكتبة كل أسبوع."
             }
           ]
         },

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-18T15:18:51.786Z",
+  "generatedAt": "2026-02-18T15:33:45.329Z",
   "worldLanguage": "japanese",
   "baseLanguages": [
     "albanian",
@@ -8091,6 +8091,24 @@
           "english": "let us try"
         }
       }
+    },
+    "sectionLabels": {
+      "Greetings": "挨拶",
+      "Politeness": "丁寧表現",
+      "Introductions": "自己紹介",
+      "Conversation": "会話",
+      "Questions": "質問",
+      "Requests": "依頼",
+      "Time & Plans": "時間と予定",
+      "Directions": "道案内",
+      "Food": "食べ物",
+      "Shopping": "買い物",
+      "Health": "健康",
+      "Feelings": "感情",
+      "Opinions": "意見",
+      "Work & Study": "仕事と勉強",
+      "Problems": "問題",
+      "Everyday Expressions": "日常表現"
     }
   },
   "grammar": {
@@ -9107,8 +9125,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "あなたは学生です。",
-              "fix": "あなたは学生ですか？"
+              "wrong": "ですは学生私。",
+              "fix": "私は学生です。"
             }
           ]
         },
@@ -9167,8 +9185,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "あれは本です。",
-              "fix": "あれは本ですか？"
+              "wrong": "ですは本これ。",
+              "fix": "これは本です。"
             }
           ]
         },
@@ -11064,7 +11082,7 @@
           "exampleHighlights": [
             {
               "label": "主語",
-              "text": "彼は「私は行く」と言った。→"
+              "text": "彼は「私は行く」と言った"
             },
             {
               "label": "動詞",

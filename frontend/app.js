@@ -661,6 +661,925 @@ const createCosmicaAuthClient = () => {
 window.cosmicaAuth = createCosmicaAuthClient();
 
 /* ==========================================================================
+   GAMIFICATION STATE + ACCOUNT HUB UI
+   Shared account session, progress state, and premium learning dashboard.
+   ========================================================================== */
+const createCosmicaGamificationClient = () => {
+  const listeners = new Set();
+  const recentEventMap = new Map();
+  const state = {
+    ready: false,
+    isAuthenticated: false,
+    loading: false,
+    user: null,
+    progress: null,
+    error: "",
+  };
+
+  const xpForLevel = (level) => {
+    const bounded = Math.max(1, Math.floor(Number(level) || 1));
+    if (bounded <= 1) {
+      return 0;
+    }
+    return Math.round(120 * Math.pow(bounded - 1, 1.34));
+  };
+
+  const deriveLevelMeta = (xpValue) => {
+    const xp = Math.max(0, Math.round(Number(xpValue) || 0));
+    let level = 1;
+    while (level < 250 && xp >= xpForLevel(level + 1)) {
+      level += 1;
+    }
+    const startXp = xpForLevel(level);
+    const nextXp = xpForLevel(level + 1);
+    const span = Math.max(1, nextXp - startXp);
+    const inLevelXp = Math.max(0, xp - startXp);
+    return {
+      level,
+      startXp,
+      nextXp,
+      xp,
+      inLevelXp,
+      toNextXp: Math.max(0, nextXp - xp),
+      ratio: Math.max(0, Math.min(1, inLevelXp / span)),
+    };
+  };
+
+  const buildDefaultProgress = () => ({
+    totals: {
+      xp: 0,
+      completedSections: 0,
+      lastActivityAt: null,
+    },
+    worlds: {},
+    recentEvents: [],
+    gamification: {
+      level: 1,
+      currentStreak: 0,
+      bestStreak: 0,
+      badges: {},
+      quests: {
+        date: null,
+        allCompleted: false,
+        tasks: {
+          practice: {
+            key: "practice",
+            label: "Practice 12 cards",
+            target: 12,
+            progress: 0,
+            completed: false,
+          },
+          discover: {
+            key: "discover",
+            label: "Start 3 sections",
+            target: 3,
+            progress: 0,
+            completed: false,
+          },
+          complete: {
+            key: "complete",
+            label: "Complete 2 sections",
+            target: 2,
+            progress: 0,
+            completed: false,
+          },
+        },
+      },
+      stats: {
+        sectionsVisited: 0,
+        sectionsCompleted: 0,
+        cardsPracticed: 0,
+        grammarReviews: 0,
+        worldsEngaged: [],
+        questDaysCompleted: 0,
+      },
+    },
+  });
+
+  const toSafeObject = (value, fallback = {}) =>
+    value && typeof value === "object" && !Array.isArray(value) ? value : fallback;
+
+  const normalizeProgressPayload = (payload) => {
+    const fallback = buildDefaultProgress();
+    const candidate = toSafeObject(payload);
+    const totals = toSafeObject(candidate.totals);
+    const gamification = toSafeObject(candidate.gamification);
+    const quests = toSafeObject(gamification.quests);
+    const tasks = toSafeObject(quests.tasks);
+    const stats = toSafeObject(gamification.stats);
+
+    fallback.totals.xp = Math.max(0, Math.round(Number(totals.xp) || 0));
+    fallback.totals.completedSections = Math.max(0, Math.round(Number(totals.completedSections) || 0));
+    fallback.totals.lastActivityAt = String(totals.lastActivityAt || "") || null;
+    fallback.worlds = toSafeObject(candidate.worlds);
+    fallback.recentEvents = Array.isArray(candidate.recentEvents)
+      ? candidate.recentEvents.slice(-120)
+      : [];
+    const levelMeta = deriveLevelMeta(fallback.totals.xp);
+    fallback.gamification.level = Math.max(levelMeta.level, Math.round(Number(gamification.level) || 1));
+    fallback.gamification.currentStreak = Math.max(0, Math.round(Number(gamification.currentStreak) || 0));
+    fallback.gamification.bestStreak = Math.max(
+      fallback.gamification.currentStreak,
+      Math.round(Number(gamification.bestStreak) || 0)
+    );
+    fallback.gamification.badges = toSafeObject(gamification.badges);
+    fallback.gamification.quests.date = String(quests.date || "") || null;
+    fallback.gamification.quests.allCompleted = Boolean(quests.allCompleted);
+    ["practice", "discover", "complete"].forEach((key) => {
+      const baseTask = fallback.gamification.quests.tasks[key];
+      const incoming = toSafeObject(tasks[key]);
+      baseTask.progress = Math.max(0, Math.min(baseTask.target, Math.round(Number(incoming.progress) || 0)));
+      baseTask.completed = Boolean(incoming.completed) || baseTask.progress >= baseTask.target;
+      if (incoming.label) {
+        baseTask.label = String(incoming.label);
+      }
+    });
+    fallback.gamification.stats.sectionsVisited = Math.max(0, Math.round(Number(stats.sectionsVisited) || 0));
+    fallback.gamification.stats.sectionsCompleted = Math.max(0, Math.round(Number(stats.sectionsCompleted) || 0));
+    fallback.gamification.stats.cardsPracticed = Math.max(0, Math.round(Number(stats.cardsPracticed) || 0));
+    fallback.gamification.stats.grammarReviews = Math.max(0, Math.round(Number(stats.grammarReviews) || 0));
+    fallback.gamification.stats.questDaysCompleted = Math.max(
+      0,
+      Math.round(Number(stats.questDaysCompleted) || 0)
+    );
+    fallback.gamification.stats.worldsEngaged = Array.isArray(stats.worldsEngaged)
+      ? [...new Set(stats.worldsEngaged.map((item) => String(item || "").trim()).filter(Boolean))]
+      : [];
+    return fallback;
+  };
+
+  const snapshot = () => {
+    const progress = state.progress ? normalizeProgressPayload(state.progress) : buildDefaultProgress();
+    const levelMeta = deriveLevelMeta(progress.totals.xp);
+    return {
+      ready: state.ready,
+      isAuthenticated: state.isAuthenticated,
+      loading: state.loading,
+      user: state.user,
+      progress,
+      levelMeta,
+      error: state.error,
+    };
+  };
+
+  const notify = () => {
+    const next = snapshot();
+    listeners.forEach((listener) => {
+      try {
+        listener(next);
+      } catch {}
+    });
+  };
+
+  const applyAuthPayload = (payload) => {
+    const user = payload && payload.user && typeof payload.user === "object" ? payload.user : null;
+    if (!user) {
+      state.isAuthenticated = false;
+      state.user = null;
+      state.progress = buildDefaultProgress();
+      state.error = "";
+      return;
+    }
+    state.isAuthenticated = true;
+    state.user = user;
+    state.progress = normalizeProgressPayload(payload.progress || {});
+    state.error = "";
+  };
+
+  const withLoading = async (task) => {
+    state.loading = true;
+    notify();
+    try {
+      const result = await task();
+      state.loading = false;
+      notify();
+      return result;
+    } catch (error) {
+      state.loading = false;
+      state.error = String(error?.message || "Request failed");
+      notify();
+      throw error;
+    }
+  };
+
+  const dedupeEvent = (eventKey, windowMs = 3600) => {
+    const now = Date.now();
+    const prev = Number(recentEventMap.get(eventKey) || 0);
+    if (prev > 0 && now - prev < windowMs) {
+      return true;
+    }
+    recentEventMap.set(eventKey, now);
+    if (recentEventMap.size > 220) {
+      const threshold = now - 120000;
+      [...recentEventMap.entries()].forEach(([key, ts]) => {
+        if (ts < threshold) {
+          recentEventMap.delete(key);
+        }
+      });
+    }
+    return false;
+  };
+
+  return {
+    subscribe: (listener) => {
+      if (typeof listener !== "function") {
+        return () => {};
+      }
+      listeners.add(listener);
+      listener(snapshot());
+      return () => listeners.delete(listener);
+    },
+    getState: () => snapshot(),
+    init: async (force = false) => {
+      if (state.ready && !force) {
+        return snapshot();
+      }
+      try {
+        await withLoading(async () => {
+          const payload = await window.cosmicaAuth.getSession();
+          applyAuthPayload(payload || null);
+          state.ready = true;
+        });
+      } catch (error) {
+        const status = Number(error?.status || 0);
+        applyAuthPayload(null);
+        state.ready = true;
+        state.loading = false;
+        if (status === 404) {
+          state.error = "Auth API is unavailable (404). Start the backend server with npm start.";
+        } else if (status > 0) {
+          state.error = `Auth request failed (${status}).`;
+        } else {
+          state.error = "Auth API is unreachable. Check that the backend server is running.";
+        }
+        notify();
+      }
+      return snapshot();
+    },
+    signUp: ({ email, password, displayName = "" } = {}) =>
+      withLoading(async () => {
+        const payload = await window.cosmicaAuth.signUp({
+          email,
+          password,
+          displayName,
+          baseLanguage: String(localStorage.getItem("cosmicaBaseLanguage") || "").trim().toLowerCase(),
+        });
+        applyAuthPayload(payload);
+        state.ready = true;
+        return snapshot();
+      }),
+    logIn: ({ email, password } = {}) =>
+      withLoading(async () => {
+        const payload = await window.cosmicaAuth.logIn({ email, password });
+        applyAuthPayload(payload);
+        state.ready = true;
+        return snapshot();
+      }),
+    logOut: () =>
+      withLoading(async () => {
+        await window.cosmicaAuth.logOut();
+        applyAuthPayload(null);
+        return snapshot();
+      }),
+    deleteAccount: ({ password } = {}) =>
+      withLoading(async () => {
+        await window.cosmicaAuth.deleteAccount({ password });
+        applyAuthPayload(null);
+        return snapshot();
+      }),
+    refreshProgress: () =>
+      withLoading(async () => {
+        const payload = await window.cosmicaAuth.getProgress();
+        if (payload && payload.progress) {
+          state.progress = normalizeProgressPayload(payload.progress);
+          state.error = "";
+        }
+        return snapshot();
+      }),
+    trackProgress: async ({ worldKey, mapKey, sectionKey, status = "practiced", score = null } = {}) => {
+      if (!state.isAuthenticated) {
+        return null;
+      }
+      const normalizedWorld = String(worldKey || "").trim().toLowerCase();
+      const normalizedMap = String(mapKey || "").trim().toLowerCase();
+      const normalizedSection = String(sectionKey || "").trim();
+      const normalizedStatus = String(status || "").trim().toLowerCase();
+      if (!normalizedWorld || !normalizedMap || !normalizedSection || !normalizedStatus) {
+        return null;
+      }
+      const eventKey = `${normalizedWorld}|${normalizedMap}|${normalizedSection}|${normalizedStatus}`;
+      const cooldownMs = normalizedStatus === "completed" ? 800 : 2600;
+      if (dedupeEvent(eventKey, cooldownMs)) {
+        return null;
+      }
+      try {
+        const payload = await window.cosmicaAuth.trackProgress({
+          worldKey: normalizedWorld,
+          mapKey: normalizedMap,
+          sectionKey: normalizedSection,
+          status: normalizedStatus,
+          score: Number.isFinite(Number(score)) ? Number(score) : undefined,
+        });
+        if (payload && payload.progress) {
+          state.progress = normalizeProgressPayload(payload.progress);
+          state.error = "";
+          notify();
+        }
+        return payload;
+      } catch (error) {
+        state.error = String(error?.message || "Failed to track progress");
+        notify();
+        return null;
+      }
+    },
+    getSectionProgress: ({ worldKey, mapKey, sectionKey } = {}) => {
+      const progress = state.progress ? normalizeProgressPayload(state.progress) : null;
+      if (!progress) {
+        return null;
+      }
+      const world = progress.worlds?.[String(worldKey || "").toLowerCase()];
+      const map = world?.maps?.[String(mapKey || "").toLowerCase()];
+      return map?.sections?.[String(sectionKey || "")] || null;
+    },
+  };
+};
+
+window.cosmicaGamification = createCosmicaGamificationClient();
+
+const detectMapKeyFromBody = () => {
+  if (document.body.classList.contains("letters-page")) {
+    return "letters";
+  }
+  if (document.body.classList.contains("words-page")) {
+    return "words";
+  }
+  if (document.body.classList.contains("phrases-page")) {
+    return "phrases";
+  }
+  if (document.body.classList.contains("grammar-page")) {
+    return "grammar";
+  }
+  return "";
+};
+
+const trackLearningProgressEvent = ({
+  status = "practiced",
+  mapKey = "",
+  sectionKey = "",
+  score = null,
+} = {}) => {
+  if (!window.cosmicaGamification || typeof window.cosmicaGamification.trackProgress !== "function") {
+    return;
+  }
+  const resolvedMapKey = String(mapKey || detectMapKeyFromBody() || "").trim().toLowerCase();
+  if (!resolvedMapKey) {
+    return;
+  }
+  const resolvedSectionKey = String(sectionKey || "").trim() || "core";
+  void window.cosmicaGamification.trackProgress({
+    worldKey: WORLD_KEY,
+    mapKey: resolvedMapKey,
+    sectionKey: resolvedSectionKey,
+    status,
+    score,
+  });
+};
+
+window.cosmicaTrackLearningProgress = trackLearningProgressEvent;
+
+const setupAccountHub = () => {
+  if (document.body.dataset.accountHubBound === "1") {
+    return;
+  }
+  document.body.dataset.accountHubBound = "1";
+  const nav = document.querySelector(".nav");
+  if (!nav || !window.cosmicaGamification) {
+    return;
+  }
+
+  const accountSlot = document.createElement("div");
+  accountSlot.className = "account-slot";
+  accountSlot.innerHTML = `
+    <button class="account-trigger" type="button" aria-haspopup="menu" aria-expanded="false">
+      <span class="account-trigger-avatar" aria-hidden="true">G</span>
+      <span class="account-trigger-copy">
+        <span class="account-trigger-label">Guest</span>
+        <span class="account-trigger-meta">Sign in</span>
+      </span>
+      <span class="account-trigger-caret" aria-hidden="true">▾</span>
+    </button>
+  `;
+
+  const soundToggleNode = document.getElementById("soundToggle");
+  let navControls = nav.querySelector(".nav-controls");
+  if (!navControls) {
+    navControls = document.createElement("div");
+    navControls.className = "nav-controls";
+    nav.appendChild(navControls);
+  }
+  if (soundToggleNode) {
+    if (soundToggleNode.parentElement !== navControls) {
+      navControls.prepend(soundToggleNode);
+    } else if (soundToggleNode !== navControls.firstElementChild) {
+      navControls.prepend(soundToggleNode);
+    }
+  }
+  navControls.appendChild(accountSlot);
+
+  const trigger = accountSlot.querySelector(".account-trigger");
+  const triggerAvatar = accountSlot.querySelector(".account-trigger-avatar");
+  const triggerLabel = accountSlot.querySelector(".account-trigger-label");
+  const triggerMeta = accountSlot.querySelector(".account-trigger-meta");
+
+  const dropdown = document.createElement("div");
+  dropdown.className = "account-dropdown";
+  dropdown.hidden = true;
+  dropdown.innerHTML = `
+    <div class="account-dropdown-card" role="menu" aria-label="Profile menu">
+      <p class="account-feedback" aria-live="polite"></p>
+      <section class="account-guest-pane">
+        <header class="account-guest-head">
+          <p class="account-pane-title">Account & Progress</p>
+          <h3>Keep your streak and XP synced</h3>
+          <p>Join once, and continue learning from any world and any device.</p>
+        </header>
+        <div class="account-auth-switch" role="tablist" aria-label="Account forms">
+          <button type="button" data-auth-panel="login" aria-selected="true">Log in</button>
+          <button type="button" data-auth-panel="signup" aria-selected="false">Sign up</button>
+        </div>
+        <div class="account-auth-panels">
+          <form class="account-form login-form" data-auth-panel-content="login">
+            <button class="account-google-button" type="button" data-google-mode="login">
+              <span class="account-google-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false">
+                  <path
+                    fill="#4285F4"
+                    d="M23.49 12.27c0-.79-.07-1.55-.2-2.27H12v4.3h6.45a5.52 5.52 0 0 1-2.4 3.63v3h3.88c2.27-2.09 3.56-5.17 3.56-8.66z"
+                  />
+                  <path
+                    fill="#34A853"
+                    d="M12 24c3.24 0 5.95-1.08 7.94-2.93l-3.88-3c-1.08.72-2.46 1.15-4.06 1.15-3.12 0-5.76-2.11-6.7-4.95H1.3v3.11A11.99 11.99 0 0 0 12 24z"
+                  />
+                  <path
+                    fill="#FBBC05"
+                    d="M5.3 14.27a7.2 7.2 0 0 1 0-4.54V6.62H1.3a11.99 11.99 0 0 0 0 10.76l4-3.11z"
+                  />
+                  <path
+                    fill="#EA4335"
+                    d="M12 4.77c1.76 0 3.35.6 4.6 1.78l3.45-3.45C17.94 1.14 15.23 0 12 0A11.99 11.99 0 0 0 1.3 6.62l4 3.11c.94-2.84 3.58-4.96 6.7-4.96z"
+                  />
+                </svg>
+              </span>
+              <span>Log in with Google account</span>
+            </button>
+            <div class="account-form-divider"><span>or continue with email</span></div>
+            <label>Email <input type="email" name="email" autocomplete="email" required /></label>
+            <label>Password <input type="password" name="password" autocomplete="current-password" minlength="8" required /></label>
+            <button type="submit">Continue learning</button>
+          </form>
+          <form class="account-form signup-form" data-auth-panel-content="signup" hidden>
+            <button class="account-google-button" type="button" data-google-mode="signup">
+              <span class="account-google-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false">
+                  <path
+                    fill="#4285F4"
+                    d="M23.49 12.27c0-.79-.07-1.55-.2-2.27H12v4.3h6.45a5.52 5.52 0 0 1-2.4 3.63v3h3.88c2.27-2.09 3.56-5.17 3.56-8.66z"
+                  />
+                  <path
+                    fill="#34A853"
+                    d="M12 24c3.24 0 5.95-1.08 7.94-2.93l-3.88-3c-1.08.72-2.46 1.15-4.06 1.15-3.12 0-5.76-2.11-6.7-4.95H1.3v3.11A11.99 11.99 0 0 0 12 24z"
+                  />
+                  <path
+                    fill="#FBBC05"
+                    d="M5.3 14.27a7.2 7.2 0 0 1 0-4.54V6.62H1.3a11.99 11.99 0 0 0 0 10.76l4-3.11z"
+                  />
+                  <path
+                    fill="#EA4335"
+                    d="M12 4.77c1.76 0 3.35.6 4.6 1.78l3.45-3.45C17.94 1.14 15.23 0 12 0A11.99 11.99 0 0 0 1.3 6.62l4 3.11c.94-2.84 3.58-4.96 6.7-4.96z"
+                  />
+                </svg>
+              </span>
+              <span>Sign up with Google account</span>
+            </button>
+            <div class="account-form-divider"><span>or continue with email</span></div>
+            <label>Name <input type="text" name="displayName" maxlength="60" autocomplete="name" /></label>
+            <label>Email <input type="email" name="email" autocomplete="email" required /></label>
+            <label>Password <input type="password" name="password" autocomplete="new-password" minlength="8" required /></label>
+            <button type="submit">Create free account</button>
+          </form>
+        </div>
+      </section>
+      <section class="account-user-pane" hidden>
+        <header class="account-menu-header">
+          <div class="account-menu-avatar" aria-hidden="true">U</div>
+          <div class="account-menu-identity">
+            <div class="account-menu-name"></div>
+            <div class="account-menu-level"></div>
+            <div class="account-menu-xp"></div>
+            <div class="account-menu-xpbar" aria-hidden="true">
+              <span class="account-menu-xpfill"></span>
+            </div>
+          </div>
+        </header>
+        <div class="account-menu-summary">
+          <div class="account-menu-stat">🔥 <span class="account-menu-streak">0 days</span></div>
+          <div class="account-menu-stat">🏆 <span class="account-menu-achievements">0 Achievements</span></div>
+        </div>
+        <nav class="account-menu-links" aria-label="Profile actions">
+          <button type="button" data-menu="profile">Profile</button>
+          <button type="button" data-menu="progress">My Progress</button>
+          <button type="button" data-menu="streaks">Streaks 🔥</button>
+          <button type="button" data-menu="achievements">Achievements 🏆</button>
+          <button type="button" data-menu="premium">Premium</button>
+          <button type="button" data-menu="settings">Settings</button>
+          <button type="button" data-menu="manage">Manage Account</button>
+        </nav>
+        <div class="account-manage-panel" hidden>
+          <form class="account-delete-form">
+            <label>
+              Confirm password
+              <input type="password" name="password" autocomplete="current-password" minlength="8" required />
+            </label>
+            <button class="account-delete" type="submit">Delete account</button>
+          </form>
+        </div>
+        <button class="account-logout" type="button">Logout</button>
+      </section>
+    </div>
+  `;
+  document.body.appendChild(dropdown);
+
+  const feedbackNode = dropdown.querySelector(".account-feedback");
+  const guestPane = dropdown.querySelector(".account-guest-pane");
+  const userPane = dropdown.querySelector(".account-user-pane");
+  const loginForm = dropdown.querySelector(".login-form");
+  const signupForm = dropdown.querySelector(".signup-form");
+  const logoutBtn = dropdown.querySelector(".account-logout");
+  const deleteForm = dropdown.querySelector(".account-delete-form");
+  const googleButtons = Array.from(dropdown.querySelectorAll(".account-google-button"));
+  const menuButtons = Array.from(dropdown.querySelectorAll(".account-menu-links button"));
+  const authSwitchButtons = Array.from(dropdown.querySelectorAll(".account-auth-switch button"));
+  const authPanelNodes = Array.from(dropdown.querySelectorAll("[data-auth-panel-content]"));
+  const managePanel = dropdown.querySelector(".account-manage-panel");
+  const menuAvatar = dropdown.querySelector(".account-menu-avatar");
+  const menuName = dropdown.querySelector(".account-menu-name");
+  const menuLevel = dropdown.querySelector(".account-menu-level");
+  const menuXp = dropdown.querySelector(".account-menu-xp");
+  const menuXpFill = dropdown.querySelector(".account-menu-xpfill");
+  const menuStreak = dropdown.querySelector(".account-menu-streak");
+  const menuAchievements = dropdown.querySelector(".account-menu-achievements");
+  let activeAuthPanel = "login";
+
+  const formatNumber = (value) => Intl.NumberFormat().format(Math.max(0, Math.round(Number(value) || 0)));
+
+  const setFeedback = (message, tone = "") => {
+    if (!feedbackNode) {
+      return;
+    }
+    feedbackNode.textContent = String(message || "");
+    feedbackNode.dataset.tone = tone;
+  };
+
+  const setAuthPanel = (panelKey, shouldFocus = false) => {
+    const normalized = String(panelKey || "").trim().toLowerCase() === "signup" ? "signup" : "login";
+    activeAuthPanel = normalized;
+    authSwitchButtons.forEach((button) => {
+      const isActive = String(button.dataset.authPanel || "").trim().toLowerCase() === normalized;
+      button.classList.toggle("is-active", isActive);
+      button.setAttribute("aria-selected", isActive ? "true" : "false");
+    });
+    authPanelNodes.forEach((panel) => {
+      const panelKeyValue = String(panel.dataset.authPanelContent || "").trim().toLowerCase();
+      panel.hidden = panelKeyValue !== normalized;
+    });
+    if (shouldFocus) {
+      const activeField =
+        (normalized === "signup" ? signupForm : loginForm)?.querySelector('input[name="email"]');
+      activeField?.focus?.();
+    }
+  };
+
+  const resolveInitialFocusElement = () => {
+    if (userPane && !userPane.hidden) {
+      return logoutBtn;
+    }
+    const activePanelNode =
+      authPanelNodes.find((panel) => !panel.hidden) || loginForm || signupForm;
+    return activePanelNode?.querySelector?.('input[name="email"]') || loginForm?.querySelector('input[name="email"]');
+  };
+
+  const startGoogleAuth = async (mode = "login") => {
+    const normalizedMode = String(mode || "").trim().toLowerCase() === "signup" ? "signup" : "login";
+    setFeedback(
+      normalizedMode === "signup"
+        ? "Redirecting to Google sign-up..."
+        : "Redirecting to Google login...",
+      "info"
+    );
+    const returnTo = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+    const endpoint = `/api/auth/google/start?mode=${encodeURIComponent(normalizedMode)}&returnTo=${encodeURIComponent(returnTo)}`;
+    try {
+      const response = await fetch(endpoint, {
+        method: "GET",
+        credentials: "include",
+        cache: "no-store",
+        headers: {
+          Accept: "application/json",
+        },
+      });
+      let payload = null;
+      try {
+        payload = await response.json();
+      } catch {}
+      if (!response.ok || !payload?.redirectUrl) {
+        throw new Error(
+          String(payload?.error || `Google authentication unavailable (${response.status})`)
+        );
+      }
+      window.location.assign(String(payload.redirectUrl));
+    } catch (error) {
+      setFeedback(error?.message || "Google authentication is unavailable right now.", "error");
+    }
+  };
+
+  const positionDropdown = () => {
+    if (dropdown.hidden) {
+      return;
+    }
+    const triggerRect = trigger.getBoundingClientRect();
+    const pageScrollX = window.scrollX || window.pageXOffset || 0;
+    const pageScrollY = window.scrollY || window.pageYOffset || 0;
+    const width = Math.min(360, Math.max(280, window.innerWidth - 16));
+    dropdown.style.width = `${width}px`;
+    const maxLeft = Math.max(8, window.innerWidth - width - 8);
+    const left = Math.max(8, Math.min(maxLeft, triggerRect.right - width));
+    const top = Math.max(12, triggerRect.bottom + 24);
+    dropdown.style.left = `${left + pageScrollX}px`;
+    dropdown.style.top = `${top + pageScrollY}px`;
+  };
+
+  const openDropdown = () => {
+    dropdown.hidden = false;
+    trigger?.setAttribute("aria-expanded", "true");
+    dropdown.scrollTop = 0;
+    const scrollSurface = dropdown.querySelector(".account-dropdown-card");
+    if (scrollSurface) {
+      scrollSurface.scrollTop = 0;
+    }
+    positionDropdown();
+    window.setTimeout(() => {
+      resolveInitialFocusElement()?.focus?.();
+    }, 20);
+  };
+
+  const closeDropdown = () => {
+    dropdown.hidden = true;
+    trigger?.setAttribute("aria-expanded", "false");
+    if (managePanel) {
+      managePanel.hidden = true;
+    }
+  };
+
+  const renderFromState = (snapshot) => {
+    const isAuthenticated = Boolean(snapshot?.isAuthenticated);
+    const loading = Boolean(snapshot?.loading);
+    const progress = snapshot?.progress || {};
+    const gamification = progress.gamification || {};
+    const badges = gamification.badges || {};
+    const levelMeta = snapshot?.levelMeta || { level: 1, xp: 0, ratio: 0, toNextXp: 0 };
+    const displayName = String(snapshot?.user?.displayName || "Guest");
+    const initial = displayName.charAt(0).toUpperCase() || "G";
+    const achievementCount = Object.keys(badges).length;
+    const streakDays = Math.max(0, Math.round(Number(gamification.currentStreak) || 0));
+
+    if (triggerMeta) {
+      triggerMeta.textContent = isAuthenticated ? `Level ${levelMeta.level}` : "Sign in";
+    }
+    if (trigger) {
+      trigger.classList.toggle("is-authenticated", isAuthenticated);
+      trigger.disabled = loading;
+    }
+    if (triggerLabel) {
+      triggerLabel.textContent = isAuthenticated ? displayName : "Guest";
+    }
+    if (triggerAvatar) {
+      triggerAvatar.textContent = initial;
+    }
+
+    if (snapshot?.error && loading === false) {
+      setFeedback(snapshot.error, "error");
+    } else if (!loading) {
+      setFeedback("");
+    }
+
+    if (guestPane) {
+      guestPane.hidden = isAuthenticated;
+    }
+    if (userPane) {
+      userPane.hidden = !isAuthenticated;
+    }
+    if (managePanel) {
+      managePanel.hidden = true;
+    }
+
+    if (!isAuthenticated) {
+      setAuthPanel(activeAuthPanel, false);
+      return;
+    }
+
+    if (menuAvatar) {
+      menuAvatar.textContent = initial;
+    }
+    if (menuName) {
+      menuName.textContent = displayName;
+    }
+    if (menuLevel) {
+      menuLevel.textContent = `Level ${levelMeta.level} Explorer`;
+    }
+    if (menuXp) {
+      menuXp.textContent = `XP: ${formatNumber(levelMeta.xp)} / ${formatNumber(levelMeta.nextXp)}`;
+    }
+    if (menuXpFill) {
+      const ratio = Math.max(0, Math.min(1, Number(levelMeta.ratio) || 0));
+      menuXpFill.style.width = `${(ratio * 100).toFixed(2)}%`;
+    }
+    if (menuStreak) {
+      menuStreak.textContent = `${streakDays} days`;
+    }
+    if (menuAchievements) {
+      menuAchievements.textContent = `${achievementCount} Achievements`;
+    }
+  };
+
+  const navigateToHash = (hash) => {
+    const safeHash = String(hash || "").trim();
+    if (!safeHash) {
+      return;
+    }
+    const target = document.querySelector(safeHash);
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+    if (window.location.pathname.toLowerCase().endsWith("/index.html") || window.location.pathname === "/") {
+      return;
+    }
+    window.location.href = `/index.html${safeHash}`;
+  };
+
+  trigger?.addEventListener("click", () => {
+    if (dropdown.hidden) {
+      openDropdown();
+    } else {
+      closeDropdown();
+    }
+  });
+  document.addEventListener("click", (event) => {
+    if (dropdown.hidden) {
+      return;
+    }
+    if (accountSlot.contains(event.target) || dropdown.contains(event.target)) {
+      return;
+    }
+    closeDropdown();
+  });
+  window.addEventListener("resize", positionDropdown, { passive: true });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !dropdown.hidden) {
+      closeDropdown();
+    }
+  });
+  authSwitchButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const panelKey = String(button.dataset.authPanel || "").trim().toLowerCase();
+      setAuthPanel(panelKey, true);
+    });
+  });
+  googleButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const mode = String(button.dataset.googleMode || "").trim().toLowerCase();
+      void startGoogleAuth(mode);
+    });
+  });
+
+  loginForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    setAuthPanel("login");
+    const formData = new FormData(loginForm);
+    const email = String(formData.get("email") || "").trim();
+    const password = String(formData.get("password") || "");
+    if (!email || !password) {
+      setFeedback("Enter email and password.", "error");
+      return;
+    }
+    setFeedback("Logging in...", "info");
+    try {
+      await window.cosmicaGamification.logIn({ email, password });
+      setFeedback("Logged in.", "success");
+      window.setTimeout(closeDropdown, 420);
+    } catch {}
+  });
+
+  signupForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    setAuthPanel("signup");
+    const formData = new FormData(signupForm);
+    const displayName = String(formData.get("displayName") || "").trim();
+    const email = String(formData.get("email") || "").trim();
+    const password = String(formData.get("password") || "");
+    if (!email || password.length < 8) {
+      setFeedback("Use a valid email and password (8+ chars).", "error");
+      return;
+    }
+    setFeedback("Creating account...", "info");
+    try {
+      await window.cosmicaGamification.signUp({ email, password, displayName });
+      setFeedback("Account created.", "success");
+      window.setTimeout(closeDropdown, 420);
+    } catch {}
+  });
+
+  menuButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const action = String(button.dataset.menu || "").trim().toLowerCase();
+      if (!action) {
+        return;
+      }
+      if (action === "manage") {
+        if (managePanel) {
+          managePanel.hidden = !managePanel.hidden;
+        }
+        return;
+      }
+      if (managePanel) {
+        managePanel.hidden = true;
+      }
+      if (action === "profile") {
+        setFeedback("Profile panel is active.", "info");
+        return;
+      }
+      if (action === "progress") {
+        setFeedback("Refreshing progress...", "info");
+        void window.cosmicaGamification.refreshProgress().then(() => {
+          setFeedback("Progress updated.", "success");
+        });
+        return;
+      }
+      if (action === "streaks") {
+        setFeedback("Streak details are shown above.", "info");
+        return;
+      }
+      if (action === "achievements") {
+        setFeedback("Achievements are synced to your account.", "info");
+        return;
+      }
+      if (action === "premium") {
+        closeDropdown();
+        navigateToHash("#support");
+        return;
+      }
+      if (action === "settings") {
+        closeDropdown();
+        navigateToHash("#world");
+      }
+    });
+  });
+
+  logoutBtn?.addEventListener("click", async () => {
+    setFeedback("Logging out...", "info");
+    try {
+      await window.cosmicaGamification.logOut();
+      setFeedback("Logged out.", "success");
+      window.setTimeout(closeDropdown, 420);
+    } catch {}
+  });
+
+  deleteForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const formData = new FormData(deleteForm);
+    const password = String(formData.get("password") || "");
+    if (!password) {
+      setFeedback("Enter your password to delete this account.", "error");
+      return;
+    }
+    setFeedback("Deleting account...", "info");
+    try {
+      await window.cosmicaGamification.deleteAccount({ password });
+      deleteForm.reset();
+      if (managePanel) {
+        managePanel.hidden = true;
+      }
+      setFeedback("Account deleted.", "success");
+      window.setTimeout(closeDropdown, 420);
+    } catch {}
+  });
+
+  setAuthPanel("login");
+  window.cosmicaGamification.subscribe(renderFromState);
+  void window.cosmicaGamification.init();
+};
+
+/* ==========================================================================
    MIMI CHAT CONFIGURATION
    Shared prompt data and canned lines for the assistant persona.
    ========================================================================== */
@@ -4108,9 +5027,33 @@ const applyMapComingSoonRules = () => {
 applyMapComingSoonRules();
 
 const mapLinks = document.querySelectorAll(".map-link");
+const inferMapKeyFromHref = (hrefValue) => {
+  const href = String(hrefValue || "").toLowerCase();
+  if (href.includes("letters")) {
+    return "letters";
+  }
+  if (href.includes("words")) {
+    return "words";
+  }
+  if (href.includes("phrases")) {
+    return "phrases";
+  }
+  if (href.includes("grammar")) {
+    return "grammar";
+  }
+  return "";
+};
 const navigateToMapLink = (href) => {
   if (!href) {
     return;
+  }
+  const mapKey = inferMapKeyFromHref(href);
+  if (mapKey) {
+    trackLearningProgressEvent({
+      status: "started",
+      mapKey,
+      sectionKey: `${mapKey}-entry`,
+    });
   }
   const baseLanguage = localStorage.getItem("cosmicaBaseLanguage") || "";
   if (!baseLanguage) {
@@ -4508,6 +5451,39 @@ const setupSpeechCards = () => {
   if (!hasSpeechCards) {
     return;
   }
+
+  const resolveSectionKeyFromElement = (element, mapKey) => {
+    if (!element) {
+      return mapKey === "letters" ? "letters-core" : "core";
+    }
+    const fromContainer = String(
+      element.closest("[data-section]")?.dataset.section || ""
+    ).trim();
+    if (fromContainer) {
+      return fromContainer;
+    }
+    const fromDataset =
+      String(element.dataset.section || "").trim() ||
+      String(element.dataset.word || "").trim() ||
+      String(element.dataset.phrase || "").trim();
+    if (fromDataset) {
+      return fromDataset.slice(0, 120);
+    }
+    return mapKey === "letters" ? "letters-core" : "core";
+  };
+
+  const trackPracticeFromElement = (element) => {
+    const mapKey = detectMapKeyFromBody();
+    if (!mapKey) {
+      return;
+    }
+    const sectionKey = resolveSectionKeyFromElement(element, mapKey);
+    trackLearningProgressEvent({
+      status: "practiced",
+      mapKey,
+      sectionKey,
+    });
+  };
 
   let availableVoices = [];
   let selectedVoice = null;
@@ -5024,6 +6000,7 @@ const setupSpeechCards = () => {
         }
         markSpeechActivation(card);
         playSpeech(card.dataset[datasetKey], { rate, pitch });
+        trackPracticeFromElement(card);
       });
       card.addEventListener("click", (event) => {
         if (event.target?.closest?.(".letter-audio, .word-audio")) {
@@ -5037,6 +6014,7 @@ const setupSpeechCards = () => {
         }
         markSpeechActivation(card);
         playSpeech(card.dataset[datasetKey], { rate, pitch });
+        trackPracticeFromElement(card);
       });
       card.addEventListener("keydown", (event) => {
         if (event.key === "Enter" || event.key === " ") {
@@ -5046,6 +6024,7 @@ const setupSpeechCards = () => {
           }
           markSpeechActivation(card);
           playSpeech(card.dataset[datasetKey], { rate, pitch });
+          trackPracticeFromElement(card);
         }
       });
     });
@@ -5089,6 +6068,7 @@ const setupSpeechCards = () => {
           }
           markSpeechActivation(button);
           playSpeech(value, { rate, pitch });
+          trackPracticeFromElement(button);
         }
       };
       button.addEventListener("pointerup", (event) => {
@@ -5836,6 +6816,7 @@ const loadMapsBundle = () =>
   });
 
 const initializeCommonShell = () => {
+  setupAccountHub();
   document.querySelectorAll(".reveal").forEach((el) => observeRevealElement(el));
   setupHomeAltInteractivity();
   void setupLettersTitleTranslation();

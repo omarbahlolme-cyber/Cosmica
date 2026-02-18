@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-18T15:18:51.764Z",
+  "generatedAt": "2026-02-18T15:33:45.216Z",
   "worldLanguage": "german",
   "baseLanguages": [
     "albanian",
@@ -12469,6 +12469,24 @@
           "english": "good idea"
         }
       }
+    },
+    "sectionLabels": {
+      "Greetings": "Begrüßungen",
+      "Politeness": "Höflichkeit",
+      "Introductions": "Vorstellungen",
+      "Conversation": "Konversation",
+      "Questions": "Fragen",
+      "Requests": "Bitten",
+      "Time & Plans": "Zeit und Pläne",
+      "Directions": "Wegbeschreibung",
+      "Food": "Essen",
+      "Shopping": "Einkaufen",
+      "Health": "Gesundheit",
+      "Feelings": "Gefühle",
+      "Opinions": "Meinungen",
+      "Work & Study": "Arbeit und Studium",
+      "Problems": "Probleme",
+      "Everyday Expressions": "Alltägliche Ausdrücke"
     }
   },
   "grammar": {
@@ -13108,7 +13126,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ich bin gerade am lernen.",
+              "wrong": "bin Ich gerade am Lernen.",
               "fix": "Ich bin gerade am Lernen."
             }
           ]
@@ -14443,7 +14461,7 @@
             },
             {
               "label": "verb",
-              "text": "weiß,"
+              "text": "weiß"
             },
             {
               "label": "dass",
@@ -14904,7 +14922,7 @@
             },
             {
               "label": "verb",
-              "text": "regnet,"
+              "text": "regnet"
             },
             {
               "label": "objekt",

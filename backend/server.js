@@ -239,6 +239,11 @@ const authSessionLimiter = createLimiter({
   max: 120,
   scope: "auth-session",
 });
+const authGoogleLimiter = createLimiter({
+  windowMs: 10 * 60 * 1000,
+  max: 80,
+  scope: "auth-google",
+});
 const accountMutationLimiter = createLimiter({
   windowMs: 10 * 60 * 1000,
   max: 120,
@@ -529,6 +534,11 @@ const PASSWORD_HASH_ITERATIONS = Math.max(
 );
 const PASSWORD_HASH_KEYLEN = 64;
 const PASSWORD_HASH_DIGEST = "sha512";
+const GOOGLE_OAUTH_AUTHORIZE_URL = "https://accounts.google.com/o/oauth2/v2/auth";
+const GOOGLE_OAUTH_TOKEN_URL = "https://oauth2.googleapis.com/token";
+const GOOGLE_OAUTH_USERINFO_URL = "https://openidconnect.googleapis.com/v1/userinfo";
+const GOOGLE_OAUTH_STATE_TTL_MS = 1000 * 60 * 10;
+const googleOauthStateStore = new Map();
 
 const isPlainObject = (value) =>
   Boolean(value) && Object.prototype.toString.call(value) === "[object Object]";
@@ -540,6 +550,73 @@ const createDefaultUserData = () => ({
   profile: {},
 });
 
+const QUEST_TASK_TEMPLATES = Object.freeze({
+  practice: Object.freeze({
+    key: "practice",
+    label: "Practice 12 cards",
+    target: 12,
+  }),
+  discover: Object.freeze({
+    key: "discover",
+    label: "Start 3 sections",
+    target: 3,
+  }),
+  complete: Object.freeze({
+    key: "complete",
+    label: "Complete 2 sections",
+    target: 2,
+  }),
+});
+
+const createDefaultQuestTasks = () => ({
+  practice: {
+    ...QUEST_TASK_TEMPLATES.practice,
+    progress: 0,
+    completed: false,
+  },
+  discover: {
+    ...QUEST_TASK_TEMPLATES.discover,
+    progress: 0,
+    completed: false,
+  },
+  complete: {
+    ...QUEST_TASK_TEMPLATES.complete,
+    progress: 0,
+    completed: false,
+  },
+});
+
+const createDefaultGamificationState = () => ({
+  level: 1,
+  currentStreak: 0,
+  bestStreak: 0,
+  lastActiveDate: null,
+  nextLevelXp: 120,
+  badges: {},
+  quests: {
+    date: null,
+    tasks: createDefaultQuestTasks(),
+    allCompleted: false,
+  },
+  stats: {
+    sectionsVisited: 0,
+    sectionsCompleted: 0,
+    cardsPracticed: 0,
+    grammarReviews: 0,
+    worldsEngaged: [],
+    questDaysCompleted: 0,
+  },
+  daily: {
+    date: null,
+    xpEarned: 0,
+    events: 0,
+    startedEvents: 0,
+    practicedEvents: 0,
+    reviewEvents: 0,
+    completedEvents: 0,
+  },
+});
+
 const createDefaultProgress = () => ({
   totals: {
     xp: 0,
@@ -548,6 +625,7 @@ const createDefaultProgress = () => ({
   },
   worlds: {},
   recentEvents: [],
+  gamification: createDefaultGamificationState(),
   updatedAt: null,
 });
 
@@ -606,6 +684,142 @@ const normalizeUserData = (value) => {
   return base;
 };
 
+const toBoundedInt = (value, min, max) => {
+  if (!Number.isFinite(Number(value))) {
+    return min;
+  }
+  return Math.max(min, Math.min(max, Math.round(Number(value))));
+};
+
+const normalizeDateKey = (value) => {
+  const raw = String(value || "").trim();
+  if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) {
+    return raw;
+  }
+  const parsed = Date.parse(raw);
+  if (!Number.isFinite(parsed)) {
+    return "";
+  }
+  return new Date(parsed).toISOString().slice(0, 10);
+};
+
+const getUtcDateKeyFromIso = (isoValue) => normalizeDateKey(isoValue || new Date().toISOString());
+
+const daysBetweenUtcDateKeys = (fromDateKey, toDateKey) => {
+  const from = normalizeDateKey(fromDateKey);
+  const to = normalizeDateKey(toDateKey);
+  if (!from || !to) {
+    return Number.POSITIVE_INFINITY;
+  }
+  const fromMs = Date.parse(`${from}T00:00:00.000Z`);
+  const toMs = Date.parse(`${to}T00:00:00.000Z`);
+  if (!Number.isFinite(fromMs) || !Number.isFinite(toMs)) {
+    return Number.POSITIVE_INFINITY;
+  }
+  return Math.round((toMs - fromMs) / 86400000);
+};
+
+const xpForLevel = (level) => {
+  const bounded = Math.max(1, Math.floor(Number(level) || 1));
+  if (bounded <= 1) {
+    return 0;
+  }
+  return Math.round(120 * Math.pow(bounded - 1, 1.34));
+};
+
+const deriveLevelMetaFromXp = (xpValue) => {
+  const xp = Math.max(0, Math.round(Number(xpValue) || 0));
+  let level = 1;
+  while (level < 250 && xp >= xpForLevel(level + 1)) {
+    level += 1;
+  }
+  const levelFloorXp = xpForLevel(level);
+  const nextLevelXp = xpForLevel(level + 1);
+  const span = Math.max(1, nextLevelXp - levelFloorXp);
+  const intoLevelXp = Math.max(0, xp - levelFloorXp);
+  return {
+    level,
+    levelFloorXp,
+    nextLevelXp,
+    intoLevelXp,
+    toNextLevelXp: Math.max(0, nextLevelXp - xp),
+    progressRatio: Math.max(0, Math.min(1, intoLevelXp / span)),
+  };
+};
+
+const normalizeQuestTasks = (value) => {
+  const fallback = createDefaultQuestTasks();
+  if (!isPlainObject(value)) {
+    return fallback;
+  }
+  Object.keys(fallback).forEach((taskKey) => {
+    const source = isPlainObject(value[taskKey]) ? value[taskKey] : {};
+    fallback[taskKey].progress = toBoundedInt(source.progress, 0, fallback[taskKey].target);
+    fallback[taskKey].completed =
+      Boolean(source.completed) || fallback[taskKey].progress >= fallback[taskKey].target;
+  });
+  return fallback;
+};
+
+const normalizeGamificationState = (value, xpValue = 0) => {
+  const fallback = createDefaultGamificationState();
+  const candidate = isPlainObject(value) ? value : {};
+  const levelMeta = deriveLevelMetaFromXp(xpValue);
+  fallback.level = toBoundedInt(candidate.level, 1, 250);
+  fallback.level = Math.max(fallback.level, levelMeta.level);
+  fallback.currentStreak = toBoundedInt(candidate.currentStreak, 0, 5000);
+  fallback.bestStreak = Math.max(
+    fallback.currentStreak,
+    toBoundedInt(candidate.bestStreak, 0, 5000)
+  );
+  fallback.lastActiveDate = normalizeDateKey(candidate.lastActiveDate) || null;
+  fallback.nextLevelXp = Math.max(levelMeta.nextLevelXp, toBoundedInt(candidate.nextLevelXp, 0, 500000000));
+
+  const badges = isPlainObject(candidate.badges) ? candidate.badges : {};
+  Object.entries(badges).forEach(([badgeId, badge]) => {
+    const id = String(badgeId || "").trim().slice(0, 60);
+    if (!id || !isPlainObject(badge)) {
+      return;
+    }
+    fallback.badges[id] = {
+      awardedAt: String(badge.awardedAt || "").slice(0, 40) || new Date().toISOString(),
+      title: String(badge.title || "").slice(0, 120),
+      description: String(badge.description || "").slice(0, 240),
+      tier: String(badge.tier || "core").slice(0, 24),
+    };
+  });
+
+  const quests = isPlainObject(candidate.quests) ? candidate.quests : {};
+  fallback.quests.date = normalizeDateKey(quests.date) || null;
+  fallback.quests.tasks = normalizeQuestTasks(quests.tasks);
+  fallback.quests.allCompleted =
+    Boolean(quests.allCompleted) ||
+    Object.values(fallback.quests.tasks).every((task) => task.completed);
+
+  const stats = isPlainObject(candidate.stats) ? candidate.stats : {};
+  fallback.stats.sectionsVisited = toBoundedInt(stats.sectionsVisited, 0, 5000000);
+  fallback.stats.sectionsCompleted = toBoundedInt(stats.sectionsCompleted, 0, 5000000);
+  fallback.stats.cardsPracticed = toBoundedInt(stats.cardsPracticed, 0, 50000000);
+  fallback.stats.grammarReviews = toBoundedInt(stats.grammarReviews, 0, 50000000);
+  fallback.stats.questDaysCompleted = toBoundedInt(stats.questDaysCompleted, 0, 5000000);
+  fallback.stats.worldsEngaged = Array.isArray(stats.worldsEngaged)
+    ? [...new Set(stats.worldsEngaged.map((key) => String(key || "").trim().slice(0, 40)).filter(Boolean))].slice(
+        0,
+        30
+      )
+    : [];
+
+  const daily = isPlainObject(candidate.daily) ? candidate.daily : {};
+  fallback.daily.date = normalizeDateKey(daily.date) || null;
+  fallback.daily.xpEarned = toBoundedInt(daily.xpEarned, 0, 30000);
+  fallback.daily.events = toBoundedInt(daily.events, 0, 50000);
+  fallback.daily.startedEvents = toBoundedInt(daily.startedEvents, 0, 50000);
+  fallback.daily.practicedEvents = toBoundedInt(daily.practicedEvents, 0, 50000);
+  fallback.daily.reviewEvents = toBoundedInt(daily.reviewEvents, 0, 50000);
+  fallback.daily.completedEvents = toBoundedInt(daily.completedEvents, 0, 50000);
+  return fallback;
+};
+
 const normalizeProgress = (value) => {
   const fallback = createDefaultProgress();
   const candidate = cloneObjectSafely(value, createDefaultProgress, MAX_PROGRESS_SERIALIZED_CHARS);
@@ -620,7 +834,7 @@ const normalizeProgress = (value) => {
     ? cloneObjectSafely(candidate.worlds, () => ({}), MAX_PROGRESS_SERIALIZED_CHARS - 5000)
     : {};
   fallback.recentEvents = Array.isArray(candidate.recentEvents)
-    ? candidate.recentEvents.slice(-50).map((event) => ({
+    ? candidate.recentEvents.slice(-120).map((event) => ({
         worldKey: String(event?.worldKey || "").slice(0, 40),
         mapKey: String(event?.mapKey || "").slice(0, 20),
         sectionKey: String(event?.sectionKey || "").slice(0, 120),
@@ -629,6 +843,7 @@ const normalizeProgress = (value) => {
         timestamp: String(event?.timestamp || "").slice(0, 40),
       }))
     : [];
+  fallback.gamification = normalizeGamificationState(candidate.gamification, fallback.totals.xp);
   fallback.updatedAt = typeof candidate.updatedAt === "string" && candidate.updatedAt ? candidate.updatedAt : null;
   return fallback;
 };
@@ -1026,6 +1241,136 @@ const requireAuthenticatedUser = (req, res, next) => {
   return next();
 };
 
+const isGoogleOauthConfigured = () =>
+  Boolean(
+    String(process.env.GOOGLE_OAUTH_CLIENT_ID || "").trim() &&
+      String(process.env.GOOGLE_OAUTH_CLIENT_SECRET || "").trim()
+  );
+
+const getRequestOrigin = (req) => {
+  const forwardedHost = String(req.get("x-forwarded-host") || "")
+    .split(",")[0]
+    .trim();
+  const directHost = String(req.get("host") || "").trim();
+  const host = forwardedHost || directHost || `localhost:${port}`;
+  const forwardedProto = String(req.get("x-forwarded-proto") || "")
+    .split(",")[0]
+    .trim()
+    .toLowerCase();
+  const protocol = forwardedProto || (isSecureRequest(req) ? "https" : "http");
+  return `${protocol}://${host}`;
+};
+
+const sanitizeReturnToPath = (rawValue) => {
+  const raw = String(rawValue || "").trim();
+  if (!raw.startsWith("/") || raw.startsWith("//")) {
+    return "/index.html";
+  }
+  try {
+    const parsed = new URL(raw, "http://localhost");
+    return `${parsed.pathname}${parsed.search}${parsed.hash}`;
+  } catch {
+    return "/index.html";
+  }
+};
+
+const buildGoogleOauthRedirectUri = (req) => {
+  const explicit = String(process.env.GOOGLE_OAUTH_REDIRECT_URI || "").trim();
+  if (explicit) {
+    return explicit;
+  }
+  return `${getRequestOrigin(req)}/api/auth/google/callback`;
+};
+
+const cleanupExpiredGoogleOauthStates = () => {
+  const nowMs = Date.now();
+  for (const [stateToken, payload] of googleOauthStateStore.entries()) {
+    const createdAtMs = Number(payload?.createdAt || 0);
+    if (!createdAtMs || nowMs - createdAtMs > GOOGLE_OAUTH_STATE_TTL_MS) {
+      googleOauthStateStore.delete(stateToken);
+    }
+  }
+};
+
+const createGoogleOauthState = ({ mode = "login", returnTo = "/index.html" } = {}) => {
+  cleanupExpiredGoogleOauthStates();
+  const stateToken = crypto.randomBytes(20).toString("base64url");
+  googleOauthStateStore.set(stateToken, {
+    mode: mode === "signup" ? "signup" : "login",
+    returnTo: sanitizeReturnToPath(returnTo),
+    createdAt: Date.now(),
+  });
+  return stateToken;
+};
+
+const consumeGoogleOauthState = (stateToken) => {
+  cleanupExpiredGoogleOauthStates();
+  const state = googleOauthStateStore.get(stateToken);
+  if (!state) {
+    return null;
+  }
+  googleOauthStateStore.delete(stateToken);
+  const createdAtMs = Number(state.createdAt || 0);
+  if (!createdAtMs || Date.now() - createdAtMs > GOOGLE_OAUTH_STATE_TTL_MS) {
+    return null;
+  }
+  return state;
+};
+
+const exchangeGoogleCodeForTokens = async ({ code, redirectUri }) => {
+  const params = new URLSearchParams();
+  params.set("code", String(code || ""));
+  params.set("client_id", String(process.env.GOOGLE_OAUTH_CLIENT_ID || "").trim());
+  params.set("client_secret", String(process.env.GOOGLE_OAUTH_CLIENT_SECRET || "").trim());
+  params.set("redirect_uri", String(redirectUri || "").trim());
+  params.set("grant_type", "authorization_code");
+
+  const response = await fetch(GOOGLE_OAUTH_TOKEN_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Accept: "application/json",
+    },
+    body: params.toString(),
+  });
+  const payload = await response.json().catch(() => null);
+  if (!response.ok || !payload || typeof payload !== "object") {
+    const errorMessage = String(payload?.error_description || payload?.error || "Google token exchange failed");
+    throw new Error(errorMessage);
+  }
+  return payload;
+};
+
+const fetchGoogleUserProfile = async ({ accessToken, idToken }) => {
+  if (accessToken) {
+    const response = await fetch(GOOGLE_OAUTH_USERINFO_URL, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        Accept: "application/json",
+      },
+    });
+    const payload = await response.json().catch(() => null);
+    if (response.ok && payload && typeof payload === "object") {
+      return payload;
+    }
+  }
+  if (idToken) {
+    const verifyUrl = `https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(idToken)}`;
+    const response = await fetch(verifyUrl, {
+      method: "GET",
+      headers: { Accept: "application/json" },
+    });
+    const payload = await response.json().catch(() => null);
+    if (response.ok && payload && typeof payload === "object") {
+      return payload;
+    }
+  }
+  throw new Error("Failed to fetch Google profile");
+};
+
+const buildAuthErrorRedirectPath = (code) => `/index.html?authError=${encodeURIComponent(String(code || "google"))}`;
+
 const normalizeWorldKey = (value) =>
   String(value || "")
     .trim()
@@ -1040,7 +1385,7 @@ const normalizeMapKey = (value) =>
     .slice(0, 20);
 const normalizeSectionKey = (value) => String(value || "").trim().slice(0, 120);
 const ALLOWED_PROGRESS_MAP_KEYS = new Set(["letters", "words", "phrases", "grammar"]);
-const ALLOWED_PROGRESS_STATUS = new Set(["started", "completed", "reviewed"]);
+const ALLOWED_PROGRESS_STATUS = new Set(["started", "practiced", "reviewed", "completed"]);
 
 const ensureProgressContainers = (progress, worldKey, mapKey) => {
   if (!isPlainObject(progress.worlds[worldKey])) {
@@ -1052,12 +1397,276 @@ const ensureProgressContainers = (progress, worldKey, mapKey) => {
   if (!isPlainObject(progress.worlds[worldKey].maps[mapKey])) {
     progress.worlds[worldKey].maps[mapKey] = {
       sections: {},
+      startedCount: 0,
+      practiceCount: 0,
+      reviewCount: 0,
       completedCount: 0,
       updatedAt: null,
     };
   }
   if (!isPlainObject(progress.worlds[worldKey].maps[mapKey].sections)) {
     progress.worlds[worldKey].maps[mapKey].sections = {};
+  }
+  const mapProgress = progress.worlds[worldKey].maps[mapKey];
+  mapProgress.startedCount = toBoundedInt(mapProgress.startedCount, 0, 5000000);
+  mapProgress.practiceCount = toBoundedInt(mapProgress.practiceCount, 0, 50000000);
+  mapProgress.reviewCount = toBoundedInt(mapProgress.reviewCount, 0, 50000000);
+  mapProgress.completedCount = toBoundedInt(mapProgress.completedCount, 0, 5000000);
+};
+
+const BADGE_DEFINITIONS = Object.freeze({
+  first_steps: Object.freeze({
+    title: "First Steps",
+    description: "Complete your first section.",
+    tier: "bronze",
+  }),
+  section_navigator: Object.freeze({
+    title: "Section Navigator",
+    description: "Start 5 unique sections.",
+    tier: "bronze",
+  }),
+  grammar_keeper: Object.freeze({
+    title: "Grammar Keeper",
+    description: "Complete 5 grammar sections.",
+    tier: "silver",
+  }),
+  streak_3: Object.freeze({
+    title: "3-Day Streak",
+    description: "Learn on 3 consecutive days.",
+    tier: "bronze",
+  }),
+  streak_7: Object.freeze({
+    title: "7-Day Streak",
+    description: "Learn on 7 consecutive days.",
+    tier: "gold",
+  }),
+  polyglot_scout: Object.freeze({
+    title: "Polyglot Scout",
+    description: "Practice in 3 language worlds.",
+    tier: "silver",
+  }),
+  listener_150: Object.freeze({
+    title: "Signal Listener",
+    description: "Practice 150 cards.",
+    tier: "silver",
+  }),
+  quest_7: Object.freeze({
+    title: "Quest Master",
+    description: "Finish daily quests on 7 days.",
+    tier: "gold",
+  }),
+  level_10: Object.freeze({
+    title: "Level 10 Pilot",
+    description: "Reach level 10.",
+    tier: "gold",
+  }),
+});
+
+const hasSectionCompletion = (sectionRecord) => {
+  if (!isPlainObject(sectionRecord)) {
+    return false;
+  }
+  if (String(sectionRecord.status || "").toLowerCase() === "completed") {
+    return true;
+  }
+  return Boolean(sectionRecord.firstCompletedAt);
+};
+
+const countCompletedGrammarSections = (progress) => {
+  let count = 0;
+  const worlds = isPlainObject(progress.worlds) ? progress.worlds : {};
+  Object.values(worlds).forEach((worldRecord) => {
+    const grammarSections = worldRecord?.maps?.grammar?.sections;
+    if (!isPlainObject(grammarSections)) {
+      return;
+    }
+    Object.values(grammarSections).forEach((sectionRecord) => {
+      if (hasSectionCompletion(sectionRecord)) {
+        count += 1;
+      }
+    });
+  });
+  return count;
+};
+
+const awardBadge = (gamification, badgeId, nowIso) => {
+  const normalizedId = String(badgeId || "").trim();
+  if (!normalizedId || gamification.badges[normalizedId]) {
+    return false;
+  }
+  const meta = BADGE_DEFINITIONS[normalizedId];
+  if (!meta) {
+    return false;
+  }
+  gamification.badges[normalizedId] = {
+    awardedAt: nowIso,
+    title: meta.title,
+    description: meta.description,
+    tier: meta.tier,
+  };
+  return true;
+};
+
+const updateStreakForDate = (gamification, dateKey) => {
+  const last = normalizeDateKey(gamification.lastActiveDate);
+  if (last === dateKey) {
+    return;
+  }
+  if (!last) {
+    gamification.currentStreak = 1;
+  } else {
+    const dayGap = daysBetweenUtcDateKeys(last, dateKey);
+    gamification.currentStreak = dayGap === 1 ? Math.max(1, gamification.currentStreak + 1) : 1;
+  }
+  gamification.bestStreak = Math.max(gamification.bestStreak, gamification.currentStreak);
+  gamification.lastActiveDate = dateKey;
+};
+
+const ensureGamificationDateState = (progress, dateKey) => {
+  progress.gamification = normalizeGamificationState(progress.gamification, progress.totals.xp);
+  const gamification = progress.gamification;
+  if (gamification.daily.date !== dateKey) {
+    gamification.daily = {
+      date: dateKey,
+      xpEarned: 0,
+      events: 0,
+      startedEvents: 0,
+      practicedEvents: 0,
+      reviewEvents: 0,
+      completedEvents: 0,
+    };
+  }
+  if (gamification.quests.date !== dateKey) {
+    gamification.quests = {
+      date: dateKey,
+      tasks: createDefaultQuestTasks(),
+      allCompleted: false,
+    };
+  }
+  updateStreakForDate(gamification, dateKey);
+  return gamification;
+};
+
+const incrementQuestTaskProgress = (task, amount = 1) => {
+  if (!task || task.completed) {
+    return false;
+  }
+  const next = Math.max(0, Math.min(task.target, Number(task.progress || 0) + amount));
+  task.progress = next;
+  task.completed = task.progress >= task.target;
+  return task.completed;
+};
+
+const updateQuestProgressFromEvent = (progress, eventContext) => {
+  const gamification = progress.gamification;
+  const tasks = gamification.quests.tasks;
+  if (!tasks) {
+    return false;
+  }
+
+  if (eventContext.status === "practiced" || eventContext.status === "reviewed") {
+    incrementQuestTaskProgress(tasks.practice, 1);
+  }
+  if (eventContext.status === "started" && eventContext.isFirstSectionVisit) {
+    incrementQuestTaskProgress(tasks.discover, 1);
+  }
+  if (eventContext.status === "completed" && eventContext.isFirstCompletion) {
+    incrementQuestTaskProgress(tasks.complete, 1);
+  }
+
+  const previouslyAllCompleted = Boolean(gamification.quests.allCompleted);
+  const nowAllCompleted = Object.values(tasks).every((task) => task.completed);
+  gamification.quests.allCompleted = nowAllCompleted;
+  if (!previouslyAllCompleted && nowAllCompleted) {
+    gamification.stats.questDaysCompleted = toBoundedInt(
+      Number(gamification.stats.questDaysCompleted || 0) + 1,
+      0,
+      5000000
+    );
+    return true;
+  }
+  return false;
+};
+
+const computeEventXpDelta = (status, mapKey, previousSection, dailyState) => {
+  const previousStatus = String(previousSection?.status || "").toLowerCase();
+  const previousUpdatedMs = Date.parse(String(previousSection?.lastUpdatedAt || ""));
+  const recentlyRepeated =
+    Number.isFinite(previousUpdatedMs) &&
+    Date.now() - previousUpdatedMs < 45000 &&
+    previousStatus === status &&
+    status !== "completed";
+  if (recentlyRepeated) {
+    return 0;
+  }
+
+  const mapWeights = {
+    letters: { started: 5, practiced: 2, reviewed: 3, completed: 32, repeatedComplete: 5 },
+    words: { started: 6, practiced: 3, reviewed: 4, completed: 42, repeatedComplete: 6 },
+    phrases: { started: 6, practiced: 3, reviewed: 5, completed: 46, repeatedComplete: 6 },
+    grammar: { started: 7, practiced: 4, reviewed: 8, completed: 55, repeatedComplete: 8 },
+  };
+  const weight = mapWeights[mapKey] || mapWeights.words;
+
+  if (dailyState.xpEarned >= 520 && status !== "completed") {
+    return 0;
+  }
+  if (status === "completed") {
+    return previousStatus === "completed" ? weight.repeatedComplete : weight.completed;
+  }
+  if (status === "started") {
+    if (!previousSection) {
+      return weight.started;
+    }
+    return previousStatus === "completed" ? 1 : Math.max(1, Math.floor(weight.started / 2));
+  }
+  if (status === "reviewed") {
+    return weight.reviewed;
+  }
+  if (status === "practiced") {
+    return weight.practiced;
+  }
+  return 0;
+};
+
+const syncBadgesAndLevel = (progress, worldKey, nowIso) => {
+  const gamification = progress.gamification;
+  const worldSet = new Set(gamification.stats.worldsEngaged || []);
+  if (worldKey) {
+    worldSet.add(worldKey);
+  }
+  gamification.stats.worldsEngaged = [...worldSet].slice(0, 30);
+
+  const levelMeta = deriveLevelMetaFromXp(progress.totals.xp);
+  gamification.level = levelMeta.level;
+  gamification.nextLevelXp = levelMeta.nextLevelXp;
+
+  if (gamification.stats.sectionsCompleted >= 1) {
+    awardBadge(gamification, "first_steps", nowIso);
+  }
+  if (gamification.stats.sectionsVisited >= 5) {
+    awardBadge(gamification, "section_navigator", nowIso);
+  }
+  if (countCompletedGrammarSections(progress) >= 5) {
+    awardBadge(gamification, "grammar_keeper", nowIso);
+  }
+  if (gamification.currentStreak >= 3) {
+    awardBadge(gamification, "streak_3", nowIso);
+  }
+  if (gamification.currentStreak >= 7) {
+    awardBadge(gamification, "streak_7", nowIso);
+  }
+  if ((gamification.stats.worldsEngaged || []).length >= 3) {
+    awardBadge(gamification, "polyglot_scout", nowIso);
+  }
+  if (gamification.stats.cardsPracticed >= 150) {
+    awardBadge(gamification, "listener_150", nowIso);
+  }
+  if (gamification.stats.questDaysCompleted >= 7) {
+    awardBadge(gamification, "quest_7", nowIso);
+  }
+  if (gamification.level >= 10) {
+    awardBadge(gamification, "level_10", nowIso);
   }
 };
 
@@ -1067,7 +1676,6 @@ const trackProgressEventForUser = (userRecord, payload) => {
   const sectionKey = normalizeSectionKey(payload.sectionKey);
   const status = String(payload.status || "started").trim().toLowerCase();
   const scoreRaw = Number(payload.score);
-  const xpDeltaRaw = Number(payload.xpDelta);
 
   if (!worldKey || !mapKey || !sectionKey) {
     return { ok: false, error: "Missing worldKey, mapKey, or sectionKey" };
@@ -1080,18 +1688,37 @@ const trackProgressEventForUser = (userRecord, payload) => {
   }
 
   const score = Number.isFinite(scoreRaw) ? Math.max(0, Math.min(100, Math.round(scoreRaw))) : null;
-  const xpDelta = Number.isFinite(xpDeltaRaw) ? Math.max(-1000, Math.min(5000, Math.round(xpDeltaRaw))) : 0;
   const now = new Date().toISOString();
+  const dateKey = getUtcDateKeyFromIso(now);
 
   userRecord.progress = normalizeProgress(userRecord.progress);
   const progress = userRecord.progress;
   ensureProgressContainers(progress, worldKey, mapKey);
   const mapProgress = progress.worlds[worldKey].maps[mapKey];
   const previous = isPlainObject(mapProgress.sections[sectionKey]) ? mapProgress.sections[sectionKey] : null;
+  const previousStatus = String(previous?.status || "").toLowerCase();
+  const isFirstCompletion = status === "completed" && previousStatus !== "completed";
+  const isFirstSectionVisit = !previous || toBoundedInt(previous.visitCount, 0, 5000000) === 0;
+
+  const gamification = ensureGamificationDateState(progress, dateKey);
+  const xpDelta = computeEventXpDelta(status, mapKey, previous, gamification.daily);
+
+  const nextVisitCount = toBoundedInt(previous?.visitCount, 0, 5000000) + (status === "started" ? 1 : 0);
+  const nextPracticeCount =
+    toBoundedInt(previous?.practiceCount, 0, 50000000) + (status === "practiced" ? 1 : 0);
+  const nextReviewCount =
+    toBoundedInt(previous?.reviewCount, 0, 50000000) + (status === "reviewed" ? 1 : 0);
+  const nextCompletionCount =
+    toBoundedInt(previous?.completionCount, 0, 5000000) + (status === "completed" ? 1 : 0);
 
   mapProgress.sections[sectionKey] = {
     status,
     score,
+    visitCount: nextVisitCount,
+    practiceCount: nextPracticeCount,
+    reviewCount: nextReviewCount,
+    completionCount: nextCompletionCount,
+    firstStartedAt: previous?.firstStartedAt || (status === "started" ? now : null),
     lastUpdatedAt: now,
     firstCompletedAt:
       status === "completed"
@@ -1099,6 +1726,15 @@ const trackProgressEventForUser = (userRecord, payload) => {
         : previous?.firstCompletedAt || null,
   };
 
+  if (status === "started") {
+    mapProgress.startedCount = toBoundedInt(Number(mapProgress.startedCount || 0) + 1, 0, 5000000);
+  }
+  if (status === "practiced") {
+    mapProgress.practiceCount = toBoundedInt(Number(mapProgress.practiceCount || 0) + 1, 0, 50000000);
+  }
+  if (status === "reviewed") {
+    mapProgress.reviewCount = toBoundedInt(Number(mapProgress.reviewCount || 0) + 1, 0, 50000000);
+  }
   if (status === "completed" && previous?.status !== "completed") {
     mapProgress.completedCount = Math.max(0, Number(mapProgress.completedCount || 0) + 1);
     progress.totals.completedSections = Math.max(0, Number(progress.totals.completedSections || 0) + 1);
@@ -1106,6 +1742,69 @@ const trackProgressEventForUser = (userRecord, payload) => {
 
   progress.totals.xp = Math.max(0, Number(progress.totals.xp || 0) + xpDelta);
   progress.totals.lastActivityAt = now;
+  gamification.daily.events = toBoundedInt(Number(gamification.daily.events || 0) + 1, 0, 50000);
+  gamification.daily.xpEarned = toBoundedInt(
+    Number(gamification.daily.xpEarned || 0) + Math.max(0, xpDelta),
+    0,
+    30000
+  );
+  if (status === "started") {
+    gamification.daily.startedEvents = toBoundedInt(Number(gamification.daily.startedEvents || 0) + 1, 0, 50000);
+  }
+  if (status === "practiced") {
+    gamification.daily.practicedEvents = toBoundedInt(
+      Number(gamification.daily.practicedEvents || 0) + 1,
+      0,
+      50000
+    );
+  }
+  if (status === "reviewed") {
+    gamification.daily.reviewEvents = toBoundedInt(Number(gamification.daily.reviewEvents || 0) + 1, 0, 50000);
+  }
+  if (status === "completed") {
+    gamification.daily.completedEvents = toBoundedInt(
+      Number(gamification.daily.completedEvents || 0) + 1,
+      0,
+      50000
+    );
+  }
+
+  if (isFirstSectionVisit && status === "started") {
+    gamification.stats.sectionsVisited = toBoundedInt(
+      Number(gamification.stats.sectionsVisited || 0) + 1,
+      0,
+      5000000
+    );
+  }
+  if (status === "practiced") {
+    gamification.stats.cardsPracticed = toBoundedInt(
+      Number(gamification.stats.cardsPracticed || 0) + 1,
+      0,
+      50000000
+    );
+  }
+  if (status === "reviewed" && mapKey === "grammar") {
+    gamification.stats.grammarReviews = toBoundedInt(
+      Number(gamification.stats.grammarReviews || 0) + 1,
+      0,
+      50000000
+    );
+  }
+  if (isFirstCompletion) {
+    gamification.stats.sectionsCompleted = toBoundedInt(
+      Number(gamification.stats.sectionsCompleted || 0) + 1,
+      0,
+      5000000
+    );
+  }
+
+  updateQuestProgressFromEvent(progress, {
+    status,
+    isFirstCompletion,
+    isFirstSectionVisit,
+  });
+  syncBadgesAndLevel(progress, worldKey, now);
+
   mapProgress.updatedAt = now;
   progress.updatedAt = now;
   progress.recentEvents.push({
@@ -1116,7 +1815,7 @@ const trackProgressEventForUser = (userRecord, payload) => {
     xpDelta,
     timestamp: now,
   });
-  progress.recentEvents = progress.recentEvents.slice(-50);
+  progress.recentEvents = progress.recentEvents.slice(-120);
   userRecord.updatedAt = now;
   markAuthStoreDirty();
 
@@ -1138,6 +1837,126 @@ const trackProgressEventForUser = (userRecord, payload) => {
 /* --------------------------------------------------------------------------
    ROUTE: AUTH + ACCOUNT + PROGRESS
    -------------------------------------------------------------------------- */
+app.get("/api/auth/google/start", authGoogleLimiter, (req, res) => {
+  if (!isGoogleOauthConfigured()) {
+    return res.status(503).json({ error: "Google authentication is not configured" });
+  }
+
+  const mode = String(req.query?.mode || "").trim().toLowerCase() === "signup" ? "signup" : "login";
+  const returnTo = sanitizeReturnToPath(req.query?.returnTo);
+  const stateToken = createGoogleOauthState({ mode, returnTo });
+  const redirectUri = buildGoogleOauthRedirectUri(req);
+  const authorizeParams = new URLSearchParams();
+  authorizeParams.set("client_id", String(process.env.GOOGLE_OAUTH_CLIENT_ID || "").trim());
+  authorizeParams.set("redirect_uri", redirectUri);
+  authorizeParams.set("response_type", "code");
+  authorizeParams.set("scope", "openid email profile");
+  authorizeParams.set("state", stateToken);
+  authorizeParams.set("prompt", "select_account");
+
+  const redirectUrl = `${GOOGLE_OAUTH_AUTHORIZE_URL}?${authorizeParams.toString()}`;
+  return res.json({ ok: true, redirectUrl });
+});
+
+app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
+  if (!isGoogleOauthConfigured()) {
+    return res.redirect(302, buildAuthErrorRedirectPath("google_not_configured"));
+  }
+
+  const authCode = String(req.query?.code || "").trim();
+  const stateToken = String(req.query?.state || "").trim();
+  const oauthError = String(req.query?.error || "").trim();
+  const stateData = consumeGoogleOauthState(stateToken);
+  if (!stateData) {
+    return res.redirect(302, buildAuthErrorRedirectPath("google_state"));
+  }
+  if (oauthError) {
+    return res.redirect(302, buildAuthErrorRedirectPath(`google_${oauthError}`));
+  }
+  if (!authCode) {
+    return res.redirect(302, buildAuthErrorRedirectPath("google_code"));
+  }
+
+  try {
+    const redirectUri = buildGoogleOauthRedirectUri(req);
+    const tokenPayload = await exchangeGoogleCodeForTokens({
+      code: authCode,
+      redirectUri,
+    });
+    const profile = await fetchGoogleUserProfile({
+      accessToken: String(tokenPayload.access_token || "").trim(),
+      idToken: String(tokenPayload.id_token || "").trim(),
+    });
+
+    const email = normalizeEmail(profile.email);
+    const emailVerifiedRaw = String(profile.email_verified || "").trim().toLowerCase();
+    const emailVerified =
+      profile.email_verified === true || emailVerifiedRaw === "true" || emailVerifiedRaw === "1";
+    if (!isValidEmail(email) || !emailVerified) {
+      return res.redirect(302, buildAuthErrorRedirectPath("google_email"));
+    }
+
+    const nowIso = new Date().toISOString();
+    const existingUserId = authStore.emailIndex[email];
+    let userRecord = existingUserId ? authStore.users[existingUserId] : null;
+
+    if (!userRecord) {
+      const userId = crypto.randomUUID();
+      const generatedPassword = crypto.randomBytes(24).toString("base64url");
+      const passwordRecord = await buildPasswordRecord(generatedPassword);
+      const displayName = sanitizeDisplayName(profile.name || profile.given_name || "", email);
+      userRecord = {
+        id: userId,
+        email,
+        displayName,
+        password: passwordRecord,
+        createdAt: nowIso,
+        updatedAt: nowIso,
+        lastLoginAt: nowIso,
+        data: {
+          settings: {
+            baseLanguage: "",
+          },
+          profile: {
+            authProvider: "google",
+            picture: String(profile.picture || "").trim(),
+          },
+        },
+        progress: createDefaultProgress(),
+      };
+      authStore.users[userId] = userRecord;
+      authStore.emailIndex[email] = userId;
+    } else {
+      if (!userRecord.displayName || userRecord.displayName === "Explorer") {
+        userRecord.displayName = sanitizeDisplayName(profile.name || profile.given_name || "", email);
+      }
+      userRecord.data = normalizeUserData(userRecord.data);
+      if (!isPlainObject(userRecord.data.profile)) {
+        userRecord.data.profile = {};
+      }
+      userRecord.data.profile.authProvider = "google";
+      const pictureUrl = String(profile.picture || "").trim();
+      if (pictureUrl) {
+        userRecord.data.profile.picture = pictureUrl;
+      }
+      userRecord.updatedAt = nowIso;
+      userRecord.lastLoginAt = nowIso;
+    }
+
+    markAuthStoreDirty();
+    const sessionToken = createSessionForUser(userRecord.id, req);
+    setAuthSessionCookie(req, res, sessionToken);
+    return res.redirect(302, sanitizeReturnToPath(stateData.returnTo));
+  } catch (error) {
+    reportServerError("auth-google-callback", error, {
+      requestId: req.requestId,
+      method: req.method,
+      path: req.originalUrl,
+    });
+    return res.redirect(302, buildAuthErrorRedirectPath("google_callback"));
+  }
+});
+
 app.post("/api/auth/signup", authSignupLimiter, async (req, res) => {
   const email = normalizeEmail(req.body?.email);
   const password = String(req.body?.password || "");

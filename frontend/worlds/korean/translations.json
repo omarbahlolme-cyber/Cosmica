@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-18T15:18:51.798Z",
+  "generatedAt": "2026-02-18T15:33:45.346Z",
   "worldLanguage": "korean",
   "baseLanguages": [
     "albanian",
@@ -8059,6 +8059,24 @@
           "english": "let us try"
         }
       }
+    },
+    "sectionLabels": {
+      "Greetings": "인사",
+      "Politeness": "공손 표현",
+      "Introductions": "자기소개",
+      "Conversation": "대화",
+      "Questions": "질문",
+      "Requests": "요청",
+      "Time & Plans": "시간과 계획",
+      "Directions": "길 안내",
+      "Food": "음식",
+      "Shopping": "쇼핑",
+      "Health": "건강",
+      "Feelings": "감정",
+      "Opinions": "의견",
+      "Work & Study": "일과 학습",
+      "Problems": "문제",
+      "Everyday Expressions": "일상 표현"
     }
   },
   "grammar": {
@@ -8959,7 +8977,7 @@
               "text": "나는"
             },
             {
-              "label": "동사",
+              "label": "목적어",
               "text": "간다"
             }
           ],
@@ -9293,7 +9311,7 @@
               "text": "예쁜"
             },
             {
-              "label": "동사",
+              "label": "명사",
               "text": "피었다"
             }
           ],
@@ -9354,15 +9372,15 @@
           ],
           "exampleHighlights": [
             {
-              "label": "비교급 형용사",
+              "label": "주어",
               "text": "저 사과보다"
             },
             {
-              "label": "대상",
+              "label": "비교급 형용사",
               "text": "더"
             },
             {
-              "label": "동사",
+              "label": "대상",
               "text": "맛있다"
             }
           ],
@@ -10368,7 +10386,7 @@
             },
             {
               "label": "동사",
-              "text": "오면,"
+              "text": "오면"
             },
             {
               "label": "조건",
@@ -10408,7 +10426,7 @@
             },
             {
               "label": "동사",
-              "text": "오고,"
+              "text": "오고"
             },
             {
               "label": "조건1",
@@ -10416,7 +10434,7 @@
             },
             {
               "label": "조건2",
-              "text": "불면,"
+              "text": "불면"
             },
             {
               "label": "결과",
@@ -10533,7 +10551,7 @@
             },
             {
               "label": "조건",
-              "text": "않으면,"
+              "text": "않으면"
             },
             {
               "label": "결과",
@@ -10572,7 +10590,7 @@
             },
             {
               "label": "조건",
-              "text": "왔으면,"
+              "text": "왔으면"
             },
             {
               "label": "결과",
@@ -11444,7 +11462,7 @@
               "text": "나는"
             },
             {
-              "label": "동사",
+              "label": "주제",
               "text": "좋아한다"
             }
           ],
@@ -11475,11 +11493,11 @@
               "text": "나는"
             },
             {
-              "label": "동사",
+              "label": "목적어",
               "text": "좋아하지만"
             },
             {
-              "label": "연결어",
+              "label": "동사",
               "text": "싫어한다"
             }
           ],
@@ -11545,11 +11563,11 @@
               "text": "나는"
             },
             {
-              "label": "동사",
+              "label": "목적어",
               "text": "좋아하지만"
             },
             {
-              "label": "대조",
+              "label": "동사",
               "text": "좋아한다"
             }
           ],
@@ -11619,11 +11637,11 @@
               "text": "나는"
             },
             {
-              "label": "동사",
+              "label": "목적어",
               "text": "좋아하는 이유는"
             },
             {
-              "label": "이유",
+              "label": "동사",
               "text": "때문이다"
             }
           ],
@@ -11654,11 +11672,11 @@
               "text": "나는"
             },
             {
-              "label": "동사",
+              "label": "목적어",
               "text": "좋아한다"
             },
             {
-              "label": "예시",
+              "label": "동사",
               "text": "건강에 좋다"
             }
           ],

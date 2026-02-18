@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-18T15:18:51.808Z",
+  "generatedAt": "2026-02-18T15:33:45.247Z",
   "worldLanguage": "portuguese",
   "baseLanguages": [
     "albanian",
@@ -7939,6 +7939,24 @@
           "english": "let us try"
         }
       }
+    },
+    "sectionLabels": {
+      "Greetings": "Saudações",
+      "Politeness": "Cortesia",
+      "Introductions": "Apresentações",
+      "Conversation": "Conversa",
+      "Questions": "Perguntas",
+      "Requests": "Pedidos",
+      "Time & Plans": "Tempo e planos",
+      "Directions": "Direções",
+      "Food": "Comida",
+      "Shopping": "Compras",
+      "Health": "Saúde",
+      "Feelings": "Sentimentos",
+      "Opinions": "Opiniões",
+      "Work & Study": "Trabalho e estudo",
+      "Problems": "Problemas",
+      "Everyday Expressions": "Expressões do dia a dia"
     }
   },
   "grammar": {

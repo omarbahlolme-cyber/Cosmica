@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-18T15:18:51.776Z",
+  "generatedAt": "2026-02-18T15:33:45.364Z",
   "worldLanguage": "hindi",
   "baseLanguages": [
     "albanian",
@@ -7885,6 +7885,24 @@
           "english": "let us try"
         }
       }
+    },
+    "sectionLabels": {
+      "Greetings": "अभिवादन",
+      "Politeness": "शिष्टाचार",
+      "Introductions": "परिचय",
+      "Conversation": "बातचीत",
+      "Questions": "प्रश्न",
+      "Requests": "अनुरोध",
+      "Time & Plans": "समय और योजनाएँ",
+      "Directions": "दिशाएँ",
+      "Food": "भोजन",
+      "Shopping": "खरीदारी",
+      "Health": "स्वास्थ्य",
+      "Feelings": "भावनाएँ",
+      "Opinions": "राय",
+      "Work & Study": "काम और अध्ययन",
+      "Problems": "समस्याएँ",
+      "Everyday Expressions": "दैनिक अभिव्यक्तियाँ"
     }
   },
   "grammar": {
@@ -10100,7 +10118,7 @@
               "text": "राम"
             },
             {
-              "label": "सहायक क्रिया",
+              "label": "क्रिया",
               "text": "लिया"
             }
           ],
@@ -10246,7 +10264,7 @@
               "text": "यदि तुम पढ़ोगे"
             },
             {
-              "label": "पढ़ोगे",
+              "label": "तुम",
               "text": "ग"
             }
           ],
@@ -10283,7 +10301,7 @@
               "text": "तो हम खेले"
             },
             {
-              "label": "तो",
+              "label": "आएगा",
               "text": "ग"
             }
           ],
@@ -10316,7 +10334,7 @@
               "text": "यदि तुम आए होते"
             },
             {
-              "label": "होते",
+              "label": "तुम",
               "text": "त"
             }
           ],
@@ -10353,7 +10371,7 @@
               "text": "तो हम नहीं जाए"
             },
             {
-              "label": "तो",
+              "label": "होगी",
               "text": "ग"
             }
           ],
@@ -10386,7 +10404,7 @@
               "text": "यदि पानी उबालेंगे"
             },
             {
-              "label": "तो",
+              "label": "पानी",
               "text": "ग"
             }
           ],
@@ -10423,7 +10441,7 @@
               "text": "तो हम चले"
             },
             {
-              "label": "हो",
+              "label": "तैयार",
               "text": "ग"
             }
           ],

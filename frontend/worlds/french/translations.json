@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-18T13:03:48.289Z",
+  "generatedAt": "2026-02-18T15:33:45.196Z",
   "worldLanguage": "french",
   "baseLanguages": [
     "albanian",
@@ -6517,22 +6517,25 @@
           "english": "i do not speak french"
         }
       },
-      "j'apprends l'anglais": {
-        "source": "i am learning english",
+      "j'apprends le fran?ais": {
+        "source": "i am learning french",
+        "intent": "learn_world_language",
         "translations": {
-          "english": "i am learning english"
+          "english": "i am learning french"
         }
       },
-      "je parle anglais": {
-        "source": "i speak english",
+      "je parle fran?ais": {
+        "source": "i speak french",
+        "intent": "speak_world_language",
         "translations": {
-          "english": "i speak english"
+          "english": "i speak french"
         }
       },
-      "je ne parle pas anglais": {
-        "source": "i do not speak english",
+      "je ne parle pas fran?ais": {
+        "source": "i do not speak french",
+        "intent": "not_speak_world_language",
         "translations": {
-          "english": "i do not speak english"
+          "english": "i do not speak french"
         }
       }
     },
@@ -6659,12 +6662,6 @@
           "english": "which one is better"
         }
       },
-      "parles-tu anglais": {
-        "source": "do you speak english",
-        "translations": {
-          "english": "do you speak english"
-        }
-      },
       "as-tu ça": {
         "source": "do you have this",
         "translations": {
@@ -6711,6 +6708,13 @@
         "source": "what is your name",
         "translations": {
           "english": "what is your name"
+        }
+      },
+      "parles-tu fran?ais": {
+        "source": "do you speak french",
+        "intent": "ask_speak_world_language",
+        "translations": {
+          "english": "do you speak french"
         }
       }
     },
@@ -7989,6 +7993,24 @@
           "english": "let us try"
         }
       }
+    },
+    "sectionLabels": {
+      "Greetings": "Salutations",
+      "Politeness": "Politesse",
+      "Introductions": "Présentations",
+      "Conversation": "Conversation",
+      "Questions": "Questions",
+      "Requests": "Demandes",
+      "Time & Plans": "Temps et plans",
+      "Directions": "Directions",
+      "Food": "Nourriture",
+      "Shopping": "Achats",
+      "Health": "Santé",
+      "Feelings": "Sentiments",
+      "Opinions": "Opinions",
+      "Work & Study": "Travail et études",
+      "Problems": "Problèmes",
+      "Everyday Expressions": "Expressions quotidiennes"
     }
   },
   "grammar": {
@@ -8687,7 +8709,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Il faut que je mangé une pomme.",
+              "wrong": "Il faut que mange je une pomme.",
               "fix": "Il faut que je mange une pomme."
             }
           ]
@@ -11316,8 +11338,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "Merci de votre aide, vous êtes gentil.",
-              "fix": "Merci pour votre aide, vous êtes gentil."
+              "wrong": "Bonjour, pourriez-m'aider vous, s'il vous plaît ?",
+              "fix": "Bonjour, pourriez-vous m'aider, s'il vous plaît ?"
             }
           ]
         },
@@ -12967,12 +12989,9 @@
         "this is my sister": "c'est ma sœur",
         "nice to meet you": "enchanté(e) de vous rencontrer",
         "pleased to meet you": "heureux/heureuse de vous rencontrer",
-        "i am learning french": "j'apprends le français",
-        "i speak french": "je parle français",
-        "i do not speak french": "je ne parle pas français",
-        "i am learning english": "j'apprends l'anglais",
-        "i speak english": "je parle anglais",
-        "i do not speak english": "je ne parle pas anglais"
+        "i am learning french": "j'apprends le fran?ais",
+        "i speak french": "je parle fran?ais",
+        "i do not speak french": "je ne parle pas fran?ais"
       },
       "Conversation": {
         "can you repeat that": "peux-tu répéter ça",
@@ -12998,7 +13017,6 @@
         "what time is it": "quelle heure est-il",
         "how many people": "combien de personnes",
         "which one is better": "lequel est meilleur",
-        "do you speak english": "parles-tu anglais",
         "do you have this": "as-tu ça",
         "is this correct": "est-ce correct",
         "is it open": "est-ce ouvert",
@@ -13006,7 +13024,8 @@
         "is there a": "y a-t-il un",
         "are you ready": "es-tu prêt",
         "what do you think": "que penses-tu",
-        "what is your name": "comment t'appelles-tu"
+        "what is your name": "comment t'appelles-tu",
+        "do you speak french": "parles-tu fran?ais"
       },
       "Requests": {
         "can you help me": "peux-tu m'aider",

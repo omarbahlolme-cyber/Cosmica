@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-18T15:18:51.739Z",
+  "generatedAt": "2026-02-18T15:33:45.313Z",
   "worldLanguage": "chinese",
   "baseLanguages": [
     "albanian",
@@ -7951,6 +7951,24 @@
           "english": "let us try"
         }
       }
+    },
+    "sectionLabels": {
+      "Greetings": "问候",
+      "Politeness": "礼貌",
+      "Introductions": "自我介绍",
+      "Conversation": "对话",
+      "Questions": "提问",
+      "Requests": "请求",
+      "Time & Plans": "时间与计划",
+      "Directions": "方向",
+      "Food": "食物",
+      "Shopping": "购物",
+      "Health": "健康",
+      "Feelings": "感受",
+      "Opinions": "观点",
+      "Work & Study": "工作与学习",
+      "Problems": "问题",
+      "Everyday Expressions": "日常表达"
     }
   },
   "grammar": {
@@ -9422,8 +9440,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "她聪明比我。",
-              "fix": "她比我聪明。"
+              "wrong": "比她我更聪明。",
+              "fix": "她比我更聪明。"
             }
           ]
         },
@@ -10108,8 +10126,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "他没是老师。",
-              "fix": "他不是老师。"
+              "wrong": "没他吃晚饭。",
+              "fix": "他没吃晚饭。"
             }
           ]
         },
@@ -11316,7 +11334,7 @@
           "exampleHighlights": [
             {
               "label": "主语",
-              "text": "她说今天会下雨。"
+              "text": "她说今天会下雨"
             },
             {
               "label": "动词",
@@ -11347,7 +11365,7 @@
           "exampleHighlights": [
             {
               "label": "主语",
-              "text": "我说我喜欢这个。"
+              "text": "我说我喜欢这个"
             },
             {
               "label": "动词",
@@ -11417,7 +11435,7 @@
           "exampleHighlights": [
             {
               "label": "主语",
-              "text": "她说她可以来。"
+              "text": "她说她可以来"
             },
             {
               "label": "动词",

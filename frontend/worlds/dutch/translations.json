@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-18T15:18:51.748Z",
+  "generatedAt": "2026-02-18T15:33:45.261Z",
   "worldLanguage": "dutch",
   "baseLanguages": [
     "albanian",
@@ -9127,6 +9127,24 @@
           "english": "let us try"
         }
       }
+    },
+    "sectionLabels": {
+      "Greetings": "Begroetingen",
+      "Politeness": "Beleefdheid",
+      "Introductions": "Introducties",
+      "Conversation": "Gesprek",
+      "Questions": "Vragen",
+      "Requests": "Verzoeken",
+      "Time & Plans": "Tijd en plannen",
+      "Directions": "Richtingen",
+      "Food": "Eten",
+      "Shopping": "Winkelen",
+      "Health": "Gezondheid",
+      "Feelings": "Gevoelens",
+      "Opinions": "Meningen",
+      "Work & Study": "Werk en studie",
+      "Problems": "Problemen",
+      "Everyday Expressions": "Dagelijkse uitdrukkingen"
     }
   },
   "grammar": {
@@ -12649,8 +12667,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "U ziet er goed uit!",
-              "fix": "Je ziet er goed uit!"
+              "wrong": "Je een mooie jurk hebt aan!",
+              "fix": "Je hebt een mooie jurk aan!"
             }
           ]
         }

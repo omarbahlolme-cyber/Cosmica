@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-18T15:18:51.825Z",
+  "generatedAt": "2026-02-18T15:33:45.277Z",
   "worldLanguage": "swedish",
   "baseLanguages": [
     "albanian",
@@ -9109,6 +9109,24 @@
           "english": "let us try"
         }
       }
+    },
+    "sectionLabels": {
+      "Greetings": "Hälsningar",
+      "Politeness": "Hövlighet",
+      "Introductions": "Presentationer",
+      "Conversation": "Samtal",
+      "Questions": "Frågor",
+      "Requests": "Förfrågningar",
+      "Time & Plans": "Tid och planer",
+      "Directions": "Vägbeskrivningar",
+      "Food": "Mat",
+      "Shopping": "Shopping",
+      "Health": "Hälsa",
+      "Feelings": "Känslor",
+      "Opinions": "Åsikter",
+      "Work & Study": "Arbete och studier",
+      "Problems": "Problem",
+      "Everyday Expressions": "Vardagliga uttryck"
     }
   },
   "grammar": {
@@ -12934,7 +12952,7 @@
               "text": "Jag"
             },
             {
-              "label": "objekt",
+              "label": "verb",
               "text": "för att lära mig svenska"
             }
           ],
