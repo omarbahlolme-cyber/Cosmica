@@ -234,6 +234,11 @@ const authLoginLimiter = createLimiter({
   max: 50,
   scope: "auth-login",
 });
+const authVerifyLimiter = createLimiter({
+  windowMs: 15 * 60 * 1000,
+  max: 30,
+  scope: "auth-verify",
+});
 const authSessionLimiter = createLimiter({
   windowMs: 5 * 60 * 1000,
   max: 120,
@@ -516,6 +521,62 @@ const sendViaResend = async ({ from, to, replyTo, subject, text }) => {
   }
 };
 
+const hasSmtpDeliveryConfig = () =>
+  Boolean(
+    String(process.env.SMTP_HOST || "").trim() &&
+      Number(process.env.SMTP_PORT || 0) > 0 &&
+      String(process.env.SMTP_USER || "").trim() &&
+      String(process.env.SMTP_PASS || "").trim()
+  );
+
+const hasAnyEmailDeliveryConfig = () =>
+  Boolean(String(process.env.RESEND_API_KEY || "").trim()) || hasSmtpDeliveryConfig();
+
+const sendTransactionalEmail = async ({ to, subject, text, replyTo = "" }) => {
+  const recipient = String(to || "").trim();
+  if (!recipient) {
+    return { ok: false, error: "Missing recipient email" };
+  }
+  const fromAddress = String(
+    process.env.AUTH_FROM || process.env.FEEDBACK_FROM || process.env.SMTP_USER || ""
+  ).trim();
+  if (!fromAddress) {
+    return { ok: false, error: "Missing AUTH_FROM/FEEDBACK_FROM sender address" };
+  }
+
+  const resendConfigured = Boolean(String(process.env.RESEND_API_KEY || "").trim());
+  if (resendConfigured) {
+    const resendResult = await sendViaResend({
+      from: fromAddress,
+      to: recipient,
+      replyTo: String(replyTo || "").trim() || undefined,
+      subject,
+      text,
+    });
+    if (resendResult.ok) {
+      return { ok: true };
+    }
+  }
+
+  const mailer = getMailer();
+  if (!mailer) {
+    return { ok: false, error: "No email provider configured" };
+  }
+
+  try {
+    await mailer.sendMail({
+      from: fromAddress,
+      to: recipient,
+      replyTo: String(replyTo || "").trim() || undefined,
+      subject,
+      text,
+    });
+    return { ok: true };
+  } catch (error) {
+    return { ok: false, error: error?.message || "SMTP delivery failed" };
+  }
+};
+
 /* --------------------------------------------------------------------------
    AUTH + ACCOUNT DATA STORE
    Lightweight file-backed persistence for accounts, sessions, and progress.
@@ -538,6 +599,12 @@ const GOOGLE_OAUTH_AUTHORIZE_URL = "https://accounts.google.com/o/oauth2/v2/auth
 const GOOGLE_OAUTH_TOKEN_URL = "https://oauth2.googleapis.com/token";
 const GOOGLE_OAUTH_USERINFO_URL = "https://openidconnect.googleapis.com/v1/userinfo";
 const GOOGLE_OAUTH_STATE_TTL_MS = 1000 * 60 * 10;
+const GOOGLE_OAUTH_FLOW_COOKIE_NAME = "cosmica_google_flow";
+const GOOGLE_OAUTH_FLOW_COOKIE_TTL_MS = 1000 * 60 * 12;
+const EMAIL_VERIFICATION_TOKEN_TTL_MS = Math.max(
+  5 * 60 * 1000,
+  Number(process.env.EMAIL_VERIFICATION_TTL_MS || 1000 * 60 * 60 * 24)
+);
 const googleOauthStateStore = new Map();
 
 const isPlainObject = (value) =>
@@ -671,6 +738,22 @@ const sanitizeDisplayName = (value, email = "") => {
     .trim()
     .slice(0, 30);
   return fallback || "Explorer";
+};
+
+const createEmptyEmailVerificationState = () => ({
+  tokenHash: "",
+  expiresAt: null,
+  sentAt: null,
+});
+
+const normalizeEmailVerificationState = (value) => {
+  const fallback = createEmptyEmailVerificationState();
+  const candidate = isPlainObject(value) ? value : {};
+  fallback.tokenHash = String(candidate.tokenHash || "").trim();
+  fallback.expiresAt =
+    typeof candidate.expiresAt === "string" && candidate.expiresAt ? candidate.expiresAt : null;
+  fallback.sentAt = typeof candidate.sentAt === "string" && candidate.sentAt ? candidate.sentAt : null;
+  return fallback;
 };
 
 const normalizeUserData = (value) => {
@@ -860,6 +943,13 @@ const normalizeUserRecord = (candidate, fallbackUserId) => {
   if (!id || !email || !passwordSalt || !passwordHash) {
     return null;
   }
+  const normalizedData = normalizeUserData(candidate.data);
+  const authProvider = String(normalizedData?.profile?.authProvider || "").trim().toLowerCase();
+  const explicitEmailVerified =
+    typeof candidate.emailVerified === "boolean" ? candidate.emailVerified : null;
+  const emailVerified =
+    explicitEmailVerified !== null ? explicitEmailVerified : authProvider === "google" || authProvider === "";
+  const normalizedEmailVerification = normalizeEmailVerificationState(candidate.emailVerification);
   return {
     id,
     email,
@@ -874,7 +964,9 @@ const normalizeUserRecord = (candidate, fallbackUserId) => {
     createdAt: String(candidate.createdAt || new Date().toISOString()),
     updatedAt: String(candidate.updatedAt || new Date().toISOString()),
     lastLoginAt: candidate.lastLoginAt ? String(candidate.lastLoginAt) : null,
-    data: normalizeUserData(candidate.data),
+    emailVerified: Boolean(emailVerified),
+    emailVerification: emailVerified ? createEmptyEmailVerificationState() : normalizedEmailVerification,
+    data: normalizedData,
     progress: normalizeProgress(candidate.progress),
   };
 };
@@ -978,6 +1070,17 @@ const markAuthStoreDirty = () => {
 
 const hashText = (value) => crypto.createHash("sha256").update(String(value || "")).digest("hex");
 const hashSessionToken = (token) => hashText(token);
+const hashEmailVerificationToken = (token) => hashText(`email-verify:${String(token || "")}`);
+
+const createEmailVerificationChallenge = () => {
+  const rawToken = crypto.randomBytes(32).toString("base64url");
+  return {
+    rawToken,
+    tokenHash: hashEmailVerificationToken(rawToken),
+    expiresAt: new Date(Date.now() + EMAIL_VERIFICATION_TOKEN_TTL_MS).toISOString(),
+    sentAt: new Date().toISOString(),
+  };
+};
 
 const parseCookieHeader = (headerValue) => {
   const result = {};
@@ -1041,6 +1144,34 @@ const setAuthSessionCookie = (req, res, rawToken) => {
 
 const clearAuthSessionCookie = (req, res) => {
   const cookie = serializeCookie(AUTH_COOKIE_NAME, "", {
+    path: "/",
+    maxAgeSec: 0,
+    expires: new Date(0),
+    sameSite: "Lax",
+    secure: shouldUseSecureAuthCookie(req),
+    httpOnly: true,
+  });
+  res.append("Set-Cookie", cookie);
+};
+
+const readGoogleOauthFlowCookie = (req) => {
+  const cookies = parseCookieHeader(req.headers.cookie || "");
+  return String(cookies[GOOGLE_OAUTH_FLOW_COOKIE_NAME] || "").trim();
+};
+
+const setGoogleOauthFlowCookie = (req, res, flowToken) => {
+  const cookie = serializeCookie(GOOGLE_OAUTH_FLOW_COOKIE_NAME, String(flowToken || ""), {
+    path: "/",
+    maxAgeSec: Math.floor(GOOGLE_OAUTH_FLOW_COOKIE_TTL_MS / 1000),
+    sameSite: "Lax",
+    secure: shouldUseSecureAuthCookie(req),
+    httpOnly: true,
+  });
+  res.append("Set-Cookie", cookie);
+};
+
+const clearGoogleOauthFlowCookie = (req, res) => {
+  const cookie = serializeCookie(GOOGLE_OAUTH_FLOW_COOKIE_NAME, "", {
     path: "/",
     maxAgeSec: 0,
     expires: new Date(0),
@@ -1191,6 +1322,7 @@ const toPublicUser = (userRecord) => ({
   id: userRecord.id,
   email: userRecord.email,
   displayName: userRecord.displayName,
+  emailVerified: userRecord.emailVerified !== false,
   createdAt: userRecord.createdAt,
   updatedAt: userRecord.updatedAt,
   lastLoginAt: userRecord.lastLoginAt || null,
@@ -1261,6 +1393,22 @@ const getRequestOrigin = (req) => {
   return `${protocol}://${host}`;
 };
 
+const getPublicAppOrigin = (req) => {
+  const requestOrigin = getRequestOrigin(req);
+  const requestHost = String(req.get("host") || "").trim();
+  if (isLocalHost(requestHost)) {
+    return requestOrigin;
+  }
+  const configuredOrigin = String(process.env.PUBLIC_APP_ORIGIN || "").trim();
+  if (configuredOrigin) {
+    try {
+      const parsed = new URL(configuredOrigin);
+      return parsed.origin;
+    } catch {}
+  }
+  return requestOrigin;
+};
+
 const sanitizeReturnToPath = (rawValue) => {
   const raw = String(rawValue || "").trim();
   if (!raw.startsWith("/") || raw.startsWith("//")) {
@@ -1292,12 +1440,13 @@ const cleanupExpiredGoogleOauthStates = () => {
   }
 };
 
-const createGoogleOauthState = ({ mode = "login", returnTo = "/index.html" } = {}) => {
+const createGoogleOauthState = ({ mode = "login", returnTo = "/index.html", flowToken = "" } = {}) => {
   cleanupExpiredGoogleOauthStates();
   const stateToken = crypto.randomBytes(20).toString("base64url");
   googleOauthStateStore.set(stateToken, {
     mode: mode === "signup" ? "signup" : "login",
     returnTo: sanitizeReturnToPath(returnTo),
+    flowToken: String(flowToken || "").trim(),
     createdAt: Date.now(),
   });
   return stateToken;
@@ -1369,7 +1518,46 @@ const fetchGoogleUserProfile = async ({ accessToken, idToken }) => {
   throw new Error("Failed to fetch Google profile");
 };
 
-const buildAuthErrorRedirectPath = (code) => `/index.html?authError=${encodeURIComponent(String(code || "google"))}`;
+const buildEmailVerificationLink = (req, rawToken, returnTo = "/index.html") => {
+  const origin = getPublicAppOrigin(req);
+  const verifyUrl = new URL("/api/auth/verify-email", origin);
+  verifyUrl.searchParams.set("token", String(rawToken || "").trim());
+  verifyUrl.searchParams.set("returnTo", sanitizeReturnToPath(returnTo));
+  return verifyUrl.toString();
+};
+
+const sendAccountVerificationEmail = async ({ req, email, displayName, rawToken, returnTo }) => {
+  const verifyUrl = buildEmailVerificationLink(req, rawToken, returnTo);
+  const safeName = sanitizeDisplayName(displayName, email);
+  const subject = "Verify your Cosmica account";
+  const text = [
+    `Hi ${safeName},`,
+    "",
+    "Welcome to Cosmica.",
+    "Please verify your email before logging in:",
+    verifyUrl,
+    "",
+    `This link expires in ${Math.round(EMAIL_VERIFICATION_TOKEN_TTL_MS / (1000 * 60 * 60))} hours.`,
+    "",
+    "If you did not create this account, you can ignore this email.",
+  ].join("\n");
+  return sendTransactionalEmail({
+    to: email,
+    subject,
+    text,
+  });
+};
+
+const buildAuthErrorRedirectPath = (code, returnTo = "/index.html") => {
+  const safeTarget = sanitizeReturnToPath(returnTo);
+  try {
+    const parsed = new URL(safeTarget, "http://localhost");
+    parsed.searchParams.set("authError", String(code || "google"));
+    return `${parsed.pathname}${parsed.search}${parsed.hash}`;
+  } catch {
+    return `/index.html?authError=${encodeURIComponent(String(code || "google"))}`;
+  }
+};
 
 const normalizeWorldKey = (value) =>
   String(value || "")
@@ -1837,14 +2025,22 @@ const trackProgressEventForUser = (userRecord, payload) => {
 /* --------------------------------------------------------------------------
    ROUTE: AUTH + ACCOUNT + PROGRESS
    -------------------------------------------------------------------------- */
-app.get("/api/auth/google/start", authGoogleLimiter, (req, res) => {
+const startGoogleOauthFlow = (req, res, forcedMode = "") => {
   if (!isGoogleOauthConfigured()) {
     return res.status(503).json({ error: "Google authentication is not configured" });
   }
 
-  const mode = String(req.query?.mode || "").trim().toLowerCase() === "signup" ? "signup" : "login";
+  const forced = String(forcedMode || "").trim().toLowerCase();
+  const mode =
+    forced === "signup" || forced === "login"
+      ? forced
+      : String(req.query?.mode || "").trim().toLowerCase() === "signup"
+        ? "signup"
+        : "login";
   const returnTo = sanitizeReturnToPath(req.query?.returnTo);
-  const stateToken = createGoogleOauthState({ mode, returnTo });
+  const flowToken = crypto.randomBytes(20).toString("base64url");
+  setGoogleOauthFlowCookie(req, res, flowToken);
+  const stateToken = createGoogleOauthState({ mode, returnTo, flowToken });
   const redirectUri = buildGoogleOauthRedirectUri(req);
   const authorizeParams = new URLSearchParams();
   authorizeParams.set("client_id", String(process.env.GOOGLE_OAUTH_CLIENT_ID || "").trim());
@@ -1855,8 +2051,18 @@ app.get("/api/auth/google/start", authGoogleLimiter, (req, res) => {
   authorizeParams.set("prompt", "select_account");
 
   const redirectUrl = `${GOOGLE_OAUTH_AUTHORIZE_URL}?${authorizeParams.toString()}`;
-  return res.json({ ok: true, redirectUrl });
-});
+  return res.json({ ok: true, redirectUrl, mode });
+};
+
+app.get("/api/auth/google/start/login", authGoogleLimiter, (req, res) =>
+  startGoogleOauthFlow(req, res, "login")
+);
+
+app.get("/api/auth/google/start/signup", authGoogleLimiter, (req, res) =>
+  startGoogleOauthFlow(req, res, "signup")
+);
+
+app.get("/api/auth/google/start", authGoogleLimiter, (req, res) => startGoogleOauthFlow(req, res));
 
 app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
   if (!isGoogleOauthConfigured()) {
@@ -1866,9 +2072,15 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
   const authCode = String(req.query?.code || "").trim();
   const stateToken = String(req.query?.state || "").trim();
   const oauthError = String(req.query?.error || "").trim();
+  const flowCookieToken = readGoogleOauthFlowCookie(req);
   const stateData = consumeGoogleOauthState(stateToken);
+  clearGoogleOauthFlowCookie(req, res);
   if (!stateData) {
     return res.redirect(302, buildAuthErrorRedirectPath("google_state"));
+  }
+  const stateFlowToken = String(stateData?.flowToken || "").trim();
+  if (!flowCookieToken || !stateFlowToken || flowCookieToken !== stateFlowToken) {
+    return res.redirect(302, buildAuthErrorRedirectPath("google_flow"));
   }
   if (oauthError) {
     return res.redirect(302, buildAuthErrorRedirectPath(`google_${oauthError}`));
@@ -1899,6 +2111,15 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
     const nowIso = new Date().toISOString();
     const existingUserId = authStore.emailIndex[email];
     let userRecord = existingUserId ? authStore.users[existingUserId] : null;
+    const authMode = String(stateData?.mode || "").trim().toLowerCase() === "signup" ? "signup" : "login";
+
+    if (!userRecord && authMode !== "signup") {
+      return res.redirect(302, buildAuthErrorRedirectPath("google_no_account"));
+    }
+
+    if (userRecord && authMode === "signup") {
+      return res.redirect(302, buildAuthErrorRedirectPath("google_account_exists"));
+    }
 
     if (!userRecord) {
       const userId = crypto.randomUUID();
@@ -1913,6 +2134,8 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
         createdAt: nowIso,
         updatedAt: nowIso,
         lastLoginAt: nowIso,
+        emailVerified: true,
+        emailVerification: createEmptyEmailVerificationState(),
         data: {
           settings: {
             baseLanguage: "",
@@ -1941,6 +2164,8 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
       }
       userRecord.updatedAt = nowIso;
       userRecord.lastLoginAt = nowIso;
+      userRecord.emailVerified = true;
+      userRecord.emailVerification = createEmptyEmailVerificationState();
     }
 
     markAuthStoreDirty();
@@ -1957,11 +2182,51 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
   }
 });
 
+app.get("/api/auth/verify-email", authGoogleLimiter, (req, res) => {
+  const rawToken = String(req.query?.token || "").trim();
+  const returnTo = sanitizeReturnToPath(req.query?.returnTo);
+
+  if (!rawToken || rawToken.length < 20) {
+    return res.redirect(302, buildAuthErrorRedirectPath("email_verify_invalid", returnTo));
+  }
+
+  const tokenHash = hashEmailVerificationToken(rawToken);
+  const userRecord = Object.values(authStore.users).find((record) => {
+    if (!record || typeof record !== "object") {
+      return false;
+    }
+    const verificationState = normalizeEmailVerificationState(record.emailVerification);
+    return verificationState.tokenHash === tokenHash;
+  });
+
+  if (!userRecord) {
+    return res.redirect(302, buildAuthErrorRedirectPath("email_verify_invalid", returnTo));
+  }
+
+  if (userRecord.emailVerified === true) {
+    return res.redirect(302, buildAuthErrorRedirectPath("email_verified", returnTo));
+  }
+
+  const verificationState = normalizeEmailVerificationState(userRecord.emailVerification);
+  const expiresAtMs = Date.parse(String(verificationState.expiresAt || ""));
+  if (!Number.isFinite(expiresAtMs) || expiresAtMs < Date.now()) {
+    return res.redirect(302, buildAuthErrorRedirectPath("email_verify_expired", returnTo));
+  }
+
+  userRecord.emailVerified = true;
+  userRecord.emailVerification = createEmptyEmailVerificationState();
+  userRecord.updatedAt = new Date().toISOString();
+  markAuthStoreDirty();
+  return res.redirect(302, buildAuthErrorRedirectPath("email_verified", returnTo));
+});
+
 app.post("/api/auth/signup", authSignupLimiter, async (req, res) => {
   const email = normalizeEmail(req.body?.email);
   const password = String(req.body?.password || "");
-  const displayName = sanitizeDisplayName(req.body?.displayName, email);
+  const displayNameInput = String(req.body?.displayName || "").trim();
+  const displayName = sanitizeDisplayName(displayNameInput, email);
   const baseLanguage = String(req.body?.baseLanguage || "").trim().slice(0, 40);
+  const returnTo = sanitizeReturnToPath(req.body?.returnTo);
 
   if (!isValidEmail(email)) {
     return res.status(400).json({ error: "Invalid email" });
@@ -1969,22 +2234,45 @@ app.post("/api/auth/signup", authSignupLimiter, async (req, res) => {
   if (!isValidPassword(password)) {
     return res.status(400).json({ error: "Password must be 8-128 characters" });
   }
-  if (authStore.emailIndex[email]) {
-    return res.status(409).json({ error: "Account already exists" });
+  if (!displayNameInput) {
+    return res.status(400).json({ error: "Username is required" });
+  }
+  if (!hasAnyEmailDeliveryConfig()) {
+    return res.status(503).json({ error: "Email verification is not configured yet" });
   }
 
   try {
+    const existingUserId = authStore.emailIndex[email];
+    const existingUser = existingUserId ? authStore.users[existingUserId] : null;
+    if (existingUser) {
+      if (existingUser.emailVerified === false) {
+        return res.status(409).json({
+          error: "Account exists but is not verified. Use resend verification below.",
+          verificationRequired: true,
+          resendEligible: true,
+        });
+      }
+      return res.status(409).json({ error: "Account already exists" });
+    }
+
+    const verificationChallenge = createEmailVerificationChallenge();
     const passwordRecord = await buildPasswordRecord(password);
     const userId = crypto.randomUUID();
     const now = new Date().toISOString();
-    authStore.users[userId] = {
+    const pendingUserRecord = {
       id: userId,
       email,
       displayName,
       password: passwordRecord,
       createdAt: now,
       updatedAt: now,
-      lastLoginAt: now,
+      lastLoginAt: null,
+      emailVerified: false,
+      emailVerification: {
+        tokenHash: verificationChallenge.tokenHash,
+        expiresAt: verificationChallenge.expiresAt,
+        sentAt: verificationChallenge.sentAt,
+      },
       data: {
         settings: {
           baseLanguage,
@@ -1993,23 +2281,123 @@ app.post("/api/auth/signup", authSignupLimiter, async (req, res) => {
       },
       progress: createDefaultProgress(),
     };
+    authStore.users[userId] = pendingUserRecord;
     authStore.emailIndex[email] = userId;
-    const sessionToken = createSessionForUser(userId, req);
-    setAuthSessionCookie(req, res, sessionToken);
+    const delivery = await sendAccountVerificationEmail({
+      req,
+      email,
+      displayName,
+      rawToken: verificationChallenge.rawToken,
+      returnTo,
+    });
+    if (!delivery.ok) {
+      delete authStore.users[userId];
+      delete authStore.emailIndex[email];
+      const deliveryError = String(delivery.error || "").trim();
+      const loweredDeliveryError = deliveryError.toLowerCase();
+      if (loweredDeliveryError.includes("testing emails") || loweredDeliveryError.includes("verify a domain")) {
+        return res.status(502).json({
+          error:
+            "Email provider is in testing mode. Verify a domain in Resend and use AUTH_FROM with that domain.",
+        });
+      }
+      return res.status(502).json({
+        error: "Could not send verification email. Check mail provider config and try again.",
+      });
+    }
+    markAuthStoreDirty();
 
     return res.status(201).json({
       ok: true,
-      user: toPublicUser(authStore.users[userId]),
-      data: cloneForResponse(authStore.users[userId].data),
-      progress: cloneForResponse(authStore.users[userId].progress),
+      verificationRequired: true,
+      message: "Account created. Check your email and verify before logging in.",
+      email,
     });
   } catch (error) {
+    if (authStore.emailIndex[email]) {
+      const userId = authStore.emailIndex[email];
+      const createdUser = authStore.users[userId];
+      if (createdUser && createdUser.email === email && createdUser.emailVerified === false) {
+        delete authStore.users[userId];
+        delete authStore.emailIndex[email];
+      }
+    }
     reportServerError("auth-signup", error, {
       requestId: req.requestId,
       method: req.method,
       path: req.originalUrl,
     });
     return res.status(500).json({ error: "Failed to create account" });
+  }
+});
+
+app.post("/api/auth/verification/resend", authVerifyLimiter, async (req, res) => {
+  const email = normalizeEmail(req.body?.email);
+  const returnTo = sanitizeReturnToPath(req.body?.returnTo);
+  if (!isValidEmail(email)) {
+    return res.status(400).json({ error: "Enter a valid email first" });
+  }
+  if (!hasAnyEmailDeliveryConfig()) {
+    return res.status(503).json({ error: "Email verification is not configured yet" });
+  }
+
+  const userId = authStore.emailIndex[email];
+  const userRecord = userId ? authStore.users[userId] : null;
+  if (!userRecord) {
+    return res.json({
+      ok: true,
+      message: "If an account exists for this email, a verification link has been sent.",
+    });
+  }
+  if (userRecord.emailVerified === true) {
+    return res.json({
+      ok: true,
+      message: "Email is already verified. You can log in now.",
+    });
+  }
+
+  try {
+    const verificationChallenge = createEmailVerificationChallenge();
+    const delivery = await sendAccountVerificationEmail({
+      req,
+      email: userRecord.email,
+      displayName: userRecord.displayName,
+      rawToken: verificationChallenge.rawToken,
+      returnTo,
+    });
+    if (!delivery.ok) {
+      const deliveryError = String(delivery.error || "").trim();
+      const loweredDeliveryError = deliveryError.toLowerCase();
+      if (loweredDeliveryError.includes("testing emails") || loweredDeliveryError.includes("verify a domain")) {
+        return res.status(502).json({
+          error:
+            "Email provider is in testing mode. Verify a domain in Resend and use AUTH_FROM with that domain.",
+        });
+      }
+      return res.status(502).json({
+        error: "Could not resend verification email. Check mail provider config and try again.",
+      });
+    }
+
+    userRecord.emailVerified = false;
+    userRecord.emailVerification = {
+      tokenHash: verificationChallenge.tokenHash,
+      expiresAt: verificationChallenge.expiresAt,
+      sentAt: verificationChallenge.sentAt,
+    };
+    userRecord.updatedAt = new Date().toISOString();
+    markAuthStoreDirty();
+    return res.json({
+      ok: true,
+      message: "Verification email sent. Check your inbox.",
+    });
+  } catch (error) {
+    reportServerError("auth-resend-verification", error, {
+      requestId: req.requestId,
+      method: req.method,
+      path: req.originalUrl,
+    });
+    return res.status(500).json({ error: "Failed to resend verification email" });
   }
 });
 
@@ -2030,6 +2418,12 @@ app.post("/api/auth/login", authLoginLimiter, async (req, res) => {
     const validPassword = await verifyPasswordAgainstRecord(password, userRecord.password);
     if (!validPassword) {
       return res.status(401).json({ error: "Invalid email or password" });
+    }
+    if (userRecord.emailVerified === false) {
+      return res.status(403).json({
+        error: "Please verify your email first. Check your inbox for the verification link.",
+        verificationRequired: true,
+      });
     }
 
     userRecord.lastLoginAt = new Date().toISOString();

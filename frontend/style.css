@@ -1182,7 +1182,15 @@ body.world-page .nav-links a {
     0 0 0 5px rgba(118, 211, 184, 0.08);
 }
 
-.account-form button:not(.account-google-button) {
+.account-form input.is-invalid,
+.account-form input.is-invalid:focus {
+  border-color: rgba(255, 134, 146, 0.95);
+  box-shadow:
+    0 0 0 1px rgba(255, 134, 146, 0.48),
+    0 0 0 5px rgba(255, 96, 132, 0.12);
+}
+
+.account-form button:not(.account-google-button):not(.account-resend-button) {
   border: 1px solid rgba(130, 232, 194, 0.54);
   background: linear-gradient(135deg, rgba(12, 64, 58, 0.92), rgba(13, 84, 71, 0.95));
   color: #ebfff5;
@@ -1193,10 +1201,35 @@ body.world-page .nav-links a {
   transition: transform 0.14s ease, filter 0.16s ease;
 }
 
-.account-form button:not(.account-google-button):hover,
-.account-form button:not(.account-google-button):focus-visible {
+.account-form button:not(.account-google-button):not(.account-resend-button):hover,
+.account-form button:not(.account-google-button):not(.account-resend-button):focus-visible {
   transform: translateY(-1px);
   filter: brightness(1.06);
+}
+
+.account-resend-button {
+  border: 1px solid rgba(133, 187, 230, 0.34);
+  background: rgba(9, 20, 44, 0.66);
+  color: rgba(198, 221, 248, 0.95);
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.16s ease, background 0.16s ease, color 0.16s ease;
+}
+
+.account-resend-button:hover,
+.account-resend-button:focus-visible {
+  border-color: rgba(147, 214, 255, 0.62);
+  background: rgba(10, 29, 58, 0.75);
+  color: #eef8ff;
+  outline: none;
+}
+
+.account-resend-button:disabled {
+  opacity: 0.62;
+  cursor: wait;
 }
 
 .account-menu-header {

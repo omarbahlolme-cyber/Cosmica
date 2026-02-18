@@ -585,9 +585,10 @@ const createCosmicaAuthClient = () => {
 
   return {
     signUp: async ({ email, password, displayName = "", baseLanguage = "" } = {}) => {
+      const returnTo = `${window.location.pathname}${window.location.search}${window.location.hash}`;
       const payload = await request("/api/auth/signup", {
         method: "POST",
-        body: { email, password, displayName, baseLanguage },
+        body: { email, password, displayName, baseLanguage, returnTo },
       });
       applyBaseLanguageFromAuthPayload(payload);
       return payload;
@@ -600,6 +601,11 @@ const createCosmicaAuthClient = () => {
       applyBaseLanguageFromAuthPayload(payload);
       return payload;
     },
+    resendVerificationEmail: async ({ email, returnTo = "" } = {}) =>
+      request("/api/auth/verification/resend", {
+        method: "POST",
+        body: { email, returnTo },
+      }),
     logOut: () =>
       request("/api/auth/logout", {
         method: "POST",
@@ -926,7 +932,7 @@ const createCosmicaGamificationClient = () => {
         });
         applyAuthPayload(payload);
         state.ready = true;
-        return snapshot();
+        return payload;
       }),
     logIn: ({ email, password } = {}) =>
       withLoading(async () => {
@@ -1101,7 +1107,6 @@ const setupAccountHub = () => {
         <header class="account-guest-head">
           <p class="account-pane-title">Account & Progress</p>
           <h3>Keep your streak and XP synced</h3>
-          <p>Join once, and continue learning from any world and any device.</p>
         </header>
         <div class="account-auth-switch" role="tablist" aria-label="Account forms">
           <button type="button" data-auth-panel="login" aria-selected="true">Log in</button>
@@ -1136,6 +1141,7 @@ const setupAccountHub = () => {
             <label>Email <input type="email" name="email" autocomplete="email" required /></label>
             <label>Password <input type="password" name="password" autocomplete="current-password" minlength="8" required /></label>
             <button type="submit">Continue learning</button>
+            <button type="button" class="account-resend-button" hidden>Resend verification email</button>
           </form>
           <form class="account-form signup-form" data-auth-panel-content="signup" hidden>
             <button class="account-google-button" type="button" data-google-mode="signup">
@@ -1162,10 +1168,13 @@ const setupAccountHub = () => {
               <span>Sign up with Google account</span>
             </button>
             <div class="account-form-divider"><span>or continue with email</span></div>
-            <label>Name <input type="text" name="displayName" maxlength="60" autocomplete="name" /></label>
+            <label>Username <input type="text" name="displayName" maxlength="60" minlength="1" autocomplete="username" required /></label>
             <label>Email <input type="email" name="email" autocomplete="email" required /></label>
             <label>Password <input type="password" name="password" autocomplete="new-password" minlength="8" required /></label>
             <button type="submit">Create free account</button>
+            <button type="button" class="account-resend-button account-resend-button-signup" hidden>
+              Resend verification email
+            </button>
           </form>
         </div>
       </section>
@@ -1214,6 +1223,8 @@ const setupAccountHub = () => {
   const userPane = dropdown.querySelector(".account-user-pane");
   const loginForm = dropdown.querySelector(".login-form");
   const signupForm = dropdown.querySelector(".signup-form");
+  const resendVerificationBtn = dropdown.querySelector(".account-resend-button");
+  const resendVerificationSignupBtn = dropdown.querySelector(".account-resend-button-signup");
   const logoutBtn = dropdown.querySelector(".account-logout");
   const deleteForm = dropdown.querySelector(".account-delete-form");
   const googleButtons = Array.from(dropdown.querySelectorAll(".account-google-button"));
@@ -1231,6 +1242,8 @@ const setupAccountHub = () => {
   let activeAuthPanel = "login";
 
   const formatNumber = (value) => Intl.NumberFormat().format(Math.max(0, Math.round(Number(value) || 0)));
+  let pendingAuthNoticeMessage = "";
+  let pendingAuthNoticeTone = "error";
 
   const setFeedback = (message, tone = "") => {
     if (!feedbackNode) {
@@ -1240,9 +1253,137 @@ const setupAccountHub = () => {
     feedbackNode.dataset.tone = tone;
   };
 
+  const setInputInvalidState = (input, invalid) => {
+    if (!(input instanceof HTMLInputElement)) {
+      return;
+    }
+    const isInvalid = Boolean(invalid);
+    input.classList.toggle("is-invalid", isInvalid);
+    if (isInvalid) {
+      input.setAttribute("aria-invalid", "true");
+    } else {
+      input.removeAttribute("aria-invalid");
+    }
+  };
+
+  const validateRequiredInput = (input) => {
+    if (!(input instanceof HTMLInputElement)) {
+      return true;
+    }
+    const rawValue = String(input.value || "");
+    const hasValue = input.type === "password" ? rawValue.length > 0 : rawValue.trim().length > 0;
+    setInputInvalidState(input, !hasValue);
+    return hasValue;
+  };
+
+  const bindLiveInputValidation = (formNode) => {
+    if (!(formNode instanceof HTMLFormElement)) {
+      return;
+    }
+    formNode.querySelectorAll("input").forEach((input) => {
+      input.addEventListener("input", () => {
+        if (!input.classList.contains("is-invalid")) {
+          return;
+        }
+        validateRequiredInput(input);
+      });
+    });
+  };
+
+  const setResendButtonVisible = (visible) => {
+    if (!resendVerificationBtn) {
+      return;
+    }
+    resendVerificationBtn.hidden = !Boolean(visible);
+  };
+
+  const setSignupResendButtonVisible = (visible) => {
+    if (!resendVerificationSignupBtn) {
+      return;
+    }
+    resendVerificationSignupBtn.hidden = !Boolean(visible);
+  };
+
+  const consumeAuthErrorFromUrl = () => {
+    const params = new URLSearchParams(window.location.search);
+    const rawCode = String(params.get("authError") || "").trim().toLowerCase();
+    if (!rawCode) {
+      return;
+    }
+    const authErrorTextMap = {
+      google_no_account: {
+        message: "No account found. Use Sign up with Google account first.",
+        tone: "error",
+        panel: "signup",
+      },
+      google_account_exists: {
+        message: "Account already exists. Use Log in with Google account.",
+        tone: "error",
+        panel: "login",
+      },
+      google_flow: {
+        message: "Google auth flow expired or mismatched. Start again from this panel.",
+        tone: "error",
+        panel: "login",
+      },
+      google_access_denied: {
+        message: "Google sign-in was cancelled.",
+        tone: "error",
+        panel: "login",
+      },
+      email_verified: {
+        message: "Email verified. You can now log in.",
+        tone: "success",
+        panel: "login",
+      },
+      email_verify_invalid: {
+        message: "Verification link is invalid. Please sign up again.",
+        tone: "error",
+        panel: "signup",
+      },
+      email_verify_expired: {
+        message: "Verification link expired. Please sign up again.",
+        tone: "error",
+        panel: "signup",
+      },
+    };
+    const resolvedNotice = authErrorTextMap[rawCode] || {
+      message: "Google authentication failed. Please try again.",
+      tone: "error",
+      panel: "login",
+    };
+    pendingAuthNoticeMessage = String(resolvedNotice.message || "").trim();
+    pendingAuthNoticeTone = String(resolvedNotice.tone || "error").trim() || "error";
+    if (resolvedNotice.panel) {
+      activeAuthPanel = String(resolvedNotice.panel).trim().toLowerCase() === "signup" ? "signup" : "login";
+    }
+    params.delete("authError");
+    const nextQuery = params.toString();
+    const nextUrl =
+      window.location.pathname + (nextQuery ? `?${nextQuery}` : "") + window.location.hash;
+    window.history.replaceState({}, "", nextUrl);
+  };
+
+  consumeAuthErrorFromUrl();
+  bindLiveInputValidation(loginForm);
+  bindLiveInputValidation(signupForm);
+  signupForm?.querySelectorAll("input").forEach((input) => {
+    input.addEventListener("input", () => {
+      if (!resendVerificationSignupBtn?.hidden) {
+        setSignupResendButtonVisible(false);
+      }
+    });
+  });
+
   const setAuthPanel = (panelKey, shouldFocus = false) => {
     const normalized = String(panelKey || "").trim().toLowerCase() === "signup" ? "signup" : "login";
     activeAuthPanel = normalized;
+    if (normalized !== "login") {
+      setResendButtonVisible(false);
+    }
+    if (normalized !== "signup") {
+      setSignupResendButtonVisible(false);
+    }
     authSwitchButtons.forEach((button) => {
       const isActive = String(button.dataset.authPanel || "").trim().toLowerCase() === normalized;
       button.classList.toggle("is-active", isActive);
@@ -1270,23 +1411,24 @@ const setupAccountHub = () => {
 
   const startGoogleAuth = async (mode = "login") => {
     const normalizedMode = String(mode || "").trim().toLowerCase() === "signup" ? "signup" : "login";
-    setFeedback(
-      normalizedMode === "signup"
-        ? "Redirecting to Google sign-up..."
-        : "Redirecting to Google login...",
-      "info"
-    );
+    setFeedback("");
     const returnTo = `${window.location.pathname}${window.location.search}${window.location.hash}`;
-    const endpoint = `/api/auth/google/start?mode=${encodeURIComponent(normalizedMode)}&returnTo=${encodeURIComponent(returnTo)}`;
+    const endpoint = `/api/auth/google/start/${normalizedMode}?returnTo=${encodeURIComponent(returnTo)}`;
+    const legacyEndpoint = `/api/auth/google/start?mode=${encodeURIComponent(normalizedMode)}&returnTo=${encodeURIComponent(returnTo)}`;
     try {
-      const response = await fetch(endpoint, {
+      const requestOptions = {
         method: "GET",
         credentials: "include",
         cache: "no-store",
         headers: {
           Accept: "application/json",
         },
-      });
+      };
+      let response = await fetch(endpoint, requestOptions);
+      // Backward compatibility: some running instances still expose only /start?mode=...
+      if (response.status === 404) {
+        response = await fetch(legacyEndpoint, requestOptions);
+      }
       let payload = null;
       try {
         payload = await response.json();
@@ -1325,6 +1467,11 @@ const setupAccountHub = () => {
     const scrollSurface = dropdown.querySelector(".account-dropdown-card");
     if (scrollSurface) {
       scrollSurface.scrollTop = 0;
+    }
+    if (pendingAuthNoticeMessage) {
+      setFeedback(pendingAuthNoticeMessage, pendingAuthNoticeTone);
+      pendingAuthNoticeMessage = "";
+      pendingAuthNoticeTone = "error";
     }
     positionDropdown();
     window.setTimeout(() => {
@@ -1465,38 +1612,152 @@ const setupAccountHub = () => {
   loginForm?.addEventListener("submit", async (event) => {
     event.preventDefault();
     setAuthPanel("login");
-    const formData = new FormData(loginForm);
-    const email = String(formData.get("email") || "").trim();
-    const password = String(formData.get("password") || "");
-    if (!email || !password) {
+    setResendButtonVisible(false);
+    const emailInput = loginForm.querySelector('input[name="email"]');
+    const passwordInput = loginForm.querySelector('input[name="password"]');
+    const loginFieldsValid =
+      validateRequiredInput(emailInput) && validateRequiredInput(passwordInput);
+    if (!loginFieldsValid) {
       setFeedback("Enter email and password.", "error");
       return;
     }
+    const formData = new FormData(loginForm);
+    const email = String(formData.get("email") || "").trim();
+    const password = String(formData.get("password") || "");
     setFeedback("Logging in...", "info");
     try {
       await window.cosmicaGamification.logIn({ email, password });
+      setResendButtonVisible(false);
       setFeedback("Logged in.", "success");
       window.setTimeout(closeDropdown, 420);
-    } catch {}
+    } catch (error) {
+      const needsVerification =
+        Boolean(error?.payload?.verificationRequired) ||
+        /verify your email/i.test(String(error?.message || ""));
+      if (needsVerification) {
+        setResendButtonVisible(true);
+        setFeedback("Please verify your email first, or resend the verification link below.", "error");
+      }
+    }
+  });
+
+  resendVerificationBtn?.addEventListener("click", async () => {
+    setAuthPanel("login");
+    if (!(loginForm instanceof HTMLFormElement)) {
+      return;
+    }
+    const emailInput = loginForm.querySelector('input[name="email"]');
+    if (!validateRequiredInput(emailInput)) {
+      setFeedback("Enter your email first.", "error");
+      emailInput?.focus?.();
+      return;
+    }
+    const email = String(emailInput?.value || "").trim();
+    if (!email) {
+      setFeedback("Enter your email first.", "error");
+      return;
+    }
+    const returnTo = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+    resendVerificationBtn.disabled = true;
+    setFeedback("Sending verification email...", "info");
+    try {
+      const payload = await window.cosmicaAuth.resendVerificationEmail({ email, returnTo });
+      setFeedback(
+        String(payload?.message || "If an account exists for this email, a verification link has been sent."),
+        "success"
+      );
+    } catch (error) {
+      setFeedback(error?.message || "Could not resend verification email.", "error");
+    } finally {
+      resendVerificationBtn.disabled = false;
+    }
+  });
+
+  resendVerificationSignupBtn?.addEventListener("click", async () => {
+    setAuthPanel("signup");
+    if (!(signupForm instanceof HTMLFormElement)) {
+      return;
+    }
+    const emailInput = signupForm.querySelector('input[name="email"]');
+    if (!validateRequiredInput(emailInput)) {
+      setFeedback("Enter your email first.", "error");
+      emailInput?.focus?.();
+      return;
+    }
+    const email = String(emailInput?.value || "").trim();
+    if (!email) {
+      setFeedback("Enter your email first.", "error");
+      return;
+    }
+    const returnTo = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+    resendVerificationSignupBtn.disabled = true;
+    setFeedback("Sending verification email...", "info");
+    try {
+      const payload = await window.cosmicaAuth.resendVerificationEmail({ email, returnTo });
+      setFeedback(
+        String(payload?.message || "If an account exists for this email, a verification link has been sent."),
+        "success"
+      );
+    } catch (error) {
+      setFeedback(error?.message || "Could not resend verification email.", "error");
+    } finally {
+      resendVerificationSignupBtn.disabled = false;
+    }
   });
 
   signupForm?.addEventListener("submit", async (event) => {
     event.preventDefault();
     setAuthPanel("signup");
+    setSignupResendButtonVisible(false);
+    const usernameInput = signupForm.querySelector('input[name="displayName"]');
+    const emailInput = signupForm.querySelector('input[name="email"]');
+    const passwordInput = signupForm.querySelector('input[name="password"]');
+    const hasRequiredSignupFields =
+      validateRequiredInput(usernameInput) &&
+      validateRequiredInput(emailInput) &&
+      validateRequiredInput(passwordInput);
+    if (!hasRequiredSignupFields) {
+      setFeedback("Fill username, email, and password.", "error");
+      return;
+    }
     const formData = new FormData(signupForm);
     const displayName = String(formData.get("displayName") || "").trim();
     const email = String(formData.get("email") || "").trim();
     const password = String(formData.get("password") || "");
-    if (!email || password.length < 8) {
+    if (password.length < 8) {
+      setInputInvalidState(passwordInput, true);
       setFeedback("Use a valid email and password (8+ chars).", "error");
       return;
     }
     setFeedback("Creating account...", "info");
     try {
-      await window.cosmicaGamification.signUp({ email, password, displayName });
+      const payload = await window.cosmicaGamification.signUp({ email, password, displayName });
+      if (payload?.verificationRequired) {
+        setFeedback(
+          String(payload?.message || "Account created. Check your email and verify before logging in."),
+          "success"
+        );
+        setSignupResendButtonVisible(true);
+        return;
+      }
+      signupForm.reset();
+      setSignupResendButtonVisible(false);
       setFeedback("Account created.", "success");
       window.setTimeout(closeDropdown, 420);
-    } catch {}
+    } catch (error) {
+      const canShowSignupResend =
+        Boolean(error?.payload?.verificationRequired) && Boolean(error?.payload?.resendEligible);
+      if (canShowSignupResend) {
+        setSignupResendButtonVisible(true);
+        setFeedback(
+          error?.message || "Unverified account found. Use resend verification below.",
+          "error"
+        );
+        return;
+      }
+      setSignupResendButtonVisible(false);
+      setFeedback(error?.message || "Could not create account. Please try again.", "error");
+    }
   });
 
   menuButtons.forEach((button) => {
