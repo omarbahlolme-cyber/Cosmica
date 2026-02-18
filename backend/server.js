@@ -31,6 +31,8 @@ const isProduction = process.env.NODE_ENV === "production";
 const PROJECT_ROOT = path.resolve(__dirname, "..");
 const FRONTEND_ROOT = path.join(PROJECT_ROOT, "frontend");
 const FRONTEND_MAPS_ROOT = path.join(FRONTEND_ROOT, "maps");
+const ADMIN_SECURITY_BASIC_USER = String(process.env.ADMIN_SECURITY_BASIC_USER || "").trim();
+const ADMIN_SECURITY_BASIC_PASS = String(process.env.ADMIN_SECURITY_BASIC_PASS || "").trim();
 
 app.use(express.json({ limit: "1mb" }));
 app.use((req, res, next) => {
@@ -254,6 +256,11 @@ const accountMutationLimiter = createLimiter({
   max: 120,
   scope: "account-mutation",
 });
+const adminSecurityLimiter = createLimiter({
+  windowMs: 10 * 60 * 1000,
+  max: 180,
+  scope: "admin-security",
+});
 const progressLimiter = createLimiter({
   windowMs: 5 * 60 * 1000,
   max: 300,
@@ -292,6 +299,56 @@ const LEGACY_WORLD_ROUTE_REDIRECTS = new Map([
   ["/phrases.html", "/english-phrases.html"],
   ["/grammar.html", "/english-grammar.html"],
 ]);
+
+const parseBasicAuthHeader = (authorizationHeader = "") => {
+  const raw = String(authorizationHeader || "").trim();
+  if (!raw.toLowerCase().startsWith("basic ")) {
+    return null;
+  }
+  const encoded = raw.slice(6).trim();
+  if (!encoded) {
+    return null;
+  }
+  try {
+    const decoded = Buffer.from(encoded, "base64").toString("utf8");
+    const dividerIndex = decoded.indexOf(":");
+    if (dividerIndex < 0) {
+      return null;
+    }
+    const username = decoded.slice(0, dividerIndex);
+    const password = decoded.slice(dividerIndex + 1);
+    return {
+      username,
+      password,
+    };
+  } catch {
+    return null;
+  }
+};
+
+const basicAuthChallenge = (res) => {
+  res.setHeader("WWW-Authenticate", 'Basic realm="Cosmica Admin", charset="UTF-8"');
+  res.setHeader("Cache-Control", "no-store");
+  res.setHeader("X-Robots-Tag", "noindex, nofollow");
+  return res.status(401).type("text/plain").send("Authentication required.");
+};
+
+app.get("/admin-security.html", (req, res) => {
+  res.setHeader("X-Robots-Tag", "noindex, nofollow");
+  res.setHeader("Cache-Control", "no-store");
+  if (!ADMIN_SECURITY_BASIC_USER || !ADMIN_SECURITY_BASIC_PASS) {
+    return res.status(503).type("text/plain").send("Admin page basic auth is not configured.");
+  }
+  const credentials = parseBasicAuthHeader(req.get("authorization"));
+  if (
+    !credentials ||
+    credentials.username !== ADMIN_SECURITY_BASIC_USER ||
+    credentials.password !== ADMIN_SECURITY_BASIC_PASS
+  ) {
+    return basicAuthChallenge(res);
+  }
+  return res.sendFile(path.join(FRONTEND_ROOT, "admin-security.html"));
+});
 
 app.use((req, res, next) => {
   const requestPath = String(req.path || "").toLowerCase();
@@ -583,10 +640,19 @@ const sendTransactionalEmail = async ({ to, subject, text, replyTo = "" }) => {
    -------------------------------------------------------------------------- */
 const AUTH_DATA_ROOT = path.join(__dirname, "data");
 const AUTH_STORE_FILE = path.join(AUTH_DATA_ROOT, "accounts.json");
+const DELETED_ACCOUNTS_AUDIT_FILE = path.join(AUTH_DATA_ROOT, "deleted-accounts.json");
+const REGISTERED_ACCOUNTS_AUDIT_FILE = path.join(AUTH_DATA_ROOT, "registered-accounts.json");
+const BLOCKED_USERS_STORE_FILE = path.join(AUTH_DATA_ROOT, "blocked-users.json");
+const SECURITY_EVENTS_STORE_FILE = path.join(AUTH_DATA_ROOT, "security-events.json");
 const AUTH_STORE_SCHEMA_VERSION = 1;
+const BLOCKED_USERS_SCHEMA_VERSION = 1;
+const SECURITY_EVENTS_SCHEMA_VERSION = 1;
 const AUTH_COOKIE_NAME = "cosmica_session";
 const SESSION_TTL_MS = 1000 * 60 * 60 * 24 * 30;
 const MAX_SESSIONS_PER_USER = 6;
+const ADMIN_SECURITY_TOKEN = String(
+  process.env.ADMIN_SECURITY_TOKEN || process.env.ADMIN_API_TOKEN || ""
+).trim();
 const MAX_USER_DATA_SERIALIZED_CHARS = 120000;
 const MAX_PROGRESS_SERIALIZED_CHARS = 220000;
 const PASSWORD_HASH_ITERATIONS = Math.max(
@@ -702,6 +768,20 @@ const createEmptyAuthStore = () => ({
   users: {},
   emailIndex: {},
   sessions: {},
+});
+
+const createEmptyBlockedUsersStore = () => ({
+  schemaVersion: BLOCKED_USERS_SCHEMA_VERSION,
+  updatedAt: new Date().toISOString(),
+  emails: {},
+  userIds: {},
+  ipHashes: {},
+});
+
+const createEmptySecurityEventsStore = () => ({
+  schemaVersion: SECURITY_EVENTS_SCHEMA_VERSION,
+  updatedAt: new Date().toISOString(),
+  events: [],
 });
 
 const cloneObjectSafely = (value, fallbackValue, maxSerializedChars) => {
@@ -1012,11 +1092,128 @@ const normalizeAuthStore = (candidate) => {
   return normalized;
 };
 
+const normalizeBlockedEntryMeta = (value) => {
+  const fallback = {
+    blockedAt: new Date().toISOString(),
+    reason: "",
+    note: "",
+    blockedBy: "admin",
+  };
+  if (!isPlainObject(value)) {
+    return fallback;
+  }
+  fallback.blockedAt = String(value.blockedAt || "").slice(0, 40) || new Date().toISOString();
+  fallback.reason = String(value.reason || "").slice(0, 200);
+  fallback.note = String(value.note || "").slice(0, 300);
+  fallback.blockedBy = String(value.blockedBy || "admin").slice(0, 80) || "admin";
+  return fallback;
+};
+
+const normalizeBlockedUsersStore = (candidate) => {
+  const normalized = createEmptyBlockedUsersStore();
+  if (!isPlainObject(candidate)) {
+    return normalized;
+  }
+
+  const emailEntries = isPlainObject(candidate.emails) ? candidate.emails : {};
+  Object.entries(emailEntries).forEach(([email, meta]) => {
+    const normalizedEmail = normalizeEmail(email);
+    if (!normalizedEmail) {
+      return;
+    }
+    normalized.emails[normalizedEmail] = normalizeBlockedEntryMeta(meta);
+  });
+
+  const userIdEntries = isPlainObject(candidate.userIds) ? candidate.userIds : {};
+  Object.entries(userIdEntries).forEach(([userId, meta]) => {
+    const normalizedUserId = String(userId || "").trim().slice(0, 120);
+    if (!normalizedUserId) {
+      return;
+    }
+    normalized.userIds[normalizedUserId] = normalizeBlockedEntryMeta(meta);
+  });
+
+  const ipHashEntries = isPlainObject(candidate.ipHashes) ? candidate.ipHashes : {};
+  Object.entries(ipHashEntries).forEach(([ipHash, meta]) => {
+    const normalizedIpHash = String(ipHash || "").trim().toLowerCase().slice(0, 120);
+    if (!normalizedIpHash) {
+      return;
+    }
+    normalized.ipHashes[normalizedIpHash] = normalizeBlockedEntryMeta(meta);
+  });
+
+  normalized.schemaVersion =
+    Number(candidate.schemaVersion) > 0 ? Number(candidate.schemaVersion) : BLOCKED_USERS_SCHEMA_VERSION;
+  normalized.updatedAt = String(candidate.updatedAt || new Date().toISOString());
+  return normalized;
+};
+
+const normalizeSecurityEventEntry = (value) => {
+  const entry = isPlainObject(value) ? value : {};
+  return {
+    at: String(entry.at || "").slice(0, 40) || new Date().toISOString(),
+    type: String(entry.type || "unknown").slice(0, 80),
+    requestId: String(entry.requestId || "").slice(0, 80),
+    endpoint: String(entry.endpoint || "").slice(0, 240),
+    method: String(entry.method || "").slice(0, 16),
+    email: normalizeEmail(entry.email),
+    userId: String(entry.userId || "").slice(0, 120),
+    ipHash: String(entry.ipHash || "").slice(0, 120),
+    reason: String(entry.reason || "").slice(0, 240),
+    details: isPlainObject(entry.details) ? cloneObjectSafely(entry.details, () => ({}), 4000) : {},
+  };
+};
+
+const normalizeSecurityEventsStore = (candidate) => {
+  const normalized = createEmptySecurityEventsStore();
+  if (!isPlainObject(candidate)) {
+    return normalized;
+  }
+  const events = Array.isArray(candidate.events) ? candidate.events : [];
+  normalized.events = events.map((event) => normalizeSecurityEventEntry(event));
+  normalized.schemaVersion =
+    Number(candidate.schemaVersion) > 0 ? Number(candidate.schemaVersion) : SECURITY_EVENTS_SCHEMA_VERSION;
+  normalized.updatedAt = String(candidate.updatedAt || new Date().toISOString());
+  return normalized;
+};
+
 const writeAuthStoreSync = (store) => {
   if (!fs.existsSync(AUTH_DATA_ROOT)) {
     fs.mkdirSync(AUTH_DATA_ROOT, { recursive: true });
   }
   fs.writeFileSync(AUTH_STORE_FILE, JSON.stringify(store, null, 2), "utf8");
+};
+
+const writeDeletedAccountsAuditSync = (entries) => {
+  if (!fs.existsSync(AUTH_DATA_ROOT)) {
+    fs.mkdirSync(AUTH_DATA_ROOT, { recursive: true });
+  }
+  const safeEntries = Array.isArray(entries) ? entries : [];
+  fs.writeFileSync(DELETED_ACCOUNTS_AUDIT_FILE, JSON.stringify(safeEntries, null, 2), "utf8");
+};
+
+const writeRegisteredAccountsAuditSync = (entries) => {
+  if (!fs.existsSync(AUTH_DATA_ROOT)) {
+    fs.mkdirSync(AUTH_DATA_ROOT, { recursive: true });
+  }
+  const safeEntries = Array.isArray(entries) ? entries : [];
+  fs.writeFileSync(REGISTERED_ACCOUNTS_AUDIT_FILE, JSON.stringify(safeEntries, null, 2), "utf8");
+};
+
+const writeBlockedUsersStoreSync = (store) => {
+  if (!fs.existsSync(AUTH_DATA_ROOT)) {
+    fs.mkdirSync(AUTH_DATA_ROOT, { recursive: true });
+  }
+  const safeStore = normalizeBlockedUsersStore(store);
+  fs.writeFileSync(BLOCKED_USERS_STORE_FILE, JSON.stringify(safeStore, null, 2), "utf8");
+};
+
+const writeSecurityEventsStoreSync = (store) => {
+  if (!fs.existsSync(AUTH_DATA_ROOT)) {
+    fs.mkdirSync(AUTH_DATA_ROOT, { recursive: true });
+  }
+  const safeStore = normalizeSecurityEventsStore(store);
+  fs.writeFileSync(SECURITY_EVENTS_STORE_FILE, JSON.stringify(safeStore, null, 2), "utf8");
 };
 
 const loadAuthStoreFromDisk = () => {
@@ -1044,8 +1241,174 @@ const loadAuthStoreFromDisk = () => {
   }
 };
 
+const loadDeletedAccountsAuditFromDisk = () => {
+  try {
+    if (!fs.existsSync(AUTH_DATA_ROOT)) {
+      fs.mkdirSync(AUTH_DATA_ROOT, { recursive: true });
+    }
+    if (!fs.existsSync(DELETED_ACCOUNTS_AUDIT_FILE)) {
+      const initial = [];
+      writeDeletedAccountsAuditSync(initial);
+      return initial;
+    }
+    const raw = fs.readFileSync(DELETED_ACCOUNTS_AUDIT_FILE, "utf8");
+    const parsed = raw.trim() ? JSON.parse(raw) : [];
+    if (!Array.isArray(parsed)) {
+      writeDeletedAccountsAuditSync([]);
+      return [];
+    }
+    const normalized = parsed
+      .filter((entry) => isPlainObject(entry))
+      .map((entry) => ({
+        deletedAt: String(entry.deletedAt || "").slice(0, 40) || new Date().toISOString(),
+        userId: String(entry.userId || "").slice(0, 100),
+        email: normalizeEmail(entry.email),
+        displayName: sanitizeDisplayName(String(entry.displayName || ""), String(entry.email || "")),
+        authProvider: String(entry.authProvider || "email").slice(0, 32),
+        createdAt: String(entry.createdAt || "").slice(0, 40) || null,
+        lastLoginAt: String(entry.lastLoginAt || "").slice(0, 40) || null,
+        source: String(entry.source || "self-delete").slice(0, 40),
+        requestId: String(entry.requestId || "").slice(0, 80),
+      }));
+    writeDeletedAccountsAuditSync(normalized);
+    return normalized;
+  } catch (error) {
+    console.error(
+      "[deleted-accounts-audit] Failed to read audit store, resetting:",
+      error?.message || error
+    );
+    const fallback = [];
+    try {
+      writeDeletedAccountsAuditSync(fallback);
+    } catch {}
+    return fallback;
+  }
+};
+
+const buildRegistrationAuditEntryFromUser = (userRecord = {}, source = "signup-email", req = null) => {
+  const email = normalizeEmail(userRecord?.email);
+  if (!email) {
+    return null;
+  }
+  const authProvider =
+    String(userRecord?.data?.profile?.authProvider || (source === "signup-google" ? "google" : "email"))
+      .trim()
+      .toLowerCase() || "email";
+  return {
+    registeredAt: String(userRecord?.createdAt || "").slice(0, 40) || new Date().toISOString(),
+    userId: String(userRecord?.id || "").slice(0, 100),
+    email,
+    displayName: sanitizeDisplayName(String(userRecord?.displayName || ""), email),
+    authProvider: authProvider.slice(0, 32),
+    source: String(source || "signup-email").slice(0, 40),
+    requestId: String(req?.requestId || "").slice(0, 80),
+  };
+};
+
+const loadRegisteredAccountsAuditFromDisk = () => {
+  try {
+    if (!fs.existsSync(AUTH_DATA_ROOT)) {
+      fs.mkdirSync(AUTH_DATA_ROOT, { recursive: true });
+    }
+    if (!fs.existsSync(REGISTERED_ACCOUNTS_AUDIT_FILE)) {
+      const bootstrap = Object.values(authStore?.users || {})
+        .map((userRecord) => buildRegistrationAuditEntryFromUser(userRecord, "bootstrap-existing", null))
+        .filter(Boolean);
+      writeRegisteredAccountsAuditSync(bootstrap);
+      return bootstrap;
+    }
+    const raw = fs.readFileSync(REGISTERED_ACCOUNTS_AUDIT_FILE, "utf8");
+    const parsed = raw.trim() ? JSON.parse(raw) : [];
+    if (!Array.isArray(parsed)) {
+      writeRegisteredAccountsAuditSync([]);
+      return [];
+    }
+    const normalized = parsed
+      .filter((entry) => isPlainObject(entry))
+      .map((entry) => ({
+        registeredAt: String(entry.registeredAt || "").slice(0, 40) || new Date().toISOString(),
+        userId: String(entry.userId || "").slice(0, 100),
+        email: normalizeEmail(entry.email),
+        displayName: sanitizeDisplayName(String(entry.displayName || ""), String(entry.email || "")),
+        authProvider: String(entry.authProvider || "email").slice(0, 32),
+        source: String(entry.source || "signup-email").slice(0, 40),
+        requestId: String(entry.requestId || "").slice(0, 80),
+      }));
+    writeRegisteredAccountsAuditSync(normalized);
+    return normalized;
+  } catch (error) {
+    console.error(
+      "[registered-accounts-audit] Failed to read audit store, resetting:",
+      error?.message || error
+    );
+    const fallback = [];
+    try {
+      writeRegisteredAccountsAuditSync(fallback);
+    } catch {}
+    return fallback;
+  }
+};
+
+const loadBlockedUsersStoreFromDisk = () => {
+  try {
+    if (!fs.existsSync(AUTH_DATA_ROOT)) {
+      fs.mkdirSync(AUTH_DATA_ROOT, { recursive: true });
+    }
+    if (!fs.existsSync(BLOCKED_USERS_STORE_FILE)) {
+      const initial = createEmptyBlockedUsersStore();
+      writeBlockedUsersStoreSync(initial);
+      return initial;
+    }
+    const raw = fs.readFileSync(BLOCKED_USERS_STORE_FILE, "utf8");
+    const parsed = raw.trim() ? JSON.parse(raw) : createEmptyBlockedUsersStore();
+    const normalized = normalizeBlockedUsersStore(parsed);
+    writeBlockedUsersStoreSync(normalized);
+    return normalized;
+  } catch (error) {
+    console.error("[blocked-users-store] Failed to read block store, resetting:", error?.message || error);
+    const fallback = createEmptyBlockedUsersStore();
+    try {
+      writeBlockedUsersStoreSync(fallback);
+    } catch {}
+    return fallback;
+  }
+};
+
+const loadSecurityEventsStoreFromDisk = () => {
+  try {
+    if (!fs.existsSync(AUTH_DATA_ROOT)) {
+      fs.mkdirSync(AUTH_DATA_ROOT, { recursive: true });
+    }
+    if (!fs.existsSync(SECURITY_EVENTS_STORE_FILE)) {
+      const initial = createEmptySecurityEventsStore();
+      writeSecurityEventsStoreSync(initial);
+      return initial;
+    }
+    const raw = fs.readFileSync(SECURITY_EVENTS_STORE_FILE, "utf8");
+    const parsed = raw.trim() ? JSON.parse(raw) : createEmptySecurityEventsStore();
+    const normalized = normalizeSecurityEventsStore(parsed);
+    writeSecurityEventsStoreSync(normalized);
+    return normalized;
+  } catch (error) {
+    console.error("[security-events-store] Failed to read events store, resetting:", error?.message || error);
+    const fallback = createEmptySecurityEventsStore();
+    try {
+      writeSecurityEventsStoreSync(fallback);
+    } catch {}
+    return fallback;
+  }
+};
+
 let authStore = loadAuthStoreFromDisk();
 let authStorePersistQueue = Promise.resolve();
+let deletedAccountsAudit = loadDeletedAccountsAuditFromDisk();
+let deletedAccountsAuditPersistQueue = Promise.resolve();
+let registeredAccountsAudit = loadRegisteredAccountsAuditFromDisk();
+let registeredAccountsAuditPersistQueue = Promise.resolve();
+let blockedUsersStore = loadBlockedUsersStoreFromDisk();
+let blockedUsersStorePersistQueue = Promise.resolve();
+let securityEventsStore = loadSecurityEventsStoreFromDisk();
+let securityEventsStorePersistQueue = Promise.resolve();
 
 const queuePersistAuthStore = () => {
   const payload = JSON.stringify(authStore, null, 2);
@@ -1063,14 +1426,233 @@ const queuePersistAuthStore = () => {
   return authStorePersistQueue;
 };
 
+const queuePersistDeletedAccountsAudit = () => {
+  const payload = JSON.stringify(deletedAccountsAudit, null, 2);
+  deletedAccountsAuditPersistQueue = deletedAccountsAuditPersistQueue
+    .catch(() => {})
+    .then(async () => {
+      await fs.promises.mkdir(AUTH_DATA_ROOT, { recursive: true });
+      const tmpPath = `${DELETED_ACCOUNTS_AUDIT_FILE}.tmp`;
+      await fs.promises.writeFile(tmpPath, payload, "utf8");
+      await fs.promises.rename(tmpPath, DELETED_ACCOUNTS_AUDIT_FILE);
+    })
+    .catch((error) => {
+      reportServerError("deleted-accounts-audit-persist", error);
+    });
+  return deletedAccountsAuditPersistQueue;
+};
+
+const queuePersistRegisteredAccountsAudit = () => {
+  const payload = JSON.stringify(registeredAccountsAudit, null, 2);
+  registeredAccountsAuditPersistQueue = registeredAccountsAuditPersistQueue
+    .catch(() => {})
+    .then(async () => {
+      await fs.promises.mkdir(AUTH_DATA_ROOT, { recursive: true });
+      const tmpPath = `${REGISTERED_ACCOUNTS_AUDIT_FILE}.tmp`;
+      await fs.promises.writeFile(tmpPath, payload, "utf8");
+      await fs.promises.rename(tmpPath, REGISTERED_ACCOUNTS_AUDIT_FILE);
+    })
+    .catch((error) => {
+      reportServerError("registered-accounts-audit-persist", error);
+    });
+  return registeredAccountsAuditPersistQueue;
+};
+
+const queuePersistBlockedUsersStore = () => {
+  const payload = JSON.stringify(blockedUsersStore, null, 2);
+  blockedUsersStorePersistQueue = blockedUsersStorePersistQueue
+    .catch(() => {})
+    .then(async () => {
+      await fs.promises.mkdir(AUTH_DATA_ROOT, { recursive: true });
+      const tmpPath = `${BLOCKED_USERS_STORE_FILE}.tmp`;
+      await fs.promises.writeFile(tmpPath, payload, "utf8");
+      await fs.promises.rename(tmpPath, BLOCKED_USERS_STORE_FILE);
+    })
+    .catch((error) => {
+      reportServerError("blocked-users-store-persist", error);
+    });
+  return blockedUsersStorePersistQueue;
+};
+
+const queuePersistSecurityEventsStore = () => {
+  const payload = JSON.stringify(securityEventsStore, null, 2);
+  securityEventsStorePersistQueue = securityEventsStorePersistQueue
+    .catch(() => {})
+    .then(async () => {
+      await fs.promises.mkdir(AUTH_DATA_ROOT, { recursive: true });
+      const tmpPath = `${SECURITY_EVENTS_STORE_FILE}.tmp`;
+      await fs.promises.writeFile(tmpPath, payload, "utf8");
+      await fs.promises.rename(tmpPath, SECURITY_EVENTS_STORE_FILE);
+    })
+    .catch((error) => {
+      reportServerError("security-events-store-persist", error);
+    });
+  return securityEventsStorePersistQueue;
+};
+
 const markAuthStoreDirty = () => {
   authStore.updatedAt = new Date().toISOString();
   void queuePersistAuthStore();
 };
 
+const markBlockedUsersStoreDirty = () => {
+  blockedUsersStore.updatedAt = new Date().toISOString();
+  void queuePersistBlockedUsersStore();
+};
+
+const markSecurityEventsStoreDirty = () => {
+  securityEventsStore.updatedAt = new Date().toISOString();
+  void queuePersistSecurityEventsStore();
+};
+
 const hashText = (value) => crypto.createHash("sha256").update(String(value || "")).digest("hex");
 const hashSessionToken = (token) => hashText(token);
 const hashEmailVerificationToken = (token) => hashText(`email-verify:${String(token || "")}`);
+
+const getRequestIpAddress = (req) => {
+  const forwardedFor = String(req.get("x-forwarded-for") || "")
+    .split(",")[0]
+    .trim();
+  const socketIp = String(req.socket?.remoteAddress || "").trim();
+  const ip = String(forwardedFor || req.ip || socketIp || "").trim();
+  return ip.slice(0, 120);
+};
+
+const getRequestIpHash = (req) => {
+  const ip = getRequestIpAddress(req);
+  if (!ip) {
+    return "";
+  }
+  return hashText(`ip:${ip}`);
+};
+
+const constantTimeStringEquals = (a, b) => {
+  const aBuffer = Buffer.from(String(a || ""), "utf8");
+  const bBuffer = Buffer.from(String(b || ""), "utf8");
+  if (aBuffer.length !== bBuffer.length) {
+    return false;
+  }
+  return crypto.timingSafeEqual(aBuffer, bBuffer);
+};
+
+const appendSecurityEvent = async ({
+  type = "unknown",
+  req = null,
+  email = "",
+  userId = "",
+  reason = "",
+  details = {},
+} = {}) => {
+  const nextEvent = normalizeSecurityEventEntry({
+    at: new Date().toISOString(),
+    type: String(type || "unknown"),
+    requestId: String(req?.requestId || ""),
+    endpoint: String(req?.originalUrl || ""),
+    method: String(req?.method || ""),
+    email: normalizeEmail(email),
+    userId: String(userId || "").trim(),
+    ipHash: getRequestIpHash(req),
+    reason: String(reason || "").trim(),
+    details: isPlainObject(details) ? details : {},
+  });
+  securityEventsStore.events.push(nextEvent);
+  markSecurityEventsStoreDirty();
+  return true;
+};
+
+const findBlockedPrincipal = ({ email = "", userId = "", ipHash = "" } = {}) => {
+  const normalizedUserId = String(userId || "").trim();
+  const normalizedEmail = normalizeEmail(email);
+  const normalizedIpHash = String(ipHash || "").trim().toLowerCase();
+
+  if (normalizedUserId && blockedUsersStore.userIds[normalizedUserId]) {
+    return {
+      type: "userId",
+      value: normalizedUserId,
+      meta: blockedUsersStore.userIds[normalizedUserId],
+    };
+  }
+  if (normalizedEmail && blockedUsersStore.emails[normalizedEmail]) {
+    return {
+      type: "email",
+      value: normalizedEmail,
+      meta: blockedUsersStore.emails[normalizedEmail],
+    };
+  }
+  if (normalizedIpHash && blockedUsersStore.ipHashes[normalizedIpHash]) {
+    return {
+      type: "ipHash",
+      value: normalizedIpHash,
+      meta: blockedUsersStore.ipHashes[normalizedIpHash],
+    };
+  }
+  return null;
+};
+
+const rejectBlockedAccess = ({ req, res, email = "", userId = "", context = "" } = {}) => {
+  const blockedMatch = findBlockedPrincipal({
+    email,
+    userId,
+    ipHash: getRequestIpHash(req),
+  });
+  if (!blockedMatch) {
+    return false;
+  }
+
+  if (req?.auth?.sessionHash) {
+    removeSessionByHash(req.auth.sessionHash);
+  }
+  clearAuthSessionCookie(req, res);
+  void appendSecurityEvent({
+    type: "blocked-access",
+    req,
+    email: normalizeEmail(email) || normalizeEmail(req?.authUser?.email),
+    userId: String(userId || req?.authUser?.id || "").trim(),
+    reason: `Blocked by ${blockedMatch.type}`,
+    details: {
+      context: String(context || ""),
+      blockedType: blockedMatch.type,
+      blockedValue: blockedMatch.value,
+    },
+  });
+  res.status(403).json({ error: "Account is blocked. Contact support." });
+  return true;
+};
+
+const appendDeletedAccountAuditEntry = async ({ userRecord = null, req = null, source = "self-delete" } = {}) => {
+  if (!userRecord || !isPlainObject(userRecord)) {
+    return false;
+  }
+  const email = normalizeEmail(userRecord.email);
+  if (!email) {
+    return false;
+  }
+  const authProvider = String(userRecord?.data?.profile?.authProvider || "email").trim().toLowerCase() || "email";
+  const entry = {
+    deletedAt: new Date().toISOString(),
+    userId: String(userRecord.id || "").trim(),
+    email,
+    displayName: sanitizeDisplayName(String(userRecord.displayName || ""), email),
+    authProvider: authProvider.slice(0, 32),
+    createdAt: String(userRecord.createdAt || "") || null,
+    lastLoginAt: String(userRecord.lastLoginAt || "") || null,
+    source: String(source || "self-delete").slice(0, 40),
+    requestId: String(req?.requestId || "").slice(0, 80),
+  };
+  deletedAccountsAudit.push(entry);
+  await queuePersistDeletedAccountsAudit();
+  return true;
+};
+
+const appendRegisteredAccountAuditEntry = async ({ userRecord = null, req = null, source = "signup-email" } = {}) => {
+  const entry = buildRegistrationAuditEntryFromUser(userRecord, source, req);
+  if (!entry) {
+    return false;
+  }
+  registeredAccountsAudit.push(entry);
+  await queuePersistRegisteredAccountsAudit();
+  return true;
+};
 
 const createEmailVerificationChallenge = () => {
   const rawToken = crypto.randomBytes(32).toString("base64url");
@@ -1250,6 +1832,50 @@ const removeAllSessionsForUser = (userId) => {
   }
 };
 
+const purgeUserFromAuthStore = ({ userId, email = "" } = {}) => {
+  const normalizedUserId = String(userId || "").trim();
+  const normalizedEmail = normalizeEmail(email);
+  if (!normalizedUserId && !normalizedEmail) {
+    return false;
+  }
+
+  const resolvedUserId =
+    normalizedUserId ||
+    String(authStore.emailIndex[normalizedEmail] || "").trim();
+  const userRecord = resolvedUserId ? authStore.users[resolvedUserId] : null;
+  const resolvedEmail = normalizeEmail(userRecord?.email || normalizedEmail);
+  let changed = false;
+
+  if (resolvedEmail && authStore.emailIndex[resolvedEmail]) {
+    delete authStore.emailIndex[resolvedEmail];
+    changed = true;
+  }
+
+  Object.entries(authStore.emailIndex).forEach(([indexedEmail, indexedUserId]) => {
+    if (String(indexedUserId || "").trim() === resolvedUserId) {
+      delete authStore.emailIndex[indexedEmail];
+      changed = true;
+    }
+  });
+
+  if (resolvedUserId && authStore.users[resolvedUserId]) {
+    delete authStore.users[resolvedUserId];
+    changed = true;
+  }
+
+  Object.entries(authStore.sessions).forEach(([sessionHash, session]) => {
+    if (String(session?.userId || "").trim() === resolvedUserId) {
+      delete authStore.sessions[sessionHash];
+      changed = true;
+    }
+  });
+
+  if (changed) {
+    markAuthStoreDirty();
+  }
+  return changed;
+};
+
 const derivePasswordHash = (password, salt, iterations, keylen, digest) =>
   new Promise((resolve, reject) => {
     crypto.pbkdf2(password, salt, iterations, keylen, digest, (error, derived) => {
@@ -1366,12 +1992,203 @@ app.use("/api", (req, res, next) => {
   next();
 });
 
+app.use("/api", (req, res, next) => {
+  if (String(req.path || "").startsWith("/admin/security")) {
+    return next();
+  }
+  if (
+    rejectBlockedAccess({
+      req,
+      res,
+      email: req.authUser?.email,
+      userId: req.authUser?.id,
+      context: "api-middleware",
+    })
+  ) {
+    return;
+  }
+  next();
+});
+
 const requireAuthenticatedUser = (req, res, next) => {
   if (!req.authUser) {
     return res.status(401).json({ error: "Authentication required" });
   }
   return next();
 };
+
+const requireAdminSecurityAccess = (req, res, next) => {
+  if (!ADMIN_SECURITY_TOKEN) {
+    return res.status(503).json({ error: "Admin security token is not configured" });
+  }
+  const providedToken = String(
+    req.get("x-admin-token") || req.body?.adminToken || req.query?.adminToken || ""
+  ).trim();
+  if (!providedToken || !constantTimeStringEquals(providedToken, ADMIN_SECURITY_TOKEN)) {
+    void appendSecurityEvent({
+      type: "admin-auth-failed",
+      req,
+      reason: "Invalid admin token",
+      details: {
+        path: String(req.originalUrl || ""),
+      },
+    });
+    return res.status(401).json({ error: "Admin authentication required" });
+  }
+  return next();
+};
+
+app.get(
+  "/api/admin/security/blocked",
+  adminSecurityLimiter,
+  requireAdminSecurityAccess,
+  (req, res) => {
+    return res.json({
+      ok: true,
+      blocked: blockedUsersStore,
+      totals: {
+        emails: Object.keys(blockedUsersStore.emails || {}).length,
+        userIds: Object.keys(blockedUsersStore.userIds || {}).length,
+        ipHashes: Object.keys(blockedUsersStore.ipHashes || {}).length,
+      },
+    });
+  }
+);
+
+app.get(
+  "/api/admin/security/events",
+  adminSecurityLimiter,
+  requireAdminSecurityAccess,
+  (req, res) => {
+    const requestedLimit = Number(req.query?.limit);
+    const limit = Number.isFinite(requestedLimit)
+      ? Math.max(1, Math.min(5000, Math.round(requestedLimit)))
+      : 200;
+    const events = (securityEventsStore.events || []).slice(-limit).reverse();
+    return res.json({
+      ok: true,
+      total: (securityEventsStore.events || []).length,
+      events,
+    });
+  }
+);
+
+app.post(
+  "/api/admin/security/block",
+  adminSecurityLimiter,
+  requireAdminSecurityAccess,
+  (req, res) => {
+    const email = normalizeEmail(req.body?.email);
+    const userId = String(req.body?.userId || "").trim().slice(0, 120);
+    const ipHashInput = String(req.body?.ipHash || "").trim().toLowerCase().slice(0, 120);
+    const ipInput = String(req.body?.ip || "").trim().slice(0, 120);
+    const reason = String(req.body?.reason || "policy-violation").trim().slice(0, 200);
+    const note = String(req.body?.note || "").trim().slice(0, 300);
+    const blockedBy = String(req.body?.blockedBy || "admin").trim().slice(0, 80) || "admin";
+
+    const resolvedIpHash = ipHashInput || (ipInput ? hashText(`ip:${ipInput}`) : "");
+    const hasTarget = Boolean(email || userId || resolvedIpHash);
+    if (!hasTarget) {
+      return res.status(400).json({ error: "Provide at least one of: email, userId, ip/ipHash" });
+    }
+
+    const meta = {
+      blockedAt: new Date().toISOString(),
+      reason,
+      note,
+      blockedBy,
+    };
+    if (email) {
+      blockedUsersStore.emails[email] = normalizeBlockedEntryMeta(meta);
+      const existingUserId = String(authStore.emailIndex[email] || "").trim();
+      if (existingUserId) {
+        removeAllSessionsForUser(existingUserId);
+      }
+    }
+    if (userId) {
+      blockedUsersStore.userIds[userId] = normalizeBlockedEntryMeta(meta);
+      removeAllSessionsForUser(userId);
+    }
+    if (resolvedIpHash) {
+      blockedUsersStore.ipHashes[resolvedIpHash] = normalizeBlockedEntryMeta(meta);
+    }
+    markBlockedUsersStoreDirty();
+    void appendSecurityEvent({
+      type: "admin-block",
+      req,
+      email,
+      userId,
+      reason,
+      details: {
+        ipHash: resolvedIpHash,
+        note,
+        blockedBy,
+      },
+    });
+    return res.json({
+      ok: true,
+      blocked: {
+        email: email || null,
+        userId: userId || null,
+        ipHash: resolvedIpHash || null,
+      },
+    });
+  }
+);
+
+app.post(
+  "/api/admin/security/unblock",
+  adminSecurityLimiter,
+  requireAdminSecurityAccess,
+  (req, res) => {
+    const email = normalizeEmail(req.body?.email);
+    const userId = String(req.body?.userId || "").trim().slice(0, 120);
+    const ipHashInput = String(req.body?.ipHash || "").trim().toLowerCase().slice(0, 120);
+    const ipInput = String(req.body?.ip || "").trim().slice(0, 120);
+    const resolvedIpHash = ipHashInput || (ipInput ? hashText(`ip:${ipInput}`) : "");
+    const hasTarget = Boolean(email || userId || resolvedIpHash);
+    if (!hasTarget) {
+      return res.status(400).json({ error: "Provide at least one of: email, userId, ip/ipHash" });
+    }
+
+    let changed = false;
+    if (email && blockedUsersStore.emails[email]) {
+      delete blockedUsersStore.emails[email];
+      changed = true;
+    }
+    if (userId && blockedUsersStore.userIds[userId]) {
+      delete blockedUsersStore.userIds[userId];
+      changed = true;
+    }
+    if (resolvedIpHash && blockedUsersStore.ipHashes[resolvedIpHash]) {
+      delete blockedUsersStore.ipHashes[resolvedIpHash];
+      changed = true;
+    }
+
+    if (changed) {
+      markBlockedUsersStoreDirty();
+    }
+    void appendSecurityEvent({
+      type: "admin-unblock",
+      req,
+      email,
+      userId,
+      reason: changed ? "Unblocked user target(s)" : "Unblock requested but no matching target",
+      details: {
+        ipHash: resolvedIpHash,
+      },
+    });
+    return res.json({
+      ok: true,
+      changed,
+      unblocked: {
+        email: email || null,
+        userId: userId || null,
+        ipHash: resolvedIpHash || null,
+      },
+    });
+  }
+);
 
 const isGoogleOauthConfigured = () =>
   Boolean(
@@ -2107,11 +2924,34 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
     if (!isValidEmail(email) || !emailVerified) {
       return res.redirect(302, buildAuthErrorRedirectPath("google_email"));
     }
+    if (
+      rejectBlockedAccess({
+        req,
+        res,
+        email,
+        context: "auth-google-callback",
+      })
+    ) {
+      return;
+    }
 
     const nowIso = new Date().toISOString();
     const existingUserId = authStore.emailIndex[email];
     let userRecord = existingUserId ? authStore.users[existingUserId] : null;
     const authMode = String(stateData?.mode || "").trim().toLowerCase() === "signup" ? "signup" : "login";
+    let createdNewGoogleUser = false;
+    if (
+      userRecord &&
+      rejectBlockedAccess({
+        req,
+        res,
+        email,
+        userId: userRecord.id,
+        context: "auth-google-callback-user",
+      })
+    ) {
+      return;
+    }
 
     if (!userRecord && authMode !== "signup") {
       return res.redirect(302, buildAuthErrorRedirectPath("google_no_account"));
@@ -2149,6 +2989,7 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
       };
       authStore.users[userId] = userRecord;
       authStore.emailIndex[email] = userId;
+      createdNewGoogleUser = true;
     } else {
       if (!userRecord.displayName || userRecord.displayName === "Explorer") {
         userRecord.displayName = sanitizeDisplayName(profile.name || profile.given_name || "", email);
@@ -2166,6 +3007,22 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
       userRecord.lastLoginAt = nowIso;
       userRecord.emailVerified = true;
       userRecord.emailVerification = createEmptyEmailVerificationState();
+    }
+
+    if (createdNewGoogleUser) {
+      try {
+        await appendRegisteredAccountAuditEntry({
+          userRecord,
+          req,
+          source: "signup-google",
+        });
+      } catch (auditError) {
+        reportServerError("registered-account-audit-write", auditError, {
+          requestId: req.requestId,
+          method: req.method,
+          path: req.originalUrl,
+        });
+      }
     }
 
     markAuthStoreDirty();
@@ -2240,6 +3097,16 @@ app.post("/api/auth/signup", authSignupLimiter, async (req, res) => {
   if (!hasAnyEmailDeliveryConfig()) {
     return res.status(503).json({ error: "Email verification is not configured yet" });
   }
+  if (
+    rejectBlockedAccess({
+      req,
+      res,
+      email,
+      context: "auth-signup",
+    })
+  ) {
+    return;
+  }
 
   try {
     const existingUserId = authStore.emailIndex[email];
@@ -2305,6 +3172,21 @@ app.post("/api/auth/signup", authSignupLimiter, async (req, res) => {
         error: "Could not send verification email. Check mail provider config and try again.",
       });
     }
+
+    try {
+      await appendRegisteredAccountAuditEntry({
+        userRecord: pendingUserRecord,
+        req,
+        source: "signup-email",
+      });
+    } catch (auditError) {
+      reportServerError("registered-account-audit-write", auditError, {
+        requestId: req.requestId,
+        method: req.method,
+        path: req.originalUrl,
+      });
+    }
+
     markAuthStoreDirty();
 
     return res.status(201).json({
@@ -2337,12 +3219,34 @@ app.post("/api/auth/verification/resend", authVerifyLimiter, async (req, res) =>
   if (!isValidEmail(email)) {
     return res.status(400).json({ error: "Enter a valid email first" });
   }
+  if (
+    rejectBlockedAccess({
+      req,
+      res,
+      email,
+      context: "auth-verification-resend",
+    })
+  ) {
+    return;
+  }
   if (!hasAnyEmailDeliveryConfig()) {
     return res.status(503).json({ error: "Email verification is not configured yet" });
   }
 
   const userId = authStore.emailIndex[email];
   const userRecord = userId ? authStore.users[userId] : null;
+  if (
+    userRecord &&
+    rejectBlockedAccess({
+      req,
+      res,
+      email,
+      userId: userRecord.id,
+      context: "auth-verification-resend-user",
+    })
+  ) {
+    return;
+  }
   if (!userRecord) {
     return res.json({
       ok: true,
@@ -2405,18 +3309,58 @@ app.post("/api/auth/login", authLoginLimiter, async (req, res) => {
   const email = normalizeEmail(req.body?.email);
   const password = String(req.body?.password || "");
   if (!isValidEmail(email) || !isValidPassword(password)) {
+    void appendSecurityEvent({
+      type: "auth-login-failed",
+      req,
+      email,
+      reason: "Invalid login payload",
+    });
     return res.status(400).json({ error: "Invalid email or password" });
+  }
+  if (
+    rejectBlockedAccess({
+      req,
+      res,
+      email,
+      context: "auth-login",
+    })
+  ) {
+    return;
   }
 
   const userId = authStore.emailIndex[email];
   const userRecord = userId ? authStore.users[userId] : null;
   if (!userRecord) {
+    void appendSecurityEvent({
+      type: "auth-login-failed",
+      req,
+      email,
+      reason: "Unknown email",
+    });
     return res.status(401).json({ error: "Invalid email or password" });
+  }
+  if (
+    rejectBlockedAccess({
+      req,
+      res,
+      email,
+      userId: userRecord.id,
+      context: "auth-login-user",
+    })
+  ) {
+    return;
   }
 
   try {
     const validPassword = await verifyPasswordAgainstRecord(password, userRecord.password);
     if (!validPassword) {
+      void appendSecurityEvent({
+        type: "auth-login-failed",
+        req,
+        email,
+        userId: userRecord.id,
+        reason: "Wrong password",
+      });
       return res.status(401).json({ error: "Invalid email or password" });
     }
     if (userRecord.emailVerified === false) {
@@ -2479,12 +3423,36 @@ app.delete("/api/auth/account", authSessionLimiter, requireAuthenticatedUser, as
       return res.status(401).json({ error: "Invalid password" });
     }
 
-    delete authStore.emailIndex[userRecord.email];
-    delete authStore.users[userRecord.id];
-    removeAllSessionsForUser(userRecord.id);
+    try {
+      await appendDeletedAccountAuditEntry({
+        userRecord,
+        req,
+        source: "self-delete",
+      });
+    } catch (auditError) {
+      reportServerError("deleted-account-audit-write", auditError, {
+        requestId: req.requestId,
+        method: req.method,
+        path: req.originalUrl,
+      });
+    }
+
+    purgeUserFromAuthStore({
+      userId: userRecord.id,
+      email: userRecord.email,
+    });
+    void appendSecurityEvent({
+      type: "account-deleted",
+      req,
+      email: userRecord.email,
+      userId: userRecord.id,
+      reason: "User deleted account",
+    });
     clearAuthSessionCookie(req, res);
-    markAuthStoreDirty();
-    return res.json({ ok: true });
+    return res.json({
+      ok: true,
+      message: "Account and data deleted permanently. You can sign up again with the same email immediately.",
+    });
   } catch (error) {
     reportServerError("auth-delete-account", error, {
       requestId: req.requestId,

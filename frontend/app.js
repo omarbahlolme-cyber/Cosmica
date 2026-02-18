@@ -1196,11 +1196,7 @@ const setupAccountHub = () => {
         </div>
         <nav class="account-menu-links" aria-label="Profile actions">
           <button type="button" data-menu="profile">Profile</button>
-          <button type="button" data-menu="progress">My Progress</button>
-          <button type="button" data-menu="streaks">Streaks 🔥</button>
-          <button type="button" data-menu="achievements">Achievements 🏆</button>
           <button type="button" data-menu="premium">Premium</button>
-          <button type="button" data-menu="settings">Settings</button>
           <button type="button" data-menu="manage">Manage Account</button>
         </nav>
         <div class="account-manage-panel" hidden>
@@ -1242,6 +1238,13 @@ const setupAccountHub = () => {
   let activeAuthPanel = "login";
 
   const formatNumber = (value) => Intl.NumberFormat().format(Math.max(0, Math.round(Number(value) || 0)));
+  const toAvatarTwoLetters = (value, fallback = "GU") => {
+    const chars = Array.from(String(value || "").replace(/\s+/g, "").trim());
+    if (!chars.length) {
+      return fallback;
+    }
+    return chars.slice(0, 2).join("").toUpperCase();
+  };
   let pendingAuthNoticeMessage = "";
   let pendingAuthNoticeTone = "error";
 
@@ -1276,6 +1279,21 @@ const setupAccountHub = () => {
     return hasValue;
   };
 
+  const validateEmailInput = (input, { required = true } = {}) => {
+    if (!(input instanceof HTMLInputElement)) {
+      return true;
+    }
+    const value = String(input.value || "").trim();
+    if (!value) {
+      const validIfEmpty = !required;
+      setInputInvalidState(input, !validIfEmpty);
+      return validIfEmpty;
+    }
+    const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) && value.length <= 160;
+    setInputInvalidState(input, !isValid);
+    return isValid;
+  };
+
   const bindLiveInputValidation = (formNode) => {
     if (!(formNode instanceof HTMLFormElement)) {
       return;
@@ -1283,6 +1301,10 @@ const setupAccountHub = () => {
     formNode.querySelectorAll("input").forEach((input) => {
       input.addEventListener("input", () => {
         if (!input.classList.contains("is-invalid")) {
+          return;
+        }
+        if (input.type === "email") {
+          validateEmailInput(input, { required: true });
           return;
         }
         validateRequiredInput(input);
@@ -1365,6 +1387,8 @@ const setupAccountHub = () => {
   };
 
   consumeAuthErrorFromUrl();
+  loginForm?.setAttribute("novalidate", "novalidate");
+  signupForm?.setAttribute("novalidate", "novalidate");
   bindLiveInputValidation(loginForm);
   bindLiveInputValidation(signupForm);
   signupForm?.querySelectorAll("input").forEach((input) => {
@@ -1495,7 +1519,7 @@ const setupAccountHub = () => {
     const badges = gamification.badges || {};
     const levelMeta = snapshot?.levelMeta || { level: 1, xp: 0, ratio: 0, toNextXp: 0 };
     const displayName = String(snapshot?.user?.displayName || "Guest");
-    const initial = displayName.charAt(0).toUpperCase() || "G";
+    const avatarLetters = toAvatarTwoLetters(displayName, isAuthenticated ? "US" : "GU");
     const achievementCount = Object.keys(badges).length;
     const streakDays = Math.max(0, Math.round(Number(gamification.currentStreak) || 0));
 
@@ -1507,10 +1531,10 @@ const setupAccountHub = () => {
       trigger.disabled = loading;
     }
     if (triggerLabel) {
-      triggerLabel.textContent = isAuthenticated ? displayName : "Guest";
+      triggerLabel.textContent = isAuthenticated ? "Profile" : "Guest";
     }
     if (triggerAvatar) {
-      triggerAvatar.textContent = initial;
+      triggerAvatar.textContent = avatarLetters;
     }
 
     if (snapshot?.error && loading === false) {
@@ -1535,7 +1559,7 @@ const setupAccountHub = () => {
     }
 
     if (menuAvatar) {
-      menuAvatar.textContent = initial;
+      menuAvatar.textContent = avatarLetters;
     }
     if (menuName) {
       menuName.textContent = displayName;
@@ -1615,8 +1639,9 @@ const setupAccountHub = () => {
     setResendButtonVisible(false);
     const emailInput = loginForm.querySelector('input[name="email"]');
     const passwordInput = loginForm.querySelector('input[name="password"]');
-    const loginFieldsValid =
-      validateRequiredInput(emailInput) && validateRequiredInput(passwordInput);
+    const emailValid = validateRequiredInput(emailInput);
+    const passwordValid = validateRequiredInput(passwordInput);
+    const loginFieldsValid = emailValid && passwordValid;
     if (!loginFieldsValid) {
       setFeedback("Enter email and password.", "error");
       return;
@@ -1712,12 +1737,17 @@ const setupAccountHub = () => {
     const usernameInput = signupForm.querySelector('input[name="displayName"]');
     const emailInput = signupForm.querySelector('input[name="email"]');
     const passwordInput = signupForm.querySelector('input[name="password"]');
-    const hasRequiredSignupFields =
-      validateRequiredInput(usernameInput) &&
-      validateRequiredInput(emailInput) &&
-      validateRequiredInput(passwordInput);
+    const usernameValid = validateRequiredInput(usernameInput);
+    const emailPresent = validateRequiredInput(emailInput);
+    const passwordPresent = validateRequiredInput(passwordInput);
+    const hasRequiredSignupFields = usernameValid && emailPresent && passwordPresent;
     if (!hasRequiredSignupFields) {
       setFeedback("Fill username, email, and password.", "error");
+      return;
+    }
+    const hasValidSignupEmail = validateEmailInput(emailInput, { required: true });
+    if (!hasValidSignupEmail) {
+      setFeedback("Enter a valid email address.", "error");
       return;
     }
     const formData = new FormData(signupForm);
@@ -1726,7 +1756,7 @@ const setupAccountHub = () => {
     const password = String(formData.get("password") || "");
     if (password.length < 8) {
       setInputInvalidState(passwordInput, true);
-      setFeedback("Use a valid email and password (8+ chars).", "error");
+      setFeedback("Password must be at least 8 characters.", "error");
       return;
     }
     setFeedback("Creating account...", "info");
@@ -1779,29 +1809,10 @@ const setupAccountHub = () => {
         setFeedback("Profile panel is active.", "info");
         return;
       }
-      if (action === "progress") {
-        setFeedback("Refreshing progress...", "info");
-        void window.cosmicaGamification.refreshProgress().then(() => {
-          setFeedback("Progress updated.", "success");
-        });
-        return;
-      }
-      if (action === "streaks") {
-        setFeedback("Streak details are shown above.", "info");
-        return;
-      }
-      if (action === "achievements") {
-        setFeedback("Achievements are synced to your account.", "info");
-        return;
-      }
       if (action === "premium") {
         closeDropdown();
         navigateToHash("#support");
         return;
-      }
-      if (action === "settings") {
-        closeDropdown();
-        navigateToHash("#world");
       }
     });
   });
@@ -1830,8 +1841,10 @@ const setupAccountHub = () => {
       if (managePanel) {
         managePanel.hidden = true;
       }
-      setFeedback("Account deleted.", "success");
-      window.setTimeout(closeDropdown, 420);
+      setFeedback("Account deleted. Redirecting...", "success");
+      window.setTimeout(() => {
+        window.location.href = "/index.html";
+      }, 280);
     } catch {}
   });
 
@@ -2277,10 +2290,37 @@ const MAX_VISIBLE_CHAT_MESSAGES = 16;
 let userHasMessagedMimi = false;
 let lastMimiReply = "";
 let chatFreshPulseTimer;
-const MIMI_CHAT_HISTORY_KEY = "cosmicaMimiChatHistory:v1";
+const MIMI_CHAT_HISTORY_KEY_PREFIX = "cosmicaMimiChatHistory:v2";
+const MIMI_CHAT_HISTORY_LEGACY_KEY = "cosmicaMimiChatHistory:v1";
+const MIMI_CHAT_HISTORY_SCOPE_GUEST = "guest";
 const MIMI_CHAT_STORAGE_SCHEMA_KEY = "cosmicaMimiChatSchema";
-const MIMI_CHAT_STORAGE_SCHEMA_VERSION = "v2";
+const MIMI_CHAT_STORAGE_SCHEMA_VERSION = "v3";
 let defaultMimiPrompt = "";
+let activeMimiChatHistoryScope = MIMI_CHAT_HISTORY_SCOPE_GUEST;
+
+const normalizeMimiChatHistoryScope = (scope) => {
+  const raw = String(scope || "").trim().toLowerCase();
+  if (!raw) {
+    return MIMI_CHAT_HISTORY_SCOPE_GUEST;
+  }
+  if (raw === MIMI_CHAT_HISTORY_SCOPE_GUEST) {
+    return MIMI_CHAT_HISTORY_SCOPE_GUEST;
+  }
+  return raw.replace(/[^a-z0-9:_-]/g, "") || MIMI_CHAT_HISTORY_SCOPE_GUEST;
+};
+
+const getMimiChatHistoryStorageKey = (scope = activeMimiChatHistoryScope) => {
+  const normalizedScope = normalizeMimiChatHistoryScope(scope);
+  return `${MIMI_CHAT_HISTORY_KEY_PREFIX}:${normalizedScope}`;
+};
+
+const resolveMimiChatHistoryScopeFromSnapshot = (snapshot) => {
+  const userId = String(snapshot?.user?.id || "").trim();
+  if (!userId) {
+    return MIMI_CHAT_HISTORY_SCOPE_GUEST;
+  }
+  return normalizeMimiChatHistoryScope(`user:${userId}`);
+};
 
 const sanitizeChatHistory = (value) => {
   if (!Array.isArray(value)) {
@@ -2298,9 +2338,17 @@ const sanitizeChatHistory = (value) => {
 
 const loadChatHistoryFromStorage = () => {
   try {
-    const raw =
-      sessionStorage.getItem(MIMI_CHAT_HISTORY_KEY) ||
-      localStorage.getItem(MIMI_CHAT_HISTORY_KEY);
+    const storageKey = getMimiChatHistoryStorageKey();
+    let loadedFromLegacyGuestKey = false;
+    let raw =
+      sessionStorage.getItem(storageKey) ||
+      localStorage.getItem(storageKey);
+    if (!raw && activeMimiChatHistoryScope === MIMI_CHAT_HISTORY_SCOPE_GUEST) {
+      raw =
+        sessionStorage.getItem(MIMI_CHAT_HISTORY_LEGACY_KEY) ||
+        localStorage.getItem(MIMI_CHAT_HISTORY_LEGACY_KEY);
+      loadedFromLegacyGuestKey = Boolean(raw);
+    }
     if (!raw) {
       return;
     }
@@ -2316,22 +2364,32 @@ const loadChatHistoryFromStorage = () => {
       lastMimiReply = latestAssistant.content;
     }
     persistChatHistoryToStorage();
+    if (loadedFromLegacyGuestKey) {
+      sessionStorage.removeItem(MIMI_CHAT_HISTORY_LEGACY_KEY);
+      localStorage.removeItem(MIMI_CHAT_HISTORY_LEGACY_KEY);
+    }
   } catch {}
 };
 
 const persistChatHistoryToStorage = () => {
   try {
+    const storageKey = getMimiChatHistoryStorageKey();
     const payload = chatHistory.slice(-Math.max(0, MIMI_CONFIG.historyLimit || 0));
     const serialized = JSON.stringify(payload);
-    sessionStorage.setItem(MIMI_CHAT_HISTORY_KEY, serialized);
-    localStorage.setItem(MIMI_CHAT_HISTORY_KEY, serialized);
+    sessionStorage.setItem(storageKey, serialized);
+    localStorage.setItem(storageKey, serialized);
   } catch {}
 };
 
 const clearChatHistoryFromStorage = () => {
   try {
-    sessionStorage.removeItem(MIMI_CHAT_HISTORY_KEY);
-    localStorage.removeItem(MIMI_CHAT_HISTORY_KEY);
+    const storageKey = getMimiChatHistoryStorageKey();
+    sessionStorage.removeItem(storageKey);
+    localStorage.removeItem(storageKey);
+    if (activeMimiChatHistoryScope === MIMI_CHAT_HISTORY_SCOPE_GUEST) {
+      sessionStorage.removeItem(MIMI_CHAT_HISTORY_LEGACY_KEY);
+      localStorage.removeItem(MIMI_CHAT_HISTORY_LEGACY_KEY);
+    }
   } catch {}
 };
 
@@ -2341,7 +2399,27 @@ const ensureMimiChatStorageSchema = () => {
     if (current === MIMI_CHAT_STORAGE_SCHEMA_VERSION) {
       return;
     }
-    clearChatHistoryFromStorage();
+    const keysToRemove = new Set();
+    for (let index = 0; index < localStorage.length; index += 1) {
+      const key = localStorage.key(index);
+      if (!key) {
+        continue;
+      }
+      if (key.startsWith(`${MIMI_CHAT_HISTORY_KEY_PREFIX}:`) || key === MIMI_CHAT_HISTORY_LEGACY_KEY) {
+        keysToRemove.add(key);
+      }
+    }
+    for (let index = 0; index < sessionStorage.length; index += 1) {
+      const key = sessionStorage.key(index);
+      if (!key) {
+        continue;
+      }
+      if (key.startsWith(`${MIMI_CHAT_HISTORY_KEY_PREFIX}:`) || key === MIMI_CHAT_HISTORY_LEGACY_KEY) {
+        keysToRemove.add(key);
+      }
+    }
+    keysToRemove.forEach((key) => localStorage.removeItem(key));
+    keysToRemove.forEach((key) => sessionStorage.removeItem(key));
     localStorage.setItem(
       MIMI_CHAT_STORAGE_SCHEMA_KEY,
       MIMI_CHAT_STORAGE_SCHEMA_VERSION
@@ -2350,6 +2428,9 @@ const ensureMimiChatStorageSchema = () => {
 };
 
 ensureMimiChatStorageSchema();
+activeMimiChatHistoryScope = resolveMimiChatHistoryScopeFromSnapshot(
+  typeof window.cosmicaGamification?.getState === "function" ? window.cosmicaGamification.getState() : null
+);
 loadChatHistoryFromStorage();
 
 const renderFlags = () => {
@@ -2607,11 +2688,13 @@ const setChatStatus = (text) => {
   }
 };
 
-const resetMimiConversationState = ({ resetPromptText = false } = {}) => {
+const resetMimiConversationState = ({ resetPromptText = false, clearStorage = true } = {}) => {
   chatHistory.length = 0;
   userHasMessagedMimi = false;
   lastMimiReply = "";
-  clearChatHistoryFromStorage();
+  if (clearStorage) {
+    clearChatHistoryFromStorage();
+  }
   if (chatLog) {
     chatLog.innerHTML = "";
     chatLog.classList.remove("typing");
@@ -2639,6 +2722,23 @@ const resetMimiConversationState = ({ resetPromptText = false } = {}) => {
   }
   setChatStatus("Mimi ready");
 };
+
+const syncMimiChatHistoryScopeFromAuthState = (snapshot, { force = false } = {}) => {
+  const nextScope = resolveMimiChatHistoryScopeFromSnapshot(snapshot);
+  if (!force && nextScope === activeMimiChatHistoryScope) {
+    return;
+  }
+  persistChatHistoryToStorage();
+  activeMimiChatHistoryScope = nextScope;
+  resetMimiConversationState({ resetPromptText: true, clearStorage: false });
+  loadChatHistoryFromStorage();
+};
+
+if (window.cosmicaGamification && typeof window.cosmicaGamification.subscribe === "function") {
+  window.cosmicaGamification.subscribe((snapshot) => {
+    syncMimiChatHistoryScopeFromAuthState(snapshot);
+  });
+}
 
 const getApiEndpoint = () => {
   return getApiEndpointCandidates()[0];

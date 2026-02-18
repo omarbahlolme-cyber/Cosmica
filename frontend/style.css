@@ -892,36 +892,114 @@ body.world-page .nav-links a {
   min-width: 0;
 }
 
+.header-privacy-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 10px 0 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(162, 221, 255, 0.42);
+  background: rgba(7, 20, 44, 0.66);
+  color: #dff2ff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.18s ease;
+}
+
+.header-privacy-link:hover,
+.header-privacy-link:focus-visible {
+  border-color: rgba(180, 232, 255, 0.72);
+  background: rgba(14, 31, 62, 0.82);
+  transform: translateY(-1px);
+}
+
 .account-trigger {
   display: inline-flex;
   align-items: center;
   gap: 9px;
   min-height: 38px;
   padding: 7px 10px;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   border-radius: 999px;
-  border: 1px solid rgba(126, 205, 255, 0.42);
-  background: linear-gradient(130deg, rgba(11, 22, 45, 0.78), rgba(15, 18, 39, 0.86));
+  border: 1px solid rgba(162, 218, 255, 0.48);
+  background:
+    radial-gradient(circle at 22% 20%, rgba(153, 226, 255, 0.2), transparent 52%),
+    linear-gradient(130deg, rgba(8, 21, 44, 0.92), rgba(20, 12, 38, 0.9));
   color: #edf7ff;
   font-weight: 600;
+  letter-spacing: 0.01em;
   cursor: pointer;
-  box-shadow: 0 10px 18px rgba(4, 8, 22, 0.4);
-  transition: transform 0.18s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  box-shadow:
+    0 10px 18px rgba(4, 8, 22, 0.44),
+    inset 0 1px 0 rgba(205, 236, 255, 0.18),
+    inset 0 -1px 0 rgba(64, 113, 178, 0.22);
+  transition: transform 0.18s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.account-trigger::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0));
+  pointer-events: none;
+  z-index: 0;
+}
+
+.account-trigger::after {
+  content: "";
+  position: absolute;
+  top: -46%;
+  left: -28%;
+  width: 34%;
+  height: 192%;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(214, 244, 255, 0.3), rgba(255, 255, 255, 0));
+  transform: rotate(18deg) translateX(-210%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.account-trigger > * {
+  position: relative;
+  z-index: 1;
 }
 
 .account-trigger:hover,
 .account-trigger:focus-visible {
   transform: translateY(-1px);
-  border-color: rgba(148, 231, 193, 0.68);
-  box-shadow: 0 12px 20px rgba(4, 10, 25, 0.48), 0 0 0 1px rgba(148, 231, 193, 0.2);
+  border-color: rgba(174, 235, 255, 0.78);
+  box-shadow:
+    0 14px 22px rgba(3, 10, 28, 0.56),
+    0 0 0 1px rgba(173, 233, 255, 0.22),
+    inset 0 1px 0 rgba(226, 245, 255, 0.24);
+}
+
+.account-trigger:hover::after,
+.account-trigger:focus-visible::after {
+  opacity: 1;
+  animation: accountTriggerSheen 1.15s ease;
 }
 
 .account-trigger[aria-expanded="true"] {
-  border-color: rgba(141, 233, 195, 0.75);
-  box-shadow: 0 12px 22px rgba(4, 10, 24, 0.5), 0 0 0 1px rgba(150, 237, 201, 0.24);
+  border-color: rgba(175, 236, 255, 0.86);
+  box-shadow:
+    0 14px 24px rgba(2, 8, 25, 0.58),
+    0 0 0 1px rgba(173, 236, 255, 0.28),
+    inset 0 1px 0 rgba(230, 245, 255, 0.26);
 }
 
 .account-trigger.is-authenticated {
-  border-color: rgba(131, 234, 192, 0.72);
+  border-color: rgba(145, 236, 202, 0.78);
+  background:
+    radial-gradient(circle at 20% 16%, rgba(163, 239, 216, 0.18), transparent 46%),
+    linear-gradient(130deg, rgba(8, 26, 44, 0.94), rgba(8, 46, 46, 0.88), rgba(20, 15, 38, 0.9));
 }
 
 .account-trigger-avatar {
@@ -933,8 +1011,15 @@ body.world-page .nav-links a {
   font-weight: 700;
   font-size: 0.84rem;
   color: #e9f8ff;
-  border: 1px solid rgba(142, 217, 255, 0.46);
-  background: radial-gradient(circle at 30% 30%, rgba(45, 98, 146, 0.8), rgba(20, 43, 75, 0.92));
+  text-shadow: 0 1px 4px rgba(8, 17, 37, 0.6);
+  border: 1px solid rgba(180, 232, 255, 0.56);
+  background:
+    radial-gradient(circle at 28% 24%, rgba(215, 244, 255, 0.32), rgba(133, 190, 255, 0.18) 42%, transparent 56%),
+    radial-gradient(circle at 70% 74%, rgba(108, 250, 201, 0.22), transparent 52%),
+    linear-gradient(160deg, rgba(48, 109, 169, 0.9), rgba(25, 60, 96, 0.95));
+  box-shadow:
+    inset 0 1px 0 rgba(229, 246, 255, 0.24),
+    0 4px 10px rgba(6, 16, 36, 0.45);
 }
 
 .account-trigger-copy {
@@ -958,7 +1043,18 @@ body.world-page .nav-links a {
 
 .account-trigger-caret {
   font-size: 0.68rem;
-  opacity: 0.88;
+  opacity: 0.95;
+  color: rgba(208, 236, 255, 0.95);
+  text-shadow: 0 1px 5px rgba(9, 20, 43, 0.6);
+}
+
+@keyframes accountTriggerSheen {
+  0% {
+    transform: rotate(18deg) translateX(-210%);
+  }
+  100% {
+    transform: rotate(18deg) translateX(460%);
+  }
 }
 
 .account-dropdown {
@@ -974,17 +1070,51 @@ body.world-page .nav-links a {
 }
 
 .account-dropdown-card {
+  position: relative;
+  isolation: isolate;
   border-radius: 16px;
-  border: 1px solid rgba(141, 211, 252, 0.34);
+  border: 1px solid rgba(166, 223, 255, 0.44);
   background:
-    radial-gradient(circle at 84% -18%, rgba(170, 229, 255, 0.24), transparent 46%),
-    linear-gradient(152deg, rgba(7, 17, 40, 0.98), rgba(8, 13, 31, 0.98));
+    radial-gradient(circle at 90% -20%, rgba(172, 230, 255, 0.3), transparent 44%),
+    radial-gradient(circle at 10% 118%, rgba(123, 243, 199, 0.16), transparent 56%),
+    linear-gradient(152deg, rgba(5, 14, 36, 0.98), rgba(9, 14, 35, 0.98), rgba(17, 10, 30, 0.98));
   box-shadow:
-    0 26px 52px rgba(2, 7, 21, 0.72),
-    0 0 0 1px rgba(173, 227, 255, 0.08);
+    0 28px 56px rgba(2, 7, 22, 0.74),
+    0 0 0 1px rgba(176, 231, 255, 0.1),
+    inset 0 1px 0 rgba(231, 246, 255, 0.2),
+    inset 0 -1px 0 rgba(68, 114, 174, 0.2);
   padding: 12px;
   max-height: inherit;
   overflow: auto;
+  backdrop-filter: blur(12px) saturate(1.06);
+}
+
+.account-dropdown-card::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0));
+  pointer-events: none;
+  z-index: 0;
+}
+
+.account-dropdown-card::after {
+  content: "";
+  position: absolute;
+  right: 8%;
+  top: -28%;
+  width: 44%;
+  height: 56%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(191, 235, 255, 0.2), transparent 68%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.account-dropdown-card > * {
+  position: relative;
+  z-index: 1;
 }
 
 .account-pane-title {
@@ -992,14 +1122,18 @@ body.world-page .nav-links a {
   font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: rgba(182, 207, 238, 0.82);
+  color: rgba(196, 223, 250, 0.92);
 }
 
 .account-feedback {
   min-height: 18px;
   margin: 0 0 10px;
+  padding: 6px 8px;
+  border-radius: 10px;
+  border: 1px solid rgba(122, 186, 232, 0.24);
+  background: rgba(8, 18, 40, 0.46);
   font-size: 0.78rem;
-  color: rgba(185, 211, 244, 0.9);
+  color: rgba(192, 218, 246, 0.94);
 }
 
 .account-feedback:empty {
@@ -1007,10 +1141,14 @@ body.world-page .nav-links a {
 }
 
 .account-feedback[data-tone="error"] {
+  border-color: rgba(255, 153, 166, 0.4);
+  background: rgba(72, 20, 32, 0.36);
   color: rgba(255, 174, 184, 0.96);
 }
 
 .account-feedback[data-tone="success"] {
+  border-color: rgba(145, 232, 198, 0.44);
+  background: rgba(12, 52, 44, 0.38);
   color: rgba(156, 235, 194, 0.95);
 }
 
@@ -1022,13 +1160,16 @@ body.world-page .nav-links a {
 
 .account-guest-head {
   padding: 6px 6px 10px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid rgba(128, 194, 239, 0.2);
 }
 
 .account-guest-head h3 {
   margin: 6px 0 4px;
   font-size: 1.08rem;
   line-height: 1.18;
-  color: #eef6ff;
+  color: #f3f9ff;
+  text-shadow: 0 2px 12px rgba(116, 174, 236, 0.2);
 }
 
 .account-guest-head p {
@@ -1043,27 +1184,34 @@ body.world-page .nav-links a {
   grid-template-columns: 1fr 1fr;
   gap: 6px;
   padding: 4px;
-  border: 1px solid rgba(130, 201, 246, 0.22);
+  border: 1px solid rgba(147, 211, 251, 0.3);
   border-radius: 12px;
-  background: rgba(7, 16, 36, 0.74);
+  background:
+    linear-gradient(180deg, rgba(9, 20, 44, 0.84), rgba(8, 14, 30, 0.82));
+  box-shadow:
+    inset 0 1px 0 rgba(206, 236, 255, 0.08),
+    inset 0 -1px 0 rgba(53, 95, 157, 0.18);
 }
 
 .account-auth-switch button {
-  border: 1px solid transparent;
+  border: 1px solid rgba(120, 183, 231, 0.14);
   border-radius: 9px;
-  background: transparent;
+  background: linear-gradient(180deg, rgba(9, 18, 39, 0.66), rgba(9, 16, 35, 0.58));
   color: rgba(182, 209, 242, 0.92);
   padding: 8px 10px;
   font-size: 0.8rem;
   font-weight: 700;
   cursor: pointer;
-  transition: background 0.16s ease, border-color 0.16s ease, color 0.16s ease;
+  transition: background 0.16s ease, border-color 0.16s ease, color 0.16s ease, transform 0.16s ease;
 }
 
 .account-auth-switch button.is-active {
-  border-color: rgba(137, 222, 193, 0.64);
-  background: linear-gradient(135deg, rgba(13, 58, 52, 0.82), rgba(11, 80, 65, 0.82));
+  border-color: rgba(152, 232, 201, 0.72);
+  background:
+    radial-gradient(circle at 18% 8%, rgba(183, 241, 219, 0.22), transparent 52%),
+    linear-gradient(135deg, rgba(13, 62, 54, 0.9), rgba(11, 86, 69, 0.86));
   color: #ebfff6;
+  box-shadow: 0 8px 16px rgba(4, 22, 19, 0.34), inset 0 1px 0 rgba(213, 248, 232, 0.2);
 }
 
 .account-auth-panels {
@@ -1075,11 +1223,14 @@ body.world-page .nav-links a {
 }
 
 .account-form {
-  border: 1px solid rgba(137, 210, 255, 0.24);
+  border: 1px solid rgba(148, 212, 252, 0.3);
   border-radius: 12px;
   background:
-    radial-gradient(circle at 86% -12%, rgba(171, 227, 255, 0.15), transparent 42%),
-    rgba(8, 20, 45, 0.72);
+    radial-gradient(circle at 86% -12%, rgba(183, 234, 255, 0.2), transparent 42%),
+    linear-gradient(160deg, rgba(8, 20, 44, 0.8), rgba(10, 15, 33, 0.76));
+  box-shadow:
+    inset 0 1px 0 rgba(226, 245, 255, 0.1),
+    inset 0 -1px 0 rgba(56, 100, 159, 0.15);
   padding: 11px;
   display: grid;
   gap: 8px;
@@ -1091,22 +1242,25 @@ body.world-page .nav-links a {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  border: 1px solid rgba(152, 183, 222, 0.42);
+  border: 1px solid rgba(160, 190, 226, 0.52);
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.96);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(242, 247, 255, 0.98));
   color: #1f2937;
   padding: 9px 11px;
   font-size: 0.82rem;
   font-weight: 700;
   cursor: pointer;
-  transition: transform 0.14s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+  box-shadow: 0 6px 14px rgba(7, 18, 43, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.82);
+  transition: transform 0.14s ease, box-shadow 0.16s ease, border-color 0.16s ease, filter 0.16s ease;
 }
 
 .account-google-button:hover,
 .account-google-button:focus-visible {
   transform: translateY(-1px);
-  border-color: rgba(124, 172, 230, 0.6);
-  box-shadow: 0 8px 18px rgba(7, 18, 43, 0.2);
+  border-color: rgba(134, 184, 236, 0.72);
+  box-shadow: 0 9px 20px rgba(7, 18, 43, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  filter: brightness(1.01);
 }
 
 .account-google-icon {
@@ -1137,7 +1291,7 @@ body.world-page .nav-links a {
   right: 0;
   top: 50%;
   height: 1px;
-  background: rgba(136, 185, 233, 0.24);
+  background: linear-gradient(90deg, rgba(136, 185, 233, 0.16), rgba(168, 226, 255, 0.42), rgba(136, 185, 233, 0.16));
 }
 
 .account-form-divider span {
@@ -1167,19 +1321,20 @@ body.world-page .nav-links a {
 
 .account-form input {
   border-radius: 9px;
-  border: 1px solid rgba(139, 190, 232, 0.34);
-  background: rgba(8, 15, 34, 0.78);
+  border: 1px solid rgba(150, 199, 239, 0.42);
+  background: linear-gradient(180deg, rgba(8, 15, 34, 0.88), rgba(8, 17, 39, 0.82));
   color: #edf4ff;
   padding: 8px 10px;
+  box-shadow: inset 0 1px 0 rgba(205, 236, 255, 0.06);
   transition: border-color 0.16s ease, box-shadow 0.16s ease;
 }
 
 .account-form input:focus {
   outline: none;
-  border-color: rgba(146, 226, 195, 0.82);
+  border-color: rgba(159, 231, 202, 0.9);
   box-shadow:
-    0 0 0 1px rgba(150, 230, 201, 0.34),
-    0 0 0 5px rgba(118, 211, 184, 0.08);
+    0 0 0 1px rgba(157, 229, 202, 0.42),
+    0 0 0 5px rgba(118, 211, 184, 0.12);
 }
 
 .account-form input.is-invalid,
@@ -1191,39 +1346,46 @@ body.world-page .nav-links a {
 }
 
 .account-form button:not(.account-google-button):not(.account-resend-button) {
-  border: 1px solid rgba(130, 232, 194, 0.54);
-  background: linear-gradient(135deg, rgba(12, 64, 58, 0.92), rgba(13, 84, 71, 0.95));
+  border: 1px solid rgba(145, 238, 204, 0.58);
+  background:
+    radial-gradient(circle at 16% 0%, rgba(186, 244, 222, 0.22), transparent 54%),
+    linear-gradient(135deg, rgba(10, 64, 56, 0.95), rgba(12, 92, 75, 0.96));
   color: #ebfff5;
   border-radius: 10px;
   padding: 9px 11px;
   font-weight: 700;
   cursor: pointer;
-  transition: transform 0.14s ease, filter 0.16s ease;
+  box-shadow: 0 8px 16px rgba(4, 25, 21, 0.34), inset 0 1px 0 rgba(216, 250, 235, 0.16);
+  transition: transform 0.14s ease, filter 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
 }
 
 .account-form button:not(.account-google-button):not(.account-resend-button):hover,
 .account-form button:not(.account-google-button):not(.account-resend-button):focus-visible {
   transform: translateY(-1px);
-  filter: brightness(1.06);
+  filter: brightness(1.04);
+  border-color: rgba(164, 244, 214, 0.76);
+  box-shadow: 0 10px 18px rgba(4, 28, 23, 0.42), inset 0 1px 0 rgba(225, 252, 241, 0.22);
 }
 
 .account-resend-button {
-  border: 1px solid rgba(133, 187, 230, 0.34);
-  background: rgba(9, 20, 44, 0.66);
+  border: 1px solid rgba(145, 198, 236, 0.4);
+  background: linear-gradient(180deg, rgba(9, 20, 44, 0.8), rgba(9, 18, 41, 0.78));
   color: rgba(198, 221, 248, 0.95);
   border-radius: 10px;
   padding: 8px 10px;
   font-size: 0.76rem;
   font-weight: 600;
   cursor: pointer;
-  transition: border-color 0.16s ease, background 0.16s ease, color 0.16s ease;
+  box-shadow: inset 0 1px 0 rgba(208, 236, 255, 0.08);
+  transition: border-color 0.16s ease, background 0.16s ease, color 0.16s ease, transform 0.16s ease;
 }
 
 .account-resend-button:hover,
 .account-resend-button:focus-visible {
-  border-color: rgba(147, 214, 255, 0.62);
-  background: rgba(10, 29, 58, 0.75);
+  border-color: rgba(157, 219, 255, 0.7);
+  background: linear-gradient(180deg, rgba(10, 29, 58, 0.84), rgba(9, 25, 52, 0.82));
   color: #eef8ff;
+  transform: translateY(-1px);
   outline: none;
 }
 
@@ -1236,8 +1398,13 @@ body.world-page .nav-links a {
   display: flex;
   gap: 10px;
   align-items: center;
-  padding: 3px 2px 10px;
-  border-bottom: 1px solid rgba(118, 181, 223, 0.25);
+  padding: 8px 8px 10px;
+  border-bottom: 1px solid rgba(129, 193, 236, 0.28);
+  border-radius: 12px;
+  background:
+    radial-gradient(circle at 86% -20%, rgba(178, 230, 255, 0.22), transparent 48%),
+    linear-gradient(150deg, rgba(10, 22, 48, 0.8), rgba(8, 18, 39, 0.76));
+  box-shadow: inset 0 1px 0 rgba(218, 242, 255, 0.08);
 }
 
 .account-menu-avatar {
@@ -1249,8 +1416,15 @@ body.world-page .nav-links a {
   font-size: 0.95rem;
   font-weight: 700;
   color: #eaf7ff;
-  border: 1px solid rgba(144, 220, 255, 0.5);
-  background: radial-gradient(circle at 30% 30%, rgba(56, 121, 171, 0.88), rgba(19, 47, 83, 0.95));
+  border: 1px solid rgba(177, 231, 255, 0.62);
+  text-shadow: 0 1px 4px rgba(10, 19, 38, 0.58);
+  background:
+    radial-gradient(circle at 28% 24%, rgba(216, 243, 255, 0.34), rgba(143, 198, 255, 0.2) 42%, transparent 56%),
+    radial-gradient(circle at 70% 74%, rgba(108, 250, 201, 0.2), transparent 52%),
+    linear-gradient(160deg, rgba(47, 111, 168, 0.92), rgba(23, 57, 94, 0.96));
+  box-shadow:
+    inset 0 1px 0 rgba(228, 246, 255, 0.22),
+    0 6px 14px rgba(6, 16, 36, 0.44);
 }
 
 .account-menu-identity {
@@ -1276,8 +1450,9 @@ body.world-page .nav-links a {
   width: 100%;
   height: 6px;
   border-radius: 999px;
-  background: rgba(20, 36, 63, 0.84);
-  border: 1px solid rgba(126, 196, 231, 0.28);
+  background: linear-gradient(180deg, rgba(20, 36, 63, 0.88), rgba(16, 30, 53, 0.9));
+  border: 1px solid rgba(136, 204, 237, 0.34);
+  box-shadow: inset 0 1px 0 rgba(216, 241, 255, 0.06);
   overflow: hidden;
 }
 
@@ -1295,8 +1470,11 @@ body.world-page .nav-links a {
   justify-content: space-between;
   gap: 8px;
   align-items: center;
-  padding: 10px 2px 8px;
-  border-bottom: 1px solid rgba(120, 184, 222, 0.2);
+  padding: 10px 8px 8px;
+  margin-top: 8px;
+  border-radius: 10px;
+  border-bottom: 1px solid rgba(120, 184, 222, 0.24);
+  background: linear-gradient(160deg, rgba(9, 20, 43, 0.52), rgba(8, 17, 37, 0.44));
 }
 
 .account-menu-stat {
@@ -1314,27 +1492,31 @@ body.world-page .nav-links a {
   width: 100%;
   text-align: left;
   border-radius: 8px;
-  border: 1px solid rgba(129, 199, 237, 0.2);
-  background: rgba(10, 22, 44, 0.62);
+  border: 1px solid rgba(136, 203, 240, 0.3);
+  background: linear-gradient(160deg, rgba(10, 22, 44, 0.72), rgba(8, 18, 37, 0.66));
   color: #e6f3ff;
   padding: 8px 10px;
   font-size: 0.84rem;
   font-weight: 600;
   cursor: pointer;
-  transition: border-color 0.16s ease, background 0.16s ease, transform 0.16s ease;
+  box-shadow: inset 0 1px 0 rgba(207, 235, 255, 0.06);
+  transition: border-color 0.16s ease, background 0.16s ease, transform 0.16s ease, box-shadow 0.16s ease;
 }
 
 .account-menu-links button:hover,
 .account-menu-links button:focus-visible {
-  border-color: rgba(129, 228, 193, 0.6);
-  background: rgba(11, 39, 56, 0.72);
+  border-color: rgba(145, 233, 200, 0.7);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(174, 241, 219, 0.2), transparent 52%),
+    linear-gradient(160deg, rgba(10, 40, 56, 0.8), rgba(9, 32, 48, 0.74));
+  box-shadow: inset 0 1px 0 rgba(215, 247, 234, 0.14), 0 6px 14px rgba(4, 20, 28, 0.24);
   transform: translateY(-1px);
 }
 
 .account-manage-panel {
   margin-top: 8px;
   padding-top: 9px;
-  border-top: 1px solid rgba(118, 181, 223, 0.2);
+  border-top: 1px solid rgba(126, 191, 233, 0.28);
 }
 
 .account-delete-form {
@@ -1351,30 +1533,51 @@ body.world-page .nav-links a {
 
 .account-delete-form input {
   border-radius: 8px;
-  border: 1px solid rgba(139, 190, 232, 0.34);
-  background: rgba(8, 15, 34, 0.78);
+  border: 1px solid rgba(150, 199, 239, 0.4);
+  background: linear-gradient(180deg, rgba(8, 15, 34, 0.88), rgba(8, 17, 39, 0.82));
   color: #edf4ff;
   padding: 7px 9px;
+  box-shadow: inset 0 1px 0 rgba(205, 236, 255, 0.06);
 }
 
 .account-logout,
 .account-delete {
   margin-top: 8px;
   border-radius: 8px;
-  border: 1px solid rgba(136, 213, 255, 0.36);
-  background: rgba(12, 28, 54, 0.78);
+  border: 1px solid rgba(149, 216, 255, 0.44);
+  background:
+    radial-gradient(circle at 16% 0%, rgba(185, 232, 255, 0.16), transparent 56%),
+    linear-gradient(160deg, rgba(11, 30, 55, 0.86), rgba(10, 21, 43, 0.82));
   color: #e9f6ff;
   padding: 8px 10px;
   font-weight: 700;
   cursor: pointer;
   width: 100%;
   text-align: left;
+  box-shadow: inset 0 1px 0 rgba(214, 239, 255, 0.1);
+  transition: border-color 0.16s ease, transform 0.16s ease, filter 0.16s ease;
+}
+
+.account-logout:hover,
+.account-logout:focus-visible {
+  border-color: rgba(168, 224, 255, 0.64);
+  transform: translateY(-1px);
+  filter: brightness(1.04);
 }
 
 .account-delete {
   border-color: rgba(255, 160, 168, 0.44);
-  color: #ffd5d8;
-  background: rgba(64, 19, 27, 0.66);
+  color: #ffe0e3;
+  background:
+    radial-gradient(circle at 14% 0%, rgba(255, 210, 216, 0.16), transparent 52%),
+    linear-gradient(160deg, rgba(74, 22, 33, 0.8), rgba(56, 18, 27, 0.78));
+}
+
+.account-delete:hover,
+.account-delete:focus-visible {
+  border-color: rgba(255, 176, 185, 0.62);
+  transform: translateY(-1px);
+  filter: brightness(1.05);
 }
 
 @keyframes navHaloDrift {
@@ -5524,6 +5727,13 @@ body.world-page.start-lesson-transition #language.language-reveal {
     order: 2;
     margin-left: auto;
     gap: 0;
+  }
+
+  .header-privacy-link {
+    margin: 0 8px 0 10px;
+    padding: 6px 8px;
+    font-size: 9px;
+    letter-spacing: 0.09em;
   }
 
   .brand-mark {
