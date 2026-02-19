@@ -1409,7 +1409,10 @@ const setupAccountHub = () => {
           </div>
         </header>
         <nav class="account-menu-links" aria-label="Account actions">
-          <button type="button" data-menu="premium">Discover Premiun</button>
+          <button type="button" data-menu="premium" class="account-premium-cta">
+            <span class="account-premium-main">Discover Premiun</span>
+            <span class="account-premium-sub">Unlock premium features</span>
+          </button>
           <button type="button" data-menu="manage">Manage Account</button>
         </nav>
         <div class="account-manage-panel" hidden>

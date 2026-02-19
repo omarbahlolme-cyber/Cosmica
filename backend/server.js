@@ -905,6 +905,10 @@ const QUEST_TASK_TEMPLATES = Object.freeze({
   }),
 });
 
+const REVIEW_INTERVAL_DAYS = Object.freeze([1, 3, 7]);
+const WORLD_BOSS_CHECKPOINT_SIZE = 6;
+const BOSS_SECTION_KEY_PREFIX = "__boss_checkpoint_";
+
 const createDefaultQuestTasks = () => ({
   practice: {
     ...QUEST_TASK_TEMPLATES.practice,
@@ -1100,6 +1104,95 @@ const daysBetweenUtcDateKeys = (fromDateKey, toDateKey) => {
     return Number.POSITIVE_INFINITY;
   }
   return Math.round((toMs - fromMs) / 86400000);
+};
+
+const addUtcDaysToIso = (isoValue, dayCount) => {
+  const baseMs = Date.parse(String(isoValue || ""));
+  const sourceMs = Number.isFinite(baseMs) ? baseMs : Date.now();
+  const daysMs = Math.max(0, Math.round(Number(dayCount) || 0)) * 86400000;
+  return new Date(sourceMs + daysMs).toISOString();
+};
+
+const computeReviewDueAt = (memoryStage, nowIso) => {
+  const stage = toBoundedInt(memoryStage, 1, REVIEW_INTERVAL_DAYS.length);
+  const days = REVIEW_INTERVAL_DAYS[Math.max(0, stage - 1)] || REVIEW_INTERVAL_DAYS[REVIEW_INTERVAL_DAYS.length - 1];
+  return addUtcDaysToIso(nowIso, days);
+};
+
+const isBossSectionKey = (sectionKey) =>
+  String(sectionKey || "").trim().toLowerCase().startsWith(BOSS_SECTION_KEY_PREFIX);
+
+const parseBossCheckpointFromSectionKey = (sectionKey) => {
+  const raw = String(sectionKey || "").trim().toLowerCase();
+  if (!raw.startsWith(BOSS_SECTION_KEY_PREFIX)) {
+    return 0;
+  }
+  const parsed = Number(raw.slice(BOSS_SECTION_KEY_PREFIX.length));
+  if (!Number.isFinite(parsed)) {
+    return 0;
+  }
+  return toBoundedInt(parsed, 1, 200);
+};
+
+const deriveSectionMasteryStars = ({
+  visitCount = 0,
+  practiceCount = 0,
+  reviewCount = 0,
+  completionCount = 0,
+  bestScore = null,
+  memoryStage = 0,
+} = {}) => {
+  let stars = 0;
+  const score = Number.isFinite(Number(bestScore)) ? Number(bestScore) : null;
+  if (visitCount > 0 || practiceCount > 0 || reviewCount > 0 || completionCount > 0) {
+    stars = 1;
+  }
+  if (stars >= 1 && (reviewCount >= 1 || practiceCount >= 6 || (score !== null && score >= 80))) {
+    stars = 2;
+  }
+  if (
+    stars >= 2 &&
+    (completionCount > 0 || memoryStage >= 3 || (reviewCount >= 2 && score !== null && score >= 88))
+  ) {
+    stars = 3;
+  }
+  return toBoundedInt(stars, 0, 3);
+};
+
+const createDefaultWorldBossState = () => ({
+  checkpointSize: WORLD_BOSS_CHECKPOINT_SIZE,
+  unlockedCheckpoint: 0,
+  defeatedCheckpoint: 0,
+  completedSections: 0,
+  nextUnlockInSections: WORLD_BOSS_CHECKPOINT_SIZE,
+  readyCheckpoint: 0,
+  lastAttemptAt: null,
+  lastCompletedAt: null,
+  lastUnlockedAt: null,
+});
+
+const normalizeWorldBossState = (value) => {
+  const fallback = createDefaultWorldBossState();
+  const source = isPlainObject(value) ? value : {};
+  fallback.checkpointSize = toBoundedInt(source.checkpointSize, WORLD_BOSS_CHECKPOINT_SIZE, 100);
+  fallback.unlockedCheckpoint = toBoundedInt(source.unlockedCheckpoint, 0, 200);
+  fallback.defeatedCheckpoint = toBoundedInt(
+    source.defeatedCheckpoint,
+    0,
+    Math.max(0, fallback.unlockedCheckpoint)
+  );
+  fallback.completedSections = toBoundedInt(source.completedSections, 0, 5000000);
+  fallback.nextUnlockInSections = toBoundedInt(source.nextUnlockInSections, 0, fallback.checkpointSize);
+  fallback.readyCheckpoint =
+    fallback.unlockedCheckpoint > fallback.defeatedCheckpoint
+      ? fallback.defeatedCheckpoint + 1
+      : 0;
+  fallback.lastAttemptAt = typeof source.lastAttemptAt === "string" && source.lastAttemptAt ? source.lastAttemptAt : null;
+  fallback.lastCompletedAt =
+    typeof source.lastCompletedAt === "string" && source.lastCompletedAt ? source.lastCompletedAt : null;
+  fallback.lastUnlockedAt =
+    typeof source.lastUnlockedAt === "string" && source.lastUnlockedAt ? source.lastUnlockedAt : null;
+  return fallback;
 };
 
 const xpForLevel = (level) => {
