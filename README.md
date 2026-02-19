@@ -34,6 +34,32 @@ npm install
 npm start
 ```
 
+## Premium checkout (Ko-fi)
+
+Premium purchase redirects use secure external Ko-fi pages.
+
+Optional environment variables:
+
+- `KOFI_PREMIUM_BASE_URL` (used when monthly URL is not set)
+- `KOFI_PREMIUM_MONTHLY_URL`
+- `KOFI_PREMIUM_OPTIONS_JSON` (array of option objects)
+- `KOFI_WEBHOOK_VERIFICATION_TOKEN` (required for Ko-fi webhook verification)
+- `ALLOW_SELF_PREMIUM_UPGRADE` (optional, default disabled; set `true` only for local/manual testing)
+
+`KOFI_PREMIUM_OPTIONS_JSON` format example:
+
+```json
+[
+  { "id": "monthly", "label": "Monthly", "description": "€9.99 per month", "url": "https://ko-fi.com/yourpage" }
+]
+```
+
+Ko-fi webhook endpoint for automatic premium activation:
+
+- `POST /api/billing/webhooks/kofi`
+- Configure the same value in Ko-fi webhook settings and `KOFI_WEBHOOK_VERIFICATION_TOKEN`.
+- The webhook upgrades the matching Cosmica account by payer email.
+
 ## Formatting
 
 ```bash

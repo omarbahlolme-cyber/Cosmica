@@ -91,7 +91,7 @@ body.letters-page main {
     inset 0 1px 0 rgba(240, 255, 248, 0.32);
 }
 
-.map-section-complete-btn::before {
+.map-section-complete-btn:not(.map-card-practice-btn)::before {
   content: attr(data-status-label);
   position: absolute;
   right: calc(100% + 8px);
@@ -107,15 +107,39 @@ body.letters-page main {
   transition: color 0.14s ease;
 }
 
-.map-section-complete-btn.is-complete::before {
+.map-section-complete-btn.is-complete:not(.map-card-practice-btn)::before {
   color: rgba(179, 248, 218, 0.96);
   text-shadow: 0 1px 10px rgba(15, 73, 55, 0.34);
+}
+
+.map-card-practice-btn::before,
+.map-card-practice-btn.is-complete::before {
+  content: none !important;
 }
 
 .map-section-complete-btn:disabled {
   opacity: 0.7;
   cursor: wait;
 }
+
+.map-card-practice-btn {
+  top: 8px;
+  right: 8px !important;
+  width: 22px;
+  height: 22px;
+  font-size: 0.72rem;
+  z-index: 4;
+}
+
+.letters-page .letter-card .map-card-practice-btn {
+  transform: translateX(9px) !important;
+}
+
+.letters-page .letter-card .map-card-practice-btn:hover,
+.letters-page .letter-card .map-card-practice-btn:focus-visible {
+  transform: translateX(9px) translateY(-1px) !important;
+}
+
 
 .letters-grid-section {
   max-width: 1160px;

@@ -266,6 +266,11 @@ const progressLimiter = createLimiter({
   max: 300,
   scope: "progress",
 });
+const billingWebhookLimiter = createLimiter({
+  windowMs: 5 * 60 * 1000,
+  max: 240,
+  scope: "billing-webhook",
+});
 
 /* --------------------------------------------------------------------------
    STATIC ASSET HOSTING
@@ -3049,7 +3054,32 @@ const syncCompleteQuestTaskFromProgress = (progress, tasks) => {
 const updateQuestProgressFromEvent = (progress, eventContext) => {
   const gamification = progress.gamification;
   const tasks = gamification.quests.tasks;
+  const hasPremiumAccess = eventContext?.hasPremiumAccess !== false;
   if (!tasks) {
+    return false;
+  }
+
+  if (eventContext.isPracticeQuestToggle) {
+    if (eventContext.shouldMarkPractice) {
+      incrementQuestTaskProgress(tasks.practice, 1);
+    }
+    if (eventContext.shouldUnmarkPractice) {
+      decrementQuestTaskProgress(tasks.practice, 1);
+    }
+
+    syncCompleteQuestTaskFromProgress(progress, tasks);
+
+    const previouslyAllCompleted = Boolean(gamification.quests.allCompleted);
+    const nowAllCompleted = Object.values(tasks).every((task) => task.completed);
+    gamification.quests.allCompleted = nowAllCompleted;
+    if (hasPremiumAccess && !previouslyAllCompleted && nowAllCompleted) {
+      gamification.stats.questDaysCompleted = toBoundedInt(
+        Number(gamification.stats.questDaysCompleted || 0) + 1,
+        0,
+        5000000
+      );
+      return true;
+    }
     return false;
   }
 
@@ -3083,7 +3113,7 @@ const updateQuestProgressFromEvent = (progress, eventContext) => {
   const previouslyAllCompleted = Boolean(gamification.quests.allCompleted);
   const nowAllCompleted = Object.values(tasks).every((task) => task.completed);
   gamification.quests.allCompleted = nowAllCompleted;
-  if (!previouslyAllCompleted && nowAllCompleted) {
+  if (hasPremiumAccess && !previouslyAllCompleted && nowAllCompleted) {
     gamification.stats.questDaysCompleted = toBoundedInt(
       Number(gamification.stats.questDaysCompleted || 0) + 1,
       0,
@@ -3135,7 +3165,7 @@ const computeEventXpDelta = (status, mapKey, previousSection, dailyState) => {
   return 0;
 };
 
-const syncBadgesAndLevel = (progress, worldKey, nowIso) => {
+const syncBadgesAndLevel = (progress, worldKey, nowIso, hasPremiumAccess = true) => {
   const gamification = progress.gamification;
   const worldSet = new Set(gamification.stats.worldsEngaged || []);
   if (worldKey) {
@@ -3146,6 +3176,10 @@ const syncBadgesAndLevel = (progress, worldKey, nowIso) => {
   const levelMeta = deriveLevelMetaFromXp(progress.totals.xp);
   gamification.level = levelMeta.level;
   gamification.nextLevelXp = levelMeta.nextLevelXp;
+
+  if (!hasPremiumAccess) {
+    return;
+  }
 
   if (gamification.stats.sectionsCompleted >= 1) {
     awardBadge(gamification, "first_steps", nowIso);
@@ -3176,6 +3210,30 @@ const syncBadgesAndLevel = (progress, worldKey, nowIso) => {
   }
 };
 
+const userHasPremiumAccessForProgress = (userRecord) => {
+  const profile = isPlainObject(userRecord?.data?.profile) ? userRecord.data.profile : {};
+  const premiumRaw = profile.isPremium ?? profile.premium ?? null;
+  const premiumText = String(premiumRaw ?? "")
+    .trim()
+    .toLowerCase();
+  const premiumTier = String(profile.plan || profile.tier || profile.membership || "")
+    .trim()
+    .toLowerCase();
+  return (
+    premiumRaw === true ||
+    premiumText === "1" ||
+    premiumText === "true" ||
+    premiumText === "yes" ||
+    premiumText === "premium" ||
+    premiumText === "pro" ||
+    premiumText === "plus" ||
+    premiumTier === "premium" ||
+    premiumTier === "pro" ||
+    premiumTier === "plus" ||
+    premiumTier === "paid"
+  );
+};
+
 const trackProgressEventForUser = (userRecord, payload) => {
   const worldKey = normalizeWorldKey(payload.worldKey);
   const mapKey = normalizeMapKey(payload.mapKey);
@@ -3194,6 +3252,9 @@ const trackProgressEventForUser = (userRecord, payload) => {
   }
 
   const score = Number.isFinite(scoreRaw) ? Math.max(0, Math.min(100, Math.round(scoreRaw))) : null;
+  const hasPremiumAccess = userHasPremiumAccessForProgress(userRecord);
+  const questToggleMode = String(payload.questToggleMode || "").trim().toLowerCase();
+  const isPracticeQuestToggle = questToggleMode === "practice";
   const now = new Date().toISOString();
   const dateKey = getUtcDateKeyFromIso(now);
 
@@ -3204,14 +3265,16 @@ const trackProgressEventForUser = (userRecord, payload) => {
   const previous = isPlainObject(mapProgress.sections[sectionKey]) ? mapProgress.sections[sectionKey] : null;
   const previousStatus = String(previous?.status || "").toLowerCase();
   const previousHasCompletion = hasSectionCompletion(previous);
-  const isUncompleteEvent = status === "uncompleted" && previousHasCompletion;
+  const isUncompleteEvent = !isPracticeQuestToggle && status === "uncompleted" && previousHasCompletion;
   const nextStatus =
-    status === "uncompleted"
+    isPracticeQuestToggle
+      ? previousStatus || "started"
+      : status === "uncompleted"
       ? previousStatus && previousStatus !== "completed"
         ? previousStatus
         : "started"
       : status;
-  const isFirstCompletion = status === "completed" && !previousHasCompletion;
+  const isFirstCompletion = !isPracticeQuestToggle && status === "completed" && !previousHasCompletion;
   const hasAnyCompletedLettersSection =
     mapKey === "letters" &&
     Object.entries(mapProgress.sections || {}).some(([existingSectionKey, existingSection]) => {
@@ -3225,6 +3288,7 @@ const trackProgressEventForUser = (userRecord, payload) => {
       );
     });
   const isFirstQuestCompletion =
+    !isPracticeQuestToggle &&
     status === "completed" &&
     (mapKey === "letters"
       ? isCountableWorldMapSectionEvent({ mapKey, sectionKey }) &&
@@ -3247,13 +3311,19 @@ const trackProgressEventForUser = (userRecord, payload) => {
       );
     });
   const shouldDecrementQuestCompletion =
+    !isPracticeQuestToggle &&
     isUncompleteEvent &&
     isCountableWorldMapSectionEvent({ mapKey, sectionKey }) &&
     (mapKey === "letters" ? !hasOtherCompletedLettersSection : true);
+  const wasPracticeQuestChecked = Boolean(previous?.practiceQuestCheckedAt);
+  const wantsPracticeQuestChecked = isPracticeQuestToggle ? status !== "uncompleted" : wasPracticeQuestChecked;
+  const shouldMarkPracticeQuest = isPracticeQuestToggle && !wasPracticeQuestChecked && wantsPracticeQuestChecked;
+  const shouldUnmarkPracticeQuest = isPracticeQuestToggle && wasPracticeQuestChecked && !wantsPracticeQuestChecked;
   const isFirstSectionVisit = !previous || toBoundedInt(previous.visitCount, 0, 5000000) === 0;
 
   const gamification = ensureGamificationDateState(progress, dateKey);
-  const xpDelta = computeEventXpDelta(status, mapKey, previous, gamification.daily);
+  const computedXpDelta = isPracticeQuestToggle ? 0 : computeEventXpDelta(status, mapKey, previous, gamification.daily);
+  let xpDelta = 0;
 
   const nextVisitCount = toBoundedInt(previous?.visitCount, 0, 5000000) + (status === "started" ? 1 : 0);
   const nextPracticeCount =
@@ -3261,7 +3331,8 @@ const trackProgressEventForUser = (userRecord, payload) => {
   const nextReviewCount =
     toBoundedInt(previous?.reviewCount, 0, 50000000) + (status === "reviewed" ? 1 : 0);
   const nextCompletionCount =
-    toBoundedInt(previous?.completionCount, 0, 5000000) + (status === "completed" ? 1 : isUncompleteEvent ? -1 : 0);
+    toBoundedInt(previous?.completionCount, 0, 5000000) +
+    (!isPracticeQuestToggle && (status === "completed" ? 1 : isUncompleteEvent ? -1 : 0));
 
   mapProgress.sections[sectionKey] = {
     status: nextStatus,
@@ -3273,11 +3344,14 @@ const trackProgressEventForUser = (userRecord, payload) => {
     firstStartedAt: previous?.firstStartedAt || (status === "started" ? now : null),
     lastUpdatedAt: now,
     firstCompletedAt:
-      status === "completed"
-        ? previous?.firstCompletedAt || now
-        : status === "uncompleted"
-          ? null
-          : previous?.firstCompletedAt || null,
+      isPracticeQuestToggle
+        ? previous?.firstCompletedAt || null
+        : status === "completed"
+          ? previous?.firstCompletedAt || now
+          : status === "uncompleted"
+            ? null
+            : previous?.firstCompletedAt || null,
+    practiceQuestCheckedAt: wantsPracticeQuestChecked ? previous?.practiceQuestCheckedAt || now : null,
   };
 
   if (status === "started") {
@@ -3289,23 +3363,17 @@ const trackProgressEventForUser = (userRecord, payload) => {
   if (status === "reviewed") {
     mapProgress.reviewCount = toBoundedInt(Number(mapProgress.reviewCount || 0) + 1, 0, 50000000);
   }
-  if (status === "completed" && !previousHasCompletion) {
+  if (!isPracticeQuestToggle && status === "completed" && !previousHasCompletion) {
     mapProgress.completedCount = Math.max(0, Number(mapProgress.completedCount || 0) + 1);
     progress.totals.completedSections = Math.max(0, Number(progress.totals.completedSections || 0) + 1);
   }
-  if (isUncompleteEvent) {
+  if (!isPracticeQuestToggle && isUncompleteEvent) {
     mapProgress.completedCount = Math.max(0, Number(mapProgress.completedCount || 0) - 1);
     progress.totals.completedSections = Math.max(0, Number(progress.totals.completedSections || 0) - 1);
   }
 
-  progress.totals.xp = Math.max(0, Number(progress.totals.xp || 0) + xpDelta);
   progress.totals.lastActivityAt = now;
   gamification.daily.events = toBoundedInt(Number(gamification.daily.events || 0) + 1, 0, 50000);
-  gamification.daily.xpEarned = toBoundedInt(
-    Number(gamification.daily.xpEarned || 0) + Math.max(0, xpDelta),
-    0,
-    30000
-  );
   if (status === "started") {
     gamification.daily.startedEvents = toBoundedInt(Number(gamification.daily.startedEvents || 0) + 1, 0, 50000);
   }
@@ -3319,7 +3387,7 @@ const trackProgressEventForUser = (userRecord, payload) => {
   if (status === "reviewed") {
     gamification.daily.reviewEvents = toBoundedInt(Number(gamification.daily.reviewEvents || 0) + 1, 0, 50000);
   }
-  if (status === "completed") {
+  if (!isPracticeQuestToggle && status === "completed") {
     gamification.daily.completedEvents = toBoundedInt(
       Number(gamification.daily.completedEvents || 0) + 1,
       0,
@@ -3354,14 +3422,14 @@ const trackProgressEventForUser = (userRecord, payload) => {
       50000000
     );
   }
-  if (isFirstCompletion) {
+  if (!isPracticeQuestToggle && isFirstCompletion) {
     gamification.stats.sectionsCompleted = toBoundedInt(
       Number(gamification.stats.sectionsCompleted || 0) + 1,
       0,
       5000000
     );
   }
-  if (isUncompleteEvent) {
+  if (!isPracticeQuestToggle && isUncompleteEvent) {
     gamification.stats.sectionsCompleted = toBoundedInt(
       Number(gamification.stats.sectionsCompleted || 0) - 1,
       0,
@@ -3376,8 +3444,24 @@ const trackProgressEventForUser = (userRecord, payload) => {
     isFirstCompletion: isFirstQuestCompletion,
     isFirstSectionVisit,
     shouldDecrementCompletion: shouldDecrementQuestCompletion,
+    isPracticeQuestToggle,
+    shouldMarkPractice: shouldMarkPracticeQuest,
+    shouldUnmarkPractice: shouldUnmarkPracticeQuest,
+    hasPremiumAccess,
   });
-  syncBadgesAndLevel(progress, worldKey, now);
+
+  if (hasPremiumAccess && gamification.quests.allCompleted) {
+    xpDelta = computedXpDelta;
+  }
+
+  progress.totals.xp = Math.max(0, Number(progress.totals.xp || 0) + xpDelta);
+  gamification.daily.xpEarned = toBoundedInt(
+    Number(gamification.daily.xpEarned || 0) + Math.max(0, xpDelta),
+    0,
+    30000
+  );
+
+  syncBadgesAndLevel(progress, worldKey, now, hasPremiumAccess);
 
   mapProgress.updatedAt = now;
   progress.updatedAt = now;
@@ -4448,6 +4532,426 @@ app.put(
     return res.json({
       ok: true,
       data: cloneForResponse(req.authUser.data),
+    });
+  }
+);
+
+app.post(
+  "/api/account/premium/upgrade",
+  accountMutationLimiter,
+  requireAuthenticatedUser,
+  (req, res) => {
+    const allowSelfPremiumUpgrade =
+      String(process.env.ALLOW_SELF_PREMIUM_UPGRADE || "")
+        .trim()
+        .toLowerCase() === "true";
+    if (!allowSelfPremiumUpgrade) {
+      return res.status(403).json({
+        error: "Self premium upgrade is disabled. Use verified billing webhook activation.",
+      });
+    }
+
+    const userRecord = req.authUser;
+    userRecord.data = normalizeUserData(userRecord.data);
+    if (!isPlainObject(userRecord.data.profile)) {
+      userRecord.data.profile = {};
+    }
+    userRecord.data.profile.isPremium = true;
+    userRecord.data.profile.premium = true;
+    userRecord.data.profile.plan = "premium";
+    userRecord.data.profile.tier = "premium";
+    userRecord.data.profile.membership = "premium";
+    if (!userRecord.data.profile.premiumActivatedAt) {
+      userRecord.data.profile.premiumActivatedAt = new Date().toISOString();
+    }
+
+    userRecord.updatedAt = new Date().toISOString();
+    markAuthStoreDirty();
+
+    return res.json({
+      ok: true,
+      user: toPublicUser(userRecord),
+      data: cloneForResponse(userRecord.data),
+      progress: cloneForResponse(normalizeProgress(userRecord.progress)),
+    });
+  }
+);
+
+/* --------------------------------------------------------------------------
+   ROUTE: BILLING WEBHOOKS (KO-FI)
+   -------------------------------------------------------------------------- */
+const pickFirstNonEmptyString = (...values) => {
+  for (const value of values) {
+    const normalized = String(value || "").trim();
+    if (normalized) {
+      return normalized;
+    }
+  }
+  return "";
+};
+
+const parseKofiWebhookPayload = (requestBody) => {
+  const candidate = isPlainObject(requestBody) ? requestBody : {};
+  const payloadCandidates = [
+    candidate.data,
+    candidate.payload,
+    candidate,
+  ];
+  for (const item of payloadCandidates) {
+    if (isPlainObject(item)) {
+      return item;
+    }
+    const raw = String(item || "").trim();
+    if (!raw) {
+      continue;
+    }
+    try {
+      const parsed = JSON.parse(raw);
+      if (isPlainObject(parsed)) {
+        return parsed;
+      }
+    } catch {}
+  }
+  return null;
+};
+
+const applyPremiumProfileToUserRecord = (
+  userRecord,
+  {
+    provider = "ko-fi",
+    source = "webhook",
+    eventId = "",
+    eventType = "",
+    amount = "",
+    currency = "",
+  } = {}
+) => {
+  if (!userRecord || !isPlainObject(userRecord)) {
+    return {
+      changed: false,
+      alreadyPremium: false,
+      alreadyProcessed: false,
+    };
+  }
+
+  userRecord.data = normalizeUserData(userRecord.data);
+  if (!isPlainObject(userRecord.data.profile)) {
+    userRecord.data.profile = {};
+  }
+
+  const profile = userRecord.data.profile;
+  const alreadyPremium = userHasPremiumAccessForProgress(userRecord);
+  const normalizedEventId = String(eventId || "").trim().slice(0, 120);
+  const alreadyProcessed =
+    Boolean(normalizedEventId) &&
+    String(profile.premiumLastEventId || "").trim() === normalizedEventId;
+  if (alreadyPremium && alreadyProcessed) {
+    return {
+      changed: false,
+      alreadyPremium,
+      alreadyProcessed,
+    };
+  }
+
+  const nowIso = new Date().toISOString();
+  profile.isPremium = true;
+  profile.premium = true;
+  profile.plan = "premium";
+  profile.tier = "premium";
+  profile.membership = "premium";
+  if (!profile.premiumActivatedAt) {
+    profile.premiumActivatedAt = nowIso;
+  }
+  profile.premiumLastSource = String(source || "").trim().slice(0, 60) || "webhook";
+  profile.premiumProvider = String(provider || "").trim().slice(0, 40) || "ko-fi";
+  profile.premiumLastEventAt = nowIso;
+  if (normalizedEventId) {
+    profile.premiumLastEventId = normalizedEventId;
+  }
+  const normalizedEventType = String(eventType || "").trim().slice(0, 80);
+  if (normalizedEventType) {
+    profile.premiumLastEventType = normalizedEventType;
+  }
+  const normalizedAmount = String(amount || "").trim().slice(0, 40);
+  if (normalizedAmount) {
+    profile.premiumLastAmount = normalizedAmount;
+  }
+  const normalizedCurrency = String(currency || "").trim().slice(0, 12).toUpperCase();
+  if (normalizedCurrency) {
+    profile.premiumLastCurrency = normalizedCurrency;
+  }
+
+  userRecord.updatedAt = nowIso;
+  markAuthStoreDirty();
+
+  return {
+    changed: true,
+    alreadyPremium,
+    alreadyProcessed,
+  };
+};
+
+app.post(
+  "/api/billing/webhooks/kofi",
+  billingWebhookLimiter,
+  express.urlencoded({ extended: false, limit: "1mb" }),
+  async (req, res) => {
+    const kofiPayload = parseKofiWebhookPayload(req.body);
+    if (!kofiPayload) {
+      return res.status(400).json({
+        error: "Invalid Ko-fi webhook payload",
+      });
+    }
+
+    const configuredToken = pickFirstNonEmptyString(
+      process.env.KOFI_WEBHOOK_VERIFICATION_TOKEN,
+      process.env.KOFI_WEBHOOK_TOKEN
+    );
+    if (!configuredToken) {
+      reportServerError("kofi-webhook-not-configured", new Error("Missing webhook verification token"), {
+        requestId: req.requestId,
+        method: req.method,
+        path: req.originalUrl,
+      });
+      return res.status(503).json({
+        error: "Ko-fi webhook is not configured yet",
+      });
+    }
+
+    const providedToken = pickFirstNonEmptyString(
+      kofiPayload.verification_token,
+      kofiPayload.verificationToken,
+      req.get("x-kofi-verification-token"),
+      req.body?.verification_token,
+      req.body?.verificationToken
+    );
+    if (!providedToken || !constantTimeStringEquals(providedToken, configuredToken)) {
+      void appendSecurityEvent({
+        type: "kofi-webhook-rejected",
+        req,
+        reason: "Invalid webhook verification token",
+      });
+      return res.status(401).json({
+        error: "Invalid webhook verification token",
+      });
+    }
+
+    const eventType = pickFirstNonEmptyString(
+      kofiPayload.type,
+      kofiPayload.event,
+      kofiPayload.event_type,
+      kofiPayload.payment_type
+    )
+      .trim()
+      .toLowerCase();
+    const paymentStatus = pickFirstNonEmptyString(
+      kofiPayload.status,
+      kofiPayload.payment_status,
+      kofiPayload.state
+    )
+      .trim()
+      .toLowerCase();
+    const shouldIgnore = ["refund", "refunded", "cancel", "canceled", "cancelled", "chargeback", "failed"]
+      .some((flag) => eventType.includes(flag) || paymentStatus.includes(flag));
+    if (shouldIgnore) {
+      return res.json({
+        ok: true,
+        ignored: true,
+      });
+    }
+
+    const supporter = isPlainObject(kofiPayload.supporter) ? kofiPayload.supporter : {};
+    const payerEmail = normalizeEmail(
+      pickFirstNonEmptyString(
+        kofiPayload.email,
+        kofiPayload.from_email,
+        kofiPayload.supporter_email,
+        kofiPayload.payer_email,
+        kofiPayload.kofi_transaction_email,
+        supporter.email
+      )
+    );
+    if (!isValidEmail(payerEmail)) {
+      void appendSecurityEvent({
+        type: "kofi-webhook-unmatched",
+        req,
+        reason: "Webhook did not include a usable payer email",
+        details: {
+          eventType,
+        },
+      });
+      return res.status(202).json({
+        ok: true,
+        matched: false,
+      });
+    }
+
+    const matchedUserId = String(authStore.emailIndex[payerEmail] || "").trim();
+    const userRecord = matchedUserId ? authStore.users[matchedUserId] : null;
+    if (!userRecord) {
+      void appendSecurityEvent({
+        type: "kofi-webhook-unmatched",
+        req,
+        email: payerEmail,
+        reason: "No account matched webhook payer email",
+        details: {
+          eventType,
+        },
+      });
+      return res.status(202).json({
+        ok: true,
+        matched: false,
+      });
+    }
+
+    const eventId = pickFirstNonEmptyString(
+      kofiPayload.message_id,
+      kofiPayload.transaction_id,
+      kofiPayload.kofi_transaction_id,
+      kofiPayload.payment_id,
+      kofiPayload.id
+    )
+      .trim()
+      .slice(0, 120);
+    const amount = pickFirstNonEmptyString(
+      kofiPayload.amount,
+      kofiPayload.amount_received,
+      kofiPayload.total_amount,
+      kofiPayload.price
+    )
+      .trim()
+      .slice(0, 40);
+    const currency = pickFirstNonEmptyString(
+      kofiPayload.currency,
+      kofiPayload.currency_code
+    )
+      .trim()
+      .toUpperCase()
+      .slice(0, 12);
+
+    const premiumResult = applyPremiumProfileToUserRecord(userRecord, {
+      provider: "ko-fi",
+      source: "kofi-webhook",
+      eventId,
+      eventType,
+      amount,
+      currency,
+    });
+
+    void appendSecurityEvent({
+      type: "kofi-webhook-processed",
+      req,
+      email: payerEmail,
+      userId: userRecord.id,
+      reason: premiumResult.changed ? "Premium activated from Ko-fi webhook" : "Ko-fi webhook idempotent replay",
+      details: {
+        eventId,
+        eventType,
+        paymentStatus,
+        amount,
+        currency,
+      },
+    });
+
+    return res.json({
+      ok: true,
+      matched: true,
+      upgraded: premiumResult.changed,
+      alreadyPremium: premiumResult.alreadyPremium,
+      alreadyProcessed: premiumResult.alreadyProcessed,
+    });
+  }
+);
+
+app.get(
+  "/api/billing/premium/options",
+  authSessionLimiter,
+  requireAuthenticatedUser,
+  (req, res) => {
+    const isAllowedCheckoutUrl = (value) => {
+      const raw = String(value || "").trim();
+      if (!raw) {
+        return "";
+      }
+      try {
+        const parsed = new URL(raw);
+        if (parsed.protocol !== "https:") {
+          return "";
+        }
+        const host = String(parsed.hostname || "").trim().toLowerCase();
+        if (host !== "ko-fi.com" && host !== "www.ko-fi.com") {
+          return "";
+        }
+        return parsed.toString();
+      } catch {
+        return "";
+      }
+    };
+
+    const fallbackBaseUrl = isAllowedCheckoutUrl(process.env.KOFI_PREMIUM_BASE_URL);
+
+    const fallbackOptions = [
+      {
+        id: "monthly",
+        label: "Monthly",
+        description: "€9.99 per month",
+        url: isAllowedCheckoutUrl(process.env.KOFI_PREMIUM_MONTHLY_URL) || fallbackBaseUrl,
+      },
+    ];
+
+    const rawCustomOptions = String(process.env.KOFI_PREMIUM_OPTIONS_JSON || "").trim();
+    let customOptions = [];
+    if (rawCustomOptions) {
+      try {
+        const parsed = JSON.parse(rawCustomOptions);
+        if (Array.isArray(parsed)) {
+          customOptions = parsed
+            .map((item, index) => {
+              const candidate = isPlainObject(item) ? item : {};
+              const checkoutUrl = isAllowedCheckoutUrl(candidate.url);
+              if (!checkoutUrl) {
+                return null;
+              }
+              const id = String(candidate.id || `option-${index + 1}`)
+                .trim()
+                .toLowerCase()
+                .slice(0, 32);
+              const label = String(candidate.label || "Premium option").trim().slice(0, 60);
+              const description = String(candidate.description || "").trim().slice(0, 140);
+              if (!id || !label) {
+                return null;
+              }
+              return {
+                id,
+                label,
+                description,
+                url: checkoutUrl,
+              };
+            })
+            .filter(Boolean);
+        }
+      } catch {}
+    }
+
+    const optionSource = customOptions.length ? customOptions : fallbackOptions;
+    const uniqueById = new Map();
+    optionSource.forEach((item) => {
+      if (!item?.id || !item?.url || uniqueById.has(item.id)) {
+        return;
+      }
+      uniqueById.set(item.id, item);
+    });
+
+    if (!uniqueById.size) {
+      return res.status(503).json({
+        error: "Premium checkout is not configured yet",
+      });
+    }
+
+    return res.json({
+      ok: true,
+      provider: "ko-fi",
+      options: [...uniqueById.values()],
     });
   }
 );

@@ -3123,8 +3123,24 @@ const trackMapSectionEvent = (mapKey, sectionKey, status = "started", score = nu
   });
 };
 
-const isSectionCompletedInProgressState = (mapKey, sectionKey) => {
-  const overrideSectionKey = `practice::${sectionKey}`;
+const slugifyCardPracticeValue = (value) =>
+  String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80);
+
+const buildCardPracticeSectionKey = (sectionKey, cardKey) => {
+  const normalizedSection = String(sectionKey || "core").trim() || "core";
+  const normalizedCard = slugifyCardPracticeValue(cardKey) || "card";
+  return `card::${normalizedSection}::${normalizedCard}`;
+};
+
+const isSectionCompletedInProgressState = (mapKey, sectionKey, mode = "complete") => {
+  const normalizedMode = String(mode || "complete").trim().toLowerCase();
+  const isPracticeMode = normalizedMode === "practice";
+  const overrideSectionKey = isPracticeMode ? `practice::${sectionKey}` : sectionKey;
   const overrideValue =
     typeof window.cosmicaGetSectionCompletionOverride === "function"
       ? window.cosmicaGetSectionCompletionOverride({
@@ -3144,21 +3160,48 @@ const isSectionCompletedInProgressState = (mapKey, sectionKey) => {
     mapKey,
     sectionKey,
   });
-  return Boolean(progress?.practiceQuestCheckedAt);
+  if (isPracticeMode) {
+    return Boolean(progress?.practiceQuestCheckedAt);
+  }
+  return (
+    String(progress?.status || "").trim().toLowerCase() === "completed" ||
+    Boolean(progress?.firstCompletedAt)
+  );
 };
 
-const applySectionCompleteButtonState = (button, mapKey, sectionKey) => {
+const applySectionCompleteButtonState = (button, mapKey, sectionKey, mode = "complete") => {
   if (!button) {
     return;
   }
-  const isComplete = isSectionCompletedInProgressState(mapKey, sectionKey);
+  const normalizedMode = String(mode || "complete").trim().toLowerCase();
+  const isPracticeMode = normalizedMode === "practice";
+  const isComplete = isSectionCompletedInProgressState(mapKey, sectionKey, normalizedMode);
+  const statusLabel = isPracticeMode
+    ? isComplete
+      ? "Section practiced"
+      : "Mark section as practiced"
+    : isComplete
+      ? "Section completed"
+      : "Mark section as completed";
   button.classList.toggle("is-complete", isComplete);
   button.setAttribute("aria-pressed", isComplete ? "true" : "false");
-  button.setAttribute("aria-label", isComplete ? "Unmark section as practiced" : "Mark section as practiced");
-  button.title = isComplete ? "Unmark section as practiced" : "Mark section as practiced";
+  button.setAttribute(
+    "aria-label",
+    isPracticeMode
+      ? isComplete
+        ? "Unmark section as practiced"
+        : "Mark section as practiced"
+      : isComplete
+        ? "Mark section incomplete"
+        : "Mark section as completed"
+  );
+  button.title = button.getAttribute("aria-label") || "";
+  button.setAttribute("data-status-label", statusLabel);
 };
 
-const createSectionCompleteButton = (mapKey, sectionKey) => {
+const createSectionCompleteButton = (mapKey, sectionKey, options = {}) => {
+  const mode = String(options?.mode || "complete").trim().toLowerCase() || "complete";
+  const isPracticeMode = mode === "practice";
   const button = document.createElement("button");
   button.type = "button";
   button.className = "map-section-complete-btn";
@@ -3170,13 +3213,16 @@ const createSectionCompleteButton = (mapKey, sectionKey) => {
   button.textContent = "✓";
   button.dataset.mapKey = String(mapKey || "").trim().toLowerCase();
   button.dataset.sectionKey = String(sectionKey || "").trim();
-  applySectionCompleteButtonState(button, button.dataset.mapKey, button.dataset.sectionKey);
+  button.dataset.toggleMode = mode;
+  applySectionCompleteButtonState(button, button.dataset.mapKey, button.dataset.sectionKey, mode);
   button.addEventListener("click", async (event) => {
     event.preventDefault();
     event.stopPropagation();
     const targetMapKey = String(button.dataset.mapKey || "").trim().toLowerCase();
     const targetSectionKey = String(button.dataset.sectionKey || "").trim();
-    const overrideSectionKey = `practice::${targetSectionKey}`;
+    const targetMode = String(button.dataset.toggleMode || "complete").trim().toLowerCase();
+    const targetIsPracticeMode = targetMode === "practice";
+    const overrideSectionKey = targetIsPracticeMode ? `practice::${targetSectionKey}` : targetSectionKey;
     if (!targetMapKey || !targetSectionKey || button.dataset.busy === "1") {
       return;
     }
@@ -3218,17 +3264,30 @@ const createSectionCompleteButton = (mapKey, sectionKey) => {
           mapKey: targetMapKey,
           sectionKey: targetSectionKey,
           status: statusToSend,
-          questToggleMode: "practice",
+          questToggleMode: targetIsPracticeMode ? "practice" : undefined,
         });
       } else {
-        trackMapSectionEvent(targetMapKey, targetSectionKey, statusToSend, null, "practice");
+        trackMapSectionEvent(
+          targetMapKey,
+          targetSectionKey,
+          statusToSend,
+          null,
+          targetIsPracticeMode ? "practice" : ""
+        );
       }
     } finally {
       button.disabled = false;
       delete button.dataset.busy;
-      applySectionCompleteButtonState(button, targetMapKey, targetSectionKey);
+      applySectionCompleteButtonState(button, targetMapKey, targetSectionKey, targetMode);
     }
   });
+  return button;
+};
+
+const createCardPracticeButton = (mapKey, sectionKey, cardKey) => {
+  const practiceSectionKey = buildCardPracticeSectionKey(sectionKey, cardKey);
+  const button = createSectionCompleteButton(mapKey, practiceSectionKey, { mode: "practice" });
+  button.classList.add("map-card-practice-btn");
   return button;
 };
 
@@ -3283,6 +3342,7 @@ const renderWordsSections = () => {
           </svg>
         </button>
       `;
+      card.appendChild(createCardPracticeButton("words", sectionName, word));
       grid.appendChild(card);
     });
     section.appendChild(title);
@@ -3437,6 +3497,7 @@ const renderPhrasesSections = () => {
           </svg>
         </button>
       `;
+      card.appendChild(createCardPracticeButton("phrases", sectionName, phrase));
       grid.appendChild(card);
     });
     section.appendChild(title);
@@ -3604,6 +3665,13 @@ const renderGrammarSections = () => {
       text.appendChild(document.createTextNode(" "));
       text.appendChild(textTranslation);
       card.appendChild(text);
+      card.appendChild(
+        createCardPracticeButton(
+          "grammar",
+          sectionName,
+          `${sourceTitle || displayTitle || concept.title || "concept"}-${conceptIndex}`
+        )
+      );
       grid.appendChild(card);
     });
     section.appendChild(title);

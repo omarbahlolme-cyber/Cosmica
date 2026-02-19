@@ -779,16 +779,21 @@ const createCosmicaAuthClient = () => {
         method: "PUT",
         body: { data },
       }),
+    getPremiumBillingOptions: () => requestOrNullOnUnauthorized("/api/billing/premium/options"),
+    upgradeToPremium: () =>
+      request("/api/account/premium/upgrade", {
+        method: "POST",
+      }),
     getProgress: () => requestOrNullOnUnauthorized("/api/progress"),
     setProgress: (progress) =>
       request("/api/progress", {
         method: "PUT",
         body: { progress },
       }),
-    trackProgress: ({ worldKey, mapKey, sectionKey, status, score, xpDelta } = {}) =>
+    trackProgress: ({ worldKey, mapKey, sectionKey, status, score, xpDelta, questToggleMode } = {}) =>
       request("/api/progress/track", {
         method: "POST",
-        body: { worldKey, mapKey, sectionKey, status, score, xpDelta },
+        body: { worldKey, mapKey, sectionKey, status, score, xpDelta, questToggleMode },
       }),
     syncBaseLanguageToAccount: async (baseLanguage = "") => {
       const accountDataResponse = await requestOrNullOnUnauthorized("/api/account/data");
@@ -1145,6 +1150,13 @@ const createCosmicaGamificationClient = () => {
         applyAuthPayload(null);
         return snapshot();
       }),
+    upgradeToPremium: () =>
+      withLoading(async () => {
+        const payload = await window.cosmicaAuth.upgradeToPremium();
+        applyAuthPayload(payload || null);
+        state.ready = true;
+        return snapshot();
+      }),
     refreshProgress: () =>
       withLoading(async () => {
         const payload = await window.cosmicaAuth.getProgress();
@@ -1154,7 +1166,7 @@ const createCosmicaGamificationClient = () => {
         }
         return snapshot();
       }),
-    trackProgress: async ({ worldKey, mapKey, sectionKey, status = "practiced", score = null } = {}) => {
+    trackProgress: async ({ worldKey, mapKey, sectionKey, status = "practiced", score = null, questToggleMode = "" } = {}) => {
       if (!state.isAuthenticated) {
         return null;
       }
@@ -1165,7 +1177,8 @@ const createCosmicaGamificationClient = () => {
       if (!normalizedWorld || !normalizedMap || !normalizedSection || !normalizedStatus) {
         return null;
       }
-      const eventKey = `${normalizedWorld}|${normalizedMap}|${normalizedSection}|${normalizedStatus}`;
+      const normalizedQuestToggleMode = String(questToggleMode || "").trim().toLowerCase();
+      const eventKey = `${normalizedWorld}|${normalizedMap}|${normalizedSection}|${normalizedStatus}|${normalizedQuestToggleMode}`;
       const cooldownMs = normalizedStatus === "completed" || normalizedStatus === "uncompleted" ? 800 : 2600;
       if (dedupeEvent(eventKey, cooldownMs)) {
         return null;
@@ -1177,6 +1190,7 @@ const createCosmicaGamificationClient = () => {
           sectionKey: normalizedSection,
           status: normalizedStatus,
           score: Number.isFinite(Number(score)) ? Number(score) : undefined,
+          questToggleMode: normalizedQuestToggleMode || undefined,
         });
         if (payload && payload.progress) {
           state.progress = normalizeProgressPayload(payload.progress);
@@ -1225,6 +1239,7 @@ const trackLearningProgressEvent = ({
   mapKey = "",
   sectionKey = "",
   score = null,
+  questToggleMode = "",
 } = {}) => {
   if (!window.cosmicaGamification || typeof window.cosmicaGamification.trackProgress !== "function") {
     return;
@@ -1240,6 +1255,7 @@ const trackLearningProgressEvent = ({
     sectionKey: resolvedSectionKey,
     status,
     score,
+    questToggleMode,
   });
 };
 
@@ -1583,13 +1599,13 @@ const setupAccountHub = () => {
       <div class="premium-plan-strip" aria-label="Plan prices">
         <div class="premium-plan-chip premium-plan-chip-free">
           <span class="premium-plan-name">Free</span>
-          <span class="premium-plan-price">$0</span>
+          <span class="premium-plan-price">€0</span>
           <span class="premium-plan-meta">Core learning access</span>
         </div>
         <div class="premium-plan-chip premium-plan-chip-pro">
           <span class="premium-plan-badge">Most popular</span>
           <span class="premium-plan-name">Premium</span>
-          <span class="premium-plan-price">$9.99/mo</span>
+          <span class="premium-plan-price">€9.99/mo</span>
           <span class="premium-plan-meta">Full premium access</span>
         </div>
       </div>
@@ -1628,6 +1644,25 @@ const setupAccountHub = () => {
   `;
   document.body.appendChild(premiumSetupOverlay);
 
+  const premiumCheckoutOverlay = document.createElement("div");
+  premiumCheckoutOverlay.className = "premium-checkout-overlay";
+  premiumCheckoutOverlay.hidden = true;
+  premiumCheckoutOverlay.innerHTML = `
+    <section class="premium-checkout-card" role="dialog" aria-modal="true" aria-labelledby="premiumCheckoutTitle">
+      <button type="button" class="premium-checkout-close" aria-label="Close checkout">×</button>
+      <h3 id="premiumCheckoutTitle">Choose a secure Premium checkout option</h3>
+      <p class="premium-checkout-message">You will be redirected to Ko-fi to complete your subscription securely.</p>
+      <div class="premium-checkout-options" role="list"></div>
+      <p class="premium-checkout-note">Payments are processed on Ko-fi's secure pages. A free Ko-fi account may be required for monthly memberships.</p>
+      <p class="premium-checkout-feedback" aria-live="polite"></p>
+      <div class="premium-checkout-actions">
+        <button type="button" class="premium-checkout-primary">Proceed</button>
+        <button type="button" class="premium-checkout-secondary">Cancel</button>
+      </div>
+    </section>
+  `;
+  document.body.appendChild(premiumCheckoutOverlay);
+
   const feedbackNode = dropdown.querySelector(".account-feedback");
   const guestPane = dropdown.querySelector(".account-guest-pane");
   const userPane = dropdown.querySelector(".account-user-pane");
@@ -1663,6 +1698,7 @@ const setupAccountHub = () => {
   const menuXpFill = dropdown.querySelector(".account-menu-xpfill");
   const menuStreak = dropdown.querySelector(".account-menu-streak");
   const menuAchievements = dropdown.querySelector(".account-menu-achievements");
+  const menuQuestsPanel = dropdown.querySelector(".account-menu-quests");
   const menuQuestStatus = dropdown.querySelector(".account-menu-quests-status");
   const menuQuestItems = {
     practice: dropdown.querySelector('[data-account-quest="practice"]'),
@@ -1674,6 +1710,13 @@ const setupAccountHub = () => {
   const premiumSetupCloseBtn = premiumSetupOverlay.querySelector(".premium-setup-close");
   const premiumSetupPrimaryBtn = premiumSetupOverlay.querySelector(".premium-setup-primary");
   const premiumSetupSecondaryBtn = premiumSetupOverlay.querySelector(".premium-setup-secondary");
+  const premiumCheckoutCard = premiumCheckoutOverlay.querySelector(".premium-checkout-card");
+  const premiumCheckoutCloseBtn = premiumCheckoutOverlay.querySelector(".premium-checkout-close");
+  const premiumCheckoutOptionsNode = premiumCheckoutOverlay.querySelector(".premium-checkout-options");
+  const premiumCheckoutFeedback = premiumCheckoutOverlay.querySelector(".premium-checkout-feedback");
+  const premiumCheckoutPrimaryBtn = premiumCheckoutOverlay.querySelector(".premium-checkout-primary");
+  const premiumCheckoutSecondaryBtn = premiumCheckoutOverlay.querySelector(".premium-checkout-secondary");
+  let selectedPremiumCheckoutOption = null;
   let activeAuthPanel = "login";
   let lastPremiumFocusNode = null;
   const triggerNoticeBubble = document.createElement("p");
@@ -2196,18 +2239,146 @@ const setupAccountHub = () => {
     }
   };
 
-  const continuePremiumSetup = () => {
-    const supportSection = document.getElementById("support");
-    if (supportSection) {
-      supportSection.scrollIntoView({ behavior: "smooth", block: "start" });
+  const syncPremiumModalBodyLock = () => {
+    const hasOpenPremiumModal = !premiumSetupOverlay.hidden || !premiumCheckoutOverlay.hidden;
+    document.body.classList.toggle("premium-setup-lock", hasOpenPremiumModal);
+  };
+
+  const setPremiumCheckoutFeedback = (message, tone = "") => {
+    if (!premiumCheckoutFeedback) {
       return;
     }
-    window.location.href = "/index.html#support";
+    premiumCheckoutFeedback.textContent = String(message || "");
+    premiumCheckoutFeedback.dataset.tone = String(tone || "");
+  };
+
+  const setPremiumCheckoutPrimaryState = (isLoading = false) => {
+    if (!(premiumCheckoutPrimaryBtn instanceof HTMLButtonElement)) {
+      return;
+    }
+    const loading = isLoading === true;
+    premiumCheckoutPrimaryBtn.disabled = loading;
+    premiumCheckoutPrimaryBtn.dataset.loading = loading ? "true" : "false";
+    premiumCheckoutPrimaryBtn.textContent = loading ? "Redirecting…" : "Proceed";
+  };
+
+  const buildFallbackPremiumBillingOptions = () => [];
+
+  const sanitizePremiumCheckoutUrl = (value) => {
+    const raw = String(value || "").trim();
+    if (!raw) {
+      return "";
+    }
+    try {
+      const parsed = new URL(raw);
+      if (parsed.protocol !== "https:") {
+        return "";
+      }
+      return parsed.toString();
+    } catch {
+      return "";
+    }
+  };
+
+  const renderPremiumCheckoutOptions = (options = []) => {
+    if (!(premiumCheckoutOptionsNode instanceof HTMLElement)) {
+      return;
+    }
+    const source = Array.isArray(options) && options.length ? options : buildFallbackPremiumBillingOptions();
+    const safeItems = source
+      .map((item, index) => {
+        const candidate = item && typeof item === "object" ? item : {};
+        const id = String(candidate.id || `option-${index + 1}`)
+          .trim()
+          .toLowerCase();
+        const label = String(candidate.label || "Premium option").trim();
+        const description = String(candidate.description || "").trim();
+        const url = sanitizePremiumCheckoutUrl(candidate.url);
+        if (!id || !label || !url) {
+          return null;
+        }
+        return {
+          id,
+          label,
+          description,
+          url,
+        };
+      })
+      .filter(Boolean);
+    selectedPremiumCheckoutOption = safeItems[0] || null;
+    premiumCheckoutOptionsNode.innerHTML = "";
+    safeItems.forEach((item) => {
+      const optionButton = document.createElement("button");
+      optionButton.type = "button";
+      optionButton.className = "premium-checkout-option";
+      optionButton.dataset.checkoutUrl = item.url;
+      optionButton.dataset.optionLabel = item.label;
+      optionButton.setAttribute("role", "listitem");
+      optionButton.disabled = true;
+      optionButton.setAttribute("aria-disabled", "true");
+      optionButton.innerHTML = `
+        <span class="premium-checkout-option-label">${item.label}</span>
+        <span class="premium-checkout-option-meta">${item.description || "Secure Ko-fi checkout"}</span>
+      `;
+      premiumCheckoutOptionsNode.appendChild(optionButton);
+    });
+  };
+
+  const loadPremiumBillingOptions = async () => {
+    try {
+      const response = await window.cosmicaAuth.getPremiumBillingOptions();
+      const options = Array.isArray(response?.options) ? response.options : [];
+      renderPremiumCheckoutOptions(options);
+    } catch {
+      renderPremiumCheckoutOptions(buildFallbackPremiumBillingOptions());
+    }
+  };
+
+  const redirectToExternalPremiumCheckout = ({ url = "", label = "Premium" } = {}) => {
+    const safeUrl = sanitizePremiumCheckoutUrl(url);
+    if (!safeUrl) {
+      setPremiumCheckoutPrimaryState(false);
+      setPremiumCheckoutFeedback("Secure checkout URL is unavailable. Please try again.", "error");
+      return;
+    }
+    setPremiumCheckoutPrimaryState(true);
+    setPremiumCheckoutFeedback(`Redirecting to secure ${label} checkout...`, "info");
+    window.setTimeout(() => {
+      window.location.assign(safeUrl);
+    }, 120);
+  };
+
+  const openPremiumCheckoutModal = async () => {
+    renderPremiumCheckoutOptions(buildFallbackPremiumBillingOptions());
+    setPremiumCheckoutPrimaryState(false);
+    setPremiumCheckoutFeedback("");
+    premiumCheckoutOverlay.hidden = false;
+    syncPremiumModalBodyLock();
+    setPremiumCheckoutFeedback("Loading secure subscription options...", "info");
+    await loadPremiumBillingOptions();
+    setPremiumCheckoutFeedback("");
+    window.setTimeout(() => {
+      if (premiumCheckoutPrimaryBtn && typeof premiumCheckoutPrimaryBtn.focus === "function") {
+        premiumCheckoutPrimaryBtn.focus();
+        return;
+      }
+      premiumCheckoutCard?.focus?.();
+    }, 20);
+  };
+
+  const closePremiumCheckoutModal = () => {
+    premiumCheckoutOverlay.hidden = true;
+    setPremiumCheckoutPrimaryState(false);
+    setPremiumCheckoutFeedback("");
+    syncPremiumModalBodyLock();
+    if (lastPremiumFocusNode && typeof lastPremiumFocusNode.focus === "function") {
+      lastPremiumFocusNode.focus();
+    }
   };
 
   const closePremiumSetupModal = () => {
     premiumSetupOverlay.hidden = true;
-    document.body.classList.remove("premium-setup-lock");
+    syncPremiumModalBodyLock();
     if (lastPremiumFocusNode && typeof lastPremiumFocusNode.focus === "function") {
       lastPremiumFocusNode.focus();
     }
@@ -2219,7 +2390,7 @@ const setupAccountHub = () => {
     }
     lastPremiumFocusNode = document.activeElement;
     premiumSetupOverlay.hidden = false;
-    document.body.classList.add("premium-setup-lock");
+    syncPremiumModalBodyLock();
     window.setTimeout(() => {
       if (premiumSetupPrimaryBtn && typeof premiumSetupPrimaryBtn.focus === "function") {
         premiumSetupPrimaryBtn.focus();
@@ -2253,22 +2424,52 @@ const setupAccountHub = () => {
   });
   premiumSetupPrimaryBtn?.addEventListener("click", () => {
     closePremiumSetupModal();
-    continuePremiumSetup();
+    void openPremiumCheckoutModal();
   });
   premiumSetupOverlay.addEventListener("click", (event) => {
     if (event.target === premiumSetupOverlay) {
       closePremiumSetupModal();
     }
   });
+
+  premiumCheckoutCloseBtn?.addEventListener("click", () => {
+    closePremiumCheckoutModal();
+  });
+  premiumCheckoutSecondaryBtn?.addEventListener("click", () => {
+    closePremiumCheckoutModal();
+  });
+  premiumCheckoutOverlay.addEventListener("click", (event) => {
+    if (event.target === premiumCheckoutOverlay) {
+      closePremiumCheckoutModal();
+    }
+  });
+
+  premiumCheckoutPrimaryBtn?.addEventListener("click", () => {
+    const target = selectedPremiumCheckoutOption;
+    if (!target?.url) {
+      setPremiumCheckoutPrimaryState(false);
+      setPremiumCheckoutFeedback("Secure checkout is currently unavailable. Please try again.", "error");
+      return;
+    }
+    redirectToExternalPremiumCheckout({
+      url: target.url,
+      label: target.label || "Premium",
+    });
+  });
+
   document.addEventListener("keydown", (event) => {
     if (event.key !== "Escape") {
       return;
     }
-    if (premiumSetupOverlay.hidden) {
+    if (!premiumCheckoutOverlay.hidden) {
+      event.preventDefault();
+      closePremiumCheckoutModal();
       return;
     }
-    event.preventDefault();
-    closePremiumSetupModal();
+    if (!premiumSetupOverlay.hidden) {
+      event.preventDefault();
+      closePremiumSetupModal();
+    }
   });
 
   const existingAccountHub =
@@ -2317,7 +2518,9 @@ const setupAccountHub = () => {
     currentAuthProvider = String(snapshot?.user?.authProvider || "").trim().toLowerCase();
     currentUserEmail = String(snapshot?.user?.email || "").trim().toLowerCase();
     const avatarLetters = toAvatarTwoLetters(displayName, isAuthenticated ? "US" : "GU");
-    const achievementCount = Math.max(0, Math.round(Number(gamification?.stats?.questDaysCompleted) || 0));
+    const achievementCount = hasPremiumAccess
+      ? Math.max(0, Math.round(Number(gamification?.stats?.questDaysCompleted) || 0))
+      : 0;
     const streakDays = Math.max(0, Math.round(Number(gamification.currentStreak) || 0));
     const quests =
       gamification?.quests && typeof gamification.quests === "object" ? gamification.quests : {};
@@ -2399,6 +2602,9 @@ const setupAccountHub = () => {
       menuPlanStatus.textContent = hasPremiumAccess ? "(Premium account)" : "(Free plan)";
       menuPlanStatus.classList.toggle("is-premium", hasPremiumAccess);
     }
+    if (menuQuestsPanel) {
+      menuQuestsPanel.classList.toggle("is-premium-locked", !hasPremiumAccess);
+    }
     if (menuXpFill) {
       const ratio = Math.max(0, Math.min(1, Number(levelMeta.ratio) || 0));
       menuXpFill.style.width = `${(ratio * 100).toFixed(2)}%`;
@@ -2432,11 +2638,14 @@ const setupAccountHub = () => {
     });
     const completedCount = questSummaries.reduce((total, item) => total + (item.completed ? 1 : 0), 0);
     const allCompleted = Boolean(quests.allCompleted) || completedCount === questSummaries.length;
+    const lockQuestsForFree = !hasPremiumAccess;
 
     if (menuQuestStatus) {
-      menuQuestStatus.textContent = allCompleted
-        ? "All complete"
-        : `${completedCount}/${questSummaries.length} complete`;
+      menuQuestStatus.textContent = lockQuestsForFree
+        ? `1/${questSummaries.length} complete`
+        : allCompleted
+          ? "All complete"
+          : `${completedCount}/${questSummaries.length} complete`;
     }
 
     questSummaries.forEach((quest) => {
@@ -2451,12 +2660,26 @@ const setupAccountHub = () => {
         labelNode.textContent = quest.label;
       }
       if (progressNode) {
-        progressNode.textContent = quest.completed ? "Done" : `${quest.progress}/${quest.target}`;
+        progressNode.textContent = lockQuestsForFree
+          ? `0/${quest.target}`
+          : quest.completed
+            ? "Done"
+            : `${quest.progress}/${quest.target}`;
       }
       if (fillNode) {
-        fillNode.style.width = `${(Math.max(0, Math.min(1, quest.ratio)) * 100).toFixed(2)}%`;
+        const freeVisualRatio =
+          quest.key === "practice"
+            ? 0.25
+            : quest.key === "discover"
+              ? 0.5
+              : quest.key === "complete"
+                ? 1
+                : 0;
+        fillNode.style.width = lockQuestsForFree
+          ? `${(freeVisualRatio * 100).toFixed(2)}%`
+          : `${(Math.max(0, Math.min(1, quest.ratio)) * 100).toFixed(2)}%`;
       }
-      questNode.classList.toggle("is-complete", quest.completed);
+      questNode.classList.toggle("is-complete", !lockQuestsForFree && quest.completed);
     });
   };
 
@@ -4206,6 +4429,138 @@ const setupLettersSectionCompleteButton = () => {
   }
 
   syncButtonState();
+};
+
+const slugifyLettersCardPracticeValue = (value) =>
+  String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80);
+
+const buildLettersCardPracticeSectionKey = (sectionKey, cardKey) => {
+  const normalizedSection = String(sectionKey || "core").trim() || "core";
+  const normalizedCard = slugifyLettersCardPracticeValue(cardKey) || "card";
+  return `card::${normalizedSection}::${normalizedCard}`;
+};
+
+const setupLettersCardPracticeButtons = () => {
+  if (!document.body.classList.contains("letters-page")) {
+    return;
+  }
+
+  const letterCards = Array.from(document.querySelectorAll(".letter-card"));
+  if (!letterCards.length) {
+    return;
+  }
+
+  letterCards.forEach((card, index) => {
+    const symbol = String(card.dataset.letter || card.querySelector(".letter")?.textContent || "").trim();
+    const practiceSectionKey = buildLettersCardPracticeSectionKey("letters-core", `${symbol || "letter"}-${index}`);
+
+    let button = card.querySelector('.map-card-practice-btn[data-map-key="letters"]');
+    if (!button) {
+      button = document.createElement("button");
+      button.type = "button";
+      button.className = "map-section-complete-btn map-card-practice-btn";
+      button.textContent = "✓";
+      button.dataset.mapKey = "letters";
+      button.dataset.sectionKey = practiceSectionKey;
+      card.appendChild(button);
+    }
+
+    const syncButtonState = () => {
+      const overrideValue =
+        typeof window.cosmicaGetSectionCompletionOverride === "function"
+          ? window.cosmicaGetSectionCompletionOverride({
+              worldKey: WORLD_KEY,
+              mapKey: "letters",
+              sectionKey: `practice::${practiceSectionKey}`,
+            })
+          : null;
+      const progress =
+        window.cosmicaGamification && typeof window.cosmicaGamification.getSectionProgress === "function"
+          ? window.cosmicaGamification.getSectionProgress({
+              worldKey: WORLD_KEY,
+              mapKey: "letters",
+              sectionKey: practiceSectionKey,
+            })
+          : null;
+      const isComplete = typeof overrideValue === "boolean" ? overrideValue : Boolean(progress?.practiceQuestCheckedAt);
+      button.classList.toggle("is-complete", isComplete);
+      button.setAttribute("aria-pressed", isComplete ? "true" : "false");
+      button.setAttribute("aria-label", isComplete ? "Unmark card as practiced" : "Mark card as practiced");
+      button.title = isComplete ? "Unmark card as practiced" : "Mark card as practiced";
+    };
+
+    if (button.dataset.bound !== "1") {
+      button.dataset.bound = "1";
+      button.addEventListener("click", async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        if (button.dataset.busy === "1") {
+          return;
+        }
+        const shouldUncheck = button.classList.contains("is-complete");
+        const statusToSend = shouldUncheck ? "uncompleted" : "completed";
+
+        if (typeof window.cosmicaSetSectionCompletionOverride === "function") {
+          window.cosmicaSetSectionCompletionOverride({
+            worldKey: WORLD_KEY,
+            mapKey: "letters",
+            sectionKey: `practice::${practiceSectionKey}`,
+            isComplete: !shouldUncheck,
+          });
+        }
+
+        if (
+          window.cosmicaGamification &&
+          typeof window.cosmicaGamification.getState === "function" &&
+          !window.cosmicaGamification.getState()?.isAuthenticated
+        ) {
+          if (window.cosmicaAccountHub && typeof window.cosmicaAccountHub.openAuth === "function") {
+            window.cosmicaAccountHub.openAuth({
+              panel: "login",
+              message: "Log in to save card practice progress.",
+              tone: "info",
+            });
+          }
+          return;
+        }
+
+        button.dataset.busy = "1";
+        button.disabled = true;
+        try {
+          if (
+            window.cosmicaGamification &&
+            typeof window.cosmicaGamification.trackProgress === "function"
+          ) {
+            await window.cosmicaGamification.trackProgress({
+              worldKey: WORLD_KEY,
+              mapKey: "letters",
+              sectionKey: practiceSectionKey,
+              status: statusToSend,
+              questToggleMode: "practice",
+            });
+          } else {
+            trackLearningProgressEvent({
+              status: statusToSend,
+              mapKey: "letters",
+              sectionKey: practiceSectionKey,
+              questToggleMode: "practice",
+            });
+          }
+        } finally {
+          button.disabled = false;
+          delete button.dataset.busy;
+          syncButtonState();
+        }
+      });
+    }
+
+    syncButtonState();
+  });
 };
 
 const LETTERS_HELPER_NATIVE_TEXT = Object.freeze({
@@ -8689,6 +9044,7 @@ const initializeCommonShell = () => {
   void setupLettersTitleTranslation();
   void setupLettersHelperTranslation();
   setupLettersSectionCompleteButton();
+  setupLettersCardPracticeButtons();
   setupLetterRomanization();
   setupSpeechCards();
   setupBackToTopButton();
