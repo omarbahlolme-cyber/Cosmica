@@ -881,8 +881,8 @@ const createCosmicaGamificationClient = () => {
         tasks: {
           practice: {
             key: "practice",
-            label: "Practice 12 cards",
-            target: 12,
+            label: "Practice 25 cards",
+            target: 25,
             progress: 0,
             completed: false,
           },
@@ -1441,6 +1441,41 @@ const setupAccountHub = () => {
             <div class="account-menu-xpbar" aria-hidden="true">
               <span class="account-menu-xpfill"></span>
             </div>
+            <section class="account-menu-quests" aria-label="Daily quests">
+              <div class="account-menu-quests-head">
+                <span class="account-menu-quests-title">Daily Quests</span>
+                <span class="account-menu-quests-status">0/3 complete</span>
+              </div>
+              <div class="account-menu-quest-list">
+                <article class="account-menu-quest-item" data-account-quest="practice">
+                  <div class="account-menu-quest-row">
+                    <span class="account-menu-quest-label">Practice phrases</span>
+                    <span class="account-menu-quest-progress">0/5</span>
+                  </div>
+                  <span class="account-menu-quest-bar" aria-hidden="true">
+                    <span class="account-menu-quest-fill"></span>
+                  </span>
+                </article>
+                <article class="account-menu-quest-item" data-account-quest="discover">
+                  <div class="account-menu-quest-row">
+                    <span class="account-menu-quest-label">Discover worlds</span>
+                    <span class="account-menu-quest-progress">0/2</span>
+                  </div>
+                  <span class="account-menu-quest-bar" aria-hidden="true">
+                    <span class="account-menu-quest-fill"></span>
+                  </span>
+                </article>
+                <article class="account-menu-quest-item" data-account-quest="complete">
+                  <div class="account-menu-quest-row">
+                    <span class="account-menu-quest-label">Complete sessions</span>
+                    <span class="account-menu-quest-progress">0/3</span>
+                  </div>
+                  <span class="account-menu-quest-bar" aria-hidden="true">
+                    <span class="account-menu-quest-fill"></span>
+                  </span>
+                </article>
+              </div>
+            </section>
           </div>
         </header>
         <nav class="account-menu-links" aria-label="Account actions">
@@ -1568,6 +1603,12 @@ const setupAccountHub = () => {
   const menuXpFill = dropdown.querySelector(".account-menu-xpfill");
   const menuStreak = dropdown.querySelector(".account-menu-streak");
   const menuAchievements = dropdown.querySelector(".account-menu-achievements");
+  const menuQuestStatus = dropdown.querySelector(".account-menu-quests-status");
+  const menuQuestItems = {
+    practice: dropdown.querySelector('[data-account-quest="practice"]'),
+    discover: dropdown.querySelector('[data-account-quest="discover"]'),
+    complete: dropdown.querySelector('[data-account-quest="complete"]'),
+  };
   const premiumSetupCard = premiumSetupOverlay.querySelector(".premium-setup-card");
   const premiumSetupMessage = premiumSetupOverlay.querySelector(".premium-setup-message");
   const premiumSetupCloseBtn = premiumSetupOverlay.querySelector(".premium-setup-close");
@@ -1981,21 +2022,58 @@ const setupAccountHub = () => {
           Accept: "application/json",
         },
       };
-      let response = await fetch(endpoint, requestOptions);
-      // Backward compatibility: some running instances still expose only /start?mode=...
-      if (response.status === 404) {
-        response = await fetch(legacyEndpoint, requestOptions);
+      const endpoints = [endpoint];
+      if (legacyEndpoint !== endpoint) {
+        endpoints.push(legacyEndpoint);
       }
-      let payload = null;
-      try {
-        payload = await response.json();
-      } catch {}
-      if (!response.ok || !payload?.redirectUrl) {
-        throw new Error(
-          String(payload?.error || `Google authentication unavailable (${response.status})`)
+
+      let lastErrorMessage = "";
+
+      for (const url of endpoints) {
+        const response = await fetch(url, requestOptions);
+        const contentType = String(response.headers.get("content-type") || "").toLowerCase();
+        let payload = null;
+        let rawText = "";
+
+        if (contentType.includes("application/json")) {
+          try {
+            payload = await response.json();
+          } catch {}
+        } else {
+          try {
+            rawText = String(await response.text() || "");
+            if (rawText.trim().startsWith("{")) {
+              payload = JSON.parse(rawText);
+            }
+          } catch {}
+        }
+
+        if (response.ok && payload?.redirectUrl) {
+          window.location.assign(String(payload.redirectUrl));
+          return;
+        }
+
+        const htmlSnippet = rawText.slice(0, 320);
+        const returnedHtml =
+          contentType.includes("text/html") || /<!doctype\s+html|<html[\s>]/i.test(htmlSnippet);
+
+        if (returnedHtml) {
+          lastErrorMessage =
+            "Google authentication endpoint returned website HTML instead of API JSON. Ensure the app is running through the backend server and /api routes are not being rewritten to index.html.";
+          continue;
+        }
+
+        if (response.status === 404) {
+          lastErrorMessage = `Google authentication endpoint not found (${response.status}).`;
+          continue;
+        }
+
+        lastErrorMessage = String(
+          payload?.error || `Google authentication unavailable (${response.status})`
         );
       }
-      window.location.assign(String(payload.redirectUrl));
+
+      throw new Error(lastErrorMessage || "Google authentication is unavailable right now.");
     } catch (error) {
       setFeedback(error?.message || "Google authentication is unavailable right now.", "error");
     }
@@ -2171,6 +2249,9 @@ const setupAccountHub = () => {
     const avatarLetters = toAvatarTwoLetters(displayName, isAuthenticated ? "US" : "GU");
     const achievementCount = Object.keys(badges).length;
     const streakDays = Math.max(0, Math.round(Number(gamification.currentStreak) || 0));
+    const quests =
+      gamification?.quests && typeof gamification.quests === "object" ? gamification.quests : {};
+    const questTasks = quests?.tasks && typeof quests.tasks === "object" ? quests.tasks : {};
     const showPasswordManagement = Boolean(isAuthenticated && currentAuthProvider !== "google");
     const showGooglePasswordNote = Boolean(isAuthenticated && currentAuthProvider === "google");
 
@@ -2251,6 +2332,51 @@ const setupAccountHub = () => {
     if (menuAchievements) {
       menuAchievements.textContent = `${achievementCount} Achievements`;
     }
+
+    const questKeys = ["practice", "discover", "complete"];
+    const questSummaries = questKeys.map((key) => {
+      const task = questTasks[key] && typeof questTasks[key] === "object" ? questTasks[key] : {};
+      const target = Math.max(1, Math.round(Number(task.target) || 1));
+      const progress = Math.max(0, Math.min(target, Math.round(Number(task.progress) || 0)));
+      const completed = Boolean(task.completed) || progress >= target;
+      const label = String(task.label || "").trim();
+      return {
+        key,
+        label,
+        progress,
+        target,
+        completed,
+        ratio: target > 0 ? progress / target : 0,
+      };
+    });
+    const completedCount = questSummaries.reduce((total, item) => total + (item.completed ? 1 : 0), 0);
+    const allCompleted = Boolean(quests.allCompleted) || completedCount === questSummaries.length;
+
+    if (menuQuestStatus) {
+      menuQuestStatus.textContent = allCompleted
+        ? "All complete"
+        : `${completedCount}/${questSummaries.length} complete`;
+    }
+
+    questSummaries.forEach((quest) => {
+      const questNode = menuQuestItems[quest.key];
+      if (!questNode) {
+        return;
+      }
+      const labelNode = questNode.querySelector(".account-menu-quest-label");
+      const progressNode = questNode.querySelector(".account-menu-quest-progress");
+      const fillNode = questNode.querySelector(".account-menu-quest-fill");
+      if (labelNode && quest.label) {
+        labelNode.textContent = quest.label;
+      }
+      if (progressNode) {
+        progressNode.textContent = quest.completed ? "Done" : `${quest.progress}/${quest.target}`;
+      }
+      if (fillNode) {
+        fillNode.style.width = `${(Math.max(0, Math.min(1, quest.ratio)) * 100).toFixed(2)}%`;
+      }
+      questNode.classList.toggle("is-complete", quest.completed);
+    });
   };
 
   const navigateToHash = (hash) => {

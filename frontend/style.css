@@ -2112,6 +2112,99 @@ body.premium-setup-lock {
   transition: width 0.3s ease;
 }
 
+.account-menu-quests {
+  margin-top: 6px;
+  padding: 7px 8px;
+  border-radius: 12px;
+  border: 1px solid rgba(128, 195, 236, 0.24);
+  background:
+    radial-gradient(circle at 84% -18%, rgba(148, 220, 252, 0.14), transparent 48%),
+    linear-gradient(162deg, rgba(8, 19, 38, 0.72), rgba(8, 18, 34, 0.62));
+  box-shadow: inset 0 1px 0 rgba(204, 235, 255, 0.06);
+}
+
+.account-menu-quests-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.account-menu-quests-title {
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(196, 226, 245, 0.9);
+}
+
+.account-menu-quests-status {
+  font-size: 0.66rem;
+  font-weight: 700;
+  color: rgba(178, 241, 218, 0.95);
+}
+
+.account-menu-quest-list {
+  display: grid;
+  gap: 5px;
+}
+
+.account-menu-quest-item {
+  display: grid;
+  gap: 4px;
+  padding: 5px 6px;
+  border-radius: 9px;
+  border: 1px solid rgba(130, 186, 227, 0.2);
+  background: linear-gradient(160deg, rgba(8, 20, 40, 0.66), rgba(7, 16, 31, 0.56));
+}
+
+.account-menu-quest-item.is-complete {
+  border-color: rgba(130, 233, 190, 0.36);
+  background: linear-gradient(160deg, rgba(7, 34, 44, 0.68), rgba(8, 24, 34, 0.62));
+}
+
+.account-menu-quest-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.account-menu-quest-label {
+  font-size: 0.69rem;
+  font-weight: 600;
+  color: rgba(223, 237, 251, 0.96);
+}
+
+.account-menu-quest-progress {
+  font-size: 0.66rem;
+  font-weight: 700;
+  color: rgba(180, 219, 247, 0.92);
+}
+
+.account-menu-quest-item.is-complete .account-menu-quest-progress {
+  color: rgba(175, 245, 210, 0.96);
+}
+
+.account-menu-quest-bar {
+  position: relative;
+  height: 4px;
+  border-radius: 999px;
+  border: 1px solid rgba(121, 178, 219, 0.24);
+  background: linear-gradient(180deg, rgba(16, 30, 55, 0.84), rgba(13, 24, 42, 0.86));
+  overflow: hidden;
+}
+
+.account-menu-quest-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(110, 217, 255, 0.9), rgba(115, 235, 186, 0.92));
+  transition: width 0.3s ease;
+}
+
 .account-menu-summary {
   display: inline-flex;
   align-items: center;
@@ -7385,6 +7478,14 @@ body.world-page.start-lesson-transition #language.language-reveal {
   .account-menu-links button {
     padding: 7px 9px;
     font-size: 0.8rem;
+  }
+
+  .account-menu-quests {
+    padding: 6px;
+  }
+
+  .account-menu-quest-item {
+    padding: 4px 5px;
   }
 }
 

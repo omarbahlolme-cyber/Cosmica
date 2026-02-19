@@ -890,8 +890,8 @@ const createDefaultUserData = () => ({
 const QUEST_TASK_TEMPLATES = Object.freeze({
   practice: Object.freeze({
     key: "practice",
-    label: "Practice 12 cards",
-    target: 12,
+    label: "Practice 25 cards",
+    target: 25,
   }),
   discover: Object.freeze({
     key: "discover",
