@@ -3105,7 +3105,7 @@ const createSectionFilterButton = (title, value, sourceTitle = title) => {
   return button;
 };
 
-const trackMapSectionEvent = (mapKey, sectionKey, status = "started", score = null) => {
+const trackMapSectionEvent = (mapKey, sectionKey, status = "started", score = null, questToggleMode = "") => {
   if (typeof window.cosmicaTrackLearningProgress !== "function") {
     return;
   }
@@ -3119,7 +3119,117 @@ const trackMapSectionEvent = (mapKey, sectionKey, status = "started", score = nu
     mapKey: normalizedMap,
     sectionKey: normalizedSection,
     score,
+    questToggleMode,
   });
+};
+
+const isSectionCompletedInProgressState = (mapKey, sectionKey) => {
+  const overrideSectionKey = `practice::${sectionKey}`;
+  const overrideValue =
+    typeof window.cosmicaGetSectionCompletionOverride === "function"
+      ? window.cosmicaGetSectionCompletionOverride({
+          worldKey: WORLD_KEY,
+          mapKey,
+          sectionKey: overrideSectionKey,
+        })
+      : null;
+  if (typeof overrideValue === "boolean") {
+    return overrideValue;
+  }
+  if (!window.cosmicaGamification || typeof window.cosmicaGamification.getSectionProgress !== "function") {
+    return false;
+  }
+  const progress = window.cosmicaGamification.getSectionProgress({
+    worldKey: WORLD_KEY,
+    mapKey,
+    sectionKey,
+  });
+  return Boolean(progress?.practiceQuestCheckedAt);
+};
+
+const applySectionCompleteButtonState = (button, mapKey, sectionKey) => {
+  if (!button) {
+    return;
+  }
+  const isComplete = isSectionCompletedInProgressState(mapKey, sectionKey);
+  button.classList.toggle("is-complete", isComplete);
+  button.setAttribute("aria-pressed", isComplete ? "true" : "false");
+  button.setAttribute("aria-label", isComplete ? "Unmark section as practiced" : "Mark section as practiced");
+  button.title = isComplete ? "Unmark section as practiced" : "Mark section as practiced";
+};
+
+const createSectionCompleteButton = (mapKey, sectionKey) => {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "map-section-complete-btn";
+  button.style.position = "absolute";
+  button.style.top = "8px";
+  button.style.right = "8px";
+  button.style.left = "auto";
+  button.style.zIndex = "3";
+  button.textContent = "✓";
+  button.dataset.mapKey = String(mapKey || "").trim().toLowerCase();
+  button.dataset.sectionKey = String(sectionKey || "").trim();
+  applySectionCompleteButtonState(button, button.dataset.mapKey, button.dataset.sectionKey);
+  button.addEventListener("click", async (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const targetMapKey = String(button.dataset.mapKey || "").trim().toLowerCase();
+    const targetSectionKey = String(button.dataset.sectionKey || "").trim();
+    const overrideSectionKey = `practice::${targetSectionKey}`;
+    if (!targetMapKey || !targetSectionKey || button.dataset.busy === "1") {
+      return;
+    }
+    const shouldUncheck = button.classList.contains("is-complete");
+    const statusToSend = shouldUncheck ? "uncompleted" : "completed";
+    if (typeof window.cosmicaSetSectionCompletionOverride === "function") {
+      window.cosmicaSetSectionCompletionOverride({
+        worldKey: WORLD_KEY,
+        mapKey: targetMapKey,
+        sectionKey: overrideSectionKey,
+        isComplete: !shouldUncheck,
+      });
+    }
+
+    if (
+      window.cosmicaGamification &&
+      typeof window.cosmicaGamification.getState === "function" &&
+      !window.cosmicaGamification.getState()?.isAuthenticated
+    ) {
+      if (window.cosmicaAccountHub && typeof window.cosmicaAccountHub.openAuth === "function") {
+        window.cosmicaAccountHub.openAuth({
+          panel: "login",
+          message: "Log in to save section completion.",
+          tone: "info",
+        });
+      }
+      return;
+    }
+
+    button.dataset.busy = "1";
+    button.disabled = true;
+    try {
+      if (
+        window.cosmicaGamification &&
+        typeof window.cosmicaGamification.trackProgress === "function"
+      ) {
+        await window.cosmicaGamification.trackProgress({
+          worldKey: WORLD_KEY,
+          mapKey: targetMapKey,
+          sectionKey: targetSectionKey,
+          status: statusToSend,
+          questToggleMode: "practice",
+        });
+      } else {
+        trackMapSectionEvent(targetMapKey, targetSectionKey, statusToSend, null, "practice");
+      }
+    } finally {
+      button.disabled = false;
+      delete button.dataset.busy;
+      applySectionCompleteButtonState(button, targetMapKey, targetSectionKey);
+    }
+  });
+  return button;
 };
 
 const renderWordsSections = () => {
@@ -3156,6 +3266,7 @@ const renderWordsSections = () => {
     titleMain.textContent = displaySectionName;
     titleHeading.appendChild(titleMain);
     title.appendChild(titleHeading);
+    section.appendChild(createSectionCompleteButton("words", sectionName));
     const grid = document.createElement("div");
     grid.className = "words-grid";
     words.forEach((word) => {
@@ -3309,6 +3420,7 @@ const renderPhrasesSections = () => {
     titleMain.textContent = displaySectionName;
     titleHeading.appendChild(titleMain);
     title.appendChild(titleHeading);
+    section.appendChild(createSectionCompleteButton("phrases", sectionName));
     const grid = document.createElement("div");
     grid.className = "words-grid";
     phrases.forEach((phrase) => {
@@ -3458,6 +3570,7 @@ const renderGrammarSections = () => {
     titleMain.textContent = displaySectionName;
     titleHeading.appendChild(titleMain);
     title.appendChild(titleHeading);
+    section.appendChild(createSectionCompleteButton("grammar", sectionName));
     const grid = document.createElement("div");
     grid.className = "words-grid";
     concepts.forEach((concept, conceptIndex) => {

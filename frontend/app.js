@@ -1166,7 +1166,7 @@ const createCosmicaGamificationClient = () => {
         return null;
       }
       const eventKey = `${normalizedWorld}|${normalizedMap}|${normalizedSection}|${normalizedStatus}`;
-      const cooldownMs = normalizedStatus === "completed" ? 800 : 2600;
+      const cooldownMs = normalizedStatus === "completed" || normalizedStatus === "uncompleted" ? 800 : 2600;
       if (dedupeEvent(eventKey, cooldownMs)) {
         return null;
       }
@@ -1244,6 +1244,62 @@ const trackLearningProgressEvent = ({
 };
 
 window.cosmicaTrackLearningProgress = trackLearningProgressEvent;
+
+const SECTION_COMPLETION_OVERRIDE_STORAGE_KEY = "cosmicaSectionCompletionOverrides:v1";
+
+const buildSectionCompletionOverrideKey = (worldKey = "", mapKey = "", sectionKey = "") => {
+  const world = String(worldKey || "").trim().toLowerCase();
+  const map = String(mapKey || "").trim().toLowerCase();
+  const section = String(sectionKey || "").trim();
+  if (!world || !map || !section) {
+    return "";
+  }
+  return `${world}|${map}|${section}`;
+};
+
+const readSectionCompletionOverrides = () => {
+  try {
+    const raw = localStorage.getItem(SECTION_COMPLETION_OVERRIDE_STORAGE_KEY);
+    if (!raw) {
+      return {};
+    }
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === "object" ? parsed : {};
+  } catch {
+    return {};
+  }
+};
+
+const writeSectionCompletionOverrides = (overrides) => {
+  try {
+    localStorage.setItem(SECTION_COMPLETION_OVERRIDE_STORAGE_KEY, JSON.stringify(overrides || {}));
+  } catch {}
+};
+
+const getSectionCompletionOverride = ({ worldKey = "", mapKey = "", sectionKey = "" } = {}) => {
+  const key = buildSectionCompletionOverrideKey(worldKey, mapKey, sectionKey);
+  if (!key) {
+    return null;
+  }
+  const overrides = readSectionCompletionOverrides();
+  if (!Object.prototype.hasOwnProperty.call(overrides, key)) {
+    return null;
+  }
+  return overrides[key] === true;
+};
+
+const setSectionCompletionOverride = ({ worldKey = "", mapKey = "", sectionKey = "", isComplete } = {}) => {
+  const key = buildSectionCompletionOverrideKey(worldKey, mapKey, sectionKey);
+  if (!key || typeof isComplete !== "boolean") {
+    return;
+  }
+  const overrides = readSectionCompletionOverrides();
+  overrides[key] = isComplete;
+  writeSectionCompletionOverrides(overrides);
+};
+
+window.cosmicaGetSectionCompletionOverride = getSectionCompletionOverride;
+window.cosmicaSetSectionCompletionOverride = setSectionCompletionOverride;
 
 const setupAccountHub = () => {
   if (document.body.dataset.accountHubBound === "1") {
@@ -1438,46 +1494,47 @@ const setupAccountHub = () => {
             </div>
             <div class="account-menu-level"></div>
             <div class="account-menu-xp"></div>
+            <div class="account-menu-plan-status">(Free plan)</div>
             <div class="account-menu-xpbar" aria-hidden="true">
               <span class="account-menu-xpfill"></span>
             </div>
-            <section class="account-menu-quests" aria-label="Daily quests">
-              <div class="account-menu-quests-head">
-                <span class="account-menu-quests-title">Daily Quests</span>
-                <span class="account-menu-quests-status">0/3 complete</span>
-              </div>
-              <div class="account-menu-quest-list">
-                <article class="account-menu-quest-item" data-account-quest="practice">
-                  <div class="account-menu-quest-row">
-                    <span class="account-menu-quest-label">Practice phrases</span>
-                    <span class="account-menu-quest-progress">0/5</span>
-                  </div>
-                  <span class="account-menu-quest-bar" aria-hidden="true">
-                    <span class="account-menu-quest-fill"></span>
-                  </span>
-                </article>
-                <article class="account-menu-quest-item" data-account-quest="discover">
-                  <div class="account-menu-quest-row">
-                    <span class="account-menu-quest-label">Discover worlds</span>
-                    <span class="account-menu-quest-progress">0/2</span>
-                  </div>
-                  <span class="account-menu-quest-bar" aria-hidden="true">
-                    <span class="account-menu-quest-fill"></span>
-                  </span>
-                </article>
-                <article class="account-menu-quest-item" data-account-quest="complete">
-                  <div class="account-menu-quest-row">
-                    <span class="account-menu-quest-label">Complete sessions</span>
-                    <span class="account-menu-quest-progress">0/3</span>
-                  </div>
-                  <span class="account-menu-quest-bar" aria-hidden="true">
-                    <span class="account-menu-quest-fill"></span>
-                  </span>
-                </article>
-              </div>
-            </section>
           </div>
         </header>
+        <section class="account-menu-quests" aria-label="Daily quests">
+          <div class="account-menu-quests-head">
+            <span class="account-menu-quests-title">Daily Quests</span>
+            <span class="account-menu-quests-status">0/3 complete</span>
+          </div>
+          <div class="account-menu-quest-list">
+            <article class="account-menu-quest-item" data-account-quest="practice">
+              <div class="account-menu-quest-row">
+                <span class="account-menu-quest-label">Practice phrases</span>
+                <span class="account-menu-quest-progress">0/5</span>
+              </div>
+              <span class="account-menu-quest-bar" aria-hidden="true">
+                <span class="account-menu-quest-fill"></span>
+              </span>
+            </article>
+            <article class="account-menu-quest-item" data-account-quest="discover">
+              <div class="account-menu-quest-row">
+                <span class="account-menu-quest-label">Discover worlds</span>
+                <span class="account-menu-quest-progress">0/2</span>
+              </div>
+              <span class="account-menu-quest-bar" aria-hidden="true">
+                <span class="account-menu-quest-fill"></span>
+              </span>
+            </article>
+            <article class="account-menu-quest-item" data-account-quest="complete">
+              <div class="account-menu-quest-row">
+                <span class="account-menu-quest-label">Complete sessions</span>
+                <span class="account-menu-quest-progress">0/3</span>
+              </div>
+              <span class="account-menu-quest-bar" aria-hidden="true">
+                <span class="account-menu-quest-fill"></span>
+              </span>
+            </article>
+          </div>
+        </section>
         <nav class="account-menu-links" aria-label="Account actions">
           <button type="button" data-menu="premium" class="account-premium-cta">
             <span class="account-premium-main">Discover Premium</span>
@@ -1597,9 +1654,12 @@ const setupAccountHub = () => {
   const manageResetEmailBtn = dropdown.querySelector(".account-manage-reset-email");
   const manageForgotPasswordBtn = dropdown.querySelector(".account-manage-forgot");
   const menuAvatar = dropdown.querySelector(".account-menu-avatar");
+  const menuHeader = dropdown.querySelector(".account-menu-header");
   const menuName = dropdown.querySelector(".account-menu-name");
   const menuLevel = dropdown.querySelector(".account-menu-level");
   const menuXp = dropdown.querySelector(".account-menu-xp");
+  const menuPlanStatus = dropdown.querySelector(".account-menu-plan-status");
+  const menuXpBar = dropdown.querySelector(".account-menu-xpbar");
   const menuXpFill = dropdown.querySelector(".account-menu-xpfill");
   const menuStreak = dropdown.querySelector(".account-menu-streak");
   const menuAchievements = dropdown.querySelector(".account-menu-achievements");
@@ -2238,16 +2298,26 @@ const setupAccountHub = () => {
 
   const renderFromState = (snapshot) => {
     const isAuthenticated = Boolean(snapshot?.isAuthenticated);
+    const userPlanTier = String(
+      snapshot?.user?.planTier || snapshot?.user?.tier || snapshot?.user?.plan || snapshot?.user?.membership || ""
+    )
+      .trim()
+      .toLowerCase();
+    const hasPremiumAccess =
+      snapshot?.user?.isPremium === true ||
+      userPlanTier === "premium" ||
+      userPlanTier === "pro" ||
+      userPlanTier === "plus" ||
+      userPlanTier === "paid";
     const loading = Boolean(snapshot?.loading);
     const progress = snapshot?.progress || {};
     const gamification = progress.gamification || {};
-    const badges = gamification.badges || {};
     const levelMeta = snapshot?.levelMeta || { level: 1, xp: 0, ratio: 0, toNextXp: 0 };
     const displayName = String(snapshot?.user?.displayName || "Guest");
     currentAuthProvider = String(snapshot?.user?.authProvider || "").trim().toLowerCase();
     currentUserEmail = String(snapshot?.user?.email || "").trim().toLowerCase();
     const avatarLetters = toAvatarTwoLetters(displayName, isAuthenticated ? "US" : "GU");
-    const achievementCount = Object.keys(badges).length;
+    const achievementCount = Math.max(0, Math.round(Number(gamification?.stats?.questDaysCompleted) || 0));
     const streakDays = Math.max(0, Math.round(Number(gamification.currentStreak) || 0));
     const quests =
       gamification?.quests && typeof gamification.quests === "object" ? gamification.quests : {};
@@ -2286,6 +2356,9 @@ const setupAccountHub = () => {
     if (userPane) {
       userPane.hidden = !isAuthenticated;
     }
+    if (menuHeader) {
+      menuHeader.classList.toggle("is-user-premium", isAuthenticated && hasPremiumAccess);
+    }
     if (managePanel) {
       managePanel.hidden = true;
       setDeleteConfirmationVisible(false);
@@ -2322,9 +2395,17 @@ const setupAccountHub = () => {
     if (menuXp) {
       menuXp.textContent = `XP: ${formatNumber(levelMeta.xp)} / ${formatNumber(levelMeta.nextXp)}`;
     }
+    if (menuPlanStatus) {
+      menuPlanStatus.textContent = hasPremiumAccess ? "(Premium account)" : "(Free plan)";
+      menuPlanStatus.classList.toggle("is-premium", hasPremiumAccess);
+    }
     if (menuXpFill) {
       const ratio = Math.max(0, Math.min(1, Number(levelMeta.ratio) || 0));
       menuXpFill.style.width = `${(ratio * 100).toFixed(2)}%`;
+      const isXpBarFull = ratio >= 0.999 || (Number(levelMeta.nextXp) > 0 && Number(levelMeta.xp) >= Number(levelMeta.nextXp));
+      if (menuXpBar) {
+        menuXpBar.classList.toggle("is-full", isXpBarFull);
+      }
     }
     if (menuStreak) {
       menuStreak.textContent = `${streakDays} days`;
@@ -4003,6 +4084,128 @@ const setupLettersTitleTranslation = async () => {
   persistLettersTitleTranslationCache();
   translationNode.textContent = `(${translated})`;
   translationNode.hidden = false;
+};
+
+const setupLettersSectionCompleteButton = () => {
+  if (!document.body.classList.contains("letters-page")) {
+    return;
+  }
+  const lettersSection = document.querySelector(".letters-grid-section");
+  if (!lettersSection) {
+    return;
+  }
+
+  let button = lettersSection.querySelector('.map-section-complete-btn[data-map-key="letters"]');
+  if (!button) {
+    button = document.createElement("button");
+    button.type = "button";
+    button.className = "map-section-complete-btn";
+    button.style.position = "absolute";
+    button.style.top = "8px";
+    button.style.right = "8px";
+    button.style.left = "auto";
+    button.style.zIndex = "3";
+    button.dataset.mapKey = "letters";
+    button.dataset.sectionKey = "letters-core";
+    button.textContent = "✓";
+    lettersSection.appendChild(button);
+  }
+
+  const syncButtonState = () => {
+    const mapKey = String(button.dataset.mapKey || "letters").trim().toLowerCase();
+    const sectionKey = String(button.dataset.sectionKey || "letters-core").trim();
+    const overrideValue =
+      typeof window.cosmicaGetSectionCompletionOverride === "function"
+        ? window.cosmicaGetSectionCompletionOverride({
+            worldKey: WORLD_KEY,
+            mapKey,
+            sectionKey,
+          })
+        : null;
+    const progress =
+      window.cosmicaGamification && typeof window.cosmicaGamification.getSectionProgress === "function"
+        ? window.cosmicaGamification.getSectionProgress({
+            worldKey: WORLD_KEY,
+            mapKey,
+            sectionKey,
+          })
+        : null;
+    const isComplete =
+      typeof overrideValue === "boolean"
+        ? overrideValue
+        : String(progress?.status || "").trim().toLowerCase() === "completed" ||
+          Boolean(progress?.firstCompletedAt);
+    const statusLabel = isComplete ? "Section completed" : "Mark section as completed";
+    button.classList.toggle("is-complete", isComplete);
+    button.setAttribute("aria-pressed", isComplete ? "true" : "false");
+    button.setAttribute("aria-label", isComplete ? "Mark section incomplete" : "Mark section as completed");
+    button.title = isComplete ? "Mark section incomplete" : "Mark section as completed";
+    button.setAttribute("data-status-label", statusLabel);
+  };
+
+  if (button.dataset.bound !== "1") {
+    button.dataset.bound = "1";
+    button.addEventListener("click", async (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const shouldUncheck = button.classList.contains("is-complete");
+      const statusToSend = shouldUncheck ? "uncompleted" : "completed";
+      if (typeof window.cosmicaSetSectionCompletionOverride === "function") {
+        window.cosmicaSetSectionCompletionOverride({
+          worldKey: WORLD_KEY,
+          mapKey: "letters",
+          sectionKey: "letters-core",
+          isComplete: !shouldUncheck,
+        });
+      }
+      if (button.dataset.busy === "1") {
+        return;
+      }
+
+      if (
+        window.cosmicaGamification &&
+        typeof window.cosmicaGamification.getState === "function" &&
+        !window.cosmicaGamification.getState()?.isAuthenticated
+      ) {
+        if (window.cosmicaAccountHub && typeof window.cosmicaAccountHub.openAuth === "function") {
+          window.cosmicaAccountHub.openAuth({
+            panel: "login",
+            message: "Log in to save section completion.",
+            tone: "info",
+          });
+        }
+        return;
+      }
+
+      button.dataset.busy = "1";
+      button.disabled = true;
+      try {
+        if (
+          window.cosmicaGamification &&
+          typeof window.cosmicaGamification.trackProgress === "function"
+        ) {
+          await window.cosmicaGamification.trackProgress({
+            worldKey: WORLD_KEY,
+            mapKey: "letters",
+            sectionKey: "letters-core",
+            status: statusToSend,
+          });
+        } else {
+          trackLearningProgressEvent({
+            status: statusToSend,
+            mapKey: "letters",
+            sectionKey: "letters-core",
+          });
+        }
+      } finally {
+        button.disabled = false;
+        delete button.dataset.busy;
+        syncButtonState();
+      }
+    });
+  }
+
+  syncButtonState();
 };
 
 const LETTERS_HELPER_NATIVE_TEXT = Object.freeze({
@@ -8485,6 +8688,7 @@ const initializeCommonShell = () => {
   setupHomeAltInteractivity();
   void setupLettersTitleTranslation();
   void setupLettersHelperTranslation();
+  setupLettersSectionCompleteButton();
   setupLetterRomanization();
   setupSpeechCards();
   setupBackToTopButton();

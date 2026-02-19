@@ -2045,6 +2045,17 @@ body.premium-setup-lock {
     inset 0 -1px 0 rgba(63, 112, 173, 0.16);
 }
 
+.account-menu-header.is-user-premium {
+  border-color: rgba(255, 219, 146, 0.72);
+  background:
+    radial-gradient(circle at 86% -20%, rgba(255, 227, 166, 0.3), transparent 48%),
+    linear-gradient(150deg, rgba(40, 28, 10, 0.92), rgba(53, 34, 11, 0.9));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 241, 208, 0.24),
+    inset 0 -1px 0 rgba(186, 132, 57, 0.28),
+    0 0 0 1px rgba(255, 214, 132, 0.14);
+}
+
 .account-menu-avatar {
   width: 40px;
   height: 40px;
@@ -2092,6 +2103,19 @@ body.premium-setup-lock {
   line-height: 1.2;
 }
 
+.account-menu-plan-status {
+  justify-self: end;
+  font-size: 0.66rem;
+  font-weight: 600;
+  color: rgba(170, 193, 218, 0.88);
+  line-height: 1.1;
+  text-align: right;
+}
+
+.account-menu-plan-status.is-premium {
+  color: rgba(255, 223, 161, 0.94);
+}
+
 .account-menu-xpbar {
   margin-top: 1px;
   width: 100%;
@@ -2110,6 +2134,15 @@ body.premium-setup-lock {
   border-radius: inherit;
   background: linear-gradient(90deg, rgba(120, 234, 188, 0.94), rgba(92, 210, 248, 0.9));
   transition: width 0.3s ease;
+}
+
+.account-menu-xpbar.is-full {
+  border-color: rgba(255, 216, 126, 0.8);
+  box-shadow: inset 0 1px 0 rgba(255, 239, 193, 0.2), 0 0 14px rgba(255, 201, 97, 0.28);
+}
+
+.account-menu-xpbar.is-full .account-menu-xpfill {
+  background: linear-gradient(90deg, rgba(255, 224, 130, 0.96), rgba(255, 178, 84, 0.94));
 }
 
 .account-menu-quests {
@@ -2188,8 +2221,10 @@ body.premium-setup-lock {
 }
 
 .account-menu-quest-bar {
+  display: block;
   position: relative;
   height: 4px;
+  line-height: 0;
   border-radius: 999px;
   border: 1px solid rgba(121, 178, 219, 0.24);
   background: linear-gradient(180deg, rgba(16, 30, 55, 0.84), rgba(13, 24, 42, 0.86));

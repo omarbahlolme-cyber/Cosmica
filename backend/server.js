@@ -2795,7 +2795,7 @@ const normalizeMapKey = (value) =>
     .slice(0, 20);
 const normalizeSectionKey = (value) => String(value || "").trim().slice(0, 120);
 const ALLOWED_PROGRESS_MAP_KEYS = new Set(["letters", "words", "phrases", "grammar"]);
-const ALLOWED_PROGRESS_STATUS = new Set(["started", "practiced", "reviewed", "completed"]);
+const ALLOWED_PROGRESS_STATUS = new Set(["started", "practiced", "reviewed", "completed", "uncompleted"]);
 
 const ensureProgressContainers = (progress, worldKey, mapKey) => {
   if (!isPlainObject(progress.worlds[worldKey])) {
@@ -2967,6 +2967,16 @@ const incrementQuestTaskProgress = (task, amount = 1) => {
   return task.completed;
 };
 
+const decrementQuestTaskProgress = (task, amount = 1) => {
+  if (!task) {
+    return false;
+  }
+  const next = Math.max(0, Math.min(task.target, Number(task.progress || 0) - amount));
+  task.progress = next;
+  task.completed = task.progress >= task.target;
+  return task.completed;
+};
+
 const isCountableWorldMapSectionEvent = (eventContext) => {
   const mapKey = String(eventContext?.mapKey || "").trim().toLowerCase();
   const sectionKey = String(eventContext?.sectionKey || "").trim();
@@ -2985,6 +2995,55 @@ const isCountableWorldMapSectionEvent = (eventContext) => {
 const isWorldMapCardPracticeEvent = (eventContext) => {
   const status = String(eventContext?.status || "").trim().toLowerCase();
   return status === "practiced" && isCountableWorldMapSectionEvent(eventContext);
+};
+
+const countEffectiveCompletedSectionsForQuests = (progress) => {
+  const worlds = isPlainObject(progress?.worlds) ? progress.worlds : {};
+  let total = 0;
+
+  Object.values(worlds).forEach((worldRecord) => {
+    const maps = isPlainObject(worldRecord?.maps) ? worldRecord.maps : {};
+
+    ALLOWED_PROGRESS_MAP_KEYS.forEach((mapKey) => {
+      const sections = isPlainObject(maps?.[mapKey]?.sections) ? maps[mapKey].sections : {};
+      if (!isPlainObject(sections)) {
+        return;
+      }
+
+      if (mapKey === "letters") {
+        const hasAnyCompletedLettersSection = Object.entries(sections).some(
+          ([sectionKey, sectionRecord]) =>
+            isCountableWorldMapSectionEvent({ mapKey, sectionKey }) && hasSectionCompletion(sectionRecord)
+        );
+        if (hasAnyCompletedLettersSection) {
+          total += 1;
+        }
+        return;
+      }
+
+      Object.entries(sections).forEach(([sectionKey, sectionRecord]) => {
+        if (!isCountableWorldMapSectionEvent({ mapKey, sectionKey })) {
+          return;
+        }
+        if (hasSectionCompletion(sectionRecord)) {
+          total += 1;
+        }
+      });
+    });
+  });
+
+  return total;
+};
+
+const syncCompleteQuestTaskFromProgress = (progress, tasks) => {
+  const completeTask = tasks?.complete;
+  if (!completeTask) {
+    return;
+  }
+  const target = Math.max(1, Number(completeTask.target || 2));
+  const effectiveCompleted = countEffectiveCompletedSectionsForQuests(progress);
+  completeTask.progress = Math.max(0, Math.min(target, effectiveCompleted));
+  completeTask.completed = completeTask.progress >= target;
 };
 
 const updateQuestProgressFromEvent = (progress, eventContext) => {
@@ -3011,6 +3070,15 @@ const updateQuestProgressFromEvent = (progress, eventContext) => {
   ) {
     incrementQuestTaskProgress(tasks.complete, 1);
   }
+  if (
+    eventContext.status === "uncompleted" &&
+    eventContext.shouldDecrementCompletion &&
+    isCountableWorldMapSectionEvent(eventContext)
+  ) {
+    decrementQuestTaskProgress(tasks.complete, 1);
+  }
+
+  syncCompleteQuestTaskFromProgress(progress, tasks);
 
   const previouslyAllCompleted = Boolean(gamification.quests.allCompleted);
   const nowAllCompleted = Object.values(tasks).every((task) => task.completed);
@@ -3135,7 +3203,53 @@ const trackProgressEventForUser = (userRecord, payload) => {
   const mapProgress = progress.worlds[worldKey].maps[mapKey];
   const previous = isPlainObject(mapProgress.sections[sectionKey]) ? mapProgress.sections[sectionKey] : null;
   const previousStatus = String(previous?.status || "").toLowerCase();
-  const isFirstCompletion = status === "completed" && previousStatus !== "completed";
+  const previousHasCompletion = hasSectionCompletion(previous);
+  const isUncompleteEvent = status === "uncompleted" && previousHasCompletion;
+  const nextStatus =
+    status === "uncompleted"
+      ? previousStatus && previousStatus !== "completed"
+        ? previousStatus
+        : "started"
+      : status;
+  const isFirstCompletion = status === "completed" && !previousHasCompletion;
+  const hasAnyCompletedLettersSection =
+    mapKey === "letters" &&
+    Object.entries(mapProgress.sections || {}).some(([existingSectionKey, existingSection]) => {
+      const existingStatus = String(existingSection?.status || "").trim().toLowerCase();
+      return (
+        existingStatus === "completed" &&
+        isCountableWorldMapSectionEvent({
+          mapKey,
+          sectionKey: existingSectionKey,
+        })
+      );
+    });
+  const isFirstQuestCompletion =
+    status === "completed" &&
+    (mapKey === "letters"
+      ? isCountableWorldMapSectionEvent({ mapKey, sectionKey }) &&
+        previousStatus !== "completed" &&
+        !hasAnyCompletedLettersSection
+      : isFirstCompletion);
+  const hasOtherCompletedLettersSection =
+    mapKey === "letters" &&
+    Object.entries(mapProgress.sections || {}).some(([existingSectionKey, existingSection]) => {
+      if (existingSectionKey === sectionKey) {
+        return false;
+      }
+      const existingStatus = String(existingSection?.status || "").trim().toLowerCase();
+      return (
+        existingStatus === "completed" &&
+        isCountableWorldMapSectionEvent({
+          mapKey,
+          sectionKey: existingSectionKey,
+        })
+      );
+    });
+  const shouldDecrementQuestCompletion =
+    isUncompleteEvent &&
+    isCountableWorldMapSectionEvent({ mapKey, sectionKey }) &&
+    (mapKey === "letters" ? !hasOtherCompletedLettersSection : true);
   const isFirstSectionVisit = !previous || toBoundedInt(previous.visitCount, 0, 5000000) === 0;
 
   const gamification = ensureGamificationDateState(progress, dateKey);
@@ -3147,10 +3261,10 @@ const trackProgressEventForUser = (userRecord, payload) => {
   const nextReviewCount =
     toBoundedInt(previous?.reviewCount, 0, 50000000) + (status === "reviewed" ? 1 : 0);
   const nextCompletionCount =
-    toBoundedInt(previous?.completionCount, 0, 5000000) + (status === "completed" ? 1 : 0);
+    toBoundedInt(previous?.completionCount, 0, 5000000) + (status === "completed" ? 1 : isUncompleteEvent ? -1 : 0);
 
   mapProgress.sections[sectionKey] = {
-    status,
+    status: nextStatus,
     score,
     visitCount: nextVisitCount,
     practiceCount: nextPracticeCount,
@@ -3161,7 +3275,9 @@ const trackProgressEventForUser = (userRecord, payload) => {
     firstCompletedAt:
       status === "completed"
         ? previous?.firstCompletedAt || now
-        : previous?.firstCompletedAt || null,
+        : status === "uncompleted"
+          ? null
+          : previous?.firstCompletedAt || null,
   };
 
   if (status === "started") {
@@ -3173,9 +3289,13 @@ const trackProgressEventForUser = (userRecord, payload) => {
   if (status === "reviewed") {
     mapProgress.reviewCount = toBoundedInt(Number(mapProgress.reviewCount || 0) + 1, 0, 50000000);
   }
-  if (status === "completed" && previous?.status !== "completed") {
+  if (status === "completed" && !previousHasCompletion) {
     mapProgress.completedCount = Math.max(0, Number(mapProgress.completedCount || 0) + 1);
     progress.totals.completedSections = Math.max(0, Number(progress.totals.completedSections || 0) + 1);
+  }
+  if (isUncompleteEvent) {
+    mapProgress.completedCount = Math.max(0, Number(mapProgress.completedCount || 0) - 1);
+    progress.totals.completedSections = Math.max(0, Number(progress.totals.completedSections || 0) - 1);
   }
 
   progress.totals.xp = Math.max(0, Number(progress.totals.xp || 0) + xpDelta);
@@ -3241,13 +3361,21 @@ const trackProgressEventForUser = (userRecord, payload) => {
       5000000
     );
   }
+  if (isUncompleteEvent) {
+    gamification.stats.sectionsCompleted = toBoundedInt(
+      Number(gamification.stats.sectionsCompleted || 0) - 1,
+      0,
+      5000000
+    );
+  }
 
   updateQuestProgressFromEvent(progress, {
     status,
     mapKey,
     sectionKey,
-    isFirstCompletion,
+    isFirstCompletion: isFirstQuestCompletion,
     isFirstSectionVisit,
+    shouldDecrementCompletion: shouldDecrementQuestCompletion,
   });
   syncBadgesAndLevel(progress, worldKey, now);
 
