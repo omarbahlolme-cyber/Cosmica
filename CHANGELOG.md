@@ -33,6 +33,7 @@ All notable changes to this project are documented in this file.
 - Map pages now include loading/fallback rendering states during translation hydration to avoid blank sections.
 - Mobile letter-card tuning was adjusted for romanization-heavy worlds, and related dynamic classes were allowlisted for bloat checks.
 - Cache-busted `app.js` reference advanced to `v=20260303` across HTML pages to force stale-client recovery after runtime fixes.
+- Temporary accepted transitive `npm audit` risk documented in `docs/SECURITY.md` (`minimatch` via Google SDK chain), with no dependency overrides to preserve production stability.
 
 ## [1.1.0] - 2026-02-08
 

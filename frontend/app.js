@@ -997,13 +997,48 @@ const createCosmicaGamificationClient = () => {
       state.error = "";
       return;
     }
+    const payloadData = toSafeObject(payload?.data);
+    const payloadProfile = toSafeObject(payloadData.profile);
     const authProvider = String(payload?.data?.profile?.authProvider || user?.authProvider || "email")
       .trim()
       .toLowerCase();
+    const premiumTier = String(
+      payloadProfile.plan ||
+        payloadProfile.tier ||
+        payloadProfile.membership ||
+        payloadData.plan ||
+        payloadData.tier ||
+        ""
+    )
+      .trim()
+      .toLowerCase();
+    const premiumFlagRaw =
+      payloadProfile.isPremium ??
+      payloadProfile.premium ??
+      payloadData.isPremium ??
+      payloadData.premium ??
+      null;
+    const premiumFlagText = String(premiumFlagRaw ?? "")
+      .trim()
+      .toLowerCase();
+    const hasPremiumAccess =
+      premiumFlagRaw === true ||
+      premiumFlagText === "1" ||
+      premiumFlagText === "true" ||
+      premiumFlagText === "yes" ||
+      premiumFlagText === "premium" ||
+      premiumFlagText === "pro" ||
+      premiumFlagText === "plus" ||
+      premiumTier === "premium" ||
+      premiumTier === "pro" ||
+      premiumTier === "plus" ||
+      premiumTier === "paid";
     state.isAuthenticated = true;
     state.user = {
       ...user,
       authProvider: authProvider || "email",
+      planTier: premiumTier || "free",
+      isPremium: hasPremiumAccess,
     };
     state.progress = normalizeProgressPayload(payload.progress || {});
     state.error = "";
@@ -1410,7 +1445,7 @@ const setupAccountHub = () => {
         </header>
         <nav class="account-menu-links" aria-label="Account actions">
           <button type="button" data-menu="premium" class="account-premium-cta">
-            <span class="account-premium-main">Discover Premiun</span>
+            <span class="account-premium-main">Discover Premium</span>
             <span class="account-premium-sub">Unlock premium features</span>
           </button>
           <button type="button" data-menu="manage">Manage Account</button>
@@ -1445,6 +1480,62 @@ const setupAccountHub = () => {
   `;
   document.body.appendChild(dropdown);
 
+  const premiumSetupOverlay = document.createElement("div");
+  premiumSetupOverlay.className = "premium-setup-overlay";
+  premiumSetupOverlay.hidden = true;
+  premiumSetupOverlay.innerHTML = `
+    <section class="premium-setup-card" role="dialog" aria-modal="true" aria-labelledby="premiumSetupTitle">
+      <button type="button" class="premium-setup-close" aria-label="Close premium setup">×</button>
+      <h3 id="premiumSetupTitle">Unlock Premium Access</h3>
+      <p class="premium-setup-message">Upgrade to Premium to unlock all premium maps and features.</p>
+      <div class="premium-plan-strip" aria-label="Plan prices">
+        <div class="premium-plan-chip premium-plan-chip-free">
+          <span class="premium-plan-name">Free</span>
+          <span class="premium-plan-price">$0</span>
+          <span class="premium-plan-meta">Core learning access</span>
+        </div>
+        <div class="premium-plan-chip premium-plan-chip-pro">
+          <span class="premium-plan-badge">Most popular</span>
+          <span class="premium-plan-name">Premium</span>
+          <span class="premium-plan-price">$9.99/mo</span>
+          <span class="premium-plan-meta">Full premium access</span>
+        </div>
+      </div>
+      <div class="premium-compare" role="table" aria-label="Free and Premium feature comparison">
+        <div class="premium-compare-head" role="row">
+          <span role="columnheader">Feature</span>
+          <span role="columnheader">Free</span>
+          <span role="columnheader" class="premium-compare-header-pro">Premium</span>
+        </div>
+        <div class="premium-compare-row" role="row">
+          <span role="cell">Core lessons</span>
+          <span role="cell">✓</span>
+          <span role="cell" class="premium-compare-pro">✓</span>
+        </div>
+        <div class="premium-compare-row" role="row">
+          <span role="cell">Mimi chat (AI guide)</span>
+          <span role="cell" class="premium-compare-muted">—</span>
+          <span role="cell" class="premium-compare-pro">✓</span>
+        </div>
+        <div class="premium-compare-row" role="row">
+          <span role="cell">Unlock grammar maps</span>
+          <span role="cell" class="premium-compare-muted">—</span>
+          <span role="cell" class="premium-compare-pro">✓</span>
+        </div>
+        <div class="premium-compare-row" role="row">
+          <span role="cell">Advanced review tools</span>
+          <span role="cell" class="premium-compare-muted">—</span>
+          <span role="cell" class="premium-compare-pro">✓</span>
+        </div>
+      </div>
+      <div class="premium-setup-actions">
+        <button type="button" class="premium-setup-primary">Upgrade to Premium</button>
+        <button type="button" class="premium-setup-secondary">Maybe later</button>
+      </div>
+    </section>
+  `;
+  document.body.appendChild(premiumSetupOverlay);
+
   const feedbackNode = dropdown.querySelector(".account-feedback");
   const guestPane = dropdown.querySelector(".account-guest-pane");
   const userPane = dropdown.querySelector(".account-user-pane");
@@ -1477,7 +1568,13 @@ const setupAccountHub = () => {
   const menuXpFill = dropdown.querySelector(".account-menu-xpfill");
   const menuStreak = dropdown.querySelector(".account-menu-streak");
   const menuAchievements = dropdown.querySelector(".account-menu-achievements");
+  const premiumSetupCard = premiumSetupOverlay.querySelector(".premium-setup-card");
+  const premiumSetupMessage = premiumSetupOverlay.querySelector(".premium-setup-message");
+  const premiumSetupCloseBtn = premiumSetupOverlay.querySelector(".premium-setup-close");
+  const premiumSetupPrimaryBtn = premiumSetupOverlay.querySelector(".premium-setup-primary");
+  const premiumSetupSecondaryBtn = premiumSetupOverlay.querySelector(".premium-setup-secondary");
   let activeAuthPanel = "login";
+  let lastPremiumFocusNode = null;
   const triggerNoticeBubble = document.createElement("p");
   triggerNoticeBubble.className = "account-trigger-bubble";
   triggerNoticeBubble.hidden = true;
@@ -1959,6 +2056,106 @@ const setupAccountHub = () => {
     if (managePanel) {
       managePanel.hidden = true;
     }
+  };
+
+  const continuePremiumSetup = () => {
+    const supportSection = document.getElementById("support");
+    if (supportSection) {
+      supportSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+    window.location.href = "/index.html#support";
+  };
+
+  const closePremiumSetupModal = () => {
+    premiumSetupOverlay.hidden = true;
+    document.body.classList.remove("premium-setup-lock");
+    if (lastPremiumFocusNode && typeof lastPremiumFocusNode.focus === "function") {
+      lastPremiumFocusNode.focus();
+    }
+  };
+
+  const openPremiumSetupModal = ({ message = "Upgrade to Premium to unlock this content." } = {}) => {
+    if (premiumSetupMessage) {
+      premiumSetupMessage.textContent = String(message || "Upgrade to Premium to unlock this content.");
+    }
+    lastPremiumFocusNode = document.activeElement;
+    premiumSetupOverlay.hidden = false;
+    document.body.classList.add("premium-setup-lock");
+    window.setTimeout(() => {
+      if (premiumSetupPrimaryBtn && typeof premiumSetupPrimaryBtn.focus === "function") {
+        premiumSetupPrimaryBtn.focus();
+        return;
+      }
+      premiumSetupCard?.focus?.();
+    }, 20);
+  };
+
+  const openPremiumFlow = ({
+    message = "Upgrade to Premium to unlock this content.",
+  } = {}) => {
+    const snapshot =
+      typeof window.cosmicaGamification?.getState === "function"
+        ? window.cosmicaGamification.getState()
+        : null;
+    if (!snapshot?.isAuthenticated) {
+      setAuthPanel("login", true);
+      openDropdown();
+      return;
+    }
+    closeDropdown();
+    openPremiumSetupModal({ message });
+  };
+
+  premiumSetupCloseBtn?.addEventListener("click", () => {
+    closePremiumSetupModal();
+  });
+  premiumSetupSecondaryBtn?.addEventListener("click", () => {
+    closePremiumSetupModal();
+  });
+  premiumSetupPrimaryBtn?.addEventListener("click", () => {
+    closePremiumSetupModal();
+    continuePremiumSetup();
+  });
+  premiumSetupOverlay.addEventListener("click", (event) => {
+    if (event.target === premiumSetupOverlay) {
+      closePremiumSetupModal();
+    }
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") {
+      return;
+    }
+    if (premiumSetupOverlay.hidden) {
+      return;
+    }
+    event.preventDefault();
+    closePremiumSetupModal();
+  });
+
+  const existingAccountHub =
+    window.cosmicaAccountHub && typeof window.cosmicaAccountHub === "object"
+      ? window.cosmicaAccountHub
+      : {};
+  window.cosmicaAccountHub = {
+    ...existingAccountHub,
+    open: () => {
+      openDropdown();
+    },
+    close: () => {
+      closeDropdown();
+    },
+    openAuth: ({ panel = "login", message = "", tone = "info" } = {}) => {
+      setAuthPanel(panel, true);
+      if (message) {
+        pendingAuthNoticeMessage = String(message);
+        pendingAuthNoticeTone = String(tone || "info").trim().toLowerCase() || "info";
+      }
+      openDropdown();
+    },
+    openPremium: ({ message = "Upgrade to Premium to unlock this content." } = {}) => {
+      openPremiumFlow({ message });
+    },
   };
 
   const renderFromState = (snapshot) => {
@@ -2449,8 +2646,10 @@ const setupAccountHub = () => {
         setDeleteConfirmationVisible(false);
       }
       if (action === "premium") {
-        closeDropdown();
-        navigateToHash("#support");
+        openPremiumFlow({
+          message: "Upgrade to Premium to unlock all premium maps and features.",
+          tone: "info",
+        });
         return;
       }
     });
@@ -4231,9 +4430,82 @@ const sendChatMessage = async (message) => {
   }
 };
 
+function showMimiPremiumBubble() {
+  // Remove any previous premium upsell bubble
+  const prev = chatLog && chatLog.querySelector('.chat-message.mimi.premium-upsell');
+  if (prev) prev.remove();
+  // Create bubble
+  const message = document.createElement("div");
+  message.className = "chat-message mimi premium-upsell";
+  message.dataset.role = "mimi";
+  const bubble = document.createElement("div");
+  bubble.className = "chat-bubble";
+  const body = document.createElement("div");
+  body.className = "chat-text";
+  body.innerHTML = `Mimi chat is a <b>Premium</b> feature.<br><br>`;
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "premium-setup-primary";
+  btn.textContent = "Upgrade to Premium";
+  btn.onclick = function() {
+    if (typeof window.cosmicaAccountHub?.openPremium === "function") {
+      window.cosmicaAccountHub.openPremium({
+        message: "Unlock Mimi chat and more with Premium!",
+      });
+      return;
+    }
+    const supportSection = document.getElementById("support");
+    if (supportSection) {
+      supportSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+    window.location.href = "/index.html#support";
+  };
+  body.appendChild(btn);
+  bubble.appendChild(body);
+  message.appendChild(bubble);
+  chatLog.appendChild(message);
+  syncChatLogMessageState && syncChatLogMessageState();
+  animateChatLogPulse && animateChatLogPulse();
+  trimVisibleChatMessages && trimVisibleChatMessages();
+  scrollChatToBottom && scrollChatToBottom();
+}
+
+const userHasPremiumAccess = (user) => {
+  if (!user || typeof user !== "object") {
+    return false;
+  }
+  const premiumFlagRaw = user.isPremium ?? user.premium;
+  const premiumFlagText = String(premiumFlagRaw ?? "")
+    .trim()
+    .toLowerCase();
+  const premiumTier = String(user.planTier ?? user.tier ?? "")
+    .trim()
+    .toLowerCase();
+  return (
+    premiumFlagRaw === true ||
+    premiumFlagText === "1" ||
+    premiumFlagText === "true" ||
+    premiumFlagText === "yes" ||
+    premiumFlagText === "premium" ||
+    premiumFlagText === "pro" ||
+    premiumFlagText === "plus" ||
+    premiumTier === "premium" ||
+    premiumTier === "pro" ||
+    premiumTier === "plus" ||
+    premiumTier === "paid"
+  );
+};
+
 if (chatForm) {
   chatForm.addEventListener("submit", (event) => {
     event.preventDefault();
+    const user = (typeof getState === "function" ? getState() : (window.store?.getState?.() || {})).user || window.state?.user || null;
+    const isPremium = userHasPremiumAccess(user);
+    if (!isPremium) {
+      showMimiPremiumBubble();
+      return;
+    }
     sendChatMessage();
   });
 }
@@ -4261,6 +4533,12 @@ chatChips.forEach((chip) => {
   chip.addEventListener("blur", releaseChipPress);
   chip.addEventListener("click", () => {
     pulseGuideInteractivity(980);
+    const user = (typeof getState === "function" ? getState() : (window.store?.getState?.() || {})).user || window.state?.user || null;
+    const isPremium = userHasPremiumAccess(user);
+    if (!isPremium) {
+      showMimiPremiumBubble();
+      return;
+    }
     const prompt = chip.dataset.prompt || chip.textContent || "";
     sendChatMessage(prompt);
   });
@@ -6040,11 +6318,31 @@ const applyMapComingSoonRules = () => {
     return;
   }
 
+  const snapshot =
+    typeof window.cosmicaGamification?.getState === "function"
+      ? window.cosmicaGamification.getState()
+      : null;
+  const user = snapshot && snapshot.user && typeof snapshot.user === "object" ? snapshot.user : null;
+  const premiumTier = String(
+    user?.planTier || user?.tier || user?.plan || user?.membership || ""
+  )
+    .trim()
+    .toLowerCase();
+  const hasPremiumAccess =
+    user?.isPremium === true ||
+    premiumTier === "premium" ||
+    premiumTier === "pro" ||
+    premiumTier === "plus" ||
+    premiumTier === "paid";
+
   const forceComingSoon = grammarCard.dataset.forceComingSoon === "true";
-  if (!forceComingSoon) {
+  const lockForPremium = !hasPremiumAccess;
+  if (!forceComingSoon && !lockForPremium) {
     grammarCard.classList.remove("coming-soon");
+    grammarCard.classList.remove("premium-locked");
     grammarCard.classList.add("map-link");
     grammarCard.dataset.comingSoon = "false";
+    grammarCard.dataset.premiumLocked = "false";
     grammarCard.removeAttribute("aria-disabled");
     grammarCard.removeAttribute("title");
     const originalHref =
@@ -6053,7 +6351,9 @@ const applyMapComingSoonRules = () => {
       grammarCard.setAttribute("href", originalHref);
       grammarCard.dataset.originalHref = originalHref;
     }
-    grammarCard.querySelector(".coming-soon-badge")?.remove();
+    grammarCard
+      .querySelector(".coming-soon-badge, .premium-map-upgrade-button")
+      ?.remove();
     return;
   }
 
@@ -6062,22 +6362,152 @@ const applyMapComingSoonRules = () => {
     grammarCard.dataset.originalHref = currentHref;
   }
 
-  grammarCard.classList.add("coming-soon");
+  grammarCard.classList.toggle("coming-soon", forceComingSoon);
+  grammarCard.classList.toggle("premium-locked", !forceComingSoon && lockForPremium);
   grammarCard.classList.remove("map-link");
-  grammarCard.dataset.comingSoon = "true";
-  grammarCard.setAttribute("aria-disabled", "true");
-  grammarCard.setAttribute("title", "Coming soon");
+  grammarCard.dataset.comingSoon = forceComingSoon ? "true" : "false";
+  grammarCard.dataset.premiumLocked = lockForPremium ? "true" : "false";
+  if (forceComingSoon) {
+    grammarCard.setAttribute("aria-disabled", "true");
+  } else {
+    grammarCard.removeAttribute("aria-disabled");
+  }
+  grammarCard.setAttribute("title", forceComingSoon ? "Coming soon" : "Premium feature");
   grammarCard.removeAttribute("href");
 
-  if (!grammarCard.querySelector(".coming-soon-badge")) {
-    const badge = document.createElement("span");
-    badge.className = "coming-soon-badge";
-    badge.textContent = "Coming soon";
-    grammarCard.appendChild(badge);
+  const existingMarker = grammarCard.querySelector(
+    ".coming-soon-badge, .premium-map-upgrade-button"
+  );
+  if (forceComingSoon) {
+    if (!(existingMarker instanceof HTMLElement) || existingMarker.tagName !== "SPAN") {
+      existingMarker?.remove();
+      const badge = document.createElement("span");
+      badge.className = "coming-soon-badge";
+      badge.textContent = "Coming soon";
+      grammarCard.appendChild(badge);
+    } else {
+      existingMarker.className = "coming-soon-badge";
+      existingMarker.textContent = "Coming soon";
+    }
+    return;
+  }
+
+  if (!(existingMarker instanceof HTMLElement) || existingMarker.tagName !== "BUTTON") {
+    existingMarker?.remove();
+    const upgradeBtn = document.createElement("button");
+    upgradeBtn.type = "button";
+    upgradeBtn.className = "premium-setup-primary premium-map-upgrade-button";
+    upgradeBtn.textContent = "Upgrade to Premium";
+    grammarCard.appendChild(upgradeBtn);
+  } else {
+    existingMarker.className = "premium-setup-primary premium-map-upgrade-button";
+    existingMarker.textContent = "Upgrade to Premium";
+    if (existingMarker instanceof HTMLButtonElement) {
+      existingMarker.type = "button";
+    }
   }
 };
 
 applyMapComingSoonRules();
+if (document.body.classList.contains("world-page") && typeof window.cosmicaGamification?.subscribe === "function") {
+  window.cosmicaGamification.subscribe(() => {
+    applyMapComingSoonRules();
+  });
+}
+
+const bindPremiumLockedInteraction = (element, {
+  upgradeHash = "#support",
+  guestPanel = "login",
+  guestMessage = "Sign in or create an account to continue. Upgrade to Premium to unlock this feature.",
+  boundFlag = "premiumUpsellBound",
+} = {}) => {
+  if (!element || element.dataset[boundFlag] === "true") {
+    return;
+  }
+  element.dataset[boundFlag] = "true";
+
+  const navigateToUpgradeTarget = () => {
+    const safeHash = String(upgradeHash || "").trim() || "#support";
+    const target = safeHash.startsWith("#") ? document.querySelector(safeHash) : null;
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+    const onHome =
+      window.location.pathname.toLowerCase().endsWith("/index.html") ||
+      window.location.pathname === "/";
+    if (onHome) {
+      window.location.hash = safeHash;
+      return;
+    }
+    window.location.href = `/index.html${safeHash}`;
+  };
+
+  const onPremiumLockedInteract = (event) => {
+    if (element.dataset.premiumLocked !== "true") {
+      return;
+    }
+    const snapshot =
+      typeof window.cosmicaGamification?.getState === "function"
+        ? window.cosmicaGamification.getState()
+        : null;
+    const isAuthenticated = Boolean(snapshot?.isAuthenticated);
+    event.preventDefault();
+    if (!isAuthenticated) {
+      if (typeof window.cosmicaAccountHub?.openAuth === "function") {
+        window.cosmicaAccountHub.openAuth({
+          panel: guestPanel,
+          message: guestMessage,
+          tone: "info",
+        });
+        return;
+      }
+      const panel = encodeURIComponent(String(guestPanel || "login").trim().toLowerCase() || "login");
+      window.location.href = `/index.html?openAuth=1&authPanel=${panel}#support`;
+      return;
+    }
+    if (typeof window.cosmicaAccountHub?.openPremium === "function") {
+      window.cosmicaAccountHub.openPremium({
+        message: "Upgrade to Premium to unlock this map.",
+        tone: "info",
+      });
+      return;
+    }
+    navigateToUpgradeTarget();
+  };
+
+  element.addEventListener("pointerup", (event) => {
+    if (event.pointerType !== "touch") {
+      return;
+    }
+    onPremiumLockedInteract(event);
+  });
+  element.addEventListener("click", (event) => {
+    onPremiumLockedInteract(event);
+  });
+  element.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") {
+      return;
+    }
+    onPremiumLockedInteract(event);
+  });
+};
+
+window.cosmicaPremiumGate = {
+  bind: bindPremiumLockedInteraction,
+};
+
+const setupGrammarPremiumUpsell = () => {
+  if (!document.body.classList.contains("world-page")) {
+    return;
+  }
+  const grammarCard = document.querySelector(".map-card.map-grammar");
+  bindPremiumLockedInteraction(grammarCard, {
+    guestMessage: "Sign in or create an account to continue. Upgrade to Premium to unlock this map.",
+  });
+};
+
+setupGrammarPremiumUpsell();
 
 const mapLinks = document.querySelectorAll(".map-link");
 const inferMapKeyFromHref = (hrefValue) => {

@@ -13,6 +13,7 @@ const FRONTEND_ROOT = path.join(ROOT, "frontend");
 const shouldSkipHtmlFile = (name) => {
   const lower = String(name || "").toLowerCase();
   return (
+    lower === "admin-security.html" ||
     lower.startsWith("live_") ||
     /^naver[a-z0-9]+\.html$/i.test(lower) ||
     /^google[a-z0-9]+\.html$/i.test(lower) ||

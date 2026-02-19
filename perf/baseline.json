@@ -1,71 +1,71 @@
 {
-  "generatedAt": "2026-02-14T03:07:01.576Z",
+  "generatedAt": "2026-02-19T11:44:57.055Z",
   "baseUrl": "http://127.0.0.1:4174",
   "routes": {
     "/index.html": {
       "status": 200,
-      "durationMs": 7,
-      "bytes": 23620,
-      "cacheControl": "no-store, no-cache, must-revalidate, proxy-revalidate"
+      "durationMs": 13,
+      "bytes": 22638,
+      "cacheControl": "public, max-age=0, must-revalidate"
     },
     "/english-world.html": {
       "status": 200,
-      "durationMs": 3,
-      "bytes": 12727,
-      "cacheControl": "no-store, no-cache, must-revalidate, proxy-revalidate"
+      "durationMs": 5,
+      "bytes": 12981,
+      "cacheControl": "public, max-age=0, must-revalidate"
     },
     "/english-letters.html": {
       "status": 200,
-      "durationMs": 3,
-      "bytes": 22200,
-      "cacheControl": "no-store, no-cache, must-revalidate, proxy-revalidate"
+      "durationMs": 4,
+      "bytes": 22213,
+      "cacheControl": "public, max-age=0, must-revalidate"
     },
     "/english-words.html": {
       "status": 200,
-      "durationMs": 2,
-      "bytes": 4597,
-      "cacheControl": "no-store, no-cache, must-revalidate, proxy-revalidate"
+      "durationMs": 3,
+      "bytes": 5020,
+      "cacheControl": "public, max-age=0, must-revalidate"
     },
     "/english-phrases.html": {
       "status": 200,
-      "durationMs": 2,
-      "bytes": 4612,
-      "cacheControl": "no-store, no-cache, must-revalidate, proxy-revalidate"
+      "durationMs": 3,
+      "bytes": 5035,
+      "cacheControl": "public, max-age=0, must-revalidate"
     },
     "/english-grammar.html": {
       "status": 200,
-      "durationMs": 2,
-      "bytes": 4590,
-      "cacheControl": "no-store, no-cache, must-revalidate, proxy-revalidate"
+      "durationMs": 3,
+      "bytes": 5013,
+      "cacheControl": "public, max-age=0, must-revalidate"
     },
     "/style.css": {
       "status": 200,
-      "durationMs": 2,
-      "bytes": 71524,
+      "durationMs": 5,
+      "bytes": 192175,
       "cacheControl": "no-store, no-cache, must-revalidate, proxy-revalidate"
     },
     "/style-maps.css": {
       "status": 200,
-      "durationMs": 2,
-      "bytes": 32753,
+      "durationMs": 4,
+      "bytes": 49259,
       "cacheControl": "public, max-age=0"
     },
     "/app.js": {
       "status": 200,
-      "durationMs": 1,
-      "bytes": 121990,
+      "durationMs": 4,
+      "bytes": 271272,
       "cacheControl": "no-store, no-cache, must-revalidate, proxy-revalidate"
     },
     "/app-maps.js": {
       "status": 200,
-      "durationMs": 4,
-      "bytes": 188571,
+      "durationMs": 8,
+      "bytes": 268580,
       "cacheControl": "public, max-age=0"
     },
     "/translations.json": {
       "status": 200,
-      "durationMs": 6,
-      "bytes": 1591312,
+      "durationMs": 10,
+      "bytes": 1591307,
       "cacheControl": "public, max-age=0"
     }
   }
