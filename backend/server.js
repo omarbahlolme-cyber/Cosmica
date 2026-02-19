@@ -2967,6 +2967,26 @@ const incrementQuestTaskProgress = (task, amount = 1) => {
   return task.completed;
 };
 
+const isCountableWorldMapSectionEvent = (eventContext) => {
+  const mapKey = String(eventContext?.mapKey || "").trim().toLowerCase();
+  const sectionKey = String(eventContext?.sectionKey || "").trim();
+  if (!ALLOWED_PROGRESS_MAP_KEYS.has(mapKey) || !sectionKey) {
+    return false;
+  }
+  if (sectionKey.startsWith(BOSS_SECTION_KEY_PREFIX)) {
+    return false;
+  }
+  if (/-entry$/i.test(sectionKey)) {
+    return false;
+  }
+  return true;
+};
+
+const isWorldMapCardPracticeEvent = (eventContext) => {
+  const status = String(eventContext?.status || "").trim().toLowerCase();
+  return status === "practiced" && isCountableWorldMapSectionEvent(eventContext);
+};
+
 const updateQuestProgressFromEvent = (progress, eventContext) => {
   const gamification = progress.gamification;
   const tasks = gamification.quests.tasks;
@@ -2974,13 +2994,21 @@ const updateQuestProgressFromEvent = (progress, eventContext) => {
     return false;
   }
 
-  if (eventContext.status === "practiced" || eventContext.status === "reviewed") {
+  if (isWorldMapCardPracticeEvent(eventContext)) {
     incrementQuestTaskProgress(tasks.practice, 1);
   }
-  if (eventContext.status === "started" && eventContext.isFirstSectionVisit) {
+  if (
+    eventContext.status === "started" &&
+    eventContext.isFirstSectionVisit &&
+    isCountableWorldMapSectionEvent(eventContext)
+  ) {
     incrementQuestTaskProgress(tasks.discover, 1);
   }
-  if (eventContext.status === "completed" && eventContext.isFirstCompletion) {
+  if (
+    eventContext.status === "completed" &&
+    eventContext.isFirstCompletion &&
+    isCountableWorldMapSectionEvent(eventContext)
+  ) {
     incrementQuestTaskProgress(tasks.complete, 1);
   }
 
@@ -3186,7 +3214,13 @@ const trackProgressEventForUser = (userRecord, payload) => {
       5000000
     );
   }
-  if (status === "practiced") {
+  if (
+    isWorldMapCardPracticeEvent({
+      status,
+      mapKey,
+      sectionKey,
+    })
+  ) {
     gamification.stats.cardsPracticed = toBoundedInt(
       Number(gamification.stats.cardsPracticed || 0) + 1,
       0,
@@ -3210,6 +3244,8 @@ const trackProgressEventForUser = (userRecord, payload) => {
 
   updateQuestProgressFromEvent(progress, {
     status,
+    mapKey,
+    sectionKey,
     isFirstCompletion,
     isFirstSectionVisit,
   });
