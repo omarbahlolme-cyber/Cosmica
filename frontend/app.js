@@ -235,6 +235,76 @@ const MAP_TITLE_ENGLISH = {
   phrases: "Phrases",
   grammar: "Grammar",
 };
+const WORLD_MAP_TITLE_RUNTIME_CACHE_KEY = "cosmicaWorldMapTitleRuntimeCache:v1";
+let worldMapTitleRuntimeCache = null;
+const readWorldMapTitleRuntimeCache = () => {
+  if (worldMapTitleRuntimeCache instanceof Map) {
+    return worldMapTitleRuntimeCache;
+  }
+  try {
+    const raw = localStorage.getItem(WORLD_MAP_TITLE_RUNTIME_CACHE_KEY);
+    if (!raw) {
+      worldMapTitleRuntimeCache = new Map();
+      return worldMapTitleRuntimeCache;
+    }
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object") {
+      worldMapTitleRuntimeCache = new Map();
+      return worldMapTitleRuntimeCache;
+    }
+    const entries = Object.entries(parsed).filter(
+      ([key, value]) => key && typeof value === "string" && value.trim()
+    );
+    worldMapTitleRuntimeCache = new Map(entries);
+    return worldMapTitleRuntimeCache;
+  } catch {
+    worldMapTitleRuntimeCache = new Map();
+    return worldMapTitleRuntimeCache;
+  }
+};
+const persistWorldMapTitleRuntimeCache = () => {
+  if (!(worldMapTitleRuntimeCache instanceof Map)) {
+    return;
+  }
+  try {
+    localStorage.setItem(
+      WORLD_MAP_TITLE_RUNTIME_CACHE_KEY,
+      JSON.stringify(Object.fromEntries(worldMapTitleRuntimeCache))
+    );
+  } catch {}
+};
+const buildWorldMapTitleRuntimeCacheKey = (worldKey, languageKey, mapType) =>
+  `${String(worldKey || "").trim().toLowerCase()}::${String(languageKey || "")
+    .trim()
+    .toLowerCase()}::${String(mapType || "").trim().toLowerCase()}`;
+const requestWorldMapTitleTranslation = async (sourceTitle, targetLanguage) => {
+  const title = String(sourceTitle || "").trim();
+  const lang = String(targetLanguage || "").trim().toLowerCase();
+  if (!title || !lang || lang === WORLD_KEY) {
+    return "";
+  }
+  try {
+    const response = await fetch("/api/translate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        text: title,
+        targetLanguage: lang,
+      }),
+      cache: "no-store",
+      credentials: "same-origin",
+    });
+    if (!response.ok) {
+      return "";
+    }
+    const data = await response.json().catch(() => ({}));
+    return String(data?.translation || data?.content || "")
+      .replace(/^["'`]|["'`]$/g, "")
+      .trim();
+  } catch {
+    return "";
+  }
+};
 const BASE_MAP_TRANSLATION_FILE = "maps/translations.json";
 const WORLD_TRANSLATION_FILES = {
   english: BASE_MAP_TRANSLATION_FILE,
@@ -305,7 +375,15 @@ const applyWorldMapBilingualTitles = () => {
   if (!document.body.classList.contains("world-page")) {
     return;
   }
-  const nativeSet = WORLD_MAP_TITLE_TRANSLATIONS[WORLD_KEY] || WORLD_MAP_TITLE_TRANSLATIONS.english;
+  const worldSet = WORLD_MAP_TITLE_TRANSLATIONS[WORLD_KEY] || WORLD_MAP_TITLE_TRANSLATIONS.english;
+  const selectedBaseLanguage = String(localStorage.getItem("cosmicaBaseLanguage") || "")
+    .trim()
+    .toLowerCase();
+  const hasSelectedBaseLanguage =
+    Boolean(selectedBaseLanguage) && selectedBaseLanguage !== WORLD_KEY;
+  const selectedSet = hasSelectedBaseLanguage
+    ? WORLD_MAP_TITLE_TRANSLATIONS[selectedBaseLanguage] || null
+    : null;
   document.querySelectorAll(".world-maps .map-card").forEach((card) => {
     const heading = card.querySelector("h3");
     if (!heading) {
@@ -332,11 +410,70 @@ const applyWorldMapBilingualTitles = () => {
       translationNode.className = "map-title-translation";
       heading.appendChild(translationNode);
     }
-    mainNode.textContent = MAP_TITLE_ENGLISH[mapType] || mainNode.textContent;
-    const nativeTitle = String(nativeSet?.[mapType] || "").trim();
-    translationNode.textContent = nativeTitle;
-    translationNode.hidden = !nativeTitle;
+    const worldTitle = String(worldSet?.[mapType] || MAP_TITLE_ENGLISH[mapType] || mapType).trim();
+    mainNode.textContent = worldTitle || MAP_TITLE_ENGLISH[mapType] || mainNode.textContent;
+    const selectedTitle = String(selectedSet?.[mapType] || "").trim();
     translationNode.setAttribute("dir", "auto");
+    if (!hasSelectedBaseLanguage) {
+      translationNode.removeAttribute("data-request-key");
+      translationNode.textContent = "";
+      translationNode.hidden = true;
+      return;
+    }
+    if (selectedTitle && selectedTitle.toLowerCase() !== worldTitle.toLowerCase()) {
+      translationNode.removeAttribute("data-request-key");
+      translationNode.textContent = selectedTitle;
+      translationNode.hidden = false;
+      return;
+    }
+
+    translationNode.textContent = "";
+    translationNode.hidden = true;
+
+    const runtimeCache = readWorldMapTitleRuntimeCache();
+    const cacheKey = buildWorldMapTitleRuntimeCacheKey(WORLD_KEY, selectedBaseLanguage, mapType);
+    const cachedTitle = String(runtimeCache.get(cacheKey) || "").trim();
+    if (cachedTitle) {
+      if (cachedTitle.toLowerCase() === worldTitle.toLowerCase()) {
+        translationNode.removeAttribute("data-request-key");
+        translationNode.textContent = "";
+        translationNode.hidden = true;
+        return;
+      }
+      translationNode.removeAttribute("data-request-key");
+      translationNode.textContent = cachedTitle;
+      translationNode.hidden = false;
+      return;
+    }
+
+    const requestKey = `${selectedBaseLanguage}::${mapType}`;
+    translationNode.dataset.requestKey = requestKey;
+    requestWorldMapTitleTranslation(worldTitle || MAP_TITLE_ENGLISH[mapType], selectedBaseLanguage).then((translated) => {
+      const resolved = String(translated || "").trim();
+      if (!resolved) {
+        return;
+      }
+      const activeBaseLanguage = String(localStorage.getItem("cosmicaBaseLanguage") || "")
+        .trim()
+        .toLowerCase();
+      if (activeBaseLanguage !== selectedBaseLanguage) {
+        return;
+      }
+      if (translationNode.dataset.requestKey !== requestKey) {
+        return;
+      }
+      runtimeCache.set(cacheKey, resolved);
+      persistWorldMapTitleRuntimeCache();
+      if (resolved.toLowerCase() === worldTitle.toLowerCase()) {
+        translationNode.removeAttribute("data-request-key");
+        translationNode.textContent = "";
+        translationNode.hidden = true;
+        return;
+      }
+      translationNode.removeAttribute("data-request-key");
+      translationNode.textContent = resolved;
+      translationNode.hidden = false;
+    });
   });
 };
 
@@ -606,6 +743,21 @@ const createCosmicaAuthClient = () => {
         method: "POST",
         body: { email, returnTo },
       }),
+    forgotPassword: async ({ email, returnTo = "" } = {}) =>
+      request("/api/auth/password/forgot", {
+        method: "POST",
+        body: { email, returnTo },
+      }),
+    resetPassword: async ({ token, newPassword, confirmPassword } = {}) =>
+      request("/api/auth/password/reset", {
+        method: "POST",
+        body: { token, newPassword, confirmPassword },
+      }),
+    changePassword: async ({ currentPassword, newPassword, confirmPassword } = {}) =>
+      request("/api/auth/password/change", {
+        method: "POST",
+        body: { currentPassword, newPassword, confirmPassword },
+      }),
     logOut: () =>
       request("/api/auth/logout", {
         method: "POST",
@@ -617,10 +769,9 @@ const createCosmicaAuthClient = () => {
       }
       return payload;
     },
-    deleteAccount: ({ password } = {}) =>
+    deleteAccount: () =>
       request("/api/auth/account", {
         method: "DELETE",
-        body: { password },
       }),
     getAccountData: () => requestOrNullOnUnauthorized("/api/account/data"),
     setAccountData: (data) =>
@@ -846,8 +997,14 @@ const createCosmicaGamificationClient = () => {
       state.error = "";
       return;
     }
+    const authProvider = String(payload?.data?.profile?.authProvider || user?.authProvider || "email")
+      .trim()
+      .toLowerCase();
     state.isAuthenticated = true;
-    state.user = user;
+    state.user = {
+      ...user,
+      authProvider: authProvider || "email",
+    };
     state.progress = normalizeProgressPayload(payload.progress || {});
     state.error = "";
   };
@@ -947,9 +1104,9 @@ const createCosmicaGamificationClient = () => {
         applyAuthPayload(null);
         return snapshot();
       }),
-    deleteAccount: ({ password } = {}) =>
+    deleteAccount: () =>
       withLoading(async () => {
-        await window.cosmicaAuth.deleteAccount({ password });
+        await window.cosmicaAuth.deleteAccount();
         applyAuthPayload(null);
         return snapshot();
       }),
@@ -1063,25 +1220,40 @@ const setupAccountHub = () => {
     return;
   }
 
-  const accountSlot = document.createElement("div");
-  accountSlot.className = "account-slot";
-  accountSlot.innerHTML = `
-    <button class="account-trigger" type="button" aria-haspopup="menu" aria-expanded="false">
-      <span class="account-trigger-avatar" aria-hidden="true">G</span>
-      <span class="account-trigger-copy">
-        <span class="account-trigger-label">Guest</span>
-        <span class="account-trigger-meta">Sign in</span>
-      </span>
-      <span class="account-trigger-caret" aria-hidden="true">▾</span>
-    </button>
-  `;
+  const accountSlot = nav.querySelector(".account-slot") || document.createElement("div");
+  if (!accountSlot.querySelector(".account-trigger")) {
+    accountSlot.className = "account-slot";
+    accountSlot.innerHTML = `
+      <button class="account-trigger" type="button" aria-haspopup="menu" aria-expanded="false">
+        <span class="account-trigger-avatar" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+            <path d="M12 12.2a4.6 4.6 0 1 0 0-9.2 4.6 4.6 0 0 0 0 9.2zm0 2.2c-4.7 0-8.5 2.8-8.5 6.3 0 .7.5 1.3 1.2 1.3h14.6c.7 0 1.2-.6 1.2-1.3 0-3.5-3.8-6.3-8.5-6.3z"></path>
+          </svg>
+        </span>
+        <span class="account-trigger-copy">
+          <span class="account-trigger-label">Guest</span>
+          <span class="account-trigger-meta">Sign in</span>
+        </span>
+        <span class="account-trigger-caret" aria-hidden="true">▾</span>
+      </button>
+    `;
+  } else {
+    accountSlot.classList.add("account-slot");
+  }
+  accountSlot.classList.remove("account-slot-preload");
+  accountSlot.removeAttribute("aria-hidden");
 
   const soundToggleNode = document.getElementById("soundToggle");
   let navControls = nav.querySelector(".nav-controls");
   if (!navControls) {
     navControls = document.createElement("div");
     navControls.className = "nav-controls";
-    nav.appendChild(navControls);
+    if (soundToggleNode && soundToggleNode.parentElement === nav) {
+      nav.replaceChild(navControls, soundToggleNode);
+      navControls.appendChild(soundToggleNode);
+    } else {
+      nav.appendChild(navControls);
+    }
   }
   if (soundToggleNode) {
     if (soundToggleNode.parentElement !== navControls) {
@@ -1090,12 +1262,25 @@ const setupAccountHub = () => {
       navControls.prepend(soundToggleNode);
     }
   }
-  navControls.appendChild(accountSlot);
+  if (accountSlot.parentElement !== navControls) {
+    navControls.appendChild(accountSlot);
+  }
 
   const trigger = accountSlot.querySelector(".account-trigger");
+  if (!trigger) {
+    return;
+  }
+  trigger.setAttribute("type", "button");
+  trigger.setAttribute("aria-haspopup", "menu");
+  trigger.setAttribute("aria-expanded", "false");
+  trigger.removeAttribute("tabindex");
   const triggerAvatar = accountSlot.querySelector(".account-trigger-avatar");
   const triggerLabel = accountSlot.querySelector(".account-trigger-label");
   const triggerMeta = accountSlot.querySelector(".account-trigger-meta");
+  const triggerCaret = accountSlot.querySelector(".account-trigger-caret");
+  if (triggerCaret) {
+    triggerCaret.textContent = "▾";
+  }
 
   const dropdown = document.createElement("div");
   dropdown.className = "account-dropdown";
@@ -1140,7 +1325,8 @@ const setupAccountHub = () => {
             <div class="account-form-divider"><span>or continue with email</span></div>
             <label>Email <input type="email" name="email" autocomplete="email" required /></label>
             <label>Password <input type="password" name="password" autocomplete="current-password" minlength="8" required /></label>
-            <button type="submit">Continue learning</button>
+            <button type="button" class="account-inline-link account-login-forgot">Forgot password?</button>
+            <button type="submit">Start learning</button>
             <button type="button" class="account-resend-button" hidden>Resend verification email</button>
           </form>
           <form class="account-form signup-form" data-auth-panel-content="signup" hidden>
@@ -1176,13 +1362,45 @@ const setupAccountHub = () => {
               Resend verification email
             </button>
           </form>
+          <form class="account-form reset-form" data-auth-panel-content="reset" hidden>
+            <p class="account-reset-intro">Set a new password for your account.</p>
+            <label>New password <input type="password" name="newPassword" autocomplete="new-password" minlength="8" required /></label>
+            <label>Retype new password <input type="password" name="confirmPassword" autocomplete="new-password" minlength="8" required /></label>
+            <button type="submit">Reset password</button>
+            <button type="button" class="account-inline-link account-reset-back-login">Back to log in</button>
+          </form>
         </div>
       </section>
       <section class="account-user-pane" hidden>
         <header class="account-menu-header">
           <div class="account-menu-avatar" aria-hidden="true">U</div>
           <div class="account-menu-identity">
-            <div class="account-menu-name"></div>
+            <div class="account-menu-topline">
+              <div class="account-menu-name"></div>
+              <div class="account-menu-summary">
+                <div class="account-menu-stat account-menu-stat-streak">
+                  <span class="account-menu-stat-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false" class="account-menu-icon-streak">
+                      <path class="icon-streak-outer" d="M13.1 1.8c.4 2-.4 3.8-1.9 5.5-1.5 1.8-3.2 3.2-3.2 5.8 0 2.5 1.9 4.6 4.4 4.6 2.7 0 4.8-2.2 4.8-5 0-1.7-.7-3.2-2.3-4.7 2.9.8 5.1 3.8 5.1 7.2 0 4.3-3.4 7.8-7.8 7.8-4.2 0-7.8-3.3-7.8-7.8 0-4 2.4-6.9 4.8-9.1 1.4-1.3 2.7-2.5 3.9-4.3z"></path>
+                      <path class="icon-streak-inner" d="M12.2 9.9c.3 1.1-.1 2.1-.8 2.9-.8.9-1.5 1.6-1.5 2.9 0 1.3 1 2.4 2.4 2.4 1.5 0 2.6-1.2 2.6-2.7 0-.9-.4-1.9-1.2-2.8 1.6.7 2.8 2.5 2.8 4.4 0 2.6-1.9 4.7-4.4 4.7-2.4 0-4.4-1.9-4.4-4.6 0-2.4 1.4-4.2 2.8-5.5.8-.7 1.4-1.3 1.7-1.7z"></path>
+                      <circle class="icon-streak-spark" cx="8.2" cy="5" r="1.1"></circle>
+                    </svg>
+                  </span>
+                  <span class="account-menu-streak">0 days</span>
+                </div>
+                <div class="account-menu-stat account-menu-stat-achievement">
+                  <span class="account-menu-stat-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false" class="account-menu-icon-achievement">
+                      <path class="icon-ach-ribbon-left" d="M8.3 14.5 6.1 21l3-1.3 1.9 2.1 1.4-4.5z"></path>
+                      <path class="icon-ach-ribbon-right" d="M15.7 14.5 17.9 21l-3-1.3-1.9 2.1-1.4-4.5z"></path>
+                      <circle class="icon-ach-medal" cx="12" cy="10.8" r="5.7"></circle>
+                      <path class="icon-ach-star" d="m12 7.6 1.1 2.1 2.3.3-1.7 1.6.4 2.2-2.1-1.1-2.1 1.1.4-2.2-1.7-1.6 2.3-.3z"></path>
+                    </svg>
+                  </span>
+                  <span class="account-menu-achievements">0 Achievements</span>
+                </div>
+              </div>
+            </div>
             <div class="account-menu-level"></div>
             <div class="account-menu-xp"></div>
             <div class="account-menu-xpbar" aria-hidden="true">
@@ -1190,23 +1408,33 @@ const setupAccountHub = () => {
             </div>
           </div>
         </header>
-        <div class="account-menu-summary">
-          <div class="account-menu-stat">🔥 <span class="account-menu-streak">0 days</span></div>
-          <div class="account-menu-stat">🏆 <span class="account-menu-achievements">0 Achievements</span></div>
-        </div>
-        <nav class="account-menu-links" aria-label="Profile actions">
-          <button type="button" data-menu="profile">Profile</button>
-          <button type="button" data-menu="premium">Premium</button>
+        <nav class="account-menu-links" aria-label="Account actions">
+          <button type="button" data-menu="premium">Discover Premiun</button>
           <button type="button" data-menu="manage">Manage Account</button>
         </nav>
         <div class="account-manage-panel" hidden>
-          <form class="account-delete-form">
-            <label>
-              Confirm password
-              <input type="password" name="password" autocomplete="current-password" minlength="8" required />
-            </label>
-            <button class="account-delete" type="submit">Delete account</button>
-          </form>
+          <section class="account-password-panel" hidden>
+            <h4>Password</h4>
+            <form class="account-form account-password-change-form">
+              <label>Current password <input type="password" name="currentPassword" autocomplete="current-password" minlength="8" required /></label>
+              <label>New password <input type="password" name="newPassword" autocomplete="new-password" minlength="8" required /></label>
+              <label>Retype new password <input type="password" name="confirmPassword" autocomplete="new-password" minlength="8" required /></label>
+              <button type="submit">Update password</button>
+              <button type="button" class="account-inline-link account-manage-forgot">Forgot password?</button>
+            </form>
+          </section>
+          <button type="button" class="account-reset-email-button account-manage-reset-email">Reset password</button>
+          <p class="account-password-provider-note" hidden>
+            Password changes for Google accounts are managed in your Google account settings.
+          </p>
+          <button class="account-delete account-delete-trigger" type="button">Delete account</button>
+          <div class="account-delete-confirm" hidden>
+            <p class="account-delete-warning">Are you sure you want to delete your account? This action cannot be undone.</p>
+            <div class="account-delete-actions">
+              <button class="account-delete-cancel" type="button">Cancel</button>
+              <button class="account-delete account-delete-confirm-btn" type="button">Delete</button>
+            </div>
+          </div>
         </div>
         <button class="account-logout" type="button">Logout</button>
       </section>
@@ -1219,15 +1447,26 @@ const setupAccountHub = () => {
   const userPane = dropdown.querySelector(".account-user-pane");
   const loginForm = dropdown.querySelector(".login-form");
   const signupForm = dropdown.querySelector(".signup-form");
+  const resetForm = dropdown.querySelector(".reset-form");
   const resendVerificationBtn = dropdown.querySelector(".account-resend-button");
   const resendVerificationSignupBtn = dropdown.querySelector(".account-resend-button-signup");
+  const loginForgotPasswordBtn = dropdown.querySelector(".account-login-forgot");
+  const resetBackToLoginBtn = dropdown.querySelector(".account-reset-back-login");
   const logoutBtn = dropdown.querySelector(".account-logout");
-  const deleteForm = dropdown.querySelector(".account-delete-form");
+  const deleteTriggerBtn = dropdown.querySelector(".account-delete-trigger");
+  const deleteConfirmPanel = dropdown.querySelector(".account-delete-confirm");
+  const deleteCancelBtn = dropdown.querySelector(".account-delete-cancel");
+  const deleteConfirmBtn = dropdown.querySelector(".account-delete-confirm-btn");
   const googleButtons = Array.from(dropdown.querySelectorAll(".account-google-button"));
   const menuButtons = Array.from(dropdown.querySelectorAll(".account-menu-links button"));
   const authSwitchButtons = Array.from(dropdown.querySelectorAll(".account-auth-switch button"));
   const authPanelNodes = Array.from(dropdown.querySelectorAll("[data-auth-panel-content]"));
   const managePanel = dropdown.querySelector(".account-manage-panel");
+  const passwordPanel = dropdown.querySelector(".account-password-panel");
+  const passwordProviderNote = dropdown.querySelector(".account-password-provider-note");
+  const passwordChangeForm = dropdown.querySelector(".account-password-change-form");
+  const manageResetEmailBtn = dropdown.querySelector(".account-manage-reset-email");
+  const manageForgotPasswordBtn = dropdown.querySelector(".account-manage-forgot");
   const menuAvatar = dropdown.querySelector(".account-menu-avatar");
   const menuName = dropdown.querySelector(".account-menu-name");
   const menuLevel = dropdown.querySelector(".account-menu-level");
@@ -1236,8 +1475,15 @@ const setupAccountHub = () => {
   const menuStreak = dropdown.querySelector(".account-menu-streak");
   const menuAchievements = dropdown.querySelector(".account-menu-achievements");
   let activeAuthPanel = "login";
+  const triggerNoticeBubble = document.createElement("p");
+  triggerNoticeBubble.className = "account-trigger-bubble";
+  triggerNoticeBubble.hidden = true;
+  triggerNoticeBubble.setAttribute("aria-live", "polite");
+  document.body.appendChild(triggerNoticeBubble);
 
   const formatNumber = (value) => Intl.NumberFormat().format(Math.max(0, Math.round(Number(value) || 0)));
+  const guestAvatarIconMarkup =
+    '<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true"><path d="M12 12.2a4.6 4.6 0 1 0 0-9.2 4.6 4.6 0 0 0 0 9.2zm0 2.2c-4.7 0-8.5 2.8-8.5 6.3 0 .7.5 1.3 1.2 1.3h14.6c.7 0 1.2-.6 1.2-1.3 0-3.5-3.8-6.3-8.5-6.3z"></path></svg>';
   const toAvatarTwoLetters = (value, fallback = "GU") => {
     const chars = Array.from(String(value || "").replace(/\s+/g, "").trim());
     if (!chars.length) {
@@ -1247,6 +1493,15 @@ const setupAccountHub = () => {
   };
   let pendingAuthNoticeMessage = "";
   let pendingAuthNoticeTone = "error";
+  let pendingPasswordResetToken = "";
+  let pendingAuthEmailPrefill = "";
+  let shouldAutoOpenAuthDropdown = false;
+  let currentAuthProvider = "";
+  let currentUserEmail = "";
+  let triggerNoticeTimerId = 0;
+  let passwordProviderNoteAlertTimerId = 0;
+  let authRedirectFeedbackLock = false;
+  let authRedirectFeedbackLockTimerId = 0;
 
   const setFeedback = (message, tone = "") => {
     if (!feedbackNode) {
@@ -1254,6 +1509,91 @@ const setupAccountHub = () => {
     }
     feedbackNode.textContent = String(message || "");
     feedbackNode.dataset.tone = tone;
+  };
+
+  const setAuthRedirectFeedbackLock = (durationMs = 9000) => {
+    authRedirectFeedbackLock = true;
+    if (authRedirectFeedbackLockTimerId) {
+      window.clearTimeout(authRedirectFeedbackLockTimerId);
+      authRedirectFeedbackLockTimerId = 0;
+    }
+    authRedirectFeedbackLockTimerId = window.setTimeout(() => {
+      authRedirectFeedbackLock = false;
+      authRedirectFeedbackLockTimerId = 0;
+    }, Math.max(1200, Number(durationMs) || 9000));
+  };
+
+  const positionTriggerNoticeBubble = () => {
+    if (triggerNoticeBubble.hidden || !trigger) {
+      return;
+    }
+    const triggerRect = trigger.getBoundingClientRect();
+    const navRect = nav.getBoundingClientRect();
+    const bubbleRect = triggerNoticeBubble.getBoundingClientRect();
+    const bubbleWidth = bubbleRect.width || 260;
+    const left = Math.max(8, Math.min(window.innerWidth - bubbleWidth - 8, triggerRect.right - bubbleWidth));
+    const top = Math.max(8, navRect.bottom + 8);
+    triggerNoticeBubble.style.left = `${left}px`;
+    triggerNoticeBubble.style.top = `${top}px`;
+  };
+
+  const hideTriggerNoticeBubble = () => {
+    if (triggerNoticeTimerId) {
+      window.clearTimeout(triggerNoticeTimerId);
+      triggerNoticeTimerId = 0;
+    }
+    triggerNoticeBubble.hidden = true;
+    triggerNoticeBubble.textContent = "";
+    triggerNoticeBubble.removeAttribute("data-tone");
+    triggerNoticeBubble.style.left = "";
+    triggerNoticeBubble.style.top = "";
+  };
+
+  const showTriggerNoticeBubble = (message, tone = "error") => {
+    const text = String(message || "").trim();
+    if (!text) {
+      hideTriggerNoticeBubble();
+      return;
+    }
+    if (triggerNoticeTimerId) {
+      window.clearTimeout(triggerNoticeTimerId);
+      triggerNoticeTimerId = 0;
+    }
+    triggerNoticeBubble.textContent = text;
+    triggerNoticeBubble.dataset.tone = String(tone || "error");
+    triggerNoticeBubble.hidden = false;
+    positionTriggerNoticeBubble();
+    window.requestAnimationFrame(positionTriggerNoticeBubble);
+    triggerNoticeTimerId = window.setTimeout(() => {
+      hideTriggerNoticeBubble();
+    }, 9000);
+  };
+
+  const setDeleteConfirmationVisible = (visible) => {
+    if (deleteTriggerBtn) {
+      deleteTriggerBtn.hidden = visible;
+    }
+    if (!deleteConfirmPanel) {
+      return;
+    }
+    deleteConfirmPanel.hidden = !visible;
+  };
+
+  const flashGooglePasswordNote = () => {
+    if (!(passwordProviderNote instanceof HTMLElement)) {
+      return;
+    }
+    if (passwordProviderNoteAlertTimerId) {
+      window.clearTimeout(passwordProviderNoteAlertTimerId);
+      passwordProviderNoteAlertTimerId = 0;
+    }
+    passwordProviderNote.classList.remove("is-alert");
+    void passwordProviderNote.offsetWidth;
+    passwordProviderNote.classList.add("is-alert");
+    passwordProviderNoteAlertTimerId = window.setTimeout(() => {
+      passwordProviderNote.classList.remove("is-alert");
+      passwordProviderNoteAlertTimerId = 0;
+    }, 1600);
   };
 
   const setInputInvalidState = (input, invalid) => {
@@ -1329,7 +1669,34 @@ const setupAccountHub = () => {
   const consumeAuthErrorFromUrl = () => {
     const params = new URLSearchParams(window.location.search);
     const rawCode = String(params.get("authError") || "").trim().toLowerCase();
+    const rawPasswordResetToken = String(params.get("passwordResetToken") || "").trim();
+    const rawAuthEmail = String(params.get("authEmail") || "").trim().toLowerCase();
+    const rawOpenAuth = String(params.get("openAuth") || "").trim().toLowerCase();
+    const rawAuthPanel = String(params.get("authPanel") || "").trim().toLowerCase();
+    if (rawPasswordResetToken) {
+      pendingPasswordResetToken = rawPasswordResetToken;
+    }
+    if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(rawAuthEmail) && rawAuthEmail.length <= 160) {
+      pendingAuthEmailPrefill = rawAuthEmail;
+    }
+    const forceOpenAuth =
+      rawOpenAuth === "1" || rawOpenAuth === "true" || rawOpenAuth === "yes" || rawOpenAuth === "open";
+    const forcedPanel = rawAuthPanel === "signup" ? "signup" : rawAuthPanel === "reset" ? "reset" : "login";
     if (!rawCode) {
+      if (forceOpenAuth) {
+        shouldAutoOpenAuthDropdown = true;
+        activeAuthPanel = forcedPanel;
+      }
+      if (rawPasswordResetToken || rawAuthEmail || rawOpenAuth || rawAuthPanel) {
+        params.delete("passwordResetToken");
+        params.delete("authEmail");
+        params.delete("openAuth");
+        params.delete("authPanel");
+        const nextQuery = params.toString();
+        const nextUrl =
+          window.location.pathname + (nextQuery ? `?${nextQuery}` : "") + window.location.hash;
+        window.history.replaceState({}, "", nextUrl);
+      }
       return;
     }
     const authErrorTextMap = {
@@ -1354,32 +1721,76 @@ const setupAccountHub = () => {
         panel: "login",
       },
       email_verified: {
-        message: "Email verified. You can now log in.",
+        message: "Account already verified. You can log in now.",
         tone: "success",
         panel: "login",
       },
       email_verify_invalid: {
-        message: "Verification link is invalid. Please sign up again.",
-        tone: "error",
-        panel: "signup",
+        message: "Account already verified or link already used. You can log in now.",
+        tone: "success",
+        panel: "login",
       },
       email_verify_expired: {
-        message: "Verification link expired. Please sign up again.",
+        message: "Verification link expired. Please verify email again.",
+        tone: "warning",
+        panel: "login",
+      },
+      password_reset_ready: {
+        message: "Reset link confirmed. Set your new password.",
+        tone: "success",
+        panel: "reset",
+      },
+      password_reset_invalid: {
+        message: "Reset link is invalid. Request a new password reset email.",
         tone: "error",
-        panel: "signup",
+        panel: "login",
+      },
+      password_reset_expired: {
+        message: "Reset link expired. Request a new password reset email.",
+        tone: "error",
+        panel: "login",
       },
     };
-    const resolvedNotice = authErrorTextMap[rawCode] || {
+    const fallbackNotice = {
       message: "Google authentication failed. Please try again.",
       tone: "error",
       panel: "login",
     };
-    pendingAuthNoticeMessage = String(resolvedNotice.message || "").trim();
-    pendingAuthNoticeTone = String(resolvedNotice.tone || "error").trim() || "error";
+    let resolvedNotice = authErrorTextMap[rawCode] || fallbackNotice;
+    if (rawCode === "password_reset_ready" && !pendingPasswordResetToken) {
+      resolvedNotice = authErrorTextMap.password_reset_invalid || fallbackNotice;
+    }
+    const resolvedMessage = String(resolvedNotice.message || "").trim();
+    const resolvedTone = String(resolvedNotice.tone || "error").trim() || "error";
+    if (rawCode === "google_no_account" || rawCode === "google_account_exists") {
+      pendingAuthNoticeMessage = "";
+      pendingAuthNoticeTone = "error";
+      showTriggerNoticeBubble(resolvedMessage, resolvedTone);
+    } else {
+      pendingAuthNoticeMessage = resolvedMessage;
+      pendingAuthNoticeTone = resolvedTone;
+    }
+    if (
+      rawCode.startsWith("password_reset_") ||
+      rawCode === "email_verified" ||
+      rawCode === "email_verify_invalid" ||
+      rawCode === "email_verify_expired"
+    ) {
+      shouldAutoOpenAuthDropdown = true;
+    }
+    if (forceOpenAuth) {
+      shouldAutoOpenAuthDropdown = true;
+      activeAuthPanel = forcedPanel;
+    }
     if (resolvedNotice.panel) {
-      activeAuthPanel = String(resolvedNotice.panel).trim().toLowerCase() === "signup" ? "signup" : "login";
+      const panelValue = String(resolvedNotice.panel).trim().toLowerCase();
+      activeAuthPanel = panelValue === "signup" ? "signup" : panelValue === "reset" ? "reset" : "login";
     }
     params.delete("authError");
+    params.delete("passwordResetToken");
+    params.delete("authEmail");
+    params.delete("openAuth");
+    params.delete("authPanel");
     const nextQuery = params.toString();
     const nextUrl =
       window.location.pathname + (nextQuery ? `?${nextQuery}` : "") + window.location.hash;
@@ -1389,8 +1800,12 @@ const setupAccountHub = () => {
   consumeAuthErrorFromUrl();
   loginForm?.setAttribute("novalidate", "novalidate");
   signupForm?.setAttribute("novalidate", "novalidate");
+  resetForm?.setAttribute("novalidate", "novalidate");
+  passwordChangeForm?.setAttribute("novalidate", "novalidate");
   bindLiveInputValidation(loginForm);
   bindLiveInputValidation(signupForm);
+  bindLiveInputValidation(resetForm);
+  bindLiveInputValidation(passwordChangeForm);
   signupForm?.querySelectorAll("input").forEach((input) => {
     input.addEventListener("input", () => {
       if (!resendVerificationSignupBtn?.hidden) {
@@ -1400,7 +1815,9 @@ const setupAccountHub = () => {
   });
 
   const setAuthPanel = (panelKey, shouldFocus = false) => {
-    const normalized = String(panelKey || "").trim().toLowerCase() === "signup" ? "signup" : "login";
+    const requested = String(panelKey || "").trim().toLowerCase();
+    const normalized =
+      requested === "signup" ? "signup" : requested === "reset" ? "reset" : "login";
     activeAuthPanel = normalized;
     if (normalized !== "login") {
       setResendButtonVisible(false);
@@ -1417,9 +1834,22 @@ const setupAccountHub = () => {
       const panelKeyValue = String(panel.dataset.authPanelContent || "").trim().toLowerCase();
       panel.hidden = panelKeyValue !== normalized;
     });
+    if (normalized === "login" && pendingAuthEmailPrefill) {
+      const loginEmailInput = loginForm?.querySelector('input[name="email"]');
+      if (loginEmailInput) {
+        loginEmailInput.value = pendingAuthEmailPrefill;
+        setInputInvalidState(loginEmailInput, false);
+      }
+      pendingAuthEmailPrefill = "";
+    }
     if (shouldFocus) {
       const activeField =
-        (normalized === "signup" ? signupForm : loginForm)?.querySelector('input[name="email"]');
+        (normalized === "signup"
+          ? signupForm
+          : normalized === "reset"
+            ? resetForm
+            : loginForm
+        )?.querySelector('input[name="email"], input[name="newPassword"]');
       activeField?.focus?.();
     }
   };
@@ -1430,7 +1860,10 @@ const setupAccountHub = () => {
     }
     const activePanelNode =
       authPanelNodes.find((panel) => !panel.hidden) || loginForm || signupForm;
-    return activePanelNode?.querySelector?.('input[name="email"]') || loginForm?.querySelector('input[name="email"]');
+    return (
+      activePanelNode?.querySelector?.('input[name="email"], input[name="newPassword"]') ||
+      loginForm?.querySelector('input[name="email"]')
+    );
   };
 
   const startGoogleAuth = async (mode = "login") => {
@@ -1487,6 +1920,7 @@ const setupAccountHub = () => {
   const openDropdown = () => {
     dropdown.hidden = false;
     trigger?.setAttribute("aria-expanded", "true");
+    hideTriggerNoticeBubble();
     dropdown.scrollTop = 0;
     const scrollSurface = dropdown.querySelector(".account-dropdown-card");
     if (scrollSurface) {
@@ -1494,6 +1928,7 @@ const setupAccountHub = () => {
     }
     if (pendingAuthNoticeMessage) {
       setFeedback(pendingAuthNoticeMessage, pendingAuthNoticeTone);
+      setAuthRedirectFeedbackLock(10000);
       pendingAuthNoticeMessage = "";
       pendingAuthNoticeTone = "error";
     }
@@ -1506,6 +1941,18 @@ const setupAccountHub = () => {
   const closeDropdown = () => {
     dropdown.hidden = true;
     trigger?.setAttribute("aria-expanded", "false");
+    hideTriggerNoticeBubble();
+    setDeleteConfirmationVisible(false);
+    authRedirectFeedbackLock = false;
+    if (authRedirectFeedbackLockTimerId) {
+      window.clearTimeout(authRedirectFeedbackLockTimerId);
+      authRedirectFeedbackLockTimerId = 0;
+    }
+    if (passwordProviderNoteAlertTimerId) {
+      window.clearTimeout(passwordProviderNoteAlertTimerId);
+      passwordProviderNoteAlertTimerId = 0;
+    }
+    passwordProviderNote?.classList.remove("is-alert");
     if (managePanel) {
       managePanel.hidden = true;
     }
@@ -1519,9 +1966,13 @@ const setupAccountHub = () => {
     const badges = gamification.badges || {};
     const levelMeta = snapshot?.levelMeta || { level: 1, xp: 0, ratio: 0, toNextXp: 0 };
     const displayName = String(snapshot?.user?.displayName || "Guest");
+    currentAuthProvider = String(snapshot?.user?.authProvider || "").trim().toLowerCase();
+    currentUserEmail = String(snapshot?.user?.email || "").trim().toLowerCase();
     const avatarLetters = toAvatarTwoLetters(displayName, isAuthenticated ? "US" : "GU");
     const achievementCount = Object.keys(badges).length;
     const streakDays = Math.max(0, Math.round(Number(gamification.currentStreak) || 0));
+    const showPasswordManagement = Boolean(isAuthenticated && currentAuthProvider !== "google");
+    const showGooglePasswordNote = Boolean(isAuthenticated && currentAuthProvider === "google");
 
     if (triggerMeta) {
       triggerMeta.textContent = isAuthenticated ? `Level ${levelMeta.level}` : "Sign in";
@@ -1534,12 +1985,17 @@ const setupAccountHub = () => {
       triggerLabel.textContent = isAuthenticated ? "Profile" : "Guest";
     }
     if (triggerAvatar) {
-      triggerAvatar.textContent = avatarLetters;
+      if (isAuthenticated) {
+        triggerAvatar.textContent = avatarLetters;
+      } else {
+        triggerAvatar.innerHTML = guestAvatarIconMarkup;
+      }
     }
 
     if (snapshot?.error && loading === false) {
+      authRedirectFeedbackLock = false;
       setFeedback(snapshot.error, "error");
-    } else if (!loading) {
+    } else if (!loading && !authRedirectFeedbackLock) {
       setFeedback("");
     }
 
@@ -1551,6 +2007,21 @@ const setupAccountHub = () => {
     }
     if (managePanel) {
       managePanel.hidden = true;
+      setDeleteConfirmationVisible(false);
+    }
+    if (passwordPanel) {
+      passwordPanel.hidden = !showPasswordManagement;
+    }
+    if (passwordProviderNote) {
+      passwordProviderNote.hidden = !showGooglePasswordNote;
+    }
+    if (manageResetEmailBtn) {
+      manageResetEmailBtn.hidden = !isAuthenticated;
+      manageResetEmailBtn.disabled = !isAuthenticated;
+      manageResetEmailBtn.textContent = "Reset password";
+    }
+    if (isAuthenticated && pendingPasswordResetToken) {
+      pendingPasswordResetToken = "";
     }
 
     if (!isAuthenticated) {
@@ -1606,6 +2077,13 @@ const setupAccountHub = () => {
     }
   });
   document.addEventListener("click", (event) => {
+    if (
+      !triggerNoticeBubble.hidden &&
+      !accountSlot.contains(event.target) &&
+      !triggerNoticeBubble.contains(event.target)
+    ) {
+      hideTriggerNoticeBubble();
+    }
     if (dropdown.hidden) {
       return;
     }
@@ -1614,9 +2092,21 @@ const setupAccountHub = () => {
     }
     closeDropdown();
   });
-  window.addEventListener("resize", positionDropdown, { passive: true });
+  window.addEventListener(
+    "resize",
+    () => {
+      positionDropdown();
+      positionTriggerNoticeBubble();
+    },
+    { passive: true }
+  );
+  window.addEventListener("scroll", positionTriggerNoticeBubble, { passive: true });
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && !dropdown.hidden) {
+    if (event.key !== "Escape") {
+      return;
+    }
+    hideTriggerNoticeBubble();
+    if (!dropdown.hidden) {
       closeDropdown();
     }
   });
@@ -1636,7 +2126,6 @@ const setupAccountHub = () => {
   loginForm?.addEventListener("submit", async (event) => {
     event.preventDefault();
     setAuthPanel("login");
-    setResendButtonVisible(false);
     const emailInput = loginForm.querySelector('input[name="email"]');
     const passwordInput = loginForm.querySelector('input[name="password"]');
     const emailValid = validateRequiredInput(emailInput);
@@ -1652,6 +2141,7 @@ const setupAccountHub = () => {
     setFeedback("Logging in...", "info");
     try {
       await window.cosmicaGamification.logIn({ email, password });
+      pendingPasswordResetToken = "";
       setResendButtonVisible(false);
       setFeedback("Logged in.", "success");
       window.setTimeout(closeDropdown, 420);
@@ -1662,7 +2152,9 @@ const setupAccountHub = () => {
       if (needsVerification) {
         setResendButtonVisible(true);
         setFeedback("Please verify your email first, or resend the verification link below.", "error");
+        return;
       }
+      setFeedback(error?.message || "Could not log in. Please try again.", "error");
     }
   });
 
@@ -1730,6 +2222,140 @@ const setupAccountHub = () => {
     }
   });
 
+  const requestForgotPasswordEmail = async ({ email = "", triggerNode = null } = {}) => {
+    const normalizedEmail = String(email || "").trim();
+    if (!normalizedEmail) {
+      setFeedback("Enter your email first.", "error");
+      return false;
+    }
+    const returnTo = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+    if (triggerNode instanceof HTMLButtonElement) {
+      triggerNode.disabled = true;
+    }
+    setFeedback("Sending reset link...", "info");
+    try {
+      const payload = await window.cosmicaAuth.forgotPassword({
+        email: normalizedEmail,
+        returnTo,
+      });
+      setFeedback(
+        String(
+          payload?.message || "If an email-password account exists for this email, a reset link will been sent."
+        ),
+        "success"
+      );
+      return true;
+    } catch (error) {
+      setFeedback(error?.message || "Could not send password reset email.", "error");
+      return false;
+    } finally {
+      if (triggerNode instanceof HTMLButtonElement) {
+        triggerNode.disabled = false;
+      }
+    }
+  };
+
+  loginForgotPasswordBtn?.addEventListener("click", async () => {
+    setAuthPanel("login");
+    if (!(loginForm instanceof HTMLFormElement)) {
+      return;
+    }
+    const emailInput = loginForm.querySelector('input[name="email"]');
+    if (!validateRequiredInput(emailInput)) {
+      setFeedback("Enter your email first.", "error");
+      emailInput?.focus?.();
+      return;
+    }
+    if (!validateEmailInput(emailInput, { required: true })) {
+      setFeedback("Enter a valid email address.", "error");
+      emailInput?.focus?.();
+      return;
+    }
+    const email = String(emailInput?.value || "").trim();
+    await requestForgotPasswordEmail({
+      email,
+      triggerNode: loginForgotPasswordBtn,
+    });
+  });
+
+  const requestManagePasswordReset = async (triggerNode) => {
+    if (currentAuthProvider === "google") {
+      flashGooglePasswordNote();
+      return;
+    }
+    if (!currentUserEmail) {
+      setFeedback("Could not detect account email for password reset.", "error");
+      return;
+    }
+    await requestForgotPasswordEmail({
+      email: currentUserEmail,
+      triggerNode,
+    });
+  };
+
+  manageForgotPasswordBtn?.addEventListener("click", async () => {
+    await requestManagePasswordReset(manageForgotPasswordBtn);
+  });
+
+  manageResetEmailBtn?.addEventListener("click", async () => {
+    await requestManagePasswordReset(manageResetEmailBtn);
+  });
+
+  resetBackToLoginBtn?.addEventListener("click", () => {
+    setAuthPanel("login", true);
+    setFeedback("");
+  });
+
+  resetForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    setAuthPanel("reset");
+    const newPasswordInput = resetForm.querySelector('input[name="newPassword"]');
+    const confirmPasswordInput = resetForm.querySelector('input[name="confirmPassword"]');
+    const newPasswordPresent = validateRequiredInput(newPasswordInput);
+    const confirmPasswordPresent = validateRequiredInput(confirmPasswordInput);
+    if (!newPasswordPresent || !confirmPasswordPresent) {
+      setFeedback("Enter and confirm your new password.", "error");
+      return;
+    }
+    const newPassword = String(newPasswordInput?.value || "");
+    const confirmPassword = String(confirmPasswordInput?.value || "");
+    if (newPassword.length < 8) {
+      setInputInvalidState(newPasswordInput, true);
+      setFeedback("Password must be at least 8 characters.", "error");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setInputInvalidState(confirmPasswordInput, true);
+      setFeedback("New password and retype password do not match.", "error");
+      return;
+    }
+    if (!pendingPasswordResetToken) {
+      setFeedback("Reset link is missing or expired. Request a new reset email.", "error");
+      return;
+    }
+    setFeedback("Resetting password...", "info");
+    try {
+      const payload = await window.cosmicaAuth.resetPassword({
+        token: pendingPasswordResetToken,
+        newPassword,
+        confirmPassword,
+      });
+      pendingPasswordResetToken = "";
+      resetForm.reset();
+      setInputInvalidState(newPasswordInput, false);
+      setInputInvalidState(confirmPasswordInput, false);
+      const loginEmailInput = loginForm?.querySelector('input[name="email"]');
+      if (loginEmailInput && payload?.email) {
+        loginEmailInput.value = String(payload.email || "").trim();
+        setInputInvalidState(loginEmailInput, false);
+      }
+      setAuthPanel("login", true);
+      setFeedback(String(payload?.message || "Password reset complete. You can log in now."), "success");
+    } catch (error) {
+      setFeedback(error?.message || "Could not reset password.", "error");
+    }
+  });
+
   signupForm?.addEventListener("submit", async (event) => {
     event.preventDefault();
     setAuthPanel("signup");
@@ -1762,18 +2388,28 @@ const setupAccountHub = () => {
     setFeedback("Creating account...", "info");
     try {
       const payload = await window.cosmicaGamification.signUp({ email, password, displayName });
+      const loginEmailInput = loginForm?.querySelector('input[name="email"]');
+      const loginPasswordInput = loginForm?.querySelector('input[name="password"]');
+      if (loginEmailInput) {
+        loginEmailInput.value = email;
+        setInputInvalidState(loginEmailInput, false);
+      }
+      if (loginPasswordInput) {
+        loginPasswordInput.value = "";
+        setInputInvalidState(loginPasswordInput, false);
+      }
+      signupForm.reset();
+      setSignupResendButtonVisible(false);
+      setAuthPanel("login", true);
       if (payload?.verificationRequired) {
         setFeedback(
           String(payload?.message || "Account created. Check your email and verify before logging in."),
           "success"
         );
-        setSignupResendButtonVisible(true);
+        setResendButtonVisible(true);
         return;
       }
-      signupForm.reset();
-      setSignupResendButtonVisible(false);
       setFeedback("Account created.", "success");
-      window.setTimeout(closeDropdown, 420);
     } catch (error) {
       const canShowSignupResend =
         Boolean(error?.payload?.verificationRequired) && Boolean(error?.payload?.resendEligible);
@@ -1799,15 +2435,15 @@ const setupAccountHub = () => {
       if (action === "manage") {
         if (managePanel) {
           managePanel.hidden = !managePanel.hidden;
+          if (managePanel.hidden) {
+            setDeleteConfirmationVisible(false);
+          }
         }
         return;
       }
       if (managePanel) {
         managePanel.hidden = true;
-      }
-      if (action === "profile") {
-        setFeedback("Profile panel is active.", "info");
-        return;
+        setDeleteConfirmationVisible(false);
       }
       if (action === "premium") {
         closeDropdown();
@@ -1815,6 +2451,52 @@ const setupAccountHub = () => {
         return;
       }
     });
+  });
+
+  passwordChangeForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (currentAuthProvider === "google") {
+      setFeedback("Google accounts must use Google sign-in and do not change password here.", "error");
+      return;
+    }
+    const currentPasswordInput = passwordChangeForm.querySelector('input[name="currentPassword"]');
+    const newPasswordInput = passwordChangeForm.querySelector('input[name="newPassword"]');
+    const confirmPasswordInput = passwordChangeForm.querySelector('input[name="confirmPassword"]');
+    const hasCurrentPassword = validateRequiredInput(currentPasswordInput);
+    const hasNewPassword = validateRequiredInput(newPasswordInput);
+    const hasConfirmPassword = validateRequiredInput(confirmPasswordInput);
+    if (!hasCurrentPassword || !hasNewPassword || !hasConfirmPassword) {
+      setFeedback("Fill current password, new password, and confirm password.", "error");
+      return;
+    }
+    const currentPassword = String(currentPasswordInput?.value || "");
+    const newPassword = String(newPasswordInput?.value || "");
+    const confirmPassword = String(confirmPasswordInput?.value || "");
+    if (newPassword.length < 8) {
+      setInputInvalidState(newPasswordInput, true);
+      setFeedback("New password must be at least 8 characters.", "error");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setInputInvalidState(confirmPasswordInput, true);
+      setFeedback("New password and retype password do not match.", "error");
+      return;
+    }
+    setFeedback("Updating password...", "info");
+    try {
+      const payload = await window.cosmicaAuth.changePassword({
+        currentPassword,
+        newPassword,
+        confirmPassword,
+      });
+      passwordChangeForm.reset();
+      setInputInvalidState(currentPasswordInput, false);
+      setInputInvalidState(newPasswordInput, false);
+      setInputInvalidState(confirmPasswordInput, false);
+      setFeedback(String(payload?.message || "Password updated."), "success");
+    } catch (error) {
+      setFeedback(error?.message || "Could not update password.", "error");
+    }
   });
 
   logoutBtn?.addEventListener("click", async () => {
@@ -1826,18 +2508,21 @@ const setupAccountHub = () => {
     } catch {}
   });
 
-  deleteForm?.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const formData = new FormData(deleteForm);
-    const password = String(formData.get("password") || "");
-    if (!password) {
-      setFeedback("Enter your password to delete this account.", "error");
-      return;
-    }
+  deleteTriggerBtn?.addEventListener("click", () => {
+    setDeleteConfirmationVisible(true);
+    setFeedback("");
+  });
+
+  deleteCancelBtn?.addEventListener("click", () => {
+    setDeleteConfirmationVisible(false);
+    setFeedback("Account deletion canceled.", "info");
+  });
+
+  deleteConfirmBtn?.addEventListener("click", async () => {
     setFeedback("Deleting account...", "info");
     try {
-      await window.cosmicaGamification.deleteAccount({ password });
-      deleteForm.reset();
+      await window.cosmicaGamification.deleteAccount();
+      setDeleteConfirmationVisible(false);
       if (managePanel) {
         managePanel.hidden = true;
       }
@@ -1848,9 +2533,12 @@ const setupAccountHub = () => {
     } catch {}
   });
 
-  setAuthPanel("login");
+  setAuthPanel(activeAuthPanel || "login");
   window.cosmicaGamification.subscribe(renderFromState);
   void window.cosmicaGamification.init();
+  if (shouldAutoOpenAuthDropdown) {
+    openDropdown();
+  }
 };
 
 /* ==========================================================================
@@ -4870,6 +5558,7 @@ const scrollToAnchor = (hash) => {
     "#guide",
     "#join",
     "#support",
+    "#policies",
   ]);
   const baseUrl = `${window.location.pathname}${window.location.search}`;
 const navEntry = performance.getEntriesByType("navigation")[0];
@@ -5605,6 +6294,7 @@ if (languagePills.length) {
   const storedLanguage = storedLanguageRaw === WORLD_KEY ? "" : storedLanguageRaw;
   if (storedLanguageRaw === WORLD_KEY) {
     localStorage.removeItem("cosmicaBaseLanguage");
+    applyWorldMapBilingualTitles();
   }
   if (storedLanguage) {
     availableLanguagePills.forEach((pill) => {
@@ -5661,6 +6351,7 @@ if (languagePills.length) {
       document.body.classList.remove("show-language");
     }
     refreshMapsForBaseLanguage();
+    applyWorldMapBilingualTitles();
     updateMapsTitleVisibility();
     if (mapsSection) {
       const targetTop = mapsSection.getBoundingClientRect().top + window.scrollY;
@@ -7029,7 +7720,7 @@ const setupHomeAltInteractivity = () => {
     return;
   }
 
-  const sectionHashes = ["#home", "#how", "#worlds", "#guide", "#join", "#support"];
+  const sectionHashes = ["#home", "#how", "#worlds", "#guide", "#join", "#support", "#policies"];
   const trackedSections = sectionHashes
     .map((hash) => ({ hash, section: document.querySelector(hash) }))
     .filter((entry) => entry.section);
@@ -7137,6 +7828,59 @@ const setupBackToTopButton = () => {
   return button;
 };
 
+const COOKIE_NOTICE_DISMISSED_KEY = "cosmicaEssentialCookieNoticeDismissed";
+
+const setupEssentialCookieNotice = () => {
+  if (!document.body || document.body.dataset.cookieNoticeBound === "1") {
+    return;
+  }
+  document.body.dataset.cookieNoticeBound = "1";
+  if (document.getElementById("cookieNotice")) {
+    return;
+  }
+  let dismissed = false;
+  try {
+    dismissed = localStorage.getItem(COOKIE_NOTICE_DISMISSED_KEY) === "1";
+  } catch {}
+  if (dismissed) {
+    return;
+  }
+
+  const notice = document.createElement("aside");
+  notice.id = "cookieNotice";
+  notice.className = "cookie-notice";
+  notice.setAttribute("role", "region");
+  notice.setAttribute("aria-label", "Cookie notice");
+  notice.innerHTML = `
+    <p>
+      <strong>Essential cookies only.</strong>
+      We use secure cookies to keep you signed in and protect your account.
+      No ads or tracking cookies are used.
+      <a href="/privacy.html">Privacy Policy</a>
+    </p>
+    <button type="button" class="cookie-notice-dismiss" aria-label="Dismiss cookie notice">OK</button>
+  `;
+
+  const dismissButton = notice.querySelector(".cookie-notice-dismiss");
+  const dismissNotice = () => {
+    try {
+      localStorage.setItem(COOKIE_NOTICE_DISMISSED_KEY, "1");
+    } catch {}
+    notice.classList.remove("is-visible");
+    window.setTimeout(() => {
+      if (notice.parentElement) {
+        notice.remove();
+      }
+    }, 200);
+  };
+
+  dismissButton?.addEventListener("click", dismissNotice);
+  document.body.appendChild(notice);
+  window.requestAnimationFrame(() => {
+    notice.classList.add("is-visible");
+  });
+};
+
 const loadMapsBundle = () =>
   new Promise((resolve, reject) => {
     const existing = document.querySelector('script[data-cosmica-bundle="maps"]');
@@ -7185,6 +7929,7 @@ const initializeCommonShell = () => {
   setupLetterRomanization();
   setupSpeechCards();
   setupBackToTopButton();
+  setupEssentialCookieNotice();
 };
 
 /* ==========================================================================

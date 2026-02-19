@@ -31,7 +31,7 @@
       name="twitter:description"
       content="Explore language worlds with structured maps and AI guidance in a free, immersive learning experience."
     />
-    <link rel="stylesheet" href="style.css?v=20260311" />
+    <link rel="stylesheet" href="style.css?v=20260325" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -81,13 +81,22 @@
       <nav class="nav-links" aria-label="Primary navigation">
         <a href="#how">How it works</a> <a href="#worlds">Worlds</a>
         <a href="#guide">Alien guide</a> <a href="#join">Feedback</a>
-        <a href="#support">Support us</a>
+        <a href="#support">Support us</a> <a href="#policies">Policies</a>
       </nav>
       <div class="nav-controls">
         <button class="sound-toggle" id="soundToggle" type="button">
           <span class="dot" aria-hidden="true"></span> <span class="sound-label">Sound: On</span>
         </button>
-        <a class="header-privacy-link" href="/privacy.html">Privacy</a>
+        <div class="account-slot account-slot-preload" aria-hidden="true">
+          <button class="account-trigger" type="button" tabindex="-1">
+            <span class="account-trigger-avatar" aria-hidden="true">G</span>
+            <span class="account-trigger-copy">
+              <span class="account-trigger-label">Guest</span>
+              <span class="account-trigger-meta">Sign in</span>
+            </span>
+            <span class="account-trigger-caret" aria-hidden="true">?</span>
+          </button>
+        </div>
       </div>
     </header>
     <!-- Page-specific main content -->
@@ -455,7 +464,7 @@
       </section>
     </main>
     <!-- Shared footer -->
-    <footer class="footer">
+    <footer class="footer" id="policies">
       <span>Cosmica Academy</span>
       <span class="footer-inline-links">
         <span class="footer-right-text">Built for explorers of every language.</span>
@@ -497,6 +506,6 @@
       </div>
     </div>
     <!-- Shared client bundle -->
-    <script src="app.js?v=20260311"></script>
+    <script src="app.js?v=20260325"></script>
   </body>
 </html>

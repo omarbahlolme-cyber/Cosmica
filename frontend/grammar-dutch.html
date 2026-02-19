@@ -29,7 +29,7 @@
       name="twitter:description"
       content="Learn Dutch grammar with structured cards, examples, and clear explanations."
     />
-    <link rel="stylesheet" href="style.css?v=20260311" />
+    <link rel="stylesheet" href="style.css?v=20260325" />
     <link rel="stylesheet" href="maps/style-maps.css?v=20260310" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -71,9 +71,21 @@
       <nav class="nav-links" aria-label="Primary navigation">
         <a href="world-dutch.html#maps">Return to Dutch World</a>
       </nav>
-      <button class="sound-toggle" id="soundToggle" type="button">
-        <span class="dot" aria-hidden="true"></span> <span class="sound-label">Sound: On</span>
-      </button>
+      <div class="nav-controls">
+        <button class="sound-toggle" id="soundToggle" type="button">
+          <span class="dot" aria-hidden="true"></span> <span class="sound-label">Sound: On</span>
+        </button>
+        <div class="account-slot account-slot-preload" aria-hidden="true">
+          <button class="account-trigger" type="button" tabindex="-1">
+            <span class="account-trigger-avatar" aria-hidden="true">G</span>
+            <span class="account-trigger-copy">
+              <span class="account-trigger-label">Guest</span>
+              <span class="account-trigger-meta">Sign in</span>
+            </span>
+            <span class="account-trigger-caret" aria-hidden="true">?</span>
+          </button>
+        </div>
+      </div>
     </header>
     <!-- Page-specific main content -->
     <main>
@@ -95,6 +107,6 @@
       </span>
     </footer>
     <!-- Shared client bundle -->
-    <script src="app.js?v=20260311"></script>
+    <script src="app.js?v=20260325"></script>
   </body>
 </html>

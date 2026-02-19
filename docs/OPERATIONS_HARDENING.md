@@ -103,6 +103,21 @@ The workflow `.github/workflows/backup-restore-drill.yml` runs monthly and:
    - `ROLLBACK_RUNBOOK.md`
 3. Always rollback via PR (do not force-push/rewrite `main` history).
 
+### 3.6 Auth data backups (runtime user store)
+
+Source backups above protect repository history, but real user accounts live in `backend/data/`.
+
+1. Create auth-data snapshot:
+   - `npm run auth-backup:create`
+2. Verify snapshot integrity:
+   - `npm run auth-backup:verify`
+3. Test restore workflow safely (no file changes):
+   - `npm run auth-backup:restore -- --yes --dry-run`
+4. Real restore (writes `backend/data/`):
+   - `npm run auth-backup:restore -- --yes`
+5. Optional offsite auth snapshot mirror:
+   - set `AUTH_DATA_BACKUP_OFFSITE_DIR` to a mounted/synced path before running create.
+
 ## 4) Ongoing Security Monitoring
 
 1. `Live Security Check` workflow validates:
@@ -115,6 +130,19 @@ The workflow `.github/workflows/backup-restore-drill.yml` runs monthly and:
 4. `Indexing Follow-up` workflow checks robots/sitemap/canonical/JSON-LD and raises SEO incident issues.
 5. Optional real-user performance forwarding:
    - Configure `RUM_WEBHOOK_URL` to receive sampled `/api/web-vitals` metrics (LCP, INP, CLS, FCP, TTFB).
+6. Optional auth alert forwarding:
+   - Configure `AUTH_ALERT_WEBHOOK_URL` (or fallback `ERROR_WEBHOOK_URL`) for:
+     - login failure spikes
+     - verification email delivery failures
+     - startup auth config audit warnings/errors
+
+### 4.1 Auth readiness checks
+
+Run before production deploys:
+
+1. `npm run auth:check:readiness`
+2. Fix all `FAIL` items before go-live.
+3. Review `WARN` items and explicitly accept or remediate.
 
 ## 5) Policy Enforcement Process
 

@@ -92,6 +92,29 @@ npm run backup:verify
 
 Note: backup snapshots are created from committed `HEAD` content (tracked files). Local scratch files in `tmp/` are intentionally excluded.
 
+Create a runtime auth-data backup (`backend/data/*.json`) with checksum verification:
+
+```bash
+npm run auth-backup:create
+npm run auth-backup:verify
+```
+
+Restore auth data from latest snapshot:
+
+```bash
+npm run auth-backup:restore -- --yes
+```
+
+Dry-run restore validation (no files changed):
+
+```bash
+npm run auth-backup:restore -- --yes --dry-run
+```
+
+Optional offsite mirror for auth-data snapshots:
+1. Set `AUTH_DATA_BACKUP_OFFSITE_DIR` to a mounted/synced path.
+2. Run `npm run auth-backup:create`.
+
 ## Rollback routine
 
 Preview latest release tags and safe rollback commands:
@@ -124,7 +147,14 @@ This verifies `robots.txt`, `sitemap.xml`, canonical tags, and JSON-LD on key pa
 - Manual GitHub protection automation is available via `.github/workflows/github-hardening.yml`.
 - Dependabot dependency update PRs are enabled via `.github/dependabot.yml`.
 - Optional server error webhook alerts can be enabled with `ERROR_WEBHOOK_URL`.
+- Optional auth-specific alert webhook can be enabled with `AUTH_ALERT_WEBHOOK_URL`.
 - Optional real-user performance webhook forwarding can be enabled with `RUM_WEBHOOK_URL`.
+
+Auth runtime readiness check:
+
+```bash
+npm run auth:check:readiness
+```
 
 ## Security hardening
 

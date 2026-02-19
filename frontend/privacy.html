@@ -27,7 +27,7 @@
       name="twitter:description"
       content="Learn how Cosmica collects, processes, and protects personal information."
     />
-    <link rel="stylesheet" href="style.css?v=20260311" />
+    <link rel="stylesheet" href="style.css?v=20260325" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -64,9 +64,21 @@
         </div>
       </div>
       <nav class="nav-links" aria-label="Primary navigation"><a href="index.html">Home</a></nav>
-      <button class="sound-toggle" id="soundToggle" type="button">
-        <span class="dot" aria-hidden="true"></span> <span class="sound-label">Sound: On</span>
-      </button>
+      <div class="nav-controls">
+        <button class="sound-toggle" id="soundToggle" type="button">
+          <span class="dot" aria-hidden="true"></span> <span class="sound-label">Sound: On</span>
+        </button>
+        <div class="account-slot account-slot-preload" aria-hidden="true">
+          <button class="account-trigger" type="button" tabindex="-1">
+            <span class="account-trigger-avatar" aria-hidden="true">G</span>
+            <span class="account-trigger-copy">
+              <span class="account-trigger-label">Guest</span>
+              <span class="account-trigger-meta">Sign in</span>
+            </span>
+            <span class="account-trigger-caret" aria-hidden="true">?</span>
+          </button>
+        </div>
+      </div>
     </header>
     <main>
       <section class="legal-card">
@@ -129,6 +141,6 @@
         </span>
       </span>
     </footer>
-    <script src="app.js?v=20260311"></script>
+    <script src="app.js?v=20260325"></script>
   </body>
 </html>

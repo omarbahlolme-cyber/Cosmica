@@ -436,11 +436,27 @@ const createClient = (apiKey) => new OpenAI({ apiKey });
 const getChatClient = () => createClient(process.env.OPENAI_CHAT_KEY || process.env.OPENAI_API_KEY);
 const ERROR_WEBHOOK_URL = process.env.ERROR_WEBHOOK_URL || "";
 const RUM_WEBHOOK_URL = process.env.RUM_WEBHOOK_URL || "";
+const AUTH_ALERT_WEBHOOK_URL = String(process.env.AUTH_ALERT_WEBHOOK_URL || ERROR_WEBHOOK_URL || "").trim();
+const AUTH_LOGIN_SPIKE_WINDOW_MS = Math.max(
+  60 * 1000,
+  Number(process.env.AUTH_LOGIN_SPIKE_WINDOW_MS || 5 * 60 * 1000)
+);
+const AUTH_LOGIN_SPIKE_THRESHOLD = Math.max(5, Number(process.env.AUTH_LOGIN_SPIKE_THRESHOLD || 20));
+const AUTH_LOGIN_SPIKE_COOLDOWN_MS = Math.max(
+  60 * 1000,
+  Number(process.env.AUTH_LOGIN_SPIKE_COOLDOWN_MS || 15 * 60 * 1000)
+);
+const AUTH_EMAIL_FAILURE_ALERT_COOLDOWN_MS = Math.max(
+  60 * 1000,
+  Number(process.env.AUTH_EMAIL_FAILURE_ALERT_COOLDOWN_MS || 20 * 60 * 1000)
+);
 const isTruthyEnvValue = (value) =>
   ["1", "true", "yes", "on"].includes(String(value || "").trim().toLowerCase());
 const GOOGLE_TTS_ENABLED = isTruthyEnvValue(process.env.GOOGLE_TTS_ENABLED);
 const GOOGLE_TTS_DEFAULT_LANGUAGE = process.env.GOOGLE_TTS_LANGUAGE_CODE || "en-GB";
 const GOOGLE_TTS_DEFAULT_VOICE = process.env.GOOGLE_TTS_VOICE || "en-GB-Neural2-F";
+const authLoginFailureSpikeTracker = new Map();
+const authAlertLastSentByKey = new Map();
 
 const getGoogleTtsClient = (() => {
   let cachedClient = null;
@@ -509,6 +525,132 @@ const postRumWebhook = async (payload) => {
   } catch (error) {
     console.error("RUM webhook failed:", error.message || error);
   }
+};
+
+const postAuthAlertWebhook = async (payload) => {
+  if (!AUTH_ALERT_WEBHOOK_URL) {
+    return;
+  }
+  try {
+    await fetch(AUTH_ALERT_WEBHOOK_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+  } catch (error) {
+    console.error("Auth alert webhook failed:", error.message || error);
+  }
+};
+
+const hashForAlert = (value) =>
+  crypto.createHash("sha256").update(String(value || ""), "utf8").digest("hex").slice(0, 20);
+
+const pruneAuthAlertCaches = (nowMs = Date.now()) => {
+  const staleTrackerMs = Math.max(AUTH_LOGIN_SPIKE_WINDOW_MS * 3, AUTH_LOGIN_SPIKE_COOLDOWN_MS * 2);
+  for (const [key, state] of authLoginFailureSpikeTracker.entries()) {
+    if (!state || typeof state !== "object") {
+      authLoginFailureSpikeTracker.delete(key);
+      continue;
+    }
+    const windowStartedAtMs = Number(state.windowStartedAtMs || 0);
+    const lastAlertAtMs = Number(state.lastAlertAtMs || 0);
+    const staleByWindow = windowStartedAtMs > 0 && nowMs - windowStartedAtMs > staleTrackerMs;
+    const staleByAlert = lastAlertAtMs > 0 && nowMs - lastAlertAtMs > staleTrackerMs;
+    if (staleByWindow && staleByAlert) {
+      authLoginFailureSpikeTracker.delete(key);
+    }
+  }
+  const staleAlertMs = Math.max(AUTH_EMAIL_FAILURE_ALERT_COOLDOWN_MS * 4, AUTH_LOGIN_SPIKE_COOLDOWN_MS * 3);
+  for (const [key, lastSentAtMs] of authAlertLastSentByKey.entries()) {
+    if (!Number.isFinite(lastSentAtMs) || nowMs - lastSentAtMs > staleAlertMs) {
+      authAlertLastSentByKey.delete(key);
+    }
+  }
+};
+
+const maybeAlertAuthLoginFailureSpike = ({ req = null, email = "", userId = "", reason = "" } = {}) => {
+  if (!AUTH_ALERT_WEBHOOK_URL || AUTH_LOGIN_SPIKE_THRESHOLD <= 0) {
+    return;
+  }
+  const nowMs = Date.now();
+  const ipHash = getRequestIpHash(req) || "unknown";
+  const trackerKey = `login-spike:${ipHash}`;
+  const existingState = authLoginFailureSpikeTracker.get(trackerKey) || {
+    windowStartedAtMs: nowMs,
+    count: 0,
+    lastAlertAtMs: 0,
+  };
+  if (!Number.isFinite(existingState.windowStartedAtMs) || nowMs - existingState.windowStartedAtMs > AUTH_LOGIN_SPIKE_WINDOW_MS) {
+    existingState.windowStartedAtMs = nowMs;
+    existingState.count = 0;
+  }
+  existingState.count += 1;
+  authLoginFailureSpikeTracker.set(trackerKey, existingState);
+  if (existingState.count < AUTH_LOGIN_SPIKE_THRESHOLD) {
+    pruneAuthAlertCaches(nowMs);
+    return;
+  }
+  if (nowMs - Number(existingState.lastAlertAtMs || 0) < AUTH_LOGIN_SPIKE_COOLDOWN_MS) {
+    pruneAuthAlertCaches(nowMs);
+    return;
+  }
+  existingState.lastAlertAtMs = nowMs;
+  authLoginFailureSpikeTracker.set(trackerKey, existingState);
+  const normalizedEmail = normalizeEmail(email);
+  void postAuthAlertWebhook({
+    type: "auth_login_failure_spike",
+    severity: "warning",
+    timestamp: new Date(nowMs).toISOString(),
+    threshold: AUTH_LOGIN_SPIKE_THRESHOLD,
+    observedCount: existingState.count,
+    windowMs: AUTH_LOGIN_SPIKE_WINDOW_MS,
+    cooldownMs: AUTH_LOGIN_SPIKE_COOLDOWN_MS,
+    ipHash,
+    emailHash: normalizedEmail ? hashForAlert(`email:${normalizedEmail}`) : "",
+    userIdHash: userId ? hashForAlert(`user:${String(userId).trim()}`) : "",
+    reason: String(reason || "").slice(0, 160),
+    requestId: String(req?.requestId || ""),
+    endpoint: String(req?.originalUrl || "").slice(0, 240),
+    method: String(req?.method || "").slice(0, 16),
+  });
+  pruneAuthAlertCaches(nowMs);
+};
+
+const maybeAlertVerificationEmailDeliveryFailure = ({
+  req = null,
+  email = "",
+  phase = "signup",
+  deliveryError = "",
+} = {}) => {
+  if (!AUTH_ALERT_WEBHOOK_URL) {
+    return;
+  }
+  const nowMs = Date.now();
+  const normalizedPhase = String(phase || "signup").trim().toLowerCase() || "signup";
+  const errorSignature = hashForAlert(`${normalizedPhase}:${String(deliveryError || "").trim().toLowerCase()}`);
+  const alertKey = `verify-email:${errorSignature}`;
+  const lastSentAtMs = Number(authAlertLastSentByKey.get(alertKey) || 0);
+  if (lastSentAtMs && nowMs - lastSentAtMs < AUTH_EMAIL_FAILURE_ALERT_COOLDOWN_MS) {
+    pruneAuthAlertCaches(nowMs);
+    return;
+  }
+  authAlertLastSentByKey.set(alertKey, nowMs);
+  const normalizedEmail = normalizeEmail(email);
+  void postAuthAlertWebhook({
+    type: "auth_verification_email_delivery_failed",
+    severity: "error",
+    timestamp: new Date(nowMs).toISOString(),
+    phase: normalizedPhase,
+    cooldownMs: AUTH_EMAIL_FAILURE_ALERT_COOLDOWN_MS,
+    emailHash: normalizedEmail ? hashForAlert(`email:${normalizedEmail}`) : "",
+    errorMessage: String(deliveryError || "").slice(0, 260),
+    requestId: String(req?.requestId || ""),
+    endpoint: String(req?.originalUrl || "").slice(0, 240),
+    method: String(req?.method || "").slice(0, 16),
+  });
+  pruneAuthAlertCaches(nowMs);
 };
 
 const reportServerError = (scope, error, context = {}) => {
@@ -588,6 +730,64 @@ const hasSmtpDeliveryConfig = () =>
 
 const hasAnyEmailDeliveryConfig = () =>
   Boolean(String(process.env.RESEND_API_KEY || "").trim()) || hasSmtpDeliveryConfig();
+
+const runAuthRuntimeConfigAudit = () => {
+  const issues = [];
+  const warnings = [];
+  const publicOrigin = String(process.env.PUBLIC_APP_ORIGIN || "").trim();
+  const senderAddress = String(
+    process.env.AUTH_FROM || process.env.FEEDBACK_FROM || process.env.SMTP_USER || ""
+  ).trim();
+
+  if (!ADMIN_SECURITY_TOKEN) {
+    issues.push("Missing ADMIN_SECURITY_TOKEN/ADMIN_API_TOKEN (admin security APIs cannot be protected).");
+  }
+  if (!hasAnyEmailDeliveryConfig()) {
+    warnings.push("No email delivery provider configured (email verification sign-up path will be disabled).");
+  }
+  if (!senderAddress) {
+    warnings.push("Missing AUTH_FROM (or FEEDBACK_FROM/SMTP_USER fallback) for verification emails.");
+  }
+  if (isProduction) {
+    if (!publicOrigin) {
+      warnings.push("Missing PUBLIC_APP_ORIGIN in production; verification links will depend on request host.");
+    } else {
+      try {
+        const parsed = new URL(publicOrigin);
+        if (parsed.protocol !== "https:") {
+          issues.push("PUBLIC_APP_ORIGIN must use https:// in production.");
+        }
+      } catch {
+        issues.push("PUBLIC_APP_ORIGIN is not a valid URL.");
+      }
+    }
+    if (!AUTH_ALERT_WEBHOOK_URL) {
+      warnings.push("AUTH_ALERT_WEBHOOK_URL/ERROR_WEBHOOK_URL not set; auth security alerts will not be forwarded.");
+    }
+  }
+
+  if (!issues.length && !warnings.length) {
+    return;
+  }
+
+  if (issues.length) {
+    console.error("[auth-config] Startup issues detected:");
+    issues.forEach((issue) => console.error(`- ${issue}`));
+  }
+  if (warnings.length) {
+    console.warn("[auth-config] Startup warnings:");
+    warnings.forEach((warning) => console.warn(`- ${warning}`));
+  }
+
+  void postAuthAlertWebhook({
+    type: "auth_runtime_config_audit",
+    severity: issues.length ? "error" : "warning",
+    timestamp: new Date().toISOString(),
+    issues,
+    warnings,
+    environment: process.env.NODE_ENV || "development",
+  });
+};
 
 const sendTransactionalEmail = async ({ to, subject, text, replyTo = "" }) => {
   const recipient = String(to || "").trim();
@@ -670,6 +870,10 @@ const GOOGLE_OAUTH_FLOW_COOKIE_TTL_MS = 1000 * 60 * 12;
 const EMAIL_VERIFICATION_TOKEN_TTL_MS = Math.max(
   5 * 60 * 1000,
   Number(process.env.EMAIL_VERIFICATION_TTL_MS || 1000 * 60 * 60 * 24)
+);
+const PASSWORD_RESET_TOKEN_TTL_MS = Math.max(
+  5 * 60 * 1000,
+  Number(process.env.PASSWORD_RESET_TTL_MS || 1000 * 60 * 60 * 2)
 );
 const googleOauthStateStore = new Map();
 
@@ -828,6 +1032,22 @@ const createEmptyEmailVerificationState = () => ({
 
 const normalizeEmailVerificationState = (value) => {
   const fallback = createEmptyEmailVerificationState();
+  const candidate = isPlainObject(value) ? value : {};
+  fallback.tokenHash = String(candidate.tokenHash || "").trim();
+  fallback.expiresAt =
+    typeof candidate.expiresAt === "string" && candidate.expiresAt ? candidate.expiresAt : null;
+  fallback.sentAt = typeof candidate.sentAt === "string" && candidate.sentAt ? candidate.sentAt : null;
+  return fallback;
+};
+
+const createEmptyPasswordResetState = () => ({
+  tokenHash: "",
+  expiresAt: null,
+  sentAt: null,
+});
+
+const normalizePasswordResetState = (value) => {
+  const fallback = createEmptyPasswordResetState();
   const candidate = isPlainObject(value) ? value : {};
   fallback.tokenHash = String(candidate.tokenHash || "").trim();
   fallback.expiresAt =
@@ -1025,11 +1245,27 @@ const normalizeUserRecord = (candidate, fallbackUserId) => {
   }
   const normalizedData = normalizeUserData(candidate.data);
   const authProvider = String(normalizedData?.profile?.authProvider || "").trim().toLowerCase();
-  const explicitEmailVerified =
-    typeof candidate.emailVerified === "boolean" ? candidate.emailVerified : null;
-  const emailVerified =
-    explicitEmailVerified !== null ? explicitEmailVerified : authProvider === "google" || authProvider === "";
+  const rawEmailVerified = candidate.emailVerified;
+  let explicitEmailVerified = null;
+  if (typeof rawEmailVerified === "boolean") {
+    explicitEmailVerified = rawEmailVerified;
+  } else if (typeof rawEmailVerified === "string") {
+    const normalizedEmailVerified = rawEmailVerified.trim().toLowerCase();
+    if (normalizedEmailVerified === "true" || normalizedEmailVerified === "1") {
+      explicitEmailVerified = true;
+    } else if (normalizedEmailVerified === "false" || normalizedEmailVerified === "0") {
+      explicitEmailVerified = false;
+    }
+  } else if (typeof rawEmailVerified === "number" && Number.isFinite(rawEmailVerified)) {
+    if (rawEmailVerified === 1) {
+      explicitEmailVerified = true;
+    } else if (rawEmailVerified === 0) {
+      explicitEmailVerified = false;
+    }
+  }
+  const emailVerified = explicitEmailVerified !== null ? explicitEmailVerified : authProvider === "google";
   const normalizedEmailVerification = normalizeEmailVerificationState(candidate.emailVerification);
+  const normalizedPasswordReset = normalizePasswordResetState(candidate.passwordReset);
   return {
     id,
     email,
@@ -1045,7 +1281,8 @@ const normalizeUserRecord = (candidate, fallbackUserId) => {
     updatedAt: String(candidate.updatedAt || new Date().toISOString()),
     lastLoginAt: candidate.lastLoginAt ? String(candidate.lastLoginAt) : null,
     emailVerified: Boolean(emailVerified),
-    emailVerification: emailVerified ? createEmptyEmailVerificationState() : normalizedEmailVerification,
+    emailVerification: normalizedEmailVerification,
+    passwordReset: authProvider === "google" ? createEmptyPasswordResetState() : normalizedPasswordReset,
     data: normalizedData,
     progress: normalizeProgress(candidate.progress),
   };
@@ -1508,6 +1745,7 @@ const markSecurityEventsStoreDirty = () => {
 const hashText = (value) => crypto.createHash("sha256").update(String(value || "")).digest("hex");
 const hashSessionToken = (token) => hashText(token);
 const hashEmailVerificationToken = (token) => hashText(`email-verify:${String(token || "")}`);
+const hashPasswordResetToken = (token) => hashText(`password-reset:${String(token || "")}`);
 
 const getRequestIpAddress = (req) => {
   const forwardedFor = String(req.get("x-forwarded-for") || "")
@@ -1660,6 +1898,16 @@ const createEmailVerificationChallenge = () => {
     rawToken,
     tokenHash: hashEmailVerificationToken(rawToken),
     expiresAt: new Date(Date.now() + EMAIL_VERIFICATION_TOKEN_TTL_MS).toISOString(),
+    sentAt: new Date().toISOString(),
+  };
+};
+
+const createPasswordResetChallenge = () => {
+  const rawToken = crypto.randomBytes(32).toString("base64url");
+  return {
+    rawToken,
+    tokenHash: hashPasswordResetToken(rawToken),
+    expiresAt: new Date(Date.now() + PASSWORD_RESET_TOKEN_TTL_MS).toISOString(),
     sentAt: new Date().toISOString(),
   };
 };
@@ -1944,15 +2192,20 @@ const cloneForResponse = (value) => {
   }
 };
 
-const toPublicUser = (userRecord) => ({
-  id: userRecord.id,
-  email: userRecord.email,
-  displayName: userRecord.displayName,
-  emailVerified: userRecord.emailVerified !== false,
-  createdAt: userRecord.createdAt,
-  updatedAt: userRecord.updatedAt,
-  lastLoginAt: userRecord.lastLoginAt || null,
-});
+const toPublicUser = (userRecord) => {
+  const authProvider =
+    String(userRecord?.data?.profile?.authProvider || "email").trim().toLowerCase() || "email";
+  return {
+    id: userRecord.id,
+    email: userRecord.email,
+    displayName: userRecord.displayName,
+    emailVerified: userRecord.emailVerified === true,
+    createdAt: userRecord.createdAt,
+    updatedAt: userRecord.updatedAt,
+    lastLoginAt: userRecord.lastLoginAt || null,
+    authProvider: authProvider.slice(0, 32),
+  };
+};
 
 const getAuthContext = (req) => {
   const cookies = parseCookieHeader(req.headers.cookie || "");
@@ -2335,16 +2588,28 @@ const fetchGoogleUserProfile = async ({ accessToken, idToken }) => {
   throw new Error("Failed to fetch Google profile");
 };
 
-const buildEmailVerificationLink = (req, rawToken, returnTo = "/index.html") => {
+const buildEmailVerificationLink = (req, rawToken, returnTo = "/index.html", email = "") => {
   const origin = getPublicAppOrigin(req);
   const verifyUrl = new URL("/api/auth/verify-email", origin);
   verifyUrl.searchParams.set("token", String(rawToken || "").trim());
   verifyUrl.searchParams.set("returnTo", sanitizeReturnToPath(returnTo));
+  const normalizedEmail = normalizeEmail(email);
+  if (normalizedEmail) {
+    verifyUrl.searchParams.set("email", normalizedEmail);
+  }
   return verifyUrl.toString();
 };
 
+const buildPasswordResetLink = (req, rawToken, returnTo = "/index.html") => {
+  const origin = getPublicAppOrigin(req);
+  const resetUrl = new URL("/api/auth/password/reset", origin);
+  resetUrl.searchParams.set("token", String(rawToken || "").trim());
+  resetUrl.searchParams.set("returnTo", sanitizeReturnToPath(returnTo));
+  return resetUrl.toString();
+};
+
 const sendAccountVerificationEmail = async ({ req, email, displayName, rawToken, returnTo }) => {
-  const verifyUrl = buildEmailVerificationLink(req, rawToken, returnTo);
+  const verifyUrl = buildEmailVerificationLink(req, rawToken, returnTo, email);
   const safeName = sanitizeDisplayName(displayName, email);
   const subject = "Verify your Cosmica account";
   const text = [
@@ -2365,14 +2630,61 @@ const sendAccountVerificationEmail = async ({ req, email, displayName, rawToken,
   });
 };
 
-const buildAuthErrorRedirectPath = (code, returnTo = "/index.html") => {
+const sendPasswordResetEmail = async ({ req, email, displayName, rawToken, returnTo }) => {
+  const resetUrl = buildPasswordResetLink(req, rawToken, returnTo);
+  const safeName = sanitizeDisplayName(displayName, email);
+  const subject = "Reset your Cosmica password";
+  const text = [
+    `Hi ${safeName},`,
+    "",
+    "We received a request to reset your Cosmica password.",
+    "Use the secure link below to set a new password:",
+    resetUrl,
+    "",
+    `This link expires in ${Math.round(PASSWORD_RESET_TOKEN_TTL_MS / (1000 * 60))} minutes.`,
+    "",
+    "If you did not request this, you can ignore this email.",
+  ].join("\n");
+  return sendTransactionalEmail({
+    to: email,
+    subject,
+    text,
+  });
+};
+
+const buildAuthErrorRedirectPath = (code, returnTo = "/index.html", extraParams = {}) => {
   const safeTarget = sanitizeReturnToPath(returnTo);
+  const extras = isPlainObject(extraParams) ? extraParams : {};
   try {
     const parsed = new URL(safeTarget, "http://localhost");
     parsed.searchParams.set("authError", String(code || "google"));
+    Object.entries(extras).forEach(([key, value]) => {
+      const normalizedKey = String(key || "").trim();
+      if (!normalizedKey) {
+        return;
+      }
+      const normalizedValue = String(value || "").trim();
+      if (!normalizedValue) {
+        return;
+      }
+      parsed.searchParams.set(normalizedKey, normalizedValue);
+    });
     return `${parsed.pathname}${parsed.search}${parsed.hash}`;
   } catch {
-    return `/index.html?authError=${encodeURIComponent(String(code || "google"))}`;
+    const params = new URLSearchParams();
+    params.set("authError", String(code || "google"));
+    Object.entries(extras).forEach(([key, value]) => {
+      const normalizedKey = String(key || "").trim();
+      if (!normalizedKey) {
+        return;
+      }
+      const normalizedValue = String(value || "").trim();
+      if (!normalizedValue) {
+        return;
+      }
+      params.set(normalizedKey, normalizedValue);
+    });
+    return `/index.html?${params.toString()}`;
   }
 };
 
@@ -2976,6 +3288,7 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
         lastLoginAt: nowIso,
         emailVerified: true,
         emailVerification: createEmptyEmailVerificationState(),
+        passwordReset: createEmptyPasswordResetState(),
         data: {
           settings: {
             baseLanguage: "",
@@ -3007,6 +3320,7 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
       userRecord.lastLoginAt = nowIso;
       userRecord.emailVerified = true;
       userRecord.emailVerification = createEmptyEmailVerificationState();
+      userRecord.passwordReset = createEmptyPasswordResetState();
     }
 
     if (createdNewGoogleUser) {
@@ -3042,9 +3356,17 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
 app.get("/api/auth/verify-email", authGoogleLimiter, (req, res) => {
   const rawToken = String(req.query?.token || "").trim();
   const returnTo = sanitizeReturnToPath(req.query?.returnTo);
+  const hintEmail = normalizeEmail(req.query?.email);
 
   if (!rawToken || rawToken.length < 20) {
-    return res.redirect(302, buildAuthErrorRedirectPath("email_verify_invalid", returnTo));
+    return res.redirect(
+      302,
+      buildAuthErrorRedirectPath("email_verify_invalid", returnTo, {
+        authEmail: hintEmail,
+        openAuth: "1",
+        authPanel: "login",
+      })
+    );
   }
 
   const tokenHash = hashEmailVerificationToken(rawToken);
@@ -3057,24 +3379,354 @@ app.get("/api/auth/verify-email", authGoogleLimiter, (req, res) => {
   });
 
   if (!userRecord) {
-    return res.redirect(302, buildAuthErrorRedirectPath("email_verify_invalid", returnTo));
+    const hintedUserId = hintEmail ? authStore.emailIndex[hintEmail] : "";
+    const hintedUser = hintedUserId ? authStore.users[hintedUserId] : null;
+    if (hintedUser && hintedUser.emailVerified === true) {
+      return res.redirect(
+        302,
+        buildAuthErrorRedirectPath("email_verified", returnTo, {
+          authEmail: normalizeEmail(hintedUser.email),
+          openAuth: "1",
+          authPanel: "login",
+        })
+      );
+    }
+    // Token was already consumed or no longer associated; keep UX on the login success path.
+    return res.redirect(
+      302,
+      buildAuthErrorRedirectPath("email_verified", returnTo, {
+        authEmail: hintEmail,
+        openAuth: "1",
+        authPanel: "login",
+      })
+    );
   }
 
   if (userRecord.emailVerified === true) {
-    return res.redirect(302, buildAuthErrorRedirectPath("email_verified", returnTo));
+    return res.redirect(
+      302,
+      buildAuthErrorRedirectPath("email_verified", returnTo, {
+        authEmail: normalizeEmail(userRecord.email),
+        openAuth: "1",
+        authPanel: "login",
+      })
+    );
   }
 
   const verificationState = normalizeEmailVerificationState(userRecord.emailVerification);
   const expiresAtMs = Date.parse(String(verificationState.expiresAt || ""));
   if (!Number.isFinite(expiresAtMs) || expiresAtMs < Date.now()) {
-    return res.redirect(302, buildAuthErrorRedirectPath("email_verify_expired", returnTo));
+    return res.redirect(
+      302,
+      buildAuthErrorRedirectPath("email_verify_expired", returnTo, {
+        authEmail: normalizeEmail(userRecord.email) || hintEmail,
+        openAuth: "1",
+        authPanel: "login",
+      })
+    );
   }
 
   userRecord.emailVerified = true;
-  userRecord.emailVerification = createEmptyEmailVerificationState();
+  userRecord.emailVerification = {
+    tokenHash: verificationState.tokenHash,
+    expiresAt: null,
+    sentAt: verificationState.sentAt,
+  };
   userRecord.updatedAt = new Date().toISOString();
   markAuthStoreDirty();
-  return res.redirect(302, buildAuthErrorRedirectPath("email_verified", returnTo));
+  return res.redirect(
+    302,
+    buildAuthErrorRedirectPath("email_verified", returnTo, {
+      authEmail: normalizeEmail(userRecord.email),
+      openAuth: "1",
+      authPanel: "login",
+    })
+  );
+});
+
+app.get("/api/auth/password/reset", authVerifyLimiter, (req, res) => {
+  const rawToken = String(req.query?.token || "").trim();
+  const returnTo = sanitizeReturnToPath(req.query?.returnTo);
+
+  if (!rawToken || rawToken.length < 20) {
+    return res.redirect(302, buildAuthErrorRedirectPath("password_reset_invalid", returnTo));
+  }
+
+  const tokenHash = hashPasswordResetToken(rawToken);
+  const userRecord = Object.values(authStore.users).find((record) => {
+    if (!record || typeof record !== "object") {
+      return false;
+    }
+    const resetState = normalizePasswordResetState(record.passwordReset);
+    return resetState.tokenHash === tokenHash;
+  });
+  if (!userRecord) {
+    return res.redirect(302, buildAuthErrorRedirectPath("password_reset_invalid", returnTo));
+  }
+
+  const authProvider = String(userRecord?.data?.profile?.authProvider || "email").trim().toLowerCase() || "email";
+  if (authProvider === "google") {
+    return res.redirect(302, buildAuthErrorRedirectPath("password_reset_invalid", returnTo));
+  }
+
+  const resetState = normalizePasswordResetState(userRecord.passwordReset);
+  const expiresAtMs = Date.parse(String(resetState.expiresAt || ""));
+  if (!Number.isFinite(expiresAtMs) || expiresAtMs < Date.now()) {
+    return res.redirect(302, buildAuthErrorRedirectPath("password_reset_expired", returnTo));
+  }
+
+  return res.redirect(
+    302,
+    buildAuthErrorRedirectPath("password_reset_ready", returnTo, {
+      passwordResetToken: rawToken,
+    })
+  );
+});
+
+app.post("/api/auth/password/forgot", authVerifyLimiter, async (req, res) => {
+  const email = normalizeEmail(req.body?.email);
+  const returnTo = sanitizeReturnToPath(req.body?.returnTo);
+  if (!isValidEmail(email)) {
+    return res.status(400).json({ error: "Enter a valid email first" });
+  }
+  if (
+    rejectBlockedAccess({
+      req,
+      res,
+      email,
+      context: "auth-password-forgot",
+    })
+  ) {
+    return;
+  }
+  if (!hasAnyEmailDeliveryConfig()) {
+    return res.status(503).json({ error: "Email verification is not configured yet" });
+  }
+
+  const userId = authStore.emailIndex[email];
+  const userRecord = userId ? authStore.users[userId] : null;
+  if (
+    userRecord &&
+    rejectBlockedAccess({
+      req,
+      res,
+      email,
+      userId: userRecord.id,
+      context: "auth-password-forgot-user",
+    })
+  ) {
+    return;
+  }
+
+  if (!userRecord) {
+    return res.json({
+      ok: true,
+      message: "If an email-password account exists for this email, a reset link will been sent.",
+    });
+  }
+
+  const authProvider = String(userRecord?.data?.profile?.authProvider || "email").trim().toLowerCase() || "email";
+  if (authProvider === "google") {
+    return res.json({
+      ok: true,
+      message: "If an email-password account exists for this email, a reset link will been sent.",
+    });
+  }
+
+  try {
+    const resetChallenge = createPasswordResetChallenge();
+    const delivery = await sendPasswordResetEmail({
+      req,
+      email: userRecord.email,
+      displayName: userRecord.displayName,
+      rawToken: resetChallenge.rawToken,
+      returnTo,
+    });
+    if (!delivery.ok) {
+      const deliveryError = String(delivery.error || "").trim();
+      void appendSecurityEvent({
+        type: "auth-password-reset-email-failed",
+        req,
+        email: userRecord.email,
+        userId: userRecord.id,
+        reason: "Password reset email delivery failed",
+        details: {
+          deliveryError: deliveryError.slice(0, 240),
+        },
+      });
+      maybeAlertVerificationEmailDeliveryFailure({
+        req,
+        email: userRecord.email,
+        phase: "password-reset",
+        deliveryError,
+      });
+      const loweredDeliveryError = deliveryError.toLowerCase();
+      if (loweredDeliveryError.includes("testing emails") || loweredDeliveryError.includes("verify a domain")) {
+        return res.status(502).json({
+          error:
+            "Email provider is in testing mode. Verify a domain in Resend and use AUTH_FROM with that domain.",
+        });
+      }
+      return res.status(502).json({
+        error: "Could not send password reset email. Check mail provider config and try again.",
+      });
+    }
+
+    userRecord.passwordReset = {
+      tokenHash: resetChallenge.tokenHash,
+      expiresAt: resetChallenge.expiresAt,
+      sentAt: resetChallenge.sentAt,
+    };
+    userRecord.updatedAt = new Date().toISOString();
+    markAuthStoreDirty();
+    void appendSecurityEvent({
+      type: "auth-password-reset-requested",
+      req,
+      email: userRecord.email,
+      userId: userRecord.id,
+      reason: "Password reset email sent",
+    });
+    return res.json({
+      ok: true,
+      message: "If an email-password account exists for this email, a reset link will been sent.",
+    });
+  } catch (error) {
+    reportServerError("auth-password-forgot", error, {
+      requestId: req.requestId,
+      method: req.method,
+      path: req.originalUrl,
+    });
+    return res.status(500).json({ error: "Failed to process password reset request" });
+  }
+});
+
+app.post("/api/auth/password/reset", authVerifyLimiter, async (req, res) => {
+  const rawToken = String(req.body?.token || "").trim();
+  const newPassword = String(req.body?.newPassword || "");
+  const confirmPassword = String(req.body?.confirmPassword || "");
+  if (!rawToken || rawToken.length < 20) {
+    return res.status(400).json({ error: "Reset link is invalid. Request a new one." });
+  }
+  if (!isValidPassword(newPassword)) {
+    return res.status(400).json({ error: "Password must be 8-128 characters" });
+  }
+  if (newPassword !== confirmPassword) {
+    return res.status(400).json({ error: "New password and confirm password do not match" });
+  }
+
+  const tokenHash = hashPasswordResetToken(rawToken);
+  const userRecord = Object.values(authStore.users).find((record) => {
+    if (!record || typeof record !== "object") {
+      return false;
+    }
+    const resetState = normalizePasswordResetState(record.passwordReset);
+    return resetState.tokenHash === tokenHash;
+  });
+  if (!userRecord) {
+    return res.status(400).json({ error: "Reset link is invalid. Request a new one." });
+  }
+
+  const authProvider = String(userRecord?.data?.profile?.authProvider || "email").trim().toLowerCase() || "email";
+  if (authProvider === "google") {
+    return res.status(400).json({ error: "Google accounts must use Google sign-in." });
+  }
+
+  const resetState = normalizePasswordResetState(userRecord.passwordReset);
+  const expiresAtMs = Date.parse(String(resetState.expiresAt || ""));
+  if (!Number.isFinite(expiresAtMs) || expiresAtMs < Date.now()) {
+    return res.status(400).json({ error: "Reset link expired. Request a new one." });
+  }
+
+  try {
+    const passwordRecord = await buildPasswordRecord(newPassword);
+    userRecord.password = passwordRecord;
+    userRecord.passwordReset = createEmptyPasswordResetState();
+    userRecord.updatedAt = new Date().toISOString();
+    removeAllSessionsForUser(userRecord.id);
+    markAuthStoreDirty();
+    void appendSecurityEvent({
+      type: "auth-password-reset-success",
+      req,
+      email: userRecord.email,
+      userId: userRecord.id,
+      reason: "Password reset completed",
+    });
+    clearAuthSessionCookie(req, res);
+    return res.json({
+      ok: true,
+      message: "Password reset complete. You can log in now.",
+      email: userRecord.email,
+    });
+  } catch (error) {
+    reportServerError("auth-password-reset", error, {
+      requestId: req.requestId,
+      method: req.method,
+      path: req.originalUrl,
+    });
+    return res.status(500).json({ error: "Failed to reset password" });
+  }
+});
+
+app.post("/api/auth/password/change", authSessionLimiter, requireAuthenticatedUser, async (req, res) => {
+  const userRecord = req.authUser;
+  const authProvider = String(userRecord?.data?.profile?.authProvider || "email").trim().toLowerCase() || "email";
+  if (authProvider === "google") {
+    return res.status(400).json({ error: "Google accounts do not use password reset here." });
+  }
+
+  const currentPassword = String(req.body?.currentPassword || "");
+  const newPassword = String(req.body?.newPassword || "");
+  const confirmPassword = String(req.body?.confirmPassword || "");
+  if (!currentPassword) {
+    return res.status(400).json({ error: "Current password is required" });
+  }
+  if (!isValidPassword(newPassword)) {
+    return res.status(400).json({ error: "Password must be 8-128 characters" });
+  }
+  if (newPassword !== confirmPassword) {
+    return res.status(400).json({ error: "New password and confirm password do not match" });
+  }
+
+  try {
+    const validCurrentPassword = await verifyPasswordAgainstRecord(currentPassword, userRecord.password);
+    if (!validCurrentPassword) {
+      void appendSecurityEvent({
+        type: "auth-password-change-failed",
+        req,
+        email: userRecord.email,
+        userId: userRecord.id,
+        reason: "Current password mismatch",
+      });
+      return res.status(401).json({ error: "Current password is incorrect" });
+    }
+
+    const passwordRecord = await buildPasswordRecord(newPassword);
+    userRecord.password = passwordRecord;
+    userRecord.passwordReset = createEmptyPasswordResetState();
+    userRecord.updatedAt = new Date().toISOString();
+    removeAllSessionsForUser(userRecord.id);
+    const sessionToken = createSessionForUser(userRecord.id, req);
+    setAuthSessionCookie(req, res, sessionToken);
+    markAuthStoreDirty();
+    void appendSecurityEvent({
+      type: "auth-password-change-success",
+      req,
+      email: userRecord.email,
+      userId: userRecord.id,
+      reason: "Password updated from manage account",
+    });
+    return res.json({
+      ok: true,
+      message: "Password updated.",
+    });
+  } catch (error) {
+    reportServerError("auth-password-change", error, {
+      requestId: req.requestId,
+      method: req.method,
+      path: req.originalUrl,
+    });
+    return res.status(500).json({ error: "Failed to update password" });
+  }
 });
 
 app.post("/api/auth/signup", authSignupLimiter, async (req, res) => {
@@ -3112,7 +3764,7 @@ app.post("/api/auth/signup", authSignupLimiter, async (req, res) => {
     const existingUserId = authStore.emailIndex[email];
     const existingUser = existingUserId ? authStore.users[existingUserId] : null;
     if (existingUser) {
-      if (existingUser.emailVerified === false) {
+      if (existingUser.emailVerified !== true) {
         return res.status(409).json({
           error: "Account exists but is not verified. Use resend verification below.",
           verificationRequired: true,
@@ -3140,11 +3792,14 @@ app.post("/api/auth/signup", authSignupLimiter, async (req, res) => {
         expiresAt: verificationChallenge.expiresAt,
         sentAt: verificationChallenge.sentAt,
       },
+      passwordReset: createEmptyPasswordResetState(),
       data: {
         settings: {
           baseLanguage,
         },
-        profile: {},
+        profile: {
+          authProvider: "email",
+        },
       },
       progress: createDefaultProgress(),
     };
@@ -3161,6 +3816,23 @@ app.post("/api/auth/signup", authSignupLimiter, async (req, res) => {
       delete authStore.users[userId];
       delete authStore.emailIndex[email];
       const deliveryError = String(delivery.error || "").trim();
+      void appendSecurityEvent({
+        type: "auth-verification-email-failed",
+        req,
+        email,
+        userId,
+        reason: "Signup verification email delivery failed",
+        details: {
+          phase: "signup",
+          deliveryError: deliveryError.slice(0, 240),
+        },
+      });
+      maybeAlertVerificationEmailDeliveryFailure({
+        req,
+        email,
+        phase: "signup",
+        deliveryError,
+      });
       const loweredDeliveryError = deliveryError.toLowerCase();
       if (loweredDeliveryError.includes("testing emails") || loweredDeliveryError.includes("verify a domain")) {
         return res.status(502).json({
@@ -3199,7 +3871,7 @@ app.post("/api/auth/signup", authSignupLimiter, async (req, res) => {
     if (authStore.emailIndex[email]) {
       const userId = authStore.emailIndex[email];
       const createdUser = authStore.users[userId];
-      if (createdUser && createdUser.email === email && createdUser.emailVerified === false) {
+      if (createdUser && createdUser.email === email && createdUser.emailVerified !== true) {
         delete authStore.users[userId];
         delete authStore.emailIndex[email];
       }
@@ -3271,6 +3943,23 @@ app.post("/api/auth/verification/resend", authVerifyLimiter, async (req, res) =>
     });
     if (!delivery.ok) {
       const deliveryError = String(delivery.error || "").trim();
+      void appendSecurityEvent({
+        type: "auth-verification-email-failed",
+        req,
+        email: userRecord.email,
+        userId: userRecord.id,
+        reason: "Resend verification email delivery failed",
+        details: {
+          phase: "resend",
+          deliveryError: deliveryError.slice(0, 240),
+        },
+      });
+      maybeAlertVerificationEmailDeliveryFailure({
+        req,
+        email: userRecord.email,
+        phase: "resend",
+        deliveryError,
+      });
       const loweredDeliveryError = deliveryError.toLowerCase();
       if (loweredDeliveryError.includes("testing emails") || loweredDeliveryError.includes("verify a domain")) {
         return res.status(502).json({
@@ -3315,6 +4004,11 @@ app.post("/api/auth/login", authLoginLimiter, async (req, res) => {
       email,
       reason: "Invalid login payload",
     });
+    maybeAlertAuthLoginFailureSpike({
+      req,
+      email,
+      reason: "Invalid login payload",
+    });
     return res.status(400).json({ error: "Invalid email or password" });
   }
   if (
@@ -3333,6 +4027,11 @@ app.post("/api/auth/login", authLoginLimiter, async (req, res) => {
   if (!userRecord) {
     void appendSecurityEvent({
       type: "auth-login-failed",
+      req,
+      email,
+      reason: "Unknown email",
+    });
+    maybeAlertAuthLoginFailureSpike({
       req,
       email,
       reason: "Unknown email",
@@ -3361,9 +4060,15 @@ app.post("/api/auth/login", authLoginLimiter, async (req, res) => {
         userId: userRecord.id,
         reason: "Wrong password",
       });
+      maybeAlertAuthLoginFailureSpike({
+        req,
+        email,
+        userId: userRecord.id,
+        reason: "Wrong password",
+      });
       return res.status(401).json({ error: "Invalid email or password" });
     }
-    if (userRecord.emailVerified === false) {
+    if (userRecord.emailVerified !== true) {
       return res.status(403).json({
         error: "Please verify your email first. Check your inbox for the verification link.",
         verificationRequired: true,
@@ -3411,18 +4116,8 @@ app.get("/api/auth/me", authSessionLimiter, requireAuthenticatedUser, (req, res)
 });
 
 app.delete("/api/auth/account", authSessionLimiter, requireAuthenticatedUser, async (req, res) => {
-  const password = String(req.body?.password || "");
-  if (!isValidPassword(password)) {
-    return res.status(400).json({ error: "Password is required" });
-  }
-
   const userRecord = req.authUser;
   try {
-    const validPassword = await verifyPasswordAgainstRecord(password, userRecord.password);
-    if (!validPassword) {
-      return res.status(401).json({ error: "Invalid password" });
-    }
-
     try {
       await appendDeletedAccountAuditEntry({
         userRecord,
@@ -3887,6 +4582,8 @@ process.on("uncaughtException", (error) => {
 /* --------------------------------------------------------------------------
    SERVER STARTUP
    -------------------------------------------------------------------------- */
+runAuthRuntimeConfigAudit();
+
 app.listen(port, () => {
   console.log(`Server listening on http://localhost:${port}`);
 });

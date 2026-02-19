@@ -3122,45 +3122,6 @@ const trackMapSectionEvent = (mapKey, sectionKey, status = "started", score = nu
   });
 };
 
-const getTrackedSectionRecord = (mapKey, sectionKey) => {
-  if (!window.cosmicaGamification || typeof window.cosmicaGamification.getSectionProgress !== "function") {
-    return null;
-  }
-  return window.cosmicaGamification.getSectionProgress({
-    worldKey: WORLD_KEY,
-    mapKey,
-    sectionKey,
-  });
-};
-
-const isTrackedSectionCompleted = (mapKey, sectionKey) => {
-  const record = getTrackedSectionRecord(mapKey, sectionKey);
-  if (!record || typeof record !== "object") {
-    return false;
-  }
-  if (String(record.status || "").toLowerCase() === "completed") {
-    return true;
-  }
-  return Boolean(record.firstCompletedAt);
-};
-
-const updateCompleteButtonState = (button, mapKey, activeFilter) => {
-  if (!button) {
-    return;
-  }
-  const sectionKey = String(activeFilter || "all").trim();
-  if (!sectionKey || sectionKey === "all") {
-    button.disabled = true;
-    button.classList.remove("is-complete");
-    button.textContent = "Select a section to complete";
-    return;
-  }
-  const alreadyComplete = isTrackedSectionCompleted(mapKey, sectionKey);
-  button.disabled = false;
-  button.classList.toggle("is-complete", alreadyComplete);
-  button.textContent = alreadyComplete ? "Completed" : "Mark section complete";
-};
-
 const renderWordsSections = () => {
   const container = document.getElementById("wordsSections");
   const controls = document.getElementById("wordsControls");
@@ -3269,19 +3230,6 @@ const renderWordsSections = () => {
       updateWordsTopState();
     };
 
-    const completeButton = document.createElement("button");
-    completeButton.type = "button";
-    completeButton.className = "words-complete-section-btn";
-    completeButton.textContent = "Select a section to complete";
-    completeButton.disabled = true;
-    completeButton.addEventListener("click", () => {
-      if (!activeFilter || activeFilter === "all") {
-        return;
-      }
-      trackMapSectionEvent("words", activeFilter, "completed", 88);
-      updateCompleteButtonState(completeButton, "words", activeFilter);
-    });
-
     list.addEventListener("click", (event) => {
       const button = event.target.closest(".words-filter");
       if (!button) {
@@ -3294,7 +3242,6 @@ const renderWordsSections = () => {
       if (filter !== "all") {
         trackMapSectionEvent("words", filter, "started");
       }
-      updateCompleteButtonState(completeButton, "words", filter);
       if (filter === "all") {
         const first = sections[0];
         if (first) {
@@ -3325,8 +3272,6 @@ const renderWordsSections = () => {
     controls.appendChild(eyebrow);
     controls.appendChild(label);
     controls.appendChild(list);
-    controls.appendChild(completeButton);
-    updateCompleteButtonState(completeButton, "words", activeFilter);
   }
 };
 
@@ -3437,19 +3382,6 @@ const renderPhrasesSections = () => {
       updatePhrasesTopState();
     };
 
-    const completeButton = document.createElement("button");
-    completeButton.type = "button";
-    completeButton.className = "words-complete-section-btn";
-    completeButton.textContent = "Select a section to complete";
-    completeButton.disabled = true;
-    completeButton.addEventListener("click", () => {
-      if (!activeFilter || activeFilter === "all") {
-        return;
-      }
-      trackMapSectionEvent("phrases", activeFilter, "completed", 90);
-      updateCompleteButtonState(completeButton, "phrases", activeFilter);
-    });
-
     list.addEventListener("click", (event) => {
       const button = event.target.closest(".words-filter");
       if (!button) {
@@ -3462,7 +3394,6 @@ const renderPhrasesSections = () => {
       if (filter !== "all") {
         trackMapSectionEvent("phrases", filter, "started");
       }
-      updateCompleteButtonState(completeButton, "phrases", filter);
       if (filter === "all") {
         const first = sections[0];
         if (first) {
@@ -3493,8 +3424,6 @@ const renderPhrasesSections = () => {
     controls.appendChild(eyebrow);
     controls.appendChild(label);
     controls.appendChild(list);
-    controls.appendChild(completeButton);
-    updateCompleteButtonState(completeButton, "phrases", activeFilter);
   }
 };
 
@@ -3623,19 +3552,6 @@ const renderGrammarSections = () => {
       updateGrammarTopState();
     };
 
-    const completeButton = document.createElement("button");
-    completeButton.type = "button";
-    completeButton.className = "words-complete-section-btn";
-    completeButton.textContent = "Select a section to complete";
-    completeButton.disabled = true;
-    completeButton.addEventListener("click", () => {
-      if (!activeFilter || activeFilter === "all") {
-        return;
-      }
-      trackMapSectionEvent("grammar", activeFilter, "completed", 92);
-      updateCompleteButtonState(completeButton, "grammar", activeFilter);
-    });
-
     list.addEventListener("click", (event) => {
       const button = event.target.closest(".words-filter");
       if (!button) {
@@ -3648,7 +3564,6 @@ const renderGrammarSections = () => {
       if (filter !== "all") {
         trackMapSectionEvent("grammar", filter, "started");
       }
-      updateCompleteButtonState(completeButton, "grammar", filter);
       if (filter === "all") {
         const first = sections[0];
         if (first) {
@@ -3679,8 +3594,6 @@ const renderGrammarSections = () => {
     controls.appendChild(eyebrow);
     controls.appendChild(label);
     controls.appendChild(list);
-    controls.appendChild(completeButton);
-    updateCompleteButtonState(completeButton, "grammar", activeFilter);
   }
 };
 
@@ -7507,290 +7420,30 @@ const buildGrammarMistakes = (card, examples = []) => {
   return unique.slice(0, 2);
 };
 
-const getGrammarUiLabels = () => {
-  const labels = {
-    french: {
-      grammar: "Grammaire",
-      chooseSection: "Choisissez une section",
-      allSections: "Toutes les sections",
-      rules: "Règles",
-      examples: "Exemples",
-      commonMistakes: "Erreurs courantes",
-      wrong: "Incorrect :",
-      fix: "Correction :",
-      phrase: "Phrase :",
-      order: "Ordre :",
-    },
-    german: {
-      grammar: "Grammatik",
-      chooseSection: "Abschnitt wählen",
-      allSections: "Alle Abschnitte",
-      rules: "Regeln",
-      examples: "Beispiele",
-      commonMistakes: "Häufige Fehler",
-      wrong: "Falsch:",
-      fix: "Korrektur:",
-      phrase: "Satz:",
-      order: "Reihenfolge:",
-    },
-    spanish: {
-      grammar: "Gramática",
-      chooseSection: "Elige una sección",
-      allSections: "Todas las secciones",
-      rules: "Reglas",
-      examples: "Ejemplos",
-      commonMistakes: "Errores comunes",
-      wrong: "Incorrecto:",
-      fix: "Corrección:",
-      phrase: "Frase:",
-      order: "Orden:",
-    },
-    portuguese: {
-      grammar: "Gramática",
-      chooseSection: "Escolha uma seção",
-      allSections: "Todas as seções",
-      rules: "Regras",
-      examples: "Exemplos",
-      commonMistakes: "Erros comuns",
-      wrong: "Incorreto:",
-      fix: "Correção:",
-      phrase: "Frase:",
-      order: "Ordem:",
-    },
-    dutch: {
-      grammar: "Grammatica",
-      chooseSection: "Kies een sectie",
-      allSections: "Alle secties",
-      rules: "Regels",
-      examples: "Voorbeelden",
-      commonMistakes: "Veelgemaakte fouten",
-      wrong: "Fout:",
-      fix: "Correctie:",
-      phrase: "Zin:",
-      order: "Volgorde:",
-    },
-    swedish: {
-      grammar: "Grammatik",
-      chooseSection: "Välj en sektion",
-      allSections: "Alla sektioner",
-      rules: "Regler",
-      examples: "Exempel",
-      commonMistakes: "Vanliga fel",
-      wrong: "Fel:",
-      fix: "Rättning:",
-      phrase: "Mening:",
-      order: "Ordföljd:",
-    },
-    arabic: {
-      grammar: "قواعد",
-      chooseSection: "اختر قسمًا",
-      allSections: "كل الأقسام",
-      rules: "القواعد",
-      examples: "أمثلة",
-      commonMistakes: "أخطاء شائعة",
-      wrong: "خطأ:",
-      fix: "تصحيح:",
-      phrase: "جملة:",
-      order: "الترتيب:",
-    },
-    chinese: {
-      grammar: "语法",
-      chooseSection: "选择一个部分",
-      allSections: "所有部分",
-      rules: "规则",
-      examples: "示例",
-      commonMistakes: "常见错误",
-      wrong: "错误:",
-      fix: "修正:",
-      phrase: "句子:",
-      order: "顺序:",
-    },
-    japanese: {
-      grammar: "文法",
-      chooseSection: "セクションを選択",
-      allSections: "すべてのセクション",
-      rules: "ルール",
-      examples: "例文",
-      commonMistakes: "よくある間違い",
-      wrong: "誤り:",
-      fix: "修正:",
-      phrase: "文:",
-      order: "順序:",
-    },
-    korean: {
-      grammar: "문법",
-      chooseSection: "섹션 선택",
-      allSections: "모든 섹션",
-      rules: "규칙",
-      examples: "예문",
-      commonMistakes: "자주 하는 실수",
-      wrong: "오류:",
-      fix: "수정:",
-      phrase: "문장:",
-      order: "순서:",
-    },
-    hindi: {
-      grammar: "व्याकरण",
-      chooseSection: "एक अनुभाग चुनें",
-      allSections: "सभी अनुभाग",
-      rules: "नियम",
-      examples: "उदाहरण",
-      commonMistakes: "सामान्य गलतियाँ",
-      wrong: "गलत:",
-      fix: "सुधार:",
-      phrase: "वाक्य:",
-      order: "क्रम:",
-    },
-  };
-  return (
-    labels[WORLD_KEY] || {
-      grammar: "Grammar",
-      chooseSection: "Choose a section",
-      allSections: "All sections",
-      rules: "Rules",
-      examples: "Examples",
-      commonMistakes: "Common mistakes",
-      wrong: "Wrong:",
-      fix: "Fix:",
-      phrase: "Phrase:",
-      order: "Order:",
-    }
-  );
-};
+const getGrammarUiLabels = () => ({
+  grammar: "Grammar",
+  chooseSection: "Choose a section",
+  allSections: "All sections",
+  rules: "Rules",
+  examples: "Examples",
+  commonMistakes: "Common mistakes",
+  wrong: "Wrong:",
+  fix: "Fix:",
+  phrase: "Phrase:",
+  order: "Order:",
+});
 
-const getWordsUiLabels = () => {
-  const labels = {
-    french: {
-      words: "Mots",
-      chooseSection: "Choisissez une section",
-      allSections: "Toutes les sections",
-    },
-    german: {
-      words: "Wörter",
-      chooseSection: "Abschnitt wählen",
-      allSections: "Alle Abschnitte",
-    },
-    spanish: {
-      words: "Palabras",
-      chooseSection: "Elige una sección",
-      allSections: "Todas las secciones",
-    },
-    portuguese: {
-      words: "Palavras",
-      chooseSection: "Escolha uma seção",
-      allSections: "Todas as seções",
-    },
-    dutch: {
-      words: "Woorden",
-      chooseSection: "Kies een sectie",
-      allSections: "Alle secties",
-    },
-    swedish: {
-      words: "Ord",
-      chooseSection: "Välj en sektion",
-      allSections: "Alla sektioner",
-    },
-    arabic: {
-      words: "كلمات",
-      chooseSection: "اختر قسمًا",
-      allSections: "كل الأقسام",
-    },
-    chinese: {
-      words: "词汇",
-      chooseSection: "选择一个部分",
-      allSections: "所有部分",
-    },
-    japanese: {
-      words: "単語",
-      chooseSection: "セクションを選択",
-      allSections: "すべてのセクション",
-    },
-    korean: {
-      words: "단어",
-      chooseSection: "섹션 선택",
-      allSections: "모든 섹션",
-    },
-    hindi: {
-      words: "शब्द",
-      chooseSection: "एक अनुभाग चुनें",
-      allSections: "सभी अनुभाग",
-    },
-  };
-  return (
-    labels[WORLD_KEY] || {
-      words: "Words",
-      chooseSection: "Choose a section",
-      allSections: "All sections",
-    }
-  );
-};
+const getWordsUiLabels = () => ({
+  words: "Words",
+  chooseSection: "Choose a section",
+  allSections: "All sections",
+});
 
-const getPhrasesUiLabels = () => {
-  const labels = {
-    french: {
-      phrases: "Phrases",
-      chooseSection: "Choisissez une section",
-      allSections: "Toutes les sections",
-    },
-    german: {
-      phrases: "Phrasen",
-      chooseSection: "Abschnitt wählen",
-      allSections: "Alle Abschnitte",
-    },
-    spanish: {
-      phrases: "Frases",
-      chooseSection: "Elige una sección",
-      allSections: "Todas las secciones",
-    },
-    portuguese: {
-      phrases: "Frases",
-      chooseSection: "Escolha uma seção",
-      allSections: "Todas as seções",
-    },
-    dutch: {
-      phrases: "Zinnen",
-      chooseSection: "Kies een sectie",
-      allSections: "Alle secties",
-    },
-    swedish: {
-      phrases: "Fraser",
-      chooseSection: "Välj en sektion",
-      allSections: "Alla sektioner",
-    },
-    arabic: {
-      phrases: "عبارات",
-      chooseSection: "اختر قسمًا",
-      allSections: "كل الأقسام",
-    },
-    chinese: {
-      phrases: "短语",
-      chooseSection: "选择一个部分",
-      allSections: "所有部分",
-    },
-    japanese: {
-      phrases: "フレーズ",
-      chooseSection: "セクションを選択",
-      allSections: "すべてのセクション",
-    },
-    korean: {
-      phrases: "구문",
-      chooseSection: "섹션 선택",
-      allSections: "모든 섹션",
-    },
-    hindi: {
-      phrases: "वाक्यांश",
-      chooseSection: "एक अनुभाग चुनें",
-      allSections: "सभी अनुभाग",
-    },
-  };
-  return (
-    labels[WORLD_KEY] || {
-      phrases: "Phrases",
-      chooseSection: "Choose a section",
-      allSections: "All sections",
-    }
-  );
-};
+const getPhrasesUiLabels = () => ({
+  phrases: "Phrases",
+  chooseSection: "Choose a section",
+  allSections: "All sections",
+});
 
 /* ==========================================================================
    GRAMMAR MODAL OVERLAY
