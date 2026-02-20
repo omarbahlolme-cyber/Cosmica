@@ -5054,84 +5054,94 @@ app.post(
   }
 );
 
+const isAllowedKoFiCheckoutUrl = (value) => {
+  const raw = String(value || "").trim();
+  if (!raw) {
+    return "";
+  }
+  try {
+    const parsed = new URL(raw);
+    if (parsed.protocol !== "https:") {
+      return "";
+    }
+    const host = String(parsed.hostname || "").trim().toLowerCase();
+    if (host !== "ko-fi.com" && host !== "www.ko-fi.com") {
+      return "";
+    }
+    return parsed.toString();
+  } catch {
+    return "";
+  }
+};
+
+const resolveConfiguredPremiumCheckoutOptions = () => {
+  const fallbackOptions = [
+    {
+      id: "monthly",
+      label: "Monthly",
+      description: "€9.99 per month",
+      url: isAllowedKoFiCheckoutUrl(process.env.KOFI_PREMIUM_MONTHLY_URL),
+    },
+  ].filter((item) => Boolean(item?.url));
+
+  const rawCustomOptions = String(process.env.KOFI_PREMIUM_OPTIONS_JSON || "").trim();
+  let customOptions = [];
+  if (rawCustomOptions) {
+    try {
+      const parsed = JSON.parse(rawCustomOptions);
+      if (Array.isArray(parsed)) {
+        customOptions = parsed
+          .map((item, index) => {
+            const candidate = isPlainObject(item) ? item : {};
+            const checkoutUrl = isAllowedKoFiCheckoutUrl(candidate.url);
+            if (!checkoutUrl) {
+              return null;
+            }
+            const id = String(candidate.id || `option-${index + 1}`)
+              .trim()
+              .toLowerCase()
+              .slice(0, 32);
+            const label = String(candidate.label || "Premium option").trim().slice(0, 60);
+            const description = String(candidate.description || "").trim().slice(0, 140);
+            if (!id || !label) {
+              return null;
+            }
+            return {
+              id,
+              label,
+              description,
+              url: checkoutUrl,
+            };
+          })
+          .filter(Boolean);
+      }
+    } catch {}
+  }
+
+  const optionSource = customOptions.length ? customOptions : fallbackOptions;
+  const uniqueById = new Map();
+  optionSource.forEach((item) => {
+    if (!item?.id || !item?.url || uniqueById.has(item.id)) {
+      return;
+    }
+    uniqueById.set(item.id, item);
+  });
+
+  const options = [...uniqueById.values()];
+  return {
+    options,
+    configured: options.length > 0,
+    source: customOptions.length ? "custom" : fallbackOptions.length ? "monthly" : "none",
+  };
+};
+
 app.get(
   "/api/billing/premium/options",
   authSessionLimiter,
   requireAuthenticatedUser,
   (req, res) => {
-    const isAllowedCheckoutUrl = (value) => {
-      const raw = String(value || "").trim();
-      if (!raw) {
-        return "";
-      }
-      try {
-        const parsed = new URL(raw);
-        if (parsed.protocol !== "https:") {
-          return "";
-        }
-        const host = String(parsed.hostname || "").trim().toLowerCase();
-        if (host !== "ko-fi.com" && host !== "www.ko-fi.com") {
-          return "";
-        }
-        return parsed.toString();
-      } catch {
-        return "";
-      }
-    };
-
-    const fallbackOptions = [
-      {
-        id: "monthly",
-        label: "Monthly",
-        description: "€9.99 per month",
-        url: isAllowedCheckoutUrl(process.env.KOFI_PREMIUM_MONTHLY_URL),
-      },
-    ].filter((item) => Boolean(item?.url));
-
-    const rawCustomOptions = String(process.env.KOFI_PREMIUM_OPTIONS_JSON || "").trim();
-    let customOptions = [];
-    if (rawCustomOptions) {
-      try {
-        const parsed = JSON.parse(rawCustomOptions);
-        if (Array.isArray(parsed)) {
-          customOptions = parsed
-            .map((item, index) => {
-              const candidate = isPlainObject(item) ? item : {};
-              const checkoutUrl = isAllowedCheckoutUrl(candidate.url);
-              if (!checkoutUrl) {
-                return null;
-              }
-              const id = String(candidate.id || `option-${index + 1}`)
-                .trim()
-                .toLowerCase()
-                .slice(0, 32);
-              const label = String(candidate.label || "Premium option").trim().slice(0, 60);
-              const description = String(candidate.description || "").trim().slice(0, 140);
-              if (!id || !label) {
-                return null;
-              }
-              return {
-                id,
-                label,
-                description,
-                url: checkoutUrl,
-              };
-            })
-            .filter(Boolean);
-        }
-      } catch {}
-    }
-
-    const optionSource = customOptions.length ? customOptions : fallbackOptions;
-    const uniqueById = new Map();
-    optionSource.forEach((item) => {
-      if (!item?.id || !item?.url || uniqueById.has(item.id)) {
-        return;
-      }
-      uniqueById.set(item.id, item);
-    });
-
-    if (!uniqueById.size) {
+    const checkoutConfig = resolveConfiguredPremiumCheckoutOptions();
+    if (!checkoutConfig.configured) {
       return res.status(503).json({
         error: "Premium checkout is not configured yet",
       });
@@ -5140,7 +5150,7 @@ app.get(
     return res.json({
       ok: true,
       provider: "ko-fi",
-      options: [...uniqueById.values()],
+      options: checkoutConfig.options,
     });
   }
 );
@@ -5439,11 +5449,14 @@ app.post("/api/chat", chatLimiter, async (req, res) => {
    ROUTE: HEALTH CHECK
    -------------------------------------------------------------------------- */
 app.get("/api/health", healthLimiter, (req, res) => {
+  const checkoutConfig = resolveConfiguredPremiumCheckoutOptions();
   res.json({
     status: "ok",
     version: APP_VERSION,
     uptimeSec: Math.round(process.uptime()),
     timestamp: new Date().toISOString(),
+    premiumCheckoutConfigured: checkoutConfig.configured,
+    premiumCheckoutSource: checkoutConfig.source,
   });
 });
 

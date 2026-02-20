@@ -2406,6 +2406,10 @@ const setupAccountHub = () => {
         openDropdown();
         return;
       }
+      if (loadResult?.reason === "not_configured") {
+        setPremiumCheckoutFeedback("Premium checkout is not configured on the server yet. Please contact support.", "error");
+        return;
+      }
       setPremiumCheckoutFeedback("Secure checkout is currently unavailable. Please try again.", "error");
     } else {
       setPremiumCheckoutFeedback("");
