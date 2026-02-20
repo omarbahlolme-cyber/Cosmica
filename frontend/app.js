@@ -142,7 +142,6 @@ if (isWorldLandingPage && urlParams.has("world")) {
     cleanUrl.hash;
   window.history.replaceState({}, "", normalizedUrl);
 }
-
 if (navRoot) {
   const navLinksCount = navRoot.querySelectorAll(".nav-links a").length;
   navRoot.classList.toggle("nav-single-link", navLinksCount <= 1);
@@ -553,7 +552,7 @@ const warmMapTranslationsCache = async () => {
   }
   try {
     // Keep map cache normalized to the base English->base-language table.
-    const response = await fetch(BASE_MAP_TRANSLATION_FILE, { cache: "no-store" });
+    const response = await fetch(BASE_MAP_TRANSLATION_FILE, { cache: "force-cache" });
     if (!response.ok) {
       return;
     }
@@ -591,7 +590,7 @@ const warmWorldTranslationsCache = async () => {
     return;
   }
   try {
-    const response = await fetch(WORLD_TRANSLATION_FILE, { cache: "no-store" });
+    const response = await fetch(WORLD_TRANSLATION_FILE, { cache: "force-cache" });
     if (!response.ok) {
       return;
     }
@@ -651,6 +650,59 @@ const cpuThreadCount = Number(navigator.hardwareConcurrency || 0);
 const isLowPowerDevice =
   (deviceMemoryGb > 0 && deviceMemoryGb <= 4) ||
   (cpuThreadCount > 0 && cpuThreadCount <= 4);
+const isConstrainedNetwork = prefersReducedData || isSlowNetwork;
+const isConstrainedCompute = isLowPowerDevice || prefersReducedMotion;
+const shouldUsePerformanceMode = isConstrainedNetwork || isConstrainedCompute;
+const shouldUseUltraPerformanceMode =
+  prefersReducedMotion ||
+  (isConstrainedNetwork && isConstrainedCompute) ||
+  (deviceMemoryGb > 0 && deviceMemoryGb <= 2) ||
+  (cpuThreadCount > 0 && cpuThreadCount <= 2);
+if (document.body) {
+  document.body.classList.toggle("perf-compact", shouldUsePerformanceMode);
+  document.body.classList.toggle("perf-ultra", shouldUseUltraPerformanceMode);
+}
+
+const scheduleNonCriticalTask = (callback, { timeout = 1200 } = {}) => {
+  if (typeof callback !== "function") {
+    return;
+  }
+  if (typeof window.requestIdleCallback === "function") {
+    window.requestIdleCallback(() => callback(), { timeout });
+    return;
+  }
+  window.setTimeout(() => callback(), Math.min(280, Math.max(80, Math.round(timeout * 0.18))));
+};
+
+const applyMediaPerformanceHints = () => {
+  const isLikelyAboveFold = (node) =>
+    Boolean(
+      node &&
+        node.closest(
+          ".nav, .hero, .world-hero, .account-menu, .premium-checkout-modal, .premium-setup-modal"
+        )
+    );
+
+  document.querySelectorAll("img").forEach((image) => {
+    if (!image.hasAttribute("decoding")) {
+      image.decoding = "async";
+    }
+    if (!image.hasAttribute("loading")) {
+      image.loading = isLikelyAboveFold(image) ? "eager" : "lazy";
+    }
+    if (!image.hasAttribute("fetchpriority") && !isLikelyAboveFold(image)) {
+      image.fetchPriority = "low";
+    }
+  });
+
+  document.querySelectorAll("iframe").forEach((frame) => {
+    if (!frame.hasAttribute("loading")) {
+      frame.loading = "lazy";
+    }
+  });
+};
+
+applyMediaPerformanceHints();
 
 /* ==========================================================================
    AUTH + PROGRESS API CLIENT
@@ -838,7 +890,7 @@ window.cosmicaAuth = createCosmicaAuthClient();
 const createCosmicaGamificationClient = () => {
   const listeners = new Set();
   const recentEventMap = new Map();
-  const progressAutosaveIntervalMs = 1000;
+  const progressAutosaveIntervalMs = shouldUsePerformanceMode ? 2400 : 1000;
   let progressAutosaveTimerId = 0;
   let progressPersistInFlight = false;
   let progressPersistPending = false;
@@ -5880,6 +5932,37 @@ const sendChatMessage = async (message) => {
   }
 };
 
+const openGuestAuthAtMenuTop = ({
+  panel = "login",
+  message = "Sign in or create an account to continue.",
+  tone = "info",
+} = {}) => {
+  const openAuthPanel = () => {
+    if (typeof window.cosmicaAccountHub?.openAuth === "function") {
+      window.cosmicaAccountHub.openAuth({ panel, message, tone });
+      return;
+    }
+    const encodedPanel = encodeURIComponent(String(panel || "login").trim().toLowerCase() || "login");
+    window.location.href = `/index.html?openAuth=1&authPanel=${encodedPanel}#support`;
+  };
+
+  const nav = document.querySelector(".nav");
+  const currentScrollY = window.scrollY || window.pageYOffset || 0;
+  const targetTop = nav
+    ? Math.max(0, (nav.getBoundingClientRect().top || 0) + currentScrollY)
+    : 0;
+  const distance = Math.abs(currentScrollY - targetTop);
+
+  if (distance <= 6) {
+    openAuthPanel();
+    return;
+  }
+
+  window.scrollTo({ top: targetTop, behavior: "smooth" });
+  const delayMs = Math.min(520, Math.max(180, Math.round(distance * 0.32)));
+  window.setTimeout(openAuthPanel, delayMs);
+};
+
 function showMimiPremiumBubble() {
   // Remove any previous premium upsell bubble
   const prev = chatLog && chatLog.querySelector('.chat-message.mimi.premium-upsell');
@@ -5898,6 +5981,21 @@ function showMimiPremiumBubble() {
   btn.className = "premium-setup-primary";
   btn.textContent = "Upgrade to Premium";
   btn.onclick = function() {
+    const snapshot =
+      typeof window.cosmicaGamification?.getState === "function"
+        ? window.cosmicaGamification.getState()
+        : null;
+    const isAuthenticated = Boolean(snapshot?.isAuthenticated);
+
+    if (!isAuthenticated) {
+      openGuestAuthAtMenuTop({
+        panel: "login",
+        message: "Sign in or create an account to continue. Upgrade to Premium to unlock Mimi chat.",
+        tone: "info",
+      });
+      return;
+    }
+
     if (typeof window.cosmicaAccountHub?.openPremium === "function") {
       window.cosmicaAccountHub.openPremium({
         message: "Unlock Mimi chat and more with Premium!",
@@ -6069,8 +6167,12 @@ const createStars = (layer, count, sizeRange) => {
 const isSmallViewport = window.matchMedia("(max-width: 960px)").matches;
 const isWorldPage = document.body.classList.contains("world-page");
 const viewportDensityMultiplier = isSmallViewport ? (isWorldPage ? 0.48 : 0.58) : 1;
-const performanceDensityMultiplier = isLowPowerDevice || prefersReducedData ? 0.72 : 1;
-const reducedMotionDensityMultiplier = prefersReducedMotion ? 0.85 : 1;
+const performanceDensityMultiplier = shouldUseUltraPerformanceMode
+  ? 0.38
+  : shouldUsePerformanceMode
+    ? 0.56
+    : 1;
+const reducedMotionDensityMultiplier = prefersReducedMotion ? 0.64 : 1;
 const starDensityMultiplier =
   viewportDensityMultiplier *
   performanceDensityMultiplier *
@@ -6415,6 +6517,8 @@ const setupWorldPageInteractiveFx = () => {
   const root = document.documentElement;
   const worldAmbient = document.querySelector(".world-ambient");
   const worldSections = Array.from(document.querySelectorAll(".world-section"));
+  const allowPointerReactiveFx = !shouldUsePerformanceMode && !prefersReducedMotion;
+  const allowAmbientAnimation = !shouldUsePerformanceMode && !prefersReducedMotion;
   document.body.classList.add("world-fx-ready");
 
   const ensureAmbientStars = () => {
@@ -6423,7 +6527,7 @@ const setupWorldPageInteractiveFx = () => {
     }
     const stars = document.createElement("div");
     stars.className = "world-fx-stars";
-    const starCount = prefersReducedMotion ? 10 : 26;
+    const starCount = shouldUseUltraPerformanceMode ? 8 : shouldUsePerformanceMode ? 12 : prefersReducedMotion ? 10 : 26;
     for (let i = 0; i < starCount; i += 1) {
       const star = document.createElement("span");
       star.className = "world-fx-star";
@@ -6439,7 +6543,7 @@ const setupWorldPageInteractiveFx = () => {
   };
 
   const ensureSpaceLayers = () => {
-    if (!worldAmbient || prefersReducedMotion) {
+    if (!worldAmbient || prefersReducedMotion || shouldUsePerformanceMode) {
       return;
     }
     if (!worldAmbient.querySelector(".world-fx-dust")) {
@@ -6522,42 +6626,47 @@ const setupWorldPageInteractiveFx = () => {
       ambientPlanetA.style.transform = `translate3d(${driftX.toFixed(2)}px, ${driftY.toFixed(2)}px, 0) rotate(${spin.toFixed(2)}deg)`;
     }
   };
-  if (!prefersReducedMotion) {
+  if (allowAmbientAnimation) {
     ambientRafId = window.requestAnimationFrame(animateAmbient);
   }
 
-  window.addEventListener(
-    "pointermove",
-    (event) => {
-      setPointerTargetFromPoint(event.clientX, event.clientY);
-    },
-    { passive: true }
-  );
-  window.addEventListener(
-    "touchmove",
-    (event) => {
-      const touch = event.touches?.[0];
-      if (!touch) {
-        return;
-      }
-      setPointerTargetFromPoint(touch.clientX, touch.clientY);
-    },
-    { passive: true }
-  );
-  window.addEventListener(
-    "pointerleave",
-    () => {
-      pointerTargetX = 0;
-      pointerTargetY = 0;
-    },
-    { passive: true }
-  );
+  if (allowPointerReactiveFx) {
+    window.addEventListener(
+      "pointermove",
+      (event) => {
+        setPointerTargetFromPoint(event.clientX, event.clientY);
+      },
+      { passive: true }
+    );
+    window.addEventListener(
+      "touchmove",
+      (event) => {
+        const touch = event.touches?.[0];
+        if (!touch) {
+          return;
+        }
+        setPointerTargetFromPoint(touch.clientX, touch.clientY);
+      },
+      { passive: true }
+    );
+    window.addEventListener(
+      "pointerleave",
+      () => {
+        pointerTargetX = 0;
+        pointerTargetY = 0;
+      },
+      { passive: true }
+    );
+  }
 
   const updateWorldScrollFx = () => {
     const scrollMax = Math.max(1, document.body.scrollHeight - window.innerHeight);
     const scrollRatio = window.scrollY / scrollMax;
     root.style.setProperty("--world-scroll-ratio", scrollRatio.toFixed(4));
     root.style.setProperty("--world-cosmic-arc", `${(scrollRatio * 360).toFixed(2)}deg`);
+    if (shouldUseUltraPerformanceMode) {
+      return;
+    }
     worldSections.forEach((section) => {
       const rect = section.getBoundingClientRect();
       const midpoint = rect.top + rect.height / 2;
@@ -6598,6 +6707,9 @@ const setupWorldPageInteractiveFx = () => {
   bindPulseFx(Array.from(document.querySelectorAll(".language-pill, .language-skip, .hero-actions .primary")));
 
   const bindMapCosmicFx = () => {
+    if (shouldUsePerformanceMode) {
+      return;
+    }
     const mapCards = Array.from(document.querySelectorAll(".world-maps .map-card"));
     mapCards.forEach((card) => {
       card.style.setProperty("--map-hot-x", "50%");
@@ -7904,16 +8016,11 @@ const bindPremiumLockedInteraction = (element, {
     const isAuthenticated = Boolean(snapshot?.isAuthenticated);
     event.preventDefault();
     if (!isAuthenticated) {
-      if (typeof window.cosmicaAccountHub?.openAuth === "function") {
-        window.cosmicaAccountHub.openAuth({
-          panel: guestPanel,
-          message: guestMessage,
-          tone: "info",
-        });
-        return;
-      }
-      const panel = encodeURIComponent(String(guestPanel || "login").trim().toLowerCase() || "login");
-      window.location.href = `/index.html?openAuth=1&authPanel=${panel}#support`;
+      openGuestAuthAtMenuTop({
+        panel: guestPanel,
+        message: guestMessage,
+        tone: "info",
+      });
       return;
     }
     if (typeof window.cosmicaAccountHub?.openPremium === "function") {
@@ -7960,6 +8067,21 @@ const setupGrammarPremiumUpsell = () => {
 setupGrammarPremiumUpsell();
 
 const mapLinks = document.querySelectorAll(".map-link");
+const primeMapTranslationCaches = ({ immediate = false } = {}) => {
+  if (shouldUseUltraPerformanceMode) {
+    return;
+  }
+  const run = () => {
+    void warmMapTranslationsCache();
+    void warmWorldTranslationsCache();
+  };
+  if (immediate && !shouldUsePerformanceMode) {
+    run();
+    return;
+  }
+  scheduleNonCriticalTask(run, { timeout: shouldUsePerformanceMode ? 1800 : 1200 });
+};
+
 const inferMapKeyFromHref = (hrefValue) => {
   const href = String(hrefValue || "").toLowerCase();
   if (href.includes("letters")) {
@@ -8001,6 +8123,10 @@ const navigateToMapLink = (href) => {
     navigated = true;
     window.location.href = href;
   };
+  if (shouldUsePerformanceMode) {
+    finalize();
+    return;
+  }
   const deadline = window.setTimeout(finalize, 800);
   Promise.allSettled([
     Promise.resolve(warmMapTranslationsCache()),
@@ -8220,8 +8346,7 @@ if (languagePills.length) {
     }
     if (selected) {
       localStorage.setItem("cosmicaBaseLanguage", selected);
-      void warmMapTranslationsCache();
-      void warmWorldTranslationsCache();
+      primeMapTranslationCaches();
     } else {
       localStorage.removeItem("cosmicaBaseLanguage");
     }
@@ -8333,8 +8458,7 @@ if (languagePills.length) {
     });
   }
 
-  void warmMapTranslationsCache();
-  void warmWorldTranslationsCache();
+  primeMapTranslationCaches();
 }
 
 const languageSearch = document.getElementById("languageSearch");
@@ -9830,7 +9954,9 @@ if (needsMapTranslations) {
   initializeCommonShell();
 }
 
-setupWebVitalsReporting();
+scheduleNonCriticalTask(() => {
+  setupWebVitalsReporting();
+}, { timeout: 2200 });
 
 
 

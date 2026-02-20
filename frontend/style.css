@@ -1304,6 +1304,9 @@ body.premium-setup-lock {
   align-items: center;
   justify-content: center;
   padding: 20px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   background: rgba(4, 10, 24, 0.68);
   backdrop-filter: blur(7px) saturate(120%);
   -webkit-backdrop-filter: blur(7px) saturate(120%);
@@ -1317,6 +1320,9 @@ body.premium-setup-lock {
   align-items: center;
   justify-content: center;
   padding: 20px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   background: rgba(4, 10, 24, 0.72);
   backdrop-filter: blur(8px) saturate(126%);
   -webkit-backdrop-filter: blur(8px) saturate(126%);
@@ -1356,7 +1362,9 @@ body.premium-setup-lock {
     0 0 38px rgba(118, 196, 255, 0.16),
     0 0 0 1px rgba(255, 209, 126, 0.12);
   padding: 28px 28px 24px;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
+  touch-action: pan-y;
   backdrop-filter: blur(24px) saturate(146%);
   -webkit-backdrop-filter: blur(24px) saturate(146%);
   color: rgba(236, 247, 255, 0.98);
@@ -1743,6 +1751,7 @@ body.premium-setup-lock {
   max-height: calc(var(--app-height) - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 24px);
   overflow-y: auto;
   overflow-x: hidden;
+  touch-action: pan-y;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
   border-radius: 22px;
@@ -3711,6 +3720,12 @@ body:not(.world-page) .hero .eyebrow {
 
 .section {
   margin: 80px 0;
+}
+
+body:not(.world-page) .section.reveal,
+body.world-page .section.reveal:not(.world-hero) {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 760px;
 }
 
 body:not(.world-page) .section {
@@ -8349,6 +8364,45 @@ body.world-page.start-lesson-transition #language.language-reveal {
   }
 }
 
+body.perf-compact .aurora,
+body.perf-compact .star,
+body.perf-compact .world-fx-star,
+body.perf-compact .home-fx-comet,
+body.perf-compact .world-fx-comet,
+body.perf-compact .world-fx-dust-particle {
+  animation-duration: 16s !important;
+}
+
+body.perf-compact .home-fx-comets,
+body.perf-compact .world-fx-dust,
+body.perf-compact .world-fx-comets {
+  display: none !important;
+}
+
+body.perf-compact .nav,
+body.perf-compact .nav-links a,
+body.perf-compact .account-menu,
+body.perf-compact .premium-setup-modal,
+body.perf-compact .premium-checkout-modal,
+body.perf-compact .premium-success-modal {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+body.perf-compact .nav,
+body.perf-compact .nav-links a {
+  box-shadow: 0 8px 18px rgba(3, 8, 20, 0.32) !important;
+}
+
+body.perf-ultra .aurora,
+body.perf-ultra .starfield,
+body.perf-ultra .world-fx-stars,
+body.perf-ultra .world-ambient .nebula-a,
+body.perf-ultra .world-ambient .nebula-b,
+body.perf-ultra .world-ambient .planet-a {
+  display: none !important;
+}
+
 /* === World pages: language + maps === */
 .world-page main {
   max-width: 1200px;
@@ -9873,6 +9927,178 @@ body.home-alt-luxe .is-interactive-surface.is-pressed {
     --surface-tilt-x: 0deg !important;
     --surface-tilt-y: 0deg !important;
     transition-duration: 0.14s;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   DEEP-SCALE DEVICE STABILITY LAYER
+   Final defensive overrides to prevent clipping/overlap across pages/browsers.
+   -------------------------------------------------------------------------- */
+
+html,
+body {
+  max-width: 100%;
+}
+
+body * {
+  min-width: 0;
+}
+
+main,
+section,
+.section,
+.hero,
+.guide,
+.steps,
+.world-grid,
+.world-maps .steps,
+.nav,
+.nav-links,
+.nav-controls,
+.join-panel,
+.support-panel,
+.footer,
+.footer-inline-links,
+.footer-legal-links,
+.account-dropdown,
+.premium-setup-card,
+.premium-checkout-card,
+.premium-success-card,
+.grammar-modal {
+  max-width: 100%;
+}
+
+.hero-left,
+.hero-right,
+.section-title,
+.card,
+.world-card,
+.map-card,
+.word-card,
+.phrase-card,
+.grammar-card,
+.account-dropdown-card,
+.premium-setup-card,
+.premium-checkout-card,
+.premium-success-card,
+.grammar-modal,
+.grammar-modal-body,
+.join-actions,
+.join-actions textarea,
+.join-actions input {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 960px) {
+  body:not(.world-page) .nav-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(112px, 1fr));
+    width: 100%;
+    gap: 8px;
+    white-space: normal;
+    overflow: visible;
+    padding-bottom: 0;
+  }
+
+  body:not(.world-page) .nav-links a {
+    min-height: 40px;
+    white-space: normal;
+    line-height: 1.22;
+    text-align: center;
+  }
+
+  .steps,
+  .world-grid,
+  .world-maps .steps {
+    grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  }
+
+  .account-slot {
+    margin-left: 0;
+    transform: none;
+  }
+}
+
+@media (max-width: 600px) {
+  body:not(.world-page) .nav-links {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .premium-setup-card,
+  .premium-checkout-card,
+  .premium-success-card,
+  .grammar-modal,
+  .account-dropdown {
+    max-width: calc(100vw - 12px) !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  body:not(.world-page) .nav-links,
+  body.world-page .nav-links {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(112px, 1fr)) !important;
+    width: 100% !important;
+    gap: 8px !important;
+    white-space: normal !important;
+    overflow: visible !important;
+    justify-content: stretch !important;
+  }
+
+  .nav-links a {
+    width: 100% !important;
+    min-height: 40px !important;
+    white-space: normal !important;
+    text-overflow: clip !important;
+    line-height: 1.22 !important;
+    text-align: center !important;
+    overflow: visible !important;
+  }
+
+  .steps,
+  .world-grid,
+  .world-maps .steps {
+    grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)) !important;
+  }
+
+  .hero-right,
+  body.home-alt-luxe .hero-right {
+    height: auto !important;
+    min-height: 300px;
+    max-height: none !important;
+  }
+
+  .orbit-system {
+    width: min(420px, 100%);
+    height: auto;
+    aspect-ratio: 1 / 1;
+  }
+}
+
+@media (max-width: 640px) {
+  body:not(.world-page) .nav-links,
+  body.world-page .nav-links {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .steps,
+  .world-grid,
+  .world-maps .steps {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
+
+@media (max-height: 620px) {
+  .nav-links a {
+    min-height: 34px !important;
+  }
+
+  .account-dropdown,
+  .premium-setup-card,
+  .premium-checkout-card,
+  .premium-success-card,
+  .grammar-modal {
+    max-height: calc(var(--app-height) - 8px) !important;
   }
 }
 

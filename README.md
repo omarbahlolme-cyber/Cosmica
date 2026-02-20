@@ -143,6 +143,25 @@ Combined guard (syntax + route smoke + cross-device checkout smoke):
 npm run verify:pc-mobile
 ```
 
+Viewport/browser layout compatibility matrix:
+
+```bash
+npm run verify:viewport:browsers
+npm run verify:viewport
+```
+
+This check:
+1. Runs key routes across Chromium, Firefox, and WebKit.
+2. Verifies key mobile/tablet/desktop viewport widths.
+3. Fails on horizontal overflow and clipped-content risk in critical containers.
+4. Writes a report to `perf/viewport-matrix-report.json`.
+5. Saves failure screenshots under `perf/viewport-failures/`.
+
+Optional runtime overrides:
+- `VIEWPORT_BASE_URL` (use deployed/staging URL instead of local server)
+- `VIEWPORT_BROWSERS` (comma-separated, e.g. `chromium,firefox`)
+- `VIEWPORT_PORT` (local server port when `VIEWPORT_BASE_URL` is not set)
+
 User-state contract check for guest/free/premium logic:
 
 ```bash

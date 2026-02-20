@@ -11,6 +11,8 @@
     "html:baseline": "node scripts/apply-html-baseline.js",
     "smoke": "node scripts/smoke.js",
     "smoke:checkout:cross-device": "node scripts/smoke-checkout-cross-device.js",
+    "verify:viewport": "node scripts/verify-viewport-matrix.js",
+    "verify:viewport:browsers": "playwright install chromium firefox webkit",
     "indexing:check": "node scripts/indexing-followup.js",
     "rollback:info": "node scripts/rollback-info.js",
     "check:syntax": "node --check server.js && node --check backend/server.js && node --check frontend/app.js && node --check frontend/maps/app-maps.js",
@@ -46,6 +48,7 @@
     "format": "prettier --write \"**/*.{html,css,js,json,md}\""
   },
   "devDependencies": {
+    "playwright": "^1.55.0",
     "prettier": "^3.2.5"
   },
   "dependencies": {

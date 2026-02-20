@@ -10,7 +10,7 @@ on:
 jobs:
   quality:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 35
 
     steps:
       - name: Checkout
@@ -50,6 +50,22 @@ jobs:
           SMOKE_USE_EXTERNAL_BASE: "false"
           SMOKE_LOCAL_PORT: "4174"
         run: npm run smoke:checkout:cross-device
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium firefox webkit
+
+      - name: Viewport/browser matrix checks
+        run: npm run verify:viewport
+
+      - name: Upload viewport matrix artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: viewport-matrix-report
+          path: |
+            perf/viewport-matrix-report.json
+            perf/viewport-failures/
+          if-no-files-found: ignore
 
       - name: Billing contract checks
         run: npm run billing:contract
