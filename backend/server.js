@@ -4662,11 +4662,20 @@ const evaluateKofiWebhookPaymentAcceptance = ({ eventType = "", paymentStatus = 
   const normalizedStatus = String(paymentStatus || "").trim().toLowerCase();
   const amountValue = Number.parseFloat(String(amount || "").replace(/[^0-9.-]/g, ""));
 
-  const rejectedKeywords = ["refund", "refunded", "cancel", "canceled", "cancelled", "chargeback", "failed"];
-  if (rejectedKeywords.some((flag) => normalizedEventType.includes(flag) || normalizedStatus.includes(flag))) {
+  const downgradeKeywords = ["refund", "refunded", "cancel", "canceled", "cancelled", "chargeback"];
+  if (downgradeKeywords.some((flag) => normalizedEventType.includes(flag) || normalizedStatus.includes(flag))) {
     return {
       accepted: false,
-      reason: "rejected-status",
+      action: "downgrade",
+      reason: "cancellation-or-refund",
+    };
+  }
+
+  if (normalizedEventType.includes("failed") || normalizedStatus.includes("failed")) {
+    return {
+      accepted: false,
+      action: "ignore",
+      reason: "failed-payment",
     };
   }
 
@@ -4674,6 +4683,7 @@ const evaluateKofiWebhookPaymentAcceptance = ({ eventType = "", paymentStatus = 
   if (!acceptedStatusKeywords.some((flag) => normalizedStatus.includes(flag))) {
     return {
       accepted: false,
+      action: "ignore",
       reason: "unconfirmed-status",
     };
   }
@@ -4682,6 +4692,7 @@ const evaluateKofiWebhookPaymentAcceptance = ({ eventType = "", paymentStatus = 
   if (normalizedEventType && !acceptedEventKeywords.some((flag) => normalizedEventType.includes(flag))) {
     return {
       accepted: false,
+      action: "ignore",
       reason: "unconfirmed-event-type",
     };
   }
@@ -4689,12 +4700,14 @@ const evaluateKofiWebhookPaymentAcceptance = ({ eventType = "", paymentStatus = 
   if (!Number.isFinite(amountValue) || amountValue <= 0) {
     return {
       accepted: false,
+      action: "ignore",
       reason: "invalid-amount",
     };
   }
 
   return {
     accepted: true,
+    action: "upgrade",
     reason: "confirmed-paid-event",
   };
 };
@@ -4775,6 +4788,70 @@ const applyPremiumProfileToUserRecord = (
   };
 };
 
+const applyPremiumDowngradeToUserRecord = (
+  userRecord,
+  {
+    provider = "ko-fi",
+    source = "webhook",
+    eventId = "",
+    eventType = "",
+  } = {}
+) => {
+  if (!userRecord || !isPlainObject(userRecord)) {
+    return {
+      changed: false,
+      alreadyFree: true,
+      alreadyProcessed: false,
+    };
+  }
+
+  userRecord.data = normalizeUserData(userRecord.data);
+  if (!isPlainObject(userRecord.data.profile)) {
+    userRecord.data.profile = {};
+  }
+
+  const profile = userRecord.data.profile;
+  const isPremium = userHasPremiumAccessForProgress(userRecord);
+  const normalizedEventId = String(eventId || "").trim().slice(0, 120);
+  const alreadyProcessed =
+    Boolean(normalizedEventId) &&
+    String(profile.premiumLastDowngradeEventId || "").trim() === normalizedEventId;
+  if (!isPremium && alreadyProcessed) {
+    return {
+      changed: false,
+      alreadyFree: true,
+      alreadyProcessed,
+    };
+  }
+
+  const nowIso = new Date().toISOString();
+  profile.isPremium = false;
+  profile.premium = false;
+  profile.plan = "free";
+  profile.tier = "free";
+  profile.membership = "free";
+  profile.premiumLastSource = String(source || "").trim().slice(0, 60) || "webhook";
+  profile.premiumProvider = String(provider || "").trim().slice(0, 40) || "ko-fi";
+  profile.premiumLastEventAt = nowIso;
+  profile.premiumDeactivatedAt = nowIso;
+  if (normalizedEventId) {
+    profile.premiumLastDowngradeEventId = normalizedEventId;
+  }
+  const normalizedEventType = String(eventType || "").trim().slice(0, 80);
+  if (normalizedEventType) {
+    profile.premiumLastEventType = normalizedEventType;
+  }
+
+  userRecord.updatedAt = nowIso;
+  markAuthStoreDirty();
+
+  return {
+    changed: isPremium,
+    alreadyFree: !isPremium,
+    alreadyProcessed,
+  };
+};
+
 app.post(
   "/api/billing/webhooks/kofi",
   billingWebhookLimiter,
@@ -4848,7 +4925,7 @@ app.post(
       paymentStatus,
       amount,
     });
-    if (!paymentAcceptance.accepted) {
+    if (!paymentAcceptance.accepted && paymentAcceptance.action === "ignore") {
       return res.json({
         ok: true,
         ignored: true,
@@ -4916,6 +4993,41 @@ app.post(
       .trim()
       .toUpperCase()
       .slice(0, 12);
+
+    if (paymentAcceptance.action === "downgrade") {
+      const downgradeResult = applyPremiumDowngradeToUserRecord(userRecord, {
+        provider: "ko-fi",
+        source: "kofi-webhook",
+        eventId,
+        eventType,
+      });
+
+      void appendSecurityEvent({
+        type: "kofi-webhook-processed",
+        req,
+        email: payerEmail,
+        userId: userRecord.id,
+        reason: downgradeResult.changed
+          ? "Premium downgraded from Ko-fi cancellation/refund webhook"
+          : "Ko-fi downgrade webhook idempotent/no-op",
+        details: {
+          eventId,
+          eventType,
+          paymentStatus,
+          amount,
+          currency,
+          action: "downgrade",
+        },
+      });
+
+      return res.json({
+        ok: true,
+        matched: true,
+        downgraded: downgradeResult.changed,
+        alreadyFree: downgradeResult.alreadyFree,
+        alreadyProcessed: downgradeResult.alreadyProcessed,
+      });
+    }
 
     const premiumResult = applyPremiumProfileToUserRecord(userRecord, {
       provider: "ko-fi",
