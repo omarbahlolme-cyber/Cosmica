@@ -1717,6 +1717,7 @@ const setupAccountHub = () => {
   const premiumCheckoutPrimaryBtn = premiumCheckoutOverlay.querySelector(".premium-checkout-primary");
   const premiumCheckoutSecondaryBtn = premiumCheckoutOverlay.querySelector(".premium-checkout-secondary");
   let selectedPremiumCheckoutOption = null;
+  let premiumCheckoutOptionsReady = false;
   let activeAuthPanel = "login";
   let lastPremiumFocusNode = null;
   const triggerNoticeBubble = document.createElement("p");
@@ -2257,21 +2258,23 @@ const setupAccountHub = () => {
       return;
     }
     const loading = isLoading === true;
-    premiumCheckoutPrimaryBtn.disabled = loading;
     premiumCheckoutPrimaryBtn.dataset.loading = loading ? "true" : "false";
     premiumCheckoutPrimaryBtn.textContent = loading ? "Redirecting…" : "Proceed";
+    premiumCheckoutPrimaryBtn.disabled = loading || !premiumCheckoutOptionsReady;
   };
 
-  const buildFallbackPremiumBillingOptions = () => [];
-
-  const sanitizePremiumCheckoutUrl = (value) => {
+  const sanitizeKoFiCheckoutUrl = (value) => {
     const raw = String(value || "").trim();
     if (!raw) {
       return "";
     }
     try {
-      const parsed = new URL(raw);
+      const parsed = new URL(raw, window.location.origin);
       if (parsed.protocol !== "https:") {
+        return "";
+      }
+      const host = String(parsed.hostname || "").trim().toLowerCase();
+      if (host !== "ko-fi.com" && host !== "www.ko-fi.com") {
         return "";
       }
       return parsed.toString();
@@ -2279,6 +2282,32 @@ const setupAccountHub = () => {
       return "";
     }
   };
+
+  const buildFallbackPremiumBillingOptions = () => {
+    const fallbackCandidates = [
+      window.COSMICA_KOFI_PREMIUM_URL,
+      document.querySelector(".support-button[href*='ko-fi.com']")?.getAttribute("href"),
+      document.querySelector("a[href*='ko-fi.com/supportcosmica']")?.getAttribute("href"),
+      "https://ko-fi.com/supportcosmica",
+    ];
+    const fallbackUrl =
+      fallbackCandidates
+        .map((entry) => sanitizeKoFiCheckoutUrl(entry))
+        .find(Boolean) || "";
+    if (!fallbackUrl) {
+      return [];
+    }
+    return [
+      {
+        id: "monthly",
+        label: "Monthly",
+        description: "€9.99 per month",
+        url: fallbackUrl,
+      },
+    ];
+  };
+
+  const sanitizePremiumCheckoutUrl = (value) => sanitizeKoFiCheckoutUrl(value);
 
   const renderPremiumCheckoutOptions = (options = []) => {
     if (!(premiumCheckoutOptionsNode instanceof HTMLElement)) {
@@ -2306,6 +2335,7 @@ const setupAccountHub = () => {
       })
       .filter(Boolean);
     selectedPremiumCheckoutOption = safeItems[0] || null;
+    premiumCheckoutOptionsReady = Boolean(selectedPremiumCheckoutOption?.url);
     premiumCheckoutOptionsNode.innerHTML = "";
     safeItems.forEach((item) => {
       const optionButton = document.createElement("button");
@@ -2322,6 +2352,7 @@ const setupAccountHub = () => {
       `;
       premiumCheckoutOptionsNode.appendChild(optionButton);
     });
+    setPremiumCheckoutPrimaryState(false);
   };
 
   const loadPremiumBillingOptions = async () => {
@@ -2349,6 +2380,7 @@ const setupAccountHub = () => {
   };
 
   const openPremiumCheckoutModal = async () => {
+    premiumCheckoutOptionsReady = false;
     renderPremiumCheckoutOptions(buildFallbackPremiumBillingOptions());
     setPremiumCheckoutPrimaryState(false);
     setPremiumCheckoutFeedback("");
@@ -2356,7 +2388,11 @@ const setupAccountHub = () => {
     syncPremiumModalBodyLock();
     setPremiumCheckoutFeedback("Loading secure subscription options...", "info");
     await loadPremiumBillingOptions();
-    setPremiumCheckoutFeedback("");
+    if (!premiumCheckoutOptionsReady) {
+      setPremiumCheckoutFeedback("Secure checkout is currently unavailable. Please try again.", "error");
+    } else {
+      setPremiumCheckoutFeedback("");
+    }
     window.setTimeout(() => {
       if (premiumCheckoutPrimaryBtn && typeof premiumCheckoutPrimaryBtn.focus === "function") {
         premiumCheckoutPrimaryBtn.focus();
@@ -2368,6 +2404,7 @@ const setupAccountHub = () => {
 
   const closePremiumCheckoutModal = () => {
     premiumCheckoutOverlay.hidden = true;
+    premiumCheckoutOptionsReady = false;
     setPremiumCheckoutPrimaryState(false);
     setPremiumCheckoutFeedback("");
     syncPremiumModalBodyLock();
@@ -2447,6 +2484,11 @@ const setupAccountHub = () => {
   premiumCheckoutPrimaryBtn?.addEventListener("click", () => {
     const target = selectedPremiumCheckoutOption;
     if (!target?.url) {
+      if (!premiumCheckoutOptionsReady) {
+        setPremiumCheckoutFeedback("Loading secure subscription options... Please wait.", "info");
+        void loadPremiumBillingOptions();
+        return;
+      }
       setPremiumCheckoutPrimaryState(false);
       setPremiumCheckoutFeedback("Secure checkout is currently unavailable. Please try again.", "error");
       return;
