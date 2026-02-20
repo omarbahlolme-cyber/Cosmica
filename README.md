@@ -75,6 +75,28 @@ Runs two quick safeguards:
 1. Verifies local HTML `href/src` references point to real files.
 2. Starts the local server on an isolated port and checks core routes return `200`.
 
+Cross-device premium checkout smoke (desktop + mobile user agents):
+
+```bash
+SMOKE_BASE_URL=https://www.cosmicalearn.com \
+SMOKE_AUTH_EMAIL=you@example.com \
+SMOKE_AUTH_PASSWORD='your-password' \
+SMOKE_EXPECTED_PREMIUM_URL='https://ko-fi.com/s/your-monthly-tier' \
+npm run smoke:checkout:cross-device
+```
+
+This check:
+1. Logs in using desktop and mobile user agents.
+2. Calls `/api/billing/premium/options` with authenticated session cookies.
+3. Verifies both devices return the same Ko-fi checkout options.
+4. Fails if a donate/support URL is returned.
+
+Combined guard (syntax + route smoke + cross-device checkout smoke):
+
+```bash
+npm run verify:pc-mobile
+```
+
 ## Quality checks (CI + local)
 
 ```bash

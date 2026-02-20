@@ -10,6 +10,7 @@
     "generate:native-grammar": "node scripts/generate-native-grammar-cards.js",
     "html:baseline": "node scripts/apply-html-baseline.js",
     "smoke": "node scripts/smoke.js",
+    "smoke:checkout:cross-device": "node scripts/smoke-checkout-cross-device.js",
     "indexing:check": "node scripts/indexing-followup.js",
     "rollback:info": "node scripts/rollback-info.js",
     "check:syntax": "node --check server.js && node --check backend/server.js && node --check frontend/app.js && node --check frontend/maps/app-maps.js",
@@ -36,6 +37,7 @@
     "backup:verify": "node scripts/verify-backup.js",
     "release:check": "node scripts/check-release.js",
     "quality": "npm run check:syntax && npm run check:literal-escapes && npm run check:a11y && npm run check:seo && npm run check:assets && npm run check:html-cache && npm run check:integrity && npm run check:securitytxt && npm run check:intents && npm run check:bloat && npm run perf:check && npm run security:audit && npm run release:check && npm run smoke",
+    "verify:pc-mobile": "npm run check:syntax && npm run smoke && npm run smoke:checkout:cross-device",
     "format": "prettier --write \"**/*.{html,css,js,json,md}\""
   },
   "devDependencies": {

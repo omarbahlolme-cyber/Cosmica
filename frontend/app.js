@@ -779,7 +779,7 @@ const createCosmicaAuthClient = () => {
         method: "PUT",
         body: { data },
       }),
-    getPremiumBillingOptions: () => requestOrNullOnUnauthorized("/api/billing/premium/options"),
+    getPremiumBillingOptions: () => request("/api/billing/premium/options"),
     upgradeToPremium: () =>
       request("/api/account/premium/upgrade", {
         method: "POST",
@@ -2336,12 +2336,43 @@ const setupAccountHub = () => {
   };
 
   const loadPremiumBillingOptions = async () => {
+    const applyResponseOptions = (responsePayload) => {
+      const options = Array.isArray(responsePayload?.options) ? responsePayload.options : [];
+      renderPremiumCheckoutOptions(options);
+      return options.length > 0;
+    };
+
     try {
       const response = await window.cosmicaAuth.getPremiumBillingOptions();
-      const options = Array.isArray(response?.options) ? response.options : [];
-      renderPremiumCheckoutOptions(options);
-    } catch {
+      return {
+        ok: applyResponseOptions(response),
+        reason: "ok",
+      };
+    } catch (error) {
+      const status = Number(error?.status || 0);
+      if (status === 401) {
+        try {
+          const refreshedSession = await window.cosmicaAuth.getSession();
+          if (refreshedSession) {
+            const retryResponse = await window.cosmicaAuth.getPremiumBillingOptions();
+            return {
+              ok: applyResponseOptions(retryResponse),
+              reason: "ok",
+            };
+          }
+        } catch {}
+        renderPremiumCheckoutOptions(buildFallbackPremiumBillingOptions());
+        return {
+          ok: false,
+          reason: "unauthorized",
+        };
+      }
+
       renderPremiumCheckoutOptions(buildFallbackPremiumBillingOptions());
+      return {
+        ok: false,
+        reason: status === 503 ? "not_configured" : "error",
+      };
     }
   };
 
@@ -2367,8 +2398,14 @@ const setupAccountHub = () => {
     premiumCheckoutOverlay.hidden = false;
     syncPremiumModalBodyLock();
     setPremiumCheckoutFeedback("Loading secure subscription options...", "info");
-    await loadPremiumBillingOptions();
+    const loadResult = await loadPremiumBillingOptions();
     if (!premiumCheckoutOptionsReady) {
+      if (loadResult?.reason === "unauthorized") {
+        setPremiumCheckoutFeedback("Your session on this device expired. Please log in again to continue.", "error");
+        setAuthPanel("login", true);
+        openDropdown();
+        return;
+      }
       setPremiumCheckoutFeedback("Secure checkout is currently unavailable. Please try again.", "error");
     } else {
       setPremiumCheckoutFeedback("");
