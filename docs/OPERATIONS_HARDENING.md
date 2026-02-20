@@ -144,6 +144,39 @@ Run before production deploys:
 2. Fix all `FAIL` items before go-live.
 3. Review `WARN` items and explicitly accept or remediate.
 
+### 4.2 Billing webhook + Google auth recovery checks
+
+Run these after billing/auth incidents, token rotation, or production redeploys.
+
+1. Rotate webhook token if exposed:
+   - Regenerate in Ko-fi Webhooks UI.
+   - Update `KOFI_WEBHOOK_VERIFICATION_TOKEN` in production env.
+   - Redeploy/restart backend.
+
+2. Confirm paid event upgrades premium (`upgraded:true`):
+
+```powershell
+$token="YOUR_KOFI_WEBHOOK_TOKEN"; $email="target-user@example.com"; $url="https://www.cosmicalearn.com/api/billing/webhooks/kofi"; $data=(@{verification_token=$token; email=$email; type="subscription"; payment_status="completed"; message_id=("ops-paid-"+[guid]::NewGuid().ToString()); amount="9.99"; currency="EUR"} | ConvertTo-Json -Compress); $r=Invoke-WebRequest -Uri $url -Method POST -ContentType "application/x-www-form-urlencoded" -Body @{data=$data}; $j=$r.Content|ConvertFrom-Json; "STATUS=$($r.StatusCode) ok=$($j.ok) matched=$($j.matched) upgraded=$($j.upgraded)"
+```
+
+3. Confirm cancellation/refund downgrades premium (`downgraded:true` or `alreadyFree:true`):
+
+```powershell
+$token="YOUR_KOFI_WEBHOOK_TOKEN"; $email="target-user@example.com"; $url="https://www.cosmicalearn.com/api/billing/webhooks/kofi"; $data=(@{verification_token=$token; email=$email; type="subscription.cancelled"; payment_status="cancelled"; message_id=("ops-cancel-"+[guid]::NewGuid().ToString()); amount="0"; currency="EUR"} | ConvertTo-Json -Compress); $r=Invoke-WebRequest -Uri $url -Method POST -ContentType "application/x-www-form-urlencoded" -Body @{data=$data}; $j=$r.Content|ConvertFrom-Json; "STATUS=$($r.StatusCode) ok=$($j.ok) matched=$($j.matched) downgraded=$($j.downgraded) alreadyFree=$($j.alreadyFree)"
+```
+
+4. Confirm failed/unconfirmed events are ignored (`ignored:true`):
+
+```powershell
+$token="YOUR_KOFI_WEBHOOK_TOKEN"; $email="target-user@example.com"; $url="https://www.cosmicalearn.com/api/billing/webhooks/kofi"; $data=(@{verification_token=$token; email=$email; type="subscription"; payment_status="pending"; message_id=("ops-pending-"+[guid]::NewGuid().ToString()); amount="9.99"; currency="EUR"} | ConvertTo-Json -Compress); $r=Invoke-WebRequest -Uri $url -Method POST -ContentType "application/x-www-form-urlencoded" -Body @{data=$data}; $j=$r.Content|ConvertFrom-Json; "STATUS=$($r.StatusCode) ok=$($j.ok) ignored=$($j.ignored) reason=$($j.reason)"
+```
+
+5. Confirm Google auth works on mobile browser:
+   - Open `https://www.cosmicalearn.com` on a phone.
+   - Run Google Login and Google Signup once.
+   - Ensure no `authError=google_*` appears in the URL.
+   - If errors appear, capture exact `authError` code and backend request ID (`X-Request-Id`) for triage.
+
 ## 5) Policy Enforcement Process
 
 For privacy/terms/license violations and response steps, use:
