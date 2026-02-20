@@ -10172,45 +10172,9 @@ section,
 }
 
 @media (max-width: 1100px) {
-  .nav {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas:
-      "brand controls"
-      "links links";
-    row-gap: 10px;
-    column-gap: 10px;
-  }
-
-  .brand {
-    grid-area: brand;
-  }
-
-  .nav-controls {
-    grid-area: controls;
-    justify-self: end;
-    min-width: 0;
-  }
-
-  .nav-links {
-    grid-area: links;
-    width: 100%;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-
   .account-slot {
     margin-left: 0;
     transform: none;
-  }
-}
-
-@media (max-width: 912px) {
-  body.world-page .world-ambient,
-  body.world-page .world-fx-stars,
-  body.world-page .world-fx-dust,
-  body.world-page .world-fx-comets {
-    display: none;
   }
 }
 
