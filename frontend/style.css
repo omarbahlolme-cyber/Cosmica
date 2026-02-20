@@ -4043,8 +4043,9 @@ body.world-page .section-title {
 
 @media (max-width: 880px) {
   body.world-page main {
-    max-width: calc(100vw - 3rem);
-    margin-left: 1.25rem;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
   }
 }
 
@@ -5516,7 +5517,7 @@ body.world-page :is(.world-section, #world, #language, #maps) {
     inset 0 -1px 0 rgba(86, 146, 214, 0.18);
   backdrop-filter: blur(14px) saturate(135%);
   -webkit-backdrop-filter: blur(14px) saturate(135%);
-  overflow: hidden;
+  overflow: visible;
   isolation: isolate;
   transition: transform 320ms cubic-bezier(0.2, 0.85, 0.3, 1),
     box-shadow 320ms ease,
@@ -5540,7 +5541,7 @@ body.world-page .world-section.is-visible {
 body.world-page :is(.world-section, #world, #language, #maps)::before {
   content: "";
   position: absolute;
-  inset: -14px -18px;
+  inset: 0;
   border-radius: 24px;
   background:
     radial-gradient(circle at 14% 18%, rgba(108, 208, 255, 0.2), transparent 45%),
@@ -5554,7 +5555,7 @@ body.world-page :is(.world-section, #world, #language, #maps)::before {
 body.world-page :is(.world-section, #world, #language, #maps)::after {
   content: "";
   position: absolute;
-  inset: -1px;
+  inset: 0;
   border-radius: inherit;
   padding: 1px;
   background: conic-gradient(
@@ -7805,8 +7806,8 @@ body.world-page.start-lesson-transition #language.language-reveal {
   }
 
   .account-slot {
-    margin-left: -16px;
-    transform: translateX(36px);
+    margin-left: 0;
+    transform: none;
   }
 
   .account-trigger-copy {
@@ -9931,8 +9932,8 @@ body.home-alt-luxe .is-interactive-surface.is-pressed {
 }
 
 /* --------------------------------------------------------------------------
-   DEEP-SCALE DEVICE STABILITY LAYER
-   Final defensive overrides to prevent clipping/overlap across pages/browsers.
+  DEVICE COMPATIBILITY STABILIZATION
+  Keep pages robust on all devices without forcing conflicting layout modes.
    -------------------------------------------------------------------------- */
 
 html,
@@ -9990,19 +9991,69 @@ section,
 }
 
 @media (max-width: 960px) {
-  body:not(.world-page) .nav-links {
+  .nav {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(112px, 1fr));
-    width: 100%;
-    gap: 8px;
-    white-space: normal;
-    overflow: visible;
-    padding-bottom: 0;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "brand controls"
+      "links links";
+    row-gap: 10px;
+    column-gap: 10px;
   }
 
-  body:not(.world-page) .nav-links a {
-    min-height: 40px;
+  .brand {
+    grid-area: brand;
+  }
+
+  .nav-controls {
+    grid-area: controls;
+    justify-self: end;
+    min-width: 0;
+  }
+
+  .nav-links {
+    grid-area: links;
+  }
+
+  body.home-alt-luxe .hero {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+
+  body.home-alt-luxe .hero-right {
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+  }
+
+  body.home-alt-luxe .orbit-system {
+    width: min(420px, 100%);
+    height: min(420px, 100%);
+  }
+
+  body.home-alt-luxe .orbit-ring-inner {
+    --ring-size: 240px;
+    --orbit-radius: 120px;
+  }
+
+  body.home-alt-luxe .orbit-ring-outer {
+    --ring-size: 340px;
+    --orbit-radius: 170px;
+  }
+
+  .nav-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    overflow: visible;
     white-space: normal;
+  }
+
+  .nav-links a {
+    min-height: 40px;
+    white-space: nowrap;
     line-height: 1.22;
     text-align: center;
   }
@@ -10017,11 +10068,28 @@ section,
     margin-left: 0;
     transform: none;
   }
+
+  .section.words-group,
+  .section.phrases-group,
+  .section.letters-grid-section {
+    overflow: visible;
+  }
 }
 
 @media (max-width: 600px) {
-  body:not(.world-page) .nav-links {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  body.home-alt-luxe .orbit-system {
+    width: min(340px, 100%);
+    height: min(340px, 100%);
+  }
+
+  body.home-alt-luxe .orbit-ring-inner {
+    --ring-size: 210px;
+    --orbit-radius: 105px;
+  }
+
+  body.home-alt-luxe .orbit-ring-outer {
+    --ring-size: 300px;
+    --orbit-radius: 150px;
   }
 
   .premium-setup-card,
@@ -10034,38 +10102,66 @@ section,
 }
 
 @media (max-width: 1024px) {
-  body:not(.world-page) .nav-links,
-  body.world-page .nav-links {
-    display: grid !important;
-    grid-template-columns: repeat(auto-fit, minmax(112px, 1fr)) !important;
-    width: 100% !important;
-    gap: 8px !important;
-    white-space: normal !important;
-    overflow: visible !important;
-    justify-content: stretch !important;
+  .aurora {
+    inset: 0;
+  }
+
+  body.home-alt-luxe .home-fx-comets,
+  body.world-page .world-fx-comets,
+  body.world-page .world-fx-dust,
+  body.world-page .world-ambient {
+    overflow: clip;
+  }
+
+  body.home-alt-luxe .home-fx-comets,
+  body.world-page .world-fx-comets {
+    display: none;
+  }
+
+  body.home-alt-luxe .home-fx-comet,
+  body.world-page .world-fx-comet {
+    right: -18%;
+  }
+
+  body.world-page .world-fx-dust {
+    inset: 0;
+  }
+
+  body.world-page .world-ambient .world-nebula {
+    width: 22vmax;
+    height: 18vmax;
+  }
+
+  body.world-page .world-ambient .nebula-a {
+    left: 0;
+  }
+
+  body.world-page .world-ambient .nebula-b {
+    right: 4%;
+  }
+
+  body.world-page .world-ambient .planet-a {
+    left: 68%;
+    width: 14vmax;
+    height: 14vmax;
   }
 
   .nav-links a {
-    width: 100% !important;
-    min-height: 40px !important;
-    white-space: normal !important;
-    text-overflow: clip !important;
-    line-height: 1.22 !important;
-    text-align: center !important;
-    overflow: visible !important;
+    text-overflow: clip;
+    overflow: visible;
   }
 
   .steps,
   .world-grid,
   .world-maps .steps {
-    grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)) !important;
+    grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
   }
 
   .hero-right,
   body.home-alt-luxe .hero-right {
-    height: auto !important;
+    height: auto;
     min-height: 300px;
-    max-height: none !important;
+    max-height: none;
   }
 
   .orbit-system {
@@ -10075,22 +10171,69 @@ section,
   }
 }
 
-@media (max-width: 640px) {
-  body:not(.world-page) .nav-links,
-  body.world-page .nav-links {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+@media (max-width: 1100px) {
+  .nav {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "brand controls"
+      "links links";
+    row-gap: 10px;
+    column-gap: 10px;
   }
 
+  .brand {
+    grid-area: brand;
+  }
+
+  .nav-controls {
+    grid-area: controls;
+    justify-self: end;
+    min-width: 0;
+  }
+
+  .nav-links {
+    grid-area: links;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .account-slot {
+    margin-left: 0;
+    transform: none;
+  }
+}
+
+@media (max-width: 912px) {
+  body.world-page .world-ambient,
+  body.world-page .world-fx-stars,
+  body.world-page .world-fx-dust,
+  body.world-page .world-fx-comets {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  body.world-page .section-title,
+  body.world-page .world-hero > .section-title {
+    max-width: 100%;
+    margin-right: 0;
+    padding-right: 0;
+  }
+}
+
+@media (max-width: 640px) {
   .steps,
   .world-grid,
   .world-maps .steps {
-    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
 @media (max-height: 620px) {
   .nav-links a {
-    min-height: 34px !important;
+    min-height: 34px;
   }
 
   .account-dropdown,
@@ -10098,61 +10241,14 @@ section,
   .premium-checkout-card,
   .premium-success-card,
   .grammar-modal {
-    max-height: calc(var(--app-height) - 8px) !important;
+    max-height: calc(var(--app-height) - 8px);
   }
 }
 
-/* --------------------------------------------------------------------------
-   CROSS-DEVICE FIT HARDENING (NO REDESIGN)
-   -------------------------------------------------------------------------- */
 @media (max-width: 1180px) {
   body.world-page main {
     padding-left: 4.5vw;
     padding-right: 4.5vw;
-  }
-
-  body.world-page .world-hero {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 22px;
-  }
-
-  body.world-page .world-hero > .section-title,
-  body.world-page .world-hero > .hero-actions {
-    grid-column: auto;
-  }
-
-  .nav-links {
-    row-gap: 8px;
-  }
-}
-
-@media (max-width: 900px) {
-  body:not(.world-page) .steps,
-  body:not(.world-page) .world-grid,
-  body.home-alt-luxe .steps,
-  body.home-alt-luxe .world-grid,
-  body.world-page .world-maps .steps {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  body.home-alt-luxe .hero-right,
-  .hero-right {
-    height: clamp(320px, 62vh, 460px);
-  }
-}
-
-@media (max-width: 640px) {
-  body:not(.world-page) .steps,
-  body:not(.world-page) .world-grid,
-  body.home-alt-luxe .steps,
-  body.home-alt-luxe .world-grid,
-  body.world-page .world-maps .steps {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .nav-links {
-    width: 100%;
-    justify-content: center;
   }
 }
 
@@ -10226,10 +10322,6 @@ section,
 }
 
 @media (min-width: 768px) and (max-width: 1024px) {
-  body.world-page .world-hero {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
   body.world-page .world-maps {
     margin-top: 132px;
   }
@@ -10245,10 +10337,6 @@ section,
 }
 
 @media (min-width: 1024px) and (max-width: 1366px) and (orientation: portrait) {
-  body.world-page .world-hero {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
   body.world-page .world-maps {
     margin-top: 132px;
   }
@@ -10273,7 +10361,6 @@ section,
     max-height: calc(var(--app-height) - 10px);
   }
 }
-
 
 /* Mobile/touch: prevent hover-first double-tap behavior on interactive controls */
 @media (hover: none), (pointer: coarse) {

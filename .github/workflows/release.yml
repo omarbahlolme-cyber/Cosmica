@@ -15,7 +15,44 @@ permissions:
   contents: write
 
 jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify syntax + smoke + cross-device checkout
+        run: npm run verify:pc-mobile
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium firefox webkit
+
+      - name: Viewport/browser matrix checks
+        run: npm run verify:viewport
+
+      - name: Upload viewport matrix artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-viewport-matrix-report
+          path: |
+            perf/viewport-matrix-report.json
+            perf/viewport-failures/
+          if-no-files-found: ignore
+
   release:
+    needs: validate
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
