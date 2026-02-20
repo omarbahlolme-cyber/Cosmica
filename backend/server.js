@@ -5054,7 +5054,7 @@ app.post(
   }
 );
 
-const isAllowedKoFiCheckoutUrl = (value) => {
+const isAllowedKoFiCheckoutUrl = (value, { requireSubscriptionPath = false } = {}) => {
   const raw = String(value || "").trim();
   if (!raw) {
     return "";
@@ -5068,6 +5068,12 @@ const isAllowedKoFiCheckoutUrl = (value) => {
     if (host !== "ko-fi.com" && host !== "www.ko-fi.com") {
       return "";
     }
+    if (requireSubscriptionPath) {
+      const pathName = String(parsed.pathname || "").trim().toLowerCase();
+      if (!pathName.startsWith("/s/")) {
+        return "";
+      }
+    }
     return parsed.toString();
   } catch {
     return "";
@@ -5075,12 +5081,18 @@ const isAllowedKoFiCheckoutUrl = (value) => {
 };
 
 const resolveConfiguredPremiumCheckoutOptions = () => {
+  const monthlyCheckoutUrl =
+    isAllowedKoFiCheckoutUrl(process.env.KOFI_PREMIUM_MONTHLY_URL) ||
+    isAllowedKoFiCheckoutUrl(process.env.KOFI_PREMIUM_BASE_URL, {
+      requireSubscriptionPath: true,
+    });
+
   const fallbackOptions = [
     {
       id: "monthly",
       label: "Monthly",
       description: "€9.99 per month",
-      url: isAllowedKoFiCheckoutUrl(process.env.KOFI_PREMIUM_MONTHLY_URL),
+      url: monthlyCheckoutUrl,
     },
   ].filter((item) => Boolean(item?.url));
 
@@ -5131,7 +5143,11 @@ const resolveConfiguredPremiumCheckoutOptions = () => {
   return {
     options,
     configured: options.length > 0,
-    source: customOptions.length ? "custom" : fallbackOptions.length ? "monthly" : "none",
+    source: customOptions.length
+      ? "custom-options-json"
+      : monthlyCheckoutUrl
+        ? "monthly-url"
+        : "none",
   };
 };
 

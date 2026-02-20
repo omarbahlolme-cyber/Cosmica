@@ -2339,14 +2339,15 @@ const setupAccountHub = () => {
     const applyResponseOptions = (responsePayload) => {
       const options = Array.isArray(responsePayload?.options) ? responsePayload.options : [];
       renderPremiumCheckoutOptions(options);
-      return options.length > 0;
+      return options.length;
     };
 
     try {
       const response = await window.cosmicaAuth.getPremiumBillingOptions();
+      const optionCount = applyResponseOptions(response);
       return {
-        ok: applyResponseOptions(response),
-        reason: "ok",
+        ok: optionCount > 0,
+        reason: optionCount > 0 ? "ok" : "not_configured",
       };
     } catch (error) {
       const status = Number(error?.status || 0);
@@ -2355,9 +2356,10 @@ const setupAccountHub = () => {
           const refreshedSession = await window.cosmicaAuth.getSession();
           if (refreshedSession) {
             const retryResponse = await window.cosmicaAuth.getPremiumBillingOptions();
+            const optionCount = applyResponseOptions(retryResponse);
             return {
-              ok: applyResponseOptions(retryResponse),
-              reason: "ok",
+              ok: optionCount > 0,
+              reason: optionCount > 0 ? "ok" : "not_configured",
             };
           }
         } catch {}
