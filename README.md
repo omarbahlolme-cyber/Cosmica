@@ -40,7 +40,6 @@ Premium purchase redirects use secure external Ko-fi pages.
 
 Optional environment variables:
 
-- `KOFI_PREMIUM_BASE_URL` (used when monthly URL is not set)
 - `KOFI_PREMIUM_MONTHLY_URL`
 - `KOFI_PREMIUM_OPTIONS_JSON` (array of option objects)
 - `KOFI_WEBHOOK_VERIFICATION_TOKEN` (required for Ko-fi webhook verification)

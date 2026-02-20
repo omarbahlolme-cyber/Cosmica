@@ -1282,9 +1282,7 @@ body.premium-setup-lock {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: max(20px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
-  overflow-y: auto;
-  overscroll-behavior: contain;
+  padding: 20px;
   background: rgba(4, 10, 24, 0.72);
   backdrop-filter: blur(8px) saturate(126%);
   -webkit-backdrop-filter: blur(8px) saturate(126%);
@@ -1677,7 +1675,6 @@ body.premium-setup-lock {
   position: relative;
   isolation: isolate;
   width: min(520px, calc(100vw - 24px));
-  max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 24px);
   border-radius: 22px;
   border: 1px solid rgba(132, 255, 207, 0.52);
   background:
@@ -1689,8 +1686,6 @@ body.premium-setup-lock {
     inset 0 1px 0 rgba(214, 255, 236, 0.16),
     0 24px 52px rgba(10, 12, 32, 0.58),
     0 0 0 1px rgba(144, 255, 216, 0.24);
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
   transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.2s ease;
   animation: premiumCheckoutCardGlow 5.8s ease-in-out infinite;
 }
@@ -1976,10 +1971,6 @@ body.premium-setup-lock {
 }
 
 @media (max-width: 680px) {
-  .premium-checkout-overlay {
-    align-items: flex-start;
-  }
-
   .premium-setup-card {
     width: min(560px, calc(100vw - 18px));
     border-radius: 22px;
@@ -2009,7 +2000,6 @@ body.premium-setup-lock {
 
   .premium-checkout-card {
     width: min(560px, calc(100vw - 18px));
-    max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 16px);
     border-radius: 18px;
     padding: 18px 14px 14px;
   }

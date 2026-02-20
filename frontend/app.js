@@ -2284,27 +2284,7 @@ const setupAccountHub = () => {
   };
 
   const buildFallbackPremiumBillingOptions = () => {
-    const fallbackCandidates = [
-      window.COSMICA_KOFI_PREMIUM_URL,
-      document.querySelector(".support-button[href*='ko-fi.com']")?.getAttribute("href"),
-      document.querySelector("a[href*='ko-fi.com/supportcosmica']")?.getAttribute("href"),
-      "https://ko-fi.com/supportcosmica",
-    ];
-    const fallbackUrl =
-      fallbackCandidates
-        .map((entry) => sanitizeKoFiCheckoutUrl(entry))
-        .find(Boolean) || "";
-    if (!fallbackUrl) {
-      return [];
-    }
-    return [
-      {
-        id: "monthly",
-        label: "Monthly",
-        description: "€9.99 per month",
-        url: fallbackUrl,
-      },
-    ];
+    return [];
   };
 
   const sanitizePremiumCheckoutUrl = (value) => sanitizeKoFiCheckoutUrl(value);

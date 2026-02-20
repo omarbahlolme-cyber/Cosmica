@@ -3598,7 +3598,6 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
     const nowIso = new Date().toISOString();
     const existingUserId = authStore.emailIndex[email];
     let userRecord = existingUserId ? authStore.users[existingUserId] : null;
-    const authMode = String(stateData?.mode || "").trim().toLowerCase() === "signup" ? "signup" : "login";
     let createdNewGoogleUser = false;
     if (
       userRecord &&
@@ -3611,14 +3610,6 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
       })
     ) {
       return;
-    }
-
-    if (!userRecord && authMode !== "signup") {
-      return res.redirect(302, buildAuthErrorRedirectPath("google_no_account"));
-    }
-
-    if (userRecord && authMode === "signup") {
-      return res.redirect(302, buildAuthErrorRedirectPath("google_account_exists"));
     }
 
     if (!userRecord) {
@@ -5088,16 +5079,14 @@ app.get(
       }
     };
 
-    const fallbackBaseUrl = isAllowedCheckoutUrl(process.env.KOFI_PREMIUM_BASE_URL);
-
     const fallbackOptions = [
       {
         id: "monthly",
         label: "Monthly",
         description: "€9.99 per month",
-        url: isAllowedCheckoutUrl(process.env.KOFI_PREMIUM_MONTHLY_URL) || fallbackBaseUrl,
+        url: isAllowedCheckoutUrl(process.env.KOFI_PREMIUM_MONTHLY_URL),
       },
-    ];
+    ].filter((item) => Boolean(item?.url));
 
     const rawCustomOptions = String(process.env.KOFI_PREMIUM_OPTIONS_JSON || "").trim();
     let customOptions = [];
