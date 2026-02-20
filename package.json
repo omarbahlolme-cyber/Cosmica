@@ -38,6 +38,7 @@
     "release:check": "node scripts/check-release.js",
     "quality": "npm run check:syntax && npm run check:literal-escapes && npm run check:a11y && npm run check:seo && npm run check:assets && npm run check:html-cache && npm run check:integrity && npm run check:securitytxt && npm run check:intents && npm run check:bloat && npm run perf:check && npm run security:audit && npm run release:check && npm run smoke",
     "verify:pc-mobile": "npm run check:syntax && npm run smoke && npm run smoke:checkout:cross-device",
+    "verify:prod-integrations": "node scripts/verify-prod-integrations.js",
     "format": "prettier --write \"**/*.{html,css,js,json,md}\""
   },
   "devDependencies": {
@@ -51,6 +52,7 @@
     "express-rate-limit": "^8.2.1",
     "helmet": "^8.1.0",
     "nodemailer": "^7.0.11",
-    "openai": "^6.22.0"
+    "openai": "^6.22.0",
+    "stripe": "^20.3.1"
   }
 }

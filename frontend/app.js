@@ -1651,9 +1651,9 @@ const setupAccountHub = () => {
     <section class="premium-checkout-card" role="dialog" aria-modal="true" aria-labelledby="premiumCheckoutTitle">
       <button type="button" class="premium-checkout-close" aria-label="Close checkout">×</button>
       <h3 id="premiumCheckoutTitle">Choose a secure Premium checkout option</h3>
-      <p class="premium-checkout-message">You will be redirected to Ko-fi to complete your subscription securely.</p>
+      <p class="premium-checkout-message">You will be redirected to complete your subscription securely.</p>
       <div class="premium-checkout-options" role="list"></div>
-      <p class="premium-checkout-note">Payments are processed on Ko-fi's secure pages. A free Ko-fi account may be required for monthly memberships.</p>
+      <p class="premium-checkout-note">Payments are handled by our secure billing provider.</p>
       <p class="premium-checkout-feedback" aria-live="polite"></p>
       <div class="premium-checkout-actions">
         <button type="button" class="premium-checkout-primary">Proceed</button>
@@ -2283,11 +2283,31 @@ const setupAccountHub = () => {
     }
   };
 
+  const sanitizeInternalPremiumCheckoutUrl = (value) => {
+    const raw = String(value || "").trim();
+    if (!raw) {
+      return "";
+    }
+    try {
+      const parsed = new URL(raw, window.location.origin);
+      if (parsed.origin !== window.location.origin) {
+        return "";
+      }
+      if (parsed.pathname !== "/api/billing/premium/checkout/start") {
+        return "";
+      }
+      return parsed.toString();
+    } catch {
+      return "";
+    }
+  };
+
   const buildFallbackPremiumBillingOptions = () => {
     return [];
   };
 
-  const sanitizePremiumCheckoutUrl = (value) => sanitizeKoFiCheckoutUrl(value);
+  const sanitizePremiumCheckoutUrl = (value) =>
+    sanitizeKoFiCheckoutUrl(value) || sanitizeInternalPremiumCheckoutUrl(value);
 
   const renderPremiumCheckoutOptions = (options = []) => {
     if (!(premiumCheckoutOptionsNode instanceof HTMLElement)) {
@@ -2328,7 +2348,7 @@ const setupAccountHub = () => {
       optionButton.setAttribute("aria-disabled", "true");
       optionButton.innerHTML = `
         <span class="premium-checkout-option-label">${item.label}</span>
-        <span class="premium-checkout-option-meta">${item.description || "Secure Ko-fi checkout"}</span>
+        <span class="premium-checkout-option-meta">${item.description || "Secure checkout"}</span>
       `;
       premiumCheckoutOptionsNode.appendChild(optionButton);
     });

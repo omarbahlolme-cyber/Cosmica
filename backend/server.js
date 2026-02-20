@@ -20,6 +20,7 @@ const app = express();
 const port = Number(process.env.PORT) || 3000;
 app.disable("x-powered-by");
 app.set("trust proxy", 1);
+const STRIPE_WEBHOOK_PATH = "/api/billing/webhooks/stripe";
 const APP_VERSION = (() => {
   try {
     return require("../package.json").version || "unknown";
@@ -34,7 +35,13 @@ const FRONTEND_MAPS_ROOT = path.join(FRONTEND_ROOT, "maps");
 const ADMIN_SECURITY_BASIC_USER = String(process.env.ADMIN_SECURITY_BASIC_USER || "").trim();
 const ADMIN_SECURITY_BASIC_PASS = String(process.env.ADMIN_SECURITY_BASIC_PASS || "").trim();
 
-app.use(express.json({ limit: "1mb" }));
+const jsonBodyParser = express.json({ limit: "1mb" });
+app.use((req, res, next) => {
+  if (String(req.path || "") === STRIPE_WEBHOOK_PATH) {
+    return next();
+  }
+  return jsonBodyParser(req, res, next);
+});
 app.use((req, res, next) => {
   const requestId = crypto.randomUUID();
   req.requestId = requestId;
@@ -462,6 +469,31 @@ const GOOGLE_TTS_DEFAULT_LANGUAGE = process.env.GOOGLE_TTS_LANGUAGE_CODE || "en-
 const GOOGLE_TTS_DEFAULT_VOICE = process.env.GOOGLE_TTS_VOICE || "en-GB-Neural2-F";
 const authLoginFailureSpikeTracker = new Map();
 const authAlertLastSentByKey = new Map();
+
+const getStripeClient = (() => {
+  let cachedClient = null;
+  let cachedKey = "";
+  return () => {
+    const secretKey = String(process.env.STRIPE_SECRET_KEY || "").trim();
+    if (!secretKey) {
+      throw new Error("Missing STRIPE_SECRET_KEY");
+    }
+    if (cachedClient && cachedKey === secretKey) {
+      return cachedClient;
+    }
+    let Stripe = null;
+    try {
+      Stripe = require("stripe");
+    } catch (error) {
+      throw new Error(`Stripe package missing: ${error.message || error}`);
+    }
+    cachedClient = new Stripe(secretKey, {
+      apiVersion: "2025-01-27.acacia",
+    });
+    cachedKey = secretKey;
+    return cachedClient;
+  };
+})();
 
 const getGoogleTtsClient = (() => {
   let cachedClient = null;
@@ -4611,8 +4643,8 @@ app.post(
 );
 
 /* --------------------------------------------------------------------------
-   ROUTE: BILLING WEBHOOKS (KO-FI)
-   -------------------------------------------------------------------------- */
+  ROUTE: BILLING WEBHOOKS (STRIPE + KO-FI)
+  -------------------------------------------------------------------------- */
 const pickFirstNonEmptyString = (...values) => {
   for (const value of values) {
     const normalized = String(value || "").trim();
@@ -4842,6 +4874,268 @@ const applyPremiumDowngradeToUserRecord = (
     alreadyProcessed,
   };
 };
+
+const hasStripePremiumAccessFromStatus = (status = "") => {
+  const normalizedStatus = String(status || "").trim().toLowerCase();
+  if (!normalizedStatus) {
+    return false;
+  }
+  return ["active", "trialing", "past_due"].includes(normalizedStatus);
+};
+
+const resolveStripeWebhookUserRecord = async (stripe, stripeObject = {}) => {
+  const objectPayload = isPlainObject(stripeObject) ? stripeObject : {};
+  const metadata = isPlainObject(objectPayload.metadata) ? objectPayload.metadata : {};
+  const customerDetails = isPlainObject(objectPayload.customer_details) ? objectPayload.customer_details : {};
+  const customerRef = objectPayload.customer;
+
+  const userIdCandidates = [
+    metadata.cosmicaUserId,
+    objectPayload.client_reference_id,
+  ]
+    .map((value) => String(value || "").trim())
+    .filter(Boolean);
+
+  for (const userId of userIdCandidates) {
+    const userRecord = authStore.users[userId];
+    if (userRecord) {
+      return {
+        userRecord,
+        userId: String(userRecord.id || userId).trim(),
+        email: normalizeEmail(userRecord.email),
+      };
+    }
+  }
+
+  const customerId = (() => {
+    if (typeof customerRef === "string") {
+      return customerRef.trim();
+    }
+    if (isPlainObject(customerRef)) {
+      return String(customerRef.id || "").trim();
+    }
+    return "";
+  })();
+
+  const emailCandidates = [
+    metadata.cosmicaUserEmail,
+    objectPayload.customer_email,
+    customerDetails.email,
+    objectPayload.receipt_email,
+    isPlainObject(customerRef) ? customerRef.email : "",
+  ];
+
+  if (!emailCandidates.length && customerId && stripe && stripe.customers) {
+    try {
+      const customer = await stripe.customers.retrieve(customerId);
+      if (customer && !customer.deleted) {
+        emailCandidates.push(customer.email);
+      }
+    } catch {}
+  }
+
+  for (const rawEmail of emailCandidates) {
+    const email = normalizeEmail(rawEmail);
+    if (!isValidEmail(email)) {
+      continue;
+    }
+    const matchedUserId = String(authStore.emailIndex[email] || "").trim();
+    const userRecord = matchedUserId ? authStore.users[matchedUserId] : null;
+    if (userRecord) {
+      return {
+        userRecord,
+        userId: String(userRecord.id || matchedUserId).trim(),
+        email,
+      };
+    }
+  }
+
+  return {
+    userRecord: null,
+    userId: "",
+    email: normalizeEmail(metadata.cosmicaUserEmail || objectPayload.customer_email || customerDetails.email),
+  };
+};
+
+app.post(
+  STRIPE_WEBHOOK_PATH,
+  billingWebhookLimiter,
+  express.raw({ type: "application/json", limit: "1mb" }),
+  async (req, res) => {
+    const configuredWebhookSecret = String(process.env.STRIPE_WEBHOOK_SECRET || "").trim();
+    if (!configuredWebhookSecret) {
+      reportServerError("stripe-webhook-not-configured", new Error("Missing STRIPE_WEBHOOK_SECRET"), {
+        requestId: req.requestId,
+        method: req.method,
+        path: req.originalUrl,
+      });
+      return res.status(503).json({
+        error: "Stripe webhook is not configured yet",
+      });
+    }
+
+    const signature = String(req.get("stripe-signature") || "").trim();
+    if (!signature) {
+      return res.status(400).json({ error: "Missing Stripe signature" });
+    }
+
+    const rawBody = Buffer.isBuffer(req.body) ? req.body : Buffer.from(String(req.body || ""), "utf8");
+    if (!rawBody.length) {
+      return res.status(400).json({ error: "Invalid Stripe webhook payload" });
+    }
+
+    let stripe = null;
+    let event = null;
+    try {
+      stripe = getStripeClient();
+      event = stripe.webhooks.constructEvent(rawBody, signature, configuredWebhookSecret);
+    } catch (error) {
+      void appendSecurityEvent({
+        type: "stripe-webhook-rejected",
+        req,
+        reason: "Invalid Stripe signature",
+        details: {
+          error: String(error?.message || error).slice(0, 240),
+        },
+      });
+      return res.status(400).json({ error: "Invalid Stripe signature" });
+    }
+
+    const eventType = String(event?.type || "").trim().toLowerCase();
+    const stripeObject = isPlainObject(event?.data?.object) ? event.data.object : {};
+    const eventId = String(event?.id || "").trim().slice(0, 120);
+
+    if (
+      eventType !== "checkout.session.completed" &&
+      eventType !== "customer.subscription.updated" &&
+      eventType !== "customer.subscription.deleted"
+    ) {
+      return res.json({
+        ok: true,
+        ignored: true,
+        reason: "event-not-handled",
+      });
+    }
+
+    const matched = await resolveStripeWebhookUserRecord(stripe, stripeObject);
+    if (!matched.userRecord) {
+      void appendSecurityEvent({
+        type: "stripe-webhook-unmatched",
+        req,
+        email: matched.email,
+        reason: "No account matched Stripe webhook metadata/email",
+        details: {
+          eventId,
+          eventType,
+          customerId: String(stripeObject.customer || "").slice(0, 120),
+        },
+      });
+      return res.status(202).json({
+        ok: true,
+        matched: false,
+      });
+    }
+
+    if (eventType === "checkout.session.completed") {
+      const premiumResult = applyPremiumProfileToUserRecord(matched.userRecord, {
+        provider: "stripe",
+        source: "stripe-webhook",
+        eventId,
+        eventType,
+        amount: String(stripeObject.amount_total || "").trim().slice(0, 40),
+        currency: String(stripeObject.currency || "").trim().slice(0, 12),
+      });
+
+      void appendSecurityEvent({
+        type: "stripe-webhook-processed",
+        req,
+        email: matched.email,
+        userId: matched.userId,
+        reason: premiumResult.changed ? "Premium activated from Stripe webhook" : "Stripe webhook idempotent replay",
+        details: {
+          eventId,
+          eventType,
+          action: "upgrade",
+        },
+      });
+
+      return res.json({
+        ok: true,
+        matched: true,
+        upgraded: premiumResult.changed,
+        alreadyPremium: premiumResult.alreadyPremium,
+        alreadyProcessed: premiumResult.alreadyProcessed,
+      });
+    }
+
+    const subscriptionStatus = String(stripeObject.status || "").trim().toLowerCase();
+    const shouldKeepPremium =
+      eventType === "customer.subscription.updated" && hasStripePremiumAccessFromStatus(subscriptionStatus);
+
+    if (shouldKeepPremium) {
+      const premiumResult = applyPremiumProfileToUserRecord(matched.userRecord, {
+        provider: "stripe",
+        source: "stripe-webhook",
+        eventId,
+        eventType,
+        currency: String(stripeObject.currency || "").trim().slice(0, 12),
+      });
+
+      void appendSecurityEvent({
+        type: "stripe-webhook-processed",
+        req,
+        email: matched.email,
+        userId: matched.userId,
+        reason: premiumResult.changed ? "Premium confirmed from Stripe subscription update" : "Stripe subscription update idempotent/no-op",
+        details: {
+          eventId,
+          eventType,
+          status: subscriptionStatus,
+          action: "upgrade",
+        },
+      });
+
+      return res.json({
+        ok: true,
+        matched: true,
+        upgraded: premiumResult.changed,
+        alreadyPremium: premiumResult.alreadyPremium,
+        alreadyProcessed: premiumResult.alreadyProcessed,
+      });
+    }
+
+    const downgradeResult = applyPremiumDowngradeToUserRecord(matched.userRecord, {
+      provider: "stripe",
+      source: "stripe-webhook",
+      eventId,
+      eventType,
+    });
+
+    void appendSecurityEvent({
+      type: "stripe-webhook-processed",
+      req,
+      email: matched.email,
+      userId: matched.userId,
+      reason: downgradeResult.changed
+        ? "Premium downgraded from Stripe subscription webhook"
+        : "Stripe downgrade webhook idempotent/no-op",
+      details: {
+        eventId,
+        eventType,
+        status: subscriptionStatus,
+        action: "downgrade",
+      },
+    });
+
+    return res.json({
+      ok: true,
+      matched: true,
+      downgraded: downgradeResult.changed,
+      alreadyFree: downgradeResult.alreadyFree,
+      alreadyProcessed: downgradeResult.alreadyProcessed,
+    });
+  }
+);
 
 app.post(
   "/api/billing/webhooks/kofi",
@@ -5090,6 +5384,33 @@ const isAllowedKoFiCheckoutUrl = (
 };
 
 const resolveConfiguredPremiumCheckoutOptions = () => {
+  const stripePriceId = String(
+    process.env.STRIPE_PREMIUM_PRICE_ID ||
+      process.env.STRIPE_PRICE_ID ||
+      process.env.PREMIUM_STRIPE_PRICE_ID ||
+      ""
+  ).trim();
+  const stripeSecretKey = String(process.env.STRIPE_SECRET_KEY || "").trim();
+  if (stripeSecretKey && stripePriceId) {
+    const label = String(process.env.STRIPE_PREMIUM_LABEL || "Monthly").trim().slice(0, 60) || "Monthly";
+    const description =
+      String(process.env.STRIPE_PREMIUM_DESCRIPTION || "€9.99 per month").trim().slice(0, 140) ||
+      "€9.99 per month";
+    return {
+      options: [
+        {
+          id: "monthly",
+          label,
+          description,
+          url: "/api/billing/premium/checkout/start?option=monthly",
+        },
+      ],
+      configured: true,
+      source: "stripe:STRIPE_PREMIUM_PRICE_ID",
+      provider: "stripe",
+    };
+  }
+
   const resolveFromEnvKeys = (envKeys = [], validator = null) => {
     for (const key of envKeys) {
       const raw = String(process.env[key] || "").trim();
@@ -5200,7 +5521,61 @@ const resolveConfiguredPremiumCheckoutOptions = () => {
         : legacyBaseEnvResult.key
           ? `monthly-url:${legacyBaseEnvResult.key}`
           : "none",
+    provider: "ko-fi",
   };
+};
+
+const createStripePremiumCheckoutSession = async (req, userRecord, optionId = "monthly") => {
+  const stripe = getStripeClient();
+  const priceId = String(
+    process.env.STRIPE_PREMIUM_PRICE_ID ||
+      process.env.STRIPE_PRICE_ID ||
+      process.env.PREMIUM_STRIPE_PRICE_ID ||
+      ""
+  ).trim();
+  if (!priceId) {
+    throw new Error("Missing STRIPE_PREMIUM_PRICE_ID");
+  }
+
+  const trialDaysRaw = Number(process.env.STRIPE_PREMIUM_TRIAL_DAYS || 0);
+  const trialDays = Number.isFinite(trialDaysRaw) ? Math.max(0, Math.floor(trialDaysRaw)) : 0;
+
+  const origin = getPublicAppOrigin(req);
+  const successPath = String(process.env.STRIPE_PREMIUM_SUCCESS_PATH || "/index.html?premium=success").trim();
+  const cancelPath = String(process.env.STRIPE_PREMIUM_CANCEL_PATH || "/index.html?premium=cancel").trim();
+  const successUrl = new URL(successPath.startsWith("/") ? successPath : `/${successPath}`, origin);
+  const cancelUrl = new URL(cancelPath.startsWith("/") ? cancelPath : `/${cancelPath}`, origin);
+
+  const metadata = {
+    cosmicaUserId: String(userRecord?.id || "").trim().slice(0, 128),
+    cosmicaUserEmail: String(userRecord?.email || "").trim().toLowerCase().slice(0, 200),
+    premiumOption: String(optionId || "monthly").trim().toLowerCase().slice(0, 32),
+  };
+
+  const subscriptionData = {
+    metadata,
+  };
+  if (trialDays > 0) {
+    subscriptionData.trial_period_days = trialDays;
+  }
+
+  const session = await stripe.checkout.sessions.create({
+    mode: "subscription",
+    line_items: [{ price: priceId, quantity: 1 }],
+    success_url: successUrl.toString(),
+    cancel_url: cancelUrl.toString(),
+    customer_email: metadata.cosmicaUserEmail,
+    client_reference_id: metadata.cosmicaUserId,
+    allow_promotion_codes: true,
+    metadata,
+    subscription_data: subscriptionData,
+  });
+
+  const checkoutUrl = String(session?.url || "").trim();
+  if (!checkoutUrl) {
+    throw new Error("Stripe session URL was not returned");
+  }
+  return checkoutUrl;
 };
 
 app.get(
@@ -5217,9 +5592,49 @@ app.get(
 
     return res.json({
       ok: true,
-      provider: "ko-fi",
+      provider: checkoutConfig.provider || "ko-fi",
       options: checkoutConfig.options,
     });
+  }
+);
+
+app.get(
+  "/api/billing/premium/checkout/start",
+  authSessionLimiter,
+  requireAuthenticatedUser,
+  async (req, res) => {
+    const checkoutConfig = resolveConfiguredPremiumCheckoutOptions();
+    if (!checkoutConfig.configured) {
+      return res.status(503).json({
+        error: "Premium checkout is not configured yet",
+      });
+    }
+
+    const optionId = String(req.query?.option || "monthly")
+      .trim()
+      .toLowerCase();
+    const selectedOption = checkoutConfig.options.find((item) => item?.id === optionId);
+    if (!selectedOption) {
+      return res.status(404).json({
+        error: "Unknown premium checkout option",
+      });
+    }
+
+    if (checkoutConfig.provider !== "stripe") {
+      return res.redirect(303, selectedOption.url);
+    }
+
+    try {
+      const checkoutUrl = await createStripePremiumCheckoutSession(req, req.authUser, optionId);
+      return res.redirect(303, checkoutUrl);
+    } catch (error) {
+      reportServerError("stripe-checkout-start", error, {
+        requestId: req.requestId,
+        method: req.method,
+        path: req.originalUrl,
+      });
+      return res.status(500).json({ error: "Unable to start Stripe checkout" });
+    }
   }
 );
 

@@ -2,7 +2,8 @@
    CROSS-DEVICE CHECKOUT SMOKE
    - Authenticates with a real account.
    - Calls premium options API with desktop + mobile user agents.
-   - Verifies both return valid Ko-fi monthly-tier checkout URLs.
+  - Verifies both return valid premium checkout URLs
+    (Stripe start endpoint, Stripe hosted checkout, or Ko-fi fallback).
    ========================================================================== */
 
 const REQUEST_TIMEOUT_MS = Math.max(3000, Number(process.env.SMOKE_REQUEST_TIMEOUT_MS || 12000));
@@ -26,17 +27,30 @@ const UAS = {
     "Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Mobile/15E148 Safari/604.1",
 };
 
-const normalizeUrl = (value) => {
+const normalizeUrl = (value, baseUrl = "") => {
   const raw = String(value || "").trim();
   if (!raw) {
     return "";
   }
   try {
+    if (baseUrl) {
+      return new URL(raw, baseUrl).toString();
+    }
     return new URL(raw).toString();
   } catch {
     return "";
   }
 };
+
+const getBaseOrigin = () => {
+  try {
+    return new URL(BASE_URL).origin;
+  } catch {
+    return "";
+  }
+};
+
+const BASE_ORIGIN = getBaseOrigin();
 
 const toCookieHeader = (setCookieValues = []) =>
   setCookieValues
@@ -86,7 +100,7 @@ const assert = (condition, message) => {
 };
 
 const isAllowedKoFiCheckoutUrl = (value) => {
-  const normalized = normalizeUrl(value);
+  const normalized = normalizeUrl(value, BASE_URL);
   if (!normalized) {
     return false;
   }
@@ -108,10 +122,48 @@ const isAllowedKoFiCheckoutUrl = (value) => {
   }
 };
 
+const isAllowedStripeHostedCheckoutUrl = (value) => {
+  const normalized = normalizeUrl(value, BASE_URL);
+  if (!normalized) {
+    return false;
+  }
+  try {
+    const parsed = new URL(normalized);
+    const host = String(parsed.hostname || "").trim().toLowerCase();
+    if (parsed.protocol !== "https:") {
+      return false;
+    }
+    return host === "checkout.stripe.com";
+  } catch {
+    return false;
+  }
+};
+
+const isAllowedInternalCheckoutStartUrl = (value) => {
+  const normalized = normalizeUrl(value, BASE_URL);
+  if (!normalized || !BASE_ORIGIN) {
+    return false;
+  }
+  try {
+    const parsed = new URL(normalized);
+    if (parsed.origin !== BASE_ORIGIN) {
+      return false;
+    }
+    return parsed.pathname === "/api/billing/premium/checkout/start";
+  } catch {
+    return false;
+  }
+};
+
+const isAllowedPremiumCheckoutUrl = (value) =>
+  isAllowedInternalCheckoutStartUrl(value) ||
+  isAllowedStripeHostedCheckoutUrl(value) ||
+  isAllowedKoFiCheckoutUrl(value);
+
 const extractOptionUrls = (payload) => {
   const options = Array.isArray(payload?.options) ? payload.options : [];
   return options
-    .map((item) => normalizeUrl(item?.url))
+    .map((item) => normalizeUrl(item?.url, BASE_URL))
     .filter(Boolean);
 };
 
@@ -157,11 +209,11 @@ const authAndFetchOptions = async ({ label, userAgent }) => {
   assert(optionUrls.length > 0, `${label}: no premium options were returned`);
 
   optionUrls.forEach((url) => {
-    assert(isAllowedKoFiCheckoutUrl(url), `${label}: invalid checkout URL returned (${url})`);
+    assert(isAllowedPremiumCheckoutUrl(url), `${label}: invalid checkout URL returned (${url})`);
   });
 
   if (EXPECTED_PREMIUM_URL) {
-    const expected = normalizeUrl(EXPECTED_PREMIUM_URL);
+    const expected = normalizeUrl(EXPECTED_PREMIUM_URL, BASE_URL);
     assert(expected, `Invalid SMOKE_EXPECTED_PREMIUM_URL value: ${EXPECTED_PREMIUM_URL}`);
     assert(
       optionUrls.includes(expected),

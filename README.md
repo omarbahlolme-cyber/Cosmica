@@ -34,11 +34,40 @@ npm install
 npm start
 ```
 
-## Premium checkout (Ko-fi)
+## Premium checkout (Stripe + Ko-fi fallback)
 
-Premium purchase redirects use secure external Ko-fi pages.
+Premium purchase supports Stripe Checkout (preferred) with Ko-fi as fallback.
+
+Quick local setup (Stripe):
+
+1. Copy env template: `Copy-Item .env.example .env`
+2. Fill Stripe values in `.env`: `STRIPE_SECRET_KEY`, `STRIPE_PREMIUM_PRICE_ID`, `STRIPE_WEBHOOK_SECRET`
+3. Start app: `npm start`
+4. In a second terminal, forward Stripe events locally:
+
+```bash
+stripe listen --forward-to http://127.0.0.1:3000/api/billing/webhooks/stripe
+```
+
+5. In Stripe Dashboard, ensure this endpoint subscribes to:
+  - `checkout.session.completed`
+  - `customer.subscription.updated`
+  - `customer.subscription.deleted`
 
 Optional environment variables:
+
+Stripe (recommended):
+
+- `STRIPE_SECRET_KEY` (required for Stripe mode)
+- `STRIPE_PREMIUM_PRICE_ID` (required for Stripe mode; aliases supported: `STRIPE_PRICE_ID`, `PREMIUM_STRIPE_PRICE_ID`)
+- `STRIPE_WEBHOOK_SECRET` (required for Stripe webhook signature verification)
+- `STRIPE_PREMIUM_LABEL` (optional, checkout option label shown in app)
+- `STRIPE_PREMIUM_DESCRIPTION` (optional, checkout option description shown in app)
+- `STRIPE_PREMIUM_SUCCESS_PATH` (optional, default `/index.html?premium=success`)
+- `STRIPE_PREMIUM_CANCEL_PATH` (optional, default `/index.html?premium=cancel`)
+- `STRIPE_PREMIUM_TRIAL_DAYS` (optional, integer trial days)
+
+Ko-fi fallback:
 
 - `KOFI_PREMIUM_MONTHLY_URL`
 - `KOFI_PREMIUM_BASE_URL` (backward compatibility only; accepted only if it is a Ko-fi subscription URL like `/s/...`, donate/support links are rejected)
@@ -62,6 +91,13 @@ Ko-fi webhook endpoint for automatic premium activation:
 - Configure the same value in Ko-fi webhook settings and `KOFI_WEBHOOK_VERIFICATION_TOKEN`.
 - The webhook upgrades the matching Cosmica account by payer email.
 
+Stripe webhook endpoint for automatic premium activation/downgrade:
+
+- `POST /api/billing/webhooks/stripe`
+- Configure `STRIPE_WEBHOOK_SECRET` from the Stripe endpoint signing secret.
+- Subscribe at minimum to: `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`.
+- This route verifies `stripe-signature` using the raw request body and applies premium changes server-side.
+
 ## Formatting
 
 ```bash
@@ -84,20 +120,41 @@ Cross-device premium checkout smoke (desktop + mobile user agents):
 SMOKE_BASE_URL=https://www.cosmicalearn.com \
 SMOKE_AUTH_EMAIL=you@example.com \
 SMOKE_AUTH_PASSWORD='your-password' \
-SMOKE_EXPECTED_PREMIUM_URL='https://ko-fi.com/s/your-monthly-tier' \
+SMOKE_EXPECTED_PREMIUM_URL='https://www.cosmicalearn.com/api/billing/premium/checkout/start?option=monthly' \
 npm run smoke:checkout:cross-device
+```
+
+Ko-fi-only deployments can still set:
+
+```bash
+SMOKE_EXPECTED_PREMIUM_URL='https://ko-fi.com/s/your-monthly-tier'
 ```
 
 This check:
 1. Logs in using desktop and mobile user agents.
 2. Calls `/api/billing/premium/options` with authenticated session cookies.
-3. Verifies both devices return the same Ko-fi checkout options.
-4. Fails if a donate/support URL is returned.
+3. Verifies both devices return the same premium checkout options.
+4. Accepts secure Stripe/internal checkout-start URLs or validated Ko-fi URLs.
 
 Combined guard (syntax + route smoke + cross-device checkout smoke):
 
 ```bash
 npm run verify:pc-mobile
+```
+
+One-command production integration check after deploy:
+
+```bash
+npm run verify:prod-integrations
+```
+
+Optional for full admin positive checks (`200`) in the same command:
+
+```bash
+VERIFY_ADMIN_BASIC_USER='your-basic-user' \
+VERIFY_ADMIN_BASIC_PASS='your-basic-pass' \
+VERIFY_ADMIN_TOKEN='your-admin-token' \
+npm run verify:prod-integrations
 ```
 
 ## Quality checks (CI + local)
