@@ -1288,6 +1288,10 @@ body.premium-setup-lock {
   -webkit-backdrop-filter: blur(8px) saturate(126%);
 }
 
+.premium-success-overlay {
+  z-index: 182;
+}
+
 .premium-setup-overlay[hidden] {
   display: none !important;
 }
@@ -1404,6 +1408,28 @@ body.premium-setup-lock {
   margin: 10px 0 0;
   color: rgba(214, 233, 252, 0.9);
   line-height: 1.5;
+}
+
+.premium-success-card {
+  width: min(620px, calc(100vw - 24px));
+}
+
+.premium-success-message {
+  margin-bottom: 0;
+}
+
+.premium-success-benefits {
+  margin-top: 14px;
+  display: grid;
+  gap: 8px;
+}
+
+.premium-success-benefits p {
+  margin: 0;
+}
+
+.premium-success-actions {
+  margin-top: 18px;
 }
 
 .premium-plan-strip {
@@ -2002,6 +2028,10 @@ body.premium-setup-lock {
     width: min(560px, calc(100vw - 18px));
     border-radius: 18px;
     padding: 18px 14px 14px;
+  }
+
+  .premium-success-card {
+    width: min(560px, calc(100vw - 18px));
   }
 
   .premium-checkout-primary,
@@ -2829,6 +2859,94 @@ body.premium-setup-lock {
   margin-top: 9px;
   padding-top: 10px;
   border-top: 1px solid rgba(126, 191, 233, 0.28);
+}
+
+.account-subscription-panel {
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(126, 191, 233, 0.22);
+}
+
+.account-subscription-panel[hidden] {
+  display: none !important;
+}
+
+.account-subscription-panel h4 {
+  margin: 0 0 6px;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(195, 223, 244, 0.92);
+}
+
+.account-subscription-note,
+.account-subscription-until,
+.account-subscription-sync,
+.account-subscription-status {
+  margin: 0 0 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(126, 191, 233, 0.24);
+  background: linear-gradient(160deg, rgba(9, 23, 42, 0.66), rgba(8, 18, 34, 0.58));
+  color: rgba(206, 228, 245, 0.92);
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.account-subscription-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.account-subscription-status-label {
+  color: rgba(188, 216, 238, 0.92);
+}
+
+.account-subscription-status-badge {
+  border-radius: 999px;
+  border: 1px solid rgba(126, 191, 233, 0.4);
+  padding: 3px 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: rgba(197, 230, 250, 0.96);
+  background: rgba(9, 31, 58, 0.5);
+}
+
+.account-subscription-status[data-status="active"] .account-subscription-status-badge {
+  border-color: rgba(145, 232, 198, 0.44);
+  color: rgba(161, 236, 197, 0.95);
+  background: rgba(12, 52, 44, 0.32);
+}
+
+.account-subscription-status[data-status="canceling"] .account-subscription-status-badge {
+  border-color: rgba(247, 213, 129, 0.5);
+  color: rgba(250, 222, 150, 0.96);
+  background: rgba(63, 49, 15, 0.35);
+}
+
+.account-subscription-status[data-status="expired"] .account-subscription-status-badge {
+  border-color: rgba(255, 168, 168, 0.52);
+  color: rgba(255, 189, 189, 0.96);
+  background: rgba(67, 24, 24, 0.38);
+}
+
+.account-subscription-until {
+  border-color: rgba(145, 232, 198, 0.44);
+  background: rgba(12, 52, 44, 0.38);
+  color: rgba(156, 235, 194, 0.95);
+}
+
+.account-subscription-until[hidden] {
+  display: none !important;
+}
+
+.account-subscription-sync {
+  border-color: rgba(126, 191, 233, 0.28);
+  background: rgba(9, 22, 40, 0.56);
+  color: rgba(184, 214, 238, 0.9);
 }
 
 .account-password-panel {

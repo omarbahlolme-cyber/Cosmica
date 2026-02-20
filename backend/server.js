@@ -469,6 +469,36 @@ const GOOGLE_TTS_DEFAULT_LANGUAGE = process.env.GOOGLE_TTS_LANGUAGE_CODE || "en-
 const GOOGLE_TTS_DEFAULT_VOICE = process.env.GOOGLE_TTS_VOICE || "en-GB-Neural2-F";
 const authLoginFailureSpikeTracker = new Map();
 const authAlertLastSentByKey = new Map();
+const stripeWebhookHealthState = {
+  lastReceivedAt: null,
+  lastProcessedAt: null,
+  lastRejectedAt: null,
+  lastErrorAt: null,
+  lastMonitorCheckAt: null,
+  lastReconcileAt: null,
+  lastReconcileSummary: null,
+  lastEventType: "",
+  lastEventId: "",
+  recentFailureCount: 0,
+  recentSuccessCount: 0,
+};
+let lastStripeWebhookAlertAtMs = 0;
+const STRIPE_WEBHOOK_ALERT_COOLDOWN_MS = Math.max(
+  60 * 1000,
+  Number(process.env.STRIPE_WEBHOOK_ALERT_COOLDOWN_MS || 5 * 60 * 1000)
+);
+const STRIPE_WEBHOOK_SILENCE_THRESHOLD_MS = Math.max(
+  15 * 60 * 1000,
+  Number(process.env.STRIPE_WEBHOOK_SILENCE_THRESHOLD_MS || 12 * 60 * 60 * 1000)
+);
+const BILLING_MONITOR_INTERVAL_MS = Math.max(
+  5 * 60 * 1000,
+  Number(process.env.BILLING_MONITOR_INTERVAL_MS || 10 * 60 * 1000)
+);
+const STRIPE_RECONCILE_INTERVAL_MS = Math.max(
+  6 * 60 * 60 * 1000,
+  Number(process.env.STRIPE_RECONCILE_INTERVAL_MS || 24 * 60 * 60 * 1000)
+);
 
 const getStripeClient = (() => {
   let cachedClient = null;
@@ -688,6 +718,27 @@ const maybeAlertVerificationEmailDeliveryFailure = ({
     method: String(req?.method || "").slice(0, 16),
   });
   pruneAuthAlertCaches(nowMs);
+};
+
+const maybeAlertStripeWebhookIssue = ({ req = null, reason = "", details = {} } = {}) => {
+  if (!AUTH_ALERT_WEBHOOK_URL) {
+    return;
+  }
+  const nowMs = Date.now();
+  if (lastStripeWebhookAlertAtMs && nowMs - lastStripeWebhookAlertAtMs < STRIPE_WEBHOOK_ALERT_COOLDOWN_MS) {
+    return;
+  }
+  lastStripeWebhookAlertAtMs = nowMs;
+  void postAuthAlertWebhook({
+    type: "billing_stripe_webhook_issue",
+    severity: "error",
+    timestamp: new Date(nowMs).toISOString(),
+    reason: String(reason || "unknown").slice(0, 200),
+    requestId: String(req?.requestId || ""),
+    endpoint: String(req?.originalUrl || "").slice(0, 240),
+    method: String(req?.method || "").slice(0, 16),
+    details,
+  });
 };
 
 const reportServerError = (scope, error, context = {}) => {
@@ -1097,14 +1148,102 @@ const normalizePasswordResetState = (value) => {
   return fallback;
 };
 
+const normalizePremiumProfileSchema = (profileValue) => {
+  const profile = isPlainObject(profileValue) ? profileValue : {};
+  const normalized = { ...profile };
+  const currentSnapshot = resolvePremiumSnapshotFromProfile(profile);
+
+  normalized.isPremium = currentSnapshot.isPremium;
+  normalized.premium = currentSnapshot.isPremium;
+  normalized.plan = currentSnapshot.planTier;
+  normalized.tier = currentSnapshot.planTier;
+  normalized.membership = currentSnapshot.planTier;
+
+  const normalizeBool = (value, fallback = false) => {
+    if (value === true || value === false) {
+      return value;
+    }
+    const text = String(value || "").trim().toLowerCase();
+    if (!text) {
+      return fallback;
+    }
+    return ["1", "true", "yes", "on"].includes(text);
+  };
+
+  const normalizeIso = (value) => {
+    const parsedMs = Date.parse(String(value || "").trim());
+    if (!Number.isFinite(parsedMs)) {
+      return "";
+    }
+    return new Date(parsedMs).toISOString();
+  };
+
+  const normalizeId = (value, limit = 120) => String(value || "").trim().slice(0, limit);
+  const normalizeShort = (value, limit = 60) => String(value || "").trim().slice(0, limit);
+
+  normalized.premiumCancelAtPeriodEnd = normalizeBool(normalized.premiumCancelAtPeriodEnd, false);
+
+  const stringIsoFields = [
+    "premiumActivatedAt",
+    "premiumDeactivatedAt",
+    "premiumCancelRequestedAt",
+    "premiumCurrentPeriodEnd",
+    "premiumScheduledEndAt",
+    "premiumLastEventAt",
+    "premiumLastSyncedAt",
+  ];
+  stringIsoFields.forEach((field) => {
+    const normalizedIso = normalizeIso(normalized[field]);
+    if (normalizedIso) {
+      normalized[field] = normalizedIso;
+    } else {
+      delete normalized[field];
+    }
+  });
+
+  const boundedFields = [
+    ["premiumProvider", 40],
+    ["premiumLastSource", 60],
+    ["premiumLastEventId", 120],
+    ["premiumLastDowngradeEventId", 120],
+    ["premiumLastEventType", 80],
+    ["premiumLastCurrency", 12],
+    ["premiumLastAmount", 40],
+    ["premiumStripeCustomerId", 120],
+    ["premiumStripeSubscriptionId", 120],
+    ["premiumStripeSubscriptionStatus", 60],
+  ];
+  boundedFields.forEach(([field, limit]) => {
+    const value = normalizeShort(normalized[field], limit);
+    if (value) {
+      normalized[field] = value;
+    } else {
+      delete normalized[field];
+    }
+  });
+
+  if (normalized.premiumLastCurrency) {
+    normalized.premiumLastCurrency = normalizeId(normalized.premiumLastCurrency, 12).toUpperCase();
+  }
+  if (normalized.premiumStripeSubscriptionStatus) {
+    normalized.premiumStripeSubscriptionStatus = normalizeId(
+      normalized.premiumStripeSubscriptionStatus,
+      60
+    ).toLowerCase();
+  }
+
+  return normalized;
+};
+
 const normalizeUserData = (value) => {
   const base = createDefaultUserData();
   const candidate = cloneObjectSafely(value, createDefaultUserData, MAX_USER_DATA_SERIALIZED_CHARS);
   const settings = isPlainObject(candidate.settings) ? candidate.settings : {};
   base.settings.baseLanguage = String(settings.baseLanguage || "").trim().slice(0, 40);
-  base.profile = isPlainObject(candidate.profile)
+  const rawProfile = isPlainObject(candidate.profile)
     ? cloneObjectSafely(candidate.profile, () => ({}), 20000)
     : {};
+  base.profile = normalizePremiumProfileSchema(rawProfile);
   return base;
 };
 
@@ -1928,6 +2067,32 @@ const appendSecurityEvent = async ({
   return true;
 };
 
+const appendBillingEntitlementAudit = async ({
+  req = null,
+  userRecord = null,
+  action = "unknown",
+  reason = "",
+  before = null,
+  after = null,
+  details = {},
+} = {}) => {
+  const userId = String(userRecord?.id || "").trim();
+  const email = normalizeEmail(userRecord?.email || "");
+  return appendSecurityEvent({
+    type: "billing-entitlement-change",
+    req,
+    userId,
+    email,
+    reason: String(reason || action || "billing change").slice(0, 220),
+    details: {
+      action: String(action || "unknown").slice(0, 80),
+      before: isPlainObject(before) ? before : {},
+      after: isPlainObject(after) ? after : {},
+      ...((isPlainObject(details) ? details : {})),
+    },
+  });
+};
+
 const findBlockedPrincipal = ({ email = "", userId = "", ipHash = "" } = {}) => {
   const normalizedUserId = String(userId || "").trim();
   const normalizedEmail = normalizeEmail(email);
@@ -2322,9 +2487,67 @@ const cloneForResponse = (value) => {
   }
 };
 
+function resolvePremiumSnapshotFromProfile(profileValue) {
+  const profile = isPlainObject(profileValue) ? profileValue : {};
+  const premiumRaw = profile.isPremium ?? profile.premium ?? null;
+  const premiumText = String(premiumRaw ?? "")
+    .trim()
+    .toLowerCase();
+  const premiumTier = String(profile.plan || profile.tier || profile.membership || "")
+    .trim()
+    .toLowerCase();
+  const hasPremiumAccess =
+    premiumRaw === true ||
+    premiumText === "1" ||
+    premiumText === "true" ||
+    premiumText === "yes" ||
+    premiumText === "premium" ||
+    premiumText === "pro" ||
+    premiumText === "plus" ||
+    premiumTier === "premium" ||
+    premiumTier === "pro" ||
+    premiumTier === "plus" ||
+    premiumTier === "paid";
+  return {
+    isPremium: hasPremiumAccess,
+    planTier: hasPremiumAccess ? "premium" : "free",
+  };
+}
+
+const parseIsoToMs = (value) => {
+  const ms = Date.parse(String(value || "").trim());
+  return Number.isFinite(ms) ? ms : null;
+};
+
+const computePremiumAccessUntilFromProfile = (profileValue, nowIso = new Date().toISOString()) => {
+  const profile = isPlainObject(profileValue) ? profileValue : {};
+  const explicitEndMs = parseIsoToMs(profile.premiumCurrentPeriodEnd || profile.premiumScheduledEndAt || "");
+  if (explicitEndMs !== null) {
+    return new Date(explicitEndMs).toISOString();
+  }
+
+  const activatedAtMs = parseIsoToMs(profile.premiumActivatedAt || "");
+  if (activatedAtMs === null) {
+    return null;
+  }
+  const nowMs = parseIsoToMs(nowIso) ?? Date.now();
+  const cycleMs = 30 * 24 * 60 * 60 * 1000;
+  const elapsedMs = Math.max(0, nowMs - activatedAtMs);
+  const cycleIndex = Math.floor(elapsedMs / cycleMs);
+  const cycleEndMsExclusive = activatedAtMs + (cycleIndex + 1) * cycleMs;
+  const inclusiveEndMs = cycleEndMsExclusive - 1;
+  return new Date(inclusiveEndMs).toISOString();
+};
+
 const toPublicUser = (userRecord) => {
   const authProvider =
     String(userRecord?.data?.profile?.authProvider || "email").trim().toLowerCase() || "email";
+  const premiumSnapshot = resolvePremiumSnapshotFromProfile(userRecord?.data?.profile);
+  const premiumAccessUntil = computePremiumAccessUntilFromProfile(userRecord?.data?.profile);
+  const premiumCancelAtPeriodEnd =
+    String(userRecord?.data?.profile?.premiumCancelAtPeriodEnd || "")
+      .trim()
+      .toLowerCase() === "true" || userRecord?.data?.profile?.premiumCancelAtPeriodEnd === true;
   return {
     id: userRecord.id,
     email: userRecord.email,
@@ -2334,6 +2557,10 @@ const toPublicUser = (userRecord) => {
     updatedAt: userRecord.updatedAt,
     lastLoginAt: userRecord.lastLoginAt || null,
     authProvider: authProvider.slice(0, 32),
+    isPremium: premiumSnapshot.isPremium,
+    planTier: premiumSnapshot.planTier,
+    premiumAccessUntil,
+    premiumCancelAtPeriodEnd,
   };
 };
 
@@ -3244,26 +3471,7 @@ const syncBadgesAndLevel = (progress, worldKey, nowIso, hasPremiumAccess = true)
 
 const userHasPremiumAccessForProgress = (userRecord) => {
   const profile = isPlainObject(userRecord?.data?.profile) ? userRecord.data.profile : {};
-  const premiumRaw = profile.isPremium ?? profile.premium ?? null;
-  const premiumText = String(premiumRaw ?? "")
-    .trim()
-    .toLowerCase();
-  const premiumTier = String(profile.plan || profile.tier || profile.membership || "")
-    .trim()
-    .toLowerCase();
-  return (
-    premiumRaw === true ||
-    premiumText === "1" ||
-    premiumText === "true" ||
-    premiumText === "yes" ||
-    premiumText === "premium" ||
-    premiumText === "pro" ||
-    premiumText === "plus" ||
-    premiumTier === "premium" ||
-    premiumTier === "pro" ||
-    premiumTier === "plus" ||
-    premiumTier === "paid"
-  );
+  return resolvePremiumSnapshotFromProfile(profile).isPremium;
 };
 
 const trackProgressEventForUser = (userRecord, payload) => {
@@ -4744,6 +4952,11 @@ const applyPremiumProfileToUserRecord = (
     eventType = "",
     amount = "",
     currency = "",
+    stripeCustomerId = "",
+    stripeSubscriptionId = "",
+    premiumAccessUntil = "",
+    cancelAtPeriodEnd = false,
+    subscriptionStatus = "",
   } = {}
 ) => {
   if (!userRecord || !isPlainObject(userRecord)) {
@@ -4774,6 +4987,13 @@ const applyPremiumProfileToUserRecord = (
   }
 
   const nowIso = new Date().toISOString();
+  const beforeSnapshot = {
+    isPremium: alreadyPremium,
+    planTier: resolvePremiumSnapshotFromProfile(profile).planTier,
+    premiumAccessUntil: computePremiumAccessUntilFromProfile(profile),
+    cancelAtPeriodEnd: profile.premiumCancelAtPeriodEnd === true,
+    subscriptionStatus: String(profile.premiumStripeSubscriptionStatus || "").trim().toLowerCase() || null,
+  };
   profile.isPremium = true;
   profile.premium = true;
   profile.plan = "premium";
@@ -4785,6 +5005,9 @@ const applyPremiumProfileToUserRecord = (
   profile.premiumLastSource = String(source || "").trim().slice(0, 60) || "webhook";
   profile.premiumProvider = String(provider || "").trim().slice(0, 40) || "ko-fi";
   profile.premiumLastEventAt = nowIso;
+  profile.premiumCancelAtPeriodEnd = false;
+  delete profile.premiumCancelRequestedAt;
+  delete profile.premiumScheduledEndAt;
   if (normalizedEventId) {
     profile.premiumLastEventId = normalizedEventId;
   }
@@ -4800,9 +5023,47 @@ const applyPremiumProfileToUserRecord = (
   if (normalizedCurrency) {
     profile.premiumLastCurrency = normalizedCurrency;
   }
+  const normalizedStripeCustomerId = String(stripeCustomerId || "").trim().slice(0, 120);
+  if (normalizedStripeCustomerId) {
+    profile.premiumStripeCustomerId = normalizedStripeCustomerId;
+  }
+  const normalizedStripeSubscriptionId = String(stripeSubscriptionId || "").trim().slice(0, 120);
+  if (normalizedStripeSubscriptionId) {
+    profile.premiumStripeSubscriptionId = normalizedStripeSubscriptionId;
+  }
+  const normalizedAccessUntil = String(premiumAccessUntil || "").trim();
+  if (normalizedAccessUntil && Number.isFinite(Date.parse(normalizedAccessUntil))) {
+    profile.premiumCurrentPeriodEnd = new Date(Date.parse(normalizedAccessUntil)).toISOString();
+  }
+  profile.premiumCancelAtPeriodEnd = cancelAtPeriodEnd === true;
+  const normalizedSubscriptionStatus = String(subscriptionStatus || "").trim().toLowerCase().slice(0, 60);
+  if (normalizedSubscriptionStatus) {
+    profile.premiumStripeSubscriptionStatus = normalizedSubscriptionStatus;
+  }
+  profile.premiumLastSyncedAt = nowIso;
+
+  const afterSnapshot = {
+    isPremium: true,
+    planTier: "premium",
+    premiumAccessUntil: computePremiumAccessUntilFromProfile(profile),
+    cancelAtPeriodEnd: profile.premiumCancelAtPeriodEnd === true,
+    subscriptionStatus: String(profile.premiumStripeSubscriptionStatus || "").trim().toLowerCase() || null,
+  };
 
   userRecord.updatedAt = nowIso;
   markAuthStoreDirty();
+  void appendBillingEntitlementAudit({
+    userRecord,
+    action: "upgrade",
+    reason: `Premium upgraded (${String(source || "webhook").slice(0, 60)})`,
+    before: beforeSnapshot,
+    after: afterSnapshot,
+    details: {
+      provider: String(provider || "").slice(0, 40),
+      eventId: normalizedEventId,
+      eventType: normalizedEventType,
+    },
+  });
 
   return {
     changed: true,
@@ -4848,6 +5109,13 @@ const applyPremiumDowngradeToUserRecord = (
   }
 
   const nowIso = new Date().toISOString();
+  const beforeSnapshot = {
+    isPremium,
+    planTier: resolvePremiumSnapshotFromProfile(profile).planTier,
+    premiumAccessUntil: computePremiumAccessUntilFromProfile(profile),
+    cancelAtPeriodEnd: profile.premiumCancelAtPeriodEnd === true,
+    subscriptionStatus: String(profile.premiumStripeSubscriptionStatus || "").trim().toLowerCase() || null,
+  };
   profile.isPremium = false;
   profile.premium = false;
   profile.plan = "free";
@@ -4857,6 +5125,12 @@ const applyPremiumDowngradeToUserRecord = (
   profile.premiumProvider = String(provider || "").trim().slice(0, 40) || "ko-fi";
   profile.premiumLastEventAt = nowIso;
   profile.premiumDeactivatedAt = nowIso;
+  profile.premiumCancelAtPeriodEnd = false;
+  delete profile.premiumCancelRequestedAt;
+  delete profile.premiumScheduledEndAt;
+  delete profile.premiumCurrentPeriodEnd;
+  delete profile.premiumStripeSubscriptionStatus;
+  delete profile.premiumStripeSubscriptionId;
   if (normalizedEventId) {
     profile.premiumLastDowngradeEventId = normalizedEventId;
   }
@@ -4864,9 +5138,30 @@ const applyPremiumDowngradeToUserRecord = (
   if (normalizedEventType) {
     profile.premiumLastEventType = normalizedEventType;
   }
+  profile.premiumLastSyncedAt = nowIso;
+
+  const afterSnapshot = {
+    isPremium: false,
+    planTier: "free",
+    premiumAccessUntil: computePremiumAccessUntilFromProfile(profile),
+    cancelAtPeriodEnd: false,
+    subscriptionStatus: null,
+  };
 
   userRecord.updatedAt = nowIso;
   markAuthStoreDirty();
+  void appendBillingEntitlementAudit({
+    userRecord,
+    action: "downgrade",
+    reason: `Premium downgraded (${String(source || "webhook").slice(0, 60)})`,
+    before: beforeSnapshot,
+    after: afterSnapshot,
+    details: {
+      provider: String(provider || "").slice(0, 40),
+      eventId: normalizedEventId,
+      eventType: normalizedEventType,
+    },
+  });
 
   return {
     changed: isPremium,
@@ -4881,6 +5176,53 @@ const hasStripePremiumAccessFromStatus = (status = "") => {
     return false;
   }
   return ["active", "trialing", "past_due"].includes(normalizedStatus);
+};
+
+const shouldStripeDowngradeFromStatus = (status = "") => {
+  const normalizedStatus = String(status || "").trim().toLowerCase();
+  if (!normalizedStatus) {
+    return false;
+  }
+  return ["canceled", "cancelled", "unpaid", "incomplete_expired"].includes(normalizedStatus);
+};
+
+const extractStripeIdentifiersFromObject = (stripeObject = {}) => {
+  const objectPayload = isPlainObject(stripeObject) ? stripeObject : {};
+  const customerRef = objectPayload.customer;
+  const subscriptionRef = objectPayload.subscription;
+  const customerId = (() => {
+    if (typeof customerRef === "string") {
+      return customerRef.trim();
+    }
+    if (isPlainObject(customerRef)) {
+      return String(customerRef.id || "").trim();
+    }
+    return "";
+  })();
+  const subscriptionId = (() => {
+    if (typeof subscriptionRef === "string") {
+      return subscriptionRef.trim();
+    }
+    if (isPlainObject(subscriptionRef)) {
+      return String(subscriptionRef.id || "").trim();
+    }
+    if (objectPayload.object === "subscription") {
+      return String(objectPayload.id || "").trim();
+    }
+    return "";
+  })();
+  const currentPeriodEndEpoch = Number(objectPayload.current_period_end || 0);
+  const premiumAccessUntil =
+    Number.isFinite(currentPeriodEndEpoch) && currentPeriodEndEpoch > 0
+      ? new Date(currentPeriodEndEpoch * 1000).toISOString()
+      : "";
+  return {
+    customerId: customerId.slice(0, 120),
+    subscriptionId: subscriptionId.slice(0, 120),
+    premiumAccessUntil,
+    cancelAtPeriodEnd: objectPayload.cancel_at_period_end === true,
+    subscriptionStatus: String(objectPayload.status || "").trim().toLowerCase().slice(0, 60),
+  };
 };
 
 const resolveStripeWebhookUserRecord = async (stripe, stripeObject = {}) => {
@@ -4904,6 +5246,22 @@ const resolveStripeWebhookUserRecord = async (stripe, stripeObject = {}) => {
         userId: String(userRecord.id || userId).trim(),
         email: normalizeEmail(userRecord.email),
       };
+    }
+  }
+
+  const webhookIds = extractStripeIdentifiersFromObject(objectPayload);
+  if (webhookIds.customerId) {
+    for (const [candidateUserId, candidateRecord] of Object.entries(authStore.users || {})) {
+      const storedCustomerId = String(candidateRecord?.data?.profile?.premiumStripeCustomerId || "")
+        .trim()
+        .slice(0, 120);
+      if (storedCustomerId && storedCustomerId === webhookIds.customerId) {
+        return {
+          userRecord: candidateRecord,
+          userId: String(candidateRecord.id || candidateUserId).trim(),
+          email: normalizeEmail(candidateRecord.email),
+        };
+      }
     }
   }
 
@@ -4962,8 +5320,15 @@ app.post(
   billingWebhookLimiter,
   express.raw({ type: "application/json", limit: "1mb" }),
   async (req, res) => {
+    stripeWebhookHealthState.lastReceivedAt = new Date().toISOString();
     const configuredWebhookSecret = String(process.env.STRIPE_WEBHOOK_SECRET || "").trim();
     if (!configuredWebhookSecret) {
+      stripeWebhookHealthState.lastErrorAt = new Date().toISOString();
+      stripeWebhookHealthState.recentFailureCount += 1;
+      maybeAlertStripeWebhookIssue({
+        req,
+        reason: "Missing STRIPE_WEBHOOK_SECRET",
+      });
       reportServerError("stripe-webhook-not-configured", new Error("Missing STRIPE_WEBHOOK_SECRET"), {
         requestId: req.requestId,
         method: req.method,
@@ -4976,6 +5341,8 @@ app.post(
 
     const signature = String(req.get("stripe-signature") || "").trim();
     if (!signature) {
+      stripeWebhookHealthState.lastRejectedAt = new Date().toISOString();
+      stripeWebhookHealthState.recentFailureCount += 1;
       return res.status(400).json({ error: "Missing Stripe signature" });
     }
 
@@ -4990,6 +5357,15 @@ app.post(
       stripe = getStripeClient();
       event = stripe.webhooks.constructEvent(rawBody, signature, configuredWebhookSecret);
     } catch (error) {
+      stripeWebhookHealthState.lastRejectedAt = new Date().toISOString();
+      stripeWebhookHealthState.recentFailureCount += 1;
+      maybeAlertStripeWebhookIssue({
+        req,
+        reason: "Invalid Stripe signature",
+        details: {
+          error: String(error?.message || error).slice(0, 240),
+        },
+      });
       void appendSecurityEvent({
         type: "stripe-webhook-rejected",
         req,
@@ -5004,6 +5380,9 @@ app.post(
     const eventType = String(event?.type || "").trim().toLowerCase();
     const stripeObject = isPlainObject(event?.data?.object) ? event.data.object : {};
     const eventId = String(event?.id || "").trim().slice(0, 120);
+    stripeWebhookHealthState.lastEventType = eventType;
+    stripeWebhookHealthState.lastEventId = eventId;
+    const stripeIds = extractStripeIdentifiersFromObject(stripeObject);
 
     if (
       eventType !== "checkout.session.completed" &&
@@ -5019,6 +5398,7 @@ app.post(
 
     const matched = await resolveStripeWebhookUserRecord(stripe, stripeObject);
     if (!matched.userRecord) {
+      stripeWebhookHealthState.recentFailureCount += 1;
       void appendSecurityEvent({
         type: "stripe-webhook-unmatched",
         req,
@@ -5044,7 +5424,14 @@ app.post(
         eventType,
         amount: String(stripeObject.amount_total || "").trim().slice(0, 40),
         currency: String(stripeObject.currency || "").trim().slice(0, 12),
+        stripeCustomerId: stripeIds.customerId,
+        stripeSubscriptionId: stripeIds.subscriptionId,
+        premiumAccessUntil: stripeIds.premiumAccessUntil,
+        cancelAtPeriodEnd: stripeIds.cancelAtPeriodEnd,
+        subscriptionStatus: stripeIds.subscriptionStatus,
       });
+      stripeWebhookHealthState.lastProcessedAt = new Date().toISOString();
+      stripeWebhookHealthState.recentSuccessCount += 1;
 
       void appendSecurityEvent({
         type: "stripe-webhook-processed",
@@ -5069,8 +5456,9 @@ app.post(
     }
 
     const subscriptionStatus = String(stripeObject.status || "").trim().toLowerCase();
-    const shouldKeepPremium =
-      eventType === "customer.subscription.updated" && hasStripePremiumAccessFromStatus(subscriptionStatus);
+    const isSubscriptionUpdate = eventType === "customer.subscription.updated";
+    const isSubscriptionDeleted = eventType === "customer.subscription.deleted";
+    const shouldKeepPremium = isSubscriptionUpdate && hasStripePremiumAccessFromStatus(subscriptionStatus);
 
     if (shouldKeepPremium) {
       const premiumResult = applyPremiumProfileToUserRecord(matched.userRecord, {
@@ -5079,7 +5467,14 @@ app.post(
         eventId,
         eventType,
         currency: String(stripeObject.currency || "").trim().slice(0, 12),
+        stripeCustomerId: stripeIds.customerId,
+        stripeSubscriptionId: stripeIds.subscriptionId,
+        premiumAccessUntil: stripeIds.premiumAccessUntil,
+        cancelAtPeriodEnd: stripeIds.cancelAtPeriodEnd,
+        subscriptionStatus: stripeIds.subscriptionStatus || subscriptionStatus,
       });
+      stripeWebhookHealthState.lastProcessedAt = new Date().toISOString();
+      stripeWebhookHealthState.recentSuccessCount += 1;
 
       void appendSecurityEvent({
         type: "stripe-webhook-processed",
@@ -5104,12 +5499,46 @@ app.post(
       });
     }
 
+    if (isSubscriptionUpdate && !shouldStripeDowngradeFromStatus(subscriptionStatus)) {
+      void appendSecurityEvent({
+        type: "stripe-webhook-processed",
+        req,
+        email: matched.email,
+        userId: matched.userId,
+        reason: "Stripe subscription update ignored for non-terminal status",
+        details: {
+          eventId,
+          eventType,
+          status: subscriptionStatus,
+          action: "ignore",
+        },
+      });
+
+      return res.json({
+        ok: true,
+        matched: true,
+        ignored: true,
+        reason: "non-terminal-subscription-status",
+      });
+    }
+
+    if (!isSubscriptionDeleted && !isSubscriptionUpdate) {
+      return res.json({
+        ok: true,
+        matched: true,
+        ignored: true,
+        reason: "event-not-applicable",
+      });
+    }
+
     const downgradeResult = applyPremiumDowngradeToUserRecord(matched.userRecord, {
       provider: "stripe",
       source: "stripe-webhook",
       eventId,
       eventType,
     });
+    stripeWebhookHealthState.lastProcessedAt = new Date().toISOString();
+    stripeWebhookHealthState.recentSuccessCount += 1;
 
     void appendSecurityEvent({
       type: "stripe-webhook-processed",
@@ -5383,34 +5812,7 @@ const isAllowedKoFiCheckoutUrl = (
   }
 };
 
-const resolveConfiguredPremiumCheckoutOptions = () => {
-  const stripePriceId = String(
-    process.env.STRIPE_PREMIUM_PRICE_ID ||
-      process.env.STRIPE_PRICE_ID ||
-      process.env.PREMIUM_STRIPE_PRICE_ID ||
-      ""
-  ).trim();
-  const stripeSecretKey = String(process.env.STRIPE_SECRET_KEY || "").trim();
-  if (stripeSecretKey && stripePriceId) {
-    const label = String(process.env.STRIPE_PREMIUM_LABEL || "Monthly").trim().slice(0, 60) || "Monthly";
-    const description =
-      String(process.env.STRIPE_PREMIUM_DESCRIPTION || "€9.99 per month").trim().slice(0, 140) ||
-      "€9.99 per month";
-    return {
-      options: [
-        {
-          id: "monthly",
-          label,
-          description,
-          url: "/api/billing/premium/checkout/start?option=monthly",
-        },
-      ],
-      configured: true,
-      source: "stripe:STRIPE_PREMIUM_PRICE_ID",
-      provider: "stripe",
-    };
-  }
-
+const resolveConfiguredKoFiPremiumCheckoutOptions = () => {
   const resolveFromEnvKeys = (envKeys = [], validator = null) => {
     for (const key of envKeys) {
       const raw = String(process.env[key] || "").trim();
@@ -5525,6 +5927,37 @@ const resolveConfiguredPremiumCheckoutOptions = () => {
   };
 };
 
+const resolveConfiguredPremiumCheckoutOptions = () => {
+  const stripePriceId = String(
+    process.env.STRIPE_PREMIUM_PRICE_ID ||
+      process.env.STRIPE_PRICE_ID ||
+      process.env.PREMIUM_STRIPE_PRICE_ID ||
+      ""
+  ).trim();
+  const stripeSecretKey = String(process.env.STRIPE_SECRET_KEY || "").trim();
+  if (stripeSecretKey && stripePriceId) {
+    const label = String(process.env.STRIPE_PREMIUM_LABEL || "Monthly").trim().slice(0, 60) || "Monthly";
+    const description =
+      String(process.env.STRIPE_PREMIUM_DESCRIPTION || "€9.99 per month").trim().slice(0, 140) ||
+      "€9.99 per month";
+    return {
+      options: [
+        {
+          id: "monthly",
+          label,
+          description,
+          url: "/api/billing/premium/checkout/start?option=monthly",
+        },
+      ],
+      configured: true,
+      source: "stripe:STRIPE_PREMIUM_PRICE_ID",
+      provider: "stripe",
+    };
+  }
+
+  return resolveConfiguredKoFiPremiumCheckoutOptions();
+};
+
 const createStripePremiumCheckoutSession = async (req, userRecord, optionId = "monthly") => {
   const stripe = getStripeClient();
   const priceId = String(
@@ -5578,22 +6011,526 @@ const createStripePremiumCheckoutSession = async (req, userRecord, optionId = "m
   return checkoutUrl;
 };
 
+const listStripeCustomersByEmail = async (stripe, email) => {
+  const normalizedEmail = normalizeEmail(email);
+  if (!isValidEmail(normalizedEmail)) {
+    return [];
+  }
+  const customers = [];
+  let startingAfter = "";
+  let hasMore = true;
+  while (hasMore) {
+    const response = await stripe.customers.list({
+      email: normalizedEmail,
+      limit: 100,
+      ...(startingAfter ? { starting_after: startingAfter } : {}),
+    });
+    const items = Array.isArray(response?.data) ? response.data : [];
+    items.forEach((item) => {
+      if (item && !item.deleted) {
+        customers.push(item);
+      }
+    });
+    hasMore = Boolean(response?.has_more) && items.length > 0;
+    startingAfter = hasMore ? String(items[items.length - 1]?.id || "") : "";
+  }
+  return customers;
+};
+
+const listStripeSubscriptionsForCustomer = async (stripe, customerId) => {
+  const subscriptions = [];
+  let startingAfter = "";
+  let hasMore = true;
+  while (hasMore) {
+    const response = await stripe.subscriptions.list({
+      customer: String(customerId || "").trim(),
+      status: "all",
+      limit: 100,
+      ...(startingAfter ? { starting_after: startingAfter } : {}),
+    });
+    const items = Array.isArray(response?.data) ? response.data : [];
+    subscriptions.push(...items);
+    hasMore = Boolean(response?.has_more) && items.length > 0;
+    startingAfter = hasMore ? String(items[items.length - 1]?.id || "") : "";
+  }
+  return subscriptions;
+};
+
+const findStripeCancelableSubscriptionForUser = async (stripe, userRecord) => {
+  const email = normalizeEmail(userRecord?.email);
+  if (!isValidEmail(email)) {
+    return null;
+  }
+  const customers = await listStripeCustomersByEmail(stripe, email);
+  for (const customer of customers) {
+    const subscriptions = await listStripeSubscriptionsForCustomer(stripe, customer.id);
+    const match = subscriptions.find((subscription) => {
+      const status = String(subscription?.status || "").trim().toLowerCase();
+      return ["active", "trialing", "past_due"].includes(status);
+    });
+    if (match) {
+      return {
+        customerId: String(customer.id || "").trim(),
+        subscription: match,
+      };
+    }
+  }
+  return null;
+};
+
+const resolveStripeSubscriptionSnapshotForUser = async (stripe, userRecord) => {
+  const profile = isPlainObject(userRecord?.data?.profile) ? userRecord.data.profile : {};
+  const knownCustomerId = String(profile.premiumStripeCustomerId || "").trim().slice(0, 120);
+  const customerIds = new Set();
+  if (knownCustomerId) {
+    customerIds.add(knownCustomerId);
+  }
+
+  const email = normalizeEmail(userRecord?.email);
+  if (isValidEmail(email)) {
+    const customers = await listStripeCustomersByEmail(stripe, email);
+    for (const customer of customers) {
+      const customerId = String(customer?.id || "").trim().slice(0, 120);
+      if (customerId) {
+        customerIds.add(customerId);
+      }
+    }
+  }
+
+  const allSubscriptions = [];
+  for (const customerId of customerIds) {
+    const subscriptions = await listStripeSubscriptionsForCustomer(stripe, customerId);
+    subscriptions.forEach((subscription) => {
+      if (subscription) {
+        allSubscriptions.push({
+          customerId,
+          subscription,
+        });
+      }
+    });
+  }
+
+  const activePriority = {
+    active: 0,
+    trialing: 1,
+    past_due: 2,
+  };
+
+  const activeMatches = allSubscriptions
+    .filter(({ subscription }) => {
+      const status = String(subscription?.status || "").trim().toLowerCase();
+      return hasStripePremiumAccessFromStatus(status);
+    })
+    .sort((a, b) => {
+      const statusA = String(a.subscription?.status || "").trim().toLowerCase();
+      const statusB = String(b.subscription?.status || "").trim().toLowerCase();
+      const priorityA = Number.isFinite(activePriority[statusA]) ? activePriority[statusA] : 99;
+      const priorityB = Number.isFinite(activePriority[statusB]) ? activePriority[statusB] : 99;
+      if (priorityA !== priorityB) {
+        return priorityA - priorityB;
+      }
+      const periodEndA = Number(a.subscription?.current_period_end || 0);
+      const periodEndB = Number(b.subscription?.current_period_end || 0);
+      return periodEndB - periodEndA;
+    });
+
+  if (activeMatches.length > 0) {
+    const winner = activeMatches[0];
+    const subscription = winner.subscription;
+    const periodEndEpoch = Number(subscription?.current_period_end || 0);
+    return {
+      hasPremium: true,
+      customerId: String(winner.customerId || "").trim().slice(0, 120),
+      subscriptionId: String(subscription?.id || "").trim().slice(0, 120),
+      subscriptionStatus: String(subscription?.status || "").trim().toLowerCase().slice(0, 60),
+      cancelAtPeriodEnd: subscription?.cancel_at_period_end === true,
+      premiumAccessUntil:
+        Number.isFinite(periodEndEpoch) && periodEndEpoch > 0
+          ? new Date(periodEndEpoch * 1000).toISOString()
+          : "",
+    };
+  }
+
+  return {
+    hasPremium: false,
+    customerId: knownCustomerId,
+    subscriptionId: "",
+    subscriptionStatus: "",
+    cancelAtPeriodEnd: false,
+    premiumAccessUntil: "",
+  };
+};
+
+const syncUserPremiumFromStripeTruth = async (
+  userRecord,
+  { source = "admin-resync", forceDowngradeWhenNoActive = true } = {}
+) => {
+  const stripe = getStripeClient();
+  userRecord.data = normalizeUserData(userRecord.data);
+  if (!isPlainObject(userRecord.data.profile)) {
+    userRecord.data.profile = {};
+  }
+  const beforePremium = userHasPremiumAccessForProgress(userRecord);
+  const snapshot = await resolveStripeSubscriptionSnapshotForUser(stripe, userRecord);
+
+  if (snapshot.hasPremium) {
+    const upgradeResult = applyPremiumProfileToUserRecord(userRecord, {
+      provider: "stripe",
+      source,
+      eventType: "stripe-truth-sync",
+      stripeCustomerId: snapshot.customerId,
+      stripeSubscriptionId: snapshot.subscriptionId,
+      premiumAccessUntil: snapshot.premiumAccessUntil,
+      cancelAtPeriodEnd: snapshot.cancelAtPeriodEnd,
+      subscriptionStatus: snapshot.subscriptionStatus,
+    });
+    return {
+      action: upgradeResult.changed ? "upgraded" : beforePremium ? "confirmed" : "upgraded",
+      changed: upgradeResult.changed,
+      isPremium: true,
+      snapshot,
+    };
+  }
+
+  if (!forceDowngradeWhenNoActive) {
+    return {
+      action: "skipped",
+      changed: false,
+      isPremium: beforePremium,
+      snapshot,
+    };
+  }
+
+  const downgradeResult = applyPremiumDowngradeToUserRecord(userRecord, {
+    provider: "stripe",
+    source,
+    eventType: "stripe-truth-sync",
+  });
+
+  return {
+    action: downgradeResult.changed ? "downgraded" : "confirmed-free",
+    changed: downgradeResult.changed,
+    isPremium: false,
+    snapshot,
+  };
+};
+
+const resolvePremiumSubscriptionStatus = (userRecord) => {
+  const profile = isPlainObject(userRecord?.data?.profile) ? userRecord.data.profile : {};
+  const premiumSnapshot = resolvePremiumSnapshotFromProfile(profile);
+  const accessUntil = computePremiumAccessUntilFromProfile(profile);
+  const cancelAtPeriodEnd =
+    profile.premiumCancelAtPeriodEnd === true ||
+    ["1", "true", "yes"].includes(String(profile.premiumCancelAtPeriodEnd || "").trim().toLowerCase());
+  const subscriptionStatus = String(profile.premiumStripeSubscriptionStatus || "").trim().toLowerCase();
+  const lastSyncAt = String(profile.premiumLastSyncedAt || profile.premiumLastEventAt || "").trim() || null;
+  const billingStatus = premiumSnapshot.isPremium
+    ? cancelAtPeriodEnd
+      ? "canceling"
+      : "active"
+    : "expired";
+  return {
+    isPremium: premiumSnapshot.isPremium,
+    planTier: premiumSnapshot.planTier,
+    billingStatus,
+    cancelAtPeriodEnd,
+    premiumAccessUntil: accessUntil,
+    premiumActivatedAt: String(profile.premiumActivatedAt || "") || null,
+    premiumProvider: String(profile.premiumProvider || "").trim().toLowerCase() || null,
+    stripeSubscriptionStatus: subscriptionStatus || null,
+    lastSyncAt,
+  };
+};
+
+app.get(
+  "/api/billing/subscription/status",
+  authSessionLimiter,
+  requireAuthenticatedUser,
+  (req, res) => {
+    req.authUser.data = normalizeUserData(req.authUser.data);
+    const status = resolvePremiumSubscriptionStatus(req.authUser);
+    return res.json({
+      ok: true,
+      subscription: status,
+    });
+  }
+);
+
+app.get(
+  "/api/admin/security/billing/stripe-health",
+  adminSecurityLimiter,
+  requireAdminSecurityAccess,
+  (req, res) => {
+    return res.json({
+      ok: true,
+      configured: {
+        stripeSecretKey: Boolean(String(process.env.STRIPE_SECRET_KEY || "").trim()),
+        stripeWebhookSecret: Boolean(String(process.env.STRIPE_WEBHOOK_SECRET || "").trim()),
+      },
+      webhookHealth: {
+        ...stripeWebhookHealthState,
+      },
+      now: new Date().toISOString(),
+    });
+  }
+);
+
+app.post(
+  "/api/admin/security/billing/stripe/resync-user",
+  adminSecurityLimiter,
+  requireAdminSecurityAccess,
+  async (req, res) => {
+    const userId = String(req.body?.userId || "").trim().slice(0, 120);
+    const email = normalizeEmail(req.body?.email);
+    const dryRun = isTruthyEnvValue(req.body?.dryRun);
+    const forceDowngradeWhenNoActive = !isTruthyEnvValue(req.body?.keepPremiumIfNoStripeActive);
+
+    const targetUserId = userId || (email ? String(authStore.emailIndex[email] || "").trim() : "");
+    const userRecord = targetUserId ? authStore.users[targetUserId] : null;
+    if (!userRecord) {
+      return res.status(404).json({ error: "User not found for provided userId/email" });
+    }
+
+    userRecord.data = normalizeUserData(userRecord.data);
+    const beforePremium = userHasPremiumAccessForProgress(userRecord);
+    const profile = isPlainObject(userRecord.data.profile) ? userRecord.data.profile : {};
+    const beforeSnapshot = {
+      isPremium: beforePremium,
+      stripeCustomerId: String(profile.premiumStripeCustomerId || "").trim().slice(0, 120) || null,
+      stripeSubscriptionId: String(profile.premiumStripeSubscriptionId || "").trim().slice(0, 120) || null,
+      premiumCurrentPeriodEnd: String(profile.premiumCurrentPeriodEnd || "").trim() || null,
+      premiumCancelAtPeriodEnd: profile.premiumCancelAtPeriodEnd === true,
+    };
+
+    try {
+      const stripe = getStripeClient();
+      const liveSnapshot = await resolveStripeSubscriptionSnapshotForUser(stripe, userRecord);
+
+      if (dryRun) {
+        return res.json({
+          ok: true,
+          dryRun: true,
+          user: {
+            id: String(userRecord.id || targetUserId).trim(),
+            email: normalizeEmail(userRecord.email),
+          },
+          before: beforeSnapshot,
+          stripe: liveSnapshot,
+          wouldAction: liveSnapshot.hasPremium
+            ? beforePremium
+              ? "confirm-premium"
+              : "upgrade"
+            : forceDowngradeWhenNoActive
+              ? beforePremium
+                ? "downgrade"
+                : "confirm-free"
+              : "no-change",
+        });
+      }
+
+      const result = await syncUserPremiumFromStripeTruth(userRecord, {
+        source: "admin-stripe-resync",
+        forceDowngradeWhenNoActive,
+      });
+
+      void appendSecurityEvent({
+        type: "admin-billing-resync",
+        req,
+        email: normalizeEmail(userRecord.email),
+        userId: String(userRecord.id || targetUserId).trim(),
+        reason: `Stripe entitlement resync: ${result.action}`,
+        details: {
+          changed: result.changed,
+          forceDowngradeWhenNoActive,
+        },
+      });
+
+      return res.json({
+        ok: true,
+        dryRun: false,
+        user: toPublicUser(userRecord),
+        before: beforeSnapshot,
+        result: {
+          action: result.action,
+          changed: result.changed,
+          isPremium: result.isPremium,
+          stripe: result.snapshot,
+        },
+      });
+    } catch (error) {
+      stripeWebhookHealthState.lastErrorAt = new Date().toISOString();
+      stripeWebhookHealthState.recentFailureCount += 1;
+      reportServerError("admin-stripe-resync-user", error, {
+        requestId: req.requestId,
+        method: req.method,
+        path: req.originalUrl,
+        userId: String(targetUserId || "").slice(0, 120),
+      });
+      return res.status(500).json({ error: "Stripe resync failed" });
+    }
+  }
+);
+
+app.post(
+  "/api/billing/subscription/cancel",
+  accountMutationLimiter,
+  requireAuthenticatedUser,
+  async (req, res) => {
+    const userRecord = req.authUser;
+    userRecord.data = normalizeUserData(userRecord.data);
+    if (!isPlainObject(userRecord.data.profile)) {
+      userRecord.data.profile = {};
+    }
+    const profile = userRecord.data.profile;
+    const premiumSnapshot = resolvePremiumSnapshotFromProfile(profile);
+    if (!premiumSnapshot.isPremium) {
+      return res.status(400).json({
+        error: "No active premium subscription found for this account.",
+      });
+    }
+
+    const nowIso = new Date().toISOString();
+    let scheduledEndIso = computePremiumAccessUntilFromProfile(profile, nowIso);
+    let provider = String(profile.premiumProvider || "").trim().toLowerCase() || "stripe";
+
+    const hasStripeSecret = Boolean(String(process.env.STRIPE_SECRET_KEY || "").trim());
+    if (hasStripeSecret) {
+      try {
+        const stripe = getStripeClient();
+        const stripeMatch = await findStripeCancelableSubscriptionForUser(stripe, userRecord);
+        if (stripeMatch?.subscription?.id) {
+          const existing = stripeMatch.subscription;
+          const updatedSubscription = existing.cancel_at_period_end
+            ? existing
+            : await stripe.subscriptions.update(String(existing.id), {
+                cancel_at_period_end: true,
+              });
+          const periodEnd = Number(updatedSubscription?.current_period_end || 0);
+          if (Number.isFinite(periodEnd) && periodEnd > 0) {
+            scheduledEndIso = new Date(periodEnd * 1000).toISOString();
+          }
+          provider = "stripe";
+        }
+      } catch (error) {
+        reportServerError("subscription-cancel-request", error, {
+          requestId: req.requestId,
+          method: req.method,
+          path: req.originalUrl,
+          userId: String(userRecord.id || "").slice(0, 80),
+        });
+      }
+    }
+
+    profile.premiumCancelAtPeriodEnd = true;
+    profile.premiumCancelRequestedAt = nowIso;
+    if (scheduledEndIso) {
+      profile.premiumScheduledEndAt = scheduledEndIso;
+      profile.premiumCurrentPeriodEnd = scheduledEndIso;
+    }
+    profile.premiumProvider = provider;
+    profile.premiumLastSource = "self-service-cancel";
+    profile.premiumLastEventAt = nowIso;
+    userRecord.updatedAt = nowIso;
+    markAuthStoreDirty();
+
+    return res.json({
+      ok: true,
+      message: "Your subscription will remain active until the end of the current billing period.",
+      subscription: resolvePremiumSubscriptionStatus(userRecord),
+      user: toPublicUser(userRecord),
+      data: cloneForResponse(normalizeUserData(userRecord.data)),
+      progress: cloneForResponse(normalizeProgress(userRecord.progress)),
+    });
+  }
+);
+
+app.post(
+  "/api/billing/subscription/restore",
+  accountMutationLimiter,
+  requireAuthenticatedUser,
+  async (req, res) => {
+    const userRecord = req.authUser;
+    try {
+      const result = await syncUserPremiumFromStripeTruth(userRecord, {
+        source: "self-service-restore",
+        forceDowngradeWhenNoActive: false,
+      });
+
+      return res.json({
+        ok: true,
+        message: result.isPremium
+          ? "Premium status synced successfully."
+          : "No active Stripe premium subscription was found for this account.",
+        result: {
+          action: result.action,
+          changed: result.changed,
+          isPremium: result.isPremium,
+          stripe: result.snapshot,
+        },
+        subscription: resolvePremiumSubscriptionStatus(userRecord),
+        user: toPublicUser(userRecord),
+        data: cloneForResponse(normalizeUserData(userRecord.data)),
+        progress: cloneForResponse(normalizeProgress(userRecord.progress)),
+      });
+    } catch (error) {
+      reportServerError("subscription-restore-request", error, {
+        requestId: req.requestId,
+        method: req.method,
+        path: req.originalUrl,
+        userId: String(userRecord?.id || "").slice(0, 120),
+      });
+      return res.status(500).json({ error: "Could not restore premium status right now" });
+    }
+  }
+);
+
 app.get(
   "/api/billing/premium/options",
   authSessionLimiter,
   requireAuthenticatedUser,
   (req, res) => {
+    const subscription = resolvePremiumSubscriptionStatus(req.authUser);
     const checkoutConfig = resolveConfiguredPremiumCheckoutOptions();
     if (!checkoutConfig.configured) {
       return res.status(503).json({
         error: "Premium checkout is not configured yet",
+        code: "premium_checkout_not_configured",
+        reasonCode: "premium_checkout_not_configured",
+        canPurchase: false,
       });
     }
+
+    const kofiFallbackConfig =
+      checkoutConfig.provider === "stripe" ? resolveConfiguredKoFiPremiumCheckoutOptions() : null;
+    const fallbackAvailable = Boolean(kofiFallbackConfig?.configured && Array.isArray(kofiFallbackConfig?.options));
+    const alreadyPremiumActive =
+      subscription?.isPremium === true &&
+      (subscription?.billingStatus === "active" || subscription?.billingStatus === "canceling");
+    const advisory = alreadyPremiumActive
+      ? subscription?.billingStatus === "canceling"
+        ? "Your Premium plan is already active and set to cancel at period end. Avoid purchasing again unless you intend to start a second subscription."
+        : "Your Premium plan is already active on this account. Avoid purchasing again to prevent duplicate subscriptions."
+      : "";
 
     return res.json({
       ok: true,
       provider: checkoutConfig.provider || "ko-fi",
       options: checkoutConfig.options,
+      canPurchase: !alreadyPremiumActive,
+      reasonCode: alreadyPremiumActive
+        ? "already_premium_active"
+        : checkoutConfig.provider === "stripe" && fallbackAvailable
+          ? "stripe_primary_fallback_available"
+          : "checkout_ready",
+      advisory,
+      subscription: {
+        isPremium: Boolean(subscription?.isPremium),
+        billingStatus: String(subscription?.billingStatus || "").trim().toLowerCase() || "expired",
+      },
+      fallback: {
+        provider: fallbackAvailable ? "ko-fi" : null,
+        available: fallbackAvailable,
+      },
     });
   }
 );
@@ -5633,6 +6570,13 @@ app.get(
         method: req.method,
         path: req.originalUrl,
       });
+
+      const kofiFallbackConfig = resolveConfiguredKoFiPremiumCheckoutOptions();
+      const kofiFallbackOption = kofiFallbackConfig.options.find((item) => item?.id === optionId);
+      if (kofiFallbackConfig.configured && kofiFallbackOption?.url) {
+        return res.redirect(303, kofiFallbackOption.url);
+      }
+
       return res.status(500).json({ error: "Unable to start Stripe checkout" });
     }
   }
@@ -5928,6 +6872,141 @@ app.post("/api/chat", chatLimiter, async (req, res) => {
   }
 });
 
+let billingBackgroundTaskRunning = false;
+let lastStripeDailyReconcileRunAtMs = 0;
+
+const checkStripeWebhookSilence = () => {
+  stripeWebhookHealthState.lastMonitorCheckAt = new Date().toISOString();
+  const webhookSecretConfigured = Boolean(String(process.env.STRIPE_WEBHOOK_SECRET || "").trim());
+  if (!webhookSecretConfigured || STRIPE_WEBHOOK_SILENCE_THRESHOLD_MS <= 0) {
+    return;
+  }
+
+  const nowMs = Date.now();
+  const lastReceivedMs = Date.parse(String(stripeWebhookHealthState.lastReceivedAt || ""));
+  const serverUptimeMs = Math.max(0, Math.round(process.uptime() * 1000));
+  const silenceMs = Number.isFinite(lastReceivedMs)
+    ? Math.max(0, nowMs - lastReceivedMs)
+    : serverUptimeMs;
+
+  if (silenceMs < STRIPE_WEBHOOK_SILENCE_THRESHOLD_MS) {
+    return;
+  }
+
+  maybeAlertStripeWebhookIssue({
+    reason: "Stripe webhook silence threshold exceeded",
+    details: {
+      thresholdMs: STRIPE_WEBHOOK_SILENCE_THRESHOLD_MS,
+      silenceMs,
+      lastReceivedAt: stripeWebhookHealthState.lastReceivedAt,
+    },
+  });
+};
+
+const runStripeDailyReconciliationDryRun = async () => {
+  if (billingBackgroundTaskRunning) {
+    return;
+  }
+  const stripeSecretConfigured = Boolean(String(process.env.STRIPE_SECRET_KEY || "").trim());
+  if (!stripeSecretConfigured) {
+    return;
+  }
+
+  const nowMs = Date.now();
+  if (lastStripeDailyReconcileRunAtMs && nowMs - lastStripeDailyReconcileRunAtMs < STRIPE_RECONCILE_INTERVAL_MS) {
+    return;
+  }
+  lastStripeDailyReconcileRunAtMs = nowMs;
+  billingBackgroundTaskRunning = true;
+
+  const summary = {
+    scanned: 0,
+    stripeCandidates: 0,
+    wouldUpgrade: 0,
+    wouldDowngrade: 0,
+    confirmedPremium: 0,
+    confirmedFree: 0,
+    errors: 0,
+  };
+
+  try {
+    const stripe = getStripeClient();
+    const allUsers = Object.values(authStore.users || {}).filter((user) => user && typeof user === "object");
+    for (const userRecord of allUsers) {
+      const email = normalizeEmail(userRecord?.email || "");
+      if (!isValidEmail(email)) {
+        continue;
+      }
+      summary.scanned += 1;
+      userRecord.data = normalizeUserData(userRecord.data);
+      const profile = isPlainObject(userRecord?.data?.profile) ? userRecord.data.profile : {};
+      const isStripeCandidate =
+        String(profile.premiumProvider || "").trim().toLowerCase() === "stripe" ||
+        Boolean(profile.premiumStripeCustomerId) ||
+        Boolean(profile.premiumStripeSubscriptionId) ||
+        userHasPremiumAccessForProgress(userRecord);
+      if (!isStripeCandidate) {
+        continue;
+      }
+      summary.stripeCandidates += 1;
+      const currentlyPremium = userHasPremiumAccessForProgress(userRecord);
+      try {
+        const stripeSnapshot = await resolveStripeSubscriptionSnapshotForUser(stripe, userRecord);
+        if (stripeSnapshot.hasPremium) {
+          if (currentlyPremium) {
+            summary.confirmedPremium += 1;
+          } else {
+            summary.wouldUpgrade += 1;
+          }
+        } else if (currentlyPremium) {
+          summary.wouldDowngrade += 1;
+        } else {
+          summary.confirmedFree += 1;
+        }
+      } catch {
+        summary.errors += 1;
+      }
+    }
+
+    stripeWebhookHealthState.lastReconcileAt = new Date().toISOString();
+    stripeWebhookHealthState.lastReconcileSummary = {
+      ...summary,
+      generatedAt: stripeWebhookHealthState.lastReconcileAt,
+    };
+
+    if (AUTH_ALERT_WEBHOOK_URL) {
+      void postAuthAlertWebhook({
+        type: "billing_stripe_daily_reconcile_summary",
+        severity: summary.errors > 0 || summary.wouldDowngrade > 0 ? "warning" : "info",
+        timestamp: stripeWebhookHealthState.lastReconcileAt,
+        summary,
+      });
+    }
+  } catch (error) {
+    stripeWebhookHealthState.lastErrorAt = new Date().toISOString();
+    stripeWebhookHealthState.recentFailureCount += 1;
+    reportServerError("billing-stripe-daily-reconcile", error, {
+      monitorIntervalMs: BILLING_MONITOR_INTERVAL_MS,
+      reconcileIntervalMs: STRIPE_RECONCILE_INTERVAL_MS,
+    });
+  } finally {
+    billingBackgroundTaskRunning = false;
+  }
+};
+
+const startBillingBackgroundMonitors = () => {
+  const shouldRun = isTruthyEnvValue(
+    String(process.env.BILLING_BACKGROUND_MONITORS_ENABLED || "true").trim()
+  );
+  if (!shouldRun) {
+    return;
+  }
+  setInterval(() => {
+    checkStripeWebhookSilence();
+    void runStripeDailyReconciliationDryRun();
+  }, BILLING_MONITOR_INTERVAL_MS);
+};
+
 /* --------------------------------------------------------------------------
    ROUTE: HEALTH CHECK
    -------------------------------------------------------------------------- */
@@ -6029,6 +7108,7 @@ process.on("uncaughtException", (error) => {
    SERVER STARTUP
    -------------------------------------------------------------------------- */
 runAuthRuntimeConfigAudit();
+startBillingBackgroundMonitors();
 
 app.listen(port, () => {
   console.log(`Server listening on http://localhost:${port}`);

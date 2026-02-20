@@ -7,6 +7,7 @@ Cosmica is a static language-learning site with a small Node/Express backend for
 - Full file-by-file map: `docs/PROJECT_STRUCTURE.md`
 - Frontend runtime guardrails: `docs/FRONTEND_RUNTIME_NOTES.md`
 - Ops/security runbook: `docs/OPERATIONS_HARDENING.md`
+- Billing ops quick commands: `docs/BILLING_OPS_QUICK_COMMANDS.md`
 - Policy enforcement runbook: `docs/ENFORCEMENT_RUNBOOK.md`
 - Front-end entry points: `frontend/index.html`, `frontend/english-*.html`, and per-world pages in `frontend/world-*.html`, `frontend/letters-*.html`, `frontend/words-*.html`, `frontend/phrases-*.html`, `frontend/grammar-*.html`
 - Base front-end logic: `frontend/app.js`
@@ -142,11 +143,40 @@ Combined guard (syntax + route smoke + cross-device checkout smoke):
 npm run verify:pc-mobile
 ```
 
+User-state contract check for guest/free/premium logic:
+
+```bash
+npm run billing:user-state:contract
+```
+
+This check:
+1. Verifies guest access is blocked (`401`) on authenticated auth/account/billing routes.
+2. Verifies free user contract shape (`planTier=free`, `isPremium=false`, `billingStatus=expired`).
+3. Verifies premium active contract shape (`planTier=premium`, `isPremium=true`, `billingStatus=active`).
+4. Verifies premium canceling contract shape (`planTier=premium`, `isPremium=true`, `billingStatus=canceling`).
+5. Verifies premium options route behavior is stable (`200` configured or `503` not configured).
+6. Verifies premium options anti-confusion fields (`reasonCode`, `canPurchase`, `subscription`, `fallback`) and purchase lock for active/canceling premium users.
+
 One-command production integration check after deploy:
 
 ```bash
 npm run verify:prod-integrations
 ```
+
+Optional authenticated user checks in the same command:
+
+```bash
+VERIFY_AUTH_EMAIL='free-or-premium-user@example.com' \
+VERIFY_AUTH_PASSWORD='your-password' \
+npm run verify:prod-integrations
+```
+
+When auth credentials are set, production verification also checks:
+1. Login contract + session cookie creation.
+2. `/api/auth/me` authenticated contract shape (`user.planTier` present).
+3. `/api/billing/subscription/status` authenticated contract shape.
+4. `/api/billing/premium/options` authenticated behavior (`200` configured or `503` not configured).
+5. `/api/progress` authenticated contract shape (learning continuity baseline).
 
 Optional for full admin positive checks (`200`) in the same command:
 
@@ -156,6 +186,13 @@ VERIFY_ADMIN_BASIC_PASS='your-basic-pass' \
 VERIFY_ADMIN_TOKEN='your-admin-token' \
 npm run verify:prod-integrations
 ```
+
+Production verification always includes:
+1. Security headers on home page (`HSTS`, `X-Content-Type-Options`, `Referrer-Policy`).
+2. Anonymous gate checks for admin routes and billing/profile authenticated routes.
+3. Public SEO/crawlability checks (`canonical` on home, `robots.txt`, `sitemap.xml`).
+4. Public trust/legal checks (`/.well-known/security.txt`, `privacy.html`, `terms.html`, `license.html`).
+5. Core learning-product checks (key learning pages return `200` with `<main>`, guest `/api/progress` is `401`).
 
 ## Quality checks (CI + local)
 

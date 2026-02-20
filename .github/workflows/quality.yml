@@ -42,3 +42,6 @@ jobs:
 
       - name: Smoke checks
         run: npm run smoke
+
+      - name: Billing contract checks
+        run: npm run billing:contract

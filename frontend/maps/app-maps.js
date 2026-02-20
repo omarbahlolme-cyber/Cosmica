@@ -3169,10 +3169,40 @@ const isSectionCompletedInProgressState = (mapKey, sectionKey, mode = "complete"
   );
 };
 
+const currentUserHasPremiumAccess = () => {
+  const snapshot =
+    typeof window.cosmicaGamification?.getState === "function"
+      ? window.cosmicaGamification.getState()
+      : null;
+  const user = snapshot && snapshot.user && typeof snapshot.user === "object" ? snapshot.user : null;
+  const premiumTier = String(user?.planTier || user?.tier || user?.plan || user?.membership || "")
+    .trim()
+    .toLowerCase();
+  return (
+    user?.isPremium === true ||
+    premiumTier === "premium" ||
+    premiumTier === "pro" ||
+    premiumTier === "plus" ||
+    premiumTier === "paid"
+  );
+};
+
 const applySectionCompleteButtonState = (button, mapKey, sectionKey, mode = "complete") => {
   if (!button) {
     return;
   }
+  const hasPremiumAccess = currentUserHasPremiumAccess();
+  if (!hasPremiumAccess) {
+    button.hidden = true;
+    button.classList.remove("is-complete");
+    button.setAttribute("aria-pressed", "false");
+    button.setAttribute("aria-label", "Premium only");
+    button.title = "Premium only";
+    button.setAttribute("data-status-label", "Premium only");
+    return;
+  }
+
+  button.hidden = false;
   const normalizedMode = String(mode || "complete").trim().toLowerCase();
   const isPracticeMode = normalizedMode === "practice";
   const isComplete = isSectionCompletedInProgressState(mapKey, sectionKey, normalizedMode);
@@ -3218,6 +3248,15 @@ const createSectionCompleteButton = (mapKey, sectionKey, options = {}) => {
   button.addEventListener("click", async (event) => {
     event.preventDefault();
     event.stopPropagation();
+    const hasPremiumAccess = currentUserHasPremiumAccess();
+    if (!hasPremiumAccess) {
+      if (typeof window.cosmicaAccountHub?.openPremium === "function") {
+        window.cosmicaAccountHub.openPremium({
+          message: "Upgrade to Premium to unlock section and card checkmarks.",
+        });
+      }
+      return;
+    }
     const targetMapKey = String(button.dataset.mapKey || "").trim().toLowerCase();
     const targetSectionKey = String(button.dataset.sectionKey || "").trim();
     const targetMode = String(button.dataset.toggleMode || "complete").trim().toLowerCase();

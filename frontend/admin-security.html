@@ -109,6 +109,33 @@
       .status.err {
         color: var(--warn);
       }
+      .billing-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 3px 8px;
+        font-size: 0.76rem;
+        color: var(--muted);
+        background: rgba(7, 16, 35, 0.45);
+      }
+      .chip.ok {
+        color: var(--ok);
+      }
+      .chip.warn {
+        color: var(--warn);
+      }
+      .meta-note {
+        font-size: 0.78rem;
+        color: var(--muted);
+      }
       pre {
         margin: 0;
         border: 1px solid rgba(136, 203, 239, 0.24);
@@ -150,6 +177,37 @@
         <div class="actions">
           <button id="loadBlockedBtn" class="secondary" type="button">Load blocked list</button>
           <button id="loadEventsBtn" class="secondary" type="button">Load events</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2 style="margin: 0 0 8px; font-size: 1rem">Billing Operations</h2>
+        <div class="billing-meta">
+          <span id="billingChipConfigured" class="chip">Configured: unknown</span>
+          <span id="billingChipWebhook" class="chip">Webhook: unknown</span>
+          <span id="billingChipWarnings" class="chip">Warnings: unknown</span>
+          <span id="billingLastRefresh" class="meta-note">Last refresh: --</span>
+        </div>
+        <div class="row-3">
+          <label>
+            User email
+            <input id="billingResyncEmail" type="text" placeholder="user@example.com" />
+          </label>
+          <label>
+            User ID
+            <input id="billingResyncUserId" type="text" placeholder="uuid" />
+          </label>
+          <label style="display: flex; align-items: end">
+            <span style="display: flex; gap: 8px; align-items: center; color: var(--text)">
+              <input id="billingKeepPremiumIfNoActive" type="checkbox" style="width: auto" />
+              Keep premium if no Stripe active sub
+            </span>
+          </label>
+        </div>
+        <div class="actions">
+          <button id="billingHealthBtn" class="secondary" type="button">Load Stripe health</button>
+          <button id="billingResyncDryRunBtn" class="secondary" type="button">Dry-run resync user</button>
+          <button id="billingResyncApplyBtn" type="button">Apply resync user</button>
         </div>
       </section>
 
@@ -234,6 +292,67 @@
         outputNode.textContent = JSON.stringify(payload, null, 2);
       };
 
+      const asIsoOrNull = (value) => {
+        const text = String(value || "").trim();
+        if (!text) {
+          return null;
+        }
+        const parsed = Date.parse(text);
+        if (!Number.isFinite(parsed)) {
+          return null;
+        }
+        return new Date(parsed).toISOString();
+      };
+
+      const setChip = (id, label, state = "neutral") => {
+        const node = $(id);
+        if (!node) {
+          return;
+        }
+        node.textContent = label;
+        node.className = `chip ${state === "ok" ? "ok" : state === "warn" ? "warn" : ""}`.trim();
+      };
+
+      const markBillingRefresh = (isoValue) => {
+        const node = $("billingLastRefresh");
+        if (!node) {
+          return;
+        }
+        const iso = asIsoOrNull(isoValue) || new Date().toISOString();
+        node.textContent = `Last refresh: ${new Date(iso).toLocaleString()}`;
+      };
+
+      const renderBillingHealthChips = (payload) => {
+        const configured = payload && payload.configured && typeof payload.configured === "object" ? payload.configured : {};
+        const webhookHealth =
+          payload && payload.webhookHealth && typeof payload.webhookHealth === "object" ? payload.webhookHealth : {};
+        const allConfigured = Object.values(configured).length > 0 && Object.values(configured).every(Boolean);
+        const hasWarnings =
+          !allConfigured ||
+          Number(webhookHealth.recentFailureCount || 0) > 0 ||
+          Boolean(String(webhookHealth.lastErrorAt || "").trim());
+        const webhookHealthy =
+          Boolean(String(webhookHealth.lastProcessedAt || "").trim()) &&
+          Number(webhookHealth.recentFailureCount || 0) === 0;
+
+        setChip(
+          "billingChipConfigured",
+          `Configured: ${allConfigured ? "yes" : "missing"}`,
+          allConfigured ? "ok" : "warn"
+        );
+        setChip(
+          "billingChipWebhook",
+          `Webhook: ${webhookHealthy ? "healthy" : "degraded"}`,
+          webhookHealthy ? "ok" : "warn"
+        );
+        setChip(
+          "billingChipWarnings",
+          `Warnings: ${hasWarnings ? "yes" : "none"}`,
+          hasWarnings ? "warn" : "ok"
+        );
+        markBillingRefresh(payload?.now || webhookHealth.lastProcessedAt || webhookHealth.lastReceivedAt);
+      };
+
       $("loadBlockedBtn").addEventListener("click", async () => {
         setStatus("Loading blocked list...");
         try {
@@ -291,6 +410,67 @@
           });
           showPayload(payload);
           setStatus(payload.changed ? "User unblocked." : "No matching block entry.", "ok");
+        } catch (error) {
+          setStatus(error.message, "err");
+        }
+      });
+
+      const buildBillingResyncPayload = ({ dryRun = false } = {}) => {
+        const email = String($("billingResyncEmail").value || "").trim();
+        const userId = String($("billingResyncUserId").value || "").trim();
+        if (!email && !userId) {
+          throw new Error("Provide user email or user ID for resync.");
+        }
+        return {
+          ...(email ? { email } : {}),
+          ...(userId ? { userId } : {}),
+          ...(dryRun ? { dryRun: true } : {}),
+          keepPremiumIfNoStripeActive: $("billingKeepPremiumIfNoActive").checked === true,
+        };
+      };
+
+      $("billingHealthBtn").addEventListener("click", async () => {
+        setStatus("Loading Stripe billing health...");
+        try {
+          const payload = await requestAdmin("/api/admin/security/billing/stripe-health");
+          showPayload(payload);
+          renderBillingHealthChips(payload);
+          setStatus("Stripe billing health loaded.", "ok");
+        } catch (error) {
+          setStatus(error.message, "err");
+        }
+      });
+
+      $("billingResyncDryRunBtn").addEventListener("click", async () => {
+        setStatus("Running billing resync dry-run...");
+        try {
+          const payload = await requestAdmin("/api/admin/security/billing/stripe/resync-user", {
+            method: "POST",
+            body: buildBillingResyncPayload({ dryRun: true }),
+          });
+          showPayload(payload);
+          markBillingRefresh(payload?.result?.stripe?.currentPeriodEnd || payload?.stripe?.currentPeriodEnd || payload?.user?.updatedAt);
+          setStatus("Billing resync dry-run complete.", "ok");
+        } catch (error) {
+          setStatus(error.message, "err");
+        }
+      });
+
+      $("billingResyncApplyBtn").addEventListener("click", async () => {
+        setStatus("Applying billing resync...");
+        try {
+          const payload = await requestAdmin("/api/admin/security/billing/stripe/resync-user", {
+            method: "POST",
+            body: buildBillingResyncPayload({ dryRun: false }),
+          });
+          showPayload(payload);
+          markBillingRefresh(
+            payload?.result?.stripe?.currentPeriodEnd ||
+              payload?.result?.stripe?.currentPeriodEndIso ||
+              payload?.user?.data?.profile?.premiumLastSyncedAt ||
+              payload?.user?.updatedAt
+          );
+          setStatus("Billing resync applied.", "ok");
         } catch (error) {
           setStatus(error.message, "err");
         }
