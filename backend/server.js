@@ -5054,7 +5054,10 @@ app.post(
   }
 );
 
-const isAllowedKoFiCheckoutUrl = (value, { requireSubscriptionPath = false } = {}) => {
+const isAllowedKoFiCheckoutUrl = (
+  value,
+  { requireSubscriptionPath = false, requireSubscriptionLikePath = true } = {}
+) => {
   const raw = String(value || "").trim();
   if (!raw) {
     return "";
@@ -5068,8 +5071,14 @@ const isAllowedKoFiCheckoutUrl = (value, { requireSubscriptionPath = false } = {
     if (host !== "ko-fi.com" && host !== "www.ko-fi.com") {
       return "";
     }
+    const pathName = String(parsed.pathname || "").trim().toLowerCase();
+    if (requireSubscriptionLikePath) {
+      const isSubscriptionLike = pathName.startsWith("/s/") || pathName.startsWith("/summary/");
+      if (!isSubscriptionLike) {
+        return "";
+      }
+    }
     if (requireSubscriptionPath) {
-      const pathName = String(parsed.pathname || "").trim().toLowerCase();
       if (!pathName.startsWith("/s/")) {
         return "";
       }
@@ -5081,11 +5090,48 @@ const isAllowedKoFiCheckoutUrl = (value, { requireSubscriptionPath = false } = {
 };
 
 const resolveConfiguredPremiumCheckoutOptions = () => {
-  const monthlyCheckoutUrl =
-    isAllowedKoFiCheckoutUrl(process.env.KOFI_PREMIUM_MONTHLY_URL) ||
-    isAllowedKoFiCheckoutUrl(process.env.KOFI_PREMIUM_BASE_URL, {
+  const resolveFromEnvKeys = (envKeys = [], validator = null) => {
+    for (const key of envKeys) {
+      const raw = String(process.env[key] || "").trim();
+      if (!raw) {
+        continue;
+      }
+      const normalized = typeof validator === "function" ? validator(raw) : raw;
+      if (normalized) {
+        return {
+          value: normalized,
+          key,
+        };
+      }
+    }
+    return {
+      value: "",
+      key: "",
+    };
+  };
+
+  const monthlyEnvResult = resolveFromEnvKeys(
+    [
+      "KOFI_PREMIUM_MONTHLY_URL",
+      "KOFI_PREMIUM_URL",
+      "KOFI_MONTHLY_URL",
+      "PREMIUM_CHECKOUT_URL",
+      "PREMIUM_MONTHLY_URL",
+    ],
+    (raw) =>
+      isAllowedKoFiCheckoutUrl(raw, {
+        requireSubscriptionLikePath: true,
+      })
+  );
+
+  const legacyBaseEnvResult = resolveFromEnvKeys(["KOFI_PREMIUM_BASE_URL"], (raw) =>
+    isAllowedKoFiCheckoutUrl(raw, {
       requireSubscriptionPath: true,
-    });
+      requireSubscriptionLikePath: true,
+    })
+  );
+
+  const monthlyCheckoutUrl = monthlyEnvResult.value || legacyBaseEnvResult.value;
 
   const fallbackOptions = [
     {
@@ -5096,7 +5142,9 @@ const resolveConfiguredPremiumCheckoutOptions = () => {
     },
   ].filter((item) => Boolean(item?.url));
 
-  const rawCustomOptions = String(process.env.KOFI_PREMIUM_OPTIONS_JSON || "").trim();
+  const rawCustomOptions =
+    String(process.env.KOFI_PREMIUM_OPTIONS_JSON || "").trim() ||
+    String(process.env.KOFI_PREMIUM_OPTIONS || "").trim();
   let customOptions = [];
   if (rawCustomOptions) {
     try {
@@ -5105,7 +5153,9 @@ const resolveConfiguredPremiumCheckoutOptions = () => {
         customOptions = parsed
           .map((item, index) => {
             const candidate = isPlainObject(item) ? item : {};
-            const checkoutUrl = isAllowedKoFiCheckoutUrl(candidate.url);
+            const checkoutUrl = isAllowedKoFiCheckoutUrl(candidate.url, {
+              requireSubscriptionLikePath: true,
+            });
             if (!checkoutUrl) {
               return null;
             }
@@ -5145,9 +5195,11 @@ const resolveConfiguredPremiumCheckoutOptions = () => {
     configured: options.length > 0,
     source: customOptions.length
       ? "custom-options-json"
-      : monthlyCheckoutUrl
-        ? "monthly-url"
-        : "none",
+      : monthlyEnvResult.key
+        ? `monthly-url:${monthlyEnvResult.key}`
+        : legacyBaseEnvResult.key
+          ? `monthly-url:${legacyBaseEnvResult.key}`
+          : "none",
   };
 };
 

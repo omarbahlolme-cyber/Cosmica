@@ -42,7 +42,9 @@ Optional environment variables:
 
 - `KOFI_PREMIUM_MONTHLY_URL`
 - `KOFI_PREMIUM_BASE_URL` (backward compatibility only; accepted only if it is a Ko-fi subscription URL like `/s/...`, donate/support links are rejected)
+- Additional accepted aliases for monthly URL (deployment compatibility): `KOFI_PREMIUM_URL`, `KOFI_MONTHLY_URL`, `PREMIUM_CHECKOUT_URL`, `PREMIUM_MONTHLY_URL`
 - `KOFI_PREMIUM_OPTIONS_JSON` (array of option objects)
+- Additional accepted alias for options JSON: `KOFI_PREMIUM_OPTIONS`
 - `KOFI_WEBHOOK_VERIFICATION_TOKEN` (required for Ko-fi webhook verification)
 - `ALLOW_SELF_PREMIUM_UPGRADE` (optional, default disabled; set `true` only for local/manual testing)
 
