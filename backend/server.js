@@ -2595,7 +2595,7 @@ const buildGoogleOauthRedirectUri = (req) => {
   if (explicit) {
     return explicit;
   }
-  return `${getRequestOrigin(req)}/api/auth/google/callback`;
+  return `${getPublicAppOrigin(req)}/api/auth/google/callback`;
 };
 
 const cleanupExpiredGoogleOauthStates = () => {
@@ -3549,7 +3549,14 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
     return res.redirect(302, buildAuthErrorRedirectPath("google_state"));
   }
   const stateFlowToken = String(stateData?.flowToken || "").trim();
-  if (!flowCookieToken || !stateFlowToken || flowCookieToken !== stateFlowToken) {
+  const requireFlowCookie =
+    String(process.env.GOOGLE_OAUTH_REQUIRE_FLOW_COOKIE || "")
+      .trim()
+      .toLowerCase() === "true";
+  const hasStateFlowToken = Boolean(stateFlowToken);
+  const hasFlowCookieToken = Boolean(flowCookieToken);
+  const hasFlowTokenMismatch = hasFlowCookieToken && hasStateFlowToken && flowCookieToken !== stateFlowToken;
+  if (!hasStateFlowToken || hasFlowTokenMismatch || (requireFlowCookie && !hasFlowCookieToken)) {
     return res.redirect(302, buildAuthErrorRedirectPath("google_flow"));
   }
   if (oauthError) {
@@ -4526,7 +4533,12 @@ app.put(
     if (serialized.length > MAX_USER_DATA_SERIALIZED_CHARS) {
       return res.status(413).json({ error: "data payload too large" });
     }
-    req.authUser.data = normalizeUserData(incoming);
+    const normalizedIncomingData = normalizeUserData(incoming);
+    const existingData = normalizeUserData(req.authUser.data);
+    normalizedIncomingData.profile = isPlainObject(existingData.profile)
+      ? cloneObjectSafely(existingData.profile, () => ({}), 20000)
+      : {};
+    req.authUser.data = normalizedIncomingData;
     req.authUser.updatedAt = new Date().toISOString();
     markAuthStoreDirty();
     return res.json({
@@ -4577,6 +4589,36 @@ app.post(
   }
 );
 
+app.post(
+  "/api/account/premium/downgrade",
+  accountMutationLimiter,
+  requireAuthenticatedUser,
+  (req, res) => {
+    const userRecord = req.authUser;
+    userRecord.data = normalizeUserData(userRecord.data);
+    if (!isPlainObject(userRecord.data.profile)) {
+      userRecord.data.profile = {};
+    }
+
+    userRecord.data.profile.isPremium = false;
+    userRecord.data.profile.premium = false;
+    userRecord.data.profile.plan = "free";
+    userRecord.data.profile.tier = "free";
+    userRecord.data.profile.membership = "free";
+    userRecord.data.profile.premiumDeactivatedAt = new Date().toISOString();
+
+    userRecord.updatedAt = new Date().toISOString();
+    markAuthStoreDirty();
+
+    return res.json({
+      ok: true,
+      user: toPublicUser(userRecord),
+      data: cloneForResponse(userRecord.data),
+      progress: cloneForResponse(normalizeProgress(userRecord.progress)),
+    });
+  }
+);
+
 /* --------------------------------------------------------------------------
    ROUTE: BILLING WEBHOOKS (KO-FI)
    -------------------------------------------------------------------------- */
@@ -4613,6 +4655,48 @@ const parseKofiWebhookPayload = (requestBody) => {
     } catch {}
   }
   return null;
+};
+
+const evaluateKofiWebhookPaymentAcceptance = ({ eventType = "", paymentStatus = "", amount = "" } = {}) => {
+  const normalizedEventType = String(eventType || "").trim().toLowerCase();
+  const normalizedStatus = String(paymentStatus || "").trim().toLowerCase();
+  const amountValue = Number.parseFloat(String(amount || "").replace(/[^0-9.-]/g, ""));
+
+  const rejectedKeywords = ["refund", "refunded", "cancel", "canceled", "cancelled", "chargeback", "failed"];
+  if (rejectedKeywords.some((flag) => normalizedEventType.includes(flag) || normalizedStatus.includes(flag))) {
+    return {
+      accepted: false,
+      reason: "rejected-status",
+    };
+  }
+
+  const acceptedStatusKeywords = ["completed", "complete", "paid", "success", "succeeded"];
+  if (!acceptedStatusKeywords.some((flag) => normalizedStatus.includes(flag))) {
+    return {
+      accepted: false,
+      reason: "unconfirmed-status",
+    };
+  }
+
+  const acceptedEventKeywords = ["payment", "subscription", "membership", "donation", "shop_order", "sale"];
+  if (normalizedEventType && !acceptedEventKeywords.some((flag) => normalizedEventType.includes(flag))) {
+    return {
+      accepted: false,
+      reason: "unconfirmed-event-type",
+    };
+  }
+
+  if (!Number.isFinite(amountValue) || amountValue <= 0) {
+    return {
+      accepted: false,
+      reason: "invalid-amount",
+    };
+  }
+
+  return {
+    accepted: true,
+    reason: "confirmed-paid-event",
+  };
 };
 
 const applyPremiumProfileToUserRecord = (
@@ -4751,12 +4835,24 @@ app.post(
     )
       .trim()
       .toLowerCase();
-    const shouldIgnore = ["refund", "refunded", "cancel", "canceled", "cancelled", "chargeback", "failed"]
-      .some((flag) => eventType.includes(flag) || paymentStatus.includes(flag));
-    if (shouldIgnore) {
+    const amount = pickFirstNonEmptyString(
+      kofiPayload.amount,
+      kofiPayload.amount_received,
+      kofiPayload.total_amount,
+      kofiPayload.price
+    )
+      .trim()
+      .slice(0, 40);
+    const paymentAcceptance = evaluateKofiWebhookPaymentAcceptance({
+      eventType,
+      paymentStatus,
+      amount,
+    });
+    if (!paymentAcceptance.accepted) {
       return res.json({
         ok: true,
         ignored: true,
+        reason: paymentAcceptance.reason,
       });
     }
 
@@ -4813,14 +4909,6 @@ app.post(
     )
       .trim()
       .slice(0, 120);
-    const amount = pickFirstNonEmptyString(
-      kofiPayload.amount,
-      kofiPayload.amount_received,
-      kofiPayload.total_amount,
-      kofiPayload.price
-    )
-      .trim()
-      .slice(0, 40);
     const currency = pickFirstNonEmptyString(
       kofiPayload.currency,
       kofiPayload.currency_code
