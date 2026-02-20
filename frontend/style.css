@@ -9991,6 +9991,11 @@ section,
 }
 
 @media (max-width: 960px) {
+  body.world-page .world-hero {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+
   .nav {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
@@ -10074,6 +10079,11 @@ section,
   .section.letters-grid-section {
     overflow: visible;
   }
+
+  body.world-page .section,
+  body.home-alt-luxe .section {
+    overflow: visible;
+  }
 }
 
 @media (max-width: 600px) {
@@ -10151,6 +10161,10 @@ section,
     overflow: visible;
   }
 
+  .nav {
+    overflow: visible;
+  }
+
   .steps,
   .world-grid,
   .world-maps .steps {
@@ -10172,9 +10186,59 @@ section,
 }
 
 @media (max-width: 1100px) {
+  .nav {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "brand controls"
+      "links links";
+    row-gap: 10px;
+    column-gap: 10px;
+  }
+
+  .brand {
+    grid-area: brand;
+  }
+
+  .nav-controls {
+    grid-area: controls;
+    justify-self: end;
+    min-width: 0;
+  }
+
+  .nav-links {
+    grid-area: links;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
   .account-slot {
     margin-left: 0;
     transform: none;
+  }
+}
+
+@media (max-width: 1024px) {
+  .cookie-notice {
+    left: 8px;
+    right: 8px;
+    width: auto;
+    max-width: calc(100vw - 16px);
+    transform: none;
+  }
+
+  .world-maps .map-card::before,
+  .world-maps .map-card::after {
+    inset: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  body.world-page .world-ambient,
+  body.world-page .world-fx-stars,
+  body.world-page .world-fx-dust,
+  body.world-page .world-fx-comets {
+    display: none;
   }
 }
 
@@ -10182,6 +10246,7 @@ section,
   body.world-page .section-title,
   body.world-page .world-hero > .section-title {
     max-width: 100%;
+    width: 100%;
     margin-right: 0;
     padding-right: 0;
   }

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-20T19:48:52.976Z",
+  "generatedAt": "2026-02-20T20:05:58.309Z",
   "baseUrl": "http://127.0.0.1:4175",
   "routes": [
     "/",
@@ -72,17 +72,7 @@
       "title": "Cosmica | English World",
       "htmlOverflow": 0,
       "bodyOverflow": 16,
-      "clippedRisk": [
-        {
-          "selector": ".section-title",
-          "index": 0,
-          "overflowX": "visible",
-          "localOverflowPx": 0,
-          "rectLeft": 33,
-          "rectRight": 333,
-          "viewportWidth": 320
-        }
-      ],
+      "clippedRisk": [],
       "screenshot": "perf/viewport-failures/chromium-320x568-english-world.html.png"
     },
     {
@@ -91,18 +81,8 @@
       "route": "/world-french.html",
       "title": "Cosmica | French World",
       "htmlOverflow": 0,
-      "bodyOverflow": 14,
-      "clippedRisk": [
-        {
-          "selector": ".section-title",
-          "index": 0,
-          "overflowX": "visible",
-          "localOverflowPx": 0,
-          "rectLeft": 33,
-          "rectRight": 333,
-          "viewportWidth": 320
-        }
-      ],
+      "bodyOverflow": 18,
+      "clippedRisk": [],
       "screenshot": "perf/viewport-failures/chromium-320x568-world-french.html.png"
     },
     {
@@ -111,7 +91,7 @@
       "route": "/english-world.html",
       "title": "Cosmica | English World",
       "htmlOverflow": 0,
-      "bodyOverflow": 10,
+      "bodyOverflow": 8,
       "clippedRisk": [],
       "screenshot": "perf/viewport-failures/chromium-360x800-english-world.html.png"
     },
@@ -121,7 +101,7 @@
       "route": "/world-french.html",
       "title": "Cosmica | French World",
       "htmlOverflow": 0,
-      "bodyOverflow": 10,
+      "bodyOverflow": 8,
       "clippedRisk": [],
       "screenshot": "perf/viewport-failures/chromium-360x800-world-french.html.png"
     },
@@ -141,19 +121,9 @@
       "route": "/world-french.html",
       "title": "Cosmica | French World",
       "htmlOverflow": 0,
-      "bodyOverflow": 8,
+      "bodyOverflow": 4,
       "clippedRisk": [],
       "screenshot": "perf/viewport-failures/chromium-390x844-world-french.html.png"
-    },
-    {
-      "browser": "chromium",
-      "viewport": "412x915",
-      "route": "/english-world.html",
-      "title": "Cosmica | English World",
-      "htmlOverflow": 0,
-      "bodyOverflow": 5,
-      "clippedRisk": [],
-      "screenshot": "perf/viewport-failures/chromium-412x915-english-world.html.png"
     },
     {
       "browser": "chromium",
@@ -161,7 +131,7 @@
       "route": "/world-french.html",
       "title": "Cosmica | French World",
       "htmlOverflow": 0,
-      "bodyOverflow": 20,
+      "bodyOverflow": 3,
       "clippedRisk": [],
       "screenshot": "perf/viewport-failures/chromium-412x915-world-french.html.png"
     },
@@ -188,41 +158,11 @@
     {
       "browser": "firefox",
       "viewport": "320x568",
-      "route": "/",
-      "title": "Cosmica | Free Language Learning Worlds",
-      "htmlOverflow": 0,
-      "bodyOverflow": 0,
-      "clippedRisk": [
-        {
-          "selector": ".section",
-          "index": 2,
-          "overflowX": "hidden",
-          "localOverflowPx": 180,
-          "rectLeft": 14,
-          "rectRight": 306,
-          "viewportWidth": 320
-        }
-      ],
-      "screenshot": "perf/viewport-failures/firefox-320x568-root.png"
-    },
-    {
-      "browser": "firefox",
-      "viewport": "320x568",
       "route": "/english-world.html",
       "title": "Cosmica | English World",
       "htmlOverflow": 0,
-      "bodyOverflow": 24,
-      "clippedRisk": [
-        {
-          "selector": ".section-title",
-          "index": 0,
-          "overflowX": "visible",
-          "localOverflowPx": 0,
-          "rectLeft": 33,
-          "rectRight": 333,
-          "viewportWidth": 320
-        }
-      ],
+      "bodyOverflow": 28,
+      "clippedRisk": [],
       "screenshot": "perf/viewport-failures/firefox-320x568-english-world.html.png"
     },
     {
@@ -231,131 +171,9 @@
       "route": "/world-french.html",
       "title": "Cosmica | French World",
       "htmlOverflow": 0,
-      "bodyOverflow": 26,
-      "clippedRisk": [
-        {
-          "selector": ".section-title",
-          "index": 0,
-          "overflowX": "visible",
-          "localOverflowPx": 0,
-          "rectLeft": 33,
-          "rectRight": 333,
-          "viewportWidth": 320
-        }
-      ],
+      "bodyOverflow": 24,
+      "clippedRisk": [],
       "screenshot": "perf/viewport-failures/firefox-320x568-world-french.html.png"
-    },
-    {
-      "browser": "firefox",
-      "viewport": "320x568",
-      "route": "/english-grammar.html",
-      "title": "Cosmica | English Grammar Map",
-      "htmlOverflow": 0,
-      "bodyOverflow": 0,
-      "clippedRisk": [
-        {
-          "selector": ".section",
-          "index": 2,
-          "overflowX": "hidden",
-          "localOverflowPx": 147,
-          "rectLeft": 14,
-          "rectRight": 306,
-          "viewportWidth": 320
-        },
-        {
-          "selector": ".section",
-          "index": 3,
-          "overflowX": "hidden",
-          "localOverflowPx": 30,
-          "rectLeft": 14,
-          "rectRight": 306,
-          "viewportWidth": 320
-        },
-        {
-          "selector": ".section",
-          "index": 4,
-          "overflowX": "hidden",
-          "localOverflowPx": 42,
-          "rectLeft": 14,
-          "rectRight": 306,
-          "viewportWidth": 320
-        },
-        {
-          "selector": ".section",
-          "index": 5,
-          "overflowX": "hidden",
-          "localOverflowPx": 147,
-          "rectLeft": 14,
-          "rectRight": 306,
-          "viewportWidth": 320
-        },
-        {
-          "selector": ".section",
-          "index": 6,
-          "overflowX": "hidden",
-          "localOverflowPx": 30,
-          "rectLeft": 14,
-          "rectRight": 306,
-          "viewportWidth": 320
-        },
-        {
-          "selector": ".section",
-          "index": 8,
-          "overflowX": "hidden",
-          "localOverflowPx": 30,
-          "rectLeft": 14,
-          "rectRight": 306,
-          "viewportWidth": 320
-        },
-        {
-          "selector": ".section",
-          "index": 11,
-          "overflowX": "hidden",
-          "localOverflowPx": 69,
-          "rectLeft": 14,
-          "rectRight": 306,
-          "viewportWidth": 320
-        },
-        {
-          "selector": ".section",
-          "index": 13,
-          "overflowX": "hidden",
-          "localOverflowPx": 30,
-          "rectLeft": 14,
-          "rectRight": 306,
-          "viewportWidth": 320
-        },
-        {
-          "selector": ".section",
-          "index": 14,
-          "overflowX": "hidden",
-          "localOverflowPx": 147,
-          "rectLeft": 14,
-          "rectRight": 306,
-          "viewportWidth": 320
-        }
-      ],
-      "screenshot": "perf/viewport-failures/firefox-320x568-english-grammar.html.png"
-    },
-    {
-      "browser": "firefox",
-      "viewport": "360x800",
-      "route": "/",
-      "title": "Cosmica | Free Language Learning Worlds",
-      "htmlOverflow": 0,
-      "bodyOverflow": 0,
-      "clippedRisk": [
-        {
-          "selector": ".section",
-          "index": 2,
-          "overflowX": "hidden",
-          "localOverflowPx": 145,
-          "rectLeft": 16,
-          "rectRight": 344,
-          "viewportWidth": 360
-        }
-      ],
-      "screenshot": "perf/viewport-failures/firefox-360x800-root.png"
     },
     {
       "browser": "firefox",
@@ -363,7 +181,7 @@
       "route": "/english-world.html",
       "title": "Cosmica | English World",
       "htmlOverflow": 0,
-      "bodyOverflow": 22,
+      "bodyOverflow": 23,
       "clippedRisk": [],
       "screenshot": "perf/viewport-failures/firefox-360x800-english-world.html.png"
     },
@@ -373,76 +191,9 @@
       "route": "/world-french.html",
       "title": "Cosmica | French World",
       "htmlOverflow": 0,
-      "bodyOverflow": 20,
+      "bodyOverflow": 24,
       "clippedRisk": [],
       "screenshot": "perf/viewport-failures/firefox-360x800-world-french.html.png"
-    },
-    {
-      "browser": "firefox",
-      "viewport": "360x800",
-      "route": "/english-grammar.html",
-      "title": "Cosmica | English Grammar Map",
-      "htmlOverflow": 0,
-      "bodyOverflow": 0,
-      "clippedRisk": [
-        {
-          "selector": ".section",
-          "index": 2,
-          "overflowX": "hidden",
-          "localOverflowPx": 109,
-          "rectLeft": 14,
-          "rectRight": 346,
-          "viewportWidth": 360
-        },
-        {
-          "selector": ".section",
-          "index": 5,
-          "overflowX": "hidden",
-          "localOverflowPx": 109,
-          "rectLeft": 14,
-          "rectRight": 346,
-          "viewportWidth": 360
-        },
-        {
-          "selector": ".section",
-          "index": 11,
-          "overflowX": "hidden",
-          "localOverflowPx": 31,
-          "rectLeft": 14,
-          "rectRight": 346,
-          "viewportWidth": 360
-        },
-        {
-          "selector": ".section",
-          "index": 14,
-          "overflowX": "hidden",
-          "localOverflowPx": 109,
-          "rectLeft": 14,
-          "rectRight": 346,
-          "viewportWidth": 360
-        }
-      ],
-      "screenshot": "perf/viewport-failures/firefox-360x800-english-grammar.html.png"
-    },
-    {
-      "browser": "firefox",
-      "viewport": "390x844",
-      "route": "/",
-      "title": "Cosmica | Free Language Learning Worlds",
-      "htmlOverflow": 0,
-      "bodyOverflow": 0,
-      "clippedRisk": [
-        {
-          "selector": ".section",
-          "index": 2,
-          "overflowX": "hidden",
-          "localOverflowPx": 137,
-          "rectLeft": 18,
-          "rectRight": 372,
-          "viewportWidth": 390
-        }
-      ],
-      "screenshot": "perf/viewport-failures/firefox-390x844-root.png"
     },
     {
       "browser": "firefox",
@@ -460,29 +211,9 @@
       "route": "/world-french.html",
       "title": "Cosmica | French World",
       "htmlOverflow": 0,
-      "bodyOverflow": 19,
+      "bodyOverflow": 21,
       "clippedRisk": [],
       "screenshot": "perf/viewport-failures/firefox-390x844-world-french.html.png"
-    },
-    {
-      "browser": "firefox",
-      "viewport": "412x915",
-      "route": "/",
-      "title": "Cosmica | Free Language Learning Worlds",
-      "htmlOverflow": 0,
-      "bodyOverflow": 0,
-      "clippedRisk": [
-        {
-          "selector": ".section",
-          "index": 2,
-          "overflowX": "hidden",
-          "localOverflowPx": 134,
-          "rectLeft": 19,
-          "rectRight": 393,
-          "viewportWidth": 412
-        }
-      ],
-      "screenshot": "perf/viewport-failures/firefox-412x915-root.png"
     },
     {
       "browser": "firefox",
@@ -490,7 +221,7 @@
       "route": "/english-world.html",
       "title": "Cosmica | English World",
       "htmlOverflow": 0,
-      "bodyOverflow": 14,
+      "bodyOverflow": 18,
       "clippedRisk": [],
       "screenshot": "perf/viewport-failures/firefox-412x915-english-world.html.png"
     },
@@ -500,49 +231,9 @@
       "route": "/world-french.html",
       "title": "Cosmica | French World",
       "htmlOverflow": 0,
-      "bodyOverflow": 18,
+      "bodyOverflow": 20,
       "clippedRisk": [],
       "screenshot": "perf/viewport-failures/firefox-412x915-world-french.html.png"
-    },
-    {
-      "browser": "firefox",
-      "viewport": "768x1024",
-      "route": "/",
-      "title": "Cosmica | Free Language Learning Worlds",
-      "htmlOverflow": 0,
-      "bodyOverflow": 0,
-      "clippedRisk": [
-        {
-          "selector": ".section",
-          "index": 2,
-          "overflowX": "hidden",
-          "localOverflowPx": 97,
-          "rectLeft": 38,
-          "rectRight": 730,
-          "viewportWidth": 768
-        }
-      ],
-      "screenshot": "perf/viewport-failures/firefox-768x1024-root.png"
-    },
-    {
-      "browser": "firefox",
-      "viewport": "820x1180",
-      "route": "/",
-      "title": "Cosmica | Free Language Learning Worlds",
-      "htmlOverflow": 0,
-      "bodyOverflow": 0,
-      "clippedRisk": [
-        {
-          "selector": ".section",
-          "index": 2,
-          "overflowX": "hidden",
-          "localOverflowPx": 103,
-          "rectLeft": 41,
-          "rectRight": 779,
-          "viewportWidth": 820
-        }
-      ],
-      "screenshot": "perf/viewport-failures/firefox-820x1180-root.png"
     },
     {
       "browser": "firefox",
@@ -680,13 +371,6 @@
     },
     {
       "browser": "firefox",
-      "viewport": "1366x768",
-      "route": "/privacy.html",
-      "reason": "navigation_or_eval_error",
-      "message": "page.goto: Timeout 18000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:4175/privacy.html\", waiting until \"domcontentloaded\"\u001b[22m\n"
-    },
-    {
-      "browser": "firefox",
       "viewport": "1920x1080",
       "route": "/",
       "title": "Cosmica | Free Language Learning Worlds",
@@ -726,19 +410,12 @@
       "screenshot": "perf/viewport-failures/firefox-1920x1080-english-words.html.png"
     },
     {
-      "browser": "firefox",
-      "viewport": "1920x1080",
-      "route": "/terms.html",
-      "reason": "navigation_or_eval_error",
-      "message": "page.goto: Timeout 18000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:4175/terms.html\", waiting until \"domcontentloaded\"\u001b[22m\n"
-    },
-    {
       "browser": "webkit",
       "viewport": "320x568",
       "route": "/english-world.html",
       "title": "Cosmica | English World",
       "htmlOverflow": 0,
-      "bodyOverflow": 15,
+      "bodyOverflow": 22,
       "clippedRisk": [],
       "screenshot": "perf/viewport-failures/webkit-320x568-english-world.html.png"
     },
@@ -748,7 +425,7 @@
       "route": "/world-french.html",
       "title": "Cosmica | French World",
       "htmlOverflow": 0,
-      "bodyOverflow": 26,
+      "bodyOverflow": 20,
       "clippedRisk": [],
       "screenshot": "perf/viewport-failures/webkit-320x568-world-french.html.png"
     },
@@ -758,7 +435,7 @@
       "route": "/english-world.html",
       "title": "Cosmica | English World",
       "htmlOverflow": 0,
-      "bodyOverflow": 18,
+      "bodyOverflow": 25,
       "clippedRisk": [],
       "screenshot": "perf/viewport-failures/webkit-360x800-english-world.html.png"
     },
@@ -778,7 +455,7 @@
       "route": "/english-world.html",
       "title": "Cosmica | English World",
       "htmlOverflow": 0,
-      "bodyOverflow": 16,
+      "bodyOverflow": 10,
       "clippedRisk": [],
       "screenshot": "perf/viewport-failures/webkit-390x844-english-world.html.png"
     },
@@ -798,7 +475,7 @@
       "route": "/english-world.html",
       "title": "Cosmica | English World",
       "htmlOverflow": 0,
-      "bodyOverflow": 13,
+      "bodyOverflow": 10,
       "clippedRisk": [],
       "screenshot": "perf/viewport-failures/webkit-412x915-english-world.html.png"
     },
@@ -808,7 +485,7 @@
       "route": "/world-french.html",
       "title": "Cosmica | French World",
       "htmlOverflow": 0,
-      "bodyOverflow": 14,
+      "bodyOverflow": 13,
       "clippedRisk": [],
       "screenshot": "perf/viewport-failures/webkit-412x915-world-french.html.png"
     },
@@ -824,5 +501,5 @@
     }
   ],
   "checks": 243,
-  "passed": 201
+  "passed": 212
 }
