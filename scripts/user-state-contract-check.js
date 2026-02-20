@@ -16,6 +16,7 @@ const PORT = Number(process.env.USER_STATE_CONTRACT_PORT || 4176);
 const BASE_URL = `http://127.0.0.1:${PORT}`;
 const STARTUP_TIMEOUT_MS = 25000;
 const REQUEST_TIMEOUT_MS = 12000;
+let authStoreSnapshotRaw = "";
 
 const FREE_USER = {
   id: "33333333-4444-4555-8666-777777777777",
@@ -132,6 +133,9 @@ const buildUserRecord = async ({
 };
 
 const seedContractUsers = async () => {
+  if (!authStoreSnapshotRaw) {
+    authStoreSnapshotRaw = fs.readFileSync(AUTH_STORE_FILE, "utf8");
+  }
   const raw = fs.readFileSync(AUTH_STORE_FILE, "utf8");
   const store = JSON.parse(raw);
   store.users = store.users && typeof store.users === "object" ? store.users : {};
@@ -150,6 +154,13 @@ const seedContractUsers = async () => {
   store.updatedAt = new Date().toISOString();
 
   fs.writeFileSync(AUTH_STORE_FILE, JSON.stringify(store, null, 2), "utf8");
+};
+
+const restoreAuthStore = () => {
+  if (!authStoreSnapshotRaw) {
+    return;
+  }
+  fs.writeFileSync(AUTH_STORE_FILE, authStoreSnapshotRaw, "utf8");
 };
 
 const waitForHealth = async () => {
@@ -391,6 +402,7 @@ const main = async () => {
     process.exitCode = 1;
   } finally {
     await stopServer(child);
+    restoreAuthStore();
   }
 };
 

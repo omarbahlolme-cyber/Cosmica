@@ -1,30 +1,154 @@
 /* ==========================================================================
    CROSS-DEVICE CHECKOUT SMOKE
-   - Authenticates with a real account.
+   - Authenticates with a test account.
    - Calls premium options API with desktop + mobile user agents.
-  - Verifies both return valid premium checkout URLs
+   - Verifies both return valid premium checkout URLs
     (Stripe start endpoint, Stripe hosted checkout, or Ko-fi fallback).
+   - Deterministic local mode by default (isolated server + seeded user).
    ========================================================================== */
 
+const fs = require("fs");
+const path = require("path");
+const crypto = require("crypto");
+const { spawn } = require("child_process");
+
 const REQUEST_TIMEOUT_MS = Math.max(3000, Number(process.env.SMOKE_REQUEST_TIMEOUT_MS || 12000));
-const BASE_URL = String(
-  process.env.SMOKE_BASE_URL || process.env.BASE_URL || "https://www.cosmicalearn.com"
-)
+const ROOT = path.resolve(__dirname, "..");
+const AUTH_STORE_FILE = path.join(ROOT, "backend", "data", "accounts.json");
+const LOCAL_PORT = Number(process.env.SMOKE_LOCAL_PORT || 4174);
+const smokeExternalBaseUrl = String(process.env.SMOKE_BASE_URL || "")
   .trim()
   .replace(/\/+$/, "");
-const AUTH_EMAIL = String(process.env.SMOKE_AUTH_EMAIL || process.env.AUTH_EMAIL || "")
+const optInExternalBase = /^(1|true|yes)$/i.test(String(process.env.SMOKE_USE_EXTERNAL_BASE || "").trim());
+const externalBaseUrl = smokeExternalBaseUrl || String(process.env.BASE_URL || "").trim().replace(/\/+$/, "");
+const USE_EXTERNAL_BASE = Boolean(smokeExternalBaseUrl) || (optInExternalBase && Boolean(externalBaseUrl));
+const BASE_URL = USE_EXTERNAL_BASE && externalBaseUrl ? externalBaseUrl : `http://127.0.0.1:${LOCAL_PORT}`;
+const AUTH_EMAIL = String(process.env.SMOKE_AUTH_EMAIL || process.env.AUTH_EMAIL || "mobile.api.test@cosmica.local")
   .trim()
   .toLowerCase();
-const AUTH_PASSWORD = String(process.env.SMOKE_AUTH_PASSWORD || process.env.AUTH_PASSWORD || "");
+const AUTH_PASSWORD = String(process.env.SMOKE_AUTH_PASSWORD || process.env.AUTH_PASSWORD || "TestPass123!");
 const EXPECTED_PREMIUM_URL = String(
   process.env.SMOKE_EXPECTED_PREMIUM_URL || process.env.EXPECTED_PREMIUM_URL || ""
 ).trim();
+const STARTUP_TIMEOUT_MS = 25000;
+const SMOKE_USER_ID = String(process.env.SMOKE_AUTH_USER_ID || "11111111-2222-4333-8444-555555555555")
+  .trim()
+  .slice(0, 120);
+
+let authStoreSnapshotRaw = "";
 
 const UAS = {
   desktop:
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
   mobile:
     "Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Mobile/15E148 Safari/604.1",
+};
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const deriveHash = (password, salt, iterations, keylen, digest) =>
+  new Promise((resolve, reject) => {
+    crypto.pbkdf2(password, salt, iterations, keylen, digest, (error, derived) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      resolve(derived.toString("hex"));
+    });
+  });
+
+const seedLocalSmokeUser = async () => {
+  if (USE_EXTERNAL_BASE) {
+    return;
+  }
+  if (!authStoreSnapshotRaw) {
+    authStoreSnapshotRaw = fs.readFileSync(AUTH_STORE_FILE, "utf8");
+  }
+  const raw = fs.readFileSync(AUTH_STORE_FILE, "utf8");
+  const store = JSON.parse(raw);
+  store.users = store.users && typeof store.users === "object" ? store.users : {};
+  store.emailIndex = store.emailIndex && typeof store.emailIndex === "object" ? store.emailIndex : {};
+
+  const now = new Date().toISOString();
+  const salt = crypto.randomBytes(16).toString("hex");
+  const hash = await deriveHash(AUTH_PASSWORD, salt, 210000, 64, "sha512");
+
+  store.users[SMOKE_USER_ID] = {
+    id: SMOKE_USER_ID,
+    email: AUTH_EMAIL,
+    displayName: "Smoke Checkout Test",
+    password: { salt, hash, iterations: 210000, keylen: 64, digest: "sha512" },
+    createdAt: now,
+    updatedAt: now,
+    lastLoginAt: now,
+    emailVerified: true,
+    emailVerification: { tokenHash: "", expiresAt: null, sentAt: null },
+    passwordReset: { tokenHash: "", expiresAt: null, sentAt: null },
+    data: {
+      settings: { baseLanguage: "english" },
+      profile: { authProvider: "email", isPremium: false, premium: false, plan: "free", tier: "free" },
+    },
+    progress: {
+      totals: { xp: 0, completedSections: 0, lastActivityAt: null },
+      worlds: {},
+      recentEvents: [],
+    },
+  };
+  store.emailIndex[AUTH_EMAIL] = SMOKE_USER_ID;
+  store.updatedAt = now;
+  fs.writeFileSync(AUTH_STORE_FILE, JSON.stringify(store, null, 2), "utf8");
+};
+
+const restoreAuthStore = () => {
+  if (USE_EXTERNAL_BASE || !authStoreSnapshotRaw) {
+    return;
+  }
+  fs.writeFileSync(AUTH_STORE_FILE, authStoreSnapshotRaw, "utf8");
+};
+
+const startLocalServer = () => {
+  if (USE_EXTERNAL_BASE) {
+    return null;
+  }
+  const child = spawn(process.execPath, ["server.js"], {
+    cwd: ROOT,
+    env: {
+      ...process.env,
+      PORT: String(LOCAL_PORT),
+      STRIPE_WEBHOOK_SECRET: String(process.env.STRIPE_WEBHOOK_SECRET || "smoke-checkout-local-secret"),
+    },
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+  return child;
+};
+
+const stopLocalServer = async (child) => {
+  if (!child || child.killed) {
+    return;
+  }
+  child.kill("SIGTERM");
+  await sleep(250);
+  if (!child.killed) {
+    child.kill("SIGKILL");
+  }
+};
+
+const waitForHealth = async () => {
+  const startedAt = Date.now();
+  let lastError = "";
+  while (Date.now() - startedAt < STARTUP_TIMEOUT_MS) {
+    try {
+      const response = await fetchJson({ url: `${BASE_URL}/api/health`, method: "GET" });
+      if (response.response.ok) {
+        return;
+      }
+      lastError = `health=${response.response.status}`;
+    } catch (error) {
+      lastError = String(error?.message || error);
+    }
+    await sleep(450);
+  }
+  throw new Error(`Server did not become healthy (${lastError})`);
 };
 
 const normalizeUrl = (value, baseUrl = "") => {
@@ -205,6 +329,11 @@ const authAndFetchOptions = async ({ label, userAgent }) => {
     `${label}: premium options failed (${optionsResult.response.status}) ${optionsResult.payload?.error || ""}`
   );
 
+  assert(
+    optionsResult.payload?.canPurchase !== false,
+    `${label}: premium options returned canPurchase=false (${optionsResult.payload?.reasonCode || "unknown"})`
+  );
+
   const optionUrls = extractOptionUrls(optionsResult.payload);
   assert(optionUrls.length > 0, `${label}: no premium options were returned`);
 
@@ -228,9 +357,14 @@ const authAndFetchOptions = async ({ label, userAgent }) => {
 };
 
 const main = async () => {
+  let localServer = null;
   try {
     assert(AUTH_EMAIL, "Missing SMOKE_AUTH_EMAIL (or AUTH_EMAIL)");
     assert(AUTH_PASSWORD, "Missing SMOKE_AUTH_PASSWORD (or AUTH_PASSWORD)");
+
+    await seedLocalSmokeUser();
+    localServer = startLocalServer();
+    await waitForHealth();
 
     const desktop = await authAndFetchOptions({ label: "desktop", userAgent: UAS.desktop });
     const mobile = await authAndFetchOptions({ label: "mobile", userAgent: UAS.mobile });
@@ -249,6 +383,9 @@ const main = async () => {
   } catch (error) {
     console.error(`FAIL [checkout-cross-device] ${error?.message || error}`);
     process.exitCode = 1;
+  } finally {
+    await stopLocalServer(localServer);
+    restoreAuthStore();
   }
 };
 

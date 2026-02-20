@@ -90,3 +90,24 @@ Checks:
 - `GET /api/billing/subscription/status`
 - `POST /api/billing/subscription/cancel`
 - `POST /api/billing/webhooks/stripe` signature rejection path
+
+## 8) Verify checkout parity (desktop vs mobile)
+
+Deterministic local mode (recommended for CI/local):
+
+```bash
+npm run smoke:checkout:cross-device
+```
+
+External-mode check (manual release validation against a running host):
+
+```bash
+SMOKE_BASE_URL="https://YOUR_HOST" \
+SMOKE_AUTH_EMAIL="your-test-user@example.com" \
+SMOKE_AUTH_PASSWORD="YOUR_TEST_PASSWORD" \
+npm run smoke:checkout:cross-device
+```
+
+Notes:
+- Local mode is isolated: it seeds/restores auth data and boots a local server.
+- External mode is explicit and should be used only for controlled release checks.

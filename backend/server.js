@@ -6540,6 +6540,19 @@ app.get(
   authSessionLimiter,
   requireAuthenticatedUser,
   async (req, res) => {
+    const subscription = resolvePremiumSubscriptionStatus(req.authUser);
+    const alreadyPremiumActive =
+      subscription?.isPremium === true &&
+      (subscription?.billingStatus === "active" || subscription?.billingStatus === "canceling");
+    if (alreadyPremiumActive) {
+      return res.status(409).json({
+        error: "Premium is already active for this account. Checkout is blocked to avoid duplicate subscriptions.",
+        reasonCode: "already_premium_active",
+        canPurchase: false,
+        subscription,
+      });
+    }
+
     const checkoutConfig = resolveConfiguredPremiumCheckoutOptions();
     if (!checkoutConfig.configured) {
       return res.status(503).json({

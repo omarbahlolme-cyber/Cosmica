@@ -51,6 +51,38 @@ body {
   min-height: 100svh;
 }
 
+img,
+video,
+canvas,
+iframe,
+svg {
+  max-width: 100%;
+}
+
+p,
+h1,
+h2,
+h3,
+.brand-title,
+.brand-sub,
+.account-menu-name,
+.account-menu-level,
+.account-menu-xp,
+.account-menu-plan-status {
+  overflow-wrap: anywhere;
+}
+
+main,
+section,
+.hero,
+.hero-left,
+.hero-right,
+.nav,
+.nav-links,
+.nav-controls {
+  min-width: 0;
+}
+
 html {
   overflow-y: scroll;
   min-height: var(--app-height);
@@ -1184,7 +1216,7 @@ body.world-page .nav-links a {
   position: absolute;
   z-index: 90;
   width: min(402px, calc(100vw - 16px));
-  max-height: min(80vh, 648px);
+  max-height: min(calc(var(--app-height) - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 20px), 648px);
   overflow: visible;
 }
 
@@ -1211,6 +1243,8 @@ body.world-page .nav-links a {
   padding: 13px;
   max-height: inherit;
   overflow: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   backdrop-filter: blur(16px) saturate(1.16);
   animation: accountDropdownEnter 0.24s ease-out;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
@@ -1304,6 +1338,11 @@ body.premium-setup-lock {
   position: relative;
   isolation: isolate;
   width: min(680px, calc(100vw - 24px));
+  max-height: calc(var(--app-height) - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 24px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   border-radius: 26px;
   border: 1px solid rgba(255, 220, 161, 0.78);
   background:
@@ -1701,6 +1740,11 @@ body.premium-setup-lock {
   position: relative;
   isolation: isolate;
   width: min(520px, calc(100vw - 24px));
+  max-height: calc(var(--app-height) - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 24px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   border-radius: 22px;
   border: 1px solid rgba(132, 255, 207, 0.52);
   background:
@@ -9829,6 +9873,178 @@ body.home-alt-luxe .is-interactive-surface.is-pressed {
     --surface-tilt-x: 0deg !important;
     --surface-tilt-y: 0deg !important;
     transition-duration: 0.14s;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   CROSS-DEVICE FIT HARDENING (NO REDESIGN)
+   -------------------------------------------------------------------------- */
+@media (max-width: 1180px) {
+  body.world-page main {
+    padding-left: 4.5vw;
+    padding-right: 4.5vw;
+  }
+
+  body.world-page .world-hero {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
+  }
+
+  body.world-page .world-hero > .section-title,
+  body.world-page .world-hero > .hero-actions {
+    grid-column: auto;
+  }
+
+  .nav-links {
+    row-gap: 8px;
+  }
+}
+
+@media (max-width: 900px) {
+  body:not(.world-page) .steps,
+  body:not(.world-page) .world-grid,
+  body.home-alt-luxe .steps,
+  body.home-alt-luxe .world-grid,
+  body.world-page .world-maps .steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  body.home-alt-luxe .hero-right,
+  .hero-right {
+    height: clamp(320px, 62vh, 460px);
+  }
+}
+
+@media (max-width: 640px) {
+  body:not(.world-page) .steps,
+  body:not(.world-page) .world-grid,
+  body.home-alt-luxe .steps,
+  body.home-alt-luxe .world-grid,
+  body.world-page .world-maps .steps {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .nav-links {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-height: 760px) {
+  body:not(.world-page) .section,
+  body.home-alt-luxe .section,
+  body.world-page .section {
+    margin-top: clamp(42px, 6vh, 64px);
+    margin-bottom: clamp(42px, 6vh, 64px);
+  }
+
+  body.home-alt-luxe .hero-right,
+  .hero-right {
+    height: clamp(280px, 58vh, 400px);
+  }
+
+  .account-dropdown {
+    max-height: min(calc(var(--app-height) - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 12px), 620px);
+  }
+}
+
+@media (max-width: 950px) and (max-height: 540px) {
+  .nav {
+    padding-top: calc(env(safe-area-inset-top) + 10px);
+    padding-bottom: 10px;
+  }
+
+  body:not(.world-page) main,
+  body.world-page main {
+    padding-top: 8px;
+  }
+
+  .nav-links a {
+    min-height: 34px;
+  }
+}
+
+@media (max-width: 400px) {
+  .nav {
+    padding-left: 3.5vw;
+    padding-right: 3.5vw;
+  }
+
+  .brand-title {
+    font-size: 13px;
+  }
+
+  .brand-sub {
+    font-size: 9px;
+  }
+
+  .nav-links {
+    gap: 6px;
+  }
+
+  .nav-links a {
+    padding: 7px 9px;
+    font-size: 9.5px;
+  }
+
+  .account-dropdown {
+    width: min(402px, calc(100vw - 10px));
+  }
+
+  .premium-setup-card,
+  .premium-checkout-card,
+  .premium-success-card,
+  .grammar-modal {
+    width: calc(100vw - 14px);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  body.world-page .world-hero {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  body.world-page .world-maps {
+    margin-top: 132px;
+  }
+
+  body.world-page .world-maps .steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  body.world-page .nav {
+    padding-left: 4.5vw;
+    padding-right: 4.5vw;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1366px) and (orientation: portrait) {
+  body.world-page .world-hero {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  body.world-page .world-maps {
+    margin-top: 132px;
+  }
+}
+
+@media (max-height: 500px) {
+  .section,
+  body.home-alt-luxe .section,
+  body.world-page .section {
+    margin-top: 32px;
+    margin-bottom: 32px;
+  }
+
+  .account-dropdown {
+    max-height: calc(var(--app-height) - 8px);
+  }
+
+  .premium-setup-card,
+  .premium-checkout-card,
+  .premium-success-card,
+  .grammar-modal {
+    max-height: calc(var(--app-height) - 10px);
   }
 }
 

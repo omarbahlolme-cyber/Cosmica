@@ -1928,6 +1928,53 @@ const setupAccountHub = () => {
   let passwordProviderNoteAlertTimerId = 0;
   let authRedirectFeedbackLock = false;
   let authRedirectFeedbackLockTimerId = 0;
+  let bodyScrollLockActive = false;
+  let bodyScrollLockY = 0;
+  let bodyScrollLockInlineTop = "";
+  let bodyScrollLockInlinePosition = "";
+  let bodyScrollLockInlineLeft = "";
+  let bodyScrollLockInlineRight = "";
+  let bodyScrollLockInlineWidth = "";
+  let bodyScrollLockInlineOverflow = "";
+
+  const setBodyScrollLock = (shouldLock) => {
+    const lock = shouldLock === true;
+    if (lock === bodyScrollLockActive) {
+      return;
+    }
+    if (lock) {
+      bodyScrollLockY = window.scrollY || window.pageYOffset || 0;
+      bodyScrollLockInlineTop = document.body.style.top;
+      bodyScrollLockInlinePosition = document.body.style.position;
+      bodyScrollLockInlineLeft = document.body.style.left;
+      bodyScrollLockInlineRight = document.body.style.right;
+      bodyScrollLockInlineWidth = document.body.style.width;
+      bodyScrollLockInlineOverflow = document.body.style.overflow;
+      document.body.style.top = `-${bodyScrollLockY}px`;
+      document.body.style.position = "fixed";
+      document.body.style.left = "0";
+      document.body.style.right = "0";
+      document.body.style.width = "100%";
+      document.body.style.overflow = "hidden";
+      bodyScrollLockActive = true;
+      return;
+    }
+    document.body.style.top = bodyScrollLockInlineTop;
+    document.body.style.position = bodyScrollLockInlinePosition;
+    document.body.style.left = bodyScrollLockInlineLeft;
+    document.body.style.right = bodyScrollLockInlineRight;
+    document.body.style.width = bodyScrollLockInlineWidth;
+    document.body.style.overflow = bodyScrollLockInlineOverflow;
+    bodyScrollLockActive = false;
+    window.scrollTo(0, Math.max(0, bodyScrollLockY));
+  };
+
+  const syncOverlayBodyLock = () => {
+    const hasOpenAccountDropdown = !dropdown.hidden;
+    const hasOpenPremiumModal =
+      !premiumSetupOverlay.hidden || !premiumCheckoutOverlay.hidden || !premiumSuccessOverlay.hidden;
+    setBodyScrollLock(hasOpenAccountDropdown || hasOpenPremiumModal);
+  };
 
   const setFeedback = (message, tone = "") => {
     if (!feedbackNode) {
@@ -2413,6 +2460,7 @@ const setupAccountHub = () => {
       pendingAuthNoticeTone = "error";
     }
     positionDropdown();
+    syncOverlayBodyLock();
     window.setTimeout(() => {
       resolveInitialFocusElement()?.focus?.();
     }, 20);
@@ -2439,6 +2487,7 @@ const setupAccountHub = () => {
     if (subscriptionPanel) {
       subscriptionPanel.hidden = true;
     }
+    syncOverlayBodyLock();
   };
 
   const formatSubscriptionDate = (isoValue) => {
@@ -2541,9 +2590,7 @@ const setupAccountHub = () => {
   };
 
   const syncPremiumModalBodyLock = () => {
-    const hasOpenPremiumModal =
-      !premiumSetupOverlay.hidden || !premiumCheckoutOverlay.hidden || !premiumSuccessOverlay.hidden;
-    document.body.classList.toggle("premium-setup-lock", hasOpenPremiumModal);
+    syncOverlayBodyLock();
   };
 
   const setPremiumCheckoutFeedback = (message, tone = "", reasonCode = "") => {
@@ -3646,7 +3693,7 @@ const setupAccountHub = () => {
           userPlanTier === "plus" ||
           userPlanTier === "paid";
         if (hasPremiumAccess || String(button.dataset.subscriptionAction || "") === "manage") {
-            void openSubscriptionPanel({ hasPremiumAccess: true });
+          void openSubscriptionPanel({ hasPremiumAccess });
           return;
         }
         openPremiumFlow({

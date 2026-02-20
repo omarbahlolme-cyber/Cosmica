@@ -17,6 +17,7 @@ const PORT = Number(process.env.BILLING_CONTRACT_PORT || 4175);
 const BASE_URL = `http://127.0.0.1:${PORT}`;
 const STARTUP_TIMEOUT_MS = 25000;
 const REQUEST_TIMEOUT_MS = 12000;
+let authStoreSnapshotRaw = "";
 
 const TEST_USER_ID = "11111111-2222-4333-8444-555555555555";
 const TEST_EMAIL = String(process.env.BILLING_CONTRACT_EMAIL || "mobile.api.test@cosmica.local").trim().toLowerCase();
@@ -55,6 +56,9 @@ const deriveHash = (password, salt, iterations, keylen, digest) =>
   });
 
 const seedTestUser = async () => {
+  if (!authStoreSnapshotRaw) {
+    authStoreSnapshotRaw = fs.readFileSync(AUTH_STORE_FILE, "utf8");
+  }
   const raw = fs.readFileSync(AUTH_STORE_FILE, "utf8");
   const store = JSON.parse(raw);
   store.users = store.users && typeof store.users === "object" ? store.users : {};
@@ -88,6 +92,13 @@ const seedTestUser = async () => {
   store.emailIndex[TEST_EMAIL] = TEST_USER_ID;
   store.updatedAt = now;
   fs.writeFileSync(AUTH_STORE_FILE, JSON.stringify(store, null, 2), "utf8");
+};
+
+const restoreAuthStore = () => {
+  if (!authStoreSnapshotRaw) {
+    return;
+  }
+  fs.writeFileSync(AUTH_STORE_FILE, authStoreSnapshotRaw, "utf8");
 };
 
 const waitForHealth = async () => {
@@ -242,6 +253,7 @@ const main = async () => {
     process.exitCode = 1;
   } finally {
     await stopServer(child);
+    restoreAuthStore();
   }
 };
 

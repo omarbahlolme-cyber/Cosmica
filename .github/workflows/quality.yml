@@ -43,5 +43,16 @@ jobs:
       - name: Smoke checks
         run: npm run smoke
 
+      - name: Checkout cross-device smoke (deterministic local)
+        env:
+          SMOKE_BASE_URL: ""
+          BASE_URL: ""
+          SMOKE_USE_EXTERNAL_BASE: "false"
+          SMOKE_LOCAL_PORT: "4174"
+        run: npm run smoke:checkout:cross-device
+
       - name: Billing contract checks
         run: npm run billing:contract
+
+      - name: User-state contract checks
+        run: npm run billing:user-state:contract
