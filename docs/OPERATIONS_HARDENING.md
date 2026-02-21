@@ -177,6 +177,17 @@ $token="YOUR_KOFI_WEBHOOK_TOKEN"; $email="target-user@example.com"; $url="https:
    - Ensure no `authError=google_*` appears in the URL.
    - If errors appear, capture exact `authError` code and backend request ID (`X-Request-Id`) for triage.
 
+### 4.3 Premium continuity guardrails
+
+1. Keep `AUTH_STORE_FAIL_FAST_ON_LOAD_ERROR=true` in every environment (staging and production) so startup halts on corrupt auth-store loads.
+2. Set `PREMIUM_CONTINUITY_CANARY_INTERVAL_MS` per environment:
+   - Production: `900000` (15 minutes) to catch regressions quickly.
+   - Staging: `3600000` (60 minutes) to reduce noise while still exercising the path.
+3. Ensure the premium continuity smoke runs in CI (see `quality` workflow) so failures block merges.
+4. If you create a staging service later, copy all required env keys from prod, then set:
+   - `AUTH_STORE_FAIL_FAST_ON_LOAD_ERROR=true`
+   - `PREMIUM_CONTINUITY_CANARY_INTERVAL_MS=3600000` (or `600000` if you want staging to match prod cadence).
+
 ## 5) Policy Enforcement Process
 
 For privacy/terms/license violations and response steps, use:

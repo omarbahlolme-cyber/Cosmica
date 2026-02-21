@@ -1,10 +1,10 @@
 {
   "summary": {
-    "generatedAt": "2026-02-20T21:44:17.166Z",
-    "base": "http://127.0.0.1:3000",
+    "generatedAt": "2026-02-21T04:18:32.811Z",
+    "base": "http://127.0.0.1:4181",
     "totalChecks": 24,
     "overflowIssues": 0,
-    "jsIssues": 16,
+    "jsIssues": 0,
     "non401JsIssues": 0
   },
   "findings": [
@@ -18,9 +18,7 @@
       },
       "bodyOverflow": 0,
       "hasMain": true,
-      "consoleErrors": [
-        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
-      ],
+      "consoleErrors": [],
       "pageErrors": [],
       "screenshot": "perf/manual-sweep/chromium-mobile-390x844-home.png"
     },
@@ -34,9 +32,7 @@
       },
       "bodyOverflow": 0,
       "hasMain": true,
-      "consoleErrors": [
-        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
-      ],
+      "consoleErrors": [],
       "pageErrors": [],
       "screenshot": "perf/manual-sweep/chromium-mobile-390x844-english-world.png"
     },
@@ -50,9 +46,7 @@
       },
       "bodyOverflow": 0,
       "hasMain": true,
-      "consoleErrors": [
-        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
-      ],
+      "consoleErrors": [],
       "pageErrors": [],
       "screenshot": "perf/manual-sweep/chromium-mobile-390x844-world-french.png"
     },
@@ -66,9 +60,7 @@
       },
       "bodyOverflow": 0,
       "hasMain": true,
-      "consoleErrors": [
-        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
-      ],
+      "consoleErrors": [],
       "pageErrors": [],
       "screenshot": "perf/manual-sweep/chromium-mobile-390x844-english-words.png"
     },
@@ -82,9 +74,7 @@
       },
       "bodyOverflow": 0,
       "hasMain": true,
-      "consoleErrors": [
-        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
-      ],
+      "consoleErrors": [],
       "pageErrors": [],
       "screenshot": "perf/manual-sweep/chromium-tablet-1024x1366-home.png"
     },
@@ -98,9 +88,7 @@
       },
       "bodyOverflow": 0,
       "hasMain": true,
-      "consoleErrors": [
-        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
-      ],
+      "consoleErrors": [],
       "pageErrors": [],
       "screenshot": "perf/manual-sweep/chromium-tablet-1024x1366-english-world.png"
     },
@@ -114,9 +102,7 @@
       },
       "bodyOverflow": 0,
       "hasMain": true,
-      "consoleErrors": [
-        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
-      ],
+      "consoleErrors": [],
       "pageErrors": [],
       "screenshot": "perf/manual-sweep/chromium-tablet-1024x1366-world-french.png"
     },
@@ -130,9 +116,7 @@
       },
       "bodyOverflow": 0,
       "hasMain": true,
-      "consoleErrors": [
-        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
-      ],
+      "consoleErrors": [],
       "pageErrors": [],
       "screenshot": "perf/manual-sweep/chromium-tablet-1024x1366-english-words.png"
     },
@@ -258,9 +242,7 @@
       },
       "bodyOverflow": 0,
       "hasMain": true,
-      "consoleErrors": [
-        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
-      ],
+      "consoleErrors": [],
       "pageErrors": [],
       "screenshot": "perf/manual-sweep/webkit-mobile-390x844-home.png"
     },
@@ -274,9 +256,7 @@
       },
       "bodyOverflow": 0,
       "hasMain": true,
-      "consoleErrors": [
-        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
-      ],
+      "consoleErrors": [],
       "pageErrors": [],
       "screenshot": "perf/manual-sweep/webkit-mobile-390x844-english-world.png"
     },
@@ -290,9 +270,7 @@
       },
       "bodyOverflow": 0,
       "hasMain": true,
-      "consoleErrors": [
-        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
-      ],
+      "consoleErrors": [],
       "pageErrors": [],
       "screenshot": "perf/manual-sweep/webkit-mobile-390x844-world-french.png"
     },
@@ -306,9 +284,7 @@
       },
       "bodyOverflow": 0,
       "hasMain": true,
-      "consoleErrors": [
-        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
-      ],
+      "consoleErrors": [],
       "pageErrors": [],
       "screenshot": "perf/manual-sweep/webkit-mobile-390x844-english-words.png"
     },
@@ -322,9 +298,7 @@
       },
       "bodyOverflow": 0,
       "hasMain": true,
-      "consoleErrors": [
-        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
-      ],
+      "consoleErrors": [],
       "pageErrors": [],
       "screenshot": "perf/manual-sweep/webkit-tablet-1024x1366-home.png"
     },
@@ -338,9 +312,7 @@
       },
       "bodyOverflow": 0,
       "hasMain": true,
-      "consoleErrors": [
-        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
-      ],
+      "consoleErrors": [],
       "pageErrors": [],
       "screenshot": "perf/manual-sweep/webkit-tablet-1024x1366-english-world.png"
     },
@@ -354,9 +326,7 @@
       },
       "bodyOverflow": 0,
       "hasMain": true,
-      "consoleErrors": [
-        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
-      ],
+      "consoleErrors": [],
       "pageErrors": [],
       "screenshot": "perf/manual-sweep/webkit-tablet-1024x1366-world-french.png"
     },
@@ -370,9 +340,7 @@
       },
       "bodyOverflow": 0,
       "hasMain": true,
-      "consoleErrors": [
-        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
-      ],
+      "consoleErrors": [],
       "pageErrors": [],
       "screenshot": "perf/manual-sweep/webkit-tablet-1024x1366-english-words.png"
     }

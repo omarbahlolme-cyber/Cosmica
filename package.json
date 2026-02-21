@@ -11,6 +11,7 @@
     "html:baseline": "node scripts/apply-html-baseline.js",
     "smoke": "node scripts/smoke.js",
     "smoke:checkout:cross-device": "node scripts/smoke-checkout-cross-device.js",
+    "smoke:premium:continuity": "node scripts/smoke-premium-continuity.js",
     "verify:viewport": "node scripts/verify-viewport-matrix.js",
     "verify:viewport:browsers": "playwright install chromium firefox webkit",
     "indexing:check": "node scripts/indexing-followup.js",
@@ -43,7 +44,7 @@
     "backup:verify": "node scripts/verify-backup.js",
     "release:check": "node scripts/check-release.js",
     "quality": "npm run check:syntax && npm run check:literal-escapes && npm run check:a11y && npm run check:seo && npm run check:assets && npm run check:html-cache && npm run check:integrity && npm run check:securitytxt && npm run check:intents && npm run check:bloat && npm run perf:check && npm run security:audit && npm run release:check && npm run smoke && npm run billing:user-state:contract",
-    "verify:pc-mobile": "npm run check:syntax && npm run smoke && npm run smoke:checkout:cross-device",
+    "verify:pc-mobile": "npm run check:syntax && npm run smoke && npm run smoke:checkout:cross-device && npm run smoke:premium:continuity",
     "verify:prod-integrations": "node scripts/verify-prod-integrations.js",
     "format": "prettier --write \"**/*.{html,css,js,json,md}\""
   },

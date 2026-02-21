@@ -499,6 +499,17 @@ const STRIPE_RECONCILE_INTERVAL_MS = Math.max(
   6 * 60 * 60 * 1000,
   Number(process.env.STRIPE_RECONCILE_INTERVAL_MS || 24 * 60 * 60 * 1000)
 );
+const AUTH_STORE_FAIL_FAST_ON_LOAD_ERROR = isTruthyEnvValue(
+  String(process.env.AUTH_STORE_FAIL_FAST_ON_LOAD_ERROR || "true").trim()
+);
+const PREMIUM_CONTINUITY_CANARY_INTERVAL_MS = Math.max(
+  10 * 60 * 1000,
+  Number(process.env.PREMIUM_CONTINUITY_CANARY_INTERVAL_MS || 60 * 60 * 1000)
+);
+const STRIPE_PREMIUM_RECOVERY_SYNC_COOLDOWN_MS = Math.max(
+  2 * 60 * 1000,
+  Number(process.env.STRIPE_PREMIUM_RECOVERY_SYNC_COOLDOWN_MS || 10 * 60 * 1000)
+);
 
 const getStripeClient = (() => {
   let cachedClient = null;
@@ -1739,6 +1750,9 @@ const loadAuthStoreFromDisk = () => {
     return normalized;
   } catch (error) {
     console.error("[auth-store] Failed to read auth store, resetting:", error?.message || error);
+    if (AUTH_STORE_FAIL_FAST_ON_LOAD_ERROR) {
+      throw new Error(`Auth store load failed (fail-fast enabled): ${error?.message || error}`);
+    }
     const fallback = createEmptyAuthStore();
     try {
       writeAuthStoreSync(fallback);
@@ -2496,7 +2510,7 @@ function resolvePremiumSnapshotFromProfile(profileValue) {
   const premiumTier = String(profile.plan || profile.tier || profile.membership || "")
     .trim()
     .toLowerCase();
-  const hasPremiumAccess =
+  const legacyPremiumAccess =
     premiumRaw === true ||
     premiumText === "1" ||
     premiumText === "true" ||
@@ -2508,16 +2522,23 @@ function resolvePremiumSnapshotFromProfile(profileValue) {
     premiumTier === "pro" ||
     premiumTier === "plus" ||
     premiumTier === "paid";
+  const premiumWindowMs = parseIsoToMs(profile.premiumCurrentPeriodEnd || profile.premiumScheduledEndAt || "");
+  const hasUnexpiredPremiumWindow = premiumWindowMs !== null && premiumWindowMs > Date.now();
+  const stripeStatus = String(profile.premiumStripeSubscriptionStatus || "")
+    .trim()
+    .toLowerCase();
+  const hasStripePremiumStatus = ["active", "trialing", "past_due"].includes(stripeStatus);
+  const hasPremiumAccess = legacyPremiumAccess || hasUnexpiredPremiumWindow || hasStripePremiumStatus;
   return {
     isPremium: hasPremiumAccess,
     planTier: hasPremiumAccess ? "premium" : "free",
   };
 }
 
-const parseIsoToMs = (value) => {
+function parseIsoToMs(value) {
   const ms = Date.parse(String(value || "").trim());
   return Number.isFinite(ms) ? ms : null;
-};
+}
 
 const computePremiumAccessUntilFromProfile = (profileValue, nowIso = new Date().toISOString()) => {
   const profile = isPlainObject(profileValue) ? profileValue : {};
@@ -4657,6 +4678,7 @@ app.post("/api/auth/login", authLoginLimiter, async (req, res) => {
     userRecord.lastLoginAt = new Date().toISOString();
     userRecord.updatedAt = userRecord.lastLoginAt;
     markAuthStoreDirty();
+    await attemptStripePremiumRecoveryIfNeeded(userRecord, "auth-login");
     const sessionToken = createSessionForUser(userRecord.id, req);
     setAuthSessionCookie(req, res, sessionToken);
 
@@ -4684,7 +4706,7 @@ app.post("/api/auth/logout", authSessionLimiter, (req, res) => {
   return res.json({ ok: true });
 });
 
-app.get("/api/auth/me", authSessionLimiter, (req, res) => {
+app.get("/api/auth/me", authSessionLimiter, async (req, res) => {
   const userRecord = req.authUser;
   if (!userRecord) {
     return res.json({
@@ -4695,6 +4717,7 @@ app.get("/api/auth/me", authSessionLimiter, (req, res) => {
       progress: null,
     });
   }
+  await attemptStripePremiumRecoveryIfNeeded(userRecord, "auth-me");
   return res.json({
     ok: true,
     authenticated: true,
@@ -6225,6 +6248,71 @@ const syncUserPremiumFromStripeTruth = async (
   };
 };
 
+const isStripePremiumRecoveryCandidate = (userRecord) => {
+  const profile = isPlainObject(userRecord?.data?.profile) ? userRecord.data.profile : {};
+  const provider = String(profile.premiumProvider || "").trim().toLowerCase();
+  const lastSource = String(profile.premiumLastSource || "").trim().toLowerCase();
+  return (
+    provider === "stripe" ||
+    Boolean(String(profile.premiumStripeCustomerId || "").trim()) ||
+    Boolean(String(profile.premiumStripeSubscriptionId || "").trim()) ||
+    Boolean(String(profile.premiumStripeSubscriptionStatus || "").trim()) ||
+    lastSource.includes("stripe")
+  );
+};
+
+const attemptStripePremiumRecoveryIfNeeded = async (userRecord, source = "auth-bootstrap") => {
+  if (!userRecord || !isPlainObject(userRecord)) {
+    return { attempted: false, recovered: false, reason: "no-user" };
+  }
+
+  userRecord.data = normalizeUserData(userRecord.data);
+  if (userHasPremiumAccessForProgress(userRecord)) {
+    return { attempted: false, recovered: false, reason: "already-premium" };
+  }
+  if (!isStripePremiumRecoveryCandidate(userRecord)) {
+    return { attempted: false, recovered: false, reason: "not-stripe-candidate" };
+  }
+
+  const stripeKeyConfigured = Boolean(String(process.env.STRIPE_SECRET_KEY || "").trim());
+  if (!stripeKeyConfigured) {
+    return { attempted: false, recovered: false, reason: "stripe-not-configured" };
+  }
+
+  const profile = isPlainObject(userRecord.data.profile) ? userRecord.data.profile : {};
+  const lastAttemptMs = parseIsoToMs(profile.premiumRecoveryLastAttemptAt || "");
+  if (
+    lastAttemptMs !== null &&
+    Date.now() - lastAttemptMs < STRIPE_PREMIUM_RECOVERY_SYNC_COOLDOWN_MS
+  ) {
+    return { attempted: false, recovered: false, reason: "cooldown" };
+  }
+
+  const nowIso = new Date().toISOString();
+  profile.premiumRecoveryLastAttemptAt = nowIso;
+  userRecord.updatedAt = nowIso;
+  markAuthStoreDirty();
+
+  try {
+    const result = await syncUserPremiumFromStripeTruth(userRecord, {
+      source,
+      forceDowngradeWhenNoActive: false,
+    });
+    return {
+      attempted: true,
+      recovered: result.isPremium === true,
+      reason: result.action,
+    };
+  } catch (error) {
+    reportServerError("premium-recovery-sync", error, {
+      source,
+      userId: String(userRecord.id || "").slice(0, 120),
+      email: normalizeEmail(userRecord.email),
+    });
+    return { attempted: true, recovered: false, reason: "sync-error" };
+  }
+};
+
 const resolvePremiumSubscriptionStatus = (userRecord) => {
   const profile = isPlainObject(userRecord?.data?.profile) ? userRecord.data.profile : {};
   const premiumSnapshot = resolvePremiumSnapshotFromProfile(profile);
@@ -6897,6 +6985,14 @@ app.post("/api/chat", chatLimiter, async (req, res) => {
 
 let billingBackgroundTaskRunning = false;
 let lastStripeDailyReconcileRunAtMs = 0;
+let premiumContinuityCanaryRunning = false;
+let lastPremiumContinuityCanaryRunAtMs = 0;
+const premiumContinuityCanaryState = {
+  lastRunAt: null,
+  lastStatus: "idle",
+  summary: null,
+  lastErrorAt: null,
+};
 
 const checkStripeWebhookSilence = () => {
   stripeWebhookHealthState.lastMonitorCheckAt = new Date().toISOString();
@@ -7017,6 +7113,89 @@ const runStripeDailyReconciliationDryRun = async () => {
   }
 };
 
+const runPremiumContinuityCanary = async () => {
+  if (premiumContinuityCanaryRunning) {
+    return;
+  }
+  const nowMs = Date.now();
+  if (
+    lastPremiumContinuityCanaryRunAtMs &&
+    nowMs - lastPremiumContinuityCanaryRunAtMs < PREMIUM_CONTINUITY_CANARY_INTERVAL_MS
+  ) {
+    return;
+  }
+  lastPremiumContinuityCanaryRunAtMs = nowMs;
+  premiumContinuityCanaryRunning = true;
+
+  const summary = {
+    scanned: 0,
+    stripeCandidates: 0,
+    entitledUsers: 0,
+    potentialFallbacks: 0,
+    generatedAt: new Date().toISOString(),
+  };
+
+  try {
+    const allUsers = Object.values(authStore.users || {}).filter((user) => user && typeof user === "object");
+    for (const userRecord of allUsers) {
+      const email = normalizeEmail(userRecord?.email || "");
+      if (!isValidEmail(email)) {
+        continue;
+      }
+      summary.scanned += 1;
+      userRecord.data = normalizeUserData(userRecord.data);
+      const profile = isPlainObject(userRecord?.data?.profile) ? userRecord.data.profile : {};
+      const stripeCandidate =
+        String(profile.premiumProvider || "").trim().toLowerCase() === "stripe" ||
+        Boolean(String(profile.premiumStripeCustomerId || "").trim()) ||
+        Boolean(String(profile.premiumStripeSubscriptionId || "").trim()) ||
+        Boolean(String(profile.premiumStripeSubscriptionStatus || "").trim()) ||
+        String(profile.premiumLastSource || "").trim().toLowerCase().includes("stripe");
+      if (!stripeCandidate) {
+        continue;
+      }
+      summary.stripeCandidates += 1;
+
+      const premiumWindowMs = parseIsoToMs(profile.premiumCurrentPeriodEnd || profile.premiumScheduledEndAt || "");
+      const hasUnexpiredPremiumWindow = premiumWindowMs !== null && premiumWindowMs > Date.now();
+      const stripeStatus = String(profile.premiumStripeSubscriptionStatus || "").trim().toLowerCase();
+      const hasStripePremiumStatus = ["active", "trialing", "past_due"].includes(stripeStatus);
+      const shouldBeEntitled = hasUnexpiredPremiumWindow || hasStripePremiumStatus;
+      if (!shouldBeEntitled) {
+        continue;
+      }
+      summary.entitledUsers += 1;
+
+      const resolved = resolvePremiumSnapshotFromProfile(profile);
+      if (!resolved.isPremium) {
+        summary.potentialFallbacks += 1;
+      }
+    }
+
+    premiumContinuityCanaryState.lastRunAt = summary.generatedAt;
+    premiumContinuityCanaryState.lastStatus = summary.potentialFallbacks > 0 ? "warning" : "ok";
+    premiumContinuityCanaryState.summary = summary;
+    premiumContinuityCanaryState.lastErrorAt = null;
+
+    if (AUTH_ALERT_WEBHOOK_URL) {
+      void postAuthAlertWebhook({
+        type: "billing_premium_continuity_canary",
+        severity: summary.potentialFallbacks > 0 ? "warning" : "info",
+        timestamp: summary.generatedAt,
+        summary,
+      });
+    }
+  } catch (error) {
+    premiumContinuityCanaryState.lastErrorAt = new Date().toISOString();
+    premiumContinuityCanaryState.lastStatus = "error";
+    reportServerError("billing-premium-continuity-canary", error, {
+      intervalMs: PREMIUM_CONTINUITY_CANARY_INTERVAL_MS,
+    });
+  } finally {
+    premiumContinuityCanaryRunning = false;
+  }
+};
+
 const startBillingBackgroundMonitors = () => {
   const shouldRun = isTruthyEnvValue(
     String(process.env.BILLING_BACKGROUND_MONITORS_ENABLED || "true").trim()
@@ -7027,7 +7206,9 @@ const startBillingBackgroundMonitors = () => {
   setInterval(() => {
     checkStripeWebhookSilence();
     void runStripeDailyReconciliationDryRun();
+    void runPremiumContinuityCanary();
   }, BILLING_MONITOR_INTERVAL_MS);
+  void runPremiumContinuityCanary();
 };
 
 /* --------------------------------------------------------------------------
@@ -7042,6 +7223,11 @@ app.get("/api/health", healthLimiter, (req, res) => {
     timestamp: new Date().toISOString(),
     premiumCheckoutConfigured: checkoutConfig.configured,
     premiumCheckoutSource: checkoutConfig.source,
+    authStoreFailFastOnLoadError: AUTH_STORE_FAIL_FAST_ON_LOAD_ERROR,
+    premiumContinuityCanary: {
+      ...premiumContinuityCanaryState,
+      intervalMs: PREMIUM_CONTINUITY_CANARY_INTERVAL_MS,
+    },
   });
 });
 

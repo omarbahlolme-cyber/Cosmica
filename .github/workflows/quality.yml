@@ -43,6 +43,9 @@ jobs:
       - name: Smoke checks
         run: npm run smoke
 
+      - name: Premium continuity smoke
+        run: npm run smoke:premium:continuity
+
       - name: Checkout cross-device smoke (deterministic local)
         env:
           SMOKE_BASE_URL: ""
