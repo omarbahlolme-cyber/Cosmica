@@ -37,6 +37,7 @@
     "auth-backup:restore": "node scripts/restore-auth-data-backup.js",
     "premium:repair:stripe": "node scripts/repair-premium-from-stripe.js",
     "premium:reconcile:stripe": "node scripts/reconcile-premium-with-stripe.js",
+    "admin:grant:premium": "node scripts/grant-premium.js",
     "billing:contract": "node scripts/billing-contract-check.js",
     "billing:user-state:contract": "node scripts/user-state-contract-check.js",
     "github:harden": "node scripts/apply-github-hardening.js",

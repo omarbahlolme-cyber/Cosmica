@@ -112,3 +112,15 @@
 7. Update `perf/baseline.json` intentionally (`npm run perf:baseline`) after verified performance changes.
 8. Update bloat allowlist intentionally (`npm run check:bloat:refresh`) only after verified cleanup.
 9. Review `docs/FRONTEND_RUNTIME_NOTES.md` before changing prefetch, translation hydration, or analytics loading behavior.
+
+## Git workflow quick reference
+
+1. Default branch is `main`; prefer branch + PR for anything non-trivial so tests/review can run.
+2. Fastest safe branch flow:
+	- `git checkout -b <topic-branch>`
+	- `git add <paths>`
+	- `git commit -m "<scope>: <summary>"`
+	- `git push origin <topic-branch>` and open PR to `main`.
+3. Direct-to-main is only for low-risk, small changes; flow: `git add <paths>` → `git commit -m "<scope>: <summary>"` → `git push origin main`.
+4. Commit messages should be descriptive (e.g., `chore: preload css and defer app bundle across frontend`, `ops: document manual premium grant flow`), not generic like `update`.
+5. Keep changes scoped per commit (perf vs. docs vs. data). Split if needed rather than batching unrelated changes.

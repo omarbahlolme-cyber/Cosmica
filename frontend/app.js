@@ -1949,6 +1949,7 @@ const setupAccountHub = () => {
   const premiumSuccessPrimaryBtn = premiumSuccessOverlay.querySelector(".premium-success-primary");
   let selectedPremiumCheckoutOption = null;
   let premiumCheckoutOptionsReady = false;
+  let manualPremiumCongratsShown = false;
   let latestPremiumCheckoutMeta = null;
   let activeAuthPanel = "login";
   let lastPremiumFocusNode = null;
@@ -2676,6 +2677,7 @@ const setupAccountHub = () => {
     await loadSubscriptionStatus();
     const effectivePremium = latestSubscriptionSnapshot?.isPremium === true || hasPremiumAccess;
     renderSubscriptionPanel({ hasPremiumAccess: effectivePremium });
+    maybeShowManualPremiumCongrats();
   };
 
   const syncPremiumModalBodyLock = () => {
@@ -2699,6 +2701,35 @@ const setupAccountHub = () => {
     premiumCheckoutPrimaryBtn.dataset.loading = loading ? "true" : "false";
     premiumCheckoutPrimaryBtn.textContent = loading ? "Redirecting…" : "Proceed";
     premiumCheckoutPrimaryBtn.disabled = loading || !premiumCheckoutOptionsReady;
+  };
+
+  const maybeShowManualPremiumCongrats = () => {
+    if (manualPremiumCongratsShown) {
+      return;
+    }
+    const sub = latestSubscriptionSnapshot || {};
+    if (!sub?.isPremium) {
+      return;
+    }
+    const provider = String(sub.provider || sub.premiumProvider || "").trim().toLowerCase();
+    const lastSource = String(sub.lastSource || sub.premiumLastSource || "").trim().toLowerCase();
+    const isManual = provider === "manual" || lastSource.includes("manual");
+    if (!isManual) {
+      return;
+    }
+    manualPremiumCongratsShown = true;
+    const accessIso =
+      sub.premiumAccessUntil ||
+      sub.premiumCurrentPeriodEnd ||
+      sub.currentPeriodEnd ||
+      sub.premiumUntil ||
+      null;
+    const endDateLabel = formatSubscriptionDate(accessIso);
+    const durationText = endDateLabel ? `through ${endDateLabel}` : "for your complimentary period";
+    setFeedback(
+      `Congrats! Your complimentary Premium is active ${durationText}. Enjoy it — best wishes from Omar (Andy).`,
+      "success"
+    );
   };
 
   const sanitizeKoFiCheckoutUrl = (value) => {
@@ -3181,8 +3212,22 @@ const setupAccountHub = () => {
     const questTasks = quests?.tasks && typeof quests.tasks === "object" ? quests.tasks : {};
     const showPasswordManagement = Boolean(isAuthenticated && currentAuthProvider !== "google");
     const showGooglePasswordNote = Boolean(isAuthenticated && currentAuthProvider === "google");
+    const premiumAccessUntil =
+      snapshot?.user?.premiumAccessUntil ||
+      snapshot?.user?.premiumCurrentPeriodEnd ||
+      snapshot?.user?.premiumScheduledEndAt ||
+      latestSubscriptionSnapshot?.premiumAccessUntil ||
+      latestSubscriptionSnapshot?.premiumCurrentPeriodEnd ||
+      null;
+    const premiumProvider = String(snapshot?.user?.premiumProvider || "").trim().toLowerCase();
+    const premiumLastSource = String(snapshot?.user?.premiumLastSource || "").trim().toLowerCase();
+
     latestSubscriptionSnapshot = {
-      premiumAccessUntil: snapshot?.user?.premiumAccessUntil || latestSubscriptionSnapshot?.premiumAccessUntil || null,
+      premiumAccessUntil,
+      premiumCurrentPeriodEnd:
+        snapshot?.user?.premiumCurrentPeriodEnd || latestSubscriptionSnapshot?.premiumCurrentPeriodEnd || null,
+      provider: premiumProvider || premiumLastSource || latestSubscriptionSnapshot?.provider || "",
+      lastSource: premiumLastSource || latestSubscriptionSnapshot?.lastSource || "",
       cancelAtPeriodEnd: snapshot?.user?.premiumCancelAtPeriodEnd === true,
       billingStatus:
         snapshot?.user?.isPremium === true
@@ -3248,6 +3293,8 @@ const setupAccountHub = () => {
     }
 
     if (!isAuthenticated) {
+      manualPremiumCongratsShown = false;
+      latestSubscriptionSnapshot = null;
       setAuthPanel(activeAuthPanel, false);
       return;
     }
@@ -3285,6 +3332,7 @@ const setupAccountHub = () => {
       menuQuestsPanel.classList.toggle("is-premium-locked", !hasPremiumAccess);
     }
     renderSubscriptionPanel({ hasPremiumAccess });
+    maybeShowManualPremiumCongrats();
     if (menuXpFill) {
       const ratio = Math.max(0, Math.min(1, Number(levelMeta.ratio) || 0));
       menuXpFill.style.width = `${(ratio * 100).toFixed(2)}%`;

@@ -193,3 +193,65 @@ $token="YOUR_KOFI_WEBHOOK_TOKEN"; $email="target-user@example.com"; $url="https:
 For privacy/terms/license violations and response steps, use:
 
 - `ENFORCEMENT_RUNBOOK.md`
+
+## 6) Admin: Premium (local/dev)
+
+Use the helper script; avoid hand-editing unless you need a manual revoke. Applies only to your local server.
+
+- Backup first: stop local server CTRL+C; run `npm run auth-backup:create`.
+- Grant local premium:
+   - Unlimited: `npm run admin:grant:premium -- --email user@example.com`
+   - Timed trial: `npm run admin:grant:premium -- --email user@example.com --days 30`
+   - Custom date: `npm run admin:grant:premium -- --email user@example.com --until YYYY-MM-DD`
+- Restart local server "npm start"; verify on localhost.
+- Revoke locally:
+   - Fast: `npm run admin:grant:premium -- --email user@example.com --until 2000-01-01`
+   - Manual edit: stop server; edit `backend/data/accounts.json` for that user; clear premium flags/end dates (`isPremium/premium/plan/tier/membership=false/""`; clear `premiumProvider/premiumLastSource`, `premiumStripeSubscriptionStatus`, end-date fields, `premiumCancelAtPeriodEnd`); save; restart.
+- Local recovery/QA:
+   - Wrong user: revert flags in `backend/data/accounts.json` or restore the latest `backups/auth-data/` snapshot, then restart.
+   - Wrong duration: re-run the grant with correct `--days` or `--until`.
+   - Corrupted store: restore the latest `backups/auth-data/` snapshot locally, then re-apply intended grants.
+   - Backups: one before edits is enough; fix/restore using it, then optionally take a fresh one after.
+
+## 7) Admin: Premium (production/live, Render free has no shell)
+
+- Private repo (simple path):
+   - Backup first: stop live server/service if you control it; locally run `npm run auth-backup:create` (keeps a copy if you need to revert).
+   - Grant: edit `backend/data/accounts.json` locally to mark your email as premium (same fields as local flow: isPremium/premium true, plan/tier/membership "premium", provider/manual, premiumCurrentPeriodEnd future date, etc.).
+   - Deploy: commit and push to `main`; Render redeploys and picks it up.
+   - Verify: log in on the live site; confirm Premium.
+   - Optional cleanup: after verifying live, make a follow-up commit reverting `backend/data/accounts.json`. The live instance keeps the premium state it already loaded.
+
+- Public repo (avoid committing auth data):
+   - Option 1: temporarily upgrade to a plan with Shell, run `npm run admin:grant:premium -- --email you@example.com --days 30` on the live box, then downgrade.
+   - Option 2: have a dev add a temporary protected grant endpoint, deploy, call it once, then remove and redeploy.
+
+- Revoke live (if needed):
+   - Fast: `npm run admin:grant:premium -- --email user@example.com --until 2000-01-01` (requires shell-capable plan).
+   - File edit path (private repo): edit `backend/data/accounts.json` to clear premium flags/end dates, commit/push, let Render redeploy.
+
+- Live recovery/QA scenarios:
+   - Wrong user: clear that user’s premium fields in `backend/data/accounts.json`, commit/push, redeploy; or restore the latest `backups/auth-data/` snapshot and redeploy.
+   - Wrong duration: adjust fields in `backend/data/accounts.json` (or rerun grant via shell if available), then commit/push and redeploy.
+   - Corrupted store: restore the latest `backups/auth-data/` snapshot locally, commit/push, redeploy.
+   - Backups: one before edits is enough; fix/restore using it, then optionally take a fresh one after things look correct.
+
+- Reminder: local changes don’t reach live unless you push them; only what’s in git (or executed on the live box) goes to production.
+
+- Runtime note: the manual premium congrats message appears once per session/login for manual grants; it resets on page reload or logout/login and does not show for Stripe users.
+
+### 7.1 Cleanup: remove accounts.json change from git (after live is verified)
+
+- If the grant was your latest commit (simplest):
+   1) In a terminal at the repo root: `git revert HEAD --no-edit`
+   2) Push: `git push origin main`
+   Done. Live keeps the premium state it already loaded.
+
+- If the grant was not the latest commit:
+   1) Target the grant commit directly and revert it: `git revert <grant-commit-sha> --no-edit`
+       - If you prefer a file reset: `git checkout <pre-grant-commit> -- backend/data/accounts.json` (if it’s one back, use `HEAD~1`).
+   2) Commit (if you used checkout): `git commit -am "Revert accounts.json"`
+   3) Push: `git push origin main`
+   Live keeps the premium state it already loaded.
+
+- You can do this cleanup anytime later (even weeks/months later); it only cleans the repo. The live server keeps the premium state it already loaded.
