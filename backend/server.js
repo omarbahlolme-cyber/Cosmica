@@ -3856,6 +3856,8 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
       return;
     }
 
+    const flowMode = (stateData?.mode || "login").toLowerCase();
+
     const nowIso = new Date().toISOString();
     const existingUserId = authStore.emailIndex[email];
     let userRecord = existingUserId ? authStore.users[existingUserId] : null;
@@ -3874,6 +3876,9 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
     }
 
     if (!userRecord) {
+      if (flowMode !== "signup") {
+        return res.redirect(302, buildAuthErrorRedirectPath("google_no_account"));
+      }
       const userId = crypto.randomUUID();
       const generatedPassword = crypto.randomBytes(24).toString("base64url");
       const passwordRecord = await buildPasswordRecord(generatedPassword);
