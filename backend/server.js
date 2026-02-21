@@ -3875,6 +3875,10 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
       return;
     }
 
+    if (userRecord && flowMode === "signup") {
+      return res.redirect(302, buildAuthErrorRedirectPath("google_account_exists"));
+    }
+
     if (!userRecord) {
       if (flowMode !== "signup") {
         return res.redirect(302, buildAuthErrorRedirectPath("google_no_account"));
@@ -4376,7 +4380,7 @@ app.post("/api/auth/signup", authSignupLimiter, async (req, res) => {
           resendEligible: true,
         });
       }
-      return res.status(409).json({ error: "Account already exists" });
+      return res.status(409).json({ error: "Account already exists. Please log in." });
     }
 
     const verificationChallenge = createEmailVerificationChallenge();

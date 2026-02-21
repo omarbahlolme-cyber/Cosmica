@@ -1737,6 +1737,7 @@ const setupAccountHub = () => {
             <span class="account-premium-main">Discover Premium</span>
             <span class="account-premium-sub">Unlock premium features</span>
           </button>
+          <button type="button" data-menu="restore" class="account-subscription-restore-nav">Restore Premium</button>
           <button type="button" data-menu="manage">Manage Account</button>
         </nav>
         <div class="account-manage-panel" hidden>
@@ -1750,7 +1751,6 @@ const setupAccountHub = () => {
             <p class="account-subscription-until" hidden></p>
             <p class="account-subscription-sync" hidden></p>
             <button type="button" class="account-reset-email-button account-subscription-cancel">Cancel subscription</button>
-            <button type="button" class="account-reset-email-button account-subscription-restore">Restore Premium</button>
           </section>
           <section class="account-password-panel" hidden>
             <h4>Password</h4>
@@ -1762,13 +1762,13 @@ const setupAccountHub = () => {
               <button type="button" class="account-inline-link account-manage-forgot">Forgot password?</button>
             </form>
           </section>
-          <button type="button" class="account-reset-email-button account-manage-reset-email">Reset password</button>
+            <button type="button" class="account-reset-email-button account-manage-reset-email">Reset password</button>
           <p class="account-password-provider-note" hidden>
             Password changes for Google accounts are managed in your Google account settings.
           </p>
           <button class="account-delete account-delete-trigger" type="button">Delete account</button>
           <div class="account-delete-confirm" hidden>
-            <p class="account-delete-warning">Are you sure you want to delete your account? This action cannot be undone.</p>
+            <p class="account-delete-warning">Are you sure you want to delete your account? This action cannot be undone. If you have Premium, you can restore it later by signing up again with the same email and hitting the "Restore Premium" button.</p>
             <div class="account-delete-actions">
               <button class="account-delete-cancel" type="button">Cancel</button>
               <button class="account-delete account-delete-confirm-btn" type="button">Delete</button>
@@ -1908,6 +1908,7 @@ const setupAccountHub = () => {
   const subscriptionUntilNode = dropdown.querySelector(".account-subscription-until");
   const subscriptionSyncNode = dropdown.querySelector(".account-subscription-sync");
   const subscriptionCancelBtn = dropdown.querySelector(".account-subscription-cancel");
+  const subscriptionRestoreNavBtn = dropdown.querySelector(".account-subscription-restore-nav");
   const subscriptionRestoreBtn = dropdown.querySelector(".account-subscription-restore");
   const passwordPanel = dropdown.querySelector(".account-password-panel");
   const passwordProviderNote = dropdown.querySelector(".account-password-provider-note");
@@ -2622,6 +2623,42 @@ const setupAccountHub = () => {
         : null;
     } catch {
       latestSubscriptionSnapshot = null;
+    }
+  };
+
+  const setRestoreButtonsState = (isLoading = false) => {
+    const label = isLoading ? "Restoring..." : "Restore Premium";
+    if (subscriptionRestoreBtn instanceof HTMLButtonElement) {
+      subscriptionRestoreBtn.disabled = isLoading;
+      subscriptionRestoreBtn.textContent = label;
+    }
+    if (subscriptionRestoreNavBtn instanceof HTMLButtonElement) {
+      subscriptionRestoreNavBtn.disabled = isLoading;
+      subscriptionRestoreNavBtn.textContent = label;
+    }
+  };
+
+  const runRestorePremium = async () => {
+    setRestoreButtonsState(true);
+    try {
+      const payload = await window.cosmicaAuth.restoreSubscription();
+      if (payload?.user || payload?.data || payload?.progress) {
+        window.cosmicaGamification.init(true).catch(() => {});
+      }
+      latestSubscriptionSnapshot = payload?.subscription && typeof payload.subscription === "object"
+        ? payload.subscription
+        : latestSubscriptionSnapshot;
+      renderSubscriptionPanel({ hasPremiumAccess: latestSubscriptionSnapshot?.isPremium === true });
+      setFeedback(
+        payload?.result?.isPremium
+          ? "Premium status restored successfully."
+          : "No active Stripe premium subscription was found for this account.",
+        payload?.result?.isPremium ? "success" : "warning"
+      );
+    } catch (error) {
+      setFeedback(error?.message || "Could not restore premium right now.", "error");
+    } finally {
+      setRestoreButtonsState(false);
     }
   };
 
@@ -3724,6 +3761,10 @@ const setupAccountHub = () => {
         }
         return;
       }
+      if (action === "restore") {
+        void runRestorePremium();
+        return;
+      }
       if (managePanel) {
         managePanel.hidden = true;
         setDeleteConfirmationVisible(false);
@@ -3763,6 +3804,11 @@ const setupAccountHub = () => {
     }
     subscriptionCancelBtn.disabled = true;
     subscriptionCancelBtn.textContent = "Scheduling cancellation...";
+    if (subscriptionRestoreNavBtn instanceof HTMLButtonElement) {
+      subscriptionRestoreNavBtn.hidden = hasPremiumAccess;
+      subscriptionRestoreNavBtn.disabled = false;
+      subscriptionRestoreNavBtn.textContent = "Restore Premium";
+    }
     try {
       const payload = await window.cosmicaAuth.cancelSubscription();
       if (payload?.user || payload?.data || payload?.progress) {
@@ -3784,31 +3830,7 @@ const setupAccountHub = () => {
   });
 
   subscriptionRestoreBtn?.addEventListener("click", async () => {
-    if (!(subscriptionRestoreBtn instanceof HTMLButtonElement)) {
-      return;
-    }
-    subscriptionRestoreBtn.disabled = true;
-    subscriptionRestoreBtn.textContent = "Restoring...";
-    try {
-      const payload = await window.cosmicaAuth.restoreSubscription();
-      if (payload?.user || payload?.data || payload?.progress) {
-        window.cosmicaGamification.init(true).catch(() => {});
-      }
-      latestSubscriptionSnapshot = payload?.subscription && typeof payload.subscription === "object"
-        ? payload.subscription
-        : latestSubscriptionSnapshot;
-      renderSubscriptionPanel({ hasPremiumAccess: latestSubscriptionSnapshot?.isPremium === true });
-      setFeedback(
-        payload?.result?.isPremium
-          ? "Premium status restored successfully."
-          : "No active Stripe premium subscription was found for this account.",
-        payload?.result?.isPremium ? "success" : "warning"
-      );
-    } catch (error) {
-      subscriptionRestoreBtn.disabled = false;
-      subscriptionRestoreBtn.textContent = "Restore Premium";
-      setFeedback(error?.message || "Could not restore premium right now.", "error");
-    }
+    void runRestorePremium();
   });
 
   passwordChangeForm?.addEventListener("submit", async (event) => {
