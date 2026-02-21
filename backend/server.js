@@ -4684,10 +4684,20 @@ app.post("/api/auth/logout", authSessionLimiter, (req, res) => {
   return res.json({ ok: true });
 });
 
-app.get("/api/auth/me", authSessionLimiter, requireAuthenticatedUser, (req, res) => {
+app.get("/api/auth/me", authSessionLimiter, (req, res) => {
   const userRecord = req.authUser;
+  if (!userRecord) {
+    return res.json({
+      ok: true,
+      authenticated: false,
+      user: null,
+      data: null,
+      progress: null,
+    });
+  }
   return res.json({
     ok: true,
+    authenticated: true,
     user: toPublicUser(userRecord),
     data: cloneForResponse(normalizeUserData(userRecord.data)),
     progress: cloneForResponse(normalizeProgress(userRecord.progress)),

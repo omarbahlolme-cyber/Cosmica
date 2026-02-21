@@ -1,0 +1,380 @@
+{
+  "summary": {
+    "generatedAt": "2026-02-20T21:44:17.166Z",
+    "base": "http://127.0.0.1:3000",
+    "totalChecks": 24,
+    "overflowIssues": 0,
+    "jsIssues": 16,
+    "non401JsIssues": 0
+  },
+  "findings": [
+    {
+      "browser": "chromium",
+      "viewport": "mobile-390x844",
+      "route": "/",
+      "measuredViewport": {
+        "w": 390,
+        "h": 844
+      },
+      "bodyOverflow": 0,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+      ],
+      "pageErrors": [],
+      "screenshot": "perf/manual-sweep/chromium-mobile-390x844-home.png"
+    },
+    {
+      "browser": "chromium",
+      "viewport": "mobile-390x844",
+      "route": "/english-world.html",
+      "measuredViewport": {
+        "w": 390,
+        "h": 844
+      },
+      "bodyOverflow": 0,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+      ],
+      "pageErrors": [],
+      "screenshot": "perf/manual-sweep/chromium-mobile-390x844-english-world.png"
+    },
+    {
+      "browser": "chromium",
+      "viewport": "mobile-390x844",
+      "route": "/world-french.html",
+      "measuredViewport": {
+        "w": 390,
+        "h": 844
+      },
+      "bodyOverflow": 0,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+      ],
+      "pageErrors": [],
+      "screenshot": "perf/manual-sweep/chromium-mobile-390x844-world-french.png"
+    },
+    {
+      "browser": "chromium",
+      "viewport": "mobile-390x844",
+      "route": "/english-words.html",
+      "measuredViewport": {
+        "w": 390,
+        "h": 844
+      },
+      "bodyOverflow": 0,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+      ],
+      "pageErrors": [],
+      "screenshot": "perf/manual-sweep/chromium-mobile-390x844-english-words.png"
+    },
+    {
+      "browser": "chromium",
+      "viewport": "tablet-1024x1366",
+      "route": "/",
+      "measuredViewport": {
+        "w": 1024,
+        "h": 1366
+      },
+      "bodyOverflow": 0,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+      ],
+      "pageErrors": [],
+      "screenshot": "perf/manual-sweep/chromium-tablet-1024x1366-home.png"
+    },
+    {
+      "browser": "chromium",
+      "viewport": "tablet-1024x1366",
+      "route": "/english-world.html",
+      "measuredViewport": {
+        "w": 1024,
+        "h": 1366
+      },
+      "bodyOverflow": 0,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+      ],
+      "pageErrors": [],
+      "screenshot": "perf/manual-sweep/chromium-tablet-1024x1366-english-world.png"
+    },
+    {
+      "browser": "chromium",
+      "viewport": "tablet-1024x1366",
+      "route": "/world-french.html",
+      "measuredViewport": {
+        "w": 1024,
+        "h": 1366
+      },
+      "bodyOverflow": 0,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+      ],
+      "pageErrors": [],
+      "screenshot": "perf/manual-sweep/chromium-tablet-1024x1366-world-french.png"
+    },
+    {
+      "browser": "chromium",
+      "viewport": "tablet-1024x1366",
+      "route": "/english-words.html",
+      "measuredViewport": {
+        "w": 1024,
+        "h": 1366
+      },
+      "bodyOverflow": 0,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+      ],
+      "pageErrors": [],
+      "screenshot": "perf/manual-sweep/chromium-tablet-1024x1366-english-words.png"
+    },
+    {
+      "browser": "firefox",
+      "viewport": "mobile-390x844",
+      "route": "/",
+      "measuredViewport": {
+        "w": 390,
+        "h": 844
+      },
+      "bodyOverflow": 0,
+      "hasMain": true,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "perf/manual-sweep/firefox-mobile-390x844-home.png"
+    },
+    {
+      "browser": "firefox",
+      "viewport": "mobile-390x844",
+      "route": "/english-world.html",
+      "measuredViewport": {
+        "w": 390,
+        "h": 844
+      },
+      "bodyOverflow": 0,
+      "hasMain": true,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "perf/manual-sweep/firefox-mobile-390x844-english-world.png"
+    },
+    {
+      "browser": "firefox",
+      "viewport": "mobile-390x844",
+      "route": "/world-french.html",
+      "measuredViewport": {
+        "w": 390,
+        "h": 844
+      },
+      "bodyOverflow": 0,
+      "hasMain": true,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "perf/manual-sweep/firefox-mobile-390x844-world-french.png"
+    },
+    {
+      "browser": "firefox",
+      "viewport": "mobile-390x844",
+      "route": "/english-words.html",
+      "measuredViewport": {
+        "w": 390,
+        "h": 844
+      },
+      "bodyOverflow": 0,
+      "hasMain": true,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "perf/manual-sweep/firefox-mobile-390x844-english-words.png"
+    },
+    {
+      "browser": "firefox",
+      "viewport": "tablet-1024x1366",
+      "route": "/",
+      "measuredViewport": {
+        "w": 1024,
+        "h": 1366
+      },
+      "bodyOverflow": 0,
+      "hasMain": true,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "perf/manual-sweep/firefox-tablet-1024x1366-home.png"
+    },
+    {
+      "browser": "firefox",
+      "viewport": "tablet-1024x1366",
+      "route": "/english-world.html",
+      "measuredViewport": {
+        "w": 1024,
+        "h": 1366
+      },
+      "bodyOverflow": 0,
+      "hasMain": true,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "perf/manual-sweep/firefox-tablet-1024x1366-english-world.png"
+    },
+    {
+      "browser": "firefox",
+      "viewport": "tablet-1024x1366",
+      "route": "/world-french.html",
+      "measuredViewport": {
+        "w": 1024,
+        "h": 1366
+      },
+      "bodyOverflow": 0,
+      "hasMain": true,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "perf/manual-sweep/firefox-tablet-1024x1366-world-french.png"
+    },
+    {
+      "browser": "firefox",
+      "viewport": "tablet-1024x1366",
+      "route": "/english-words.html",
+      "measuredViewport": {
+        "w": 1024,
+        "h": 1366
+      },
+      "bodyOverflow": 0,
+      "hasMain": true,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "perf/manual-sweep/firefox-tablet-1024x1366-english-words.png"
+    },
+    {
+      "browser": "webkit",
+      "viewport": "mobile-390x844",
+      "route": "/",
+      "measuredViewport": {
+        "w": 390,
+        "h": 844
+      },
+      "bodyOverflow": 0,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+      ],
+      "pageErrors": [],
+      "screenshot": "perf/manual-sweep/webkit-mobile-390x844-home.png"
+    },
+    {
+      "browser": "webkit",
+      "viewport": "mobile-390x844",
+      "route": "/english-world.html",
+      "measuredViewport": {
+        "w": 390,
+        "h": 844
+      },
+      "bodyOverflow": 0,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+      ],
+      "pageErrors": [],
+      "screenshot": "perf/manual-sweep/webkit-mobile-390x844-english-world.png"
+    },
+    {
+      "browser": "webkit",
+      "viewport": "mobile-390x844",
+      "route": "/world-french.html",
+      "measuredViewport": {
+        "w": 390,
+        "h": 844
+      },
+      "bodyOverflow": 0,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+      ],
+      "pageErrors": [],
+      "screenshot": "perf/manual-sweep/webkit-mobile-390x844-world-french.png"
+    },
+    {
+      "browser": "webkit",
+      "viewport": "mobile-390x844",
+      "route": "/english-words.html",
+      "measuredViewport": {
+        "w": 390,
+        "h": 844
+      },
+      "bodyOverflow": 0,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+      ],
+      "pageErrors": [],
+      "screenshot": "perf/manual-sweep/webkit-mobile-390x844-english-words.png"
+    },
+    {
+      "browser": "webkit",
+      "viewport": "tablet-1024x1366",
+      "route": "/",
+      "measuredViewport": {
+        "w": 1024,
+        "h": 1366
+      },
+      "bodyOverflow": 0,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+      ],
+      "pageErrors": [],
+      "screenshot": "perf/manual-sweep/webkit-tablet-1024x1366-home.png"
+    },
+    {
+      "browser": "webkit",
+      "viewport": "tablet-1024x1366",
+      "route": "/english-world.html",
+      "measuredViewport": {
+        "w": 1024,
+        "h": 1366
+      },
+      "bodyOverflow": 0,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+      ],
+      "pageErrors": [],
+      "screenshot": "perf/manual-sweep/webkit-tablet-1024x1366-english-world.png"
+    },
+    {
+      "browser": "webkit",
+      "viewport": "tablet-1024x1366",
+      "route": "/world-french.html",
+      "measuredViewport": {
+        "w": 1024,
+        "h": 1366
+      },
+      "bodyOverflow": 0,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+      ],
+      "pageErrors": [],
+      "screenshot": "perf/manual-sweep/webkit-tablet-1024x1366-world-french.png"
+    },
+    {
+      "browser": "webkit",
+      "viewport": "tablet-1024x1366",
+      "route": "/english-words.html",
+      "measuredViewport": {
+        "w": 1024,
+        "h": 1366
+      },
+      "bodyOverflow": 0,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+      ],
+      "pageErrors": [],
+      "screenshot": "perf/manual-sweep/webkit-tablet-1024x1366-english-words.png"
+    }
+  ]
+}
