@@ -401,6 +401,54 @@ const verifyUserState = async ({ label, cookie, expectedPlanTier, expectedPremiu
   }
 };
 
+const verifyRestoreSubscriptionContracts = async ({ freeCookie, premiumCookie, driftCookie }) => {
+  const freeRestore = await getJson({
+    path: "/api/billing/subscription/restore",
+    cookie: freeCookie,
+    method: "POST",
+  });
+  assert(
+    freeRestore.response.status === 409,
+    `free-user: restore should be 409, got ${freeRestore.response.status}`
+  );
+  assert(
+    String(freeRestore.payload?.code || "").trim().toLowerCase() === "no_active_premium_plan_found",
+    "free-user: restore should return no_active_premium_plan_found"
+  );
+
+  const premiumRestore = await getJson({
+    path: "/api/billing/subscription/restore",
+    cookie: premiumCookie,
+    method: "POST",
+  });
+  assert(
+    premiumRestore.response.status === 200,
+    `premium-user: restore should be 200, got ${premiumRestore.response.status}`
+  );
+  assert(
+    String(premiumRestore.payload?.status || "").trim().toLowerCase() === "already_active",
+    "premium-user: restore should return already_active"
+  );
+
+  const driftRestore = await getJson({
+    path: "/api/billing/subscription/restore",
+    cookie: driftCookie,
+    method: "POST",
+  });
+  assert(
+    driftRestore.response.status === 200,
+    `drift-user: restore should be 200, got ${driftRestore.response.status}`
+  );
+  assert(
+    ["already_active", "restored"].includes(
+      String(driftRestore.payload?.status || "")
+        .trim()
+        .toLowerCase()
+    ),
+    "drift-user: restore should return already_active or restored"
+  );
+};
+
 const startServer = () => {
   const child = spawn(process.execPath, ["server.js"], {
     cwd: ROOT,
@@ -497,7 +545,13 @@ const main = async () => {
       expectedBillingStatus: "active",
     });
 
-    console.log("PASS [user-state-contract] guest/free/premium/canceling/drift invariants");
+    await verifyRestoreSubscriptionContracts({
+      freeCookie,
+      premiumCookie,
+      driftCookie,
+    });
+
+    console.log("PASS [user-state-contract] guest/free/premium/canceling/drift/restore invariants");
   } catch (error) {
     console.error(`FAIL [user-state-contract] ${error?.message || error}`);
     process.exitCode = 1;

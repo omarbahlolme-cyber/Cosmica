@@ -780,6 +780,10 @@ const createCosmicaAuthClient = () => {
         body: { data },
       }),
     getPremiumBillingOptions: () => request("/api/billing/premium/options"),
+    restorePremiumSubscription: () =>
+      request("/api/billing/subscription/restore", {
+        method: "POST",
+      }),
     upgradeToPremium: () =>
       request("/api/account/premium/upgrade", {
         method: "POST",
@@ -1326,6 +1330,17 @@ const createCosmicaGamificationClient = () => {
         state.ready = true;
         return snapshot();
       }),
+    restorePremiumSubscription: () =>
+      withLoading(async () => {
+        const payload = await window.cosmicaAuth.restorePremiumSubscription();
+        applyAuthPayload(payload || null);
+        state.ready = true;
+        return {
+          ...snapshot(),
+          restoreStatus: String(payload?.status || "").trim().toLowerCase(),
+          restoreMessage: String(payload?.message || payload?.error || "").trim(),
+        };
+      }),
     refreshProgress: () =>
       withLoading(async () => {
         const payload = await window.cosmicaAuth.getProgress();
@@ -1729,6 +1744,7 @@ const setupAccountHub = () => {
             <span class="account-premium-main">Discover Premium</span>
             <span class="account-premium-sub">Unlock premium features</span>
           </button>
+          <button type="button" data-menu="restore-premium" class="account-manage-restore-premium">Restore Premium</button>
           <button type="button" data-menu="manage">Manage Account</button>
         </nav>
         <div class="account-manage-panel" hidden>
@@ -1861,6 +1877,7 @@ const setupAccountHub = () => {
   const passwordProviderNote = dropdown.querySelector(".account-password-provider-note");
   const passwordChangeForm = dropdown.querySelector(".account-password-change-form");
   const manageResetEmailBtn = dropdown.querySelector(".account-manage-reset-email");
+  const manageRestorePremiumBtn = dropdown.querySelector(".account-manage-restore-premium");
   const manageForgotPasswordBtn = dropdown.querySelector(".account-manage-forgot");
   const menuAvatar = dropdown.querySelector(".account-menu-avatar");
   const menuHeader = dropdown.querySelector(".account-menu-header");
@@ -2705,6 +2722,33 @@ const setupAccountHub = () => {
     )
       .trim()
       .toLowerCase();
+    const premiumStatus = String(
+      snapshot?.user?.premiumStatus ||
+        snapshot?.user?.subscriptionStatus ||
+        snapshot?.user?.premiumStripeSubscriptionStatus ||
+        snapshot?.user?.stripeSubscriptionStatus ||
+        ""
+    )
+      .trim()
+      .toLowerCase();
+    const premiumEndRaw = String(
+      snapshot?.user?.premiumCurrentPeriodEnd ||
+        snapshot?.user?.premiumEndsAt ||
+        snapshot?.user?.premiumExpiresAt ||
+        snapshot?.user?.subscriptionEndsAt ||
+        snapshot?.user?.currentPeriodEnd ||
+        snapshot?.user?.planEndsAt ||
+        snapshot?.user?.expiresAt ||
+        ""
+    ).trim();
+    const premiumEndMs = Date.parse(premiumEndRaw);
+    const hasFuturePremiumEnd = Number.isFinite(premiumEndMs) && premiumEndMs > Date.now();
+    const statusIndicatesPremium =
+      premiumStatus === "active" ||
+      premiumStatus === "trialing" ||
+      premiumStatus === "past_due" ||
+      premiumStatus === "canceling" ||
+      premiumStatus === "grace";
     return (
       premiumFlagRaw === true ||
       premiumFlagText === "1" ||
@@ -2716,7 +2760,9 @@ const setupAccountHub = () => {
       userPlanTier === "premium" ||
       userPlanTier === "pro" ||
       userPlanTier === "plus" ||
-      userPlanTier === "paid"
+      userPlanTier === "paid" ||
+      statusIndicatesPremium ||
+      hasFuturePremiumEnd
     );
   };
 
@@ -2927,6 +2973,14 @@ const setupAccountHub = () => {
       manageResetEmailBtn.hidden = !isAuthenticated;
       manageResetEmailBtn.disabled = !isAuthenticated;
       manageResetEmailBtn.textContent = "Reset password";
+    }
+    if (manageRestorePremiumBtn) {
+      const disableRestore = !isAuthenticated || hasPremiumAccess;
+      manageRestorePremiumBtn.hidden = !isAuthenticated;
+      manageRestorePremiumBtn.disabled = disableRestore;
+      manageRestorePremiumBtn.textContent = hasPremiumAccess
+        ? "Premium Active"
+        : "Restore Premium";
     }
     if (isAuthenticated && pendingPasswordResetToken) {
       pendingPasswordResetToken = "";
@@ -3297,6 +3351,56 @@ const setupAccountHub = () => {
     await requestManagePasswordReset(manageResetEmailBtn);
   });
 
+  const handleRestorePremiumAction = async () => {
+    if (!manageRestorePremiumBtn || manageRestorePremiumBtn.disabled) {
+      return;
+    }
+    if (manageRestorePremiumBtn.disabled) {
+      return;
+    }
+    const previousLabel = manageRestorePremiumBtn.textContent;
+    manageRestorePremiumBtn.disabled = true;
+    manageRestorePremiumBtn.textContent = "Checking...";
+    setFeedback("Checking active premium plan...", "info");
+    try {
+      const result = await window.cosmicaGamification.restorePremiumSubscription();
+      const status = String(result?.restoreStatus || "").trim().toLowerCase();
+      if (status === "restored") {
+        setFeedback(
+          String(result?.restoreMessage || "Premium restored successfully."),
+          "success"
+        );
+      } else if (status === "already_active") {
+        setFeedback(
+          String(result?.restoreMessage || "Premium is already active."),
+          "info"
+        );
+      } else {
+        setFeedback("No active premium plan found.", "error");
+      }
+      renderFromState(window.cosmicaGamification.getState());
+    } catch (error) {
+      const code = String(error?.payload?.code || "").trim().toLowerCase();
+      if (code === "no_active_premium_plan_found" || Number(error?.status || 0) === 409) {
+        setFeedback("No active premium plan found.", "error");
+      } else {
+        setFeedback(error?.message || "Could not restore premium right now.", "error");
+      }
+    } finally {
+      if (manageRestorePremiumBtn) {
+        const snapshot =
+          typeof window.cosmicaGamification?.getState === "function"
+            ? window.cosmicaGamification.getState()
+            : null;
+        const hasPremium = snapshotHasPremiumAccess(snapshot);
+        manageRestorePremiumBtn.disabled = hasPremium;
+        manageRestorePremiumBtn.textContent = hasPremium
+          ? "Premium Active"
+          : String(previousLabel || "Restore Premium");
+      }
+    }
+  };
+
   resetBackToLoginBtn?.addEventListener("click", () => {
     setAuthPanel("login", true);
     setFeedback("");
@@ -3446,6 +3550,10 @@ const setupAccountHub = () => {
           message: "Upgrade to Premium to unlock all premium maps and features.",
           tone: "info",
         });
+        return;
+      }
+      if (action === "restore-premium") {
+        void handleRestorePremiumAction();
         return;
       }
     });

@@ -219,6 +219,24 @@ const upgradeToPremiumByCookie = async (cookieValue) => {
   return response.status;
 };
 
+const restorePremiumByCookie = async (cookieValue) => {
+  const response = await fetch(`${BASE_URL}/api/billing/subscription/restore`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      Cookie: `cosmica_session=${cookieValue}`,
+    },
+  });
+  let payload = null;
+  try {
+    payload = await response.json();
+  } catch {}
+  return {
+    status: response.status,
+    payload,
+  };
+};
+
 const applySessionCookieToBrowser = async (context, cookieValue) => {
   await context.clearCookies();
   if (!cookieValue) {
@@ -295,6 +313,33 @@ const checkLettersCheckmarkExists = async (page) => {
   });
 };
 
+const openAccountManagePanel = async (page) => {
+  await page.waitForSelector(".account-trigger", { timeout: 15000 });
+  await page.click(".account-trigger");
+  await page.waitForSelector(".account-dropdown", { timeout: 15000 });
+  await page.waitForSelector('.account-menu-links button[data-menu="manage"]', { timeout: 15000 });
+  await page.click('.account-menu-links button[data-menu="manage"]');
+  await page.waitForSelector(".account-manage-panel", { timeout: 15000 });
+};
+
+const clickRestoreAndGetFeedback = async (page) => {
+  await page.waitForSelector(".account-manage-restore-premium", { timeout: 15000 });
+  await page.click(".account-manage-restore-premium");
+  await page.waitForFunction(() => {
+    const feedback = document.querySelector(".account-feedback");
+    const text = String(feedback?.textContent || "").trim().toLowerCase();
+    return (
+      text.includes("no active premium plan found") ||
+      text.includes("premium restored successfully") ||
+      text.includes("premium is already active")
+    );
+  }, { timeout: 20000 });
+  return page.evaluate(() => {
+    const feedback = document.querySelector(".account-feedback");
+    return String(feedback?.textContent || "").trim();
+  });
+};
+
 const runMatrix = async () => {
   await seedUsers();
   const server = startServer();
@@ -352,6 +397,29 @@ const runMatrix = async () => {
     await submitChat(page, "hello free");
     addResult("free-chat-upsell", (await checkPremiumUpsellPresent(page)) > 0);
 
+    const freeRestoreApi = await restorePremiumByCookie(freeCookie);
+    addResult(
+      "free-restore-api-guard",
+      freeRestoreApi.status === 409 &&
+        String(freeRestoreApi.payload?.code || "").trim().toLowerCase() ===
+          "no_active_premium_plan_found",
+      `status=${freeRestoreApi.status}`
+    );
+
+    await openAccountManagePanel(page);
+    const freeRestoreFeedback = await clickRestoreAndGetFeedback(page);
+    addResult(
+      "free-restore-ui-error",
+      /no active premium plan found/i.test(freeRestoreFeedback),
+      freeRestoreFeedback
+    );
+
+    const freePlanLabel = await page.evaluate(() => {
+      const node = document.querySelector(".account-menu-plan-status");
+      return String(node?.textContent || "").trim();
+    });
+    addResult("free-plan-stays-free-after-restore", /free plan/i.test(freePlanLabel), freePlanLabel);
+
     const upgradeStatus = await upgradeToPremiumByCookie(freeCookie);
     addResult("free-upgrade-api", upgradeStatus === 200, `status=${upgradeStatus}`);
 
@@ -377,6 +445,21 @@ const runMatrix = async () => {
     const premiumCookie = await loginAndGetSessionCookieValue(PREMIUM_USER);
     await applySessionCookieToBrowser(context, premiumCookie);
     await gotoAndInit(page, "/index.html");
+
+    const premiumRestoreApi = await restorePremiumByCookie(premiumCookie);
+    addResult(
+      "premium-restore-api-active",
+      premiumRestoreApi.status === 200 &&
+        String(premiumRestoreApi.payload?.status || "").trim().toLowerCase() === "already_active",
+      `status=${premiumRestoreApi.status}`
+    );
+
+    await openAccountManagePanel(page);
+    const premiumRestoreDisabled = await page.evaluate(() => {
+      const btn = document.querySelector(".account-manage-restore-premium");
+      return Boolean(btn && btn.disabled === true && /premium active/i.test(String(btn.textContent || "")));
+    });
+    addResult("premium-restore-ui-disabled-when-active", premiumRestoreDisabled === true);
 
     const premiumMeta = await getAccountTriggerMeta(page);
     addResult("premium-streak-visible", /^level\s+\d+/i.test(premiumMeta), `meta=${premiumMeta}`);

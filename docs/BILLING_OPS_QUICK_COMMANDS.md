@@ -80,6 +80,10 @@ POST /api/billing/subscription/restore
 
 This endpoint does **not** force downgrade when Stripe has no active subscription.
 
+Expected responses:
+- `200` with status `restored` or `already_active` when an active premium entitlement exists.
+- `409` with error `No active premium plan found.` when no active premium entitlement is detected.
+
 ## 7) Verify billing contracts locally
 
 ```bash

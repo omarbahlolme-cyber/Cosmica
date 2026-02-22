@@ -5519,6 +5519,252 @@ const createStripePremiumCheckoutSession = async (req, userRecord, optionId = "m
   return checkoutUrl;
 };
 
+const ACTIVE_STRIPE_PREMIUM_STATUSES = new Set(["active", "trialing", "past_due"]);
+
+const normalizeStripeUnixToIso = (unixSeconds) => {
+  const parsed = Number(unixSeconds);
+  if (!Number.isFinite(parsed) || parsed <= 0) {
+    return "";
+  }
+  try {
+    return new Date(parsed * 1000).toISOString();
+  } catch {
+    return "";
+  }
+};
+
+const hasLocalActivePremiumEvidence = (profile) => {
+  if (!isPlainObject(profile)) {
+    return false;
+  }
+  const premiumStatus = String(
+    profile.premiumStatus ||
+      profile.subscriptionStatus ||
+      profile.premiumStripeSubscriptionStatus ||
+      profile.stripeSubscriptionStatus ||
+      ""
+  )
+    .trim()
+    .toLowerCase();
+  const premiumEndRaw = String(
+    profile.premiumCurrentPeriodEnd ||
+      profile.currentPeriodEnd ||
+      profile.subscriptionEndsAt ||
+      profile.premiumEndsAt ||
+      profile.premiumExpiresAt ||
+      profile.planEndsAt ||
+      profile.expiresAt ||
+      ""
+  ).trim();
+  const premiumEndMs = Date.parse(premiumEndRaw);
+  const hasFuturePremiumEnd = Number.isFinite(premiumEndMs) && premiumEndMs > Date.now();
+  const hasPremiumStatus =
+    premiumStatus === "active" ||
+    premiumStatus === "trialing" ||
+    premiumStatus === "past_due" ||
+    premiumStatus === "canceling" ||
+    premiumStatus === "grace";
+  return hasPremiumStatus || hasFuturePremiumEnd;
+};
+
+const findStripeActiveSubscriptionForUser = async (userRecord) => {
+  const stripe = getStripeClient();
+  const profile = isPlainObject(userRecord?.data?.profile) ? userRecord.data.profile : {};
+  const knownCustomerId = String(profile.premiumStripeCustomerId || "").trim();
+  const userEmail = normalizeEmail(userRecord?.email);
+  const customerIds = new Set();
+  if (knownCustomerId) {
+    customerIds.add(knownCustomerId);
+  }
+
+  if (userEmail) {
+    let hasMoreCustomers = true;
+    let customerStartingAfter = "";
+    while (hasMoreCustomers) {
+      const customerResponse = await stripe.customers.list({
+        email: userEmail,
+        limit: 100,
+        ...(customerStartingAfter ? { starting_after: customerStartingAfter } : {}),
+      });
+      const customerItems = Array.isArray(customerResponse?.data) ? customerResponse.data : [];
+      customerItems.forEach((customer) => {
+        if (!customer || customer.deleted) {
+          return;
+        }
+        const customerId = String(customer.id || "").trim();
+        if (customerId) {
+          customerIds.add(customerId);
+        }
+      });
+      hasMoreCustomers = Boolean(customerResponse?.has_more) && customerItems.length > 0;
+      customerStartingAfter = hasMoreCustomers
+        ? String(customerItems[customerItems.length - 1]?.id || "")
+        : "";
+    }
+  }
+
+  for (const customerId of customerIds) {
+    let hasMoreSubscriptions = true;
+    let subscriptionStartingAfter = "";
+    const candidateSubscriptions = [];
+    while (hasMoreSubscriptions) {
+      const subscriptionResponse = await stripe.subscriptions.list({
+        customer: customerId,
+        status: "all",
+        limit: 100,
+        ...(subscriptionStartingAfter ? { starting_after: subscriptionStartingAfter } : {}),
+      });
+      const subscriptionItems = Array.isArray(subscriptionResponse?.data)
+        ? subscriptionResponse.data
+        : [];
+      candidateSubscriptions.push(
+        ...subscriptionItems.filter((subscription) =>
+          ACTIVE_STRIPE_PREMIUM_STATUSES.has(String(subscription?.status || "").trim().toLowerCase())
+        )
+      );
+      hasMoreSubscriptions = Boolean(subscriptionResponse?.has_more) && subscriptionItems.length > 0;
+      subscriptionStartingAfter = hasMoreSubscriptions
+        ? String(subscriptionItems[subscriptionItems.length - 1]?.id || "")
+        : "";
+    }
+
+    const winner = candidateSubscriptions.sort(
+      (a, b) => Number(b?.current_period_end || 0) - Number(a?.current_period_end || 0)
+    )[0];
+    if (!winner) {
+      continue;
+    }
+
+    const status = String(winner.status || "").trim().toLowerCase();
+    return {
+      customerId,
+      subscriptionId: String(winner.id || "").trim(),
+      status,
+      cancelAtPeriodEnd: winner.cancel_at_period_end === true,
+      currentPeriodEnd: normalizeStripeUnixToIso(winner.current_period_end),
+    };
+  }
+
+  return null;
+};
+
+const applyStripeRestoreToUserRecord = (userRecord, stripeMatch) => {
+  if (!userRecord || !isPlainObject(userRecord)) {
+    return false;
+  }
+  userRecord.data = normalizeUserData(userRecord.data);
+  if (!isPlainObject(userRecord.data.profile)) {
+    userRecord.data.profile = {};
+  }
+  const profile = userRecord.data.profile;
+  const nowIso = new Date().toISOString();
+  profile.isPremium = true;
+  profile.premium = true;
+  profile.plan = "premium";
+  profile.tier = "premium";
+  profile.membership = "premium";
+  if (!profile.premiumActivatedAt) {
+    profile.premiumActivatedAt = nowIso;
+  }
+  profile.premiumProvider = "stripe";
+  profile.premiumLastSource = "subscription-restore";
+  profile.premiumLastEventAt = nowIso;
+  profile.premiumStripeCustomerId = String(stripeMatch?.customerId || "").trim().slice(0, 120);
+  profile.premiumStripeSubscriptionId = String(stripeMatch?.subscriptionId || "").trim().slice(0, 120);
+  profile.premiumStripeSubscriptionStatus = String(stripeMatch?.status || "")
+    .trim()
+    .toLowerCase()
+    .slice(0, 60);
+  profile.premiumCancelAtPeriodEnd = stripeMatch?.cancelAtPeriodEnd === true;
+  if (stripeMatch?.currentPeriodEnd) {
+    profile.premiumCurrentPeriodEnd = String(stripeMatch.currentPeriodEnd).trim().slice(0, 40);
+  }
+  userRecord.updatedAt = nowIso;
+  markAuthStoreDirty();
+  return true;
+};
+
+app.post(
+  "/api/billing/subscription/restore",
+  accountMutationLimiter,
+  requireAuthenticatedUser,
+  async (req, res) => {
+    const userRecord = req.authUser;
+    userRecord.data = normalizeUserData(userRecord.data);
+    if (!isPlainObject(userRecord.data.profile)) {
+      userRecord.data.profile = {};
+    }
+    const profile = userRecord.data.profile;
+
+    if (userHasPremiumAccessForProgress(userRecord)) {
+      return res.json({
+        ok: true,
+        restored: false,
+        status: "already_active",
+        message: "Premium is already active.",
+        user: toPublicUser(userRecord),
+        data: cloneForResponse(normalizeUserData(userRecord.data)),
+        progress: cloneForResponse(normalizeProgress(userRecord.progress)),
+      });
+    }
+
+    let restored = false;
+    let restoreSource = "";
+
+    if (hasLocalActivePremiumEvidence(profile)) {
+      profile.isPremium = true;
+      profile.premium = true;
+      profile.plan = "premium";
+      profile.tier = "premium";
+      profile.membership = "premium";
+      profile.premiumLastSource = "subscription-restore-local";
+      profile.premiumLastEventAt = new Date().toISOString();
+      userRecord.updatedAt = profile.premiumLastEventAt;
+      markAuthStoreDirty();
+      restored = true;
+      restoreSource = "profile";
+    } else {
+      const stripeSecretKey = String(process.env.STRIPE_SECRET_KEY || "").trim();
+      if (stripeSecretKey) {
+        try {
+          const stripeMatch = await findStripeActiveSubscriptionForUser(userRecord);
+          if (stripeMatch) {
+            restored = applyStripeRestoreToUserRecord(userRecord, stripeMatch);
+            restoreSource = "stripe";
+          }
+        } catch (error) {
+          reportServerError("billing-subscription-restore", error, {
+            requestId: req.requestId,
+            method: req.method,
+            path: req.originalUrl,
+            userId: String(userRecord?.id || "").slice(0, 100),
+          });
+        }
+      }
+    }
+
+    if (!restored) {
+      return res.status(409).json({
+        ok: false,
+        code: "no_active_premium_plan_found",
+        error: "No active premium plan found.",
+        status: "not_found",
+      });
+    }
+
+    return res.json({
+      ok: true,
+      restored: true,
+      status: "restored",
+      source: restoreSource || "unknown",
+      message: "Premium restored successfully.",
+      user: toPublicUser(userRecord),
+      data: cloneForResponse(normalizeUserData(userRecord.data)),
+      progress: cloneForResponse(normalizeProgress(userRecord.progress)),
+    });
+  }
+);
+
 app.get(
   "/api/billing/premium/options",
   authSessionLimiter,
