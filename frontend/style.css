@@ -3007,6 +3007,112 @@ body.premium-setup-lock {
   color: rgba(184, 214, 238, 0.9);
 }
 
+.account-subscription-cancel-trigger {
+  margin-top: 4px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 179, 186, 0.5);
+  background:
+    radial-gradient(circle at 14% 0%, rgba(255, 215, 220, 0.16), transparent 52%),
+    linear-gradient(160deg, rgba(65, 23, 34, 0.82), rgba(50, 18, 28, 0.78));
+  color: #ffe5e8;
+  padding: 9px 11px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 227, 232, 0.15),
+    0 8px 16px rgba(23, 8, 12, 0.24);
+  transition: border-color 0.16s ease, transform 0.16s ease, filter 0.16s ease;
+}
+
+.account-subscription-cancel-trigger:hover,
+.account-subscription-cancel-trigger:focus-visible {
+  border-color: rgba(255, 194, 200, 0.7);
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+}
+
+.account-subscription-cancel-trigger:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+  filter: none;
+}
+
+.account-subscription-cancel-confirm {
+  margin-top: 8px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 171, 180, 0.42);
+  background: linear-gradient(160deg, rgba(44, 18, 26, 0.75), rgba(35, 14, 22, 0.68));
+}
+
+.account-subscription-cancel-confirm[hidden] {
+  display: none !important;
+}
+
+.account-subscription-cancel-warning {
+  margin: 0;
+  color: rgba(255, 218, 223, 0.94);
+  font-size: 0.77rem;
+  line-height: 1.4;
+}
+
+.account-subscription-cancel-actions {
+  margin-top: 9px;
+  display: flex;
+  gap: 8px;
+}
+
+.account-subscription-cancel-dismiss,
+.account-subscription-cancel-confirm-btn {
+  margin-top: 0;
+  border-radius: 10px;
+  border: 1px solid rgba(170, 198, 223, 0.44);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(218, 227, 238, 0.14), transparent 50%),
+    linear-gradient(160deg, rgba(56, 66, 79, 0.9), rgba(45, 54, 67, 0.84));
+  color: #e7edf5;
+  padding: 9px 11px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(238, 243, 250, 0.1);
+  transition: border-color 0.16s ease, transform 0.16s ease, filter 0.16s ease;
+  flex: 1 1 0;
+}
+
+.account-subscription-cancel-confirm-btn {
+  border-color: rgba(255, 170, 178, 0.5);
+  background:
+    radial-gradient(circle at 14% 0%, rgba(255, 211, 217, 0.16), transparent 52%),
+    linear-gradient(160deg, rgba(74, 22, 33, 0.8), rgba(56, 18, 27, 0.78));
+  color: #ffe3e7;
+}
+
+.account-subscription-cancel-dismiss:hover,
+.account-subscription-cancel-dismiss:focus-visible,
+.account-subscription-cancel-confirm-btn:hover,
+.account-subscription-cancel-confirm-btn:focus-visible {
+  border-color: rgba(194, 222, 246, 0.7);
+  transform: translateY(-1px);
+  filter: brightness(1.04);
+}
+
+.account-subscription-cancel-confirm-btn:hover,
+.account-subscription-cancel-confirm-btn:focus-visible {
+  border-color: rgba(255, 185, 193, 0.72);
+}
+
+.account-subscription-cancel-dismiss:disabled,
+.account-subscription-cancel-confirm-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+  transform: none;
+  filter: none;
+}
+
 .account-password-panel {
   margin-bottom: 10px;
   padding-bottom: 10px;

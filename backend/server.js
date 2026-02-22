@@ -6017,6 +6017,228 @@ app.post(
 );
 
 app.get(
+  "/api/billing/subscription/manage",
+  authSessionLimiter,
+  requireAuthenticatedUser,
+  async (req, res) => {
+    const userRecord = req.authUser;
+    userRecord.data = normalizeUserData(userRecord.data);
+    if (!isPlainObject(userRecord.data.profile)) {
+      userRecord.data.profile = {};
+    }
+
+    const stripeSecretKey = String(process.env.STRIPE_SECRET_KEY || "").trim();
+    const profile = userRecord.data.profile;
+    const shouldTryStripeRefresh =
+      Boolean(stripeSecretKey) &&
+      (String(profile.premiumProvider || "").trim().toLowerCase() === "stripe" ||
+        Boolean(String(profile.premiumStripeSubscriptionId || "").trim()) ||
+        Boolean(String(profile.premiumStripeCustomerId || "").trim()) ||
+        userHasPremiumAccessForProgress(userRecord));
+
+    let stripeRefreshed = false;
+    if (shouldTryStripeRefresh) {
+      try {
+        const stripeMatch = await findStripeActiveSubscriptionForUser(userRecord);
+        if (stripeMatch) {
+          stripeRefreshed = applyStripeRestoreToUserRecord(userRecord, {
+            ...stripeMatch,
+            source: "subscription-manage-refresh",
+            provider: "stripe",
+          });
+        }
+      } catch (error) {
+        reportServerError("billing-subscription-manage", error, {
+          requestId: req.requestId,
+          method: req.method,
+          path: req.originalUrl,
+          userId: String(userRecord?.id || "").slice(0, 100),
+        });
+      }
+    }
+
+    const refreshedProfile = isPlainObject(userRecord?.data?.profile) ? userRecord.data.profile : {};
+    const hasPremiumAccess = userHasPremiumAccessForProgress(userRecord);
+    const provider = String(refreshedProfile.premiumProvider || "")
+      .trim()
+      .toLowerCase();
+    const status = String(
+      refreshedProfile.premiumStatus ||
+        refreshedProfile.subscriptionStatus ||
+        refreshedProfile.premiumStripeSubscriptionStatus ||
+        refreshedProfile.stripeSubscriptionStatus ||
+        ""
+    )
+      .trim()
+      .toLowerCase();
+    const cancelAtPeriodEnd = refreshedProfile.premiumCancelAtPeriodEnd === true;
+    const currentPeriodEnd = String(
+      refreshedProfile.premiumCurrentPeriodEnd ||
+        refreshedProfile.currentPeriodEnd ||
+        refreshedProfile.subscriptionEndsAt ||
+        refreshedProfile.premiumEndsAt ||
+        refreshedProfile.premiumExpiresAt ||
+        refreshedProfile.planEndsAt ||
+        refreshedProfile.expiresAt ||
+        ""
+    ).trim();
+    const hasStripeSubscriptionReference =
+      Boolean(String(refreshedProfile.premiumStripeSubscriptionId || "").trim()) ||
+      Boolean(String(refreshedProfile.premiumStripeCustomerId || "").trim());
+    const canCancel = Boolean(stripeSecretKey) && hasPremiumAccess && !cancelAtPeriodEnd;
+    const resolvedStatus = status || (cancelAtPeriodEnd ? "canceling" : hasPremiumAccess ? "active" : "inactive");
+
+    return res.json({
+      ok: true,
+      isPremium: hasPremiumAccess,
+      provider: provider || (hasStripeSubscriptionReference ? "stripe" : "unknown"),
+      status: resolvedStatus,
+      cancelAtPeriodEnd,
+      currentPeriodEnd,
+      canCancel,
+      stripeRefreshed,
+      message: cancelAtPeriodEnd
+        ? "Your subscription is scheduled to cancel at the end of the current billing period."
+        : hasPremiumAccess
+          ? ""
+          : "No active Premium subscription was found.",
+    });
+  }
+);
+
+app.post(
+  "/api/billing/subscription/cancel",
+  accountMutationLimiter,
+  requireAuthenticatedUser,
+  async (req, res) => {
+    const stripeSecretKey = String(process.env.STRIPE_SECRET_KEY || "").trim();
+    if (!stripeSecretKey) {
+      return res.status(503).json({
+        error: "Subscription cancellation is unavailable because Stripe is not configured.",
+      });
+    }
+
+    const userRecord = req.authUser;
+    userRecord.data = normalizeUserData(userRecord.data);
+    if (!isPlainObject(userRecord.data.profile)) {
+      userRecord.data.profile = {};
+    }
+
+    if (!userHasPremiumAccessForProgress(userRecord)) {
+      return res.status(409).json({
+        error: "No active Premium subscription was found.",
+      });
+    }
+
+    let stripeMatch = null;
+    try {
+      stripeMatch = await findStripeActiveSubscriptionForUser(userRecord);
+    } catch (error) {
+      reportServerError("billing-subscription-cancel-lookup", error, {
+        requestId: req.requestId,
+        method: req.method,
+        path: req.originalUrl,
+        userId: String(userRecord?.id || "").slice(0, 100),
+      });
+      return res.status(502).json({
+        error: "Could not verify subscription status with Stripe. Please try again.",
+      });
+    }
+
+    const knownSubscriptionId = String(profile.premiumStripeSubscriptionId || "").trim();
+    if (!stripeMatch?.subscriptionId && knownSubscriptionId) {
+      try {
+        const stripe = getStripeClient();
+        const knownSubscription = await stripe.subscriptions.retrieve(knownSubscriptionId);
+        const knownStatus = String(knownSubscription?.status || "").trim().toLowerCase();
+        const knownCancelAtPeriodEnd = knownSubscription?.cancel_at_period_end === true;
+        const activeLike = ACTIVE_STRIPE_PREMIUM_STATUSES.has(knownStatus) || knownCancelAtPeriodEnd;
+        if (activeLike) {
+          stripeMatch = {
+            customerId: String(knownSubscription?.customer || profile.premiumStripeCustomerId || "").trim(),
+            subscriptionId: String(knownSubscription?.id || knownSubscriptionId).trim(),
+            status: knownStatus || "active",
+            cancelAtPeriodEnd: knownCancelAtPeriodEnd,
+            currentPeriodEnd:
+              normalizeStripeUnixToIso(knownSubscription?.current_period_end) ||
+              String(profile.premiumCurrentPeriodEnd || "").trim(),
+          };
+        }
+      } catch (error) {
+        reportServerError("billing-subscription-cancel-known-subscription-lookup", error, {
+          requestId: req.requestId,
+          method: req.method,
+          path: req.originalUrl,
+          userId: String(userRecord?.id || "").slice(0, 100),
+        });
+      }
+    }
+
+    if (!stripeMatch?.subscriptionId) {
+      return res.status(409).json({
+        error:
+          "No active Stripe subscription was found for this account. Please contact support if you need help cancelling.",
+      });
+    }
+
+    if (stripeMatch.cancelAtPeriodEnd === true) {
+      applyStripeRestoreToUserRecord(userRecord, {
+        ...stripeMatch,
+        source: "subscription-cancel-already-scheduled",
+        provider: "stripe",
+      });
+      return res.json({
+        ok: true,
+        canceled: false,
+        status: "already_canceling",
+        cancelAtPeriodEnd: true,
+        currentPeriodEnd: String(stripeMatch.currentPeriodEnd || "").trim(),
+        message: "Cancellation is already scheduled. Your Premium access remains active until the current period ends.",
+      });
+    }
+
+    try {
+      const stripe = getStripeClient();
+      const updatedSubscription = await stripe.subscriptions.update(stripeMatch.subscriptionId, {
+        cancel_at_period_end: true,
+      });
+      const updatedMatch = {
+        customerId: String(updatedSubscription?.customer || stripeMatch.customerId || "").trim(),
+        subscriptionId: String(updatedSubscription?.id || stripeMatch.subscriptionId || "").trim(),
+        status: String(updatedSubscription?.status || stripeMatch.status || "active").trim().toLowerCase(),
+        cancelAtPeriodEnd: updatedSubscription?.cancel_at_period_end === true,
+        currentPeriodEnd:
+          normalizeStripeUnixToIso(updatedSubscription?.current_period_end) ||
+          String(stripeMatch.currentPeriodEnd || "").trim(),
+        provider: "stripe",
+        source: "subscription-cancel-request",
+      };
+      applyStripeRestoreToUserRecord(userRecord, updatedMatch);
+
+      return res.json({
+        ok: true,
+        canceled: true,
+        status: "canceling",
+        cancelAtPeriodEnd: true,
+        currentPeriodEnd: String(updatedMatch.currentPeriodEnd || "").trim(),
+        message:
+          "Your subscription will not renew. Premium access remains active until the end of your current billing period.",
+      });
+    } catch (error) {
+      reportServerError("billing-subscription-cancel", error, {
+        requestId: req.requestId,
+        method: req.method,
+        path: req.originalUrl,
+        userId: String(userRecord?.id || "").slice(0, 100),
+      });
+      return res.status(502).json({
+        error: "We could not schedule cancellation right now. Please try again in a moment.",
+      });
+    }
+  }
+);
+
+app.get(
   "/api/billing/premium/options",
   authSessionLimiter,
   requireAuthenticatedUser,
