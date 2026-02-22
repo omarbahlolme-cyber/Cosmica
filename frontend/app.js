@@ -2883,7 +2883,7 @@ const setupAccountHub = () => {
       pendingPasswordResetToken = "";
       setResendButtonVisible(false);
       setFeedback("Logged in.", "success");
-      window.setTimeout(closeDropdown, 420);
+      window.location.reload();
     } catch (error) {
       const needsVerification =
         Boolean(error?.payload?.verificationRequired) ||
@@ -3245,7 +3245,7 @@ const setupAccountHub = () => {
     try {
       await window.cosmicaGamification.logOut();
       setFeedback("Logged out.", "success");
-      window.setTimeout(closeDropdown, 420);
+      window.location.reload();
     } catch {}
   });
 
