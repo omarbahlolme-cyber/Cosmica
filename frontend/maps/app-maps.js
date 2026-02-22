@@ -2697,6 +2697,65 @@ const getWorldSectionLabelFromPack = (mapType, section) => {
   return "";
 };
 
+const normalizePedagogyKey = (value) =>
+  String(value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
+
+const findPedagogyMatchAt = (sentence, phrase, fromIndex = 0) => {
+  const source = normalizePedagogyKey(sentence);
+  const target = normalizePedagogyKey(phrase);
+  if (!source || !target) {
+    return -1;
+  }
+  return source.indexOf(target, Math.max(0, Number(fromIndex) || 0));
+};
+
+const isStrictPedagogyCard = (card) => {
+  if (!card || typeof card !== "object") {
+    return false;
+  }
+  const title = String(card.title || "").trim();
+  const example = String(card.example || "").trim();
+  if (!title || !example) {
+    return false;
+  }
+  const mistakes = Array.isArray(card.mistakes) ? card.mistakes : [];
+  const wrong = String(mistakes?.[0]?.wrong || "").trim();
+  const fix = String(mistakes?.[0]?.fix || "").trim();
+  if (!wrong || !fix || normalizePedagogyKey(wrong) === normalizePedagogyKey(fix)) {
+    return false;
+  }
+
+  const ruleOrder = Array.isArray(card.ruleOrder)
+    ? card.ruleOrder.map((item) => String(item || "").trim()).filter(Boolean)
+    : [];
+  if (ruleOrder.length < 2) {
+    return true;
+  }
+
+  const highlights = Array.isArray(card.exampleHighlights)
+    ? card.exampleHighlights
+        .map((entry) => String(entry?.text || "").trim())
+        .filter(Boolean)
+    : [];
+  if (highlights.length !== ruleOrder.length) {
+    return false;
+  }
+
+  let cursor = 0;
+  for (const phrase of highlights) {
+    const at = findPedagogyMatchAt(example, phrase, cursor);
+    if (at < 0) {
+      return false;
+    }
+    cursor = at + normalizePedagogyKey(phrase).length;
+  }
+  return true;
+};
+
 const getGrammarCardsForSection = (section) => {
   const worldCards = WORLD_TRANSLATIONS?.grammar?.cards?.[section];
   if (Array.isArray(worldCards) && worldCards.length) {
@@ -2715,7 +2774,10 @@ const getGrammarCardsForSection = (section) => {
                 !!String(mistake?.sourceWrong || "").trim() ||
                 !!String(mistake?.sourceFix || "").trim()
             ));
-        return !hasEnglishSourceMarkers;
+        if (hasEnglishSourceMarkers) {
+          return false;
+        }
+        return isStrictPedagogyCard(card);
       });
     }
     return worldCards;
