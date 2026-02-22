@@ -3176,6 +3176,40 @@ const syncCompleteQuestTaskFromProgress = (progress, tasks) => {
   completeTask.completed = completeTask.progress >= target;
 };
 
+const countGrammarReviewEventsForStats = (progress) => {
+  const worlds = isPlainObject(progress?.worlds) ? progress.worlds : {};
+  let total = 0;
+
+  Object.values(worlds).forEach((worldRecord) => {
+    const grammarSections = isPlainObject(worldRecord?.maps?.grammar?.sections)
+      ? worldRecord.maps.grammar.sections
+      : {};
+    if (!isPlainObject(grammarSections)) {
+      return;
+    }
+    Object.entries(grammarSections).forEach(([sectionKey, sectionRecord]) => {
+      if (!isCountableWorldMapSectionEvent({ mapKey: "grammar", sectionKey })) {
+        return;
+      }
+      total += toBoundedInt(sectionRecord?.reviewCount, 0, 50000000);
+    });
+  });
+
+  return total;
+};
+
+const syncGamificationStatsFromProgress = (progress) => {
+  const gamification = progress?.gamification;
+  const stats = gamification?.stats;
+  if (!isPlainObject(stats)) {
+    return;
+  }
+  stats.sectionsVisited = toBoundedInt(countVisitedSectionsForQuests(progress), 0, 5000000);
+  stats.sectionsCompleted = toBoundedInt(countEffectiveCompletedSectionsForQuests(progress), 0, 5000000);
+  stats.cardsPracticed = toBoundedInt(countCheckedPracticeItemsForQuests(progress), 0, 50000000);
+  stats.grammarReviews = toBoundedInt(countGrammarReviewEventsForStats(progress), 0, 50000000);
+};
+
 const updateQuestProgressFromEvent = (progress, eventContext) => {
   const gamification = progress.gamification;
   const tasks = gamification.quests.tasks;
@@ -3561,6 +3595,8 @@ const trackProgressEventForUser = (userRecord, payload) => {
     shouldUnmarkPractice: shouldUnmarkPracticeQuest,
     hasPremiumAccess,
   });
+
+  syncGamificationStatsFromProgress(progress);
 
   if (hasPremiumAccess && gamification.quests.allCompleted) {
     xpDelta = computedXpDelta;
