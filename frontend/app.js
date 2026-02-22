@@ -2146,6 +2146,11 @@ const setupAccountHub = () => {
         tone: "error",
         panel: "login",
       },
+      google_account_exists_email: {
+        message: "Account already exists with email and password. Please log in with email and password.",
+        tone: "error",
+        panel: "login",
+      },
       google_flow: {
         message: "Google auth flow expired or mismatched. Start again from this panel.",
         tone: "error",
@@ -4389,7 +4394,28 @@ if (window.cosmicaGamification && typeof window.cosmicaGamification.subscribe ==
   window.cosmicaGamification.subscribe((snapshot) => {
     syncMimiChatHistoryScopeFromAuthState(snapshot);
     const snapshotUser = snapshot?.user && typeof snapshot.user === "object" ? snapshot.user : null;
-    if (userHasPremiumAccess(snapshotUser)) {
+    const premiumFlagRaw = snapshotUser?.isPremium ?? snapshotUser?.premium;
+    const premiumFlagText = String(premiumFlagRaw ?? "")
+      .trim()
+      .toLowerCase();
+    const premiumTier = String(
+      snapshotUser?.planTier || snapshotUser?.tier || snapshotUser?.plan || snapshotUser?.membership || ""
+    )
+      .trim()
+      .toLowerCase();
+    const hasPremiumAccess =
+      premiumFlagRaw === true ||
+      premiumFlagText === "1" ||
+      premiumFlagText === "true" ||
+      premiumFlagText === "yes" ||
+      premiumFlagText === "premium" ||
+      premiumFlagText === "pro" ||
+      premiumFlagText === "plus" ||
+      premiumTier === "premium" ||
+      premiumTier === "pro" ||
+      premiumTier === "plus" ||
+      premiumTier === "paid";
+    if (hasPremiumAccess) {
       removeMimiPremiumBubble();
     }
   });

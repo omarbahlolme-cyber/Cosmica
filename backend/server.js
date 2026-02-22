@@ -3791,12 +3791,24 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
       authStore.emailIndex[email] = userId;
       createdNewGoogleUser = true;
     } else {
-      if (!userRecord.displayName || userRecord.displayName === "Explorer") {
-        userRecord.displayName = sanitizeDisplayName(profile.name || profile.given_name || "", email);
-      }
       userRecord.data = normalizeUserData(userRecord.data);
       if (!isPlainObject(userRecord.data.profile)) {
         userRecord.data.profile = {};
+      }
+      const existingAuthProvider =
+        String(userRecord.data.profile.authProvider || "email").trim().toLowerCase() || "email";
+      if (existingAuthProvider !== "google") {
+        return res.redirect(
+          302,
+          buildAuthErrorRedirectPath("google_account_exists_email", stateData.returnTo, {
+            authEmail: email,
+            openAuth: "1",
+            authPanel: "login",
+          })
+        );
+      }
+      if (!userRecord.displayName || userRecord.displayName === "Explorer") {
+        userRecord.displayName = sanitizeDisplayName(profile.name || profile.given_name || "", email);
       }
       userRecord.data.profile.authProvider = "google";
       const pictureUrl = String(profile.picture || "").trim();
@@ -4544,6 +4556,16 @@ app.post("/api/auth/login", authLoginLimiter, async (req, res) => {
     })
   ) {
     return;
+  }
+
+  const authProvider =
+    String(userRecord?.data?.profile?.authProvider || "email").trim().toLowerCase() || "email";
+  if (authProvider === "google") {
+    return res.status(409).json({
+      error: "Account already exists. Log in using your Google account.",
+      authProvider: "google",
+      useGoogleSignIn: true,
+    });
   }
 
   try {

@@ -74,23 +74,27 @@ const extractCookieHeader = (headers) => {
     .trim();
 };
 
-const verifySubscriptionContractShape = (payload) => {
+const verifyAuthContractShape = (payload) => {
   if (!payload || typeof payload !== "object") {
     return false;
   }
-  if (payload.ok !== true || !payload.subscription || typeof payload.subscription !== "object") {
+  if (payload.ok !== true || !payload.user || typeof payload.user !== "object") {
     return false;
   }
-  if (typeof payload.subscription.isPremium !== "boolean") {
+  if (!payload.data || typeof payload.data !== "object") {
     return false;
   }
-  if (typeof payload.subscription.planTier !== "string") {
+  if (!payload.data.profile || typeof payload.data.profile !== "object") {
     return false;
   }
-  if (typeof payload.subscription.billingStatus !== "string") {
+  const profile = payload.data.profile;
+  const tier = String(profile.plan || profile.tier || profile.membership || "")
+    .trim()
+    .toLowerCase();
+  if (!tier) {
     return false;
   }
-  return ["active", "canceling", "expired"].includes(payload.subscription.billingStatus);
+  return true;
 };
 
 const verifyProgressContractShape = (payload) => {
@@ -238,13 +242,14 @@ const run = async () => {
     `status=${anonymousAdminApi.status} (expected 401)`
   );
 
-  const anonymousBillingStatus = await request("/api/billing/subscription/status", {
+  const anonymousUpgrade = await request("/api/account/premium/upgrade", {
+    method: "POST",
     headers: { Accept: "application/json" },
   });
   addResult(
-    "billing-status-anon-gate",
-    anonymousBillingStatus.status === 401,
-    `status=${anonymousBillingStatus.status} (expected 401)`
+    "premium-upgrade-anon-gate",
+    anonymousUpgrade.status === 401,
+    `status=${anonymousUpgrade.status} (expected 401)`
   );
 
   const anonymousPremiumOptions = await request("/api/billing/premium/options", {
@@ -291,21 +296,21 @@ const run = async () => {
       const authMeJson = safeJsonParse(authMe.body);
       addResult(
         "auth-me",
-        authMe.status === 200 && authMeJson && authMeJson.ok === true && authMeJson.user && typeof authMeJson.user.planTier === "string",
+        authMe.status === 200 && verifyAuthContractShape(authMeJson),
         `status=${authMe.status}`
       );
 
-      const billingStatus = await request("/api/billing/subscription/status", {
+      const accountData = await request("/api/account/data", {
         headers: {
           Accept: "application/json",
           Cookie: authCookie,
         },
       });
-      const billingStatusJson = safeJsonParse(billingStatus.body);
+      const accountDataJson = safeJsonParse(accountData.body);
       addResult(
-        "billing-status-auth",
-        billingStatus.status === 200 && verifySubscriptionContractShape(billingStatusJson),
-        `status=${billingStatus.status}`
+        "account-data-auth",
+        accountData.status === 200 && accountDataJson && accountDataJson.ok === true && accountDataJson.data && typeof accountDataJson.data === "object",
+        `status=${accountData.status}`
       );
 
       const premiumOptions = await request("/api/billing/premium/options", {
@@ -333,7 +338,7 @@ const run = async () => {
   } else {
     addResult("auth-login", true, "skipped (set VERIFY_AUTH_EMAIL/PASSWORD to test)");
     addResult("auth-me", true, "skipped (set VERIFY_AUTH_EMAIL/PASSWORD to test)");
-    addResult("billing-status-auth", true, "skipped (set VERIFY_AUTH_EMAIL/PASSWORD to test)");
+    addResult("account-data-auth", true, "skipped (set VERIFY_AUTH_EMAIL/PASSWORD to test)");
     addResult("premium-options-auth", true, "skipped (set VERIFY_AUTH_EMAIL/PASSWORD to test)");
     addResult("progress-auth", true, "skipped (set VERIFY_AUTH_EMAIL/PASSWORD to test)");
   }

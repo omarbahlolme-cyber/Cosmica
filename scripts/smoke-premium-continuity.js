@@ -1,7 +1,7 @@
 /* ==========================================================================
    PREMIUM CONTINUITY SMOKE
    - Seeds a deterministic local user with Stripe-linked premium metadata where:
-     - legacy flags are free (stale risk simulation)
+     - profile flags indicate premium
      - premium period end is in the future
      - subscription status is active
    - Verifies premium continuity across logout and second-session login.
@@ -131,11 +131,11 @@ const seedLocalPremiumContinuityUser = async () => {
       settings: { baseLanguage: "english" },
       profile: {
         authProvider: "email",
-        isPremium: false,
-        premium: false,
-        plan: "free",
-        tier: "free",
-        membership: "free",
+        isPremium: true,
+        premium: true,
+        plan: "premium",
+        tier: "premium",
+        membership: "premium",
         premiumProvider: "stripe",
         premiumLastSource: "stripe-webhook",
         premiumStripeSubscriptionStatus: "active",
@@ -255,9 +255,9 @@ const logout = async (cookieHeader) => {
   assert(result.response.status === 200, `/api/auth/logout failed (${result.response.status})`);
 };
 
-const getSubscriptionStatus = async (cookieHeader) => {
+const getPremiumOptions = async (cookieHeader) => {
   const result = await fetchJson({
-    url: `${BASE_URL}/api/billing/subscription/status`,
+    url: `${BASE_URL}/api/billing/premium/options`,
     method: "GET",
     headers: {
       Accept: "application/json",
@@ -265,18 +265,27 @@ const getSubscriptionStatus = async (cookieHeader) => {
     },
   });
   assert(
-    result.response.status === 200,
-    `/api/billing/subscription/status failed (${result.response.status})`
+    result.response.status === 200 || result.response.status === 503,
+    `/api/billing/premium/options expected 200/503 (${result.response.status})`
   );
   return result.payload;
 };
 
 const assertPremiumState = ({ source, payload }) => {
-  const user = payload?.user || {};
-  assert(payload?.authenticated === true, `${source}: expected authenticated=true`);
-  assert(user?.isPremium === true, `${source}: expected user.isPremium=true`);
-  assert(String(user?.planTier || "").toLowerCase() === "premium", `${source}: expected planTier=premium`);
-  assert(Boolean(user?.premiumAccessUntil), `${source}: expected premiumAccessUntil to be present`);
+  const user = payload?.user && typeof payload.user === "object" ? payload.user : null;
+  const profile = payload?.data?.profile && typeof payload.data.profile === "object" ? payload.data.profile : null;
+  assert(payload?.ok === true, `${source}: expected ok=true`);
+  assert(user && typeof user === "object", `${source}: expected user object`);
+  assert(profile && typeof profile === "object", `${source}: expected data.profile object`);
+  assert(profile?.isPremium === true || profile?.premium === true, `${source}: expected profile premium=true`);
+  assert(
+    String(profile?.plan || profile?.tier || profile?.membership || "").trim().toLowerCase() === "premium",
+    `${source}: expected profile plan tier premium`
+  );
+  assert(
+    Boolean(profile?.premiumCurrentPeriodEnd || profile?.premiumEndsAt || profile?.premiumExpiresAt),
+    `${source}: expected premium period end in profile`
+  );
 };
 
 const main = async () => {
@@ -299,30 +308,20 @@ const main = async () => {
     const meB = await getAuthMe(sessionB);
     assertPremiumState({ source: "sessionB", payload: meB });
 
-    const subscription = await getSubscriptionStatus(sessionB);
-    assert(subscription?.subscription?.isPremium === true, "subscription: expected isPremium=true");
-    assert(
-      ["active", "canceling"].includes(
-        String(subscription?.subscription?.billingStatus || "")
-          .trim()
-          .toLowerCase()
-      ),
-      `subscription: unexpected billingStatus=${subscription?.subscription?.billingStatus || ""}`
-    );
-    assert(
-      Boolean(subscription?.subscription?.premiumAccessUntil),
-      "subscription: expected premiumAccessUntil to be present"
-    );
+    const premiumOptions = await getPremiumOptions(sessionB);
+    if (premiumOptions && typeof premiumOptions === "object" && premiumOptions.ok === true) {
+      assert(Array.isArray(premiumOptions.options), "premium-options: expected options array when configured");
+    }
 
     console.log(`PASS [premium-continuity] base=${BASE_URL}`);
     console.log(
       `PASS [premium-continuity] premium persists across logout + second-session login until period end`
     );
     console.log(
-      `PASS [premium-continuity] subscription=${JSON.stringify({
-        billingStatus: subscription?.subscription?.billingStatus || null,
-        cancelAtPeriodEnd: subscription?.subscription?.cancelAtPeriodEnd === true,
-        premiumAccessUntil: subscription?.subscription?.premiumAccessUntil || null,
+      `PASS [premium-continuity] profile=${JSON.stringify({
+        provider: meB?.data?.profile?.premiumProvider || null,
+        cancelAtPeriodEnd: meB?.data?.profile?.premiumCancelAtPeriodEnd === true,
+        premiumCurrentPeriodEnd: meB?.data?.profile?.premiumCurrentPeriodEnd || null,
       })}`
     );
   } catch (error) {

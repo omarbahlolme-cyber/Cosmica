@@ -156,42 +156,70 @@ const loginAndGetCookie = async () => {
 };
 
 const runContracts = async (cookieHeader) => {
-  const statusResponse = await fetchWithTimeout(`${BASE_URL}/api/billing/subscription/status`, {
+  const anonymousOptionsResponse = await fetchWithTimeout(`${BASE_URL}/api/billing/premium/options`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+    },
+  });
+  assert(
+    anonymousOptionsResponse.status === 401,
+    `premium options anonymous gate failed (${anonymousOptionsResponse.status})`
+  );
+
+  const optionsResponse = await fetchWithTimeout(`${BASE_URL}/api/billing/premium/options`, {
     method: "GET",
     headers: {
       Accept: "application/json",
       Cookie: cookieHeader,
     },
   });
-  const statusPayload = await statusResponse.json();
-  assert(statusResponse.status === 200, `subscription status contract failed (${statusResponse.status})`);
-  assert(statusPayload?.ok === true, "subscription status contract failed: missing ok=true");
-  assert(statusPayload?.subscription && typeof statusPayload.subscription === "object", "subscription status contract failed: missing subscription object");
-  assert(typeof statusPayload.subscription.billingStatus === "string", "subscription status contract failed: missing billingStatus");
-
-  const cancelResponse = await fetchWithTimeout(`${BASE_URL}/api/billing/subscription/cancel`, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      Cookie: cookieHeader,
-    },
-    body: JSON.stringify({}),
-  });
-  const cancelText = await cancelResponse.text();
-  let cancelPayload = null;
+  let optionsPayload = null;
   try {
-    cancelPayload = cancelText ? JSON.parse(cancelText) : null;
-  } catch {}
+    optionsPayload = await optionsResponse.json();
+  } catch {
+    optionsPayload = null;
+  }
   assert(
-    cancelResponse.status === 200 || cancelResponse.status === 400,
-    `subscription cancel contract failed (${cancelResponse.status})`
+    optionsResponse.status === 200 || optionsResponse.status === 503,
+    `premium options contract failed (${optionsResponse.status})`
   );
-  if (cancelResponse.status === 200) {
-    assert(cancelPayload?.subscription && typeof cancelPayload.subscription === "object", "subscription cancel contract failed: missing subscription payload on success");
+  if (optionsResponse.status === 200) {
+    assert(optionsPayload?.ok === true, "premium options contract failed: missing ok=true");
+    assert(typeof optionsPayload?.provider === "string", "premium options contract failed: missing provider");
+    assert(Array.isArray(optionsPayload?.options), "premium options contract failed: missing options array");
   }
 
-  const webhookResponse = await fetchWithTimeout(`${BASE_URL}/api/billing/webhooks/stripe`, {
+  const checkoutStartResponse = await fetchWithTimeout(
+    `${BASE_URL}/api/billing/premium/checkout/start?option=__invalid_option__`,
+    {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        Cookie: cookieHeader,
+      },
+    }
+  );
+  assert(
+    checkoutStartResponse.status === 404 || checkoutStartResponse.status === 503,
+    `premium checkout start contract failed (${checkoutStartResponse.status})`
+  );
+
+  if (checkoutStartResponse.status === 404) {
+    const checkoutText = await checkoutStartResponse.text();
+    let checkoutPayload = null;
+    try {
+      checkoutPayload = checkoutText ? JSON.parse(checkoutText) : null;
+    } catch {
+      checkoutPayload = null;
+    }
+    assert(
+      String(checkoutPayload?.error || "").toLowerCase().includes("unknown premium checkout option"),
+      "premium checkout start contract failed: missing unknown option error"
+    );
+  }
+
+  const webhookResponse = await fetchWithTimeout(`${BASE_URL}/api/billing/webhooks/kofi`, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -200,8 +228,8 @@ const runContracts = async (cookieHeader) => {
     body: JSON.stringify({}),
   });
   assert(
-    webhookResponse.status === 400,
-    `stripe webhook signature rejection contract failed (${webhookResponse.status})`
+    webhookResponse.status === 400 || webhookResponse.status === 401 || webhookResponse.status === 415,
+    `kofi webhook invalid payload contract failed (${webhookResponse.status})`
   );
 };
 
@@ -247,7 +275,7 @@ const main = async () => {
     await waitForHealth();
     const cookie = await loginAndGetCookie();
     await runContracts(cookie);
-    console.log("PASS [billing-contract] status/cancel/webhook contracts");
+    console.log("PASS [billing-contract] premium-options/checkout-start/kofi-webhook contracts");
   } catch (error) {
     console.error(`FAIL [billing-contract] ${error?.message || error}`);
     process.exitCode = 1;

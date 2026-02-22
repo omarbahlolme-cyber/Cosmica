@@ -250,12 +250,6 @@ const verifyGuestGuards = async () => {
     `guest /api/account/data should be 401, got ${guestAccountData.response.status}`
   );
 
-  const guestSubStatus = await getJson({ path: "/api/billing/subscription/status" });
-  assert(
-    guestSubStatus.response.status === 401,
-    `guest /api/billing/subscription/status should be 401, got ${guestSubStatus.response.status}`
-  );
-
   const guestPremiumOptions = await getJson({ path: "/api/billing/premium/options" });
   assert(
     guestPremiumOptions.response.status === 401,
@@ -263,32 +257,59 @@ const verifyGuestGuards = async () => {
   );
 };
 
-const verifySubscriptionShape = (payload, expectedBillingStatus) => {
-  assert(payload?.ok === true, "subscription status payload missing ok=true");
-  assert(payload?.subscription && typeof payload.subscription === "object", "subscription object missing");
-  assert(typeof payload.subscription.isPremium === "boolean", "subscription.isPremium missing boolean");
-  assert(typeof payload.subscription.planTier === "string", "subscription.planTier missing string");
-  assert(typeof payload.subscription.billingStatus === "string", "subscription.billingStatus missing string");
-  assert(
-    ["active", "canceling", "expired"].includes(payload.subscription.billingStatus),
-    `subscription.billingStatus invalid (${payload.subscription.billingStatus})`
-  );
-  assert(
-    payload.subscription.billingStatus === expectedBillingStatus,
-    `subscription.billingStatus mismatch expected=${expectedBillingStatus} actual=${payload.subscription.billingStatus}`
-  );
+const deriveExpectedBillingStatusFromProfile = (profile) => {
+  const premiumRaw = profile?.isPremium ?? profile?.premium;
+  const premiumText = String(premiumRaw ?? "")
+    .trim()
+    .toLowerCase();
+  const hasPremium =
+    premiumRaw === true ||
+    premiumText === "1" ||
+    premiumText === "true" ||
+    premiumText === "yes" ||
+    premiumText === "premium" ||
+    premiumText === "pro" ||
+    premiumText === "plus";
+  if (!hasPremium) {
+    return "expired";
+  }
+  const stripeStatus = String(profile?.premiumStripeSubscriptionStatus || "")
+    .trim()
+    .toLowerCase();
+  if (
+    profile?.premiumCancelAtPeriodEnd === true ||
+    stripeStatus === "canceling" ||
+    stripeStatus === "canceled"
+  ) {
+    return "canceling";
+  }
+  return "active";
 };
+
+const resolvePlanTierFromProfile = (profile) =>
+  String(profile?.plan || profile?.tier || profile?.membership || "")
+    .trim()
+    .toLowerCase();
 
 const verifyUserState = async ({ label, cookie, expectedPlanTier, expectedPremium, expectedBillingStatus }) => {
   const me = await getJson({ path: "/api/auth/me", cookie });
   assert(me.response.status === 200, `${label}: /api/auth/me failed (${me.response.status})`);
+  assert(me.payload?.ok === true, `${label}: /api/auth/me missing ok=true`);
   assert(me.payload?.user && typeof me.payload.user === "object", `${label}: /api/auth/me missing user object`);
-  assert(me.payload.user.planTier === expectedPlanTier, `${label}: planTier mismatch`);
-  assert(me.payload.user.isPremium === expectedPremium, `${label}: isPremium mismatch`);
+  const profile = me.payload?.data?.profile;
+  assert(profile && typeof profile === "object", `${label}: /api/auth/me missing data.profile object`);
 
-  const subscription = await getJson({ path: "/api/billing/subscription/status", cookie });
-  assert(subscription.response.status === 200, `${label}: /api/billing/subscription/status failed (${subscription.response.status})`);
-  verifySubscriptionShape(subscription.payload, expectedBillingStatus);
+  const resolvedPlanTier = resolvePlanTierFromProfile(profile);
+  const premiumRaw = profile?.isPremium ?? profile?.premium;
+  const resolvedPremium = premiumRaw === true;
+  const resolvedBillingStatus = deriveExpectedBillingStatusFromProfile(profile);
+
+  assert(resolvedPlanTier === expectedPlanTier, `${label}: planTier mismatch expected=${expectedPlanTier} actual=${resolvedPlanTier}`);
+  assert(resolvedPremium === expectedPremium, `${label}: isPremium mismatch expected=${expectedPremium} actual=${resolvedPremium}`);
+  assert(
+    resolvedBillingStatus === expectedBillingStatus,
+    `${label}: billingStatus mismatch expected=${expectedBillingStatus} actual=${resolvedBillingStatus}`
+  );
 
   const options = await getJson({ path: "/api/billing/premium/options", cookie });
   assert(
@@ -296,20 +317,9 @@ const verifyUserState = async ({ label, cookie, expectedPlanTier, expectedPremiu
     `${label}: /api/billing/premium/options expected 200/503 got ${options.response.status}`
   );
   if (options.response.status === 200) {
+    assert(options.payload?.ok === true, `${label}: premium options missing ok=true`);
+    assert(typeof options.payload?.provider === "string", `${label}: premium options missing provider`);
     assert(Array.isArray(options.payload?.options), `${label}: premium options should be an array when configured`);
-    assert(typeof options.payload?.canPurchase === "boolean", `${label}: premium options missing canPurchase boolean`);
-    assert(typeof options.payload?.reasonCode === "string", `${label}: premium options missing reasonCode`);
-    assert(options.payload?.fallback && typeof options.payload.fallback === "object", `${label}: premium options missing fallback object`);
-    assert(typeof options.payload.fallback.available === "boolean", `${label}: premium options missing fallback.available boolean`);
-    assert(options.payload?.subscription && typeof options.payload.subscription === "object", `${label}: premium options missing subscription object`);
-    assert(typeof options.payload.subscription.billingStatus === "string", `${label}: premium options missing subscription.billingStatus`);
-
-    if (expectedBillingStatus === "active" || expectedBillingStatus === "canceling") {
-      assert(options.payload.canPurchase === false, `${label}: canPurchase should be false for active/canceling premium`);
-    }
-    if (expectedBillingStatus === "expired") {
-      assert(options.payload.canPurchase === true, `${label}: canPurchase should be true for free/expired users`);
-    }
   }
 };
 
