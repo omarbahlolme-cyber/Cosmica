@@ -1292,9 +1292,19 @@ body.world-page .nav-links a {
   z-index: 1;
 }
 
+html.premium-setup-lock,
+html.premium-setup-lock body {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
 body.premium-setup-lock {
   overflow: hidden;
   overscroll-behavior: none;
+  position: fixed;
+  width: 100%;
+  left: 0;
+  right: 0;
 }
 
 .premium-setup-overlay {

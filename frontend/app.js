@@ -2049,6 +2049,8 @@ const setupAccountHub = () => {
   let latestSubscriptionManageState = null;
   let subscriptionManageInFlight = false;
   let subscriptionCancelInFlight = false;
+  let premiumModalBodyLockActive = false;
+  let premiumModalBodyLockScrollY = 0;
 
   const setFeedback = (message, tone = "") => {
     if (!feedbackNode) {
@@ -2668,6 +2670,19 @@ const setupAccountHub = () => {
   const syncPremiumModalBodyLock = () => {
     const hasOpenPremiumModal = !premiumSetupOverlay.hidden || !premiumCheckoutOverlay.hidden;
     document.body.classList.toggle("premium-setup-lock", hasOpenPremiumModal);
+    document.documentElement.classList.toggle("premium-setup-lock", hasOpenPremiumModal);
+    if (hasOpenPremiumModal && !premiumModalBodyLockActive) {
+      premiumModalBodyLockScrollY = Math.max(0, window.scrollY || window.pageYOffset || 0);
+      document.body.style.top = `-${premiumModalBodyLockScrollY}px`;
+      premiumModalBodyLockActive = true;
+      return;
+    }
+    if (!hasOpenPremiumModal && premiumModalBodyLockActive) {
+      document.body.style.top = "";
+      window.scrollTo({ top: premiumModalBodyLockScrollY, left: 0, behavior: "auto" });
+      premiumModalBodyLockActive = false;
+      premiumModalBodyLockScrollY = 0;
+    }
   };
 
   const setPremiumCheckoutFeedback = (message, tone = "") => {
