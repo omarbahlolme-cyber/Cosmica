@@ -3037,6 +3037,96 @@ const isWorldMapCardPracticeEvent = (eventContext) => {
   return status === "practiced" && isCountableWorldMapSectionEvent(eventContext);
 };
 
+const isSectionVisitedForQuest = (sectionRecord) => {
+  const status = String(sectionRecord?.status || "").trim().toLowerCase();
+  if (status === "started" || status === "practiced" || status === "reviewed" || status === "completed") {
+    return true;
+  }
+  if (hasSectionCompletion(sectionRecord)) {
+    return true;
+  }
+  return (
+    toBoundedInt(sectionRecord?.visitCount, 0, 5000000) > 0 ||
+    toBoundedInt(sectionRecord?.practiceCount, 0, 50000000) > 0 ||
+    toBoundedInt(sectionRecord?.reviewCount, 0, 50000000) > 0 ||
+    toBoundedInt(sectionRecord?.completionCount, 0, 5000000) > 0
+  );
+};
+
+const countVisitedSectionsForQuests = (progress) => {
+  const worlds = isPlainObject(progress?.worlds) ? progress.worlds : {};
+  let total = 0;
+
+  Object.values(worlds).forEach((worldRecord) => {
+    const maps = isPlainObject(worldRecord?.maps) ? worldRecord.maps : {};
+
+    ALLOWED_PROGRESS_MAP_KEYS.forEach((mapKey) => {
+      const sections = isPlainObject(maps?.[mapKey]?.sections) ? maps[mapKey].sections : {};
+      if (!isPlainObject(sections)) {
+        return;
+      }
+      Object.entries(sections).forEach(([sectionKey, sectionRecord]) => {
+        if (!isCountableWorldMapSectionEvent({ mapKey, sectionKey })) {
+          return;
+        }
+        if (isSectionVisitedForQuest(sectionRecord)) {
+          total += 1;
+        }
+      });
+    });
+  });
+
+  return total;
+};
+
+const countCheckedPracticeItemsForQuests = (progress) => {
+  const worlds = isPlainObject(progress?.worlds) ? progress.worlds : {};
+  let total = 0;
+
+  Object.values(worlds).forEach((worldRecord) => {
+    const maps = isPlainObject(worldRecord?.maps) ? worldRecord.maps : {};
+
+    ALLOWED_PROGRESS_MAP_KEYS.forEach((mapKey) => {
+      const sections = isPlainObject(maps?.[mapKey]?.sections) ? maps[mapKey].sections : {};
+      if (!isPlainObject(sections)) {
+        return;
+      }
+      Object.entries(sections).forEach(([sectionKey, sectionRecord]) => {
+        if (!isCountableWorldMapSectionEvent({ mapKey, sectionKey })) {
+          return;
+        }
+        if (Boolean(sectionRecord?.practiceQuestCheckedAt)) {
+          total += 1;
+        }
+      });
+    });
+  });
+
+  return total;
+};
+
+const syncPracticeQuestTaskFromProgress = (progress, tasks) => {
+  const practiceTask = tasks?.practice;
+  if (!practiceTask) {
+    return;
+  }
+  const target = Math.max(1, Number(practiceTask.target || 25));
+  const checkedCount = countCheckedPracticeItemsForQuests(progress);
+  practiceTask.progress = Math.max(0, Math.min(target, checkedCount));
+  practiceTask.completed = practiceTask.progress >= target;
+};
+
+const syncDiscoverQuestTaskFromProgress = (progress, tasks) => {
+  const discoverTask = tasks?.discover;
+  if (!discoverTask) {
+    return;
+  }
+  const target = Math.max(1, Number(discoverTask.target || 3));
+  const visitedCount = countVisitedSectionsForQuests(progress);
+  discoverTask.progress = Math.max(0, Math.min(target, visitedCount));
+  discoverTask.completed = discoverTask.progress >= target;
+};
+
 const countEffectiveCompletedSectionsForQuests = (progress) => {
   const worlds = isPlainObject(progress?.worlds) ? progress.worlds : {};
   let total = 0;
@@ -3095,13 +3185,8 @@ const updateQuestProgressFromEvent = (progress, eventContext) => {
   }
 
   if (eventContext.isPracticeQuestToggle) {
-    if (eventContext.shouldMarkPractice) {
-      incrementQuestTaskProgress(tasks.practice, 1);
-    }
-    if (eventContext.shouldUnmarkPractice) {
-      decrementQuestTaskProgress(tasks.practice, 1);
-    }
-
+    syncPracticeQuestTaskFromProgress(progress, tasks);
+    syncDiscoverQuestTaskFromProgress(progress, tasks);
     syncCompleteQuestTaskFromProgress(progress, tasks);
 
     const previouslyAllCompleted = Boolean(gamification.quests.allCompleted);
@@ -3117,32 +3202,8 @@ const updateQuestProgressFromEvent = (progress, eventContext) => {
     }
     return false;
   }
-
-  if (isWorldMapCardPracticeEvent(eventContext)) {
-    incrementQuestTaskProgress(tasks.practice, 1);
-  }
-  if (
-    eventContext.status === "started" &&
-    eventContext.isFirstSectionVisit &&
-    isCountableWorldMapSectionEvent(eventContext)
-  ) {
-    incrementQuestTaskProgress(tasks.discover, 1);
-  }
-  if (
-    eventContext.status === "completed" &&
-    eventContext.isFirstCompletion &&
-    isCountableWorldMapSectionEvent(eventContext)
-  ) {
-    incrementQuestTaskProgress(tasks.complete, 1);
-  }
-  if (
-    eventContext.status === "uncompleted" &&
-    eventContext.shouldDecrementCompletion &&
-    isCountableWorldMapSectionEvent(eventContext)
-  ) {
-    decrementQuestTaskProgress(tasks.complete, 1);
-  }
-
+  syncPracticeQuestTaskFromProgress(progress, tasks);
+  syncDiscoverQuestTaskFromProgress(progress, tasks);
   syncCompleteQuestTaskFromProgress(progress, tasks);
 
   const previouslyAllCompleted = Boolean(gamification.quests.allCompleted);
@@ -3288,6 +3349,22 @@ const trackProgressEventForUser = (userRecord, payload) => {
 
   const score = Number.isFinite(scoreRaw) ? Math.max(0, Math.min(100, Math.round(scoreRaw))) : null;
   const hasPremiumAccess = userHasPremiumAccessForProgress(userRecord);
+  if (!hasPremiumAccess) {
+    userRecord.progress = normalizeProgress(userRecord.progress);
+    return {
+      ok: true,
+      progress: userRecord.progress,
+      event: {
+        worldKey,
+        mapKey,
+        sectionKey,
+        status,
+        xpDelta: 0,
+        score,
+        timestamp: new Date().toISOString(),
+      },
+    };
+  }
   const questToggleMode = String(payload.questToggleMode || "").trim().toLowerCase();
   const isPracticeQuestToggle = questToggleMode === "practice";
   const now = new Date().toISOString();
@@ -5398,6 +5475,13 @@ app.get("/api/progress", progressLimiter, requireAuthenticatedUser, (req, res) =
 });
 
 app.put("/api/progress", progressLimiter, requireAuthenticatedUser, (req, res) => {
+  if (!userHasPremiumAccessForProgress(req.authUser)) {
+    req.authUser.progress = normalizeProgress(req.authUser.progress);
+    return res.json({
+      ok: true,
+      progress: cloneForResponse(req.authUser.progress),
+    });
+  }
   const incoming = req.body?.progress;
   if (!isPlainObject(incoming)) {
     return res.status(400).json({ error: "progress must be an object" });

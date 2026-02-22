@@ -790,6 +790,30 @@ const createCosmicaAuthClient = () => {
         method: "PUT",
         body: { progress },
       }),
+    setProgressKeepalive: async (progress) => {
+      const response = await fetch("/api/progress", {
+        method: "PUT",
+        credentials: "include",
+        cache: "no-store",
+        keepalive: true,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ progress }),
+      });
+      const payload = await parseJsonResponse(response);
+      if (!response.ok) {
+        const message =
+          (payload && typeof payload.error === "string" && payload.error) ||
+          `Request failed (${response.status})`;
+        const error = new Error(message);
+        error.status = response.status;
+        error.payload = payload;
+        throw error;
+      }
+      return payload || {};
+    },
     trackProgress: ({ worldKey, mapKey, sectionKey, status, score, xpDelta, questToggleMode } = {}) =>
       request("/api/progress/track", {
         method: "POST",
@@ -827,6 +851,7 @@ window.cosmicaAuth = createCosmicaAuthClient();
    Shared account session, progress state, and premium learning dashboard.
    ========================================================================== */
 const createCosmicaGamificationClient = () => {
+  const PREMIUM_PROGRESS_CHECKPOINT_INTERVAL_MS = 18000;
   const listeners = new Set();
   const recentEventMap = new Map();
   const state = {
@@ -836,6 +861,90 @@ const createCosmicaGamificationClient = () => {
     user: null,
     progress: null,
     error: "",
+  };
+  let premiumCheckpointTimerId = 0;
+  let premiumCheckpointDirty = false;
+  let premiumCheckpointInFlight = false;
+  let premiumCheckpointLifecycleBound = false;
+
+  const hasPremiumCheckpointAccess = () =>
+    Boolean(state.isAuthenticated && state.user?.isPremium === true && state.progress);
+
+  const stopPremiumCheckpointTimer = () => {
+    if (premiumCheckpointTimerId) {
+      window.clearInterval(premiumCheckpointTimerId);
+      premiumCheckpointTimerId = 0;
+    }
+  };
+
+  const markPremiumCheckpointDirty = () => {
+    if (!hasPremiumCheckpointAccess()) {
+      return;
+    }
+    premiumCheckpointDirty = true;
+  };
+
+  const flushPremiumCheckpoint = async ({ force = false, useKeepalive = false } = {}) => {
+    if (!hasPremiumCheckpointAccess()) {
+      return false;
+    }
+    if (!force && !premiumCheckpointDirty) {
+      return false;
+    }
+    if (premiumCheckpointInFlight) {
+      return false;
+    }
+    premiumCheckpointInFlight = true;
+    try {
+      const snapshotProgress = normalizeProgressPayload(state.progress);
+      const payload =
+        useKeepalive && typeof window.cosmicaAuth?.setProgressKeepalive === "function"
+          ? await window.cosmicaAuth.setProgressKeepalive(snapshotProgress)
+          : await window.cosmicaAuth.setProgress(snapshotProgress);
+      if (payload && payload.progress) {
+        state.progress = normalizeProgressPayload(payload.progress);
+      }
+      premiumCheckpointDirty = false;
+      state.error = "";
+      return true;
+    } catch (error) {
+      state.error = String(error?.message || "Failed to save progress checkpoint");
+      return false;
+    } finally {
+      premiumCheckpointInFlight = false;
+    }
+  };
+
+  const bindPremiumCheckpointLifecycle = () => {
+    if (premiumCheckpointLifecycleBound) {
+      return;
+    }
+    premiumCheckpointLifecycleBound = true;
+    const flushWithKeepalive = () => {
+      void flushPremiumCheckpoint({ force: true, useKeepalive: true });
+    };
+    window.addEventListener("pagehide", flushWithKeepalive, { passive: true });
+    window.addEventListener("beforeunload", flushWithKeepalive, { passive: true });
+    document.addEventListener(
+      "visibilitychange",
+      () => {
+        if (document.visibilityState === "hidden") {
+          flushWithKeepalive();
+        }
+      },
+      { passive: true }
+    );
+  };
+
+  const syncPremiumCheckpointTimer = () => {
+    stopPremiumCheckpointTimer();
+    if (!hasPremiumCheckpointAccess()) {
+      return;
+    }
+    bindPremiumCheckpointLifecycle();
+    premiumCheckpointTimerId = window.setInterval(() => {
+      void flushPremiumCheckpoint();
+    }, PREMIUM_PROGRESS_CHECKPOINT_INTERVAL_MS);
   };
 
   const xpForLevel = (level) => {
@@ -1000,6 +1109,8 @@ const createCosmicaGamificationClient = () => {
       state.user = null;
       state.progress = buildDefaultProgress();
       state.error = "";
+      premiumCheckpointDirty = false;
+      stopPremiumCheckpointTimer();
       return;
     }
     const payloadData = toSafeObject(payload?.data);
@@ -1047,6 +1158,8 @@ const createCosmicaGamificationClient = () => {
     };
     state.progress = normalizeProgressPayload(payload.progress || {});
     state.error = "";
+    markPremiumCheckpointDirty();
+    syncPremiumCheckpointTimer();
   };
 
   const withLoading = async (task) => {
@@ -1140,6 +1253,7 @@ const createCosmicaGamificationClient = () => {
       }),
     logOut: () =>
       withLoading(async () => {
+        await flushPremiumCheckpoint({ force: true });
         await window.cosmicaAuth.logOut();
         applyAuthPayload(null);
         return snapshot();
@@ -1163,6 +1277,8 @@ const createCosmicaGamificationClient = () => {
         if (payload && payload.progress) {
           state.progress = normalizeProgressPayload(payload.progress);
           state.error = "";
+          markPremiumCheckpointDirty();
+          syncPremiumCheckpointTimer();
         }
         return snapshot();
       }),
@@ -1195,6 +1311,8 @@ const createCosmicaGamificationClient = () => {
         if (payload && payload.progress) {
           state.progress = normalizeProgressPayload(payload.progress);
           state.error = "";
+          markPremiumCheckpointDirty();
+          syncPremiumCheckpointTimer();
           notify();
         }
         return payload;
@@ -4443,6 +4561,24 @@ const setupLettersSectionCompleteButton = () => {
     lettersSection.appendChild(button);
   }
 
+  const currentUserHasPremiumAccess = () => {
+    const snapshot =
+      window.cosmicaGamification && typeof window.cosmicaGamification.getState === "function"
+        ? window.cosmicaGamification.getState()
+        : null;
+    const user = snapshot && snapshot.user && typeof snapshot.user === "object" ? snapshot.user : null;
+    const premiumTier = String(user?.planTier || user?.tier || user?.plan || user?.membership || "")
+      .trim()
+      .toLowerCase();
+    return (
+      user?.isPremium === true ||
+      premiumTier === "premium" ||
+      premiumTier === "pro" ||
+      premiumTier === "plus" ||
+      premiumTier === "paid"
+    );
+  };
+
   const syncButtonState = () => {
     const mapKey = String(button.dataset.mapKey || "letters").trim().toLowerCase();
     const sectionKey = String(button.dataset.sectionKey || "letters-core").trim();
@@ -4467,11 +4603,19 @@ const setupLettersSectionCompleteButton = () => {
         ? overrideValue
         : String(progress?.status || "").trim().toLowerCase() === "completed" ||
           Boolean(progress?.firstCompletedAt);
-    const statusLabel = isComplete ? "Section completed" : "Mark section as completed";
+    const hasPremiumAccess = currentUserHasPremiumAccess();
+    const statusLabel = hasPremiumAccess
+      ? isComplete
+        ? "Completed"
+        : ""
+      : isComplete
+        ? "Section completed"
+        : "Mark section as completed";
     button.classList.toggle("is-complete", isComplete);
     button.setAttribute("aria-pressed", isComplete ? "true" : "false");
-    button.setAttribute("aria-label", isComplete ? "Mark section incomplete" : "Mark section as completed");
-    button.title = isComplete ? "Mark section incomplete" : "Mark section as completed";
+    const incompleteLabel = hasPremiumAccess ? "" : "Mark section as completed";
+    button.setAttribute("aria-label", isComplete ? "Mark section incomplete" : incompleteLabel);
+    button.title = isComplete ? "Mark section incomplete" : incompleteLabel;
     button.setAttribute("data-status-label", statusLabel);
   };
 

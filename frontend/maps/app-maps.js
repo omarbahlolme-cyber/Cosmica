@@ -3231,30 +3231,43 @@ const isSectionCompletedInProgressState = (mapKey, sectionKey, mode = "complete"
   );
 };
 
-const currentUserHasPremiumAccess = () => {
+const getPremiumAccessState = () => {
   const snapshot =
     typeof window.cosmicaGamification?.getState === "function"
       ? window.cosmicaGamification.getState()
       : null;
+  if (!snapshot || snapshot.ready !== true) {
+    return "loading";
+  }
   const user = snapshot && snapshot.user && typeof snapshot.user === "object" ? snapshot.user : null;
   const premiumTier = String(user?.planTier || user?.tier || user?.plan || user?.membership || "")
     .trim()
     .toLowerCase();
-  return (
+  const hasPremiumAccess = (
     user?.isPremium === true ||
     premiumTier === "premium" ||
     premiumTier === "pro" ||
     premiumTier === "plus" ||
     premiumTier === "paid"
   );
+  return hasPremiumAccess ? "premium" : "non-premium";
 };
 
 const applySectionCompleteButtonState = (button, mapKey, sectionKey, mode = "complete") => {
   if (!button) {
     return;
   }
-  const hasPremiumAccess = currentUserHasPremiumAccess();
-  if (!hasPremiumAccess) {
+  const premiumAccessState = getPremiumAccessState();
+  if (premiumAccessState === "loading") {
+    button.hidden = true;
+    button.classList.remove("is-complete");
+    button.setAttribute("aria-pressed", "false");
+    button.setAttribute("aria-label", "");
+    button.title = "";
+    button.setAttribute("data-status-label", "");
+    return;
+  }
+  if (premiumAccessState !== "premium") {
     button.hidden = true;
     button.classList.remove("is-complete");
     button.setAttribute("aria-pressed", "false");
@@ -3273,8 +3286,8 @@ const applySectionCompleteButtonState = (button, mapKey, sectionKey, mode = "com
       ? "Section practiced"
       : "Mark section as practiced"
     : isComplete
-      ? "Section completed"
-      : "Mark section as completed";
+      ? "Completed"
+      : "";
   button.classList.toggle("is-complete", isComplete);
   button.setAttribute("aria-pressed", isComplete ? "true" : "false");
   button.setAttribute(
@@ -3285,7 +3298,7 @@ const applySectionCompleteButtonState = (button, mapKey, sectionKey, mode = "com
         : "Mark section as practiced"
       : isComplete
         ? "Mark section incomplete"
-        : "Mark section as completed"
+        : ""
   );
   button.title = button.getAttribute("aria-label") || "";
   button.setAttribute("data-status-label", statusLabel);
@@ -3310,8 +3323,11 @@ const createSectionCompleteButton = (mapKey, sectionKey, options = {}) => {
   button.addEventListener("click", async (event) => {
     event.preventDefault();
     event.stopPropagation();
-    const hasPremiumAccess = currentUserHasPremiumAccess();
-    if (!hasPremiumAccess) {
+    const premiumAccessState = getPremiumAccessState();
+    if (premiumAccessState === "loading") {
+      return;
+    }
+    if (premiumAccessState !== "premium") {
       if (typeof window.cosmicaAccountHub?.openPremium === "function") {
         window.cosmicaAccountHub.openPremium({
           message: "Upgrade to Premium to unlock section and card checkmarks.",
