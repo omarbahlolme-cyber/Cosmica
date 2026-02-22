@@ -154,6 +154,24 @@ const collectUsedTokens = () => {
 
   for (const jsFile of jsFiles) {
     const content = readText(path.join(FRONTEND_ROOT, jsFile));
+
+    let classAttr;
+    while ((classAttr = HTML_CLASS_ATTR_REGEX.exec(content)) !== null) {
+      classAttr[1]
+        .split(/\s+/)
+        .map((item) => item.trim())
+        .filter(Boolean)
+        .forEach((item) => classes.add(item));
+    }
+
+    let idAttr;
+    while ((idAttr = HTML_ID_ATTR_REGEX.exec(content)) !== null) {
+      const idValue = String(idAttr[1] || "").trim();
+      if (idValue) {
+        ids.add(idValue);
+      }
+    }
+
     let selector;
     while ((selector = JS_SELECTOR_REGEX.exec(content)) !== null) {
       const value = selector[1];

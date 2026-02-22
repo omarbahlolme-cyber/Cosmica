@@ -3918,6 +3918,18 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
     }
 
     if (!userRecord) {
+      const oauthMode =
+        String(stateData?.mode || "login").trim().toLowerCase() === "signup" ? "signup" : "login";
+      if (oauthMode !== "signup") {
+        return res.redirect(
+          302,
+          buildAuthErrorRedirectPath("google_no_account", stateData.returnTo, {
+            authEmail: email,
+            openAuth: "1",
+            authPanel: "signup",
+          })
+        );
+      }
       const userId = crypto.randomUUID();
       const generatedPassword = crypto.randomBytes(24).toString("base64url");
       const passwordRecord = await buildPasswordRecord(generatedPassword);

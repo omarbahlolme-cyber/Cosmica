@@ -1311,6 +1311,9 @@ const createCosmicaGamificationClient = () => {
       withLoading(async () => {
         await flushPremiumCheckpoint({ force: true });
         await window.cosmicaAuth.logOut();
+        if (typeof window.cosmicaClearSectionCompletionOverrides === "function") {
+          window.cosmicaClearSectionCompletionOverrides();
+        }
         applyAuthPayload(null);
         return snapshot();
       }),
@@ -1480,7 +1483,23 @@ const writeSectionCompletionOverrides = (overrides) => {
   } catch {}
 };
 
+const clearSectionCompletionOverrides = () => {
+  try {
+    localStorage.removeItem(SECTION_COMPLETION_OVERRIDE_STORAGE_KEY);
+  } catch {}
+};
+
+const hasAuthenticatedGamificationSession = () => {
+  if (!window.cosmicaGamification || typeof window.cosmicaGamification.getState !== "function") {
+    return false;
+  }
+  return Boolean(window.cosmicaGamification.getState()?.isAuthenticated);
+};
+
 const getSectionCompletionOverride = ({ worldKey = "", mapKey = "", sectionKey = "" } = {}) => {
+  if (!hasAuthenticatedGamificationSession()) {
+    return null;
+  }
   const key = buildSectionCompletionOverrideKey(worldKey, mapKey, sectionKey);
   if (!key) {
     return null;
@@ -1493,6 +1512,9 @@ const getSectionCompletionOverride = ({ worldKey = "", mapKey = "", sectionKey =
 };
 
 const setSectionCompletionOverride = ({ worldKey = "", mapKey = "", sectionKey = "", isComplete } = {}) => {
+  if (!hasAuthenticatedGamificationSession()) {
+    return;
+  }
   const key = buildSectionCompletionOverrideKey(worldKey, mapKey, sectionKey);
   if (!key || typeof isComplete !== "boolean") {
     return;
@@ -1504,6 +1526,7 @@ const setSectionCompletionOverride = ({ worldKey = "", mapKey = "", sectionKey =
 
 window.cosmicaGetSectionCompletionOverride = getSectionCompletionOverride;
 window.cosmicaSetSectionCompletionOverride = setSectionCompletionOverride;
+window.cosmicaClearSectionCompletionOverrides = clearSectionCompletionOverrides;
 
 const setupAccountHub = () => {
   if (document.body.dataset.accountHubBound === "1") {
@@ -1748,6 +1771,7 @@ const setupAccountHub = () => {
           <button type="button" data-menu="manage">Manage Account</button>
         </nav>
         <div class="account-manage-panel" hidden>
+          <button type="button" class="account-reset-email-button account-manage-reset-email">Reset password</button>
           <section class="account-password-panel" hidden>
             <h4>Password</h4>
             <form class="account-form account-password-change-form">
@@ -1758,7 +1782,6 @@ const setupAccountHub = () => {
               <button type="button" class="account-inline-link account-manage-forgot">Forgot password?</button>
             </form>
           </section>
-          <button type="button" class="account-reset-email-button account-manage-reset-email">Reset password</button>
           <p class="account-password-provider-note" hidden>
             Password changes for Google accounts are managed in your Google account settings.
           </p>
@@ -2036,7 +2059,7 @@ const setupAccountHub = () => {
     triggerNoticeBubble.style.top = "";
   };
 
-  const showTriggerNoticeBubble = (message, tone = "error") => {
+  const showTriggerNoticeBubble = (message, tone = "error", durationMs = 9000) => {
     const text = String(message || "").trim();
     if (!text) {
       hideTriggerNoticeBubble();
@@ -2053,7 +2076,7 @@ const setupAccountHub = () => {
     window.requestAnimationFrame(positionTriggerNoticeBubble);
     triggerNoticeTimerId = window.setTimeout(() => {
       hideTriggerNoticeBubble();
-    }, 9000);
+    }, Math.max(1200, Number(durationMs) || 9000));
   };
 
   const setDeleteConfirmationVisible = (visible) => {
@@ -2188,7 +2211,7 @@ const setupAccountHub = () => {
     }
     const authErrorTextMap = {
       google_no_account: {
-        message: "No account found. Use Sign up with Google account first.",
+        message: "No account was found for this Google email. Please create your account first using Sign up with Google.",
         tone: "error",
         panel: "signup",
       },
@@ -2254,14 +2277,8 @@ const setupAccountHub = () => {
     }
     const resolvedMessage = String(resolvedNotice.message || "").trim();
     const resolvedTone = String(resolvedNotice.tone || "error").trim() || "error";
-    if (rawCode === "google_no_account" || rawCode === "google_account_exists") {
-      pendingAuthNoticeMessage = "";
-      pendingAuthNoticeTone = "error";
-      showTriggerNoticeBubble(resolvedMessage, resolvedTone);
-    } else {
-      pendingAuthNoticeMessage = resolvedMessage;
-      pendingAuthNoticeTone = resolvedTone;
-    }
+    pendingAuthNoticeMessage = resolvedMessage;
+    pendingAuthNoticeTone = resolvedTone;
     if (
       rawCode.startsWith("password_reset_") ||
       rawCode === "email_verified" ||
@@ -2289,7 +2306,35 @@ const setupAccountHub = () => {
     window.history.replaceState({}, "", nextUrl);
   };
 
+  const consumeAccountDeletedNoticeFromUrl = () => {
+    const params = new URLSearchParams(window.location.search);
+    const accountDeletedRaw = String(params.get("accountDeleted") || "").trim().toLowerCase();
+    const deleteNoticeRaw = String(params.get("deleteNotice") || "").trim();
+    const shouldShowNotice =
+      accountDeletedRaw === "1" ||
+      accountDeletedRaw === "true" ||
+      accountDeletedRaw === "yes" ||
+      accountDeletedRaw === "deleted";
+
+    if (!shouldShowNotice && !deleteNoticeRaw) {
+      return;
+    }
+
+    const resolvedMessage =
+      deleteNoticeRaw ||
+      "Your account and associated learning data have been permanently deleted.";
+    showTriggerNoticeBubble(resolvedMessage, "success", 14000);
+
+    params.delete("accountDeleted");
+    params.delete("deleteNotice");
+    const nextQuery = params.toString();
+    const nextUrl =
+      window.location.pathname + (nextQuery ? `?${nextQuery}` : "") + window.location.hash;
+    window.history.replaceState({}, "", nextUrl);
+  };
+
   consumeAuthErrorFromUrl();
+  consumeAccountDeletedNoticeFromUrl();
   loginForm?.setAttribute("novalidate", "novalidate");
   signupForm?.setAttribute("novalidate", "novalidate");
   resetForm?.setAttribute("novalidate", "novalidate");
@@ -2977,7 +3022,8 @@ const setupAccountHub = () => {
       setDeleteConfirmationVisible(false);
     }
     if (passwordPanel) {
-      passwordPanel.hidden = !showPasswordManagement;
+      passwordPanel.dataset.open = "0";
+      passwordPanel.hidden = true;
     }
     if (passwordProviderNote) {
       passwordProviderNote.hidden = !showGooglePasswordNote;
@@ -3353,12 +3399,52 @@ const setupAccountHub = () => {
     });
   };
 
+  const openManagePasswordForm = () => {
+    if (managePanel) {
+      managePanel.hidden = false;
+    }
+    if (currentAuthProvider === "google") {
+      if (passwordProviderNote) {
+        passwordProviderNote.hidden = false;
+      }
+      if (passwordPanel) {
+        passwordPanel.dataset.open = "0";
+        passwordPanel.hidden = true;
+      }
+      flashGooglePasswordNote();
+      setFeedback("Password changes for Google accounts are managed in your Google account settings.", "info");
+      return;
+    }
+    const isPasswordPanelOpen =
+      Boolean(passwordPanel) &&
+      String(passwordPanel.dataset.open || "0").trim() === "1" &&
+      !passwordPanel.hidden;
+    if (isPasswordPanelOpen) {
+      if (passwordPanel) {
+        passwordPanel.dataset.open = "0";
+        passwordPanel.hidden = true;
+      }
+      setFeedback("Password form collapsed.", "info");
+      return;
+    }
+    if (passwordPanel) {
+      passwordPanel.dataset.open = "1";
+      passwordPanel.hidden = false;
+      requestAnimationFrame(() => {
+        passwordPanel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      });
+    }
+    const currentPasswordInput = passwordChangeForm?.querySelector('input[name="currentPassword"]');
+    currentPasswordInput?.focus?.();
+    setFeedback("");
+  };
+
   manageForgotPasswordBtn?.addEventListener("click", async () => {
     await requestManagePasswordReset(manageForgotPasswordBtn);
   });
 
-  manageResetEmailBtn?.addEventListener("click", async () => {
-    await requestManagePasswordReset(manageResetEmailBtn);
+  manageResetEmailBtn?.addEventListener("click", () => {
+    openManagePasswordForm();
   });
 
   const handleRestorePremiumAction = async () => {
@@ -3545,6 +3631,10 @@ const setupAccountHub = () => {
         if (managePanel) {
           managePanel.hidden = !managePanel.hidden;
           if (managePanel.hidden) {
+            if (passwordPanel) {
+              passwordPanel.dataset.open = "0";
+              passwordPanel.hidden = true;
+            }
             setDeleteConfirmationVisible(false);
           }
         }
@@ -3552,6 +3642,10 @@ const setupAccountHub = () => {
       }
       if (managePanel) {
         managePanel.hidden = true;
+        if (passwordPanel) {
+          passwordPanel.dataset.open = "0";
+          passwordPanel.hidden = true;
+        }
         setDeleteConfirmationVisible(false);
       }
       if (action === "premium") {
@@ -3642,10 +3736,13 @@ const setupAccountHub = () => {
         managePanel.hidden = true;
       }
       const deleteMessage = String(payload?.message || "").trim();
-      setFeedback(deleteMessage || "Account deleted. Redirecting...", "success");
-      window.setTimeout(() => {
-        window.location.href = "/index.html";
-      }, 280);
+      const params = new URLSearchParams();
+      params.set("accountDeleted", "1");
+      if (deleteMessage) {
+        params.set("deleteNotice", deleteMessage);
+      }
+      const nextUrl = `/index.html?${params.toString()}`;
+      window.location.href = nextUrl;
     } catch {}
   });
 
@@ -4947,14 +5044,6 @@ const setupLettersSectionCompleteButton = () => {
       event.stopPropagation();
       const shouldUncheck = button.classList.contains("is-complete");
       const statusToSend = shouldUncheck ? "uncompleted" : "completed";
-      if (typeof window.cosmicaSetSectionCompletionOverride === "function") {
-        window.cosmicaSetSectionCompletionOverride({
-          worldKey: WORLD_KEY,
-          mapKey: "letters",
-          sectionKey: "letters-core",
-          isComplete: !shouldUncheck,
-        });
-      }
       if (button.dataset.busy === "1") {
         return;
       }
@@ -4972,6 +5061,15 @@ const setupLettersSectionCompleteButton = () => {
           });
         }
         return;
+      }
+
+      if (typeof window.cosmicaSetSectionCompletionOverride === "function") {
+        window.cosmicaSetSectionCompletionOverride({
+          worldKey: WORLD_KEY,
+          mapKey: "letters",
+          sectionKey: "letters-core",
+          isComplete: !shouldUncheck,
+        });
       }
 
       button.dataset.busy = "1";
@@ -5079,15 +5177,6 @@ const setupLettersCardPracticeButtons = () => {
         const shouldUncheck = button.classList.contains("is-complete");
         const statusToSend = shouldUncheck ? "uncompleted" : "completed";
 
-        if (typeof window.cosmicaSetSectionCompletionOverride === "function") {
-          window.cosmicaSetSectionCompletionOverride({
-            worldKey: WORLD_KEY,
-            mapKey: "letters",
-            sectionKey: `practice::${practiceSectionKey}`,
-            isComplete: !shouldUncheck,
-          });
-        }
-
         if (
           window.cosmicaGamification &&
           typeof window.cosmicaGamification.getState === "function" &&
@@ -5101,6 +5190,15 @@ const setupLettersCardPracticeButtons = () => {
             });
           }
           return;
+        }
+
+        if (typeof window.cosmicaSetSectionCompletionOverride === "function") {
+          window.cosmicaSetSectionCompletionOverride({
+            worldKey: WORLD_KEY,
+            mapKey: "letters",
+            sectionKey: `practice::${practiceSectionKey}`,
+            isComplete: !shouldUncheck,
+          });
         }
 
         button.dataset.busy = "1";

@@ -195,7 +195,26 @@
     "words-grid",
     "world-fx-comet",
     "world-fx-dust-particle",
-    "world-fx-star"
+    "world-fx-star",
+    "account-menu",
+    "account-subscription-note",
+    "account-subscription-panel",
+    "account-subscription-status",
+    "account-subscription-status-badge",
+    "account-subscription-status-label",
+    "account-subscription-sync",
+    "account-subscription-until",
+    "premium-checkout-modal",
+    "premium-checkout-option",
+    "premium-checkout-overlay",
+    "premium-map-upgrade-button",
+    "premium-setup-modal",
+    "premium-success-actions",
+    "premium-success-benefits",
+    "premium-success-card",
+    "premium-success-message",
+    "premium-success-modal",
+    "premium-success-overlay"
   ],
   "ids": [
     "journey"

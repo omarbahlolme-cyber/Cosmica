@@ -63,6 +63,7 @@ for (const rule of ASSET_RULES) {
   const versionsByFile = new Map();
   const uniqueVersions = new Set();
   let totalMatches = 0;
+  let filesWithMatch = 0;
 
   for (const htmlFile of htmlFiles) {
     const htmlPath = path.join(FRONTEND_ROOT, htmlFile);
@@ -73,6 +74,7 @@ for (const rule of ASSET_RULES) {
     }
 
     totalMatches += matchedVersions.length;
+    filesWithMatch += 1;
     matchedVersions.forEach((version) => {
       if (!version) {
         failures.push(
@@ -85,9 +87,9 @@ for (const rule of ASSET_RULES) {
     });
   }
 
-  if (rule.required && totalMatches !== htmlFiles.length) {
+  if (rule.required && filesWithMatch !== htmlFiles.length) {
     failures.push(
-      `${rule.file}: expected one reference in each HTML page (${htmlFiles.length}), found ${totalMatches}`
+      `${rule.file}: expected reference in each HTML page (${htmlFiles.length}), found ${filesWithMatch}`
     );
   }
 
