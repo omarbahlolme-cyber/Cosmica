@@ -40,6 +40,7 @@
     "admin:grant:premium": "node scripts/grant-premium.js",
     "billing:contract": "node scripts/billing-contract-check.js",
     "billing:user-state:contract": "node scripts/user-state-contract-check.js",
+    "auth:provider:contract": "node scripts/auth-provider-contract-check.js",
     "test:user-matrix": "node scripts/e2e-user-matrix.js",
     "github:harden": "node scripts/apply-github-hardening.js",
     "backup:create": "node scripts/create-backup.js",

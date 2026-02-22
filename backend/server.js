@@ -3349,6 +3349,33 @@ const userHasPremiumAccessForProgress = (userRecord) => {
   const premiumTier = String(profile.plan || profile.tier || profile.membership || "")
     .trim()
     .toLowerCase();
+  const premiumStatus = String(
+    profile.premiumStatus ||
+      profile.subscriptionStatus ||
+      profile.premiumStripeSubscriptionStatus ||
+      profile.stripeSubscriptionStatus ||
+      ""
+  )
+    .trim()
+    .toLowerCase();
+  const premiumEndRaw = String(
+    profile.premiumCurrentPeriodEnd ||
+      profile.currentPeriodEnd ||
+      profile.subscriptionEndsAt ||
+      profile.premiumEndsAt ||
+      profile.premiumExpiresAt ||
+      profile.planEndsAt ||
+      profile.expiresAt ||
+      ""
+  ).trim();
+  const premiumEndMs = Date.parse(premiumEndRaw);
+  const hasFuturePremiumEnd = Number.isFinite(premiumEndMs) && premiumEndMs > Date.now();
+  const statusIndicatesPremium =
+    premiumStatus === "active" ||
+    premiumStatus === "trialing" ||
+    premiumStatus === "past_due" ||
+    premiumStatus === "canceling" ||
+    premiumStatus === "grace";
   return (
     premiumRaw === true ||
     premiumText === "1" ||
@@ -3360,7 +3387,9 @@ const userHasPremiumAccessForProgress = (userRecord) => {
     premiumTier === "premium" ||
     premiumTier === "pro" ||
     premiumTier === "plus" ||
-    premiumTier === "paid"
+    premiumTier === "paid" ||
+    statusIndicatesPremium ||
+    hasFuturePremiumEnd
   );
 };
 

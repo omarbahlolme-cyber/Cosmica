@@ -3247,6 +3247,33 @@ const getPremiumAccessState = () => {
   const premiumTier = String(user?.planTier || user?.tier || user?.plan || user?.membership || "")
     .trim()
     .toLowerCase();
+  const premiumStatus = String(
+    user?.premiumStatus ||
+      user?.subscriptionStatus ||
+      user?.premiumStripeSubscriptionStatus ||
+      user?.stripeSubscriptionStatus ||
+      ""
+  )
+    .trim()
+    .toLowerCase();
+  const premiumEndRaw = String(
+    user?.premiumCurrentPeriodEnd ||
+      user?.premiumEndsAt ||
+      user?.premiumExpiresAt ||
+      user?.subscriptionEndsAt ||
+      user?.currentPeriodEnd ||
+      user?.planEndsAt ||
+      user?.expiresAt ||
+      ""
+  ).trim();
+  const premiumEndMs = Date.parse(premiumEndRaw);
+  const hasFuturePremiumEnd = Number.isFinite(premiumEndMs) && premiumEndMs > Date.now();
+  const statusIndicatesPremium =
+    premiumStatus === "active" ||
+    premiumStatus === "trialing" ||
+    premiumStatus === "past_due" ||
+    premiumStatus === "canceling" ||
+    premiumStatus === "grace";
   const hasPremiumAccess = (
     premiumFlagRaw === true ||
     premiumFlagText === "1" ||
@@ -3258,7 +3285,9 @@ const getPremiumAccessState = () => {
     premiumTier === "premium" ||
     premiumTier === "pro" ||
     premiumTier === "plus" ||
-    premiumTier === "paid"
+    premiumTier === "paid" ||
+    statusIndicatesPremium ||
+    hasFuturePremiumEnd
   );
   return hasPremiumAccess ? "premium" : "non-premium";
 };

@@ -1137,7 +1137,7 @@ const createCosmicaGamificationClient = () => {
     const premiumFlagText = String(premiumFlagRaw ?? "")
       .trim()
       .toLowerCase();
-    const hasPremiumAccess =
+    const hasPremiumAccessFromFlags =
       premiumFlagRaw === true ||
       premiumFlagText === "1" ||
       premiumFlagText === "true" ||
@@ -1152,29 +1152,60 @@ const createCosmicaGamificationClient = () => {
     const premiumEndDateRaw =
       payloadProfile.premiumEndsAt ||
       payloadProfile.premiumExpiresAt ||
+      payloadProfile.premiumCurrentPeriodEnd ||
       payloadProfile.subscriptionEndsAt ||
       payloadProfile.currentPeriodEnd ||
       payloadProfile.planEndsAt ||
       payloadProfile.expiresAt ||
       payloadData.premiumEndsAt ||
       payloadData.premiumExpiresAt ||
+      payloadData.premiumCurrentPeriodEnd ||
       payloadData.subscriptionEndsAt ||
       payloadData.currentPeriodEnd ||
       payloadData.planEndsAt ||
       payloadData.expiresAt ||
       user.premiumEndsAt ||
       user.premiumExpiresAt ||
+      user.premiumCurrentPeriodEnd ||
       user.subscriptionEndsAt ||
       user.currentPeriodEnd ||
       user.planEndsAt ||
       user.expiresAt ||
       null;
+    const premiumStatus = String(
+      payloadProfile.premiumStatus ||
+        payloadProfile.subscriptionStatus ||
+        payloadProfile.premiumStripeSubscriptionStatus ||
+        payloadProfile.stripeSubscriptionStatus ||
+        payloadData.premiumStatus ||
+        payloadData.subscriptionStatus ||
+        payloadData.premiumStripeSubscriptionStatus ||
+        payloadData.stripeSubscriptionStatus ||
+        user.premiumStatus ||
+        user.subscriptionStatus ||
+        user.premiumStripeSubscriptionStatus ||
+        user.stripeSubscriptionStatus ||
+        ""
+    )
+      .trim()
+      .toLowerCase();
+    const premiumEndMs = Date.parse(String(premiumEndDateRaw || "").trim());
+    const hasFuturePremiumEnd = Number.isFinite(premiumEndMs) && premiumEndMs > Date.now();
+    const statusIndicatesPremium =
+      premiumStatus === "active" ||
+      premiumStatus === "trialing" ||
+      premiumStatus === "past_due" ||
+      premiumStatus === "canceling" ||
+      premiumStatus === "grace";
+    const hasPremiumAccess =
+      hasPremiumAccessFromFlags || statusIndicatesPremium || hasFuturePremiumEnd;
     state.isAuthenticated = true;
     state.user = {
       ...user,
       authProvider: authProvider || "email",
       planTier: premiumTier || "free",
       isPremium: hasPremiumAccess,
+      premiumStatus,
       premiumEndsAt: premiumEndDateRaw,
     };
     state.progress = normalizeProgressPayload(payload.progress || {});
@@ -4708,6 +4739,33 @@ const setupLettersSectionCompleteButton = () => {
     const premiumTier = String(user?.planTier || user?.tier || user?.plan || user?.membership || "")
       .trim()
       .toLowerCase();
+    const premiumStatus = String(
+      user?.premiumStatus ||
+        user?.subscriptionStatus ||
+        user?.premiumStripeSubscriptionStatus ||
+        user?.stripeSubscriptionStatus ||
+        ""
+    )
+      .trim()
+      .toLowerCase();
+    const premiumEndRaw = String(
+      user?.premiumCurrentPeriodEnd ||
+        user?.premiumEndsAt ||
+        user?.premiumExpiresAt ||
+        user?.subscriptionEndsAt ||
+        user?.currentPeriodEnd ||
+        user?.planEndsAt ||
+        user?.expiresAt ||
+        ""
+    ).trim();
+    const premiumEndMs = Date.parse(premiumEndRaw);
+    const hasFuturePremiumEnd = Number.isFinite(premiumEndMs) && premiumEndMs > Date.now();
+    const statusIndicatesPremium =
+      premiumStatus === "active" ||
+      premiumStatus === "trialing" ||
+      premiumStatus === "past_due" ||
+      premiumStatus === "canceling" ||
+      premiumStatus === "grace";
     return (
       premiumFlagRaw === true ||
       premiumFlagText === "1" ||
@@ -4719,7 +4777,9 @@ const setupLettersSectionCompleteButton = () => {
       premiumTier === "premium" ||
       premiumTier === "pro" ||
       premiumTier === "plus" ||
-      premiumTier === "paid"
+      premiumTier === "paid" ||
+      statusIndicatesPremium ||
+      hasFuturePremiumEnd
     );
   };
 
@@ -5571,6 +5631,33 @@ const userHasPremiumAccess = (user) => {
   const premiumTier = String(user.planTier ?? user.tier ?? "")
     .trim()
     .toLowerCase();
+  const premiumStatus = String(
+    user.premiumStatus ||
+      user.subscriptionStatus ||
+      user.premiumStripeSubscriptionStatus ||
+      user.stripeSubscriptionStatus ||
+      ""
+  )
+    .trim()
+    .toLowerCase();
+  const premiumEndRaw = String(
+    user.premiumCurrentPeriodEnd ||
+      user.premiumEndsAt ||
+      user.premiumExpiresAt ||
+      user.subscriptionEndsAt ||
+      user.currentPeriodEnd ||
+      user.planEndsAt ||
+      user.expiresAt ||
+      ""
+  ).trim();
+  const premiumEndMs = Date.parse(premiumEndRaw);
+  const hasFuturePremiumEnd = Number.isFinite(premiumEndMs) && premiumEndMs > Date.now();
+  const statusIndicatesPremium =
+    premiumStatus === "active" ||
+    premiumStatus === "trialing" ||
+    premiumStatus === "past_due" ||
+    premiumStatus === "canceling" ||
+    premiumStatus === "grace";
   return (
     premiumFlagRaw === true ||
     premiumFlagText === "1" ||
@@ -5585,7 +5672,8 @@ const userHasPremiumAccess = (user) => {
     premiumTier === "paid" ||
     String(user.plan ?? "").trim().toLowerCase() === "premium" ||
     String(user.membership ?? "").trim().toLowerCase() === "premium" ||
-    premiumTier === "paid"
+    statusIndicatesPremium ||
+    hasFuturePremiumEnd
   );
 };
 
@@ -7438,6 +7526,33 @@ const applyMapComingSoonRules = () => {
   )
     .trim()
     .toLowerCase();
+  const premiumStatus = String(
+    user?.premiumStatus ||
+      user?.subscriptionStatus ||
+      user?.premiumStripeSubscriptionStatus ||
+      user?.stripeSubscriptionStatus ||
+      ""
+  )
+    .trim()
+    .toLowerCase();
+  const premiumEndRaw = String(
+    user?.premiumCurrentPeriodEnd ||
+      user?.premiumEndsAt ||
+      user?.premiumExpiresAt ||
+      user?.subscriptionEndsAt ||
+      user?.currentPeriodEnd ||
+      user?.planEndsAt ||
+      user?.expiresAt ||
+      ""
+  ).trim();
+  const premiumEndMs = Date.parse(premiumEndRaw);
+  const hasFuturePremiumEnd = Number.isFinite(premiumEndMs) && premiumEndMs > Date.now();
+  const statusIndicatesPremium =
+    premiumStatus === "active" ||
+    premiumStatus === "trialing" ||
+    premiumStatus === "past_due" ||
+    premiumStatus === "canceling" ||
+    premiumStatus === "grace";
   const hasPremiumAccess =
     premiumFlagRaw === true ||
     premiumFlagText === "1" ||
@@ -7449,7 +7564,9 @@ const applyMapComingSoonRules = () => {
     premiumTier === "premium" ||
     premiumTier === "pro" ||
     premiumTier === "plus" ||
-    premiumTier === "paid";
+    premiumTier === "paid" ||
+    statusIndicatesPremium ||
+    hasFuturePremiumEnd;
 
   const forceComingSoon = grammarCard.dataset.forceComingSoon === "true";
   const lockForPremium = !hasPremiumAccess;

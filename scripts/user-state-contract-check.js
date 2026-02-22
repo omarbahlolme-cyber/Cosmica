@@ -43,6 +43,13 @@ const CANCELING_USER = {
   displayName: "Contract Canceling User",
 };
 
+const DRIFT_USER = {
+  id: "66666666-7777-4888-8999-000000000000",
+  email: String(process.env.USER_STATE_DRIFT_EMAIL || "contract.drift@cosmica.local").trim().toLowerCase(),
+  password: String(process.env.USER_STATE_DRIFT_PASSWORD || "TestPass123!"),
+  displayName: "Contract Drift User",
+};
+
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const fetchWithTimeout = async (url, options = {}) => {
@@ -82,6 +89,7 @@ const buildUserRecord = async ({
   displayName,
   premium = false,
   cancelAtPeriodEnd = false,
+  premiumFlagDrift = false,
 } = {}) => {
   const now = new Date().toISOString();
   const salt = crypto.randomBytes(16).toString("hex");
@@ -89,11 +97,11 @@ const buildUserRecord = async ({
   const profile = premium
     ? {
         authProvider: "email",
-        isPremium: true,
-        premium: true,
-        plan: "premium",
-        tier: "premium",
-        membership: "premium",
+        isPremium: premiumFlagDrift ? false : true,
+        premium: premiumFlagDrift ? false : true,
+        plan: premiumFlagDrift ? "free" : "premium",
+        tier: premiumFlagDrift ? "free" : "premium",
+        membership: premiumFlagDrift ? "free" : "premium",
         premiumProvider: "stripe",
         premiumActivatedAt: now,
         premiumCurrentPeriodEnd: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString(),
@@ -148,9 +156,15 @@ const seedContractUsers = async () => {
     premium: true,
     cancelAtPeriodEnd: true,
   });
+  store.users[DRIFT_USER.id] = await buildUserRecord({
+    ...DRIFT_USER,
+    premium: true,
+    premiumFlagDrift: true,
+  });
   store.emailIndex[FREE_USER.email] = FREE_USER.id;
   store.emailIndex[PREMIUM_USER.email] = PREMIUM_USER.id;
   store.emailIndex[CANCELING_USER.email] = CANCELING_USER.id;
+  store.emailIndex[DRIFT_USER.email] = DRIFT_USER.id;
   store.updatedAt = new Date().toISOString();
 
   fs.writeFileSync(AUTH_STORE_FILE, JSON.stringify(store, null, 2), "utf8");
@@ -262,7 +276,7 @@ const deriveExpectedBillingStatusFromProfile = (profile) => {
   const premiumText = String(premiumRaw ?? "")
     .trim()
     .toLowerCase();
-  const hasPremium =
+  const hasPremiumFromFlags =
     premiumRaw === true ||
     premiumText === "1" ||
     premiumText === "true" ||
@@ -270,12 +284,37 @@ const deriveExpectedBillingStatusFromProfile = (profile) => {
     premiumText === "premium" ||
     premiumText === "pro" ||
     premiumText === "plus";
+  const stripeStatus = String(
+    profile?.premiumStatus ||
+      profile?.subscriptionStatus ||
+      profile?.premiumStripeSubscriptionStatus ||
+      profile?.stripeSubscriptionStatus ||
+      ""
+  )
+    .trim()
+    .toLowerCase();
+  const premiumEndRaw = String(
+    profile?.premiumCurrentPeriodEnd ||
+      profile?.currentPeriodEnd ||
+      profile?.subscriptionEndsAt ||
+      profile?.premiumEndsAt ||
+      profile?.premiumExpiresAt ||
+      profile?.planEndsAt ||
+      profile?.expiresAt ||
+      ""
+  ).trim();
+  const premiumEndMs = Date.parse(premiumEndRaw);
+  const hasFuturePremiumEnd = Number.isFinite(premiumEndMs) && premiumEndMs > Date.now();
+  const hasPremiumFromStatus =
+    stripeStatus === "active" ||
+    stripeStatus === "trialing" ||
+    stripeStatus === "past_due" ||
+    stripeStatus === "canceling" ||
+    stripeStatus === "grace";
+  const hasPremium = hasPremiumFromFlags || hasPremiumFromStatus || hasFuturePremiumEnd;
   if (!hasPremium) {
     return "expired";
   }
-  const stripeStatus = String(profile?.premiumStripeSubscriptionStatus || "")
-    .trim()
-    .toLowerCase();
   if (
     profile?.premiumCancelAtPeriodEnd === true ||
     stripeStatus === "canceling" ||
@@ -301,7 +340,46 @@ const verifyUserState = async ({ label, cookie, expectedPlanTier, expectedPremiu
 
   const resolvedPlanTier = resolvePlanTierFromProfile(profile);
   const premiumRaw = profile?.isPremium ?? profile?.premium;
-  const resolvedPremium = premiumRaw === true;
+  const premiumText = String(premiumRaw ?? "")
+    .trim()
+    .toLowerCase();
+  const premiumStatus = String(
+    profile?.premiumStatus ||
+      profile?.subscriptionStatus ||
+      profile?.premiumStripeSubscriptionStatus ||
+      profile?.stripeSubscriptionStatus ||
+      ""
+  )
+    .trim()
+    .toLowerCase();
+  const premiumEndRaw = String(
+    profile?.premiumCurrentPeriodEnd ||
+      profile?.currentPeriodEnd ||
+      profile?.subscriptionEndsAt ||
+      profile?.premiumEndsAt ||
+      profile?.premiumExpiresAt ||
+      profile?.planEndsAt ||
+      profile?.expiresAt ||
+      ""
+  ).trim();
+  const premiumEndMs = Date.parse(premiumEndRaw);
+  const hasFuturePremiumEnd = Number.isFinite(premiumEndMs) && premiumEndMs > Date.now();
+  const statusIndicatesPremium =
+    premiumStatus === "active" ||
+    premiumStatus === "trialing" ||
+    premiumStatus === "past_due" ||
+    premiumStatus === "canceling" ||
+    premiumStatus === "grace";
+  const resolvedPremium =
+    premiumRaw === true ||
+    premiumText === "1" ||
+    premiumText === "true" ||
+    premiumText === "yes" ||
+    premiumText === "premium" ||
+    premiumText === "pro" ||
+    premiumText === "plus" ||
+    statusIndicatesPremium ||
+    hasFuturePremiumEnd;
   const resolvedBillingStatus = deriveExpectedBillingStatusFromProfile(profile);
 
   assert(resolvedPlanTier === expectedPlanTier, `${label}: planTier mismatch expected=${expectedPlanTier} actual=${resolvedPlanTier}`);
@@ -406,7 +484,20 @@ const main = async () => {
       expectedBillingStatus: "canceling",
     });
 
-    console.log("PASS [user-state-contract] guest/free/premium/canceling invariants");
+    const driftCookie = await loginAndGetCookie({
+      email: DRIFT_USER.email,
+      password: DRIFT_USER.password,
+      label: "drift-user",
+    });
+    await verifyUserState({
+      label: "drift-user",
+      cookie: driftCookie,
+      expectedPlanTier: "free",
+      expectedPremium: true,
+      expectedBillingStatus: "active",
+    });
+
+    console.log("PASS [user-state-contract] guest/free/premium/canceling/drift invariants");
   } catch (error) {
     console.error(`FAIL [user-state-contract] ${error?.message || error}`);
     process.exitCode = 1;
