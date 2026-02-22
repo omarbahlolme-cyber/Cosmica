@@ -3901,6 +3901,8 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
     }
 
     const nowIso = new Date().toISOString();
+    const oauthMode =
+      String(stateData?.mode || "login").trim().toLowerCase() === "signup" ? "signup" : "login";
     const existingUserId = authStore.emailIndex[email];
     let userRecord = existingUserId ? authStore.users[existingUserId] : null;
     let createdNewGoogleUser = false;
@@ -3918,8 +3920,6 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
     }
 
     if (!userRecord) {
-      const oauthMode =
-        String(stateData?.mode || "login").trim().toLowerCase() === "signup" ? "signup" : "login";
       if (oauthMode !== "signup") {
         return res.redirect(
           302,
@@ -3970,6 +3970,16 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
         return res.redirect(
           302,
           buildAuthErrorRedirectPath("google_account_exists_email", stateData.returnTo, {
+            authEmail: email,
+            openAuth: "1",
+            authPanel: "login",
+          })
+        );
+      }
+      if (oauthMode === "signup") {
+        return res.redirect(
+          302,
+          buildAuthErrorRedirectPath("google_account_exists", stateData.returnTo, {
             authEmail: email,
             openAuth: "1",
             authPanel: "login",
@@ -4439,6 +4449,9 @@ app.post("/api/auth/signup", authSignupLimiter, async (req, res) => {
       if (existingAuthProvider === "google") {
         return res.status(409).json({
           error: "Account already exists. Please log in with your Google account",
+          authProvider: "google",
+          useGoogleSignIn: true,
+          authPanel: "login",
         });
       }
       if (existingUser.emailVerified !== true) {
@@ -4448,7 +4461,11 @@ app.post("/api/auth/signup", authSignupLimiter, async (req, res) => {
           resendEligible: true,
         });
       }
-      return res.status(409).json({ error: "Account already exists" });
+      return res.status(409).json({
+        error: "Account already exists",
+        authProvider: "email",
+        authPanel: "login",
+      });
     }
 
     const verificationChallenge = createEmailVerificationChallenge();

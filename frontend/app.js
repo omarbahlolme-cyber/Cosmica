@@ -2222,7 +2222,7 @@ const setupAccountHub = () => {
         panel: "login",
       },
       google_account_exists_email: {
-        message: "Account already exists with email and password. Please log in with email and password.",
+        message: "Account already exists. Log in using your email and password.",
         tone: "error",
         panel: "login",
       },
@@ -2324,7 +2324,7 @@ const setupAccountHub = () => {
     const resolvedMessage =
       deleteNoticeRaw ||
       "Your account and associated learning data have been permanently deleted.";
-    showTriggerNoticeBubble(resolvedMessage, "success", 14000);
+    showTriggerNoticeBubble(resolvedMessage, "success", 10000);
 
     params.delete("accountDeleted");
     params.delete("deleteNotice");
@@ -3622,6 +3622,33 @@ const setupAccountHub = () => {
           error?.message || "Unverified account found. Use resend verification below.",
           "error"
         );
+        return;
+      }
+      const status = Number(error?.status || 0);
+      const providerFromPayload = String(error?.payload?.authProvider || "").trim().toLowerCase();
+      const providerFromMessage = /google/i.test(String(error?.message || "")) ? "google" : "";
+      const conflictProvider = providerFromPayload || providerFromMessage;
+      const isExistingAccountConflict =
+        status === 409 &&
+        (Boolean(conflictProvider) || /account already exists/i.test(String(error?.message || "")));
+      if (isExistingAccountConflict) {
+        const loginEmailInput = loginForm?.querySelector('input[name="email"]');
+        const loginPasswordInput = loginForm?.querySelector('input[name="password"]');
+        if (loginEmailInput) {
+          loginEmailInput.value = email;
+          setInputInvalidState(loginEmailInput, false);
+        }
+        if (loginPasswordInput) {
+          loginPasswordInput.value = "";
+          setInputInvalidState(loginPasswordInput, false);
+        }
+        setSignupResendButtonVisible(false);
+        setAuthPanel("login", true);
+        if (conflictProvider === "google") {
+          setFeedback("Account already exists. Use Log in with Google account.", "error");
+          return;
+        }
+        setFeedback("Account already exists. Log in using your email and password.", "error");
         return;
       }
       setSignupResendButtonVisible(false);
