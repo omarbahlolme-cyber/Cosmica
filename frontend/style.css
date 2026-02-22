@@ -3081,6 +3081,12 @@ body.premium-setup-lock {
   display: none !important;
 }
 
+.account-actions-divider {
+  height: 1px;
+  margin: 12px 0 2px;
+  background: linear-gradient(90deg, rgba(98, 188, 255, 0.08), rgba(141, 209, 255, 0.55), rgba(98, 188, 255, 0.08));
+}
+
 .account-logout,
 .account-delete {
   margin-top: 9px;

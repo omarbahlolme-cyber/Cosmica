@@ -4713,7 +4713,7 @@ app.post("/api/auth/login", authLoginLimiter, async (req, res) => {
       email,
       reason: "Unknown email",
     });
-    return res.status(401).json({ error: "Invalid email or password" });
+    return res.status(401).json({ error: "Account does not exist. Try signing up first." });
   }
   if (
     rejectBlockedAccess({

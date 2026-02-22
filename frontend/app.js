@@ -1793,6 +1793,7 @@ const setupAccountHub = () => {
               <button class="account-delete account-delete-confirm-btn" type="button">Delete</button>
             </div>
           </div>
+          <div class="account-actions-divider" aria-hidden="true"></div>
         </div>
         <button class="account-logout" type="button">Logout</button>
       </section>
@@ -3431,7 +3432,7 @@ const setupAccountHub = () => {
       passwordPanel.dataset.open = "1";
       passwordPanel.hidden = false;
       requestAnimationFrame(() => {
-        passwordPanel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        passwordPanel.scrollIntoView({ behavior: "smooth", block: "center" });
       });
     }
     const currentPasswordInput = passwordChangeForm?.querySelector('input[name="currentPassword"]');
@@ -3451,15 +3452,18 @@ const setupAccountHub = () => {
     if (!manageRestorePremiumBtn || manageRestorePremiumBtn.disabled) {
       return;
     }
-    if (manageRestorePremiumBtn.disabled) {
-      return;
-    }
+    const restoreStartedAtMs = Date.now();
+    const minLoadingMs = 550;
     const previousLabel = manageRestorePremiumBtn.textContent;
     manageRestorePremiumBtn.disabled = true;
-    manageRestorePremiumBtn.textContent = "Checking...";
-    setFeedback("Checking active premium plan...", "info");
+    manageRestorePremiumBtn.textContent = "Restoring...";
+    setFeedback("Restoring premium subscription...", "info");
     try {
       const result = await window.cosmicaGamification.restorePremiumSubscription();
+      const waitMs = Math.max(0, minLoadingMs - (Date.now() - restoreStartedAtMs));
+      if (waitMs > 0) {
+        await new Promise((resolve) => window.setTimeout(resolve, waitMs));
+      }
       const status = String(result?.restoreStatus || "").trim().toLowerCase();
       if (status === "restored") {
         setFeedback(
@@ -3476,6 +3480,10 @@ const setupAccountHub = () => {
       }
       renderFromState(window.cosmicaGamification.getState());
     } catch (error) {
+      const waitMs = Math.max(0, minLoadingMs - (Date.now() - restoreStartedAtMs));
+      if (waitMs > 0) {
+        await new Promise((resolve) => window.setTimeout(resolve, waitMs));
+      }
       const code = String(error?.payload?.code || "").trim().toLowerCase();
       if (code === "no_active_premium_plan_found" || Number(error?.status || 0) === 409) {
         setFeedback("No active premium plan found.", "error");
