@@ -5803,7 +5803,8 @@ const setupWorldPageInteractiveFx = () => {
     if (!worldAmbient.querySelector(".world-fx-comets")) {
       const comets = document.createElement("div");
       comets.className = "world-fx-comets";
-      for (let i = 0; i < 4; i += 1) {
+      const cometCount = prefersReducedMotion ? 1 : 3;
+      for (let i = 0; i < cometCount; i += 1) {
         const comet = document.createElement("span");
         comet.className = "world-fx-comet";
         comet.style.setProperty("--c-top", `${(8 + Math.random() * 56).toFixed(2)}%`);
@@ -8727,7 +8728,7 @@ const setupHomeAltInteractivity = () => {
     const layer = document.createElement("div");
     layer.className = "home-fx-comets";
     layer.setAttribute("aria-hidden", "true");
-    const cometCount = prefersReducedMotion ? 2 : 4;
+    const cometCount = prefersReducedMotion ? 1 : 3;
     for (let i = 0; i < cometCount; i += 1) {
       const comet = document.createElement("span");
       comet.className = "home-fx-comet";
