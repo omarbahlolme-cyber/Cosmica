@@ -2745,6 +2745,8 @@ const setupAccountHub = () => {
       ? Math.max(0, Math.round(Number(gamification?.stats?.questDaysCompleted) || 0))
       : 0;
     const streakDays = Math.max(0, Math.round(Number(gamification.currentStreak) || 0));
+    const showPremiumStatus = Boolean(isAuthenticated && hasPremiumAccess);
+    const showFreeStreakOnly = Boolean(isAuthenticated && !hasPremiumAccess);
     const quests =
       gamification?.quests && typeof gamification.quests === "object" ? gamification.quests : {};
     const questTasks = quests?.tasks && typeof quests.tasks === "object" ? quests.tasks : {};
@@ -2752,7 +2754,11 @@ const setupAccountHub = () => {
     const showGooglePasswordNote = Boolean(isAuthenticated && currentAuthProvider === "google");
 
     if (triggerMeta) {
-      triggerMeta.textContent = isAuthenticated ? `Level ${levelMeta.level}` : "Sign in";
+      triggerMeta.textContent = isAuthenticated
+        ? hasPremiumAccess
+          ? `Level ${levelMeta.level}`
+          : `Streak ${streakDays}d`
+        : "Sign in";
     }
     if (trigger) {
       trigger.classList.toggle("is-authenticated", isAuthenticated);
@@ -2821,9 +2827,11 @@ const setupAccountHub = () => {
     }
     if (menuLevel) {
       menuLevel.textContent = `Level ${levelMeta.level} Explorer`;
+      menuLevel.hidden = !showPremiumStatus;
     }
     if (menuXp) {
       menuXp.textContent = `XP: ${formatNumber(levelMeta.xp)} / ${formatNumber(levelMeta.nextXp)}`;
+      menuXp.hidden = !showPremiumStatus;
     }
     if (menuPlanStatus) {
       menuPlanStatus.textContent = hasPremiumAccess ? "(Premium account)" : "(Free plan)";
@@ -2831,6 +2839,7 @@ const setupAccountHub = () => {
     }
     if (menuQuestsPanel) {
       menuQuestsPanel.classList.toggle("is-premium-locked", !hasPremiumAccess);
+      menuQuestsPanel.hidden = !showPremiumStatus;
     }
     if (menuXpFill) {
       const ratio = Math.max(0, Math.min(1, Number(levelMeta.ratio) || 0));
@@ -2838,13 +2847,22 @@ const setupAccountHub = () => {
       const isXpBarFull = ratio >= 0.999 || (Number(levelMeta.nextXp) > 0 && Number(levelMeta.xp) >= Number(levelMeta.nextXp));
       if (menuXpBar) {
         menuXpBar.classList.toggle("is-full", isXpBarFull);
+        menuXpBar.hidden = !showPremiumStatus;
       }
     }
     if (menuStreak) {
       menuStreak.textContent = `${streakDays} days`;
+      const streakStatNode = menuStreak.closest(".account-menu-stat");
+      if (streakStatNode) {
+        streakStatNode.hidden = !showPremiumStatus && !showFreeStreakOnly;
+      }
     }
     if (menuAchievements) {
       menuAchievements.textContent = `${achievementCount} Achievements`;
+      const achievementsStatNode = menuAchievements.closest(".account-menu-stat");
+      if (achievementsStatNode) {
+        achievementsStatNode.hidden = !showPremiumStatus;
+      }
     }
 
     const questKeys = ["practice", "discover", "complete"];
