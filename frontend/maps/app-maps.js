@@ -7789,8 +7789,10 @@ const renderGrammarModal = (section, index) => {
     modalityExamples;
   const rawExamples = activeExamples || buildGenericExamplePairs(cardData, index, section);
   const exampleItems = ensureTwoGrammarExamples(rawExamples, cardData, section, index);
-  const mistakes = buildGrammarMistakes(cardData, exampleItems);
-  const renderedExamples = exampleItems
+  const limitedExamples = exampleItems.slice(0, 1);
+  const mistakes = buildGrammarMistakes(cardData, limitedExamples);
+  const limitedMistakes = mistakes.slice(0, 1);
+  const renderedExamples = limitedExamples
     .map((item) => {
       const labels = Array.isArray(item?.labels) ? item.labels : [];
       const expandedText =
@@ -7850,7 +7852,7 @@ const renderGrammarModal = (section, index) => {
       <div class="grammar-block">
         <h4>${grammarUi.commonMistakes}</h4>
         <ul>
-          ${mistakes
+          ${limitedMistakes
             .map(
               (mistake) =>
                 `<li><span class="mistake-wrong">${grammarUi.wrong}</span> ${mistake.wrong}</li>

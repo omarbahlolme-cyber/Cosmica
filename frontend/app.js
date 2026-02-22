@@ -142,6 +142,7 @@ if (isWorldLandingPage && urlParams.has("world")) {
     cleanUrl.hash;
   window.history.replaceState({}, "", normalizedUrl);
 }
+
 if (navRoot) {
   const navLinksCount = navRoot.querySelectorAll(".nav-links a").length;
   navRoot.classList.toggle("nav-single-link", navLinksCount <= 1);
@@ -552,7 +553,7 @@ const warmMapTranslationsCache = async () => {
   }
   try {
     // Keep map cache normalized to the base English->base-language table.
-    const response = await fetch(BASE_MAP_TRANSLATION_FILE, { cache: "force-cache" });
+    const response = await fetch(BASE_MAP_TRANSLATION_FILE, { cache: "no-store" });
     if (!response.ok) {
       return;
     }
@@ -590,7 +591,7 @@ const warmWorldTranslationsCache = async () => {
     return;
   }
   try {
-    const response = await fetch(WORLD_TRANSLATION_FILE, { cache: "force-cache" });
+    const response = await fetch(WORLD_TRANSLATION_FILE, { cache: "no-store" });
     if (!response.ok) {
       return;
     }
@@ -650,59 +651,6 @@ const cpuThreadCount = Number(navigator.hardwareConcurrency || 0);
 const isLowPowerDevice =
   (deviceMemoryGb > 0 && deviceMemoryGb <= 4) ||
   (cpuThreadCount > 0 && cpuThreadCount <= 4);
-const isConstrainedNetwork = prefersReducedData || isSlowNetwork;
-const isConstrainedCompute = isLowPowerDevice || prefersReducedMotion;
-const shouldUsePerformanceMode = isConstrainedNetwork || isConstrainedCompute;
-const shouldUseUltraPerformanceMode =
-  prefersReducedMotion ||
-  (isConstrainedNetwork && isConstrainedCompute) ||
-  (deviceMemoryGb > 0 && deviceMemoryGb <= 2) ||
-  (cpuThreadCount > 0 && cpuThreadCount <= 2);
-if (document.body) {
-  document.body.classList.toggle("perf-compact", shouldUsePerformanceMode);
-  document.body.classList.toggle("perf-ultra", shouldUseUltraPerformanceMode);
-}
-
-const scheduleNonCriticalTask = (callback, { timeout = 1200 } = {}) => {
-  if (typeof callback !== "function") {
-    return;
-  }
-  if (typeof window.requestIdleCallback === "function") {
-    window.requestIdleCallback(() => callback(), { timeout });
-    return;
-  }
-  window.setTimeout(() => callback(), Math.min(280, Math.max(80, Math.round(timeout * 0.18))));
-};
-
-const applyMediaPerformanceHints = () => {
-  const isLikelyAboveFold = (node) =>
-    Boolean(
-      node &&
-        node.closest(
-          ".nav, .hero, .world-hero, .account-menu, .premium-checkout-modal, .premium-setup-modal"
-        )
-    );
-
-  document.querySelectorAll("img").forEach((image) => {
-    if (!image.hasAttribute("decoding")) {
-      image.decoding = "async";
-    }
-    if (!image.hasAttribute("loading")) {
-      image.loading = isLikelyAboveFold(image) ? "eager" : "lazy";
-    }
-    if (!image.hasAttribute("fetchpriority") && !isLikelyAboveFold(image)) {
-      image.fetchPriority = "low";
-    }
-  });
-
-  document.querySelectorAll("iframe").forEach((frame) => {
-    if (!frame.hasAttribute("loading")) {
-      frame.loading = "lazy";
-    }
-  });
-};
-
-applyMediaPerformanceHints();
 
 /* ==========================================================================
    AUTH + PROGRESS API CLIENT
@@ -832,15 +780,6 @@ const createCosmicaAuthClient = () => {
         body: { data },
       }),
     getPremiumBillingOptions: () => request("/api/billing/premium/options"),
-    getSubscriptionStatus: () => requestOrNullOnUnauthorized("/api/billing/subscription/status"),
-    cancelSubscription: () =>
-      request("/api/billing/subscription/cancel", {
-        method: "POST",
-      }),
-    restoreSubscription: () =>
-      request("/api/billing/subscription/restore", {
-        method: "POST",
-      }),
     upgradeToPremium: () =>
       request("/api/account/premium/upgrade", {
         method: "POST",
@@ -890,11 +829,6 @@ window.cosmicaAuth = createCosmicaAuthClient();
 const createCosmicaGamificationClient = () => {
   const listeners = new Set();
   const recentEventMap = new Map();
-  const progressAutosaveIntervalMs = shouldUsePerformanceMode ? 2400 : 1000;
-  let progressAutosaveTimerId = 0;
-  let progressPersistInFlight = false;
-  let progressPersistPending = false;
-  let progressPersistFingerprint = "";
   const state = {
     ready: false,
     isAuthenticated: false,
@@ -903,106 +837,6 @@ const createCosmicaGamificationClient = () => {
     progress: null,
     error: "",
   };
-
-  const normalizeProgressSnapshot = (value) => normalizeProgressPayload(value || state.progress || {});
-
-  const computeProgressFingerprint = (progressValue) => {
-    try {
-      return JSON.stringify(normalizeProgressSnapshot(progressValue));
-    } catch {
-      return "";
-    }
-  };
-
-  const stopProgressAutosaveLoop = () => {
-    if (!progressAutosaveTimerId) {
-      return;
-    }
-    window.clearInterval(progressAutosaveTimerId);
-    progressAutosaveTimerId = 0;
-  };
-
-  const markProgressForPersistence = () => {
-    if (!state.isAuthenticated) {
-      return;
-    }
-    progressPersistPending = true;
-  };
-
-  const persistProgressNow = async ({ useKeepalive = false } = {}) => {
-    if (!state.isAuthenticated || !state.progress || progressPersistInFlight) {
-      return false;
-    }
-    const normalizedProgress = normalizeProgressSnapshot(state.progress);
-    const fingerprint = computeProgressFingerprint(normalizedProgress);
-    if (!fingerprint) {
-      return false;
-    }
-    if (!progressPersistPending && fingerprint === progressPersistFingerprint) {
-      return false;
-    }
-
-    progressPersistInFlight = true;
-    try {
-      if (useKeepalive) {
-        const response = await fetch("/api/progress", {
-          method: "PUT",
-          credentials: "include",
-          cache: "no-store",
-          keepalive: true,
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ progress: normalizedProgress }),
-        });
-        if (!response.ok) {
-          throw new Error(`Progress keepalive save failed (${response.status})`);
-        }
-        const payload = await response.json().catch(() => ({}));
-        if (payload && payload.progress) {
-          state.progress = normalizeProgressPayload(payload.progress);
-        }
-      } else {
-        const payload = await window.cosmicaAuth.setProgress(normalizedProgress);
-        if (payload && payload.progress) {
-          state.progress = normalizeProgressPayload(payload.progress);
-        }
-      }
-      progressPersistFingerprint = computeProgressFingerprint(state.progress);
-      progressPersistPending = false;
-      return true;
-    } catch {
-      progressPersistPending = true;
-      return false;
-    } finally {
-      progressPersistInFlight = false;
-    }
-  };
-
-  const ensureProgressAutosaveLoop = () => {
-    if (progressAutosaveTimerId) {
-      return;
-    }
-    progressAutosaveTimerId = window.setInterval(() => {
-      void persistProgressNow();
-    }, progressAutosaveIntervalMs);
-  };
-
-  const flushProgressOnLifecycle = () => {
-    if (!state.isAuthenticated || !progressPersistPending) {
-      return;
-    }
-    void persistProgressNow({ useKeepalive: true });
-  };
-
-  window.addEventListener("beforeunload", flushProgressOnLifecycle);
-  window.addEventListener("pagehide", flushProgressOnLifecycle);
-  document.addEventListener("visibilitychange", () => {
-    if (document.hidden) {
-      flushProgressOnLifecycle();
-    }
-  });
 
   const xpForLevel = (level) => {
     const bounded = Math.max(1, Math.floor(Number(level) || 1));
@@ -1165,9 +999,6 @@ const createCosmicaGamificationClient = () => {
       state.isAuthenticated = false;
       state.user = null;
       state.progress = buildDefaultProgress();
-      progressPersistPending = false;
-      progressPersistFingerprint = "";
-      stopProgressAutosaveLoop();
       state.error = "";
       return;
     }
@@ -1182,10 +1013,6 @@ const createCosmicaGamificationClient = () => {
         payloadProfile.membership ||
         payloadData.plan ||
         payloadData.tier ||
-        user?.planTier ||
-        user?.plan ||
-        user?.tier ||
-        user?.membership ||
         ""
     )
       .trim()
@@ -1195,8 +1022,6 @@ const createCosmicaGamificationClient = () => {
       payloadProfile.premium ??
       payloadData.isPremium ??
       payloadData.premium ??
-      user?.isPremium ??
-      user?.premium ??
       null;
     const premiumFlagText = String(premiumFlagRaw ?? "")
       .trim()
@@ -1221,9 +1046,6 @@ const createCosmicaGamificationClient = () => {
       isPremium: hasPremiumAccess,
     };
     state.progress = normalizeProgressPayload(payload.progress || {});
-    progressPersistFingerprint = computeProgressFingerprint(state.progress);
-    progressPersistPending = false;
-    ensureProgressAutosaveLoop();
     state.error = "";
   };
 
@@ -1340,8 +1162,6 @@ const createCosmicaGamificationClient = () => {
         const payload = await window.cosmicaAuth.getProgress();
         if (payload && payload.progress) {
           state.progress = normalizeProgressPayload(payload.progress);
-          progressPersistFingerprint = computeProgressFingerprint(state.progress);
-          progressPersistPending = false;
           state.error = "";
         }
         return snapshot();
@@ -1374,7 +1194,6 @@ const createCosmicaGamificationClient = () => {
         });
         if (payload && payload.progress) {
           state.progress = normalizeProgressPayload(payload.progress);
-          markProgressForPersistence();
           state.error = "";
           notify();
         }
@@ -1737,21 +1556,9 @@ const setupAccountHub = () => {
             <span class="account-premium-main">Discover Premium</span>
             <span class="account-premium-sub">Unlock premium features</span>
           </button>
-          <button type="button" data-menu="restore" class="account-subscription-restore-nav">Restore Premium</button>
           <button type="button" data-menu="manage">Manage Account</button>
         </nav>
         <div class="account-manage-panel" hidden>
-          <section class="account-subscription-panel" hidden>
-            <h4>Subscription</h4>
-            <p class="account-subscription-note">Manage your Premium renewal settings.</p>
-            <p class="account-subscription-status" hidden>
-              <span class="account-subscription-status-label">Status:</span>
-              <span class="account-subscription-status-badge">Expired</span>
-            </p>
-            <p class="account-subscription-until" hidden></p>
-            <p class="account-subscription-sync" hidden></p>
-            <button type="button" class="account-reset-email-button account-subscription-cancel">Cancel subscription</button>
-          </section>
           <section class="account-password-panel" hidden>
             <h4>Password</h4>
             <form class="account-form account-password-change-form">
@@ -1762,13 +1569,13 @@ const setupAccountHub = () => {
               <button type="button" class="account-inline-link account-manage-forgot">Forgot password?</button>
             </form>
           </section>
-            <button type="button" class="account-reset-email-button account-manage-reset-email">Reset password</button>
+          <button type="button" class="account-reset-email-button account-manage-reset-email">Reset password</button>
           <p class="account-password-provider-note" hidden>
             Password changes for Google accounts are managed in your Google account settings.
           </p>
           <button class="account-delete account-delete-trigger" type="button">Delete account</button>
           <div class="account-delete-confirm" hidden>
-            <p class="account-delete-warning">Are you sure you want to delete your account? This action cannot be undone. If you have Premium, you can restore it later by signing up again with the same email and hitting the "Restore Premium" button.</p>
+            <p class="account-delete-warning">Are you sure you want to delete your account? This action cannot be undone.</p>
             <div class="account-delete-actions">
               <button class="account-delete-cancel" type="button">Cancel</button>
               <button class="account-delete account-delete-confirm-btn" type="button">Delete</button>
@@ -1856,29 +1663,6 @@ const setupAccountHub = () => {
   `;
   document.body.appendChild(premiumCheckoutOverlay);
 
-  const premiumSuccessOverlay = document.createElement("div");
-  premiumSuccessOverlay.className = "premium-setup-overlay premium-success-overlay";
-  premiumSuccessOverlay.hidden = true;
-  premiumSuccessOverlay.innerHTML = `
-    <section class="premium-setup-card premium-success-card" role="dialog" aria-modal="true" aria-labelledby="premiumSuccessTitle">
-      <button type="button" class="premium-setup-close premium-success-close" aria-label="Close premium welcome">×</button>
-      <h3 id="premiumSuccessTitle">Welcome to Premium 🚀</h3>
-      <p class="premium-setup-message premium-success-message">
-        Congratulations! Your Premium subscription is now active.
-      </p>
-      <div class="premium-success-benefits" role="list" aria-label="Premium access unlocked">
-        <p role="listitem">✓ Full access to premium language maps across worlds</p>
-        <p role="listitem">✓ Mimi AI guide for deeper, guided learning sessions</p>
-        <p role="listitem">✓ Advanced grammar tools and richer practice flow</p>
-        <p role="listitem">✓ Priority-ready premium experience on this account</p>
-      </div>
-      <div class="premium-setup-actions premium-success-actions">
-        <button type="button" class="premium-setup-primary premium-success-primary">Start exploring Premium</button>
-      </div>
-    </section>
-  `;
-  document.body.appendChild(premiumSuccessOverlay);
-
   const feedbackNode = dropdown.querySelector(".account-feedback");
   const guestPane = dropdown.querySelector(".account-guest-pane");
   const userPane = dropdown.querySelector(".account-user-pane");
@@ -1896,20 +1680,9 @@ const setupAccountHub = () => {
   const deleteConfirmBtn = dropdown.querySelector(".account-delete-confirm-btn");
   const googleButtons = Array.from(dropdown.querySelectorAll(".account-google-button"));
   const menuButtons = Array.from(dropdown.querySelectorAll(".account-menu-links button"));
-  const premiumMenuButton = dropdown.querySelector('[data-menu="premium"]');
-  const premiumMenuMain = premiumMenuButton?.querySelector(".account-premium-main");
-  const premiumMenuSub = premiumMenuButton?.querySelector(".account-premium-sub");
   const authSwitchButtons = Array.from(dropdown.querySelectorAll(".account-auth-switch button"));
   const authPanelNodes = Array.from(dropdown.querySelectorAll("[data-auth-panel-content]"));
   const managePanel = dropdown.querySelector(".account-manage-panel");
-  const subscriptionPanel = dropdown.querySelector(".account-subscription-panel");
-  const subscriptionStatusNode = dropdown.querySelector(".account-subscription-status");
-  const subscriptionStatusBadgeNode = dropdown.querySelector(".account-subscription-status-badge");
-  const subscriptionUntilNode = dropdown.querySelector(".account-subscription-until");
-  const subscriptionSyncNode = dropdown.querySelector(".account-subscription-sync");
-  const subscriptionCancelBtn = dropdown.querySelector(".account-subscription-cancel");
-  const subscriptionRestoreNavBtn = dropdown.querySelector(".account-subscription-restore-nav");
-  const subscriptionRestoreBtn = dropdown.querySelector(".account-subscription-restore");
   const passwordPanel = dropdown.querySelector(".account-password-panel");
   const passwordProviderNote = dropdown.querySelector(".account-password-provider-note");
   const passwordChangeForm = dropdown.querySelector(".account-password-change-form");
@@ -1940,21 +1713,13 @@ const setupAccountHub = () => {
   const premiumCheckoutCard = premiumCheckoutOverlay.querySelector(".premium-checkout-card");
   const premiumCheckoutCloseBtn = premiumCheckoutOverlay.querySelector(".premium-checkout-close");
   const premiumCheckoutOptionsNode = premiumCheckoutOverlay.querySelector(".premium-checkout-options");
-  const premiumCheckoutNote = premiumCheckoutOverlay.querySelector(".premium-checkout-note");
   const premiumCheckoutFeedback = premiumCheckoutOverlay.querySelector(".premium-checkout-feedback");
   const premiumCheckoutPrimaryBtn = premiumCheckoutOverlay.querySelector(".premium-checkout-primary");
   const premiumCheckoutSecondaryBtn = premiumCheckoutOverlay.querySelector(".premium-checkout-secondary");
-  const premiumSuccessCard = premiumSuccessOverlay.querySelector(".premium-success-card");
-  const premiumSuccessCloseBtn = premiumSuccessOverlay.querySelector(".premium-success-close");
-  const premiumSuccessPrimaryBtn = premiumSuccessOverlay.querySelector(".premium-success-primary");
   let selectedPremiumCheckoutOption = null;
   let premiumCheckoutOptionsReady = false;
-  let manualPremiumCongratsShown = false;
-  let latestPremiumCheckoutMeta = null;
   let activeAuthPanel = "login";
   let lastPremiumFocusNode = null;
-  let pendingPremiumRedirectStatus = "";
-  let latestSubscriptionSnapshot = null;
   const triggerNoticeBubble = document.createElement("p");
   triggerNoticeBubble.className = "account-trigger-bubble";
   triggerNoticeBubble.hidden = true;
@@ -1982,53 +1747,6 @@ const setupAccountHub = () => {
   let passwordProviderNoteAlertTimerId = 0;
   let authRedirectFeedbackLock = false;
   let authRedirectFeedbackLockTimerId = 0;
-  let bodyScrollLockActive = false;
-  let bodyScrollLockY = 0;
-  let bodyScrollLockInlineTop = "";
-  let bodyScrollLockInlinePosition = "";
-  let bodyScrollLockInlineLeft = "";
-  let bodyScrollLockInlineRight = "";
-  let bodyScrollLockInlineWidth = "";
-  let bodyScrollLockInlineOverflow = "";
-
-  const setBodyScrollLock = (shouldLock) => {
-    const lock = shouldLock === true;
-    if (lock === bodyScrollLockActive) {
-      return;
-    }
-    if (lock) {
-      bodyScrollLockY = window.scrollY || window.pageYOffset || 0;
-      bodyScrollLockInlineTop = document.body.style.top;
-      bodyScrollLockInlinePosition = document.body.style.position;
-      bodyScrollLockInlineLeft = document.body.style.left;
-      bodyScrollLockInlineRight = document.body.style.right;
-      bodyScrollLockInlineWidth = document.body.style.width;
-      bodyScrollLockInlineOverflow = document.body.style.overflow;
-      document.body.style.top = `-${bodyScrollLockY}px`;
-      document.body.style.position = "fixed";
-      document.body.style.left = "0";
-      document.body.style.right = "0";
-      document.body.style.width = "100%";
-      document.body.style.overflow = "hidden";
-      bodyScrollLockActive = true;
-      return;
-    }
-    document.body.style.top = bodyScrollLockInlineTop;
-    document.body.style.position = bodyScrollLockInlinePosition;
-    document.body.style.left = bodyScrollLockInlineLeft;
-    document.body.style.right = bodyScrollLockInlineRight;
-    document.body.style.width = bodyScrollLockInlineWidth;
-    document.body.style.overflow = bodyScrollLockInlineOverflow;
-    bodyScrollLockActive = false;
-    window.scrollTo(0, Math.max(0, bodyScrollLockY));
-  };
-
-  const syncOverlayBodyLock = () => {
-    const hasOpenAccountDropdown = !dropdown.hidden;
-    const hasOpenPremiumModal =
-      !premiumSetupOverlay.hidden || !premiumCheckoutOverlay.hidden || !premiumSuccessOverlay.hidden;
-    setBodyScrollLock(hasOpenAccountDropdown || hasOpenPremiumModal);
-  };
 
   const setFeedback = (message, tone = "") => {
     if (!feedbackNode) {
@@ -2324,24 +2042,7 @@ const setupAccountHub = () => {
     window.history.replaceState({}, "", nextUrl);
   };
 
-  const consumePremiumRedirectFromUrl = () => {
-    const params = new URLSearchParams(window.location.search);
-    const premiumStatus = String(params.get("premium") || "")
-      .trim()
-      .toLowerCase();
-    if (premiumStatus !== "success" && premiumStatus !== "cancel") {
-      return;
-    }
-    pendingPremiumRedirectStatus = premiumStatus;
-    params.delete("premium");
-    const nextQuery = params.toString();
-    const nextUrl =
-      window.location.pathname + (nextQuery ? `?${nextQuery}` : "") + window.location.hash;
-    window.history.replaceState({}, "", nextUrl);
-  };
-
   consumeAuthErrorFromUrl();
-  consumePremiumRedirectFromUrl();
   loginForm?.setAttribute("novalidate", "novalidate");
   signupForm?.setAttribute("novalidate", "novalidate");
   resetForm?.setAttribute("novalidate", "novalidate");
@@ -2514,7 +2215,6 @@ const setupAccountHub = () => {
       pendingAuthNoticeTone = "error";
     }
     positionDropdown();
-    syncOverlayBodyLock();
     window.setTimeout(() => {
       resolveInitialFocusElement()?.focus?.();
     }, 20);
@@ -2538,159 +2238,19 @@ const setupAccountHub = () => {
     if (managePanel) {
       managePanel.hidden = true;
     }
-    if (subscriptionPanel) {
-      subscriptionPanel.hidden = true;
-    }
-    syncOverlayBodyLock();
-  };
-
-  const formatSubscriptionDate = (isoValue) => {
-    const parsedMs = Date.parse(String(isoValue || "").trim());
-    if (!Number.isFinite(parsedMs)) {
-      return "";
-    }
-    return new Date(parsedMs).toLocaleDateString(undefined, {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
-
-  const formatSubscriptionStatusLabel = (statusValue, hasPremiumAccess) => {
-    const normalized = String(statusValue || "").trim().toLowerCase();
-    if (normalized === "active") {
-      return "Active";
-    }
-    if (normalized === "canceling") {
-      return "Canceling";
-    }
-    return hasPremiumAccess ? "Active" : "Expired";
-  };
-
-  const renderSubscriptionPanel = ({ hasPremiumAccess = false } = {}) => {
-    if (!(subscriptionPanel instanceof HTMLElement)) {
-      return;
-    }
-    const billingStatus = String(latestSubscriptionSnapshot?.billingStatus || "").trim().toLowerCase();
-    const statusLabel = formatSubscriptionStatusLabel(billingStatus, hasPremiumAccess);
-    const untilDateLabel = formatSubscriptionDate(latestSubscriptionSnapshot?.premiumAccessUntil);
-    const syncDateLabel = formatSubscriptionDate(latestSubscriptionSnapshot?.lastSyncAt);
-    const cancelAtPeriodEnd = latestSubscriptionSnapshot?.cancelAtPeriodEnd === true;
-    subscriptionPanel.hidden = false;
-
-    if (subscriptionStatusNode instanceof HTMLElement) {
-      subscriptionStatusNode.hidden = false;
-      subscriptionStatusNode.dataset.status = statusLabel.toLowerCase();
-    }
-    if (subscriptionStatusBadgeNode instanceof HTMLElement) {
-      subscriptionStatusBadgeNode.textContent = statusLabel;
-    }
-
-    if (subscriptionUntilNode) {
-      if (hasPremiumAccess) {
-        const endText = untilDateLabel
-          ? `Your Premium access remains active until ${untilDateLabel}, even after cancellation.`
-          : "Your Premium access remains active until the end of your current billing period, even after cancellation.";
-        subscriptionUntilNode.textContent = endText;
-        subscriptionUntilNode.hidden = false;
-      } else {
-        subscriptionUntilNode.hidden = true;
-        subscriptionUntilNode.textContent = "";
-      }
-    }
-    if (subscriptionSyncNode) {
-      subscriptionSyncNode.textContent = syncDateLabel
-        ? `Last billing sync: ${syncDateLabel}`
-        : "Last billing sync: not available yet";
-      subscriptionSyncNode.hidden = false;
-    }
-    if (subscriptionCancelBtn instanceof HTMLButtonElement) {
-      subscriptionCancelBtn.hidden = !hasPremiumAccess;
-      subscriptionCancelBtn.disabled = cancelAtPeriodEnd;
-      subscriptionCancelBtn.textContent = cancelAtPeriodEnd ? "Cancellation scheduled" : "Cancel subscription";
-    }
-    if (subscriptionRestoreBtn instanceof HTMLButtonElement) {
-      subscriptionRestoreBtn.hidden = hasPremiumAccess;
-      subscriptionRestoreBtn.disabled = false;
-      subscriptionRestoreBtn.textContent = "Restore Premium";
-    }
-  };
-
-  const loadSubscriptionStatus = async () => {
-    try {
-      const payload = await window.cosmicaAuth.getSubscriptionStatus();
-      latestSubscriptionSnapshot = payload?.subscription && typeof payload.subscription === "object"
-        ? payload.subscription
-        : null;
-    } catch {
-      latestSubscriptionSnapshot = null;
-    }
-  };
-
-  const setRestoreButtonsState = (isLoading = false) => {
-    const label = isLoading ? "Restoring..." : "Restore Premium";
-    if (subscriptionRestoreBtn instanceof HTMLButtonElement) {
-      subscriptionRestoreBtn.disabled = isLoading;
-      subscriptionRestoreBtn.textContent = label;
-    }
-    if (subscriptionRestoreNavBtn instanceof HTMLButtonElement) {
-      subscriptionRestoreNavBtn.disabled = isLoading;
-      subscriptionRestoreNavBtn.textContent = label;
-    }
-  };
-
-  const runRestorePremium = async () => {
-    setRestoreButtonsState(true);
-    try {
-      const payload = await window.cosmicaAuth.restoreSubscription();
-      if (payload?.user || payload?.data || payload?.progress) {
-        window.cosmicaGamification.init(true).catch(() => {});
-      }
-      latestSubscriptionSnapshot = payload?.subscription && typeof payload.subscription === "object"
-        ? payload.subscription
-        : latestSubscriptionSnapshot;
-      renderSubscriptionPanel({ hasPremiumAccess: latestSubscriptionSnapshot?.isPremium === true });
-      setFeedback(
-        payload?.result?.isPremium
-          ? "Premium status restored successfully."
-          : "No active Stripe premium subscription was found for this account.",
-        payload?.result?.isPremium ? "success" : "warning"
-      );
-    } catch (error) {
-      setFeedback(error?.message || "Could not restore premium right now.", "error");
-    } finally {
-      setRestoreButtonsState(false);
-    }
-  };
-
-  const openSubscriptionPanel = async ({ hasPremiumAccess = false } = {}) => {
-    if (managePanel) {
-      managePanel.hidden = false;
-    }
-    if (subscriptionPanel) {
-      subscriptionPanel.hidden = false;
-    }
-    if (subscriptionCancelBtn instanceof HTMLButtonElement) {
-      subscriptionCancelBtn.disabled = true;
-      subscriptionCancelBtn.textContent = "Loading...";
-    }
-    await loadSubscriptionStatus();
-    const effectivePremium = latestSubscriptionSnapshot?.isPremium === true || hasPremiumAccess;
-    renderSubscriptionPanel({ hasPremiumAccess: effectivePremium });
-    maybeShowManualPremiumCongrats();
   };
 
   const syncPremiumModalBodyLock = () => {
-    syncOverlayBodyLock();
+    const hasOpenPremiumModal = !premiumSetupOverlay.hidden || !premiumCheckoutOverlay.hidden;
+    document.body.classList.toggle("premium-setup-lock", hasOpenPremiumModal);
   };
 
-  const setPremiumCheckoutFeedback = (message, tone = "", reasonCode = "") => {
+  const setPremiumCheckoutFeedback = (message, tone = "") => {
     if (!premiumCheckoutFeedback) {
       return;
     }
     premiumCheckoutFeedback.textContent = String(message || "");
     premiumCheckoutFeedback.dataset.tone = String(tone || "");
-    premiumCheckoutFeedback.dataset.reasonCode = String(reasonCode || "").trim().toLowerCase();
   };
 
   const setPremiumCheckoutPrimaryState = (isLoading = false) => {
@@ -2701,35 +2261,6 @@ const setupAccountHub = () => {
     premiumCheckoutPrimaryBtn.dataset.loading = loading ? "true" : "false";
     premiumCheckoutPrimaryBtn.textContent = loading ? "Redirecting…" : "Proceed";
     premiumCheckoutPrimaryBtn.disabled = loading || !premiumCheckoutOptionsReady;
-  };
-
-  const maybeShowManualPremiumCongrats = () => {
-    if (manualPremiumCongratsShown) {
-      return;
-    }
-    const sub = latestSubscriptionSnapshot || {};
-    if (!sub?.isPremium) {
-      return;
-    }
-    const provider = String(sub.provider || sub.premiumProvider || "").trim().toLowerCase();
-    const lastSource = String(sub.lastSource || sub.premiumLastSource || "").trim().toLowerCase();
-    const isManual = provider === "manual" || lastSource.includes("manual");
-    if (!isManual) {
-      return;
-    }
-    manualPremiumCongratsShown = true;
-    const accessIso =
-      sub.premiumAccessUntil ||
-      sub.premiumCurrentPeriodEnd ||
-      sub.currentPeriodEnd ||
-      sub.premiumUntil ||
-      null;
-    const endDateLabel = formatSubscriptionDate(accessIso);
-    const durationText = endDateLabel ? `through ${endDateLabel}` : "for your complimentary period";
-    setFeedback(
-      `Congrats! Your complimentary Premium is active ${durationText}. Enjoy it — best wishes from Omar (Andy).`,
-      "success"
-    );
   };
 
   const sanitizeKoFiCheckoutUrl = (value) => {
@@ -2777,13 +2308,6 @@ const setupAccountHub = () => {
 
   const sanitizePremiumCheckoutUrl = (value) =>
     sanitizeKoFiCheckoutUrl(value) || sanitizeInternalPremiumCheckoutUrl(value);
-
-  const setPremiumCheckoutNoteText = (text) => {
-    if (!(premiumCheckoutNote instanceof HTMLElement)) {
-      return;
-    }
-    premiumCheckoutNote.textContent = String(text || "Payments are handled by our secure billing provider.");
-  };
 
   const renderPremiumCheckoutOptions = (options = []) => {
     if (!(premiumCheckoutOptionsNode instanceof HTMLElement)) {
@@ -2833,63 +2357,29 @@ const setupAccountHub = () => {
 
   const loadPremiumBillingOptions = async () => {
     const applyResponseOptions = (responsePayload) => {
-      latestPremiumCheckoutMeta =
-        responsePayload && typeof responsePayload === "object"
-          ? {
-              provider: String(responsePayload.provider || "").trim().toLowerCase(),
-              canPurchase: responsePayload.canPurchase !== false,
-              advisory: String(responsePayload.advisory || "").trim(),
-              fallbackAvailable: responsePayload?.fallback?.available === true,
-              reasonCode: String(responsePayload.reasonCode || "checkout_ready").trim().toLowerCase(),
-            }
-          : null;
-
       const options = Array.isArray(responsePayload?.options) ? responsePayload.options : [];
-      const canPurchase = latestPremiumCheckoutMeta?.canPurchase !== false;
-      renderPremiumCheckoutOptions(canPurchase ? options : []);
-
-      if (!canPurchase) {
-        return {
-          optionCount: 0,
-          reason: "already_premium",
-          reasonCode: latestPremiumCheckoutMeta?.reasonCode || "already_premium_active",
-        };
-      }
-
-      return {
-        optionCount: options.length,
-        reason: options.length > 0 ? "ok" : "not_configured",
-        reasonCode:
-          options.length > 0
-            ? latestPremiumCheckoutMeta?.reasonCode || "checkout_ready"
-            : "premium_checkout_not_configured",
-      };
+      renderPremiumCheckoutOptions(options);
+      return options.length;
     };
 
     try {
       const response = await window.cosmicaAuth.getPremiumBillingOptions();
-      const result = applyResponseOptions(response);
+      const optionCount = applyResponseOptions(response);
       return {
-        ok: result.optionCount > 0,
-        reason: result.reason,
-        reasonCode: result.reasonCode || "checkout_ready",
+        ok: optionCount > 0,
+        reason: optionCount > 0 ? "ok" : "not_configured",
       };
     } catch (error) {
-      latestPremiumCheckoutMeta = null;
       const status = Number(error?.status || 0);
-      const payloadCode = String(error?.payload?.reasonCode || error?.payload?.code || "")
-        .trim()
-        .toLowerCase();
       if (status === 401) {
         try {
           const refreshedSession = await window.cosmicaAuth.getSession();
           if (refreshedSession) {
             const retryResponse = await window.cosmicaAuth.getPremiumBillingOptions();
-            const result = applyResponseOptions(retryResponse);
+            const optionCount = applyResponseOptions(retryResponse);
             return {
-              ok: result.optionCount > 0,
-              reason: result.reason,
-              reasonCode: result.reasonCode || "checkout_ready",
+              ok: optionCount > 0,
+              reason: optionCount > 0 ? "ok" : "not_configured",
             };
           }
         } catch {}
@@ -2897,7 +2387,6 @@ const setupAccountHub = () => {
         return {
           ok: false,
           reason: "unauthorized",
-          reasonCode: "session_expired",
         };
       }
 
@@ -2905,8 +2394,6 @@ const setupAccountHub = () => {
       return {
         ok: false,
         reason: status === 503 ? "not_configured" : "error",
-        reasonCode:
-          payloadCode || (status === 503 ? "premium_checkout_not_configured" : "premium_checkout_load_error"),
       };
     }
   };
@@ -2915,19 +2402,11 @@ const setupAccountHub = () => {
     const safeUrl = sanitizePremiumCheckoutUrl(url);
     if (!safeUrl) {
       setPremiumCheckoutPrimaryState(false);
-      setPremiumCheckoutFeedback(
-        "Secure checkout URL is unavailable. Please try again.",
-        "error",
-        "premium_checkout_url_invalid"
-      );
+      setPremiumCheckoutFeedback("Secure checkout URL is unavailable. Please try again.", "error");
       return;
     }
     setPremiumCheckoutPrimaryState(true);
-    setPremiumCheckoutFeedback(
-      `Redirecting to secure ${label} checkout...`,
-      "info",
-      latestPremiumCheckoutMeta?.reasonCode || "checkout_redirect_start"
-    );
+    setPremiumCheckoutFeedback(`Redirecting to secure ${label} checkout...`, "info");
     window.setTimeout(() => {
       window.location.assign(safeUrl);
     }, 120);
@@ -2935,61 +2414,27 @@ const setupAccountHub = () => {
 
   const openPremiumCheckoutModal = async () => {
     premiumCheckoutOptionsReady = false;
-    latestPremiumCheckoutMeta = null;
     renderPremiumCheckoutOptions(buildFallbackPremiumBillingOptions());
     setPremiumCheckoutPrimaryState(false);
     setPremiumCheckoutFeedback("");
-    setPremiumCheckoutNoteText("Payments are handled by our secure billing provider.");
     premiumCheckoutOverlay.hidden = false;
     syncPremiumModalBodyLock();
-    setPremiumCheckoutFeedback("Loading secure subscription options...", "info", "checkout_options_loading");
+    setPremiumCheckoutFeedback("Loading secure subscription options...", "info");
     const loadResult = await loadPremiumBillingOptions();
-
-    if (latestPremiumCheckoutMeta?.provider === "stripe") {
-      setPremiumCheckoutNoteText(
-        latestPremiumCheckoutMeta.fallbackAvailable
-          ? "Secure Stripe checkout is primary. If unavailable, a secure Ko-fi fallback may be used."
-          : "Secure Stripe checkout is active for this account."
-      );
-    } else if (latestPremiumCheckoutMeta?.provider === "ko-fi") {
-      setPremiumCheckoutNoteText("Secure Ko-fi checkout is active for this account.");
-    }
-
     if (!premiumCheckoutOptionsReady) {
       if (loadResult?.reason === "unauthorized") {
-        setPremiumCheckoutFeedback(
-          "Your session on this device expired. Please log in again to continue.",
-          "error",
-          loadResult?.reasonCode || "session_expired"
-        );
+        setPremiumCheckoutFeedback("Your session on this device expired. Please log in again to continue.", "error");
         setAuthPanel("login", true);
         openDropdown();
         return;
       }
-      if (loadResult?.reason === "already_premium") {
-        const advisoryMessage = String(latestPremiumCheckoutMeta?.advisory || "").trim();
-        setPremiumCheckoutFeedback(
-          advisoryMessage || "Premium is already active on this account. No new checkout is needed right now.",
-          "info",
-          loadResult?.reasonCode || "already_premium_active"
-        );
-        return;
-      }
       if (loadResult?.reason === "not_configured") {
-        setPremiumCheckoutFeedback(
-          "Premium checkout is not configured on the server yet. Please contact support.",
-          "error",
-          loadResult?.reasonCode || "premium_checkout_not_configured"
-        );
+        setPremiumCheckoutFeedback("Premium checkout is not configured on the server yet. Please contact support.", "error");
         return;
       }
-      setPremiumCheckoutFeedback(
-        "Secure checkout is currently unavailable. Please try again.",
-        "error",
-        loadResult?.reasonCode || "premium_checkout_load_error"
-      );
+      setPremiumCheckoutFeedback("Secure checkout is currently unavailable. Please try again.", "error");
     } else {
-      setPremiumCheckoutFeedback("", "", loadResult?.reasonCode || "checkout_ready");
+      setPremiumCheckoutFeedback("");
     }
     window.setTimeout(() => {
       if (premiumCheckoutPrimaryBtn && typeof premiumCheckoutPrimaryBtn.focus === "function") {
@@ -3017,27 +2462,6 @@ const setupAccountHub = () => {
     if (lastPremiumFocusNode && typeof lastPremiumFocusNode.focus === "function") {
       lastPremiumFocusNode.focus();
     }
-  };
-
-  const closePremiumSuccessModal = () => {
-    premiumSuccessOverlay.hidden = true;
-    syncPremiumModalBodyLock();
-    if (lastPremiumFocusNode && typeof lastPremiumFocusNode.focus === "function") {
-      lastPremiumFocusNode.focus();
-    }
-  };
-
-  const openPremiumSuccessModal = () => {
-    lastPremiumFocusNode = document.activeElement;
-    premiumSuccessOverlay.hidden = false;
-    syncPremiumModalBodyLock();
-    window.setTimeout(() => {
-      if (premiumSuccessPrimaryBtn && typeof premiumSuccessPrimaryBtn.focus === "function") {
-        premiumSuccessPrimaryBtn.focus();
-        return;
-      }
-      premiumSuccessCard?.focus?.();
-    }, 20);
   };
 
   const openPremiumSetupModal = ({ message = "Upgrade to Premium to unlock this content." } = {}) => {
@@ -3100,18 +2524,6 @@ const setupAccountHub = () => {
     }
   });
 
-  premiumSuccessCloseBtn?.addEventListener("click", () => {
-    closePremiumSuccessModal();
-  });
-  premiumSuccessPrimaryBtn?.addEventListener("click", () => {
-    closePremiumSuccessModal();
-  });
-  premiumSuccessOverlay.addEventListener("click", (event) => {
-    if (event.target === premiumSuccessOverlay) {
-      closePremiumSuccessModal();
-    }
-  });
-
   premiumCheckoutPrimaryBtn?.addEventListener("click", () => {
     const target = selectedPremiumCheckoutOption;
     if (!target?.url) {
@@ -3134,11 +2546,6 @@ const setupAccountHub = () => {
     if (event.key !== "Escape") {
       return;
     }
-    if (!premiumSuccessOverlay.hidden) {
-      event.preventDefault();
-      closePremiumSuccessModal();
-      return;
-    }
     if (!premiumCheckoutOverlay.hidden) {
       event.preventDefault();
       closePremiumCheckoutModal();
@@ -3149,13 +2556,6 @@ const setupAccountHub = () => {
       closePremiumSetupModal();
     }
   });
-
-  if (pendingPremiumRedirectStatus === "success") {
-    pendingPremiumRedirectStatus = "";
-    window.setTimeout(() => {
-      openPremiumSuccessModal();
-    }, 60);
-  }
 
   const existingAccountHub =
     window.cosmicaAccountHub && typeof window.cosmicaAccountHub === "object"
@@ -3212,32 +2612,6 @@ const setupAccountHub = () => {
     const questTasks = quests?.tasks && typeof quests.tasks === "object" ? quests.tasks : {};
     const showPasswordManagement = Boolean(isAuthenticated && currentAuthProvider !== "google");
     const showGooglePasswordNote = Boolean(isAuthenticated && currentAuthProvider === "google");
-    const premiumAccessUntil =
-      snapshot?.user?.premiumAccessUntil ||
-      snapshot?.user?.premiumCurrentPeriodEnd ||
-      snapshot?.user?.premiumScheduledEndAt ||
-      latestSubscriptionSnapshot?.premiumAccessUntil ||
-      latestSubscriptionSnapshot?.premiumCurrentPeriodEnd ||
-      null;
-    const premiumProvider = String(snapshot?.user?.premiumProvider || "").trim().toLowerCase();
-    const premiumLastSource = String(snapshot?.user?.premiumLastSource || "").trim().toLowerCase();
-
-    latestSubscriptionSnapshot = {
-      premiumAccessUntil,
-      premiumCurrentPeriodEnd:
-        snapshot?.user?.premiumCurrentPeriodEnd || latestSubscriptionSnapshot?.premiumCurrentPeriodEnd || null,
-      provider: premiumProvider || premiumLastSource || latestSubscriptionSnapshot?.provider || "",
-      lastSource: premiumLastSource || latestSubscriptionSnapshot?.lastSource || "",
-      cancelAtPeriodEnd: snapshot?.user?.premiumCancelAtPeriodEnd === true,
-      billingStatus:
-        snapshot?.user?.isPremium === true
-          ? snapshot?.user?.premiumCancelAtPeriodEnd === true
-            ? "canceling"
-            : "active"
-          : "expired",
-      isPremium: snapshot?.user?.isPremium === true,
-      lastSyncAt: latestSubscriptionSnapshot?.lastSyncAt || null,
-    };
 
     if (triggerMeta) {
       triggerMeta.textContent = isAuthenticated ? `Level ${levelMeta.level}` : "Sign in";
@@ -3293,8 +2667,6 @@ const setupAccountHub = () => {
     }
 
     if (!isAuthenticated) {
-      manualPremiumCongratsShown = false;
-      latestSubscriptionSnapshot = null;
       setAuthPanel(activeAuthPanel, false);
       return;
     }
@@ -3315,24 +2687,9 @@ const setupAccountHub = () => {
       menuPlanStatus.textContent = hasPremiumAccess ? "(Premium account)" : "(Free plan)";
       menuPlanStatus.classList.toggle("is-premium", hasPremiumAccess);
     }
-    if (premiumMenuButton instanceof HTMLButtonElement) {
-      premiumMenuButton.hidden = false;
-      premiumMenuButton.disabled = false;
-      premiumMenuButton.dataset.subscriptionAction = hasPremiumAccess ? "manage" : "upgrade";
-      if (premiumMenuMain) {
-        premiumMenuMain.textContent = hasPremiumAccess ? "Manage Subscription" : "Discover Premium";
-      }
-      if (premiumMenuSub) {
-        premiumMenuSub.textContent = hasPremiumAccess
-          ? "Billing and renewal settings"
-          : "Unlock premium features";
-      }
-    }
     if (menuQuestsPanel) {
       menuQuestsPanel.classList.toggle("is-premium-locked", !hasPremiumAccess);
     }
-    renderSubscriptionPanel({ hasPremiumAccess });
-    maybeShowManualPremiumCongrats();
     if (menuXpFill) {
       const ratio = Math.max(0, Math.min(1, Number(levelMeta.ratio) || 0));
       menuXpFill.style.width = `${(ratio * 100).toFixed(2)}%`;
@@ -3795,22 +3152,8 @@ const setupAccountHub = () => {
           managePanel.hidden = !managePanel.hidden;
           if (managePanel.hidden) {
             setDeleteConfirmationVisible(false);
-            if (subscriptionPanel) {
-              subscriptionPanel.hidden = true;
-            }
-          } else {
-            const snapshot =
-              typeof window.cosmicaGamification?.getState === "function"
-                ? window.cosmicaGamification.getState()
-                : null;
-            const hasPremiumAccess = snapshot?.user?.isPremium === true;
-            void openSubscriptionPanel({ hasPremiumAccess });
           }
         }
-        return;
-      }
-      if (action === "restore") {
-        void runRestorePremium();
         return;
       }
       if (managePanel) {
@@ -3818,25 +3161,6 @@ const setupAccountHub = () => {
         setDeleteConfirmationVisible(false);
       }
       if (action === "premium") {
-        const snapshot =
-          typeof window.cosmicaGamification?.getState === "function"
-            ? window.cosmicaGamification.getState()
-            : null;
-        const userPlanTier = String(
-          snapshot?.user?.planTier || snapshot?.user?.tier || snapshot?.user?.plan || snapshot?.user?.membership || ""
-        )
-          .trim()
-          .toLowerCase();
-        const hasPremiumAccess =
-          snapshot?.user?.isPremium === true ||
-          userPlanTier === "premium" ||
-          userPlanTier === "pro" ||
-          userPlanTier === "plus" ||
-          userPlanTier === "paid";
-        if (hasPremiumAccess || String(button.dataset.subscriptionAction || "") === "manage") {
-          void openSubscriptionPanel({ hasPremiumAccess });
-          return;
-        }
         openPremiumFlow({
           message: "Upgrade to Premium to unlock all premium maps and features.",
           tone: "info",
@@ -3844,41 +3168,6 @@ const setupAccountHub = () => {
         return;
       }
     });
-  });
-
-  subscriptionCancelBtn?.addEventListener("click", async () => {
-    if (!(subscriptionCancelBtn instanceof HTMLButtonElement)) {
-      return;
-    }
-    subscriptionCancelBtn.disabled = true;
-    subscriptionCancelBtn.textContent = "Scheduling cancellation...";
-    if (subscriptionRestoreNavBtn instanceof HTMLButtonElement) {
-      subscriptionRestoreNavBtn.hidden = hasPremiumAccess;
-      subscriptionRestoreNavBtn.disabled = false;
-      subscriptionRestoreNavBtn.textContent = "Restore Premium";
-    }
-    try {
-      const payload = await window.cosmicaAuth.cancelSubscription();
-      if (payload?.user || payload?.data || payload?.progress) {
-        window.cosmicaGamification.init(true).catch(() => {});
-      }
-      latestSubscriptionSnapshot = payload?.subscription && typeof payload.subscription === "object"
-        ? payload.subscription
-        : latestSubscriptionSnapshot;
-      renderSubscriptionPanel({ hasPremiumAccess: latestSubscriptionSnapshot?.isPremium === true });
-      setFeedback(
-        "Cancellation scheduled. Your Premium access remains active until the end of your current billing period.",
-        "success"
-      );
-    } catch (error) {
-      subscriptionCancelBtn.disabled = false;
-      subscriptionCancelBtn.textContent = "Cancel subscription";
-      setFeedback(error?.message || "Could not update subscription right now.", "error");
-    }
-  });
-
-  subscriptionRestoreBtn?.addEventListener("click", async () => {
-    void runRestorePremium();
   });
 
   passwordChangeForm?.addEventListener("submit", async (event) => {
@@ -5131,30 +4420,6 @@ const setupLettersSectionCompleteButton = () => {
   }
 
   const syncButtonState = () => {
-    const snapshot =
-      typeof window.cosmicaGamification?.getState === "function"
-        ? window.cosmicaGamification.getState()
-        : null;
-    const user = snapshot && snapshot.user && typeof snapshot.user === "object" ? snapshot.user : null;
-    const premiumTier = String(user?.planTier || user?.tier || user?.plan || user?.membership || "")
-      .trim()
-      .toLowerCase();
-    const hasPremiumAccess =
-      user?.isPremium === true ||
-      premiumTier === "premium" ||
-      premiumTier === "pro" ||
-      premiumTier === "plus" ||
-      premiumTier === "paid";
-    if (!hasPremiumAccess) {
-      button.hidden = true;
-      button.classList.remove("is-complete");
-      button.setAttribute("aria-pressed", "false");
-      button.setAttribute("aria-label", "Premium only");
-      button.title = "Premium only";
-      return;
-    }
-
-    button.hidden = false;
     const mapKey = String(button.dataset.mapKey || "letters").trim().toLowerCase();
     const sectionKey = String(button.dataset.sectionKey || "letters-core").trim();
     const overrideValue =
@@ -5191,28 +4456,6 @@ const setupLettersSectionCompleteButton = () => {
     button.addEventListener("click", async (event) => {
       event.preventDefault();
       event.stopPropagation();
-      const snapshot =
-        typeof window.cosmicaGamification?.getState === "function"
-          ? window.cosmicaGamification.getState()
-          : null;
-      const user = snapshot && snapshot.user && typeof snapshot.user === "object" ? snapshot.user : null;
-      const premiumTier = String(user?.planTier || user?.tier || user?.plan || user?.membership || "")
-        .trim()
-        .toLowerCase();
-      const hasPremiumAccess =
-        user?.isPremium === true ||
-        premiumTier === "premium" ||
-        premiumTier === "pro" ||
-        premiumTier === "plus" ||
-        premiumTier === "paid";
-      if (!hasPremiumAccess) {
-        if (window.cosmicaAccountHub && typeof window.cosmicaAccountHub.openPremium === "function") {
-          window.cosmicaAccountHub.openPremium({
-            message: "Upgrade to Premium to unlock section checkmarks.",
-          });
-        }
-        return;
-      }
       const shouldUncheck = button.classList.contains("is-complete");
       const statusToSend = shouldUncheck ? "uncompleted" : "completed";
       if (typeof window.cosmicaSetSectionCompletionOverride === "function") {
@@ -5313,30 +4556,6 @@ const setupLettersCardPracticeButtons = () => {
     }
 
     const syncButtonState = () => {
-      const snapshot =
-        typeof window.cosmicaGamification?.getState === "function"
-          ? window.cosmicaGamification.getState()
-          : null;
-      const user = snapshot && snapshot.user && typeof snapshot.user === "object" ? snapshot.user : null;
-      const premiumTier = String(user?.planTier || user?.tier || user?.plan || user?.membership || "")
-        .trim()
-        .toLowerCase();
-      const hasPremiumAccess =
-        user?.isPremium === true ||
-        premiumTier === "premium" ||
-        premiumTier === "pro" ||
-        premiumTier === "plus" ||
-        premiumTier === "paid";
-      if (!hasPremiumAccess) {
-        button.hidden = true;
-        button.classList.remove("is-complete");
-        button.setAttribute("aria-pressed", "false");
-        button.setAttribute("aria-label", "Premium only");
-        button.title = "Premium only";
-        return;
-      }
-
-      button.hidden = false;
       const overrideValue =
         typeof window.cosmicaGetSectionCompletionOverride === "function"
           ? window.cosmicaGetSectionCompletionOverride({
@@ -5365,28 +4584,6 @@ const setupLettersCardPracticeButtons = () => {
       button.addEventListener("click", async (event) => {
         event.preventDefault();
         event.stopPropagation();
-        const snapshot =
-          typeof window.cosmicaGamification?.getState === "function"
-            ? window.cosmicaGamification.getState()
-            : null;
-        const user = snapshot && snapshot.user && typeof snapshot.user === "object" ? snapshot.user : null;
-        const premiumTier = String(user?.planTier || user?.tier || user?.plan || user?.membership || "")
-          .trim()
-          .toLowerCase();
-        const hasPremiumAccess =
-          user?.isPremium === true ||
-          premiumTier === "premium" ||
-          premiumTier === "pro" ||
-          premiumTier === "plus" ||
-          premiumTier === "paid";
-        if (!hasPremiumAccess) {
-          if (window.cosmicaAccountHub && typeof window.cosmicaAccountHub.openPremium === "function") {
-            window.cosmicaAccountHub.openPremium({
-              message: "Upgrade to Premium to unlock card checkmarks.",
-            });
-          }
-          return;
-        }
         if (button.dataset.busy === "1") {
           return;
         }
@@ -6002,37 +5199,6 @@ const sendChatMessage = async (message) => {
   }
 };
 
-const openGuestAuthAtMenuTop = ({
-  panel = "login",
-  message = "Sign in or create an account to continue.",
-  tone = "info",
-} = {}) => {
-  const openAuthPanel = () => {
-    if (typeof window.cosmicaAccountHub?.openAuth === "function") {
-      window.cosmicaAccountHub.openAuth({ panel, message, tone });
-      return;
-    }
-    const encodedPanel = encodeURIComponent(String(panel || "login").trim().toLowerCase() || "login");
-    window.location.href = `/index.html?openAuth=1&authPanel=${encodedPanel}#support`;
-  };
-
-  const nav = document.querySelector(".nav");
-  const currentScrollY = window.scrollY || window.pageYOffset || 0;
-  const targetTop = nav
-    ? Math.max(0, (nav.getBoundingClientRect().top || 0) + currentScrollY)
-    : 0;
-  const distance = Math.abs(currentScrollY - targetTop);
-
-  if (distance <= 6) {
-    openAuthPanel();
-    return;
-  }
-
-  window.scrollTo({ top: targetTop, behavior: "smooth" });
-  const delayMs = Math.min(520, Math.max(180, Math.round(distance * 0.32)));
-  window.setTimeout(openAuthPanel, delayMs);
-};
-
 function showMimiPremiumBubble() {
   // Remove any previous premium upsell bubble
   const prev = chatLog && chatLog.querySelector('.chat-message.mimi.premium-upsell');
@@ -6051,21 +5217,6 @@ function showMimiPremiumBubble() {
   btn.className = "premium-setup-primary";
   btn.textContent = "Upgrade to Premium";
   btn.onclick = function() {
-    const snapshot =
-      typeof window.cosmicaGamification?.getState === "function"
-        ? window.cosmicaGamification.getState()
-        : null;
-    const isAuthenticated = Boolean(snapshot?.isAuthenticated);
-
-    if (!isAuthenticated) {
-      openGuestAuthAtMenuTop({
-        panel: "login",
-        message: "Sign in or create an account to continue. Upgrade to Premium to unlock Mimi chat.",
-        tone: "info",
-      });
-      return;
-    }
-
     if (typeof window.cosmicaAccountHub?.openPremium === "function") {
       window.cosmicaAccountHub.openPremium({
         message: "Unlock Mimi chat and more with Premium!",
@@ -6237,12 +5388,8 @@ const createStars = (layer, count, sizeRange) => {
 const isSmallViewport = window.matchMedia("(max-width: 960px)").matches;
 const isWorldPage = document.body.classList.contains("world-page");
 const viewportDensityMultiplier = isSmallViewport ? (isWorldPage ? 0.48 : 0.58) : 1;
-const performanceDensityMultiplier = shouldUseUltraPerformanceMode
-  ? 0.38
-  : shouldUsePerformanceMode
-    ? 0.56
-    : 1;
-const reducedMotionDensityMultiplier = prefersReducedMotion ? 0.64 : 1;
+const performanceDensityMultiplier = isLowPowerDevice || prefersReducedData ? 0.72 : 1;
+const reducedMotionDensityMultiplier = prefersReducedMotion ? 0.85 : 1;
 const starDensityMultiplier =
   viewportDensityMultiplier *
   performanceDensityMultiplier *
@@ -6587,8 +5734,6 @@ const setupWorldPageInteractiveFx = () => {
   const root = document.documentElement;
   const worldAmbient = document.querySelector(".world-ambient");
   const worldSections = Array.from(document.querySelectorAll(".world-section"));
-  const allowPointerReactiveFx = !shouldUsePerformanceMode && !prefersReducedMotion;
-  const allowAmbientAnimation = !shouldUsePerformanceMode && !prefersReducedMotion;
   document.body.classList.add("world-fx-ready");
 
   const ensureAmbientStars = () => {
@@ -6597,7 +5742,7 @@ const setupWorldPageInteractiveFx = () => {
     }
     const stars = document.createElement("div");
     stars.className = "world-fx-stars";
-    const starCount = shouldUseUltraPerformanceMode ? 8 : shouldUsePerformanceMode ? 12 : prefersReducedMotion ? 10 : 26;
+    const starCount = prefersReducedMotion ? 10 : 26;
     for (let i = 0; i < starCount; i += 1) {
       const star = document.createElement("span");
       star.className = "world-fx-star";
@@ -6613,7 +5758,7 @@ const setupWorldPageInteractiveFx = () => {
   };
 
   const ensureSpaceLayers = () => {
-    if (!worldAmbient || prefersReducedMotion || shouldUsePerformanceMode) {
+    if (!worldAmbient || prefersReducedMotion) {
       return;
     }
     if (!worldAmbient.querySelector(".world-fx-dust")) {
@@ -6696,47 +5841,42 @@ const setupWorldPageInteractiveFx = () => {
       ambientPlanetA.style.transform = `translate3d(${driftX.toFixed(2)}px, ${driftY.toFixed(2)}px, 0) rotate(${spin.toFixed(2)}deg)`;
     }
   };
-  if (allowAmbientAnimation) {
+  if (!prefersReducedMotion) {
     ambientRafId = window.requestAnimationFrame(animateAmbient);
   }
 
-  if (allowPointerReactiveFx) {
-    window.addEventListener(
-      "pointermove",
-      (event) => {
-        setPointerTargetFromPoint(event.clientX, event.clientY);
-      },
-      { passive: true }
-    );
-    window.addEventListener(
-      "touchmove",
-      (event) => {
-        const touch = event.touches?.[0];
-        if (!touch) {
-          return;
-        }
-        setPointerTargetFromPoint(touch.clientX, touch.clientY);
-      },
-      { passive: true }
-    );
-    window.addEventListener(
-      "pointerleave",
-      () => {
-        pointerTargetX = 0;
-        pointerTargetY = 0;
-      },
-      { passive: true }
-    );
-  }
+  window.addEventListener(
+    "pointermove",
+    (event) => {
+      setPointerTargetFromPoint(event.clientX, event.clientY);
+    },
+    { passive: true }
+  );
+  window.addEventListener(
+    "touchmove",
+    (event) => {
+      const touch = event.touches?.[0];
+      if (!touch) {
+        return;
+      }
+      setPointerTargetFromPoint(touch.clientX, touch.clientY);
+    },
+    { passive: true }
+  );
+  window.addEventListener(
+    "pointerleave",
+    () => {
+      pointerTargetX = 0;
+      pointerTargetY = 0;
+    },
+    { passive: true }
+  );
 
   const updateWorldScrollFx = () => {
     const scrollMax = Math.max(1, document.body.scrollHeight - window.innerHeight);
     const scrollRatio = window.scrollY / scrollMax;
     root.style.setProperty("--world-scroll-ratio", scrollRatio.toFixed(4));
     root.style.setProperty("--world-cosmic-arc", `${(scrollRatio * 360).toFixed(2)}deg`);
-    if (shouldUseUltraPerformanceMode) {
-      return;
-    }
     worldSections.forEach((section) => {
       const rect = section.getBoundingClientRect();
       const midpoint = rect.top + rect.height / 2;
@@ -6777,9 +5917,6 @@ const setupWorldPageInteractiveFx = () => {
   bindPulseFx(Array.from(document.querySelectorAll(".language-pill, .language-skip, .hero-actions .primary")));
 
   const bindMapCosmicFx = () => {
-    if (shouldUsePerformanceMode) {
-      return;
-    }
     const mapCards = Array.from(document.querySelectorAll(".world-maps .map-card"));
     mapCards.forEach((card) => {
       card.style.setProperty("--map-hot-x", "50%");
@@ -8086,11 +7223,16 @@ const bindPremiumLockedInteraction = (element, {
     const isAuthenticated = Boolean(snapshot?.isAuthenticated);
     event.preventDefault();
     if (!isAuthenticated) {
-      openGuestAuthAtMenuTop({
-        panel: guestPanel,
-        message: guestMessage,
-        tone: "info",
-      });
+      if (typeof window.cosmicaAccountHub?.openAuth === "function") {
+        window.cosmicaAccountHub.openAuth({
+          panel: guestPanel,
+          message: guestMessage,
+          tone: "info",
+        });
+        return;
+      }
+      const panel = encodeURIComponent(String(guestPanel || "login").trim().toLowerCase() || "login");
+      window.location.href = `/index.html?openAuth=1&authPanel=${panel}#support`;
       return;
     }
     if (typeof window.cosmicaAccountHub?.openPremium === "function") {
@@ -8137,21 +7279,6 @@ const setupGrammarPremiumUpsell = () => {
 setupGrammarPremiumUpsell();
 
 const mapLinks = document.querySelectorAll(".map-link");
-const primeMapTranslationCaches = ({ immediate = false } = {}) => {
-  if (shouldUseUltraPerformanceMode) {
-    return;
-  }
-  const run = () => {
-    void warmMapTranslationsCache();
-    void warmWorldTranslationsCache();
-  };
-  if (immediate && !shouldUsePerformanceMode) {
-    run();
-    return;
-  }
-  scheduleNonCriticalTask(run, { timeout: shouldUsePerformanceMode ? 1800 : 1200 });
-};
-
 const inferMapKeyFromHref = (hrefValue) => {
   const href = String(hrefValue || "").toLowerCase();
   if (href.includes("letters")) {
@@ -8193,10 +7320,6 @@ const navigateToMapLink = (href) => {
     navigated = true;
     window.location.href = href;
   };
-  if (shouldUsePerformanceMode) {
-    finalize();
-    return;
-  }
   const deadline = window.setTimeout(finalize, 800);
   Promise.allSettled([
     Promise.resolve(warmMapTranslationsCache()),
@@ -8416,7 +7539,8 @@ if (languagePills.length) {
     }
     if (selected) {
       localStorage.setItem("cosmicaBaseLanguage", selected);
-      primeMapTranslationCaches();
+      void warmMapTranslationsCache();
+      void warmWorldTranslationsCache();
     } else {
       localStorage.removeItem("cosmicaBaseLanguage");
     }
@@ -8528,7 +7652,8 @@ if (languagePills.length) {
     });
   }
 
-  primeMapTranslationCaches();
+  void warmMapTranslationsCache();
+  void warmWorldTranslationsCache();
 }
 
 const languageSearch = document.getElementById("languageSearch");
@@ -10024,9 +9149,7 @@ if (needsMapTranslations) {
   initializeCommonShell();
 }
 
-scheduleNonCriticalTask(() => {
-  setupWebVitalsReporting();
-}, { timeout: 2200 });
+setupWebVitalsReporting();
 
 
 
