@@ -12,11 +12,13 @@ const { spawn } = require("child_process");
 
 const ROOT = path.resolve(__dirname, "..");
 const AUTH_STORE_FILE = path.join(ROOT, "backend", "data", "accounts.json");
+const DELETED_ACCOUNTS_AUDIT_FILE = path.join(ROOT, "backend", "data", "deleted-accounts.json");
 const PORT = Number(process.env.USER_STATE_CONTRACT_PORT || 4176);
 const BASE_URL = `http://127.0.0.1:${PORT}`;
 const STARTUP_TIMEOUT_MS = 25000;
 const REQUEST_TIMEOUT_MS = 12000;
 let authStoreSnapshotRaw = "";
+let deletedAccountsAuditSnapshotRaw = "";
 
 const FREE_USER = {
   id: "33333333-4444-4555-8666-777777777777",
@@ -48,6 +50,40 @@ const DRIFT_USER = {
   email: String(process.env.USER_STATE_DRIFT_EMAIL || "contract.drift@cosmica.local").trim().toLowerCase(),
   password: String(process.env.USER_STATE_DRIFT_PASSWORD || "TestPass123!"),
   displayName: "Contract Drift User",
+};
+
+const DELETE_USER = {
+  id: "77777777-8888-4999-9000-111111111111",
+  email: String(process.env.USER_STATE_DELETE_EMAIL || "contract.delete@cosmica.local").trim().toLowerCase(),
+  password: String(process.env.USER_STATE_DELETE_PASSWORD || "TestPass123!"),
+  displayName: "Contract Delete User",
+};
+
+const DELETED_RESTORE_ACTIVE_USER = {
+  id: "88888888-9999-4000-9001-222222222222",
+  email: String(process.env.USER_STATE_DELETED_RESTORE_ACTIVE_EMAIL || "contract.restore.active@cosmica.local")
+    .trim()
+    .toLowerCase(),
+  password: String(process.env.USER_STATE_DELETED_RESTORE_ACTIVE_PASSWORD || "TestPass123!"),
+  displayName: "Contract Restore Active User",
+};
+
+const DELETED_RESTORE_EXPIRED_USER = {
+  id: "99999999-0000-4001-9002-333333333333",
+  email: String(process.env.USER_STATE_DELETED_RESTORE_EXPIRED_EMAIL || "contract.restore.expired@cosmica.local")
+    .trim()
+    .toLowerCase(),
+  password: String(process.env.USER_STATE_DELETED_RESTORE_EXPIRED_PASSWORD || "TestPass123!"),
+  displayName: "Contract Restore Expired User",
+};
+
+const DELETED_RESTORE_MANUAL_USER = {
+  id: "00000000-1111-4002-9003-444444444444",
+  email: String(process.env.USER_STATE_DELETED_RESTORE_MANUAL_EMAIL || "contract.restore.manual@cosmica.local")
+    .trim()
+    .toLowerCase(),
+  password: String(process.env.USER_STATE_DELETED_RESTORE_MANUAL_PASSWORD || "TestPass123!"),
+  displayName: "Contract Restore Manual User",
 };
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -144,6 +180,11 @@ const seedContractUsers = async () => {
   if (!authStoreSnapshotRaw) {
     authStoreSnapshotRaw = fs.readFileSync(AUTH_STORE_FILE, "utf8");
   }
+  if (!deletedAccountsAuditSnapshotRaw) {
+    deletedAccountsAuditSnapshotRaw = fs.existsSync(DELETED_ACCOUNTS_AUDIT_FILE)
+      ? fs.readFileSync(DELETED_ACCOUNTS_AUDIT_FILE, "utf8")
+      : "";
+  }
   const raw = fs.readFileSync(AUTH_STORE_FILE, "utf8");
   const store = JSON.parse(raw);
   store.users = store.users && typeof store.users === "object" ? store.users : {};
@@ -161,13 +202,92 @@ const seedContractUsers = async () => {
     premium: true,
     premiumFlagDrift: true,
   });
+  store.users[DELETE_USER.id] = await buildUserRecord({ ...DELETE_USER, premium: false });
+  store.users[DELETED_RESTORE_ACTIVE_USER.id] = await buildUserRecord({
+    ...DELETED_RESTORE_ACTIVE_USER,
+    premium: false,
+  });
+  store.users[DELETED_RESTORE_EXPIRED_USER.id] = await buildUserRecord({
+    ...DELETED_RESTORE_EXPIRED_USER,
+    premium: false,
+  });
+  store.users[DELETED_RESTORE_MANUAL_USER.id] = await buildUserRecord({
+    ...DELETED_RESTORE_MANUAL_USER,
+    premium: false,
+  });
   store.emailIndex[FREE_USER.email] = FREE_USER.id;
   store.emailIndex[PREMIUM_USER.email] = PREMIUM_USER.id;
   store.emailIndex[CANCELING_USER.email] = CANCELING_USER.id;
   store.emailIndex[DRIFT_USER.email] = DRIFT_USER.id;
+  store.emailIndex[DELETE_USER.email] = DELETE_USER.id;
+  store.emailIndex[DELETED_RESTORE_ACTIVE_USER.email] = DELETED_RESTORE_ACTIVE_USER.id;
+  store.emailIndex[DELETED_RESTORE_EXPIRED_USER.email] = DELETED_RESTORE_EXPIRED_USER.id;
+  store.emailIndex[DELETED_RESTORE_MANUAL_USER.email] = DELETED_RESTORE_MANUAL_USER.id;
   store.updatedAt = new Date().toISOString();
 
   fs.writeFileSync(AUTH_STORE_FILE, JSON.stringify(store, null, 2), "utf8");
+
+  const now = Date.now();
+  const deletedAuditSeed = [
+    {
+      deletedAt: new Date(now - 60 * 60 * 1000).toISOString(),
+      userId: `${DELETED_RESTORE_ACTIVE_USER.id}-deleted`,
+      email: DELETED_RESTORE_ACTIVE_USER.email,
+      displayName: DELETED_RESTORE_ACTIVE_USER.displayName,
+      authProvider: "google",
+      createdAt: new Date(now - 30 * 24 * 60 * 60 * 1000).toISOString(),
+      lastLoginAt: new Date(now - 2 * 60 * 60 * 1000).toISOString(),
+      source: "self-delete",
+      requestId: "contract-deleted-restore-active",
+      premiumSnapshot: {
+        status: "active",
+        currentPeriodEnd: new Date(now + 5 * 24 * 60 * 60 * 1000).toISOString(),
+        customerId: "cus_contract_restore_active",
+        subscriptionId: "sub_contract_restore_active",
+        cancelAtPeriodEnd: false,
+      },
+    },
+    {
+      deletedAt: new Date(now - 90 * 60 * 1000).toISOString(),
+      userId: `${DELETED_RESTORE_EXPIRED_USER.id}-deleted`,
+      email: DELETED_RESTORE_EXPIRED_USER.email,
+      displayName: DELETED_RESTORE_EXPIRED_USER.displayName,
+      authProvider: "google",
+      createdAt: new Date(now - 30 * 24 * 60 * 60 * 1000).toISOString(),
+      lastLoginAt: new Date(now - 3 * 60 * 60 * 1000).toISOString(),
+      source: "self-delete",
+      requestId: "contract-deleted-restore-expired",
+      premiumSnapshot: {
+        status: "canceled",
+        currentPeriodEnd: new Date(now - 2 * 24 * 60 * 60 * 1000).toISOString(),
+        customerId: "cus_contract_restore_expired",
+        subscriptionId: "sub_contract_restore_expired",
+        cancelAtPeriodEnd: true,
+      },
+    },
+    {
+      deletedAt: new Date(now - 120 * 60 * 1000).toISOString(),
+      userId: `${DELETED_RESTORE_MANUAL_USER.id}-deleted`,
+      email: DELETED_RESTORE_MANUAL_USER.email,
+      displayName: DELETED_RESTORE_MANUAL_USER.displayName,
+      authProvider: "google",
+      createdAt: new Date(now - 10 * 24 * 60 * 60 * 1000).toISOString(),
+      lastLoginAt: new Date(now - 4 * 60 * 60 * 1000).toISOString(),
+      source: "self-delete",
+      requestId: "contract-deleted-restore-manual",
+      premiumSnapshot: {
+        isPremium: true,
+        premium: true,
+        plan: "premium",
+        tier: "premium",
+        membership: "premium",
+        provider: "admin",
+        status: "",
+        currentPeriodEnd: "",
+      },
+    },
+  ];
+  fs.writeFileSync(DELETED_ACCOUNTS_AUDIT_FILE, JSON.stringify(deletedAuditSeed, null, 2), "utf8");
 };
 
 const restoreAuthStore = () => {
@@ -175,6 +295,16 @@ const restoreAuthStore = () => {
     return;
   }
   fs.writeFileSync(AUTH_STORE_FILE, authStoreSnapshotRaw, "utf8");
+};
+
+const restoreDeletedAccountsAuditStore = () => {
+  if (deletedAccountsAuditSnapshotRaw) {
+    fs.writeFileSync(DELETED_ACCOUNTS_AUDIT_FILE, deletedAccountsAuditSnapshotRaw, "utf8");
+    return;
+  }
+  if (fs.existsSync(DELETED_ACCOUNTS_AUDIT_FILE)) {
+    fs.rmSync(DELETED_ACCOUNTS_AUDIT_FILE);
+  }
 };
 
 const waitForHealth = async () => {
@@ -449,6 +579,150 @@ const verifyRestoreSubscriptionContracts = async ({ freeCookie, premiumCookie, d
   );
 };
 
+const verifyDeleteRequiresReregister = async () => {
+  const deleteCookie = await loginAndGetCookie({
+    email: DELETE_USER.email,
+    password: DELETE_USER.password,
+    label: "delete-user",
+  });
+
+  const deleteResult = await getJson({
+    path: "/api/auth/account",
+    cookie: deleteCookie,
+    method: "DELETE",
+  });
+  assert(deleteResult.response.status === 200, `delete-user: account delete failed (${deleteResult.response.status})`);
+  assert(deleteResult.payload?.ok === true, "delete-user: account delete missing ok=true");
+
+  const staleMe = await getJson({
+    path: "/api/auth/me",
+    cookie: deleteCookie,
+  });
+  assert(staleMe.response.status === 401, `delete-user: stale cookie should be 401, got ${staleMe.response.status}`);
+
+  const reloginResponse = await fetchWithTimeout(`${BASE_URL}/api/auth/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({ email: DELETE_USER.email, password: DELETE_USER.password }),
+  });
+  let reloginPayload = null;
+  try {
+    reloginPayload = await reloginResponse.json();
+  } catch {
+    reloginPayload = null;
+  }
+  assert(
+    reloginResponse.status === 401,
+    `delete-user: login after delete should be 401, got ${reloginResponse.status} ${reloginPayload?.error || ""}`
+  );
+
+  const signupResponse = await fetchWithTimeout(`${BASE_URL}/api/auth/signup`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      displayName: "Recreated User",
+      email: DELETE_USER.email,
+      password: DELETE_USER.password,
+      baseLanguage: "english",
+    }),
+  });
+  let signupPayload = null;
+  try {
+    signupPayload = await signupResponse.json();
+  } catch {
+    signupPayload = null;
+  }
+  assert(
+    signupResponse.status !== 409,
+    `delete-user: signup after delete should not be blocked as existing account (got 409: ${signupPayload?.error || ""})`
+  );
+};
+
+const verifyDeletedAccountRestoreContracts = async () => {
+  const activeCookie = await loginAndGetCookie({
+    email: DELETED_RESTORE_ACTIVE_USER.email,
+    password: DELETED_RESTORE_ACTIVE_USER.password,
+    label: "deleted-restore-active-user",
+  });
+  const activeRestore = await getJson({
+    path: "/api/billing/subscription/restore",
+    cookie: activeCookie,
+    method: "POST",
+  });
+  assert(
+    activeRestore.response.status === 200,
+    `deleted-restore-active-user: restore should be 200, got ${activeRestore.response.status}`
+  );
+  assert(
+    String(activeRestore.payload?.status || "").trim().toLowerCase() === "restored",
+    "deleted-restore-active-user: restore should return restored"
+  );
+
+  const activeMe = await getJson({ path: "/api/auth/me", cookie: activeCookie });
+  const activeProfile = activeMe.payload?.data?.profile;
+  assert(activeMe.response.status === 200, `deleted-restore-active-user: /api/auth/me failed (${activeMe.response.status})`);
+  assert(
+    String(activeProfile?.plan || activeProfile?.tier || "").trim().toLowerCase() === "premium",
+    "deleted-restore-active-user: restored account should be premium"
+  );
+
+  const expiredCookie = await loginAndGetCookie({
+    email: DELETED_RESTORE_EXPIRED_USER.email,
+    password: DELETED_RESTORE_EXPIRED_USER.password,
+    label: "deleted-restore-expired-user",
+  });
+  const expiredRestore = await getJson({
+    path: "/api/billing/subscription/restore",
+    cookie: expiredCookie,
+    method: "POST",
+  });
+  assert(
+    expiredRestore.response.status === 409,
+    `deleted-restore-expired-user: restore should be 409, got ${expiredRestore.response.status}`
+  );
+  assert(
+    String(expiredRestore.payload?.code || "").trim().toLowerCase() === "no_active_premium_plan_found",
+    "deleted-restore-expired-user: restore should return no_active_premium_plan_found"
+  );
+
+  const manualCookie = await loginAndGetCookie({
+    email: DELETED_RESTORE_MANUAL_USER.email,
+    password: DELETED_RESTORE_MANUAL_USER.password,
+    label: "deleted-restore-manual-user",
+  });
+  const manualRestore = await getJson({
+    path: "/api/billing/subscription/restore",
+    cookie: manualCookie,
+    method: "POST",
+  });
+  assert(
+    manualRestore.response.status === 200,
+    `deleted-restore-manual-user: restore should be 200, got ${manualRestore.response.status}`
+  );
+  assert(
+    String(manualRestore.payload?.status || "").trim().toLowerCase() === "restored",
+    "deleted-restore-manual-user: restore should return restored"
+  );
+
+  const manualMe = await getJson({ path: "/api/auth/me", cookie: manualCookie });
+  const manualProfile = manualMe.payload?.data?.profile;
+  assert(manualMe.response.status === 200, `deleted-restore-manual-user: /api/auth/me failed (${manualMe.response.status})`);
+  assert(
+    String(manualProfile?.plan || manualProfile?.tier || "").trim().toLowerCase() === "premium",
+    "deleted-restore-manual-user: restored account should be premium"
+  );
+  assert(
+    String(manualProfile?.premiumProvider || "").trim().toLowerCase() === "admin",
+    "deleted-restore-manual-user: premium provider should preserve admin/manual source"
+  );
+};
+
 const startServer = () => {
   const child = spawn(process.execPath, ["server.js"], {
     cwd: ROOT,
@@ -551,13 +825,19 @@ const main = async () => {
       driftCookie,
     });
 
-    console.log("PASS [user-state-contract] guest/free/premium/canceling/drift/restore invariants");
+    await verifyDeleteRequiresReregister();
+    await verifyDeletedAccountRestoreContracts();
+
+    console.log(
+      "PASS [user-state-contract] guest/free/premium/canceling/drift/restore/delete/deleted-restore invariants"
+    );
   } catch (error) {
     console.error(`FAIL [user-state-contract] ${error?.message || error}`);
     process.exitCode = 1;
   } finally {
     await stopServer(child);
     restoreAuthStore();
+    restoreDeletedAccountsAuditStore();
   }
 };
 

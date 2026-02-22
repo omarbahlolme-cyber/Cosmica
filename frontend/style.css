@@ -2695,6 +2695,11 @@ body.premium-setup-lock {
   margin-top: 0;
 }
 
+.account-menu-summary.is-free-plan {
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+}
+
 .account-menu-stat {
   display: inline-flex;
   align-items: center;

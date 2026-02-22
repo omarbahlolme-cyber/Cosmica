@@ -1881,6 +1881,7 @@ const setupAccountHub = () => {
   const manageForgotPasswordBtn = dropdown.querySelector(".account-manage-forgot");
   const menuAvatar = dropdown.querySelector(".account-menu-avatar");
   const menuHeader = dropdown.querySelector(".account-menu-header");
+  const menuSummary = dropdown.querySelector(".account-menu-summary");
   const menuName = dropdown.querySelector(".account-menu-name");
   const menuLevel = dropdown.querySelector(".account-menu-level");
   const menuXp = dropdown.querySelector(".account-menu-xp");
@@ -2957,6 +2958,9 @@ const setupAccountHub = () => {
     if (menuHeader) {
       menuHeader.classList.toggle("is-user-premium", isAuthenticated && hasPremiumAccess);
     }
+    if (menuSummary) {
+      menuSummary.classList.toggle("is-free-plan", isAuthenticated && !hasPremiumAccess);
+    }
     if (premiumCtaBtn) {
       premiumCtaBtn.hidden = !isAuthenticated;
       premiumCtaBtn.setAttribute("aria-hidden", premiumCtaBtn.hidden ? "true" : "false");
@@ -3042,7 +3046,7 @@ const setupAccountHub = () => {
       menuAchievements.textContent = `${achievementCount} Achievements`;
       const achievementsStatNode = menuAchievements.closest(".account-menu-stat");
       if (achievementsStatNode) {
-        achievementsStatNode.hidden = !showPremiumStatus;
+        achievementsStatNode.hidden = !showPremiumStatus && !showFreeStreakOnly;
       }
     }
 

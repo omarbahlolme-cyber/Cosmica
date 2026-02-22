@@ -1601,6 +1601,83 @@ const loadAuthStoreFromDisk = () => {
   }
 };
 
+const normalizeDeletedAccountPremiumSnapshot = (snapshot) => {
+  if (!isPlainObject(snapshot)) {
+    return null;
+  }
+  const premiumRaw = snapshot.isPremium ?? snapshot.premium;
+  const premiumText = String(premiumRaw ?? "")
+    .trim()
+    .toLowerCase();
+  const hasPremiumFlag =
+    premiumRaw === true ||
+    premiumText === "1" ||
+    premiumText === "true" ||
+    premiumText === "yes" ||
+    premiumText === "premium" ||
+    premiumText === "pro" ||
+    premiumText === "plus";
+  const plan = String(snapshot.plan || "")
+    .trim()
+    .toLowerCase()
+    .slice(0, 24);
+  const tier = String(snapshot.tier || "")
+    .trim()
+    .toLowerCase()
+    .slice(0, 24);
+  const membership = String(snapshot.membership || "")
+    .trim()
+    .toLowerCase()
+    .slice(0, 24);
+  const provider = String(snapshot.provider || snapshot.premiumProvider || "")
+    .trim()
+    .toLowerCase()
+    .slice(0, 40);
+  const status = String(snapshot.status || snapshot.subscriptionStatus || "")
+    .trim()
+    .toLowerCase()
+    .slice(0, 60);
+  const currentPeriodEnd = String(
+    snapshot.currentPeriodEnd || snapshot.premiumCurrentPeriodEnd || snapshot.endsAt || ""
+  )
+    .trim()
+    .slice(0, 40);
+  const customerId = String(snapshot.customerId || snapshot.premiumStripeCustomerId || "")
+    .trim()
+    .slice(0, 120);
+  const subscriptionId = String(snapshot.subscriptionId || snapshot.premiumStripeSubscriptionId || "")
+    .trim()
+    .slice(0, 120);
+  const cancelAtPeriodEnd = snapshot.cancelAtPeriodEnd === true;
+  if (
+    !hasPremiumFlag &&
+    !plan &&
+    !tier &&
+    !membership &&
+    !provider &&
+    !status &&
+    !currentPeriodEnd &&
+    !customerId &&
+    !subscriptionId &&
+    !cancelAtPeriodEnd
+  ) {
+    return null;
+  }
+  return {
+    isPremium: hasPremiumFlag,
+    premium: hasPremiumFlag,
+    plan,
+    tier,
+    membership,
+    provider,
+    status,
+    currentPeriodEnd,
+    customerId,
+    subscriptionId,
+    cancelAtPeriodEnd,
+  };
+};
+
 const loadDeletedAccountsAuditFromDisk = () => {
   try {
     if (!fs.existsSync(AUTH_DATA_ROOT)) {
@@ -1629,6 +1706,7 @@ const loadDeletedAccountsAuditFromDisk = () => {
         lastLoginAt: String(entry.lastLoginAt || "").slice(0, 40) || null,
         source: String(entry.source || "self-delete").slice(0, 40),
         requestId: String(entry.requestId || "").slice(0, 80),
+        premiumSnapshot: normalizeDeletedAccountPremiumSnapshot(entry.premiumSnapshot),
       }));
     writeDeletedAccountsAuditSync(normalized);
     return normalized;
@@ -1989,6 +2067,29 @@ const appendDeletedAccountAuditEntry = async ({ userRecord = null, req = null, s
     return false;
   }
   const authProvider = String(userRecord?.data?.profile?.authProvider || "email").trim().toLowerCase() || "email";
+  const profile = isPlainObject(userRecord?.data?.profile) ? userRecord.data.profile : {};
+  const premiumSnapshot = normalizeDeletedAccountPremiumSnapshot({
+    isPremium: profile.isPremium,
+    premium: profile.premium,
+    plan: profile.plan,
+    tier: profile.tier,
+    membership: profile.membership,
+    provider: profile.premiumProvider,
+    status:
+      profile.premiumStatus || profile.subscriptionStatus || profile.premiumStripeSubscriptionStatus || "",
+    currentPeriodEnd:
+      profile.premiumCurrentPeriodEnd ||
+      profile.currentPeriodEnd ||
+      profile.subscriptionEndsAt ||
+      profile.premiumEndsAt ||
+      profile.premiumExpiresAt ||
+      profile.planEndsAt ||
+      profile.expiresAt ||
+      "",
+    customerId: profile.premiumStripeCustomerId || "",
+    subscriptionId: profile.premiumStripeSubscriptionId || "",
+    cancelAtPeriodEnd: profile.premiumCancelAtPeriodEnd === true,
+  });
   const entry = {
     deletedAt: new Date().toISOString(),
     userId: String(userRecord.id || "").trim(),
@@ -2000,6 +2101,9 @@ const appendDeletedAccountAuditEntry = async ({ userRecord = null, req = null, s
     source: String(source || "self-delete").slice(0, 40),
     requestId: String(req?.requestId || "").slice(0, 80),
   };
+  if (premiumSnapshot) {
+    entry.premiumSnapshot = premiumSnapshot;
+  }
   deletedAccountsAudit.push(entry);
   await queuePersistDeletedAccountsAudit();
   return true;
@@ -2217,25 +2321,49 @@ const purgeUserFromAuthStore = ({ userId, email = "" } = {}) => {
   const resolvedEmail = normalizeEmail(userRecord?.email || normalizedEmail);
   let changed = false;
 
+  const userIdsToPurge = new Set();
+  if (resolvedUserId) {
+    userIdsToPurge.add(resolvedUserId);
+  }
+  Object.entries(authStore.users || {}).forEach(([candidateUserId, candidateUser]) => {
+    if (!candidateUser || typeof candidateUser !== "object") {
+      return;
+    }
+    const candidateEmail = normalizeEmail(candidateUser.email);
+    if (resolvedEmail && candidateEmail === resolvedEmail) {
+      userIdsToPurge.add(String(candidateUserId || "").trim());
+    }
+  });
+  Object.entries(authStore.emailIndex || {}).forEach(([, indexedUserId]) => {
+    const normalizedIndexedUserId = String(indexedUserId || "").trim();
+    if (normalizedIndexedUserId && userIdsToPurge.has(normalizedIndexedUserId)) {
+      userIdsToPurge.add(normalizedIndexedUserId);
+    }
+  });
+
   if (resolvedEmail && authStore.emailIndex[resolvedEmail]) {
     delete authStore.emailIndex[resolvedEmail];
     changed = true;
   }
 
   Object.entries(authStore.emailIndex).forEach(([indexedEmail, indexedUserId]) => {
-    if (String(indexedUserId || "").trim() === resolvedUserId) {
+    const normalizedIndexedUserId = String(indexedUserId || "").trim();
+    if (userIdsToPurge.has(normalizedIndexedUserId)) {
       delete authStore.emailIndex[indexedEmail];
       changed = true;
     }
   });
 
-  if (resolvedUserId && authStore.users[resolvedUserId]) {
-    delete authStore.users[resolvedUserId];
-    changed = true;
-  }
+  userIdsToPurge.forEach((candidateUserId) => {
+    if (candidateUserId && authStore.users[candidateUserId]) {
+      delete authStore.users[candidateUserId];
+      changed = true;
+    }
+  });
 
   Object.entries(authStore.sessions).forEach(([sessionHash, session]) => {
-    if (String(session?.userId || "").trim() === resolvedUserId) {
+    const sessionUserId = String(session?.userId || "").trim();
+    if (userIdsToPurge.has(sessionUserId)) {
       delete authStore.sessions[sessionHash];
       changed = true;
     }
@@ -5520,6 +5648,18 @@ const createStripePremiumCheckoutSession = async (req, userRecord, optionId = "m
 };
 
 const ACTIVE_STRIPE_PREMIUM_STATUSES = new Set(["active", "trialing", "past_due"]);
+const TERMINAL_PREMIUM_STATUSES = new Set([
+  "canceled",
+  "cancelled",
+  "expired",
+  "ended",
+  "stopped",
+  "incomplete",
+  "incomplete_expired",
+  "unpaid",
+  "paused",
+  "revoked",
+]);
 
 const normalizeStripeUnixToIso = (unixSeconds) => {
   const parsed = Number(unixSeconds);
@@ -5578,54 +5718,69 @@ const findStripeActiveSubscriptionForUser = async (userRecord) => {
   }
 
   if (userEmail) {
-    let hasMoreCustomers = true;
-    let customerStartingAfter = "";
-    while (hasMoreCustomers) {
-      const customerResponse = await stripe.customers.list({
+    try {
+      let hasMoreCustomers = true;
+      let customerStartingAfter = "";
+      while (hasMoreCustomers) {
+        const customerResponse = await stripe.customers.list({
+          email: userEmail,
+          limit: 100,
+          ...(customerStartingAfter ? { starting_after: customerStartingAfter } : {}),
+        });
+        const customerItems = Array.isArray(customerResponse?.data) ? customerResponse.data : [];
+        customerItems.forEach((customer) => {
+          if (!customer || customer.deleted) {
+            return;
+          }
+          const customerId = String(customer.id || "").trim();
+          if (customerId) {
+            customerIds.add(customerId);
+          }
+        });
+        hasMoreCustomers = Boolean(customerResponse?.has_more) && customerItems.length > 0;
+        customerStartingAfter = hasMoreCustomers
+          ? String(customerItems[customerItems.length - 1]?.id || "")
+          : "";
+      }
+    } catch (error) {
+      reportServerError("billing-restore-customer-email-list", error, {
+        userId: String(userRecord?.id || "").slice(0, 100),
         email: userEmail,
-        limit: 100,
-        ...(customerStartingAfter ? { starting_after: customerStartingAfter } : {}),
       });
-      const customerItems = Array.isArray(customerResponse?.data) ? customerResponse.data : [];
-      customerItems.forEach((customer) => {
-        if (!customer || customer.deleted) {
-          return;
-        }
-        const customerId = String(customer.id || "").trim();
-        if (customerId) {
-          customerIds.add(customerId);
-        }
-      });
-      hasMoreCustomers = Boolean(customerResponse?.has_more) && customerItems.length > 0;
-      customerStartingAfter = hasMoreCustomers
-        ? String(customerItems[customerItems.length - 1]?.id || "")
-        : "";
     }
   }
 
   for (const customerId of customerIds) {
-    let hasMoreSubscriptions = true;
-    let subscriptionStartingAfter = "";
     const candidateSubscriptions = [];
-    while (hasMoreSubscriptions) {
-      const subscriptionResponse = await stripe.subscriptions.list({
-        customer: customerId,
-        status: "all",
-        limit: 100,
-        ...(subscriptionStartingAfter ? { starting_after: subscriptionStartingAfter } : {}),
+    try {
+      let hasMoreSubscriptions = true;
+      let subscriptionStartingAfter = "";
+      while (hasMoreSubscriptions) {
+        const subscriptionResponse = await stripe.subscriptions.list({
+          customer: customerId,
+          status: "all",
+          limit: 100,
+          ...(subscriptionStartingAfter ? { starting_after: subscriptionStartingAfter } : {}),
+        });
+        const subscriptionItems = Array.isArray(subscriptionResponse?.data)
+          ? subscriptionResponse.data
+          : [];
+        candidateSubscriptions.push(
+          ...subscriptionItems.filter((subscription) =>
+            ACTIVE_STRIPE_PREMIUM_STATUSES.has(String(subscription?.status || "").trim().toLowerCase())
+          )
+        );
+        hasMoreSubscriptions = Boolean(subscriptionResponse?.has_more) && subscriptionItems.length > 0;
+        subscriptionStartingAfter = hasMoreSubscriptions
+          ? String(subscriptionItems[subscriptionItems.length - 1]?.id || "")
+          : "";
+      }
+    } catch (error) {
+      reportServerError("billing-restore-customer-subscription-list", error, {
+        userId: String(userRecord?.id || "").slice(0, 100),
+        customerId: String(customerId || "").slice(0, 120),
       });
-      const subscriptionItems = Array.isArray(subscriptionResponse?.data)
-        ? subscriptionResponse.data
-        : [];
-      candidateSubscriptions.push(
-        ...subscriptionItems.filter((subscription) =>
-          ACTIVE_STRIPE_PREMIUM_STATUSES.has(String(subscription?.status || "").trim().toLowerCase())
-        )
-      );
-      hasMoreSubscriptions = Boolean(subscriptionResponse?.has_more) && subscriptionItems.length > 0;
-      subscriptionStartingAfter = hasMoreSubscriptions
-        ? String(subscriptionItems[subscriptionItems.length - 1]?.id || "")
-        : "";
+      continue;
     }
 
     const winner = candidateSubscriptions.sort(
@@ -5642,6 +5797,65 @@ const findStripeActiveSubscriptionForUser = async (userRecord) => {
       status,
       cancelAtPeriodEnd: winner.cancel_at_period_end === true,
       currentPeriodEnd: normalizeStripeUnixToIso(winner.current_period_end),
+    };
+  }
+
+  return null;
+};
+
+const findDeletedAccountActivePremiumForEmail = (email = "") => {
+  const normalizedEmail = normalizeEmail(email);
+  if (!normalizedEmail || !Array.isArray(deletedAccountsAudit) || deletedAccountsAudit.length === 0) {
+    return null;
+  }
+
+  const candidates = deletedAccountsAudit
+    .filter((entry) => normalizeEmail(entry?.email) === normalizedEmail)
+    .sort((a, b) => Date.parse(String(b?.deletedAt || "")) - Date.parse(String(a?.deletedAt || "")));
+
+  for (const entry of candidates) {
+    const snapshot = normalizeDeletedAccountPremiumSnapshot(entry?.premiumSnapshot);
+    if (!snapshot) {
+      continue;
+    }
+    const endMs = Date.parse(String(snapshot.currentPeriodEnd || ""));
+    const hasFuturePremiumEnd = Number.isFinite(endMs) && endMs > Date.now();
+    const status = String(snapshot.status || "").trim().toLowerCase();
+    const activeByStatus =
+      status === "active" ||
+      status === "trialing" ||
+      status === "past_due" ||
+      status === "canceling" ||
+      status === "grace";
+    const tier = String(snapshot.plan || snapshot.tier || snapshot.membership || "")
+      .trim()
+      .toLowerCase();
+    const activeByManualFlags =
+      snapshot.isPremium === true ||
+      snapshot.premium === true ||
+      tier === "premium" ||
+      tier === "pro" ||
+      tier === "plus" ||
+      tier === "paid";
+    if (status && TERMINAL_PREMIUM_STATUSES.has(status)) {
+      continue;
+    }
+    if (!hasFuturePremiumEnd && !activeByStatus && !activeByManualFlags) {
+      continue;
+    }
+    const provider = String(snapshot.provider || "").trim().toLowerCase();
+    return {
+      customerId: String(snapshot.customerId || "").trim(),
+      subscriptionId: String(snapshot.subscriptionId || "").trim(),
+      status: status || "active",
+      cancelAtPeriodEnd: snapshot.cancelAtPeriodEnd === true,
+      currentPeriodEnd: String(snapshot.currentPeriodEnd || "").trim(),
+      provider:
+        provider ||
+        (String(snapshot.customerId || "").trim() || String(snapshot.subscriptionId || "").trim()
+          ? "stripe"
+          : "manual"),
+      source: "subscription-restore-deleted-audit",
     };
   }
 
@@ -5666,8 +5880,10 @@ const applyStripeRestoreToUserRecord = (userRecord, stripeMatch) => {
   if (!profile.premiumActivatedAt) {
     profile.premiumActivatedAt = nowIso;
   }
-  profile.premiumProvider = "stripe";
-  profile.premiumLastSource = "subscription-restore";
+  profile.premiumProvider = String(stripeMatch?.provider || "stripe").trim().toLowerCase().slice(0, 40);
+  profile.premiumLastSource = String(stripeMatch?.source || "subscription-restore")
+    .trim()
+    .slice(0, 60);
   profile.premiumLastEventAt = nowIso;
   profile.premiumStripeCustomerId = String(stripeMatch?.customerId || "").trim().slice(0, 120);
   profile.premiumStripeSubscriptionId = String(stripeMatch?.subscriptionId || "").trim().slice(0, 120);
@@ -5724,8 +5940,14 @@ app.post(
       restored = true;
       restoreSource = "profile";
     } else {
+      const deletedAccountMatch = findDeletedAccountActivePremiumForEmail(userRecord?.email);
+      if (deletedAccountMatch) {
+        restored = applyStripeRestoreToUserRecord(userRecord, deletedAccountMatch);
+        restoreSource = "deleted-account-audit";
+      }
+
       const stripeSecretKey = String(process.env.STRIPE_SECRET_KEY || "").trim();
-      if (stripeSecretKey) {
+      if (stripeSecretKey && !restored) {
         try {
           const stripeMatch = await findStripeActiveSubscriptionForUser(userRecord);
           if (stripeMatch) {
