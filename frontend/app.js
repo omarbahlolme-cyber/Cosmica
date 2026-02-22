@@ -1897,6 +1897,8 @@ const setupAccountHub = () => {
     complete: dropdown.querySelector('[data-account-quest="complete"]'),
   };
   const premiumCtaBtn = dropdown.querySelector('[data-menu="premium"]');
+  const premiumCtaMain = premiumCtaBtn?.querySelector(".account-premium-main") || null;
+  const premiumCtaSub = premiumCtaBtn?.querySelector(".account-premium-sub") || null;
   const premiumSetupCard = premiumSetupOverlay.querySelector(".premium-setup-card");
   const premiumSetupMessage = premiumSetupOverlay.querySelector(".premium-setup-message");
   const premiumSetupCloseBtn = premiumSetupOverlay.querySelector(".premium-setup-close");
@@ -2956,8 +2958,15 @@ const setupAccountHub = () => {
       menuHeader.classList.toggle("is-user-premium", isAuthenticated && hasPremiumAccess);
     }
     if (premiumCtaBtn) {
-      premiumCtaBtn.hidden = !isAuthenticated || hasPremiumAccess;
+      premiumCtaBtn.hidden = !isAuthenticated;
       premiumCtaBtn.setAttribute("aria-hidden", premiumCtaBtn.hidden ? "true" : "false");
+      if (premiumCtaMain) {
+        premiumCtaMain.textContent = hasPremiumAccess ? "Manage subscription" : "Discover Premium";
+      }
+      if (premiumCtaSub) {
+        premiumCtaSub.hidden = hasPremiumAccess;
+        premiumCtaSub.textContent = "Unlock premium features";
+      }
     }
     if (managePanel) {
       managePanel.hidden = true;
@@ -2975,12 +2984,9 @@ const setupAccountHub = () => {
       manageResetEmailBtn.textContent = "Reset password";
     }
     if (manageRestorePremiumBtn) {
-      const disableRestore = !isAuthenticated || hasPremiumAccess;
-      manageRestorePremiumBtn.hidden = !isAuthenticated;
-      manageRestorePremiumBtn.disabled = disableRestore;
-      manageRestorePremiumBtn.textContent = hasPremiumAccess
-        ? "Premium Active"
-        : "Restore Premium";
+      manageRestorePremiumBtn.hidden = !isAuthenticated || hasPremiumAccess;
+      manageRestorePremiumBtn.disabled = !isAuthenticated || hasPremiumAccess;
+      manageRestorePremiumBtn.textContent = "Restore Premium";
     }
     if (isAuthenticated && pendingPasswordResetToken) {
       pendingPasswordResetToken = "";
@@ -3393,10 +3399,9 @@ const setupAccountHub = () => {
             ? window.cosmicaGamification.getState()
             : null;
         const hasPremium = snapshotHasPremiumAccess(snapshot);
+        manageRestorePremiumBtn.hidden = hasPremium;
         manageRestorePremiumBtn.disabled = hasPremium;
-        manageRestorePremiumBtn.textContent = hasPremium
-          ? "Premium Active"
-          : String(previousLabel || "Restore Premium");
+        manageRestorePremiumBtn.textContent = String(previousLabel || "Restore Premium");
       }
     }
   };

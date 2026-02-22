@@ -455,11 +455,11 @@ const runMatrix = async () => {
     );
 
     await openAccountManagePanel(page);
-    const premiumRestoreDisabled = await page.evaluate(() => {
+    const premiumRestoreHidden = await page.evaluate(() => {
       const btn = document.querySelector(".account-manage-restore-premium");
-      return Boolean(btn && btn.disabled === true && /premium active/i.test(String(btn.textContent || "")));
+      return Boolean(btn && btn.hidden === true);
     });
-    addResult("premium-restore-ui-disabled-when-active", premiumRestoreDisabled === true);
+    addResult("premium-restore-ui-hidden-when-active", premiumRestoreHidden === true);
 
     const premiumMeta = await getAccountTriggerMeta(page);
     addResult("premium-streak-visible", /^level\s+\d+/i.test(premiumMeta), `meta=${premiumMeta}`);
