@@ -171,7 +171,35 @@ $token="YOUR_KOFI_WEBHOOK_TOKEN"; $email="target-user@example.com"; $url="https:
 $token="YOUR_KOFI_WEBHOOK_TOKEN"; $email="target-user@example.com"; $url="https://www.cosmicalearn.com/api/billing/webhooks/kofi"; $data=(@{verification_token=$token; email=$email; type="subscription"; payment_status="pending"; message_id=("ops-pending-"+[guid]::NewGuid().ToString()); amount="9.99"; currency="EUR"} | ConvertTo-Json -Compress); $r=Invoke-WebRequest -Uri $url -Method POST -ContentType "application/x-www-form-urlencoded" -Body @{data=$data}; $j=$r.Content|ConvertFrom-Json; "STATUS=$($r.StatusCode) ok=$($j.ok) ignored=$($j.ignored) reason=$($j.reason)"
 ```
 
-5. Confirm Google auth works on mobile browser:
+5. Configure Stripe webhook delivery (production):
+   - Endpoint URL: `https://www.cosmicalearn.com/api/billing/webhooks/stripe`
+   - Listen to events:
+     - `checkout.session.completed`
+     - `customer.subscription.created`
+     - `customer.subscription.updated`
+     - `customer.subscription.deleted`
+     - `invoice.payment_failed`
+     - `invoice.payment_succeeded`
+     - `invoice.paid`
+   - Set `STRIPE_WEBHOOK_SECRET` in production from the endpoint signing secret (`whsec_...`).
+   - Keep `STRIPE_SECRET_KEY` configured and redeploy/restart backend after env updates.
+
+6. Verify Stripe signature path is active:
+   - In Stripe Dashboard -> Webhooks -> your endpoint -> `Send test webhook` for `customer.subscription.updated`.
+   - Expect HTTP `200` with JSON including `ok:true`.
+   - If you receive HTTP `400` (`signature verification failed`), re-check `STRIPE_WEBHOOK_SECRET`, then redeploy.
+
+7. Verify failed rebill and downgrade behavior:
+   - Send `invoice.payment_failed` for a test subscription.
+   - Expected result: user remains premium only if `premiumCurrentPeriodEnd` is still in the future; downgrades to free after period end/terminal state.
+   - Confirm via account menu (`Manage subscription`) or `GET /api/billing/subscription/status`.
+
+8. Verify cancel-at-period-end behavior:
+   - Trigger cancellation from app (`POST /api/billing/subscription/cancel`) so Stripe sets `cancel_at_period_end=true`.
+   - Expected result before period end: premium remains active, auto-renew is off.
+   - After period end (or terminal status webhook), account downgrades to free automatically.
+
+9. Confirm Google auth works on mobile browser:
    - Open `https://www.cosmicalearn.com` on a phone.
    - Run Google Login and Google Signup once.
    - Ensure no `authError=google_*` appears in the URL.

@@ -34,7 +34,16 @@ const FRONTEND_MAPS_ROOT = path.join(FRONTEND_ROOT, "maps");
 const ADMIN_SECURITY_BASIC_USER = String(process.env.ADMIN_SECURITY_BASIC_USER || "").trim();
 const ADMIN_SECURITY_BASIC_PASS = String(process.env.ADMIN_SECURITY_BASIC_PASS || "").trim();
 
-app.use(express.json({ limit: "1mb" }));
+app.use(
+  express.json({
+    limit: "1mb",
+    verify: (req, res, buf) => {
+      if (String(req.originalUrl || "").startsWith("/api/billing/webhooks/stripe")) {
+        req.rawBody = Buffer.from(buf);
+      }
+    },
+  })
+);
 app.use((req, res, next) => {
   const requestId = crypto.randomUUID();
   req.requestId = requestId;
@@ -4812,6 +4821,9 @@ app.post("/api/auth/logout", authSessionLimiter, (req, res) => {
 
 app.get("/api/auth/me", authSessionLimiter, requireAuthenticatedUser, (req, res) => {
   const userRecord = req.authUser;
+  reconcileExpiredStripePremiumFromLocalProfile(userRecord, {
+    source: "auth-me-expiry-reconcile",
+  });
   return res.json({
     ok: true,
     user: toPublicUser(userRecord),
@@ -4951,6 +4963,7 @@ app.post(
     if (!isPlainObject(userRecord.data.profile)) {
       userRecord.data.profile = {};
     }
+    const profile = userRecord.data.profile;
     userRecord.data.profile.isPremium = true;
     userRecord.data.profile.premium = true;
     userRecord.data.profile.plan = "premium";
@@ -5446,6 +5459,144 @@ app.post(
   }
 );
 
+app.post(
+  "/api/billing/webhooks/stripe",
+  billingWebhookLimiter,
+  async (req, res) => {
+    const stripeSecretKey = String(process.env.STRIPE_SECRET_KEY || "").trim();
+    if (!stripeSecretKey) {
+      return res.status(503).json({
+        error: "Stripe webhook is unavailable because Stripe is not configured.",
+      });
+    }
+
+    let event = null;
+    try {
+      const stripe = getStripeClient();
+      const webhookSecret = String(process.env.STRIPE_WEBHOOK_SECRET || "").trim();
+      if (webhookSecret) {
+        const signature = String(req.get("stripe-signature") || "").trim();
+        if (!signature || !Buffer.isBuffer(req.rawBody)) {
+          return res.status(400).json({ error: "Missing Stripe signature or raw body" });
+        }
+        event = stripe.webhooks.constructEvent(req.rawBody, signature, webhookSecret);
+      } else {
+        const candidate = req.body;
+        if (!candidate || typeof candidate !== "object") {
+          return res.status(400).json({ error: "Invalid Stripe webhook payload" });
+        }
+        event = candidate;
+      }
+    } catch (error) {
+      reportServerError("stripe-webhook-parse", error, {
+        requestId: req.requestId,
+        method: req.method,
+        path: req.originalUrl,
+      });
+      return res.status(400).json({ error: "Stripe webhook signature verification failed" });
+    }
+
+    const eventType = String(event?.type || "").trim().toLowerCase();
+    const eventId = String(event?.id || "").trim().slice(0, 120);
+    const eventObject = event?.data?.object && typeof event.data.object === "object" ? event.data.object : null;
+
+    const actionableTypes = new Set([
+      "checkout.session.completed",
+      "customer.subscription.created",
+      "customer.subscription.updated",
+      "customer.subscription.deleted",
+      "invoice.payment_failed",
+      "invoice.payment_succeeded",
+      "invoice.paid",
+    ]);
+    if (!actionableTypes.has(eventType)) {
+      return res.json({ ok: true, ignored: true, eventType });
+    }
+
+    let subscription = null;
+    try {
+      subscription = await fetchStripeSubscriptionFromEvent(eventObject);
+    } catch (error) {
+      reportServerError("stripe-webhook-subscription-fetch", error, {
+        requestId: req.requestId,
+        method: req.method,
+        path: req.originalUrl,
+        eventType,
+        eventId,
+      });
+      return res.status(502).json({ error: "Could not fetch Stripe subscription" });
+    }
+
+    if (!subscription) {
+      return res.json({ ok: true, ignored: true, reason: "no-subscription", eventType });
+    }
+
+    const subscriptionMetadata = subscription?.metadata && typeof subscription.metadata === "object"
+      ? subscription.metadata
+      : {};
+    const objectEmail =
+      String(eventObject?.customer_email || "").trim() ||
+      String(eventObject?.receipt_email || "").trim() ||
+      String(subscriptionMetadata?.cosmicaUserEmail || "").trim();
+    const objectUserId = String(subscriptionMetadata?.cosmicaUserId || "").trim();
+    const customerId = String(subscription?.customer || eventObject?.customer || "").trim();
+    const subscriptionId = String(subscription?.id || eventObject?.subscription || "").trim();
+
+    const matchedUser = findUserByStripeLinkage({
+      userId: objectUserId,
+      email: objectEmail,
+      customerId,
+      subscriptionId,
+    });
+
+    if (!matchedUser) {
+      void appendSecurityEvent({
+        type: "stripe-webhook-unmatched",
+        req,
+        email: normalizeEmail(objectEmail),
+        reason: "No account matched Stripe webhook subscription",
+        details: {
+          eventType,
+          eventId,
+          customerId: customerId.slice(0, 120),
+          subscriptionId: subscriptionId.slice(0, 120),
+        },
+      });
+      return res.status(202).json({ ok: true, matched: false });
+    }
+
+    const syncResult = applyStripeSubscriptionStateToUserRecord(matchedUser, {
+      subscription,
+      source: "stripe-webhook",
+      eventId,
+      eventType,
+    });
+
+    void appendSecurityEvent({
+      type: "stripe-webhook-processed",
+      req,
+      email: matchedUser.email,
+      userId: matchedUser.id,
+      reason: `Stripe webhook processed (${eventType})`,
+      details: {
+        eventId,
+        eventType,
+        action: syncResult.action,
+        status: syncResult.status,
+        cancelAtPeriodEnd: syncResult.cancelAtPeriodEnd === true,
+        currentPeriodEnd: String(syncResult.currentPeriodEnd || "").slice(0, 60),
+      },
+    });
+
+    return res.json({
+      ok: true,
+      matched: true,
+      action: syncResult.action,
+      status: syncResult.status || "",
+    });
+  }
+);
+
 const isAllowedKoFiCheckoutUrl = (
   value,
   { requireSubscriptionPath = false, requireSubscriptionLikePath = true } = {}
@@ -5702,6 +5853,149 @@ const normalizeStripeUnixToIso = (unixSeconds) => {
   }
 };
 
+const findUserByStripeLinkage = ({ userId = "", email = "", customerId = "", subscriptionId = "" } = {}) => {
+  const normalizedUserId = String(userId || "").trim();
+  if (normalizedUserId && authStore.users[normalizedUserId]) {
+    return authStore.users[normalizedUserId];
+  }
+
+  const normalizedEmail = normalizeEmail(email);
+  if (normalizedEmail) {
+    const mappedUserId = String(authStore.emailIndex[normalizedEmail] || "").trim();
+    if (mappedUserId && authStore.users[mappedUserId]) {
+      return authStore.users[mappedUserId];
+    }
+  }
+
+  const normalizedCustomerId = String(customerId || "").trim();
+  const normalizedSubscriptionId = String(subscriptionId || "").trim();
+  if (!normalizedCustomerId && !normalizedSubscriptionId) {
+    return null;
+  }
+
+  for (const candidate of Object.values(authStore.users || {})) {
+    const profile = isPlainObject(candidate?.data?.profile) ? candidate.data.profile : {};
+    const candidateCustomerId = String(profile.premiumStripeCustomerId || "").trim();
+    const candidateSubscriptionId = String(profile.premiumStripeSubscriptionId || "").trim();
+    if (
+      (normalizedCustomerId && candidateCustomerId === normalizedCustomerId) ||
+      (normalizedSubscriptionId && candidateSubscriptionId === normalizedSubscriptionId)
+    ) {
+      return candidate;
+    }
+  }
+
+  return null;
+};
+
+const applyStripeSubscriptionStateToUserRecord = (
+  userRecord,
+  {
+    subscription = null,
+    source = "stripe-webhook",
+    eventId = "",
+    eventType = "",
+  } = {}
+) => {
+  if (!userRecord || !isPlainObject(userRecord) || !subscription || typeof subscription !== "object") {
+    return {
+      changed: false,
+      action: "none",
+    };
+  }
+
+  userRecord.data = normalizeUserData(userRecord.data);
+  if (!isPlainObject(userRecord.data.profile)) {
+    userRecord.data.profile = {};
+  }
+  const profile = userRecord.data.profile;
+
+  const status = String(subscription?.status || "").trim().toLowerCase();
+  const cancelAtPeriodEnd = subscription?.cancel_at_period_end === true;
+  const currentPeriodEnd = normalizeStripeUnixToIso(subscription?.current_period_end);
+  const customerId = String(subscription?.customer || "").trim();
+  const subscriptionId = String(subscription?.id || "").trim();
+  const nowIso = new Date().toISOString();
+
+  profile.premiumProvider = "stripe";
+  profile.premiumStripeCustomerId = customerId.slice(0, 120);
+  profile.premiumStripeSubscriptionId = subscriptionId.slice(0, 120);
+  profile.premiumStripeSubscriptionStatus = status.slice(0, 60);
+  profile.stripeSubscriptionStatus = status.slice(0, 60);
+  profile.premiumStatus = status.slice(0, 60);
+  profile.subscriptionStatus = status.slice(0, 60);
+  profile.premiumCancelAtPeriodEnd = cancelAtPeriodEnd;
+  if (currentPeriodEnd) {
+    profile.premiumCurrentPeriodEnd = currentPeriodEnd.slice(0, 40);
+    profile.currentPeriodEnd = currentPeriodEnd.slice(0, 40);
+    profile.subscriptionEndsAt = currentPeriodEnd.slice(0, 40);
+    profile.premiumEndsAt = currentPeriodEnd.slice(0, 40);
+  }
+
+  const endMs = Date.parse(String(currentPeriodEnd || ""));
+  const hasFutureEnd = Number.isFinite(endMs) && endMs > Date.now();
+  const activeLike =
+    ACTIVE_STRIPE_PREMIUM_STATUSES.has(status) ||
+    status === "canceling" ||
+    (cancelAtPeriodEnd && hasFutureEnd);
+
+  let action = "none";
+  if (activeLike) {
+    profile.isPremium = true;
+    profile.premium = true;
+    profile.plan = "premium";
+    profile.tier = "premium";
+    profile.membership = "premium";
+    if (!profile.premiumActivatedAt) {
+      profile.premiumActivatedAt = nowIso;
+    }
+    action = "premium-active";
+  } else if (TERMINAL_PREMIUM_STATUSES.has(status) || !hasFutureEnd) {
+    profile.isPremium = false;
+    profile.premium = false;
+    profile.plan = "free";
+    profile.tier = "free";
+    profile.membership = "free";
+    profile.premiumCancelAtPeriodEnd = false;
+    profile.premiumDeactivatedAt = profile.premiumDeactivatedAt || nowIso;
+    action = "premium-downgraded";
+  }
+
+  profile.premiumLastSource = String(source || "stripe-webhook").trim().slice(0, 60);
+  profile.premiumLastEventAt = nowIso;
+  if (eventId) {
+    profile.premiumLastEventId = String(eventId).trim().slice(0, 120);
+  }
+  if (eventType) {
+    profile.premiumLastEventType = String(eventType).trim().slice(0, 80);
+  }
+  userRecord.updatedAt = nowIso;
+  markAuthStoreDirty();
+
+  return {
+    changed: true,
+    action,
+    status,
+    cancelAtPeriodEnd,
+    currentPeriodEnd,
+  };
+};
+
+const fetchStripeSubscriptionFromEvent = async (eventObject = null) => {
+  if (!eventObject || typeof eventObject !== "object") {
+    return null;
+  }
+  if (String(eventObject.object || "").trim().toLowerCase() === "subscription") {
+    return eventObject;
+  }
+  const linkedSubscriptionId = String(eventObject.subscription || "").trim();
+  if (!linkedSubscriptionId) {
+    return null;
+  }
+  const stripe = getStripeClient();
+  return stripe.subscriptions.retrieve(linkedSubscriptionId);
+};
+
 const hasLocalActivePremiumEvidence = (profile) => {
   if (!isPlainObject(profile)) {
     return false;
@@ -5734,6 +6028,90 @@ const hasLocalActivePremiumEvidence = (profile) => {
     premiumStatus === "canceling" ||
     premiumStatus === "grace";
   return hasPremiumStatus || hasFuturePremiumEnd;
+};
+
+const reconcileExpiredStripePremiumFromLocalProfile = (
+  userRecord,
+  { source = "subscription-expiry-local" } = {}
+) => {
+  if (!userRecord || !isPlainObject(userRecord)) {
+    return false;
+  }
+  userRecord.data = normalizeUserData(userRecord.data);
+  if (!isPlainObject(userRecord.data.profile)) {
+    userRecord.data.profile = {};
+  }
+  const profile = userRecord.data.profile;
+  const provider = String(profile.premiumProvider || "")
+    .trim()
+    .toLowerCase();
+  const status = String(
+    profile.premiumStatus ||
+      profile.subscriptionStatus ||
+      profile.premiumStripeSubscriptionStatus ||
+      profile.stripeSubscriptionStatus ||
+      ""
+  )
+    .trim()
+    .toLowerCase();
+  const hasStripeHints =
+    provider === "stripe" ||
+    Boolean(String(profile.premiumStripeSubscriptionId || "").trim()) ||
+    Boolean(String(profile.premiumStripeCustomerId || "").trim()) ||
+    Boolean(status) ||
+    profile.premiumCancelAtPeriodEnd === true;
+  if (!hasStripeHints) {
+    return false;
+  }
+
+  const premiumEndRaw = String(
+    profile.premiumCurrentPeriodEnd ||
+      profile.currentPeriodEnd ||
+      profile.subscriptionEndsAt ||
+      profile.premiumEndsAt ||
+      profile.premiumExpiresAt ||
+      profile.planEndsAt ||
+      profile.expiresAt ||
+      ""
+  ).trim();
+  const premiumEndMs = Date.parse(premiumEndRaw);
+  if (!Number.isFinite(premiumEndMs) || premiumEndMs > Date.now()) {
+    return false;
+  }
+
+  const cancelingLike = profile.premiumCancelAtPeriodEnd === true || status === "canceling";
+  const terminal = status ? TERMINAL_PREMIUM_STATUSES.has(status) : false;
+  if (!cancelingLike && !terminal) {
+    return false;
+  }
+
+  if (
+    profile.isPremium === false &&
+    profile.premium === false &&
+    String(profile.plan || "").trim().toLowerCase() === "free"
+  ) {
+    return false;
+  }
+
+  const nowIso = new Date().toISOString();
+  profile.isPremium = false;
+  profile.premium = false;
+  profile.plan = "free";
+  profile.tier = "free";
+  profile.membership = "free";
+  profile.premiumCancelAtPeriodEnd = false;
+  profile.premiumStatus = "expired";
+  profile.subscriptionStatus = "expired";
+  profile.premiumStripeSubscriptionStatus = terminal ? status : "canceled";
+  profile.stripeSubscriptionStatus = terminal ? status : "canceled";
+  profile.premiumLastSource = String(source || "subscription-expiry-local").trim().slice(0, 60);
+  profile.premiumLastEventAt = nowIso;
+  if (!profile.premiumDeactivatedAt) {
+    profile.premiumDeactivatedAt = nowIso;
+  }
+  userRecord.updatedAt = nowIso;
+  markAuthStoreDirty();
+  return true;
 };
 
 const findStripeActiveSubscriptionForUser = async (userRecord) => {
@@ -6029,6 +6407,9 @@ app.get(
 
     const stripeSecretKey = String(process.env.STRIPE_SECRET_KEY || "").trim();
     const profile = userRecord.data.profile;
+    reconcileExpiredStripePremiumFromLocalProfile(userRecord, {
+      source: "subscription-manage-expiry-reconcile",
+    });
     const shouldTryStripeRefresh =
       Boolean(stripeSecretKey) &&
       (String(profile.premiumProvider || "").trim().toLowerCase() === "stripe" ||
@@ -6123,6 +6504,10 @@ app.post(
     if (!isPlainObject(userRecord.data.profile)) {
       userRecord.data.profile = {};
     }
+    const profile = userRecord.data.profile;
+    reconcileExpiredStripePremiumFromLocalProfile(userRecord, {
+      source: "subscription-cancel-expiry-reconcile",
+    });
 
     if (!userHasPremiumAccessForProgress(userRecord)) {
       return res.status(409).json({

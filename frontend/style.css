@@ -1294,6 +1294,7 @@ body.world-page .nav-links a {
 
 body.premium-setup-lock {
   overflow: hidden;
+  overscroll-behavior: none;
 }
 
 .premium-setup-overlay {
@@ -1304,9 +1305,10 @@ body.premium-setup-lock {
   align-items: center;
   justify-content: center;
   padding: 20px;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
+  overflow: hidden;
+  overscroll-behavior: none;
+  overscroll-behavior-y: none;
+  touch-action: none;
   background: rgba(4, 10, 24, 0.68);
   backdrop-filter: blur(7px) saturate(120%);
   -webkit-backdrop-filter: blur(7px) saturate(120%);
@@ -1344,10 +1346,14 @@ body.premium-setup-lock {
   position: relative;
   isolation: isolate;
   width: min(680px, calc(100vw - 24px));
-  max-height: calc(var(--app-height) - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 24px);
+  max-height: min(
+    calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 40px),
+    calc(var(--app-height) - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 40px)
+  );
   overflow-y: auto;
   overflow-x: hidden;
-  overscroll-behavior: contain;
+  overscroll-behavior: none;
+  overscroll-behavior-y: none;
   -webkit-overflow-scrolling: touch;
   border-radius: 26px;
   border: 1px solid rgba(255, 220, 161, 0.78);
@@ -1361,9 +1367,7 @@ body.premium-setup-lock {
     0 36px 66px rgba(28, 18, 62, 0.44),
     0 0 38px rgba(118, 196, 255, 0.16),
     0 0 0 1px rgba(255, 209, 126, 0.12);
-  padding: 28px 28px 24px;
-  overflow-y: auto;
-  overflow-x: hidden;
+  padding: 28px 28px 12px;
   touch-action: pan-y;
   backdrop-filter: blur(24px) saturate(146%);
   -webkit-backdrop-filter: blur(24px) saturate(146%);
@@ -1373,6 +1377,12 @@ body.premium-setup-lock {
     premiumSetupCardIn 260ms ease-out,
     accountPremiumNebulaShift 12s ease-in-out infinite,
     premiumSetupCardPulse 4.8s ease-in-out infinite;
+  scrollbar-width: none;
+}
+
+.premium-setup-card::-webkit-scrollbar {
+  width: 0;
+  height: 0;
 }
 
 .premium-setup-card > * {
@@ -1383,7 +1393,7 @@ body.premium-setup-lock {
 .premium-setup-card::before {
   content: "";
   position: absolute;
-  inset: -20% -12%;
+  inset: 0;
   background:
     radial-gradient(circle at 14% 24%, rgba(255, 238, 183, 0.8) 0 1px, transparent 2px),
     radial-gradient(circle at 58% 32%, rgba(208, 238, 255, 0.74) 0 1px, transparent 2px),
@@ -1410,10 +1420,10 @@ body.premium-setup-lock {
 .premium-setup-card::after {
   content: "";
   position: absolute;
-  top: -140%;
+  top: 0;
   left: -40%;
   width: 34%;
-  height: 360%;
+  height: 100%;
   background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(204, 231, 255, 0.2), rgba(255, 234, 176, 0.24), rgba(255, 255, 255, 0));
   opacity: 0.62;
   transform: rotate(20deg) translateX(-260%);
@@ -1749,11 +1759,7 @@ body.premium-setup-lock {
   isolation: isolate;
   width: min(520px, calc(100vw - 24px));
   max-height: calc(var(--app-height) - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 24px);
-  overflow-y: auto;
-  overflow-x: hidden;
-  touch-action: pan-y;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
+  overflow: hidden;
   border-radius: 22px;
   border: 1px solid rgba(132, 255, 207, 0.52);
   background:
@@ -1767,6 +1773,12 @@ body.premium-setup-lock {
     0 0 0 1px rgba(144, 255, 216, 0.24);
   transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.2s ease;
   animation: premiumCheckoutCardGlow 5.8s ease-in-out infinite;
+  scrollbar-width: none;
+}
+
+.premium-checkout-card::-webkit-scrollbar {
+  width: 0;
+  height: 0;
 }
 
 .premium-checkout-card::before {
@@ -2050,10 +2062,18 @@ body.premium-setup-lock {
 }
 
 @media (max-width: 680px) {
+  .premium-setup-overlay {
+    padding: 10px;
+  }
+
   .premium-setup-card {
     width: min(560px, calc(100vw - 18px));
+    max-height: min(
+      calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 10px),
+      calc(var(--app-height) - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 10px)
+    );
     border-radius: 22px;
-    padding: 22px 18px 18px;
+    padding: 22px 18px 12px;
   }
 
   .premium-plan-strip,
@@ -6087,7 +6107,7 @@ body.world-page .is-energized {
 .chat-log {
   position: relative;
   height: clamp(180px, calc(var(--vh) * 24), 300px);
-  overflow-y: auto;
+  overflow-y: hidden;
   display: grid;
   grid-auto-rows: max-content;
   align-content: start;
@@ -6099,8 +6119,11 @@ body.world-page .is-energized {
     radial-gradient(circle at 90% -20%, rgba(145, 186, 255, 0.12), transparent 52%);
   padding: 10px 8px;
   padding-right: 6px;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(132, 200, 255, 0.42) rgba(8, 10, 24, 0.4);
+  scrollbar-width: none;
+}
+
+.chat-log.has-user-messages {
+  overflow-y: auto;
 }
 
 
@@ -6144,16 +6167,17 @@ body.world-page .is-energized {
 }
 
 .chat-log::-webkit-scrollbar {
-  width: 7px;
+  width: 0;
+  height: 0;
 }
 
 .chat-log::-webkit-scrollbar-track {
-  background: rgba(8, 10, 24, 0.45);
+  background: transparent;
   border-radius: 999px;
 }
 
 .chat-log::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, rgba(116, 203, 255, 0.64), rgba(116, 203, 255, 0.28));
+  background: transparent;
   border-radius: 999px;
 }
 
@@ -6219,7 +6243,7 @@ body.world-page .is-energized {
 
   .chat-log {
     height: clamp(160px, calc(var(--vh) * 22), 230px);
-    overflow-y: auto;
+    overflow-y: hidden;
     padding: 9px 6px;
   }
 

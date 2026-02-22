@@ -3140,7 +3140,7 @@ const setupAccountHub = () => {
       triggerMeta.textContent = isAuthenticated
         ? hasPremiumAccess
           ? `Level ${levelMeta.level}`
-          : `Streak ${streakDays}d`
+          : ""
         : "Sign in";
     }
     if (trigger) {
@@ -3692,9 +3692,18 @@ const setupAccountHub = () => {
       return;
     }
     subscriptionCancelInFlight = true;
-    applySubscriptionManagementState(latestSubscriptionManageState || {}, { loading: false });
     try {
-      const payload = await window.cosmicaAuth.cancelPremiumSubscription();
+      applySubscriptionManagementState(latestSubscriptionManageState || {}, { loading: false });
+      const payload = await Promise.race([
+        window.cosmicaAuth.cancelPremiumSubscription(),
+        new Promise((_, reject) => {
+          window.setTimeout(() => {
+            const timeoutError = new Error("Cancellation timed out. Please try again.");
+            timeoutError.status = 0;
+            reject(timeoutError);
+          }, 15000);
+        }),
+      ]);
       latestSubscriptionManageState = {
         ...(latestSubscriptionManageState || {}),
         status: String(payload?.status || "canceling").trim().toLowerCase() || "canceling",
@@ -3717,13 +3726,19 @@ const setupAccountHub = () => {
       applySubscriptionManagementState(latestSubscriptionManageState || {}, { loading: false });
       const status = Number(error?.status || 0);
       if (status === 404) {
-        setFeedback("Subscription cancellation is temporarily unavailable. Please refresh and try again.", "error");
+        const message = "Subscription cancellation is temporarily unavailable. Please refresh and try again.";
+        setFeedback(message, "error");
+        showTriggerNoticeBubble(message, "error", 10000);
       } else {
-        setFeedback(error?.message || "Could not schedule cancellation right now.", "error");
+        const message = error?.message || "Could not schedule cancellation right now.";
+        setFeedback(message, "error");
+        showTriggerNoticeBubble(message, "error", 10000);
       }
     } finally {
       subscriptionCancelInFlight = false;
-      applySubscriptionManagementState(latestSubscriptionManageState || {}, { loading: false });
+      try {
+        applySubscriptionManagementState(latestSubscriptionManageState || {}, { loading: false });
+      } catch {}
     }
   };
 
@@ -4778,7 +4793,9 @@ const syncChatLogMessageState = () => {
     return;
   }
   const hasMessages = Boolean(chatLog.querySelector(".chat-message"));
+  const hasUserMessages = Boolean(chatLog.querySelector(".chat-message.user"));
   chatLog.classList.toggle("has-messages", hasMessages);
+  chatLog.classList.toggle("has-user-messages", hasUserMessages);
 };
 
 const animateChatLogPulse = () => {
@@ -5370,18 +5387,12 @@ const setupLettersSectionCompleteButton = () => {
         : String(progress?.status || "").trim().toLowerCase() === "completed" ||
           Boolean(progress?.firstCompletedAt);
     const hasPremiumAccess = currentUserHasPremiumAccess();
-    const statusLabel = hasPremiumAccess
-      ? isComplete
-        ? "Completed"
-        : ""
-      : isComplete
-        ? "Section completed"
-        : "Mark section as completed";
+    const statusLabel = hasPremiumAccess ? (isComplete ? "Completed" : "") : isComplete ? "Completed" : "";
     button.classList.toggle("is-complete", isComplete);
     button.setAttribute("aria-pressed", isComplete ? "true" : "false");
-    const incompleteLabel = hasPremiumAccess ? "" : "Mark section as completed";
-    button.setAttribute("aria-label", isComplete ? "Mark section incomplete" : incompleteLabel);
-    button.title = isComplete ? "Mark section incomplete" : incompleteLabel;
+    const incompleteLabel = "";
+    button.setAttribute("aria-label", isComplete ? "Mark section incomplete" : "Mark section complete");
+    button.title = "";
     button.setAttribute("data-status-label", statusLabel);
   };
 
