@@ -1149,12 +1149,33 @@ const createCosmicaGamificationClient = () => {
       premiumTier === "pro" ||
       premiumTier === "plus" ||
       premiumTier === "paid";
+    const premiumEndDateRaw =
+      payloadProfile.premiumEndsAt ||
+      payloadProfile.premiumExpiresAt ||
+      payloadProfile.subscriptionEndsAt ||
+      payloadProfile.currentPeriodEnd ||
+      payloadProfile.planEndsAt ||
+      payloadProfile.expiresAt ||
+      payloadData.premiumEndsAt ||
+      payloadData.premiumExpiresAt ||
+      payloadData.subscriptionEndsAt ||
+      payloadData.currentPeriodEnd ||
+      payloadData.planEndsAt ||
+      payloadData.expiresAt ||
+      user.premiumEndsAt ||
+      user.premiumExpiresAt ||
+      user.subscriptionEndsAt ||
+      user.currentPeriodEnd ||
+      user.planEndsAt ||
+      user.expiresAt ||
+      null;
     state.isAuthenticated = true;
     state.user = {
       ...user,
       authProvider: authProvider || "email",
       planTier: premiumTier || "free",
       isPremium: hasPremiumAccess,
+      premiumEndsAt: premiumEndDateRaw,
     };
     state.progress = normalizeProgressPayload(payload.progress || {});
     state.error = "";
@@ -1260,9 +1281,12 @@ const createCosmicaGamificationClient = () => {
       }),
     deleteAccount: () =>
       withLoading(async () => {
-        await window.cosmicaAuth.deleteAccount();
+        const payload = await window.cosmicaAuth.deleteAccount();
         applyAuthPayload(null);
-        return snapshot();
+        return {
+          ...snapshot(),
+          message: String(payload?.message || "").trim(),
+        };
       }),
     upgradeToPremium: () =>
       withLoading(async () => {
@@ -1796,6 +1820,7 @@ const setupAccountHub = () => {
   const deleteConfirmPanel = dropdown.querySelector(".account-delete-confirm");
   const deleteCancelBtn = dropdown.querySelector(".account-delete-cancel");
   const deleteConfirmBtn = dropdown.querySelector(".account-delete-confirm-btn");
+  const deleteWarningNode = dropdown.querySelector(".account-delete-warning");
   const googleButtons = Array.from(dropdown.querySelectorAll(".account-google-button"));
   const menuButtons = Array.from(dropdown.querySelectorAll(".account-menu-links button"));
   const authSwitchButtons = Array.from(dropdown.querySelectorAll(".account-auth-switch button"));
@@ -1848,6 +1873,53 @@ const setupAccountHub = () => {
   const formatNumber = (value) => Intl.NumberFormat().format(Math.max(0, Math.round(Number(value) || 0)));
   const guestAvatarIconMarkup =
     '<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true"><path d="M12 12.2a4.6 4.6 0 1 0 0-9.2 4.6 4.6 0 0 0 0 9.2zm0 2.2c-4.7 0-8.5 2.8-8.5 6.3 0 .7.5 1.3 1.2 1.3h14.6c.7 0 1.2-.6 1.2-1.3 0-3.5-3.8-6.3-8.5-6.3z"></path></svg>';
+  const formatPremiumEndDate = (value) => {
+    const raw = String(value || "").trim();
+    if (!raw) {
+      return "";
+    }
+    const parsed = new Date(raw);
+    if (!Number.isFinite(parsed.getTime())) {
+      return "";
+    }
+    try {
+      return new Intl.DateTimeFormat(undefined, {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }).format(parsed);
+    } catch {
+      return parsed.toISOString().slice(0, 10);
+    }
+  };
+  const resolvePremiumEndDateFromSnapshot = (snapshot) => {
+    const user = snapshot?.user && typeof snapshot.user === "object" ? snapshot.user : {};
+    const candidates = [
+      user.premiumEndsAt,
+      user.premiumExpiresAt,
+      user.subscriptionEndsAt,
+      user.currentPeriodEnd,
+      user.planEndsAt,
+      user.expiresAt,
+    ];
+    for (const candidate of candidates) {
+      const formatted = formatPremiumEndDate(candidate);
+      if (formatted) {
+        return formatted;
+      }
+    }
+    return "";
+  };
+  const getDeleteWarningMessage = (snapshot, hasPremiumAccess) => {
+    if (!hasPremiumAccess) {
+      return "Are you sure you want to delete your account? This action cannot be undone.";
+    }
+    const premiumEndDate = resolvePremiumEndDateFromSnapshot(snapshot);
+    const accessLine = premiumEndDate
+      ? `If you register again with the same account email before ${premiumEndDate}, your Premium access remains available until your current subscription period ends.`
+      : "If you register again with the same account email while your current subscription is still active, your Premium access remains available until your current subscription period ends.";
+    return `Are you sure you want to permanently delete your account? This action cannot be undone. ${accessLine}`;
+  };
   const toAvatarTwoLetters = (value, fallback = "GU") => {
     const chars = Array.from(String(value || "").replace(/\s+/g, "").trim());
     if (!chars.length) {
@@ -2584,6 +2656,10 @@ const setupAccountHub = () => {
   };
 
   const snapshotHasPremiumAccess = (snapshot) => {
+    const premiumFlagRaw = snapshot?.user?.isPremium ?? snapshot?.user?.premium;
+    const premiumFlagText = String(premiumFlagRaw ?? "")
+      .trim()
+      .toLowerCase();
     const userPlanTier = String(
       snapshot?.user?.planTier ||
         snapshot?.user?.tier ||
@@ -2594,7 +2670,13 @@ const setupAccountHub = () => {
       .trim()
       .toLowerCase();
     return (
-      snapshot?.user?.isPremium === true ||
+      premiumFlagRaw === true ||
+      premiumFlagText === "1" ||
+      premiumFlagText === "true" ||
+      premiumFlagText === "yes" ||
+      premiumFlagText === "premium" ||
+      premiumFlagText === "pro" ||
+      premiumFlagText === "plus" ||
       userPlanTier === "premium" ||
       userPlanTier === "pro" ||
       userPlanTier === "plus" ||
@@ -2836,6 +2918,9 @@ const setupAccountHub = () => {
     if (menuPlanStatus) {
       menuPlanStatus.textContent = hasPremiumAccess ? "(Premium account)" : "(Free plan)";
       menuPlanStatus.classList.toggle("is-premium", hasPremiumAccess);
+    }
+    if (deleteWarningNode) {
+      deleteWarningNode.textContent = getDeleteWarningMessage(snapshot, hasPremiumAccess);
     }
     if (menuQuestsPanel) {
       menuQuestsPanel.classList.toggle("is-premium-locked", !hasPremiumAccess);
@@ -3398,12 +3483,13 @@ const setupAccountHub = () => {
   deleteConfirmBtn?.addEventListener("click", async () => {
     setFeedback("Deleting account...", "info");
     try {
-      await window.cosmicaGamification.deleteAccount();
+      const payload = await window.cosmicaGamification.deleteAccount();
       setDeleteConfirmationVisible(false);
       if (managePanel) {
         managePanel.hidden = true;
       }
-      setFeedback("Account deleted. Redirecting...", "success");
+      const deleteMessage = String(payload?.message || "").trim();
+      setFeedback(deleteMessage || "Account deleted. Redirecting...", "success");
       window.setTimeout(() => {
         window.location.href = "/index.html";
       }, 280);
@@ -4302,6 +4388,10 @@ const syncMimiChatHistoryScopeFromAuthState = (snapshot, { force = false } = {})
 if (window.cosmicaGamification && typeof window.cosmicaGamification.subscribe === "function") {
   window.cosmicaGamification.subscribe((snapshot) => {
     syncMimiChatHistoryScopeFromAuthState(snapshot);
+    const snapshotUser = snapshot?.user && typeof snapshot.user === "object" ? snapshot.user : null;
+    if (userHasPremiumAccess(snapshotUser)) {
+      removeMimiPremiumBubble();
+    }
   });
 }
 
@@ -4585,11 +4675,21 @@ const setupLettersSectionCompleteButton = () => {
         ? window.cosmicaGamification.getState()
         : null;
     const user = snapshot && snapshot.user && typeof snapshot.user === "object" ? snapshot.user : null;
+    const premiumFlagRaw = user?.isPremium ?? user?.premium;
+    const premiumFlagText = String(premiumFlagRaw ?? "")
+      .trim()
+      .toLowerCase();
     const premiumTier = String(user?.planTier || user?.tier || user?.plan || user?.membership || "")
       .trim()
       .toLowerCase();
     return (
-      user?.isPremium === true ||
+      premiumFlagRaw === true ||
+      premiumFlagText === "1" ||
+      premiumFlagText === "true" ||
+      premiumFlagText === "yes" ||
+      premiumFlagText === "premium" ||
+      premiumFlagText === "pro" ||
+      premiumFlagText === "plus" ||
       premiumTier === "premium" ||
       premiumTier === "pro" ||
       premiumTier === "plus" ||
@@ -5426,6 +5526,14 @@ function showMimiPremiumBubble() {
   scrollChatToBottom && scrollChatToBottom();
 }
 
+function removeMimiPremiumBubble() {
+  const bubble = chatLog && chatLog.querySelector('.chat-message.mimi.premium-upsell');
+  if (bubble) {
+    bubble.remove();
+    syncChatLogMessageState && syncChatLogMessageState();
+  }
+}
+
 const userHasPremiumAccess = (user) => {
   if (!user || typeof user !== "object") {
     return false;
@@ -5448,19 +5556,35 @@ const userHasPremiumAccess = (user) => {
     premiumTier === "premium" ||
     premiumTier === "pro" ||
     premiumTier === "plus" ||
+    premiumTier === "paid" ||
+    String(user.plan ?? "").trim().toLowerCase() === "premium" ||
+    String(user.membership ?? "").trim().toLowerCase() === "premium" ||
     premiumTier === "paid"
   );
+};
+
+const isMimiPremiumAccessEnabled = () => {
+  if (typeof window.cosmicaGamification?.getState === "function") {
+    const snapshot = window.cosmicaGamification.getState();
+    const snapshotUser = snapshot?.user && typeof snapshot.user === "object" ? snapshot.user : null;
+    return userHasPremiumAccess(snapshotUser);
+  }
+  const fallbackUser =
+    (typeof getState === "function" ? getState() : window.store?.getState?.() || {}).user ||
+    window.state?.user ||
+    null;
+  return userHasPremiumAccess(fallbackUser);
 };
 
 if (chatForm) {
   chatForm.addEventListener("submit", (event) => {
     event.preventDefault();
-    const user = (typeof getState === "function" ? getState() : (window.store?.getState?.() || {})).user || window.state?.user || null;
-    const isPremium = userHasPremiumAccess(user);
+    const isPremium = isMimiPremiumAccessEnabled();
     if (!isPremium) {
       showMimiPremiumBubble();
       return;
     }
+    removeMimiPremiumBubble();
     sendChatMessage();
   });
 }
@@ -5488,12 +5612,12 @@ chatChips.forEach((chip) => {
   chip.addEventListener("blur", releaseChipPress);
   chip.addEventListener("click", () => {
     pulseGuideInteractivity(980);
-    const user = (typeof getState === "function" ? getState() : (window.store?.getState?.() || {})).user || window.state?.user || null;
-    const isPremium = userHasPremiumAccess(user);
+    const isPremium = isMimiPremiumAccessEnabled();
     if (!isPremium) {
       showMimiPremiumBubble();
       return;
     }
+    removeMimiPremiumBubble();
     const prompt = chip.dataset.prompt || chip.textContent || "";
     sendChatMessage(prompt);
   });
@@ -7279,13 +7403,23 @@ const applyMapComingSoonRules = () => {
       ? window.cosmicaGamification.getState()
       : null;
   const user = snapshot && snapshot.user && typeof snapshot.user === "object" ? snapshot.user : null;
+  const premiumFlagRaw = user?.isPremium ?? user?.premium;
+  const premiumFlagText = String(premiumFlagRaw ?? "")
+    .trim()
+    .toLowerCase();
   const premiumTier = String(
     user?.planTier || user?.tier || user?.plan || user?.membership || ""
   )
     .trim()
     .toLowerCase();
   const hasPremiumAccess =
-    user?.isPremium === true ||
+    premiumFlagRaw === true ||
+    premiumFlagText === "1" ||
+    premiumFlagText === "true" ||
+    premiumFlagText === "yes" ||
+    premiumFlagText === "premium" ||
+    premiumFlagText === "pro" ||
+    premiumFlagText === "plus" ||
     premiumTier === "premium" ||
     premiumTier === "pro" ||
     premiumTier === "plus" ||

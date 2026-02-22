@@ -3240,11 +3240,21 @@ const getPremiumAccessState = () => {
     return "loading";
   }
   const user = snapshot && snapshot.user && typeof snapshot.user === "object" ? snapshot.user : null;
+  const premiumFlagRaw = user?.isPremium ?? user?.premium;
+  const premiumFlagText = String(premiumFlagRaw ?? "")
+    .trim()
+    .toLowerCase();
   const premiumTier = String(user?.planTier || user?.tier || user?.plan || user?.membership || "")
     .trim()
     .toLowerCase();
   const hasPremiumAccess = (
-    user?.isPremium === true ||
+    premiumFlagRaw === true ||
+    premiumFlagText === "1" ||
+    premiumFlagText === "true" ||
+    premiumFlagText === "yes" ||
+    premiumFlagText === "premium" ||
+    premiumFlagText === "pro" ||
+    premiumFlagText === "plus" ||
     premiumTier === "premium" ||
     premiumTier === "pro" ||
     premiumTier === "plus" ||

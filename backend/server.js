@@ -4615,6 +4615,32 @@ app.get("/api/auth/me", authSessionLimiter, requireAuthenticatedUser, (req, res)
 app.delete("/api/auth/account", authSessionLimiter, requireAuthenticatedUser, async (req, res) => {
   const userRecord = req.authUser;
   try {
+    const hadPremiumAccess = userHasPremiumAccessForProgress(userRecord);
+    const profile = isPlainObject(userRecord?.data?.profile) ? userRecord.data.profile : {};
+    const premiumEndRaw = String(
+      profile.premiumEndsAt ||
+        profile.premiumExpiresAt ||
+        profile.subscriptionEndsAt ||
+        profile.currentPeriodEnd ||
+        profile.planEndsAt ||
+        profile.expiresAt ||
+        ""
+    ).trim();
+    const premiumEndMs = Date.parse(premiumEndRaw);
+    const hasPremiumEndDate = Number.isFinite(premiumEndMs);
+    const premiumEndDateText = hasPremiumEndDate
+      ? new Date(premiumEndMs).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        })
+      : "";
+    const deleteMessage = hadPremiumAccess
+      ? hasPremiumEndDate
+        ? `Your account and associated learning data have been permanently deleted. If you register again with the same account email before ${premiumEndDateText}, your Premium access remains available until your current subscription period ends.`
+        : "Your account and associated learning data have been permanently deleted. If you register again with the same account email while your current subscription is still active, your Premium access remains available until your current subscription period ends."
+      : "Account and data deleted permanently. You can sign up again with the same email immediately.";
+
     try {
       await appendDeletedAccountAuditEntry({
         userRecord,
@@ -4643,7 +4669,7 @@ app.delete("/api/auth/account", authSessionLimiter, requireAuthenticatedUser, as
     clearAuthSessionCookie(req, res);
     return res.json({
       ok: true,
-      message: "Account and data deleted permanently. You can sign up again with the same email immediately.",
+      message: deleteMessage,
     });
   } catch (error) {
     reportServerError("auth-delete-account", error, {
