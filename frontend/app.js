@@ -1705,6 +1705,7 @@ const setupAccountHub = () => {
     discover: dropdown.querySelector('[data-account-quest="discover"]'),
     complete: dropdown.querySelector('[data-account-quest="complete"]'),
   };
+  const premiumCtaBtn = dropdown.querySelector('[data-menu="premium"]');
   const premiumSetupCard = premiumSetupOverlay.querySelector(".premium-setup-card");
   const premiumSetupMessage = premiumSetupOverlay.querySelector(".premium-setup-message");
   const premiumSetupCloseBtn = premiumSetupOverlay.querySelector(".premium-setup-close");
@@ -2464,7 +2465,33 @@ const setupAccountHub = () => {
     }
   };
 
+  const snapshotHasPremiumAccess = (snapshot) => {
+    const userPlanTier = String(
+      snapshot?.user?.planTier ||
+        snapshot?.user?.tier ||
+        snapshot?.user?.plan ||
+        snapshot?.user?.membership ||
+        ""
+    )
+      .trim()
+      .toLowerCase();
+    return (
+      snapshot?.user?.isPremium === true ||
+      userPlanTier === "premium" ||
+      userPlanTier === "pro" ||
+      userPlanTier === "plus" ||
+      userPlanTier === "paid"
+    );
+  };
+
   const openPremiumSetupModal = ({ message = "Upgrade to Premium to unlock this content." } = {}) => {
+    const snapshot =
+      typeof window.cosmicaGamification?.getState === "function"
+        ? window.cosmicaGamification.getState()
+        : null;
+    if (snapshotHasPremiumAccess(snapshot)) {
+      return;
+    }
     if (premiumSetupMessage) {
       premiumSetupMessage.textContent = String(message || "Upgrade to Premium to unlock this content.");
     }
@@ -2490,6 +2517,9 @@ const setupAccountHub = () => {
     if (!snapshot?.isAuthenticated) {
       setAuthPanel("login", true);
       openDropdown();
+      return;
+    }
+    if (snapshotHasPremiumAccess(snapshot)) {
       return;
     }
     closeDropdown();
@@ -2584,17 +2614,7 @@ const setupAccountHub = () => {
 
   const renderFromState = (snapshot) => {
     const isAuthenticated = Boolean(snapshot?.isAuthenticated);
-    const userPlanTier = String(
-      snapshot?.user?.planTier || snapshot?.user?.tier || snapshot?.user?.plan || snapshot?.user?.membership || ""
-    )
-      .trim()
-      .toLowerCase();
-    const hasPremiumAccess =
-      snapshot?.user?.isPremium === true ||
-      userPlanTier === "premium" ||
-      userPlanTier === "pro" ||
-      userPlanTier === "plus" ||
-      userPlanTier === "paid";
+    const hasPremiumAccess = snapshotHasPremiumAccess(snapshot);
     const loading = Boolean(snapshot?.loading);
     const progress = snapshot?.progress || {};
     const gamification = progress.gamification || {};
@@ -2646,6 +2666,10 @@ const setupAccountHub = () => {
     }
     if (menuHeader) {
       menuHeader.classList.toggle("is-user-premium", isAuthenticated && hasPremiumAccess);
+    }
+    if (premiumCtaBtn) {
+      premiumCtaBtn.hidden = !isAuthenticated || hasPremiumAccess;
+      premiumCtaBtn.setAttribute("aria-hidden", premiumCtaBtn.hidden ? "true" : "false");
     }
     if (managePanel) {
       managePanel.hidden = true;

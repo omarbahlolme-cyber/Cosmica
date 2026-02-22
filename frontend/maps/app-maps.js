@@ -5075,7 +5075,7 @@ const buildConditionExamples = (card) => {
   if (title.includes("unless and otherwise")) {
     return [
       {
-        labels: ["Unless clause: unless it rains", "Result clause: we will go"],
+        labels: ["Result clause: we will go", "Unless clause: unless it rains"],
         base: "we will go unless it rains",
         expanded: "We will go unless it rains.",
       },
@@ -6555,6 +6555,12 @@ const buildRuleDrivenExampleItem = (payload, fallbackRuleOrder = []) => {
     dedupedLabels.push(label);
   });
   let finalLabels = dedupedLabels;
+  const expectedLabelCount = ruleOrder.length;
+  const shouldRequireExactCount =
+    expectedLabelCount >= 2 && /\s/u.test(expanded) && highlights.length >= expectedLabelCount;
+  if (shouldRequireExactCount && finalLabels.length !== expectedLabelCount) {
+    finalLabels = buildRuleOrderFallbackLabels(ruleOrder, expanded);
+  }
   if (finalLabels.length < 2) {
     finalLabels = buildRuleOrderFallbackLabels(ruleOrder, expanded);
   }
