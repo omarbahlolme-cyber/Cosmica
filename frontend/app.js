@@ -3224,7 +3224,29 @@ const setupAccountHub = () => {
     closePremiumSetupModal();
   });
   premiumSetupPrimaryBtn?.addEventListener("click", () => {
+    const snapshot =
+      typeof window.cosmicaGamification?.getState === "function"
+        ? window.cosmicaGamification.getState()
+        : null;
+    const isAuthenticated = Boolean(snapshot?.isAuthenticated);
     closePremiumSetupModal();
+    if (!isAuthenticated) {
+      const authMessage = "Please log in or sign up to continue with Premium upgrade.";
+      if (typeof window.cosmicaOpenSignupPanelUpwards === "function") {
+        window.cosmicaOpenSignupPanelUpwards(authMessage);
+        return;
+      }
+      if (typeof window.cosmicaAccountHub?.openAuth === "function") {
+        window.cosmicaAccountHub.openAuth({
+          panel: "signup",
+          message: authMessage,
+          tone: "info",
+        });
+        return;
+      }
+      window.location.href = "/index.html?openAuth=1&authPanel=signup#support";
+      return;
+    }
     void openPremiumCheckoutModal();
   });
   premiumSetupOverlay.addEventListener("click", (event) => {
@@ -8479,15 +8501,43 @@ worldCards.forEach((card) => {
    ========================================================================== */
 const openGuestSignupPanelUpwards = (message = "Sign up to save your progress.") => {
   const openSignupPanel = () => {
-    if (window.cosmicaAccountHub && typeof window.cosmicaAccountHub.openAuth === "function") {
-      window.cosmicaAccountHub.openAuth({
-        panel: "signup",
-        message,
-        tone: "info",
-      });
+    const openAuthFromHub = () => {
+      if (window.cosmicaAccountHub && typeof window.cosmicaAccountHub.openAuth === "function") {
+        window.cosmicaAccountHub.openAuth({
+          panel: "signup",
+          message,
+          tone: "info",
+        });
+        return true;
+      }
+      return false;
+    };
+
+    if (openAuthFromHub()) {
+      window.setTimeout(() => {
+        const dropdownNode = document.querySelector(".account-dropdown");
+        const isOpen = Boolean(dropdownNode instanceof HTMLElement && dropdownNode.hidden === false);
+        if (isOpen) {
+          return;
+        }
+        if (openAuthFromHub()) {
+          window.setTimeout(() => {
+            const retryDropdownNode = document.querySelector(".account-dropdown");
+            const retryOpen = Boolean(
+              retryDropdownNode instanceof HTMLElement && retryDropdownNode.hidden === false
+            );
+            if (retryOpen) {
+              return;
+            }
+            window.location.href = "/index.html?openAuth=1&authPanel=signup#support";
+          }, 140);
+          return;
+        }
+        window.location.href = "/index.html?openAuth=1&authPanel=signup#support";
+      }, 120);
       return;
     }
-    window.location.href = "/index.html?openAuth=1&authPanel=signup";
+    window.location.href = "/index.html?openAuth=1&authPanel=signup#support";
   };
 
   const startY = Math.max(0, window.scrollY || window.pageYOffset || 0);

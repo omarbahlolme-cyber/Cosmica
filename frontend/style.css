@@ -2734,12 +2734,13 @@ body.premium-setup-lock {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  font-size: 0.72rem;
+  font-size: 0.76rem;
   font-weight: 700;
   line-height: 1.1;
+  white-space: nowrap;
   color: rgba(232, 243, 255, 0.95);
-  min-height: 24px;
-  padding: 4px 6px;
+  min-height: 28px;
+  padding: 5px 8px;
   border-radius: 999px;
   border: 1px solid rgba(131, 192, 236, 0.3);
   background:
@@ -2749,16 +2750,16 @@ body.premium-setup-lock {
 }
 
 .account-menu-stat-icon {
-  width: 14px;
-  height: 14px;
-  flex: 0 0 14px;
+  width: 15px;
+  height: 15px;
+  flex: 0 0 15px;
   display: inline-grid;
   place-items: center;
 }
 
 .account-menu-stat-icon svg {
-  width: 14px;
-  height: 14px;
+  width: 15px;
+  height: 15px;
   display: block;
   filter: drop-shadow(0 1px 1px rgba(5, 10, 24, 0.35));
 }
@@ -2786,6 +2787,13 @@ body.premium-setup-lock {
 
 .account-menu-stat-achievement .icon-ach-star {
   fill: #fff6bf;
+}
+
+.account-menu-streak,
+.account-menu-achievements {
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: normal;
 }
 
 .account-menu-links {
