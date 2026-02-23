@@ -3254,6 +3254,112 @@ const inferKoreanRegisterFromText = (value) => {
   return "neutral";
 };
 
+const inferPhraseRegisterByWorld = (value, section = "") => {
+  const text = String(value || "").trim();
+  if (!text) {
+    return "neutral";
+  }
+  const lower = text.toLowerCase();
+  const sectionKey = String(section || "").trim();
+
+  if (WORLD_KEY === "korean") {
+    return inferKoreanRegisterFromText(text);
+  }
+
+  if (WORLD_KEY === "french") {
+    if (/\b(salut|peux-tu|pourrais-tu|ça va)\b/.test(lower)) {
+      return "informal";
+    }
+    if (/\b(vous\b|excusez|pardonnez|pourriez-vous|s'il vous plaît)\b/.test(lower)) {
+      return "polite";
+    }
+  }
+
+  if (WORLD_KEY === "german") {
+    if (/\b(du\b|dir\b|dich\b|kannst du|könntest du|tschüss)\b/.test(lower)) {
+      return "informal";
+    }
+    if (/\b(sie\b|ihnen\b|entschuldigen sie|könnten sie)\b/.test(lower)) {
+      return "polite";
+    }
+  }
+
+  if (WORLD_KEY === "spanish") {
+    if (/\b(puedes|podrías|cómo estás|tú)\b/.test(lower)) {
+      return "informal";
+    }
+    if (/\b(disculpe|perdóneme|usted|podría)\b/.test(lower)) {
+      return "polite";
+    }
+  }
+
+  if (WORLD_KEY === "portuguese") {
+    if (/\b(oi|tu\b|valeu|tchau)\b/.test(lower)) {
+      return "informal";
+    }
+    if (/\b(com licença|você|desculpe|poderia)\b/.test(lower)) {
+      return "polite";
+    }
+  }
+
+  if (WORLD_KEY === "dutch") {
+    if (/\b(doei|kun je|zou je)\b/.test(lower)) {
+      return "informal";
+    }
+    if (/\b(u\b|kunt u|zou u|dank u)\b/.test(lower)) {
+      return "polite";
+    }
+  }
+
+  if (WORLD_KEY === "swedish") {
+    if (/\b(hej då|du\b|snälla)\b/.test(lower)) {
+      return "informal";
+    }
+    if (/\b(ursäkta|ni\b|skulle ni)\b/.test(lower)) {
+      return "polite";
+    }
+  }
+
+  if (WORLD_KEY === "arabic") {
+    if (/(أهلا|إزيك|ازيك)/.test(text)) {
+      return "informal";
+    }
+    if (/(هل يمكنك|من فضلك|عفوا|أعتذر|اسمح)/.test(text)) {
+      return "formal";
+    }
+  }
+
+  if (sectionKey === "Requests") {
+    if (/(please|por favor|s'il vous plaît|bitte|من فضلك)/i.test(text)) {
+      return WORLD_KEY === "arabic" ? "formal" : "polite";
+    }
+  }
+
+  return "neutral";
+};
+
+const resolvePhraseNeutralFallbackRegister = () => {
+  if (WORLD_KEY === "arabic") {
+    return "formal";
+  }
+  if (
+    [
+      "korean",
+      "japanese",
+      "hindi",
+      "french",
+      "german",
+      "spanish",
+      "portuguese",
+      "dutch",
+      "swedish",
+    ].includes(WORLD_KEY)
+  ) {
+    return "polite";
+  }
+  return "neutral";
+};
+
 const resolveCardRegister = (registerValue, fallbackText = "") => {
   const explicit = String(registerValue || "").trim();
   if (explicit) {
@@ -3926,8 +4032,7 @@ const renderPhrasesSections = () => {
           </svg>
         </button>
       `;
-      const worldEntry = WORLD_TRANSLATIONS?.phrases?.[sectionName]?.[phrase] || null;
-      applyCardRegisterBadge(card, worldEntry?.register);
+      applyCardRegisterBadge(card, resolvePhraseRegister(sectionName, phrase));
       card.appendChild(createCardPracticeButton("phrases", sectionName, phrase));
       grid.appendChild(card);
     });
@@ -9477,9 +9582,15 @@ const resolvePhraseRomanization = (section, worldPhrase) => {
 const resolvePhraseRegister = (section, worldPhrase) => {
   const sectionKey = section || PHRASE_SECTION_ORDER[0];
   const worldEntry = resolveWorldPhraseEntry(sectionKey, worldPhrase);
-  const resolved = resolveCardRegister(worldEntry?.register, worldPhrase);
-  if (["korean", "japanese", "hindi"].includes(WORLD_KEY) && resolved === "neutral") {
-    return "polite";
+  let resolved = resolveCardRegister(worldEntry?.register, worldPhrase);
+  if (resolved === "neutral") {
+    resolved = inferPhraseRegisterByWorld(worldPhrase, sectionKey);
+  }
+  if (resolved === "neutral") {
+    const fallback = resolvePhraseNeutralFallbackRegister();
+    if (fallback !== "neutral") {
+      return fallback;
+    }
   }
   return resolved;
 };
