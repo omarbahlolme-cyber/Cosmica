@@ -2347,8 +2347,8 @@ const setupAccountHub = () => {
     }
     if (subscriptionSyncNode) {
       if (loading) {
-        subscriptionSyncNode.textContent = "Loading subscription details...";
-        subscriptionSyncNode.hidden = false;
+        subscriptionSyncNode.textContent = "";
+        subscriptionSyncNode.hidden = true;
       } else {
         const message = String(next.message || "").trim();
         subscriptionSyncNode.textContent = message;
@@ -3375,7 +3375,7 @@ const setupAccountHub = () => {
       cancelAtPeriodEnd,
       provider,
       isPremium,
-      canCancel: false,
+      canCancel: isPremium && !cancelAtPeriodEnd,
       message: cancelAtPeriodEnd
         ? "Your subscription is scheduled to cancel at period end."
         : "",
@@ -3972,11 +3972,10 @@ const setupAccountHub = () => {
     setDeleteConfirmationVisible(false);
     setSubscriptionCancelConfirmationVisible(false);
     setFeedback("");
-    const subscriptionDetailsLoadPromise = loadManageSubscriptionDetails({ showLoading: true });
+    void loadManageSubscriptionDetails({ showLoading: false });
     requestAnimationFrame(() => {
       scrollMenuPanelIntoView(subscriptionPanel, { behavior: "auto", block: "start" });
     });
-    await subscriptionDetailsLoadPromise;
   };
 
   const submitSubscriptionCancellation = async () => {
