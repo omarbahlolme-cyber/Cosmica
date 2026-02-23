@@ -328,6 +328,8 @@ body.home-alt-luxe .home-fx-comet::after {
 .brand-mark {
   position: relative;
   overflow: visible;
+  flex: 0 0 auto;
+  aspect-ratio: 1 / 1;
   transform-origin: 50% 50%;
   will-change: transform, box-shadow, filter;
   --brand-spin-angle: 0deg;
@@ -341,6 +343,12 @@ body.home-alt-luxe .home-fx-comet::after {
     rotate(var(--brand-spin-angle))
     scale(var(--brand-scale));
   transition: filter 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+}
+
+@media (max-width: 960px), (hover: none), (pointer: coarse) {
+  .brand-mark {
+    transform: rotate(var(--brand-spin-angle)) scale(var(--brand-scale));
+  }
 }
 
 .brand-mark::before {
@@ -1214,7 +1222,7 @@ body.world-page .nav-links a {
 
 .account-dropdown {
   position: absolute;
-  z-index: 90;
+  z-index: 1205;
   width: min(402px, calc(100vw - 16px));
   max-height: min(calc(var(--app-height) - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 20px), 648px);
   overflow: visible;
@@ -1325,7 +1333,7 @@ body.premium-setup-lock {
 .premium-setup-overlay {
   position: fixed;
   inset: 0;
-  z-index: 180;
+  z-index: 1306;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1342,7 +1350,7 @@ body.premium-setup-lock {
 .premium-checkout-overlay {
   position: fixed;
   inset: 0;
-  z-index: 181;
+  z-index: 1307;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1356,7 +1364,7 @@ body.premium-setup-lock {
 }
 
 .premium-success-overlay {
-  z-index: 182;
+  z-index: 1308;
 }
 
 .premium-setup-overlay[hidden] {
@@ -1512,6 +1520,59 @@ body.premium-setup-lock {
 
 .premium-success-actions {
   margin-top: 18px;
+}
+
+.premium-celebration-card {
+  width: min(920px, calc(100vw - 24px));
+  padding-bottom: 22px;
+}
+
+.premium-celebration-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  align-items: center;
+  gap: 18px;
+}
+
+.premium-celebration-copy {
+  min-width: 0;
+}
+
+.premium-celebration-copy .premium-success-message {
+  margin-top: 12px;
+}
+
+.premium-celebration-mimi {
+  display: grid;
+  place-items: center;
+  min-height: 250px;
+  pointer-events: none;
+}
+
+.premium-celebration-mimi .alien {
+  transform: scale(1.1);
+  transform-origin: center bottom;
+  filter: drop-shadow(0 20px 30px rgba(4, 18, 46, 0.38));
+  animation: mimiCelebrationFloat 2.8s ease-in-out infinite;
+}
+
+.premium-celebration-mimi .alien-arm.left,
+.premium-celebration-mimi .alien-arm.right {
+  animation: wave 1.25s ease-in-out infinite;
+}
+
+.premium-celebration-mimi .alien-arm.right {
+  animation-delay: 0.18s;
+}
+
+@keyframes mimiCelebrationFloat {
+  0%,
+  100% {
+    transform: translateY(0) scale(1.1);
+  }
+  50% {
+    transform: translateY(-7px) scale(1.1);
+  }
 }
 
 .premium-plan-strip {
@@ -2133,6 +2194,19 @@ body.premium-setup-lock {
     width: min(560px, calc(100vw - 18px));
   }
 
+  .premium-celebration-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .premium-celebration-mimi {
+    min-height: 172px;
+  }
+
+  .premium-celebration-mimi .alien {
+    transform: scale(0.95);
+  }
+
   .premium-checkout-primary,
   .premium-checkout-secondary {
     width: auto;
@@ -2142,6 +2216,12 @@ body.premium-setup-lock {
 @media (prefers-reduced-motion: reduce) {
   .premium-setup-card,
   .premium-plan-chip-pro {
+    animation: none;
+  }
+
+  .premium-celebration-mimi .alien,
+  .premium-celebration-mimi .alien-arm.left,
+  .premium-celebration-mimi .alien-arm.right {
     animation: none;
   }
 
@@ -5739,7 +5819,7 @@ body.world-page :is(.world-section, #world, #language, #maps) {
     inset 0 -1px 0 rgba(86, 146, 214, 0.18);
   backdrop-filter: blur(14px) saturate(135%);
   -webkit-backdrop-filter: blur(14px) saturate(135%);
-  overflow: visible;
+  overflow: hidden;
   isolation: isolate;
   transition: transform 320ms cubic-bezier(0.2, 0.85, 0.3, 1),
     box-shadow 320ms ease,
@@ -5797,7 +5877,7 @@ body.world-page :is(.world-section, #world, #language, #maps)::after {
 }
 
 body.world-page #world {
-  overflow: visible;
+  overflow: hidden;
 }
 
 body.world-page :is(.world-section, #world, #language, #maps) > * {
@@ -7126,7 +7206,7 @@ body.legal-page main {
 .scroll-top-btn {
   position: fixed;
   right: 20px;
-  top: 18px;
+  top: calc(var(--runtime-nav-height, var(--global-nav-offset, 96px)) + 8px);
   bottom: auto;
   width: 42px;
   height: 42px;
@@ -7137,7 +7217,7 @@ body.legal-page main {
   font-size: 22px;
   line-height: 1;
   cursor: pointer;
-  z-index: 120;
+  z-index: 1300;
   opacity: 0;
   pointer-events: none;
   transform: translateY(8px);
@@ -8185,7 +8265,7 @@ body.world-page.start-lesson-transition #language.language-reveal {
 
   .scroll-top-btn {
     right: 14px;
-    top: 14px;
+    top: calc(var(--runtime-nav-height, var(--global-nav-offset, 96px)) + 6px);
     bottom: auto;
     width: 40px;
     height: 40px;
@@ -10169,7 +10249,7 @@ body.home-alt-luxe .is-interactive-surface.is-pressed {
   }
 
   body.home-alt-luxe .scroll-top-btn {
-    top: calc(env(safe-area-inset-top) + 10px);
+    top: calc(var(--runtime-nav-height, var(--global-nav-offset, 96px)) + 6px);
     right: 12px;
   }
 }
@@ -10277,7 +10357,7 @@ section,
   }
 
   body.home-alt-luxe .hero-right {
-    overflow: hidden;
+    overflow: visible;
     display: grid;
     place-items: center;
   }
@@ -10318,6 +10398,19 @@ section,
   .world-grid,
   .world-maps .steps {
     grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  }
+
+  .nav,
+  body.world-page .nav {
+    overflow: clip !important;
+  }
+
+  .nav::before,
+  .nav::after,
+  body.world-page .nav::before,
+  body.world-page .nav::after {
+    inset: 0 !important;
+    border-radius: inherit;
   }
 
   .account-slot {
@@ -10371,7 +10464,6 @@ section,
   .aurora {
     inset: 0;
   }
-
   body.home-alt-luxe .home-fx-comets,
   body.world-page .world-fx-comets,
   body.world-page .world-fx-dust,
@@ -10465,7 +10557,7 @@ section,
 
   .hero-right,
   body.home-alt-luxe .hero-right {
-    overflow: hidden;
+    overflow: visible;
   }
 
   body.home-alt-luxe .orbit-system::after {
@@ -10877,6 +10969,27 @@ section,
   }
 }
 
+@media (max-width: 900px), (hover: none), (pointer: coarse) {
+  html,
+  body,
+  body.world-page,
+  body.world-page main {
+    overflow-x: clip;
+  }
+
+  body.world-page .world-ambient::after {
+    transform: none !important;
+    animation: none !important;
+    opacity: 0.22;
+  }
+
+  body.world-page .world-ambient::before,
+  body.world-page :is(.world-section, #world, #language, #maps)::before,
+  body.world-page .world-maps .map-card {
+    animation: none !important;
+  }
+}
+
 /* --------------------------------------------------------------------------
   FINAL RESPONSIVE GEOMETRY SAFETY LAYER
   Prevent overlap/cropping on tight viewports while preserving current design.
@@ -10918,6 +11031,28 @@ section,
 ) {
   overflow-wrap: anywhere;
   word-break: break-word;
+}
+
+header.nav,
+.nav {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1000 !important;
+}
+
+body {
+  --global-nav-offset: clamp(82px, 8vw, 112px);
+}
+
+body > main {
+  padding-top: calc(var(--global-nav-offset) + 12px) !important;
+}
+
+body.world-page > main {
+  padding-top: calc(var(--global-nav-offset) + 8px) !important;
 }
 
 @media (max-width: 960px) {

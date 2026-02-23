@@ -2018,6 +2018,53 @@ const setupAccountHub = () => {
   `;
   document.body.appendChild(premiumCheckoutOverlay);
 
+  const premiumSuccessOverlay = document.createElement("div");
+  premiumSuccessOverlay.className = "premium-checkout-overlay premium-success-overlay";
+  premiumSuccessOverlay.hidden = true;
+  premiumSuccessOverlay.innerHTML = `
+    <section class="premium-setup-card premium-success-card premium-celebration-card" role="dialog" aria-modal="true" aria-labelledby="premiumSuccessTitle">
+      <button type="button" class="premium-checkout-close premium-success-close" aria-label="Close celebration">×</button>
+      <div class="premium-celebration-layout">
+        <div class="premium-celebration-copy">
+          <h3 id="premiumSuccessTitle">Welcome to Cosmica Premium</h3>
+          <p class="premium-setup-message premium-success-message">Your subscription is now active. Wishing you a joyful learning journey and beautiful exploration across every world in Cosmica.</p>
+          <div class="premium-success-benefits" aria-label="Premium unlocked features">
+            <p>✓ Full premium map access is unlocked.</p>
+            <p>✓ Mimi chat and advanced practice tools are ready.</p>
+            <p>✓ Your progress, streak, and level continue seamlessly.</p>
+          </div>
+          <div class="premium-setup-actions premium-success-actions">
+            <button type="button" class="premium-setup-primary premium-success-cta">Start exploring</button>
+          </div>
+        </div>
+        <div class="premium-celebration-mimi" aria-hidden="true">
+          <div class="alien mood-happy is-waving">
+            <div class="alien-glow"></div>
+            <div class="alien-head">
+              <div class="alien-antenna"></div>
+              <div class="alien-antenna right"></div>
+              <div class="alien-eye left"></div>
+              <div class="alien-eye right"></div>
+              <div class="alien-blush left"></div>
+              <div class="alien-blush right"></div>
+              <div class="alien-mouth">
+                <svg viewBox="0 0 64 32" aria-hidden="true">
+                  <path d="M10 10 C 22 26, 42 26, 54 10" />
+                </svg>
+              </div>
+            </div>
+            <div class="alien-body">
+              <div class="alien-arm left"></div>
+              <div class="alien-arm right"></div>
+            </div>
+            <div class="alien-tail"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  `;
+  document.body.appendChild(premiumSuccessOverlay);
+
   const feedbackNode = dropdown.querySelector(".account-feedback");
   const guestPane = dropdown.querySelector(".account-guest-pane");
   const userPane = dropdown.querySelector(".account-user-pane");
@@ -2088,6 +2135,9 @@ const setupAccountHub = () => {
   const premiumCheckoutFeedback = premiumCheckoutOverlay.querySelector(".premium-checkout-feedback");
   const premiumCheckoutPrimaryBtn = premiumCheckoutOverlay.querySelector(".premium-checkout-primary");
   const premiumCheckoutSecondaryBtn = premiumCheckoutOverlay.querySelector(".premium-checkout-secondary");
+  const premiumSuccessCard = premiumSuccessOverlay.querySelector(".premium-success-card");
+  const premiumSuccessCloseBtn = premiumSuccessOverlay.querySelector(".premium-success-close");
+  const premiumSuccessCtaBtn = premiumSuccessOverlay.querySelector(".premium-success-cta");
   let selectedPremiumCheckoutOption = null;
   let premiumCheckoutOptionsReady = false;
   let isSubscriptionPanelExpanded = false;
@@ -2195,6 +2245,8 @@ const setupAccountHub = () => {
   let premiumModalBodyLockActive = false;
   let premiumModalBodyLockScrollY = 0;
   let premiumModalTouchStartY = 0;
+  let pendingPremiumWelcomeMode = "";
+  let hasShownPremiumWelcome = false;
   let authDropdownBodyLockActive = false;
   let authDropdownBodyLockScrollY = 0;
   let authDropdownTouchStartY = 0;
@@ -2638,8 +2690,34 @@ const setupAccountHub = () => {
     window.history.replaceState({}, "", nextUrl);
   };
 
+  const consumePremiumCheckoutNoticeFromUrl = () => {
+    const params = new URLSearchParams(window.location.search);
+    const premiumState = String(params.get("premium") || "")
+      .trim()
+      .toLowerCase();
+    if (premiumState === "success") {
+      pendingPremiumWelcomeMode = "success";
+      hasShownPremiumWelcome = false;
+    } else if (premiumState === "test") {
+      pendingPremiumWelcomeMode = "test";
+      hasShownPremiumWelcome = false;
+    } else if (premiumState === "cancel") {
+      showTriggerNoticeBubble("Premium checkout was cancelled. No charge was made.", "info", 7000);
+    }
+    if (!premiumState) {
+      return;
+    }
+    params.delete("premium");
+    params.delete("session_id");
+    const nextQuery = params.toString();
+    const nextUrl =
+      window.location.pathname + (nextQuery ? `?${nextQuery}` : "") + window.location.hash;
+    window.history.replaceState({}, "", nextUrl);
+  };
+
   consumeAuthErrorFromUrl();
   consumeAccountDeletedNoticeFromUrl();
+  consumePremiumCheckoutNoticeFromUrl();
   loginForm?.setAttribute("novalidate", "novalidate");
   signupForm?.setAttribute("novalidate", "novalidate");
   resetForm?.setAttribute("novalidate", "novalidate");
@@ -2878,7 +2956,8 @@ const setupAccountHub = () => {
   };
 
   const syncPremiumModalBodyLock = () => {
-    const hasOpenPremiumModal = !premiumSetupOverlay.hidden || !premiumCheckoutOverlay.hidden;
+    const hasOpenPremiumModal =
+      !premiumSetupOverlay.hidden || !premiumCheckoutOverlay.hidden || !premiumSuccessOverlay.hidden;
     document.body.classList.toggle("premium-setup-lock", hasOpenPremiumModal);
     document.documentElement.classList.toggle("premium-setup-lock", hasOpenPremiumModal);
     if (hasOpenPremiumModal && !premiumModalBodyLockActive) {
@@ -2934,15 +3013,25 @@ const setupAccountHub = () => {
   };
 
   const maybeBlockPremiumModalBackgroundScroll = (event) => {
-    if (premiumSetupOverlay.hidden) {
+    const hasOpenPremiumModal =
+      !premiumSetupOverlay.hidden || !premiumCheckoutOverlay.hidden || !premiumSuccessOverlay.hidden;
+    if (!hasOpenPremiumModal) {
       return;
     }
 
     const eventTarget = event.target;
     const insideSetupCard =
       premiumSetupCard instanceof HTMLElement && eventTarget instanceof Node && premiumSetupCard.contains(eventTarget);
+    const insideCheckoutCard =
+      premiumCheckoutCard instanceof HTMLElement &&
+      eventTarget instanceof Node &&
+      premiumCheckoutCard.contains(eventTarget);
+    const insideSuccessCard =
+      premiumSuccessCard instanceof HTMLElement &&
+      eventTarget instanceof Node &&
+      premiumSuccessCard.contains(eventTarget);
 
-    if (insideSetupCard) {
+    if (insideSetupCard || insideCheckoutCard || insideSuccessCard) {
       let deltaY = 0;
       if (event.type === "wheel") {
         deltaY = Number(event.deltaY) || 0;
@@ -2954,7 +3043,8 @@ const setupAccountHub = () => {
         }
       }
 
-      if (canScrollElementForDelta(premiumSetupCard, deltaY)) {
+      const targetCard = insideSetupCard ? premiumSetupCard : insideCheckoutCard ? premiumCheckoutCard : premiumSuccessCard;
+      if (canScrollElementForDelta(targetCard, deltaY)) {
         return;
       }
     }
@@ -3212,6 +3302,34 @@ const setupAccountHub = () => {
     }
   };
 
+  const openPremiumSuccessModal = ({ testMode = false } = {}) => {
+    hasShownPremiumWelcome = true;
+    pendingPremiumWelcomeMode = "";
+    closeDropdown();
+    lastPremiumFocusNode = document.activeElement;
+    const titleNode = premiumSuccessOverlay.querySelector("#premiumSuccessTitle");
+    if (titleNode) {
+      titleNode.textContent = "Welcome to Cosmica Premium";
+    }
+    premiumSuccessOverlay.hidden = false;
+    syncPremiumModalBodyLock();
+    window.setTimeout(() => {
+      if (premiumSuccessCtaBtn && typeof premiumSuccessCtaBtn.focus === "function") {
+        premiumSuccessCtaBtn.focus();
+        return;
+      }
+      premiumSuccessCard?.focus?.();
+    }, 20);
+  };
+
+  const closePremiumSuccessModal = () => {
+    premiumSuccessOverlay.hidden = true;
+    syncPremiumModalBodyLock();
+    if (lastPremiumFocusNode && typeof lastPremiumFocusNode.focus === "function") {
+      lastPremiumFocusNode.focus();
+    }
+  };
+
   const snapshotHasPremiumAccess = (snapshot) => {
     const premiumFlagRaw = snapshot?.user?.isPremium ?? snapshot?.user?.premium;
     const premiumFlagText = String(premiumFlagRaw ?? "")
@@ -3390,8 +3508,31 @@ const setupAccountHub = () => {
     });
   });
 
+  premiumSuccessCloseBtn?.addEventListener("click", () => {
+    closePremiumSuccessModal();
+  });
+
+  premiumSuccessCtaBtn?.addEventListener("click", () => {
+    closePremiumSuccessModal();
+    const worldsSection = document.getElementById("worlds");
+    if (worldsSection) {
+      worldsSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  });
+
+  premiumSuccessOverlay.addEventListener("click", (event) => {
+    if (event.target === premiumSuccessOverlay) {
+      closePremiumSuccessModal();
+    }
+  });
+
   document.addEventListener("keydown", (event) => {
     if (event.key !== "Escape") {
+      return;
+    }
+    if (!premiumSuccessOverlay.hidden) {
+      event.preventDefault();
+      closePremiumSuccessModal();
       return;
     }
     if (!premiumCheckoutOverlay.hidden) {
@@ -3408,7 +3549,9 @@ const setupAccountHub = () => {
   document.addEventListener(
     "touchstart",
     (event) => {
-      if (premiumSetupOverlay.hidden) {
+      const hasOpenPremiumModal =
+        !premiumSetupOverlay.hidden || !premiumCheckoutOverlay.hidden || !premiumSuccessOverlay.hidden;
+      if (!hasOpenPremiumModal) {
         const touchTarget = event.target;
         if (
           dropdown.hidden ||
@@ -3531,6 +3674,14 @@ const setupAccountHub = () => {
     const questTasks = quests?.tasks && typeof quests.tasks === "object" ? quests.tasks : {};
     const showPasswordManagement = Boolean(isAuthenticated && currentAuthProvider !== "google");
     const showGooglePasswordNote = Boolean(isAuthenticated && currentAuthProvider === "google");
+
+    if (!hasShownPremiumWelcome && pendingPremiumWelcomeMode === "test") {
+      openPremiumSuccessModal({ testMode: true });
+    } else if (!hasShownPremiumWelcome && pendingPremiumWelcomeMode === "success") {
+      if (isAuthenticated && hasPremiumAccess) {
+        openPremiumSuccessModal({ testMode: false });
+      }
+    }
 
     if (triggerMeta) {
       triggerMeta.textContent = shouldSuppressGuestFlash
@@ -5692,8 +5843,8 @@ const setupLettersSectionCompleteButton = () => {
     button.type = "button";
     button.className = "map-section-complete-btn";
     button.style.position = "absolute";
-    button.style.top = "8px";
-    button.style.right = "8px";
+    button.style.top = "16px";
+    button.style.right = "16px";
     button.style.left = "auto";
     button.style.zIndex = "3";
     button.dataset.mapKey = "letters";
@@ -10918,16 +11069,30 @@ const setupHomeAltInteractivity = () => {
     if (nearPageBottom) {
       return trackedSections[trackedSections.length - 1].hash;
     }
-    const focalY = window.scrollY + window.innerHeight * 0.36;
+    const navElement = document.querySelector("header.nav, .nav");
+    const navBottomY =
+      navElement instanceof HTMLElement
+        ? window.scrollY + navElement.getBoundingClientRect().bottom
+        : window.scrollY;
+    const triggerY = navBottomY + 22;
     let winner = trackedSections[0].hash;
-    let minDistance = Number.POSITIVE_INFINITY;
     trackedSections.forEach(({ hash, section }) => {
-      const distance = Math.abs(section.offsetTop - focalY);
-      if (distance < minDistance) {
-        minDistance = distance;
+      const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+      if (sectionTop <= triggerY) {
         winner = hash;
       }
     });
+    const remainingScroll =
+      document.documentElement.scrollHeight - (window.scrollY + window.innerHeight);
+    if (remainingScroll <= window.innerHeight * 0.85) {
+      const lateViewportTriggerY = window.scrollY + window.innerHeight - 120;
+      trackedSections.forEach(({ hash, section }) => {
+        const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+        if (sectionTop <= lateViewportTriggerY) {
+          winner = hash;
+        }
+      });
+    }
     return winner;
   };
 
@@ -10984,6 +11149,18 @@ const setupBackToTopButton = () => {
 
   document.body.appendChild(button);
   return button;
+};
+
+const syncRuntimeNavHeightVar = () => {
+  const nav = document.querySelector("header.nav, .nav");
+  if (!(nav instanceof HTMLElement) || !document.documentElement) {
+    return;
+  }
+  const navHeight = Math.max(0, Math.ceil(nav.getBoundingClientRect().height || 0));
+  if (!navHeight) {
+    return;
+  }
+  document.documentElement.style.setProperty("--runtime-nav-height", `${navHeight}px`);
 };
 
 const COOKIE_NOTICE_DISMISSED_KEY = "cosmicaEssentialCookieNoticeDismissed";
@@ -11089,6 +11266,9 @@ const initializeCommonShell = () => {
   setupLetterRomanization();
   setupSpeechCards();
   setupBackToTopButton();
+  syncRuntimeNavHeightVar();
+  window.addEventListener("resize", syncRuntimeNavHeightVar, { passive: true });
+  window.addEventListener("orientationchange", syncRuntimeNavHeightVar, { passive: true });
   setupEssentialCookieNotice();
 };
 

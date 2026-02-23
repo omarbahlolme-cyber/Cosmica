@@ -31,6 +31,7 @@ body.letters-page main {
   display: flex;
   align-items: flex-start;
   gap: 10px;
+  margin-top: 8px;
 }
 
 .letters-grid-section .section-title h2,
@@ -62,6 +63,17 @@ html[lang="ar"] body:is(.letters-page, .words-page, .phrases-page, .grammar-page
 body.letters-page[data-world="Arabic"] .letters-grid-section .section-title,
 html[lang="ar"] body.letters-page .letters-grid-section .section-title {
   margin-top: 14px;
+}
+
+body.words-page .words-group .section-title,
+html[lang="ar"] body.words-page .words-group .section-title {
+  margin-top: 32px;
+}
+
+body:is(.letters-page, .words-page, .phrases-page, .grammar-page)
+  :is(.letters-grid-section, .words-group, .phrases-group, .grammar-group)
+  > .section-title {
+  margin-top: 32px !important;
 }
 
 body[data-world="Arabic"]:is(.letters-page, .words-page, .phrases-page, .grammar-page) .section-title h2,
@@ -176,8 +188,8 @@ html[lang="ar"] body:is(.words-page, .phrases-page, .grammar-page) .words-contro
 }
 
 .map-card-practice-btn {
-  top: 8px;
-  right: 8px !important;
+  top: 16px;
+  right: 16px !important;
   width: 22px;
   height: 22px;
   font-size: 0.72rem;
@@ -185,14 +197,22 @@ html[lang="ar"] body:is(.words-page, .phrases-page, .grammar-page) .words-contro
 }
 
 .letters-page .letter-card .map-card-practice-btn {
-  top: 2px;
-  right: 6px !important;
+  position: relative !important;
+  top: 4px;
+  left: 8px;
+  bottom: auto;
+  right: auto !important;
   transform: none !important;
 }
 
 .letters-page .letter-card .map-card-practice-btn:hover,
 .letters-page .letter-card .map-card-practice-btn:focus-visible {
   transform: translateY(-1px) !important;
+}
+
+body.letters-page[data-world="Japanese"] .letter-card .map-card-practice-btn {
+  top: 3px;
+  left: 6px;
 }
 
 
@@ -229,6 +249,21 @@ body.letters-page[data-world="Japanese"] .letters-grid {
   color: rgba(224, 238, 255, 0.96);
 }
 
+body.letters-page:is(
+    [data-world="Arabic"],
+    [data-world="Chinese"],
+    [data-world="Korean"],
+    [data-world="Hindi"]
+  ) .letters-grid + .letters-script-heading,
+body.letters-page:is(
+    [data-world="Arabic"],
+    [data-world="Chinese"],
+    [data-world="Korean"],
+    [data-world="Hindi"]
+  ) .letters-grid + .letters-script-note + .letters-script-heading {
+  margin-top: 112px;
+}
+
 .letters-script-note {
   margin: -6px 4px 14px;
   font-size: clamp(0.82rem, 1.45vw, 0.94rem);
@@ -255,7 +290,7 @@ body.letters-page[data-world="Japanese"] .letters-script-group .letters-grid {
 }
 
 body.letters-page[data-world="Japanese"] .letters-script-group-katakana {
-  margin-top: 34px;
+  margin-top: 140px;
 }
 
 .letter-card {
@@ -1297,6 +1332,27 @@ body:is(.letters-page, .words-page, .phrases-page, .grammar-page) main {
   padding-inline: clamp(14px, 3vw, 34px);
 }
 
+@media (max-width: 900px) {
+  body:is(.letters-page, .words-page, .phrases-page, .grammar-page) main {
+    padding-inline: clamp(6px, 2vw, 10px);
+  }
+
+  .letters-grid-section,
+  .words-group,
+  .phrases-group,
+  .grammar-group {
+    animation: none;
+    background-position: 0 0, 50% 50%, 50% 50%;
+  }
+
+  .letters-grid-section::after,
+  .words-group::after,
+  .phrases-group::after,
+  .grammar-group::after {
+    display: none;
+  }
+}
+
 .letters-grid-section,
 .words-group,
 .phrases-group,
@@ -1594,9 +1650,9 @@ html[lang="ar"] body.phrases-page .phrase-card .word-audio {
 }
 
 .letter-card > *,
-.word-card > *,
-.phrase-card > *,
-.grammar-card > * {
+.word-card > :not(.map-section-complete-btn),
+.phrase-card > :not(.map-section-complete-btn),
+.grammar-card > :not(.map-section-complete-btn) {
   position: relative;
   z-index: 1;
 }
@@ -1700,6 +1756,21 @@ html[lang="ar"] body.phrases-page .phrase-card .word-audio {
     padding: 14px;
   }
 
+  .letters-grid-section,
+  .words-group,
+  .phrases-group,
+  .grammar-group {
+    animation: none;
+    background-position: 0 0, 50% 50%, 50% 50%;
+  }
+
+  .letters-grid-section::after,
+  .words-group::after,
+  .phrases-group::after,
+  .grammar-group::after {
+    display: none;
+  }
+
   .words-controls {
     padding: 10px;
   }
@@ -1712,7 +1783,7 @@ html[lang="ar"] body.phrases-page .phrase-card .word-audio {
 
   body.letters-page main {
     max-width: 100%;
-    padding-inline: 12px;
+    padding-inline: 8px;
   }
 
   body.letters-page .letters-grid-section {
@@ -1736,6 +1807,23 @@ html[lang="ar"] body.phrases-page .phrase-card .word-audio {
 
   body.letters-page .letters-grid-section .section-title h2 {
     font-size: clamp(1.86rem, 7.2vw, 2.34rem);
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .letters-grid-section,
+  .words-group,
+  .phrases-group,
+  .grammar-group {
+    animation: none;
+    background-position: 0 0, 50% 50%, 50% 50%;
+  }
+
+  .letters-grid-section::after,
+  .words-group::after,
+  .phrases-group::after,
+  .grammar-group::after {
+    display: none;
   }
 }
 
@@ -1829,7 +1917,14 @@ html[lang="ar"] body.phrases-page .phrase-card .word-audio {
   }
 
   .map-section-complete-btn:not(.map-card-practice-btn)::before {
-    content: none;
+    content: attr(data-status-label);
+    right: calc(100% + 8px);
+    left: auto;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.72rem;
+    line-height: 1;
+    white-space: nowrap;
   }
 }
 

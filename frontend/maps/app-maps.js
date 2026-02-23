@@ -3655,8 +3655,8 @@ const createSectionCompleteButton = (mapKey, sectionKey, options = {}) => {
   button.type = "button";
   button.className = "map-section-complete-btn";
   button.style.position = "absolute";
-  button.style.top = "8px";
-  button.style.right = "8px";
+  button.style.top = "16px";
+  button.style.right = "16px";
   button.style.left = "auto";
   button.style.zIndex = "3";
   button.textContent = "✓";

@@ -399,7 +399,11 @@ app.use((req, res, next) => {
   if (!versionTag) {
     return next();
   }
-  if (FRESH_ASSET_EXTENSIONS.has(ext) || CACHEABLE_MEDIA_EXTENSIONS.has(ext)) {
+  if (FRESH_ASSET_EXTENSIONS.has(ext)) {
+    res.setHeader("Cache-Control", "public, max-age=0, must-revalidate");
+    return next();
+  }
+  if (CACHEABLE_MEDIA_EXTENSIONS.has(ext)) {
     res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
   }
   return next();
