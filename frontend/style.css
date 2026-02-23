@@ -5797,7 +5797,7 @@ body.world-page :is(.world-section, #world, #language, #maps)::after {
 }
 
 body.world-page #world {
-  overflow: hidden;
+  overflow: visible;
 }
 
 body.world-page :is(.world-section, #world, #language, #maps) > * {

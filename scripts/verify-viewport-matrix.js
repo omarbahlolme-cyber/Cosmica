@@ -11,7 +11,7 @@ const { spawn } = require("child_process");
 const ROOT = path.resolve(__dirname, "..");
 const PORT = Number(process.env.VIEWPORT_PORT || 4175);
 const STARTUP_TIMEOUT_MS = Number(process.env.VIEWPORT_STARTUP_TIMEOUT_MS || 25000);
-const NAVIGATION_TIMEOUT_MS = Number(process.env.VIEWPORT_NAVIGATION_TIMEOUT_MS || 18000);
+const NAVIGATION_TIMEOUT_MS = Number(process.env.VIEWPORT_NAVIGATION_TIMEOUT_MS || 60000);
 const BASE_URL = String(process.env.VIEWPORT_BASE_URL || `http://127.0.0.1:${PORT}`)
   .trim()
   .replace(/\/$/, "");
@@ -32,15 +32,31 @@ const ROUTES = [
 ];
 
 const VIEWPORTS = [
+  { id: "280x653", width: 280, height: 653 },
   { id: "320x568", width: 320, height: 568 },
+  { id: "344x882", width: 344, height: 882 },
+  { id: "360x640", width: 360, height: 640 },
   { id: "360x800", width: 360, height: 800 },
+  { id: "375x667", width: 375, height: 667 },
+  { id: "375x812", width: 375, height: 812 },
   { id: "390x844", width: 390, height: 844 },
   { id: "412x915", width: 412, height: 915 },
+  { id: "430x932", width: 430, height: 932 },
+  { id: "540x720", width: 540, height: 720 },
+  { id: "600x960", width: 600, height: 960 },
   { id: "768x1024", width: 768, height: 1024 },
+  { id: "810x1080", width: 810, height: 1080 },
   { id: "820x1180", width: 820, height: 1180 },
+  { id: "912x1368", width: 912, height: 1368 },
+  { id: "1024x768", width: 1024, height: 768 },
   { id: "1024x1366", width: 1024, height: 1366 },
+  { id: "1280x720", width: 1280, height: 720 },
   { id: "1366x768", width: 1366, height: 768 },
+  { id: "1440x900", width: 1440, height: 900 },
+  { id: "1536x864", width: 1536, height: 864 },
+  { id: "1600x900", width: 1600, height: 900 },
   { id: "1920x1080", width: 1920, height: 1080 },
+  { id: "2560x1440", width: 2560, height: 1440 },
 ];
 
 const DEFAULT_BROWSERS = ["chromium", "firefox", "webkit"];
@@ -48,11 +64,18 @@ const REQUEST_SELECTORS = [
   "main",
   ".nav",
   ".hero",
+  ".world-hero",
   ".section",
   ".section-title",
   ".steps",
   ".world-grid",
   ".world-maps .steps",
+  ".letters-grid",
+  ".words-grid",
+  ".letter-card",
+  ".word-card",
+  ".phrase-card",
+  ".grammar-card",
   "footer",
   ".account-dropdown:not([hidden])",
   ".premium-setup-card",
@@ -152,9 +175,34 @@ const waitForServerHealth = async (baseUrl) => {
   throw new Error(`Server did not become healthy in time (${lastError || "unknown error"})`);
 };
 
+const gotoWithRetry = async (page, url) => {
+  const attempts = [
+    { waitUntil: "domcontentloaded", timeout: NAVIGATION_TIMEOUT_MS },
+    { waitUntil: "load", timeout: NAVIGATION_TIMEOUT_MS },
+  ];
+  let lastError = null;
+
+  for (let i = 0; i < attempts.length; i += 1) {
+    const attempt = attempts[i];
+    try {
+      await page.goto(url, attempt);
+      return;
+    } catch (error) {
+      lastError = error;
+      if (i < attempts.length - 1) {
+        try {
+          await page.goto("about:blank", { waitUntil: "load", timeout: 10000 });
+        } catch {}
+      }
+    }
+  }
+
+  throw lastError;
+};
+
 const checkRouteInViewport = async ({ page, route, selectors }) => {
   const url = `${BASE_URL}${route}`;
-  await page.goto(url, { waitUntil: "domcontentloaded", timeout: NAVIGATION_TIMEOUT_MS });
+  await gotoWithRetry(page, url);
   await page.waitForTimeout(220);
 
   return page.evaluate(({ targetSelectors }) => {

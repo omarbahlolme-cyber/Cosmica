@@ -185,13 +185,14 @@ html[lang="ar"] body:is(.words-page, .phrases-page, .grammar-page) .words-contro
 }
 
 .letters-page .letter-card .map-card-practice-btn {
-  top: 5px;
-  transform: translateX(9px) !important;
+  top: 2px;
+  right: 6px !important;
+  transform: none !important;
 }
 
 .letters-page .letter-card .map-card-practice-btn:hover,
 .letters-page .letter-card .map-card-practice-btn:focus-visible {
-  transform: translateX(9px) translateY(-1px) !important;
+  transform: translateY(-1px) !important;
 }
 
 
@@ -211,7 +212,7 @@ html[lang="ar"] body:is(.words-page, .phrases-page, .grammar-page) .words-contro
 
 .letters-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(clamp(96px, 12.5vw, 120px), 1fr));
   gap: 18px;
   width: 100%;
 }
@@ -261,7 +262,7 @@ body.letters-page[data-world="Japanese"] .letters-script-group-katakana {
   position: relative;
   border-radius: 18px;
   padding: 18px 14px 14px;
-  min-height: 120px;
+  min-height: clamp(98px, 14vw, 120px);
   display: grid;
   place-items: center;
   gap: 10px;
@@ -1422,7 +1423,7 @@ body.letters-page main {
 body.letters-page .letters-grid-section .section-title {
   max-width: min(980px, 100%);
   margin-bottom: clamp(30px, 3vw, 44px);
-  min-height: clamp(172px, 22vh, 246px);
+  min-height: clamp(132px, 16vh, 188px);
   display: grid;
   align-content: start;
   gap: 12px;
@@ -1447,6 +1448,7 @@ html[lang="ar"] body.letters-page .letters-grid-section .section-title .eyebrow 
 body.letters-page .letters-grid-section .section-title h2 {
   font-size: clamp(2.15rem, 4.3vw, 3.15rem);
   line-height: 1.1;
+  text-wrap: balance;
 }
 
 body.letters-page[data-world="Arabic"] .letters-grid-section .section-title h2,
@@ -1640,7 +1642,7 @@ html[lang="ar"] body.phrases-page .phrase-card .word-audio {
   display: grid;
   grid-template-rows: auto auto 1fr auto;
   gap: 8px;
-  min-height: 154px;
+  min-height: clamp(124px, 16vw, 154px);
   padding: 34px 14px 12px;
   align-items: start;
 }
@@ -1683,7 +1685,7 @@ html[lang="ar"] body.phrases-page .phrase-card .word-audio {
 }
 
 .grammar-card {
-  min-height: 148px;
+  min-height: clamp(122px, 15vw, 148px);
   display: grid;
   place-items: center;
   padding: 14px 12px;
