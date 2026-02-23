@@ -923,6 +923,8 @@ const GOOGLE_OAUTH_USERINFO_URL = "https://openidconnect.googleapis.com/v1/useri
 const GOOGLE_OAUTH_STATE_TTL_MS = 1000 * 60 * 10;
 const GOOGLE_OAUTH_FLOW_COOKIE_NAME = "cosmica_google_flow";
 const GOOGLE_OAUTH_FLOW_COOKIE_TTL_MS = 1000 * 60 * 12;
+const SIGNUP_WEBHOOK_URL = String(process.env.SIGNUP_WEBHOOK_URL || "").trim();
+
 const EMAIL_VERIFICATION_TOKEN_TTL_MS = Math.max(
   5 * 60 * 1000,
   Number(process.env.EMAIL_VERIFICATION_TTL_MS || 1000 * 60 * 60 * 24)
@@ -2063,6 +2065,43 @@ const appendSecurityEvent = async ({
   securityEventsStore.events.push(nextEvent);
   markSecurityEventsStoreDirty();
   return true;
+};
+
+const sendSignupWebhookNotification = async ({ userRecord = null, source = "signup-email", req = null } = {}) => {
+  if (!SIGNUP_WEBHOOK_URL || !userRecord || typeof userRecord !== "object") {
+    return false;
+  }
+  const payload = {
+    event: "user_signup",
+    email: String(userRecord.email || "").slice(0, 200),
+    displayName: String(userRecord.displayName || "").slice(0, 120),
+    source: String(source || "signup-email").slice(0, 40),
+    userId: String(userRecord.id || "").slice(0, 120),
+    requestId: String(req?.requestId || "").slice(0, 120),
+    createdAt: new Date().toISOString(),
+  };
+  try {
+    const response = await fetch(SIGNUP_WEBHOOK_URL, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+    if (!response.ok) {
+      throw new Error(`Webhook responded with status ${response.status}`);
+    }
+    return true;
+  } catch (error) {
+    reportServerError("signup-webhook", error, {
+      requestId: req?.requestId,
+      method: req?.method,
+      path: req?.originalUrl,
+      email: payload.email,
+      source: payload.source,
+    });
+    return false;
+  }
 };
 
 const findBlockedPrincipal = ({ email = "", userId = "", ipHash = "" } = {}) => {
@@ -4353,6 +4392,7 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
           req,
           source: "signup-google",
         });
+        void sendSignupWebhookNotification({ userRecord, req, source: "signup-google" });
       } catch (auditError) {
         reportServerError("registered-account-audit-write", auditError, {
           requestId: req.requestId,
@@ -4897,6 +4937,7 @@ app.post("/api/auth/signup", authSignupLimiter, async (req, res) => {
         req,
         source: "signup-email",
       });
+      void sendSignupWebhookNotification({ userRecord: pendingUserRecord, req, source: "signup-email" });
     } catch (auditError) {
       reportServerError("registered-account-audit-write", auditError, {
         requestId: req.requestId,
@@ -6170,6 +6211,26 @@ const createStripePremiumCheckoutSession = async (req, userRecord, optionId = "m
   return checkoutUrl;
 };
 
+const getConfiguredStripeHostedBillingPortalUrl = () => {
+  const raw = String(process.env.STRIPE_BILLING_PORTAL_URL || process.env.STRIPE_CUSTOMER_PORTAL_URL || "").trim();
+  if (!raw) {
+    return "";
+  }
+  try {
+    const parsed = new URL(raw);
+    if (parsed.protocol !== "https:") {
+      return "";
+    }
+    const host = String(parsed.hostname || "").trim().toLowerCase();
+    if (host !== "billing.stripe.com") {
+      return "";
+    }
+    return parsed.toString();
+  } catch {
+    return "";
+  }
+};
+
 const ACTIVE_STRIPE_PREMIUM_STATUSES = new Set(["active", "trialing", "past_due"]);
 const TERMINAL_PREMIUM_STATUSES = new Set([
   "canceled",
@@ -6660,6 +6721,10 @@ app.post(
     if (!isPlainObject(userRecord.data.profile)) {
       userRecord.data.profile = {};
     }
+    const stripeSecretKey = String(process.env.STRIPE_SECRET_KEY || "").trim();
+    reconcileExpiredStripePremiumFromLocalProfile(userRecord, {
+      source: "subscription-restore-expiry-reconcile",
+    });
     const profile = userRecord.data.profile;
 
     if (userHasPremiumAccessForProgress(userRecord)) {
@@ -6677,41 +6742,26 @@ app.post(
     let restored = false;
     let restoreSource = "";
 
-    if (hasLocalActivePremiumEvidence(profile)) {
-      profile.isPremium = true;
-      profile.premium = true;
-      profile.plan = "premium";
-      profile.tier = "premium";
-      profile.membership = "premium";
-      profile.premiumLastSource = "subscription-restore-local";
-      profile.premiumLastEventAt = new Date().toISOString();
-      userRecord.updatedAt = profile.premiumLastEventAt;
-      markAuthStoreDirty();
-      restored = true;
-      restoreSource = "profile";
-    } else {
-      const deletedAccountMatch = findDeletedAccountActivePremiumForEmail(userRecord?.email);
-      if (deletedAccountMatch) {
-        restored = applyStripeRestoreToUserRecord(userRecord, deletedAccountMatch);
-        restoreSource = "deleted-account-audit";
-      }
+    const deletedAccountMatch = findDeletedAccountActivePremiumForEmail(userRecord?.email);
+    if (deletedAccountMatch) {
+      restored = applyStripeRestoreToUserRecord(userRecord, deletedAccountMatch);
+      restoreSource = "deleted-account-audit";
+    }
 
-      const stripeSecretKey = String(process.env.STRIPE_SECRET_KEY || "").trim();
-      if (stripeSecretKey && !restored) {
-        try {
-          const stripeMatch = await findStripeActiveSubscriptionForUser(userRecord);
-          if (stripeMatch) {
-            restored = applyStripeRestoreToUserRecord(userRecord, stripeMatch);
-            restoreSource = "stripe";
-          }
-        } catch (error) {
-          reportServerError("billing-subscription-restore", error, {
-            requestId: req.requestId,
-            method: req.method,
-            path: req.originalUrl,
-            userId: String(userRecord?.id || "").slice(0, 100),
-          });
+    if (stripeSecretKey && !restored) {
+      try {
+        const stripeMatch = await findStripeActiveSubscriptionForUser(userRecord);
+        if (stripeMatch) {
+          restored = applyStripeRestoreToUserRecord(userRecord, stripeMatch);
+          restoreSource = "stripe";
         }
+      } catch (error) {
+        reportServerError("billing-subscription-restore", error, {
+          requestId: req.requestId,
+          method: req.method,
+          path: req.originalUrl,
+          userId: String(userRecord?.id || "").slice(0, 100),
+        });
       }
     }
 
@@ -6831,138 +6881,21 @@ app.get(
 );
 
 app.post(
-  "/api/billing/subscription/cancel",
-  accountMutationLimiter,
+  "/api/billing/subscription/portal/session",
+  authSessionLimiter,
   requireAuthenticatedUser,
-  async (req, res) => {
-    const stripeSecretKey = String(process.env.STRIPE_SECRET_KEY || "").trim();
-    if (!stripeSecretKey) {
+  (req, res) => {
+    const portalUrl = getConfiguredStripeHostedBillingPortalUrl();
+    if (!portalUrl) {
       return res.status(503).json({
-        error: "Subscription cancellation is unavailable because Stripe is not configured.",
+        error: "Subscription management is unavailable because hosted Stripe portal URL is not configured.",
       });
     }
 
-    const userRecord = req.authUser;
-    userRecord.data = normalizeUserData(userRecord.data);
-    if (!isPlainObject(userRecord.data.profile)) {
-      userRecord.data.profile = {};
-    }
-    const profile = userRecord.data.profile;
-    reconcileExpiredStripePremiumFromLocalProfile(userRecord, {
-      source: "subscription-cancel-expiry-reconcile",
+    return res.json({
+      ok: true,
+      url: portalUrl,
     });
-
-    if (!userHasPremiumAccessForProgress(userRecord)) {
-      return res.status(409).json({
-        error: "No active Premium subscription was found.",
-      });
-    }
-
-    let stripeMatch = null;
-    try {
-      stripeMatch = await findStripeActiveSubscriptionForUser(userRecord);
-    } catch (error) {
-      reportServerError("billing-subscription-cancel-lookup", error, {
-        requestId: req.requestId,
-        method: req.method,
-        path: req.originalUrl,
-        userId: String(userRecord?.id || "").slice(0, 100),
-      });
-      return res.status(502).json({
-        error: "Could not verify subscription status with Stripe. Please try again.",
-      });
-    }
-
-    const knownSubscriptionId = String(profile.premiumStripeSubscriptionId || "").trim();
-    if (!stripeMatch?.subscriptionId && knownSubscriptionId) {
-      try {
-        const stripe = getStripeClient();
-        const knownSubscription = await stripe.subscriptions.retrieve(knownSubscriptionId);
-        const knownStatus = String(knownSubscription?.status || "").trim().toLowerCase();
-        const knownCancelAtPeriodEnd = knownSubscription?.cancel_at_period_end === true;
-        const activeLike = ACTIVE_STRIPE_PREMIUM_STATUSES.has(knownStatus) || knownCancelAtPeriodEnd;
-        if (activeLike) {
-          stripeMatch = {
-            customerId: String(knownSubscription?.customer || profile.premiumStripeCustomerId || "").trim(),
-            subscriptionId: String(knownSubscription?.id || knownSubscriptionId).trim(),
-            status: knownStatus || "active",
-            cancelAtPeriodEnd: knownCancelAtPeriodEnd,
-            currentPeriodEnd:
-              normalizeStripeUnixToIso(knownSubscription?.current_period_end) ||
-              String(profile.premiumCurrentPeriodEnd || "").trim(),
-          };
-        }
-      } catch (error) {
-        reportServerError("billing-subscription-cancel-known-subscription-lookup", error, {
-          requestId: req.requestId,
-          method: req.method,
-          path: req.originalUrl,
-          userId: String(userRecord?.id || "").slice(0, 100),
-        });
-      }
-    }
-
-    if (!stripeMatch?.subscriptionId) {
-      return res.status(409).json({
-        error:
-          "No active Stripe subscription was found for this account. Please contact support if you need help cancelling.",
-      });
-    }
-
-    if (stripeMatch.cancelAtPeriodEnd === true) {
-      applyStripeRestoreToUserRecord(userRecord, {
-        ...stripeMatch,
-        source: "subscription-cancel-already-scheduled",
-        provider: "stripe",
-      });
-      return res.json({
-        ok: true,
-        canceled: false,
-        status: "already_canceling",
-        cancelAtPeriodEnd: true,
-        currentPeriodEnd: String(stripeMatch.currentPeriodEnd || "").trim(),
-        message: "Cancellation is already scheduled. Your Premium access remains active until the current period ends.",
-      });
-    }
-
-    try {
-      const stripe = getStripeClient();
-      const updatedSubscription = await stripe.subscriptions.update(stripeMatch.subscriptionId, {
-        cancel_at_period_end: true,
-      });
-      const updatedMatch = {
-        customerId: String(updatedSubscription?.customer || stripeMatch.customerId || "").trim(),
-        subscriptionId: String(updatedSubscription?.id || stripeMatch.subscriptionId || "").trim(),
-        status: String(updatedSubscription?.status || stripeMatch.status || "active").trim().toLowerCase(),
-        cancelAtPeriodEnd: updatedSubscription?.cancel_at_period_end === true,
-        currentPeriodEnd:
-          normalizeStripeUnixToIso(updatedSubscription?.current_period_end) ||
-          String(stripeMatch.currentPeriodEnd || "").trim(),
-        provider: "stripe",
-        source: "subscription-cancel-request",
-      };
-      applyStripeRestoreToUserRecord(userRecord, updatedMatch);
-
-      return res.json({
-        ok: true,
-        canceled: true,
-        status: "canceling",
-        cancelAtPeriodEnd: true,
-        currentPeriodEnd: String(updatedMatch.currentPeriodEnd || "").trim(),
-        message:
-          "Your subscription will not renew. Premium access remains active until the end of your current billing period.",
-      });
-    } catch (error) {
-      reportServerError("billing-subscription-cancel", error, {
-        requestId: req.requestId,
-        method: req.method,
-        path: req.originalUrl,
-        userId: String(userRecord?.id || "").slice(0, 100),
-      });
-      return res.status(502).json({
-        error: "We could not schedule cancellation right now. Please try again in a moment.",
-      });
-    }
   }
 );
 

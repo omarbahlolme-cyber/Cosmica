@@ -880,8 +880,8 @@ const createCosmicaAuthClient = () => {
       }),
     getPremiumBillingOptions: () => request("/api/billing/premium/options"),
     getPremiumSubscriptionManagement: () => request("/api/billing/subscription/manage"),
-    cancelPremiumSubscription: () =>
-      request("/api/billing/subscription/cancel", {
+    getPremiumHostedSubscriptionPortal: () =>
+      request("/api/billing/subscription/portal/session", {
         method: "POST",
       }),
     restorePremiumSubscription: () =>
@@ -1902,14 +1902,7 @@ const setupAccountHub = () => {
             </div>
             <p class="account-subscription-until" hidden></p>
             <p class="account-subscription-sync" hidden></p>
-            <button type="button" class="account-subscription-cancel-trigger">Cancel subscription</button>
-            <div class="account-subscription-cancel-confirm" hidden>
-              <p class="account-subscription-cancel-warning"></p>
-              <div class="account-subscription-cancel-actions">
-                <button type="button" class="account-subscription-cancel-dismiss">Cancel</button>
-                <button type="button" class="account-subscription-cancel-confirm-btn">Confirm</button>
-              </div>
-            </div>
+            <button type="button" class="account-subscription-manage-portal">Manage subscription</button>
           </section>
           <button type="button" class="account-reset-email-button account-manage-reset-email">Reset password</button>
           <section class="account-password-panel" hidden>
@@ -2043,11 +2036,7 @@ const setupAccountHub = () => {
   const subscriptionStatusBadge = dropdown.querySelector(".account-subscription-status-badge");
   const subscriptionUntilNode = dropdown.querySelector(".account-subscription-until");
   const subscriptionSyncNode = dropdown.querySelector(".account-subscription-sync");
-  const subscriptionCancelTriggerBtn = dropdown.querySelector(".account-subscription-cancel-trigger");
-  const subscriptionCancelConfirmPanel = dropdown.querySelector(".account-subscription-cancel-confirm");
-  const subscriptionCancelWarningNode = dropdown.querySelector(".account-subscription-cancel-warning");
-  const subscriptionCancelDismissBtn = dropdown.querySelector(".account-subscription-cancel-dismiss");
-  const subscriptionCancelConfirmBtn = dropdown.querySelector(".account-subscription-cancel-confirm-btn");
+  const subscriptionManagePortalBtn = dropdown.querySelector(".account-subscription-manage-portal");
   const passwordPanel = dropdown.querySelector(".account-password-panel");
   const passwordProviderNote = dropdown.querySelector(".account-password-provider-note");
   const passwordChangeForm = dropdown.querySelector(".account-password-change-form");
@@ -2189,7 +2178,7 @@ const setupAccountHub = () => {
   let noActivePlanFeedbackTimerId = 0;
   let latestSubscriptionManageState = null;
   let subscriptionManageInFlight = false;
-  let subscriptionCancelInFlight = false;
+  let subscriptionPortalInFlight = false;
   let premiumModalBodyLockActive = false;
   let premiumModalBodyLockScrollY = 0;
   let premiumModalTouchStartY = 0;
@@ -2278,6 +2267,27 @@ const setupAccountHub = () => {
     }, Math.max(1200, Number(durationMs) || 9000));
   };
 
+  const scrollExpandedAccountPanelIntoView = (panelNode) => {
+    if (!(panelNode instanceof HTMLElement)) {
+      return;
+    }
+    window.requestAnimationFrame(() => {
+      const scrollSurface = dropdown.querySelector(".account-dropdown-card");
+      if (!(scrollSurface instanceof HTMLElement)) {
+        return;
+      }
+      const surfaceRect = scrollSurface.getBoundingClientRect();
+      const panelRect = panelNode.getBoundingClientRect();
+      const currentTop = scrollSurface.scrollTop;
+      const relativeTop = panelRect.top - surfaceRect.top;
+      const nextTop = currentTop + relativeTop - (scrollSurface.clientHeight - panelRect.height) / 2;
+      scrollSurface.scrollTo({
+        top: Math.max(0, Math.round(nextTop)),
+        behavior: "smooth",
+      });
+    });
+  };
+
   const setDeleteConfirmationVisible = (visible) => {
     if (deleteTriggerBtn) {
       deleteTriggerBtn.hidden = visible;
@@ -2286,17 +2296,8 @@ const setupAccountHub = () => {
       return;
     }
     deleteConfirmPanel.hidden = !visible;
-  };
-
-  const setSubscriptionCancelConfirmationVisible = (visible, warningText = "") => {
-    if (subscriptionCancelTriggerBtn) {
-      subscriptionCancelTriggerBtn.hidden = visible;
-    }
-    if (subscriptionCancelWarningNode) {
-      subscriptionCancelWarningNode.textContent = String(warningText || "").trim();
-    }
-    if (subscriptionCancelConfirmPanel) {
-      subscriptionCancelConfirmPanel.hidden = !visible;
+    if (visible) {
+      scrollExpandedAccountPanelIntoView(deleteConfirmPanel);
     }
   };
 
@@ -2328,8 +2329,6 @@ const setupAccountHub = () => {
       cancelAtPeriodEnd,
     });
     const untilDate = formatPremiumEndDate(next.currentPeriodEnd || "");
-    const canCancel = !cancelAtPeriodEnd && (next.canCancel === true || next.isPremium === true);
-
     if (subscriptionStatusNode) {
       subscriptionStatusNode.dataset.status = statusDisplay.key;
     }
@@ -2355,32 +2354,13 @@ const setupAccountHub = () => {
         subscriptionSyncNode.hidden = !message;
       }
     }
-    if (subscriptionCancelTriggerBtn) {
-      subscriptionCancelTriggerBtn.hidden = loading || !canCancel;
-      subscriptionCancelTriggerBtn.disabled = loading || subscriptionCancelInFlight;
-      subscriptionCancelTriggerBtn.textContent = "Cancel subscription";
+    if (subscriptionManagePortalBtn) {
+      subscriptionManagePortalBtn.hidden = loading;
+      subscriptionManagePortalBtn.disabled = loading || subscriptionPortalInFlight;
+      subscriptionManagePortalBtn.textContent = subscriptionPortalInFlight
+        ? "Opening..."
+        : "Manage subscription";
     }
-    if (subscriptionCancelDismissBtn) {
-      subscriptionCancelDismissBtn.disabled = subscriptionCancelInFlight;
-    }
-    if (subscriptionCancelConfirmBtn) {
-      subscriptionCancelConfirmBtn.disabled = subscriptionCancelInFlight;
-      subscriptionCancelConfirmBtn.textContent = subscriptionCancelInFlight
-        ? "Confirming..."
-        : "Confirm";
-    }
-    if (cancelAtPeriodEnd) {
-      setSubscriptionCancelConfirmationVisible(false);
-    }
-  };
-
-  const buildSubscriptionCancelWarning = (state = {}) => {
-    const next = state && typeof state === "object" ? state : {};
-    const untilDate = formatPremiumEndDate(next.currentPeriodEnd || "");
-    if (untilDate) {
-      return `If you cancel now, your subscription will not renew. You will keep Premium access until ${untilDate}.`;
-    }
-    return "If you cancel now, your subscription will not renew. You will keep Premium access until the end of your current billing period.";
   };
 
   const flashGooglePasswordNote = () => {
@@ -2515,7 +2495,7 @@ const setupAccountHub = () => {
         panel: "login",
       },
       google_account_exists_email: {
-        message: "Account already exists. Log in using your email and password.",
+        message: "Log in using your email and password.",
         tone: "error",
         panel: "login",
       },
@@ -2816,7 +2796,6 @@ const setupAccountHub = () => {
     trigger?.setAttribute("aria-expanded", "false");
     hideTriggerNoticeBubble();
     setDeleteConfirmationVisible(false);
-    setSubscriptionCancelConfirmationVisible(false);
     authRedirectFeedbackLock = false;
     if (authRedirectFeedbackLockTimerId) {
       window.clearTimeout(authRedirectFeedbackLockTimerId);
@@ -3456,7 +3435,7 @@ const setupAccountHub = () => {
       premiumCtaBtn.hidden = !isAuthenticated;
       premiumCtaBtn.setAttribute("aria-hidden", premiumCtaBtn.hidden ? "true" : "false");
       if (premiumCtaMain) {
-        premiumCtaMain.textContent = hasPremiumAccess ? "Manage subscription" : "Discover Premium";
+        premiumCtaMain.textContent = hasPremiumAccess ? "Subscription details" : "Discover Premium";
       }
       if (premiumCtaSub) {
         premiumCtaSub.hidden = hasPremiumAccess;
@@ -3466,7 +3445,6 @@ const setupAccountHub = () => {
     if (managePanel) {
       managePanel.hidden = true;
       setDeleteConfirmationVisible(false);
-      setSubscriptionCancelConfirmationVisible(false);
     }
     if (subscriptionPanel) {
       subscriptionPanel.hidden = !showSubscriptionManagement || !isSubscriptionPanelExpanded;
@@ -3959,7 +3937,6 @@ const setupAccountHub = () => {
     isSubscriptionPanelExpanded = nextExpanded;
     subscriptionPanel.hidden = !nextExpanded;
     if (!nextExpanded) {
-      setSubscriptionCancelConfirmationVisible(false);
       return;
     }
     if (managePanel) {
@@ -3970,7 +3947,6 @@ const setupAccountHub = () => {
       passwordPanel.hidden = true;
     }
     setDeleteConfirmationVisible(false);
-    setSubscriptionCancelConfirmationVisible(false);
     setFeedback("");
     void loadManageSubscriptionDetails({ showLoading: false });
     requestAnimationFrame(() => {
@@ -3978,59 +3954,27 @@ const setupAccountHub = () => {
     });
   };
 
-  const submitSubscriptionCancellation = async () => {
-    if (subscriptionCancelInFlight) {
+  const openHostedSubscriptionPortal = async () => {
+    if (subscriptionPortalInFlight) {
       return;
     }
-    subscriptionCancelInFlight = true;
+    subscriptionPortalInFlight = true;
     try {
+      setFeedback("Opening subscription manager...", "info");
       applySubscriptionManagementState(latestSubscriptionManageState || {}, { loading: false });
-      const payload = await Promise.race([
-        window.cosmicaAuth.cancelPremiumSubscription(),
-        new Promise((_, reject) => {
-          window.setTimeout(() => {
-            const timeoutError = new Error("Cancellation timed out. Please try again.");
-            timeoutError.status = 0;
-            reject(timeoutError);
-          }, 15000);
-        }),
-      ]);
-      latestSubscriptionManageState = {
-        ...(latestSubscriptionManageState || {}),
-        status: String(payload?.status || "canceling").trim().toLowerCase() || "canceling",
-        currentPeriodEnd: String(payload?.currentPeriodEnd || latestSubscriptionManageState?.currentPeriodEnd || "")
-          .trim(),
-        cancelAtPeriodEnd: payload?.cancelAtPeriodEnd === true,
-        canCancel: false,
-        message: String(
-          payload?.message ||
-            "Your subscription will not renew. Premium access remains active until the end of the current billing period."
-        ).trim(),
-      };
-      applySubscriptionManagementState(latestSubscriptionManageState, { loading: false });
-      setSubscriptionCancelConfirmationVisible(false);
-      const successMessage = String(payload?.message || "Cancellation scheduled.");
-      setFeedback(successMessage, "success");
-      showTriggerNoticeBubble(successMessage, "success", 10000);
-      await loadManageSubscriptionDetails({ showLoading: false });
+      const payload = await window.cosmicaAuth.getPremiumHostedSubscriptionPortal();
+      const redirectUrl = String(payload?.url || "").trim();
+      if (!redirectUrl) {
+        throw new Error("Could not open subscription management right now.");
+      }
+      window.location.assign(redirectUrl);
     } catch (error) {
       applySubscriptionManagementState(latestSubscriptionManageState || {}, { loading: false });
-      const status = Number(error?.status || 0);
-      if (status === 404) {
-        const message = "Subscription cancellation is temporarily unavailable. Please refresh and try again.";
-        if (!/No active Stripe subscription was found for this account/i.test(message)) {
-          setFeedback(message, "error");
-        }
-        showTriggerNoticeBubble(message, "error", 10000);
-      } else {
-        const message = error?.message || "Could not schedule cancellation right now.";
-        if (!/No active Stripe subscription was found for this account/i.test(message)) {
-          setFeedback(message, "error");
-        }
-        showTriggerNoticeBubble(message, "error", 10000);
-      }
+      const message = String(error?.message || "Could not open subscription management right now.").trim();
+      setFeedback(message, "error");
+      showTriggerNoticeBubble(message, "error", 10000);
     } finally {
-      subscriptionCancelInFlight = false;
+      subscriptionPortalInFlight = false;
       try {
         applySubscriptionManagementState(latestSubscriptionManageState || {}, { loading: false });
       } catch {}
@@ -4045,18 +3989,8 @@ const setupAccountHub = () => {
     openManagePasswordForm();
   });
 
-  subscriptionCancelTriggerBtn?.addEventListener("click", () => {
-    const sourceState = latestSubscriptionManageState || resolveSubscriptionStateFromSnapshot(window.cosmicaGamification.getState());
-    const warningText = buildSubscriptionCancelWarning(sourceState);
-    setSubscriptionCancelConfirmationVisible(true, warningText);
-  });
-
-  subscriptionCancelDismissBtn?.addEventListener("click", () => {
-    setSubscriptionCancelConfirmationVisible(false);
-  });
-
-  subscriptionCancelConfirmBtn?.addEventListener("click", async () => {
-    await submitSubscriptionCancellation();
+  subscriptionManagePortalBtn?.addEventListener("click", async () => {
+    await openHostedSubscriptionPortal();
   });
 
   const handleRestorePremiumAction = async () => {
@@ -4297,7 +4231,6 @@ const setupAccountHub = () => {
               passwordPanel.hidden = true;
             }
             setDeleteConfirmationVisible(false);
-            setSubscriptionCancelConfirmationVisible(false);
           }
         }
         return;
@@ -4309,7 +4242,6 @@ const setupAccountHub = () => {
           passwordPanel.hidden = true;
         }
         setDeleteConfirmationVisible(false);
-        setSubscriptionCancelConfirmationVisible(false);
       }
       if (action === "premium") {
         const snapshot =
@@ -4317,7 +4249,7 @@ const setupAccountHub = () => {
             ? window.cosmicaGamification.getState()
             : null;
         if (snapshotHasPremiumAccess(snapshot)) {
-          void openManageSubscriptionPanel();
+          openManageSubscriptionPanel();
           return;
         }
         openPremiumFlow({
