@@ -14807,7 +14807,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ich gehe nach Hause denn ich bin müde.",
+              "wrong": "Ich gehe nach Hause, denn ich müde bin.",
               "fix": "Ich gehe nach Hause, denn ich bin müde."
             }
           ]
@@ -14890,7 +14890,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ich komme sobald ich fertig bin.",
+              "wrong": "Ich komme, sobald ich bin fertig.",
               "fix": "Ich komme, sobald ich fertig bin."
             }
           ]
@@ -15087,7 +15087,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Wenn es morgen regnet, oder schneit, bleibe ich zu Hause.",
+              "wrong": "Wenn es morgen regnet oder schneit, ich bleibe zu Hause.",
               "fix": "Wenn es morgen regnet oder schneit, bleibe ich zu Hause."
             }
           ]
@@ -16103,7 +16103,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ich mag Äpfel und ich mag Birnen aber ich mag keine Bananen.",
+              "wrong": "Ich mag Äpfel, und ich mag Birnen, aber ich mögen keine Bananen.",
               "fix": "Ich mag Äpfel, und ich mag Birnen, aber ich mag keine Bananen."
             }
           ]
@@ -16171,7 +16171,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ich bleibe zu Hause weil es regnet.",
+              "wrong": "Ich bleibe zu Hause, weil es regnen.",
               "fix": "Ich bleibe zu Hause, weil es regnet."
             }
           ]
@@ -16273,7 +16273,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ich gehe nach Hause denn ich bin müde.",
+              "wrong": "Ich gehe nach Hause, denn ich müde.",
               "fix": "Ich gehe nach Hause, denn ich bin müde."
             }
           ]
@@ -16307,7 +16307,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Während ich esse schaue ich fern.",
+              "wrong": "Während ich esse, ich schaue fern.",
               "fix": "Während ich esse, schaue ich fern."
             }
           ]

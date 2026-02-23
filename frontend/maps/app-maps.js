@@ -2760,8 +2760,9 @@ const isStrictPedagogyCard = (card) => {
         .map((entry) => String(entry?.text || "").trim())
         .filter(Boolean)
     : [];
-  if (highlights.length !== ruleOrder.length) {
-    return false;
+
+  if (!highlights.length) {
+    return true;
   }
 
   let cursor = 0;
@@ -7088,8 +7089,7 @@ const buildRuleDrivenExampleItem = (payload, fallbackRuleOrder = []) => {
   });
   let finalLabels = dedupedLabels;
   const expectedLabelCount = ruleOrder.length;
-  const shouldRequireExactCount =
-    expectedLabelCount >= 2 && /\s/u.test(expanded) && highlights.length >= expectedLabelCount;
+  const shouldRequireExactCount = expectedLabelCount >= 2 && /\s/u.test(expanded);
   if (shouldRequireExactCount && finalLabels.length !== expectedLabelCount) {
     finalLabels = buildRuleOrderFallbackLabels(ruleOrder, expanded);
   }

@@ -11743,7 +11743,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "O livro, que eu comprei é interessante.",
+              "wrong": "O livro que eu comprei interessante.",
               "fix": "O livro que eu comprei é interessante."
             }
           ]

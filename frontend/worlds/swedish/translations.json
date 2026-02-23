@@ -11486,7 +11486,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Det var kallt så jag tog på mig en jacka.",
+              "wrong": "Det var kallt, så jag tog på mig en jackan.",
               "fix": "Det var kallt, så jag tog på mig en jacka."
             }
           ]
@@ -12325,7 +12325,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Hon sa, Jag kommer imorgon.",
+              "wrong": "Hon sa att jag kommer imorgon.",
               "fix": "Hon sa: \"Jag kommer imorgon.\""
             }
           ]
@@ -12427,7 +12427,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Som hon sa: Det är viktigt att studera.",
+              "wrong": "Som hon sa, \"Det är viktigt att studerar.\"",
               "fix": "Som hon sa, \"Det är viktigt att studera.\""
             }
           ]
@@ -12958,7 +12958,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Jag studerar, för att lära mig svenska.",
+              "wrong": "Jag studerar för lära mig svenska.",
               "fix": "Jag studerar för att lära mig svenska."
             }
           ]
@@ -13060,7 +13060,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Jag gillar sporter, som fotboll och tennis.",
+              "wrong": "Jag gillar sporter som fotboll och tenniser.",
               "fix": "Jag gillar sporter som fotboll och tennis."
             }
           ]

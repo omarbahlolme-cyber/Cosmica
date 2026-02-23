@@ -12714,7 +12714,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Primero fui al mercado luego cociné.",
+              "wrong": "Primero, fui al mercado; luego, cocinó.",
               "fix": "Primero, fui al mercado; luego, cociné."
             }
           ]
@@ -12748,7 +12748,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Quería ir sin embargo estaba cansado.",
+              "wrong": "Quería ir; sin embargo, estaba cansados.",
               "fix": "Quería ir; sin embargo, estaba cansado."
             }
           ]
@@ -12812,7 +12812,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Aunque llovía salí a correr.",
+              "wrong": "Aunque llovía, salí correr.",
               "fix": "Aunque llovía, salí a correr."
             }
           ]
@@ -12876,7 +12876,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "¿Por qué no viniste aunque te invité?",
+              "wrong": "¿Por qué no viniste, aunque te invité tú?",
               "fix": "¿Por qué no viniste, aunque te invité?"
             }
           ]

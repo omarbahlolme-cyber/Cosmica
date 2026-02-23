@@ -11719,7 +11719,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ik kom mits je me ophaalt.",
+              "wrong": "Ik kom mits je mij ophaal.",
               "fix": "Ik kom, mits je me ophaalt."
             }
           ]
@@ -12221,7 +12221,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Hij zei 'Ik ga naar de winkel.'",
+              "wrong": "Hij zei 'Ik gaat naar de winkel.'",
               "fix": "Hij zei: 'Ik ga naar de winkel.'"
             }
           ]
