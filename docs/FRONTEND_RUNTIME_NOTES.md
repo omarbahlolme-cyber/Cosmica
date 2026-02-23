@@ -53,6 +53,14 @@ This file tracks important runtime decisions and guardrails for `frontend/app.js
    - below-the-fold image fetch priority is lowered when unset.
 4. These updates are performance-only and must not alter layout/visual design.
 
+## Premium Success Modal (2026-02)
+
+1. Stripe success redirect trigger is query param `premium=success`.
+2. Temporary QA trigger URL:
+   - `/index.html?premium=test`
+3. Cancel notice trigger is query param `premium=cancel`.
+4. The frontend consumes these params, shows the corresponding UI, then cleans the URL via `history.replaceState`.
+
 ## Cloudflare Analytics
 
 1. Manual analytics snippet injection was removed from frontend code.

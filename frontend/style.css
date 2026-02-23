@@ -1905,6 +1905,7 @@ body.premium-setup-lock {
   position: absolute;
   top: 10px;
   right: 12px;
+  z-index: 8;
   width: 34px;
   height: 34px;
   border-radius: 999px;
@@ -1914,6 +1915,8 @@ body.premium-setup-lock {
   font-size: 1.2rem;
   line-height: 1;
   cursor: pointer;
+  pointer-events: auto;
+  touch-action: manipulation;
   transition: transform 0.14s ease, border-color 0.14s ease, box-shadow 0.14s ease;
 }
 
@@ -10473,6 +10476,19 @@ section,
 
   body.home-alt-luxe .home-fx-comets,
   body.world-page .world-fx-comets {
+    display: block;
+    opacity: 0.72;
+  }
+
+  body.home-alt-luxe .home-fx-comet,
+  body.world-page .world-fx-comet {
+    opacity: 0;
+    animation-duration: calc(var(--c-duration, 7s) * 1.35);
+    filter: drop-shadow(0 0 6px rgba(160, 220, 255, 0.52));
+  }
+
+  body.home-alt-luxe .home-fx-comet:nth-child(n + 3),
+  body.world-page .world-fx-comet:nth-child(n + 3) {
     display: none;
   }
 
@@ -10623,8 +10639,16 @@ section,
 @media (max-width: 480px) {
   body.world-page .world-ambient,
   body.world-page .world-fx-stars,
-  body.world-page .world-fx-dust,
+  body.world-page .world-fx-dust {
+    display: none;
+  }
+
   body.world-page .world-fx-comets {
+    display: block;
+    opacity: 0.62;
+  }
+
+  body.world-page .world-fx-comet:nth-child(n + 2) {
     display: none;
   }
 }
