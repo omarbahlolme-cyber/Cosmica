@@ -1929,6 +1929,13 @@ const setupAccountHub = () => {
           <div class="account-actions-divider" aria-hidden="true"></div>
         </div>
         <button class="account-logout" type="button">Logout</button>
+        <div class="account-logout-confirm" hidden>
+          <p class="account-logout-warning">Are you sure you want to log out?</p>
+          <div class="account-logout-actions">
+            <button class="account-logout-cancel" type="button">Cancel</button>
+            <button class="account-logout account-logout-confirm-btn" type="button">Confirm</button>
+          </div>
+        </div>
       </section>
     </div>
   `;
@@ -2020,6 +2027,9 @@ const setupAccountHub = () => {
   const loginForgotPasswordBtn = dropdown.querySelector(".account-login-forgot");
   const resetBackToLoginBtn = dropdown.querySelector(".account-reset-back-login");
   const logoutBtn = dropdown.querySelector(".account-logout");
+  const logoutConfirmPanel = dropdown.querySelector(".account-logout-confirm");
+  const logoutCancelBtn = dropdown.querySelector(".account-logout-cancel");
+  const logoutConfirmBtn = dropdown.querySelector(".account-logout-confirm-btn");
   const deleteTriggerBtn = dropdown.querySelector(".account-delete-trigger");
   const deleteConfirmPanel = dropdown.querySelector(".account-delete-confirm");
   const deleteCancelBtn = dropdown.querySelector(".account-delete-cancel");
@@ -2302,6 +2312,16 @@ const setupAccountHub = () => {
     deleteConfirmPanel.hidden = !visible;
     if (visible) {
       scrollExpandedAccountPanelIntoView(deleteConfirmPanel);
+    }
+  };
+
+  const setLogoutConfirmationVisible = (visible) => {
+    if (!logoutConfirmPanel) {
+      return;
+    }
+    logoutConfirmPanel.hidden = !visible;
+    if (visible) {
+      scrollExpandedAccountPanelIntoView(logoutConfirmPanel);
     }
   };
 
@@ -2801,6 +2821,7 @@ const setupAccountHub = () => {
     trigger?.setAttribute("aria-expanded", "false");
     syncAuthDropdownBodyLock();
     hideTriggerNoticeBubble();
+    setLogoutConfirmationVisible(false);
     setDeleteConfirmationVisible(false);
     authRedirectFeedbackLock = false;
     if (authRedirectFeedbackLockTimerId) {
@@ -3568,6 +3589,7 @@ const setupAccountHub = () => {
     if (managePanel) {
       managePanel.hidden = true;
       setDeleteConfirmationVisible(false);
+      setLogoutConfirmationVisible(false);
     }
     if (subscriptionPanel) {
       subscriptionPanel.hidden = !showSubscriptionManagement || !isSubscriptionPanelExpanded;
@@ -3793,7 +3815,7 @@ const setupAccountHub = () => {
   loginForm?.addEventListener("submit", async (event) => {
     event.preventDefault();
     setAuthPanel("login");
-    scrollAuthDropdownToTop("smooth");
+    scrollAuthDropdownToTop("auto");
     const emailInput = loginForm.querySelector('input[name="email"]');
     const passwordInput = loginForm.querySelector('input[name="password"]');
     const emailValid = validateRequiredInput(emailInput);
@@ -4247,7 +4269,7 @@ const setupAccountHub = () => {
   signupForm?.addEventListener("submit", async (event) => {
     event.preventDefault();
     setAuthPanel("signup");
-    scrollAuthDropdownToTop("smooth");
+    scrollAuthDropdownToTop("auto");
     setSignupResendButtonVisible(false);
     const usernameInput = signupForm.querySelector('input[name="displayName"]');
     const emailInput = signupForm.querySelector('input[name="email"]');
@@ -4436,7 +4458,19 @@ const setupAccountHub = () => {
     }
   });
 
-  logoutBtn?.addEventListener("click", async () => {
+  logoutBtn?.addEventListener("click", () => {
+    setDeleteConfirmationVisible(false);
+    setLogoutConfirmationVisible(true);
+    setFeedback("");
+  });
+
+  logoutCancelBtn?.addEventListener("click", () => {
+    setLogoutConfirmationVisible(false);
+    setFeedback("Logout canceled.", "info");
+  });
+
+  logoutConfirmBtn?.addEventListener("click", async () => {
+    setLogoutConfirmationVisible(false);
     setFeedback("Logging out...", "info");
     try {
       await window.cosmicaGamification.logOut();
@@ -4446,6 +4480,7 @@ const setupAccountHub = () => {
   });
 
   deleteTriggerBtn?.addEventListener("click", () => {
+    setLogoutConfirmationVisible(false);
     setDeleteConfirmationVisible(true);
     setFeedback("");
   });
