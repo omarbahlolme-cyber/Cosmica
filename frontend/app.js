@@ -2029,6 +2029,7 @@ const setupAccountHub = () => {
   const menuButtons = Array.from(dropdown.querySelectorAll(".account-menu-links button"));
   const authSwitchButtons = Array.from(dropdown.querySelectorAll(".account-auth-switch button"));
   const authPanelNodes = Array.from(dropdown.querySelectorAll("[data-auth-panel-content]"));
+  const accountDropdownCard = dropdown.querySelector(".account-dropdown-card");
   const managePanel = dropdown.querySelector(".account-manage-panel");
   const subscriptionPanel = dropdown.querySelector(".account-subscription-panel");
   const userMenuLinks = dropdown.querySelector(".account-menu-links");
@@ -2182,6 +2183,9 @@ const setupAccountHub = () => {
   let premiumModalBodyLockActive = false;
   let premiumModalBodyLockScrollY = 0;
   let premiumModalTouchStartY = 0;
+  let authDropdownBodyLockActive = false;
+  let authDropdownBodyLockScrollY = 0;
+  let authDropdownTouchStartY = 0;
 
   const setFeedback = (message, tone = "") => {
     if (!feedbackNode) {
@@ -2775,10 +2779,11 @@ const setupAccountHub = () => {
     trigger?.setAttribute("aria-expanded", "true");
     hideTriggerNoticeBubble();
     dropdown.scrollTop = 0;
-    const scrollSurface = dropdown.querySelector(".account-dropdown-card");
+    const scrollSurface = accountDropdownCard;
     if (scrollSurface) {
       scrollSurface.scrollTop = 0;
     }
+    syncAuthDropdownBodyLock();
     if (pendingAuthNoticeMessage) {
       setFeedback(pendingAuthNoticeMessage, pendingAuthNoticeTone);
       setAuthRedirectFeedbackLock(10000);
@@ -2794,6 +2799,7 @@ const setupAccountHub = () => {
   const closeDropdown = () => {
     dropdown.hidden = true;
     trigger?.setAttribute("aria-expanded", "false");
+    syncAuthDropdownBodyLock();
     hideTriggerNoticeBubble();
     setDeleteConfirmationVisible(false);
     authRedirectFeedbackLock = false;
@@ -2819,7 +2825,7 @@ const setupAccountHub = () => {
     if (!(panelNode instanceof HTMLElement)) {
       return;
     }
-    const scrollSurface = dropdown.querySelector(".account-dropdown-card");
+    const scrollSurface = accountDropdownCard;
     if (!(scrollSurface instanceof HTMLElement)) {
       return;
     }
@@ -2839,6 +2845,15 @@ const setupAccountHub = () => {
     });
   };
 
+  const scrollAuthDropdownToTop = (behavior = "smooth") => {
+    dropdown.scrollTop = 0;
+    const scrollSurface = accountDropdownCard;
+    if (!(scrollSurface instanceof HTMLElement)) {
+      return;
+    }
+    scrollSurface.scrollTo({ top: 0, behavior });
+  };
+
   const syncPremiumModalBodyLock = () => {
     const hasOpenPremiumModal = !premiumSetupOverlay.hidden || !premiumCheckoutOverlay.hidden;
     document.body.classList.toggle("premium-setup-lock", hasOpenPremiumModal);
@@ -2854,6 +2869,27 @@ const setupAccountHub = () => {
       window.scrollTo({ top: premiumModalBodyLockScrollY, left: 0, behavior: "auto" });
       premiumModalBodyLockActive = false;
       premiumModalBodyLockScrollY = 0;
+    }
+  };
+
+  const syncAuthDropdownBodyLock = () => {
+    if (premiumModalBodyLockActive) {
+      return;
+    }
+    const shouldLock = !dropdown.hidden;
+    document.body.classList.toggle("account-dropdown-lock", shouldLock);
+    document.documentElement.classList.toggle("account-dropdown-lock", shouldLock);
+    if (shouldLock && !authDropdownBodyLockActive) {
+      authDropdownBodyLockScrollY = Math.max(0, window.scrollY || window.pageYOffset || 0);
+      document.body.style.top = `-${authDropdownBodyLockScrollY}px`;
+      authDropdownBodyLockActive = true;
+      return;
+    }
+    if (!shouldLock && authDropdownBodyLockActive) {
+      document.body.style.top = "";
+      window.scrollTo({ top: authDropdownBodyLockScrollY, left: 0, behavior: "auto" });
+      authDropdownBodyLockActive = false;
+      authDropdownBodyLockScrollY = 0;
     }
   };
 
@@ -2896,6 +2932,37 @@ const setupAccountHub = () => {
       }
 
       if (canScrollElementForDelta(premiumSetupCard, deltaY)) {
+        return;
+      }
+    }
+
+    event.preventDefault();
+  };
+
+  const maybeBlockAuthDropdownBackgroundScroll = (event) => {
+    if (dropdown.hidden) {
+      return;
+    }
+
+    const eventTarget = event.target;
+    const insideDropdownCard =
+      accountDropdownCard instanceof HTMLElement &&
+      eventTarget instanceof Node &&
+      accountDropdownCard.contains(eventTarget);
+
+    if (insideDropdownCard) {
+      let deltaY = 0;
+      if (event.type === "wheel") {
+        deltaY = Number(event.deltaY) || 0;
+      } else if (event.type === "touchmove") {
+        const touchY = Number(event.touches?.[0]?.clientY);
+        if (Number.isFinite(touchY)) {
+          deltaY = authDropdownTouchStartY - touchY;
+          authDropdownTouchStartY = touchY;
+        }
+      }
+
+      if (canScrollElementForDelta(accountDropdownCard, deltaY)) {
         return;
       }
     }
@@ -3232,19 +3299,34 @@ const setupAccountHub = () => {
     closePremiumSetupModal();
     if (!isAuthenticated) {
       const authMessage = "Please log in or sign up to continue with Premium upgrade.";
-      if (typeof window.cosmicaOpenSignupPanelUpwards === "function") {
-        window.cosmicaOpenSignupPanelUpwards(authMessage);
-        return;
+      const openAuthDropdown = () => {
+        if (typeof window.cosmicaAccountHub?.openAuth === "function") {
+          window.cosmicaAccountHub.openAuth({
+            panel: "signup",
+            message: authMessage,
+            tone: "info",
+          });
+          return;
+        }
+        window.location.href = "/index.html?openAuth=1&authPanel=signup#support";
+      };
+
+      const startY = Math.max(0, window.scrollY || window.pageYOffset || 0);
+      if (startY > 8) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
       }
-      if (typeof window.cosmicaAccountHub?.openAuth === "function") {
-        window.cosmicaAccountHub.openAuth({
-          panel: "signup",
-          message: authMessage,
-          tone: "info",
-        });
-        return;
-      }
-      window.location.href = "/index.html?openAuth=1&authPanel=signup#support";
+
+      const initialDelayMs = startY > 8 ? 420 : 0;
+      window.setTimeout(() => {
+        openAuthDropdown();
+        window.setTimeout(() => {
+          const dropdownNode = document.querySelector(".account-dropdown");
+          const isOpen = Boolean(dropdownNode instanceof HTMLElement && dropdownNode.hidden === false);
+          if (!isOpen) {
+            openAuthDropdown();
+          }
+        }, 170);
+      }, initialDelayMs);
       return;
     }
     void openPremiumCheckoutModal();
@@ -3304,6 +3386,19 @@ const setupAccountHub = () => {
     "touchstart",
     (event) => {
       if (premiumSetupOverlay.hidden) {
+        const touchTarget = event.target;
+        if (
+          dropdown.hidden ||
+          !(touchTarget instanceof Node) ||
+          !(accountDropdownCard instanceof HTMLElement) ||
+          !accountDropdownCard.contains(touchTarget)
+        ) {
+          return;
+        }
+        const authTouchY = Number(event.touches?.[0]?.clientY);
+        if (Number.isFinite(authTouchY)) {
+          authDropdownTouchStartY = authTouchY;
+        }
         return;
       }
       const touchY = Number(event.touches?.[0]?.clientY);
@@ -3317,7 +3412,13 @@ const setupAccountHub = () => {
   document.addEventListener("touchmove", maybeBlockPremiumModalBackgroundScroll, {
     passive: false,
   });
+  document.addEventListener("touchmove", maybeBlockAuthDropdownBackgroundScroll, {
+    passive: false,
+  });
   document.addEventListener("wheel", maybeBlockPremiumModalBackgroundScroll, {
+    passive: false,
+  });
+  document.addEventListener("wheel", maybeBlockAuthDropdownBackgroundScroll, {
     passive: false,
   });
 
@@ -3692,6 +3793,7 @@ const setupAccountHub = () => {
   loginForm?.addEventListener("submit", async (event) => {
     event.preventDefault();
     setAuthPanel("login");
+    scrollAuthDropdownToTop("smooth");
     const emailInput = loginForm.querySelector('input[name="email"]');
     const passwordInput = loginForm.querySelector('input[name="password"]');
     const emailValid = validateRequiredInput(emailInput);
@@ -4145,6 +4247,7 @@ const setupAccountHub = () => {
   signupForm?.addEventListener("submit", async (event) => {
     event.preventDefault();
     setAuthPanel("signup");
+    scrollAuthDropdownToTop("smooth");
     setSignupResendButtonVisible(false);
     const usernameInput = signupForm.querySelector('input[name="displayName"]');
     const emailInput = signupForm.querySelector('input[name="email"]');
