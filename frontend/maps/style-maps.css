@@ -303,6 +303,49 @@ body.letters-page[data-world="Japanese"] .letters-script-group-katakana {
   word-break: break-word;
 }
 
+.letters-romanization-toggle {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.letters-romanization-toggle-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(190, 206, 232, 0.82);
+}
+
+.letters-romanization-option {
+  border: 1px solid rgba(120, 235, 255, 0.35);
+  background: rgba(10, 20, 42, 0.5);
+  color: rgba(220, 236, 255, 0.92);
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease,
+    box-shadow 0.16s ease;
+}
+
+.letters-romanization-option:hover,
+.letters-romanization-option:focus-visible {
+  border-color: rgba(120, 235, 255, 0.72);
+  background: rgba(56, 164, 255, 0.2);
+  box-shadow: 0 0 0 1px rgba(120, 235, 255, 0.3), 0 8px 18px rgba(8, 18, 38, 0.35);
+  transform: translateY(-1px);
+}
+
+.letters-romanization-option.is-active {
+  border-color: rgba(120, 235, 255, 0.78);
+  background: rgba(56, 164, 255, 0.22);
+  color: #f6fbff;
+}
+
 .letter-audio {
   border: none;
   background: transparent;
@@ -1737,6 +1780,100 @@ html[lang="ar"] body.phrases-page .phrase-card .word-audio {
   }
   100% {
     transform: skewX(-16deg) translateX(330%);
+  }
+}
+
+/* --------------------------------------------------------------------------
+  FINAL MAP RESPONSIVE SAFETY LAYER
+  Keep cards readable and prevent clipping on all devices.
+   -------------------------------------------------------------------------- */
+
+:where(.letters-grid, .words-grid, .grammar-modal-grid) > * {
+  min-width: 0;
+}
+
+:where(
+  .letter-card,
+  .word-card,
+  .phrase-card,
+  .grammar-card,
+  .grammar-modal,
+  .grammar-modal-body,
+  .grammar-template,
+  .grammar-example,
+  .grammar-title-main,
+  .grammar-title-translation,
+  .word,
+  .phrase-text,
+  .word-translation,
+  .phrase-translation,
+  .word-romanization,
+  .phrase-romanization,
+  .letter-romanization
+) {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+@media (max-width: 900px) {
+  .words-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+  }
+
+  .word-card,
+  .phrase-card,
+  .grammar-card {
+    min-height: 126px;
+  }
+
+  .map-section-complete-btn:not(.map-card-practice-btn)::before {
+    content: none;
+  }
+}
+
+@media (max-width: 600px) {
+  body.letters-page[data-world="Japanese"] .letters-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    gap: 8px;
+  }
+
+  body.letters-page[data-world="Japanese"] .letter-card {
+    min-height: 90px;
+    padding: 10px 6px 8px;
+    gap: 4px;
+  }
+
+  body.letters-page[data-world="Japanese"] .letter-card .letter {
+    font-size: clamp(1.28rem, 5vw, 1.6rem);
+  }
+
+  body.letters-page[data-world="Japanese"] .letter-card .letter-romanization {
+    font-size: clamp(0.5rem, 2vw, 0.58rem);
+    line-height: 1.1;
+  }
+
+  body.letters-page[data-world="Japanese"] .letter-audio svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+@media (max-width: 380px) {
+  body.letters-page[data-world="Japanese"] .letters-grid {
+    gap: 6px;
+  }
+
+  body.letters-page[data-world="Japanese"] .letter-card {
+    min-height: 84px;
+    padding: 8px 5px 7px;
+  }
+
+  body.letters-page[data-world="Japanese"] .letter-card .letter {
+    font-size: clamp(1.12rem, 5vw, 1.34rem);
+  }
+
+  body.letters-page[data-world="Japanese"] .letter-card .letter-romanization {
+    font-size: 0.48rem;
   }
 }
 

@@ -745,6 +745,8 @@ const isLowPowerDevice =
 const shouldUseConservativeAnimationBudget =
   isLowPowerDevice || prefersReducedData || isSlowNetwork;
 const conservativeAnimationFrameMinMs = shouldUseConservativeAnimationBudget ? 34 : 16;
+const shouldUseLiteInteractiveEffects =
+  prefersReducedMotion || shouldUseConservativeAnimationBudget;
 
 /* ==========================================================================
    AUTH + PROGRESS API CLIENT
@@ -6084,6 +6086,153 @@ const setupLettersHelperTranslation = async () => {
   translationNode.hidden = false;
 };
 
+const HINDI_ROMANIZATION_VARIANTS = Object.freeze({
+  practical: Object.freeze({
+    अ: "a",
+    आ: "aa",
+    इ: "i",
+    ई: "ii",
+    उ: "u",
+    ऊ: "uu",
+    ऋ: "ri",
+    ए: "e",
+    ऐ: "ai",
+    ओ: "o",
+    औ: "au",
+    अं: "an",
+    अः: "ah",
+    क: "ka",
+    ख: "kha",
+    ग: "ga",
+    घ: "gha",
+    ङ: "nga",
+    च: "ca",
+    छ: "cha",
+    ज: "ja",
+    झ: "jha",
+    ञ: "nya",
+    ट: "ṭa",
+    ठ: "ṭha",
+    ड: "ḍa",
+    ढ: "ḍha",
+    ण: "ṇa",
+    त: "ta",
+    थ: "tha",
+    द: "da",
+    ध: "dha",
+    न: "na",
+    प: "pa",
+    फ: "pha",
+    ब: "ba",
+    भ: "bha",
+    म: "ma",
+    य: "ya",
+    र: "ra",
+    ल: "la",
+    व: "va",
+    श: "sha",
+    ष: "sha",
+    स: "sa",
+    ह: "ha",
+    "क़": "qa",
+    "ख़": "kha",
+    "ग़": "ga",
+    "ज़": "za",
+    "ड़": "ṛa",
+    "ढ़": "ṛha",
+    "फ़": "fa",
+    "ा": "aa-matra",
+    "ि": "i-matra",
+    "ी": "ii-matra",
+    "ु": "u-matra",
+    "ू": "uu-matra",
+    "ृ": "ri-matra",
+    "े": "e-matra",
+    "ै": "ai-matra",
+    "ो": "o-matra",
+    "ौ": "au-matra",
+    "ं": "anusvara",
+    "ः": "visarga",
+    "ँ": "chandrabindu",
+    क्ष: "ksha",
+    त्र: "tra",
+    ज्ञ: "gya",
+    श्र: "shra",
+  }),
+  iast: Object.freeze({
+    अ: "a",
+    आ: "ā",
+    इ: "i",
+    ई: "ī",
+    उ: "u",
+    ऊ: "ū",
+    ऋ: "ṛ",
+    ए: "e",
+    ऐ: "ai",
+    ओ: "o",
+    औ: "au",
+    अं: "aṃ",
+    अः: "aḥ",
+    क: "ka",
+    ख: "kha",
+    ग: "ga",
+    घ: "gha",
+    ङ: "ṅa",
+    च: "ca",
+    छ: "cha",
+    ज: "ja",
+    झ: "jha",
+    ञ: "ña",
+    ट: "ṭa",
+    ठ: "ṭha",
+    ड: "ḍa",
+    ढ: "ḍha",
+    ण: "ṇa",
+    त: "ta",
+    थ: "tha",
+    द: "da",
+    ध: "dha",
+    न: "na",
+    प: "pa",
+    फ: "pha",
+    ब: "ba",
+    भ: "bha",
+    म: "ma",
+    य: "ya",
+    र: "ra",
+    ल: "la",
+    व: "va",
+    श: "śa",
+    ष: "ṣa",
+    स: "sa",
+    ह: "ha",
+    "क़": "qa",
+    "ख़": "ḵha",
+    "ग़": "ġa",
+    "ज़": "za",
+    "ड़": "ṛa",
+    "ढ़": "ṛha",
+    "फ़": "fa",
+    "ा": "ā-mātrā",
+    "ि": "i-mātrā",
+    "ी": "ī-mātrā",
+    "ु": "u-mātrā",
+    "ू": "ū-mātrā",
+    "ृ": "ṛ-mātrā",
+    "े": "e-mātrā",
+    "ै": "ai-mātrā",
+    "ो": "o-mātrā",
+    "ौ": "au-mātrā",
+    "ं": "anusvāra",
+    "ः": "visarga",
+    "ँ": "candrabindu",
+    क्ष: "kṣa",
+    त्र: "tra",
+    ज्ञ: "jña",
+    श्र: "śra",
+  }),
+});
+
 const LETTER_ROMANIZATION_MAP = Object.freeze({
   korean: Object.freeze({
     ㄱ: "g/k",
@@ -6318,81 +6467,88 @@ const LETTER_ROMANIZATION_MAP = Object.freeze({
     و: "wāw",
     ي: "yāʾ",
   }),
-  hindi: Object.freeze({
-    अ: "a",
-    आ: "aa",
-    इ: "i",
-    ई: "ii",
-    उ: "u",
-    ऊ: "uu",
-    ऋ: "ri",
-    ए: "e",
-    ऐ: "ai",
-    ओ: "o",
-    औ: "au",
-    अं: "an",
-    अः: "ah",
-    क: "ka",
-    ख: "kha",
-    ग: "ga",
-    घ: "gha",
-    ङ: "nga",
-    च: "ca",
-    छ: "cha",
-    ज: "ja",
-    झ: "jha",
-    ञ: "nya",
-    ट: "ṭa",
-    ठ: "ṭha",
-    ड: "ḍa",
-    ढ: "ḍha",
-    ण: "ṇa",
-    त: "ta",
-    थ: "tha",
-    द: "da",
-    ध: "dha",
-    न: "na",
-    प: "pa",
-    फ: "pha",
-    ब: "ba",
-    भ: "bha",
-    म: "ma",
-    य: "ya",
-    र: "ra",
-    ल: "la",
-    व: "va",
-    श: "sha",
-    ष: "sha",
-    स: "sa",
-    ह: "ha",
-    "क़": "qa",
-    "ख़": "kha",
-    "ग़": "ga",
-    "ज़": "za",
-    "ड़": "ṛa",
-    "ढ़": "ṛha",
-    "फ़": "fa",
-    "ा": "aa-matra",
-    "ि": "i-matra",
-    "ी": "ii-matra",
-    "ु": "u-matra",
-    "ू": "uu-matra",
-    "ृ": "ri-matra",
-    "े": "e-matra",
-    "ै": "ai-matra",
-    "ो": "o-matra",
-    "ौ": "au-matra",
-    "ं": "anusvara",
-    "ः": "visarga",
-    "ँ": "chandrabindu",
-    क्ष: "ksha",
-    त्र: "tra",
-    ज्ञ: "gya",
-    श्र: "shra",
-  }),
+  hindi: HINDI_ROMANIZATION_VARIANTS.practical,
 });
 
 const REPORTED_MISSING_ROMANIZATION_KEYS = new Set();
+const HINDI_ROMANIZATION_VARIANT_STORAGE_KEY = "cosmicaHindiRomanizationVariant";
+const HINDI_ROMANIZATION_DEFAULT_VARIANT = "practical";
+
+const getHindiRomanizationVariant = () => {
+  if (WORLD_KEY !== "hindi") {
+    return HINDI_ROMANIZATION_DEFAULT_VARIANT;
+  }
+  try {
+    const stored = String(
+      localStorage.getItem(HINDI_ROMANIZATION_VARIANT_STORAGE_KEY) || ""
+    )
+      .trim()
+      .toLowerCase();
+    if (stored && HINDI_ROMANIZATION_VARIANTS[stored]) {
+      return stored;
+    }
+  } catch {}
+  return HINDI_ROMANIZATION_DEFAULT_VARIANT;
+};
+
+const setHindiRomanizationVariant = (variant) => {
+  if (WORLD_KEY !== "hindi") {
+    return;
+  }
+  const normalized = String(variant || "")
+    .trim()
+    .toLowerCase();
+  if (!HINDI_ROMANIZATION_VARIANTS[normalized]) {
+    return;
+  }
+  try {
+    localStorage.setItem(HINDI_ROMANIZATION_VARIANT_STORAGE_KEY, normalized);
+  } catch {}
+};
+
+const getActiveLetterRomanizationMap = () => {
+  if (WORLD_KEY === "hindi") {
+    const variant = getHindiRomanizationVariant();
+    return HINDI_ROMANIZATION_VARIANTS[variant] || HINDI_ROMANIZATION_VARIANTS.practical;
+  }
+  return LETTER_ROMANIZATION_MAP[WORLD_KEY];
+};
+
+const setupHindiRomanizationToggle = () => {
+  if (!document.body.classList.contains("letters-page") || WORLD_KEY !== "hindi") {
+    return;
+  }
+  const sectionTitle = document.querySelector(".letters-grid-section .section-title");
+  if (!sectionTitle) {
+    return;
+  }
+
+  let toggleEl = sectionTitle.querySelector(".letters-romanization-toggle");
+  if (!toggleEl) {
+    toggleEl = document.createElement("div");
+    toggleEl.className = "letters-romanization-toggle";
+    toggleEl.innerHTML = `
+      <span class="letters-romanization-toggle-label">Romanization</span>
+      <button type="button" class="letters-romanization-option" data-romanization-variant="practical">Practical</button>
+      <button type="button" class="letters-romanization-option" data-romanization-variant="iast">IAST</button>
+    `;
+    toggleEl.querySelectorAll(".letters-romanization-option").forEach((button) => {
+      button.addEventListener("click", () => {
+        const nextVariant = button.dataset.romanizationVariant;
+        setHindiRomanizationVariant(nextVariant);
+        setupLetterRomanization();
+      });
+    });
+    sectionTitle.appendChild(toggleEl);
+  }
+
+  const currentVariant = getHindiRomanizationVariant();
+  toggleEl.querySelectorAll(".letters-romanization-option").forEach((button) => {
+    const isActive = button.dataset.romanizationVariant === currentVariant;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+  });
+};
 
 const isRomanizationDiagnosticsEnabled = () => {
   const host = String(window.location.hostname || "").trim().toLowerCase();
@@ -6419,7 +6575,8 @@ const setupLetterRomanization = () => {
   if (!document.body.classList.contains("letters-page")) {
     return;
   }
-  const worldMap = LETTER_ROMANIZATION_MAP[WORLD_KEY];
+  setupHindiRomanizationToggle();
+  const worldMap = getActiveLetterRomanizationMap();
   if (!worldMap) {
     return;
   }
@@ -7315,7 +7472,11 @@ const setupWorldPageInteractiveFx = () => {
     }
     const stars = document.createElement("div");
     stars.className = "world-fx-stars";
-    const starCount = prefersReducedMotion ? 10 : 26;
+    const starCount = shouldUseConservativeAnimationBudget
+      ? 14
+      : prefersReducedMotion
+        ? 10
+        : 26;
     for (let i = 0; i < starCount; i += 1) {
       const star = document.createElement("span");
       star.className = "world-fx-star";
@@ -7337,7 +7498,8 @@ const setupWorldPageInteractiveFx = () => {
     if (!worldAmbient.querySelector(".world-fx-dust")) {
       const dust = document.createElement("div");
       dust.className = "world-fx-dust";
-      for (let i = 0; i < 18; i += 1) {
+      const dustCount = shouldUseConservativeAnimationBudget ? 10 : 18;
+      for (let i = 0; i < dustCount; i += 1) {
         const particle = document.createElement("span");
         particle.className = "world-fx-dust-particle";
         particle.style.setProperty("--d-x", `${(Math.random() * 100).toFixed(2)}%`);
@@ -7352,7 +7514,7 @@ const setupWorldPageInteractiveFx = () => {
     if (!worldAmbient.querySelector(".world-fx-comets")) {
       const comets = document.createElement("div");
       comets.className = "world-fx-comets";
-      const cometCount = prefersReducedMotion ? 1 : 3;
+      const cometCount = shouldUseConservativeAnimationBudget ? 1 : prefersReducedMotion ? 1 : 3;
       for (let i = 0; i < cometCount; i += 1) {
         const comet = document.createElement("span");
         comet.className = "world-fx-comet";
@@ -7423,28 +7585,22 @@ const setupWorldPageInteractiveFx = () => {
       ambientPlanetA.style.transform = `translate3d(${driftX.toFixed(2)}px, ${driftY.toFixed(2)}px, 0) rotate(${spin.toFixed(2)}deg)`;
     }
   };
-  if (!prefersReducedMotion) {
+  const canRunAmbientPointerLoop =
+    !shouldUseLiteInteractiveEffects &&
+    window.matchMedia("(pointer: fine)").matches;
+  if (!shouldUseLiteInteractiveEffects) {
     ambientRafId = window.requestAnimationFrame(animateAmbient);
   }
 
-  window.addEventListener(
-    "pointermove",
-    (event) => {
-      setPointerTargetFromPoint(event.clientX, event.clientY);
-    },
-    { passive: true }
-  );
-  window.addEventListener(
-    "touchmove",
-    (event) => {
-      const touch = event.touches?.[0];
-      if (!touch) {
-        return;
-      }
-      setPointerTargetFromPoint(touch.clientX, touch.clientY);
-    },
-    { passive: true }
-  );
+  if (canRunAmbientPointerLoop) {
+    window.addEventListener(
+      "pointermove",
+      (event) => {
+        setPointerTargetFromPoint(event.clientX, event.clientY);
+      },
+      { passive: true }
+    );
+  }
   window.addEventListener(
     "pointerleave",
     () => {
@@ -7901,8 +8057,8 @@ const setIntensityTarget = (value) => {
 };
 
 const updateIntensity = () => {
-  if (!audioContext || !orchestra) {
-    intensityRaf = window.requestAnimationFrame(updateIntensity);
+  if (!ambientPlaying || !audioContext || !orchestra) {
+    intensityRaf = null;
     return;
   }
 
@@ -7963,6 +8119,10 @@ const stopAmbient = async () => {
   ambientGain.gain.setTargetAtTime(0.0, audioContext.currentTime, 0.3);
   ambientPlaying = false;
   desiredSoundOn = false;
+  if (intensityRaf) {
+    window.cancelAnimationFrame(intensityRaf);
+    intensityRaf = null;
+  }
   setSoundUi(false);
   if (audioContext && audioContext.state === "running") {
     try {
@@ -8449,7 +8609,7 @@ let mouseY = 0;
 let currentX = 0;
 let currentY = 0;
 
-if (hero && !prefersReducedMotion) {
+if (hero && !shouldUseLiteInteractiveEffects) {
   let heroMoveRafId = 0;
   let heroMoveTargetX = 0;
   let heroMoveTargetY = 0;
@@ -8517,7 +8677,7 @@ const updateGaze = (event) => {
   gazeMoveRafId = window.requestAnimationFrame(applyQueuedGazeUpdate);
 };
 
-if (!prefersReducedMotion && alien && alienHead) {
+if (!shouldUseLiteInteractiveEffects && alien && alienHead) {
   window.addEventListener("mousemove", updateGaze, { passive: true });
   document.addEventListener("mouseleave", resetGaze);
 }
@@ -10480,7 +10640,7 @@ const setupHomeAltInteractivity = () => {
         triggerLogoSpin(1.1);
       });
 
-      if (!prefersReducedMotion) {
+      if (!shouldUseLiteInteractiveEffects) {
         window.setTimeout(() => {
           triggerLogoSpin(0.95);
         }, 320);
@@ -10499,7 +10659,7 @@ const setupHomeAltInteractivity = () => {
     const layer = document.createElement("div");
     layer.className = "home-fx-comets";
     layer.setAttribute("aria-hidden", "true");
-    const cometCount = prefersReducedMotion ? 1 : 3;
+    const cometCount = shouldUseConservativeAnimationBudget ? 1 : prefersReducedMotion ? 1 : 3;
     for (let i = 0; i < cometCount; i += 1) {
       const comet = document.createElement("span");
       comet.className = "home-fx-comet";
@@ -10575,7 +10735,7 @@ const setupHomeAltInteractivity = () => {
   });
 
   const homeWorldsSection = document.getElementById("worlds");
-  if (homeWorldsSection && !prefersReducedMotion) {
+  if (homeWorldsSection && !shouldUseLiteInteractiveEffects) {
     const homeWorldCards = Array.from(
       homeWorldsSection.querySelectorAll(".world-card:not(.coming-soon)")
     );
@@ -10642,7 +10802,7 @@ const setupHomeAltInteractivity = () => {
   }
 
   const heroRightPanel = document.querySelector(".hero-right");
-  if (heroRightPanel && !prefersReducedMotion) {
+  if (heroRightPanel && !shouldUseLiteInteractiveEffects) {
     let pulseTimer = 0;
     let pointerRaf = 0;
     let pointerX = 50;

@@ -8028,7 +8028,10 @@ body.world-page.start-lesson-transition #language.language-reveal {
   }
 
   .nav.nav-single-link .nav-links {
+    display: flex;
+    grid-template-columns: none;
     justify-content: center;
+    align-items: center;
     overflow: visible;
     padding-left: 2px;
     padding-right: 2px;
@@ -10871,5 +10874,110 @@ section,
   .grammar-close {
     touch-action: manipulation;
     -webkit-tap-highlight-color: rgba(104, 225, 255, 0.14);
+  }
+}
+
+/* --------------------------------------------------------------------------
+  FINAL RESPONSIVE GEOMETRY SAFETY LAYER
+  Prevent overlap/cropping on tight viewports while preserving current design.
+   -------------------------------------------------------------------------- */
+
+:where(
+  .nav-links a,
+  .sound-toggle,
+  .account-trigger,
+  .primary,
+  .support-button,
+  .words-filter,
+  .words-complete-section-btn,
+  .chat-send,
+  .cookie-notice-dismiss,
+  .map-section-complete-btn
+) {
+  max-width: 100%;
+  min-width: 0;
+}
+
+:where(
+  .nav-links a,
+  .brand-title,
+  .brand-sub,
+  .section-title h2,
+  .section-title p,
+  .word,
+  .phrase-text,
+  .word-translation,
+  .phrase-translation,
+  .grammar-title-main,
+  .grammar-title-translation,
+  .chat-text,
+  .join-status,
+  .footer,
+  .footer-inline-links,
+  .footer-legal-links
+) {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+@media (max-width: 960px) {
+  .nav-links {
+    white-space: normal !important;
+    overflow-x: visible !important;
+    row-gap: 8px;
+  }
+
+  .nav-links a {
+    white-space: normal;
+    text-align: center;
+    line-height: 1.2;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .hero-actions {
+    flex-wrap: wrap;
+    align-items: stretch;
+  }
+
+  body:not(.world-page) .hero-actions #startVoyageButton,
+  body:not(.world-page) .hero-actions #talkButton,
+  .support-button {
+    width: min(100%, 360px);
+  }
+
+  .join-actions {
+    width: 100%;
+  }
+
+  .join-actions input,
+  .join-actions textarea {
+    width: min(100%, 100%);
+    min-width: 0;
+  }
+
+  .footer {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .footer > :first-child,
+  .footer-inline-links,
+  .footer-legal-links,
+  .footer-right-text {
+    grid-column: 1;
+    justify-self: start;
+    text-align: left;
+  }
+}
+
+@media (max-width: 600px) {
+  .cookie-notice {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .cookie-notice-dismiss {
+    width: 100%;
   }
 }

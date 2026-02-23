@@ -7638,15 +7638,87 @@ const buildGenericExamplePairs = (cardData, index, sectionName = "") => {
 const buildGrammarHowItWorks = (card) => {
   const sourceTitle = String(card.sourceTitle || card.title || "");
   const title = sourceTitle.toLowerCase();
+  const tokenize = (value) =>
+    (String(value || "").match(/[\p{L}\p{N}]+/gu) || [])
+      .map((token) => normalizeGrammarTextKey(token))
+      .filter((token) => token.length >= 2);
+  const buildTopicAnchorSet = () => {
+    const anchors = new Set();
+    tokenize(card?.title).forEach((token) => anchors.add(token));
+    tokenize(card?.example).forEach((token) => anchors.add(token));
+    (Array.isArray(card?.ruleOrder) ? card.ruleOrder : []).forEach((part) => {
+      tokenize(part).forEach((token) => anchors.add(token));
+    });
+    (Array.isArray(card?.exampleHighlights) ? card.exampleHighlights : []).forEach((entry) => {
+      tokenize(entry?.label).forEach((token) => anchors.add(token));
+      tokenize(entry?.text).forEach((token) => anchors.add(token));
+    });
+    return anchors;
+  };
+  const topicAnchors = buildTopicAnchorSet();
+  const isTopicSpecificPoint = (point) => {
+    const normalizedPoint = normalizeGrammarTextKey(point);
+    if (!normalizedPoint) {
+      return false;
+    }
+    const explicitOrder = Array.isArray(card?.ruleOrder)
+      ? card.ruleOrder.map((item) => String(item || "").trim()).filter(Boolean)
+      : [];
+    if (
+      explicitOrder.some((slot) => {
+        const normalizedSlot = normalizeGrammarTextKey(slot);
+        return normalizedSlot && normalizedPoint.includes(normalizedSlot);
+      })
+    ) {
+      return true;
+    }
+    const tokens = tokenize(point);
+    let overlap = 0;
+    for (const token of tokens) {
+      if (topicAnchors.has(token)) {
+        overlap += 1;
+        if (overlap >= 2) {
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+  const buildRuleSpecificFallbackBullets = (explicitOrder = []) => {
+    const fallback = [];
+    if (explicitOrder.length >= 2) {
+      fallback.push(explicitOrder.join(" + "));
+    }
+    const highlightPairs = (Array.isArray(card?.exampleHighlights) ? card.exampleHighlights : [])
+      .map((entry) => {
+        const label = String(entry?.label || "").trim();
+        const text = String(entry?.text || "").trim();
+        if (!label || !text) {
+          return "";
+        }
+        return `${label}: ${text}`;
+      })
+      .filter(Boolean);
+    if (highlightPairs.length >= 2) {
+      fallback.push(highlightPairs.join(" + "));
+    }
+    const example = String(card?.example || "").trim();
+    if (example) {
+      fallback.push(example);
+    }
+    return fallback.slice(0, 3);
+  };
   const explicitOrder = Array.isArray(card?.ruleOrder)
     ? card.ruleOrder.map((item) => String(item || "").trim()).filter(Boolean)
     : [];
   if (explicitOrder.length >= 2) {
     const expandedPoints = (card.points || []).map(expandGrammarPoint);
+    const topicPoints = expandedPoints.filter((point) => isTopicSpecificPoint(point));
+    const fallbackBullets = buildRuleSpecificFallbackBullets(explicitOrder);
     const orderText = explicitOrder.join(" + ");
     return {
       order: orderText,
-      bullets: expandedPoints,
+      bullets: (topicPoints.length ? topicPoints : fallbackBullets).slice(0, 3),
       template: orderText,
     };
   }
@@ -8136,6 +8208,72 @@ const buildMistakeFromExample = (exampleItem) => {
   return { wrong, fix };
 };
 
+const tokenizeGrammarSentence = (value) =>
+  (String(value || "").match(/[\p{L}\p{N}]+/gu) || [])
+    .map((token) => normalizeGrammarTextKey(token))
+    .filter((token) => token.length >= 2);
+
+const buildGrammarMistakeContext = (card, examples = []) => {
+  const phrases = [];
+  const push = (value) => {
+    const normalized = normalizeGrammarTextKey(value);
+    if (!normalized || normalized.length < 3) {
+      return;
+    }
+    phrases.push(normalized);
+  };
+
+  push(card?.example);
+  (Array.isArray(examples) ? examples : []).forEach((example) => {
+    push(example?.expanded);
+    push(example?.base);
+    const labels = parseGrammarExampleLabels(example?.labels);
+    labels.forEach((label) => {
+      push(label?.phrase);
+    });
+  });
+
+  const tokens = new Set();
+  phrases.forEach((phrase) => {
+    tokenizeGrammarSentence(phrase).forEach((token) => {
+      tokens.add(token);
+    });
+  });
+
+  return {
+    phrases,
+    tokens,
+  };
+};
+
+const isTopicAlignedMistake = (entry, card, examples = []) => {
+  const wrong = normalizeGrammarTextKey(entry?.wrong || "");
+  const fix = normalizeGrammarTextKey(entry?.fix || "");
+  if (!wrong || !fix) {
+    return false;
+  }
+
+  const context = buildGrammarMistakeContext(card, examples);
+  if (context.phrases.some((phrase) => (wrong.includes(phrase) || fix.includes(phrase)))) {
+    return true;
+  }
+
+  const fixTokens = tokenizeGrammarSentence(fix);
+  if (!fixTokens.length || context.tokens.size === 0) {
+    return false;
+  }
+  let overlap = 0;
+  for (const token of fixTokens) {
+    if (context.tokens.has(token)) {
+      overlap += 1;
+      if (overlap >= 2) {
+        return true;
+      }
+    }
+  }
+  return false;
+};
+
 const buildGrammarMistakes = (card, examples = []) => {
   const unique = [];
   const seen = new Set();
@@ -8152,29 +8290,36 @@ const buildGrammarMistakes = (card, examples = []) => {
     seen.add(key);
     unique.push({ wrong, fix });
   };
+
+  const generatedMistakes = (Array.isArray(examples) ? examples : [])
+    .map((item) => buildMistakeFromExample(item))
+    .filter(Boolean);
+
+  generatedMistakes.forEach((generated) => {
+    pushMistake(generated);
+  });
+
   if (Array.isArray(card.mistakes) && card.mistakes.length) {
-    pushMistake(card.mistakes[0]);
+    const firstCardMistake = card.mistakes[0];
+    if (isTopicAlignedMistake(firstCardMistake, card, examples)) {
+      pushMistake(firstCardMistake);
+    }
   }
+
   const sourceTitle = String(card.sourceTitle || card.title || "");
   const title = sourceTitle.toLowerCase();
   const pair = GRAMMAR_MISTAKES[title];
-  if (unique.length === 0 && pair) {
+  if (unique.length === 0 && pair && isTopicAlignedMistake(pair, card, examples)) {
     pushMistake(pair);
   }
+
   if (unique.length === 0) {
     pushMistake({
       wrong: "She not explain well.",
       fix: "She did not explain well.",
     });
   }
-  if (unique.length < 2) {
-    const preferredExample =
-      examples[Math.min(unique.length, Math.max(0, examples.length - 1))] || examples[0];
-    const generatedMistake = buildMistakeFromExample(preferredExample);
-    if (generatedMistake) {
-      pushMistake(generatedMistake);
-    }
-  }
+
   return unique.slice(0, 2);
 };
 
@@ -8324,7 +8469,7 @@ const renderGrammarModal = (section, index) => {
   const rawExamples = activeExamples || buildGenericExamplePairs(cardData, index, section);
   const exampleItems = ensureTwoGrammarExamples(rawExamples, cardData, section, index);
   const limitedExamples = exampleItems.slice(0, 1);
-  const mistakes = buildGrammarMistakes(cardData, limitedExamples);
+  const mistakes = buildGrammarMistakes(cardData, exampleItems);
   const limitedMistakes = mistakes.slice(0, 1);
   const renderedExamples = limitedExamples
     .map((item) => {
