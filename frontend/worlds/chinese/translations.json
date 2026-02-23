@@ -42,7 +42,8 @@
         "source": "hi",
         "translations": {
           "english": "hi"
-        }
+        },
+        "register": "informal"
       },
       "你好": {
         "source": "hello",
@@ -84,7 +85,8 @@
         "source": "bye",
         "translations": {
           "english": "bye"
-        }
+        },
+        "register": "informal"
       },
       "保重": {
         "source": "take care",
@@ -102,13 +104,15 @@
         "source": "excuse me",
         "translations": {
           "english": "excuse me"
-        }
+        },
+        "register": "polite"
       },
       "抱歉": {
         "source": "sorry",
         "translations": {
           "english": "sorry"
-        }
+        },
+        "register": "polite"
       },
       "谢谢": {
         "source": "thanks",
@@ -138,13 +142,15 @@
         "source": "pleased to meet you",
         "translations": {
           "english": "pleased to meet you"
-        }
+        },
+        "register": "informal"
       },
       "回头见": {
         "source": "see you later",
         "translations": {
           "english": "see you later"
-        }
+        },
+        "register": "informal"
       },
       "很快见": {
         "source": "see you soon",
@@ -156,7 +162,8 @@
         "source": "see you tomorrow",
         "translations": {
           "english": "see you tomorrow"
-        }
+        },
+        "register": "informal"
       },
       "祝你有个好日子": {
         "source": "have a good day",
@@ -180,7 +187,8 @@
         "source": "no problem",
         "translations": {
           "english": "no problem"
-        }
+        },
+        "register": "informal"
       }
     },
     "Pronouns": {
@@ -194,7 +202,8 @@
         "source": "you",
         "translations": {
           "english": "you"
-        }
+        },
+        "register": "informal"
       },
       "他": {
         "source": "him",
@@ -6229,7 +6238,8 @@
         "source": "hi there",
         "translations": {
           "english": "hi there"
-        }
+        },
+        "register": "informal"
       },
       "你好": {
         "source": "hello there",
@@ -6271,25 +6281,29 @@
         "source": "how are you doing",
         "translations": {
           "english": "how are you doing"
-        }
+        },
+        "register": "informal"
       },
       "最近怎么样": {
         "source": "how is it going",
         "translations": {
           "english": "how is it going"
-        }
+        },
+        "register": "informal"
       },
       "见到你真好": {
         "source": "good to see you",
         "translations": {
           "english": "good to see you"
-        }
+        },
+        "register": "informal"
       },
       "很高兴见到你": {
         "source": "nice to see you",
         "translations": {
           "english": "nice to see you"
-        }
+        },
+        "register": "informal"
       },
       "欢迎回来": {
         "source": "welcome back",
@@ -6307,19 +6321,22 @@
         "source": "see you later",
         "translations": {
           "english": "see you later"
-        }
+        },
+        "register": "informal"
       },
       "很快见": {
         "source": "see you soon",
         "translations": {
           "english": "see you soon"
-        }
+        },
+        "register": "informal"
       },
       "明天见": {
         "source": "see you tomorrow",
         "translations": {
           "english": "see you tomorrow"
-        }
+        },
+        "register": "informal"
       },
       "保重": {
         "source": "take care",
@@ -6331,13 +6348,15 @@
         "source": "have a good day",
         "translations": {
           "english": "have a good day"
-        }
+        },
+        "register": "formal"
       },
       "祝你有愉快的一天": {
         "source": "have a nice day",
         "translations": {
           "english": "have a nice day"
-        }
+        },
+        "register": "formal"
       }
     },
     "Politeness": {
@@ -6345,25 +6364,29 @@
         "source": "excuse me",
         "translations": {
           "english": "excuse me"
-        }
+        },
+        "register": "polite"
       },
       "请原谅我": {
         "source": "please forgive me",
         "translations": {
           "english": "please forgive me"
-        }
+        },
+        "register": "formal"
       },
       "我很抱歉": {
         "source": "i am sorry",
         "translations": {
           "english": "i am sorry"
-        }
+        },
+        "register": "formal"
       },
       "对此我感到抱歉": {
         "source": "sorry about that",
         "translations": {
           "english": "sorry about that"
-        }
+        },
+        "register": "formal"
       },
       "谢谢": {
         "source": "thank you",
@@ -6375,13 +6398,15 @@
         "source": "thanks a lot",
         "translations": {
           "english": "thanks a lot"
-        }
+        },
+        "register": "formal"
       },
       "我很感激": {
         "source": "i appreciate it",
         "translations": {
           "english": "i appreciate it"
-        }
+        },
+        "register": "formal"
       },
       "不客气": {
         "source": "you are welcome",
@@ -6393,7 +6418,8 @@
         "source": "no problem",
         "translations": {
           "english": "no problem"
-        }
+        },
+        "register": "informal"
       },
       "没关系": {
         "source": "that is okay",
@@ -6405,13 +6431,15 @@
         "source": "after you",
         "translations": {
           "english": "after you"
-        }
+        },
+        "register": "formal"
       },
       "我的歉意": {
         "source": "my apologies",
         "translations": {
           "english": "my apologies"
-        }
+        },
+        "register": "formal"
       }
     },
     "Introductions": {
@@ -6711,31 +6739,36 @@
         "source": "could you help me",
         "translations": {
           "english": "could you help me"
-        }
+        },
+        "register": "informal"
       },
       "请帮我": {
         "source": "please help me",
         "translations": {
           "english": "please help me"
-        }
+        },
+        "register": "polite"
       },
       "你能给我看看吗": {
         "source": "could you show me",
         "translations": {
           "english": "could you show me"
-        }
+        },
+        "register": "informal"
       },
       "你能告诉我吗": {
         "source": "could you tell me",
         "translations": {
           "english": "could you tell me"
-        }
+        },
+        "register": "informal"
       },
       "你能解释一下吗": {
         "source": "could you explain",
         "translations": {
           "english": "could you explain"
-        }
+        },
+        "register": "informal"
       },
       "我可以要吗": {
         "source": "could i have",
@@ -6759,25 +6792,29 @@
         "source": "let me know",
         "translations": {
           "english": "let me know"
-        }
+        },
+        "register": "informal"
       },
       "请稍等片刻": {
         "source": "please wait a moment",
         "translations": {
           "english": "please wait a moment"
-        }
+        },
+        "register": "formal"
       },
       "请慢慢说": {
         "source": "please speak slowly",
         "translations": {
           "english": "please speak slowly"
-        }
+        },
+        "register": "polite"
       },
       "你能慢慢说吗": {
         "source": "can you speak slowly",
         "translations": {
           "english": "can you speak slowly"
-        }
+        },
+        "register": "informal"
       }
     },
     "Time & Plans": {
@@ -8194,7 +8231,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "我吃午饭了。",
+              "wrong": "我了吃午饭。",
               "fix": "我吃了午饭。"
             }
           ]
@@ -8421,7 +8458,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "我吃午饭了。",
+              "wrong": "我吃午饭。",
               "fix": "我吃了午饭。"
             }
           ]
@@ -8504,7 +8541,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "我去要北京。",
+              "wrong": "我明天要北京去。",
               "fix": "我明天要去北京。"
             }
           ]
@@ -8686,7 +8723,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "我今天去商店。",
+              "wrong": "我去商店今天。",
               "fix": "今天我去商店。"
             }
           ]
@@ -8850,7 +8887,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "我今天去商店。",
+              "wrong": "我去商店今天。",
               "fix": "今天我去商店。"
             }
           ]

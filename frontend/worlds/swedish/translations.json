@@ -12045,7 +12045,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Måste jag gå till skolan?",
+              "wrong": "Jag måste till skolan gå.",
               "fix": "Jag måste gå till skolan."
             }
           ]
@@ -12079,7 +12079,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Kan jag simma?",
+              "wrong": "Jag kan simmar.",
               "fix": "Jag kan simma."
             }
           ]
@@ -12495,7 +12495,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Hon frågade, vill du följa med?",
+              "wrong": "Hon frågade om jag vill följa med.",
               "fix": "Hon frågade om jag ville följa med."
             }
           ]

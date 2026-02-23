@@ -8160,7 +8160,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Vous aimes le chocolat ?",
+              "wrong": "Tu aime le chocolat ?",
               "fix": "Tu aimes le chocolat ?"
             }
           ]
@@ -9276,7 +9276,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Tu es très aimable.",
+              "wrong": "Vous est très aimable.",
               "fix": "Vous êtes très aimable."
             }
           ]
@@ -9874,7 +9874,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Je me demande viens-tu ?",
+              "wrong": "Je me demande si viens-tu.",
               "fix": "Je me demande si tu viens."
             }
           ]

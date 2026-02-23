@@ -12641,7 +12641,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Kannst du mir bitte helfen?",
+              "wrong": "Kannst Sie mir bitte helfen?",
               "fix": "Könnten Sie mir bitte helfen?"
             }
           ]
@@ -13669,7 +13669,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Hat jemand angerufen?",
+              "wrong": "Jemand angerufen hat.",
               "fix": "Jemand hat angerufen."
             }
           ]
@@ -14256,7 +14256,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ich weiß nicht, kommt er?",
+              "wrong": "Ich weiß nicht, ob kommt er.",
               "fix": "Ich weiß nicht, ob er kommt."
             }
           ]
@@ -15871,7 +15871,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Kannst du mir bitte helfen?",
+              "wrong": "Könnten Sie mir bitte hilfst?",
               "fix": "Könnten Sie mir bitte helfen?"
             }
           ]
@@ -16003,7 +16003,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Hallo Frau Müller, wie geht's?",
+              "wrong": "Sehr geehrte Frau Müller, ich hoffe, es geht Ihnen.",
               "fix": "Sehr geehrte Frau Müller, ich hoffe, es geht Ihnen gut."
             }
           ]

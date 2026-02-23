@@ -9792,7 +9792,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Você gostaria de um café?",
+              "wrong": "O senhor gostaria um café?",
               "fix": "O senhor gostaria de um café?"
             }
           ]
