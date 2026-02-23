@@ -735,6 +735,9 @@ const cpuThreadCount = Number(navigator.hardwareConcurrency || 0);
 const isLowPowerDevice =
   (deviceMemoryGb > 0 && deviceMemoryGb <= 4) ||
   (cpuThreadCount > 0 && cpuThreadCount <= 4);
+const shouldUseConservativeAnimationBudget =
+  isLowPowerDevice || prefersReducedData || isSlowNetwork;
+const conservativeAnimationFrameMinMs = shouldUseConservativeAnimationBudget ? 34 : 16;
 
 /* ==========================================================================
    AUTH + PROGRESS API CLIENT
@@ -3370,7 +3373,7 @@ const setupAccountHub = () => {
         : isAuthenticated
         ? hasPremiumAccess
           ? `Level ${levelMeta.level}`
-          : ""
+          : `Streak ${streakDays}d`
         : "Sign in";
     }
     if (trigger) {
@@ -7193,8 +7196,16 @@ const setupWorldPageInteractiveFx = () => {
   const ambientNebulaB = worldAmbient?.querySelector(".nebula-b") || null;
   const ambientPlanetA = worldAmbient?.querySelector(".planet-a") || null;
   let ambientRafId = 0;
+  let lastAmbientFrameTs = 0;
   const animateAmbient = (timestamp) => {
     ambientRafId = window.requestAnimationFrame(animateAmbient);
+    if (document.hidden) {
+      return;
+    }
+    if (timestamp - lastAmbientFrameTs < conservativeAnimationFrameMinMs) {
+      return;
+    }
+    lastAmbientFrameTs = timestamp;
     pointerCurrentX += (pointerTargetX - pointerCurrentX) * 0.075;
     pointerCurrentY += (pointerTargetY - pointerCurrentY) * 0.075;
     setPointerShift(pointerCurrentX, pointerCurrentY);
@@ -8238,6 +8249,7 @@ const hero = document.querySelector(".hero-right");
 const parallaxLayers = document.querySelectorAll("[data-depth]");
 const canUseParallax =
   !prefersReducedMotion &&
+  !shouldUseConservativeAnimationBudget &&
   window.matchMedia("(pointer: fine) and (min-width: 961px)").matches;
 let mouseX = 0;
 let mouseY = 0;
@@ -8245,14 +8257,30 @@ let currentX = 0;
 let currentY = 0;
 
 if (hero && !prefersReducedMotion) {
-  hero.addEventListener("mousemove", (event) => {
+  let heroMoveRafId = 0;
+  let heroMoveTargetX = 0;
+  let heroMoveTargetY = 0;
+  const applyHeroPointerTransform = () => {
+    heroMoveRafId = 0;
+    hero.style.transform = `translate3d(${heroMoveTargetX * 10}px, ${heroMoveTargetY * 10}px, 0)`;
+  };
+  const queueHeroPointerTransform = (event) => {
     const rect = hero.getBoundingClientRect();
-    const x = (event.clientX - rect.left) / rect.width - 0.5;
-    const y = (event.clientY - rect.top) / rect.height - 0.5;
-    hero.style.transform = `translate3d(${x * 10}px, ${y * 10}px, 0)`;
-  });
+    heroMoveTargetX = (event.clientX - rect.left) / rect.width - 0.5;
+    heroMoveTargetY = (event.clientY - rect.top) / rect.height - 0.5;
+    if (heroMoveRafId) {
+      return;
+    }
+    heroMoveRafId = window.requestAnimationFrame(applyHeroPointerTransform);
+  };
+
+  hero.addEventListener("mousemove", queueHeroPointerTransform, { passive: true });
 
   hero.addEventListener("mouseleave", () => {
+    if (heroMoveRafId) {
+      window.cancelAnimationFrame(heroMoveRafId);
+      heroMoveRafId = 0;
+    }
     hero.style.transform = "translate3d(0, 0, 0)";
   });
 }
@@ -8265,8 +8293,13 @@ const resetGaze = () => {
   alien.style.setProperty("--gaze-y", "0px");
 };
 
-const updateGaze = (event) => {
-  if (!alien || !alienHead) {
+let gazeMoveRafId = 0;
+let gazeMoveEvent = null;
+const applyQueuedGazeUpdate = () => {
+  gazeMoveRafId = 0;
+  const event = gazeMoveEvent;
+  gazeMoveEvent = null;
+  if (!event || !alien || !alienHead) {
     return;
   }
   const rect = alienHead.getBoundingClientRect();
@@ -8283,8 +8316,16 @@ const updateGaze = (event) => {
   gazeResetTimer = window.setTimeout(resetGaze, 1300);
 };
 
+const updateGaze = (event) => {
+  gazeMoveEvent = event;
+  if (gazeMoveRafId) {
+    return;
+  }
+  gazeMoveRafId = window.requestAnimationFrame(applyQueuedGazeUpdate);
+};
+
 if (!prefersReducedMotion && alien && alienHead) {
-  window.addEventListener("mousemove", updateGaze);
+  window.addEventListener("mousemove", updateGaze, { passive: true });
   document.addEventListener("mouseleave", resetGaze);
 }
 

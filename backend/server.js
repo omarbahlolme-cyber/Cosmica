@@ -392,6 +392,19 @@ app.get("/app-maps.js", sendMapAssetAlias("app-maps.js"));
 app.get("/style-maps.css", sendMapAssetAlias("style-maps.css"));
 app.get("/translations.json", sendMapAssetAlias("translations.json"));
 
+app.use((req, res, next) => {
+  const requestPath = String(req.path || "").toLowerCase();
+  const ext = path.extname(requestPath).toLowerCase();
+  const versionTag = String(req.query?.v || "").trim();
+  if (!versionTag) {
+    return next();
+  }
+  if (FRESH_ASSET_EXTENSIONS.has(ext) || CACHEABLE_MEDIA_EXTENSIONS.has(ext)) {
+    res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+  }
+  return next();
+});
+
 app.use(
   express.static(FRONTEND_ROOT, {
     etag: true,
@@ -405,13 +418,17 @@ app.use(
         return;
       }
       if (FRESH_ASSET_EXTENSIONS.has(ext)) {
+        if (res.getHeader("Cache-Control")) {
+          return;
+        }
         // Force immediate revalidation for active bundles/data during rapid deploy cycles.
-        res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
-        res.setHeader("Pragma", "no-cache");
-        res.setHeader("Expires", "0");
+        res.setHeader("Cache-Control", "public, max-age=600, stale-while-revalidate=86400");
         return;
       }
       if (CACHEABLE_MEDIA_EXTENSIONS.has(ext)) {
+        if (res.getHeader("Cache-Control")) {
+          return;
+        }
         res.setHeader("Cache-Control", "public, max-age=86400, stale-while-revalidate=604800");
         return;
       }

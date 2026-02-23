@@ -1,70 +1,70 @@
 {
-  "generatedAt": "2026-02-19T11:44:57.055Z",
+  "generatedAt": "2026-02-23T08:03:17.723Z",
   "baseUrl": "http://127.0.0.1:4174",
   "routes": {
     "/index.html": {
       "status": 200,
-      "durationMs": 13,
-      "bytes": 22638,
+      "durationMs": 18,
+      "bytes": 23229,
       "cacheControl": "public, max-age=0, must-revalidate"
     },
     "/english-world.html": {
       "status": 200,
-      "durationMs": 5,
-      "bytes": 12981,
+      "durationMs": 6,
+      "bytes": 13369,
       "cacheControl": "public, max-age=0, must-revalidate"
     },
     "/english-letters.html": {
       "status": 200,
-      "durationMs": 4,
-      "bytes": 22213,
+      "durationMs": 5,
+      "bytes": 22826,
       "cacheControl": "public, max-age=0, must-revalidate"
     },
     "/english-words.html": {
       "status": 200,
-      "durationMs": 3,
-      "bytes": 5020,
+      "durationMs": 4,
+      "bytes": 5223,
       "cacheControl": "public, max-age=0, must-revalidate"
     },
     "/english-phrases.html": {
       "status": 200,
-      "durationMs": 3,
-      "bytes": 5035,
+      "durationMs": 4,
+      "bytes": 5238,
       "cacheControl": "public, max-age=0, must-revalidate"
     },
     "/english-grammar.html": {
       "status": 200,
-      "durationMs": 3,
-      "bytes": 5013,
+      "durationMs": 4,
+      "bytes": 5216,
       "cacheControl": "public, max-age=0, must-revalidate"
     },
     "/style.css": {
       "status": 200,
       "durationMs": 5,
-      "bytes": 192175,
-      "cacheControl": "no-store, no-cache, must-revalidate, proxy-revalidate"
+      "bytes": 253731,
+      "cacheControl": "public, max-age=600, stale-while-revalidate=86400"
     },
     "/style-maps.css": {
       "status": 200,
-      "durationMs": 4,
-      "bytes": 49259,
+      "durationMs": 5,
+      "bytes": 54436,
       "cacheControl": "public, max-age=0"
     },
     "/app.js": {
       "status": 200,
-      "durationMs": 4,
-      "bytes": 271272,
-      "cacheControl": "no-store, no-cache, must-revalidate, proxy-revalidate"
+      "durationMs": 5,
+      "bytes": 379146,
+      "cacheControl": "public, max-age=600, stale-while-revalidate=86400"
     },
     "/app-maps.js": {
       "status": 200,
-      "durationMs": 8,
-      "bytes": 268580,
+      "durationMs": 9,
+      "bytes": 287349,
       "cacheControl": "public, max-age=0"
     },
     "/translations.json": {
       "status": 200,
-      "durationMs": 10,
+      "durationMs": 13,
       "bytes": 1591307,
       "cacheControl": "public, max-age=0"
     }
