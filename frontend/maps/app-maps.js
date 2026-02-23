@@ -7997,6 +7997,7 @@ const renderGrammarModal = (section, index) => {
   const limitedMistakes = mistakes.slice(0, 1);
   const renderedExamples = limitedExamples
     .map((item) => {
+      const isRtlExample = WORLD_KEY === "arabic";
       const labels = Array.isArray(item?.labels) ? item.labels : [];
       const expandedText =
         shouldCapPhrase && item.expanded
@@ -8016,10 +8017,16 @@ const renderGrammarModal = (section, index) => {
         );
         exampleTranslation = expandedTranslation || baseTranslation;
       }
+      const highlightedExampleText = applyGrammarHighlights(expandedText, labels, {
+        colorByOrder: !!item.colorByOrder,
+      });
+      const renderedExampleLine = isRtlExample
+        ? `<div class="grammar-example-expanded" dir="ltr"><span class="grammar-example-prefix" dir="ltr">${grammarUi.phrase}</span> <span class="grammar-example-content" dir="rtl">${highlightedExampleText}</span></div>`
+        : `<div class="grammar-example-expanded">${grammarUi.phrase} ${highlightedExampleText}</div>`;
       return `
-        <div class="grammar-example">
+        <div class="grammar-example"${isRtlExample ? ' dir="rtl"' : ""}>
           ${item.variantLabel ? `<div class="grammar-example-variant">${formatExampleVariantLabel(item.variantLabel)}</div>` : ""}
-          <div class="grammar-example-labels">
+          <div class="grammar-example-labels"${isRtlExample ? ' dir="rtl"' : ""}>
             ${labels
                 .map(
                   (label, labelIndex) =>
@@ -8027,7 +8034,7 @@ const renderGrammarModal = (section, index) => {
                 )
                 .join("")}
           </div>
-          <div class="grammar-example-expanded">${grammarUi.phrase} ${applyGrammarHighlights(expandedText, labels, { colorByOrder: !!item.colorByOrder })}</div>
+          ${renderedExampleLine}
           ${exampleTranslation ? `<div class="grammar-translation">${exampleTranslation}</div>` : ""}
         </div>
       `;

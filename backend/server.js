@@ -1101,6 +1101,28 @@ const sanitizeDisplayName = (value, email = "") => {
     .slice(0, 30);
   return fallback || "Explorer";
 };
+const normalizeDisplayNameKey = (value) =>
+  sanitizeDisplayName(value, "")
+    .trim()
+    .toLowerCase();
+const findExistingUserByDisplayName = (displayName, { excludeUserId = "" } = {}) => {
+  const normalizedDisplayName = normalizeDisplayNameKey(displayName);
+  if (!normalizedDisplayName) {
+    return null;
+  }
+  const excludedId = String(excludeUserId || "").trim();
+  const userEntries = Object.entries(authStore?.users || {});
+  for (const [userId, userRecord] of userEntries) {
+    if (excludedId && userId === excludedId) {
+      continue;
+    }
+    const recordDisplayName = normalizeDisplayNameKey(String(userRecord?.displayName || ""));
+    if (recordDisplayName === normalizedDisplayName) {
+      return userRecord;
+    }
+  }
+  return null;
+};
 
 const createEmptyEmailVerificationState = () => ({
   tokenHash: "",
@@ -4777,6 +4799,13 @@ app.post("/api/auth/signup", authSignupLimiter, async (req, res) => {
         error: "Account already exists",
         authProvider: "email",
         authPanel: "login",
+      });
+    }
+    const existingDisplayNameUser = findExistingUserByDisplayName(displayName);
+    if (existingDisplayNameUser) {
+      return res.status(409).json({
+        error: "Username is already taken. Try another one.",
+        field: "displayName",
       });
     }
 

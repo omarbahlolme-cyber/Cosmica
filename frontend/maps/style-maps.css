@@ -40,6 +40,59 @@ body.letters-page main {
   margin: 0;
 }
 
+body[data-world="Arabic"]:is(.letters-page, .words-page, .phrases-page, .grammar-page) .section-title,
+html[lang="ar"] body:is(.letters-page, .words-page, .phrases-page, .grammar-page) .section-title,
+body[data-world="Arabic"]:is(.letters-page, .words-page, .phrases-page, .grammar-page) .section-title h2,
+html[lang="ar"] body:is(.letters-page, .words-page, .phrases-page, .grammar-page) .section-title h2,
+body[data-world="Arabic"]:is(.words-page, .phrases-page, .grammar-page) .words-controls-list,
+html[lang="ar"] body:is(.words-page, .phrases-page, .grammar-page) .words-controls-list {
+  direction: rtl;
+  text-align: right;
+}
+
+body[data-world="Arabic"]:is(.letters-page, .words-page, .phrases-page, .grammar-page) .section-title,
+html[lang="ar"] body:is(.letters-page, .words-page, .phrases-page, .grammar-page) .section-title {
+  width: 100%;
+  justify-content: flex-end;
+  margin-top: 8px;
+  margin-left: auto;
+  margin-right: 0;
+}
+
+body.letters-page[data-world="Arabic"] .letters-grid-section .section-title,
+html[lang="ar"] body.letters-page .letters-grid-section .section-title {
+  margin-top: 14px;
+}
+
+body[data-world="Arabic"]:is(.letters-page, .words-page, .phrases-page, .grammar-page) .section-title h2,
+html[lang="ar"] body:is(.letters-page, .words-page, .phrases-page, .grammar-page) .section-title h2 {
+  width: 100%;
+  text-align: right;
+}
+
+body[data-world="Arabic"]:is(.words-page, .phrases-page, .grammar-page) .words-controls-eyebrow,
+html[lang="ar"] body:is(.words-page, .phrases-page, .grammar-page) .words-controls-eyebrow,
+body[data-world="Arabic"]:is(.words-page, .phrases-page, .grammar-page) .words-controls-list,
+html[lang="ar"] body:is(.words-page, .phrases-page, .grammar-page) .words-controls-list {
+  width: 100%;
+}
+
+body[data-world="Arabic"]:is(.letters-page, .words-page, .phrases-page, .grammar-page) .section-title .eyebrow,
+html[lang="ar"] body:is(.letters-page, .words-page, .phrases-page, .grammar-page) .section-title .eyebrow,
+body[data-world="Arabic"]:is(.words-page, .phrases-page, .grammar-page) .words-controls-eyebrow,
+html[lang="ar"] body:is(.words-page, .phrases-page, .grammar-page) .words-controls-eyebrow {
+  direction: ltr;
+  text-align: left;
+  margin-left: 0;
+  margin-right: auto;
+  justify-self: start;
+}
+
+body[data-world="Arabic"]:is(.words-page, .phrases-page, .grammar-page) .words-controls-list,
+html[lang="ar"] body:is(.words-page, .phrases-page, .grammar-page) .words-controls-list {
+  justify-content: flex-end;
+}
+
 .letters-grid-section,
 .words-group,
 .phrases-group,
@@ -132,6 +185,7 @@ body.letters-page main {
 }
 
 .letters-page .letter-card .map-card-practice-btn {
+  top: 5px;
   transform: translateX(9px) !important;
 }
 
@@ -1318,9 +1372,66 @@ body.letters-page .letters-grid-section .section-title .eyebrow {
   margin-bottom: 10px;
 }
 
+body.letters-page[data-world="Arabic"] .letters-grid-section .section-title .eyebrow,
+html[lang="ar"] body.letters-page .letters-grid-section .section-title .eyebrow {
+  direction: ltr;
+  text-align: left;
+  width: fit-content;
+  margin-left: 0;
+  margin-right: auto;
+  justify-self: start;
+}
+
 body.letters-page .letters-grid-section .section-title h2 {
   font-size: clamp(2.15rem, 4.3vw, 3.15rem);
   line-height: 1.1;
+}
+
+body.letters-page[data-world="Arabic"] .letters-grid-section .section-title h2,
+html[lang="ar"] body.letters-page .letters-grid-section .section-title h2 {
+  direction: rtl;
+  text-align: right;
+  display: block;
+  width: 100%;
+  justify-self: stretch;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+html[lang="ar"] body.letters-page[data-world="Arabic"] .letters-grid-section .section-title > h2 {
+  direction: rtl !important;
+  text-align: right !important;
+  justify-self: end !important;
+  width: max-content !important;
+  max-width: 100% !important;
+  margin-left: auto !important;
+  margin-right: 0 !important;
+}
+
+html[lang="ar"] body.letters-page[data-world="Arabic"] .letters-grid-section .section-title > h2 .map-section-title-main {
+  display: inline-block;
+  direction: rtl;
+  text-align: right;
+}
+
+body.letters-page[data-world="Arabic"] .letters-grid-section .section-title,
+html[lang="ar"] body.letters-page .letters-grid-section .section-title {
+  max-width: 100%;
+  width: 100%;
+  justify-items: stretch;
+  justify-self: stretch;
+  text-align: right;
+  margin-left: 0;
+  margin-right: 0;
+  min-height: 0;
+  margin-bottom: clamp(18px, 2.2vw, 28px);
+}
+
+body.letters-page[data-world="Arabic"] .letters-grid-section .section-title p,
+html[lang="ar"] body.letters-page .letters-grid-section .section-title p {
+  text-align: right;
+  margin-left: auto;
+  margin-right: 0;
 }
 
 body.letters-page[data-world="Arabic"] .letters-grid,
@@ -1331,6 +1442,37 @@ html[lang="ar"] body.letters-page .letters-grid {
 body.letters-page[data-world="Arabic"] .letter-card,
 html[lang="ar"] body.letters-page .letter-card {
   direction: rtl;
+}
+
+body.words-page[data-world="Arabic"] .word-card,
+html[lang="ar"] body.words-page .word-card,
+body.phrases-page[data-world="Arabic"] .phrase-card,
+html[lang="ar"] body.phrases-page .phrase-card {
+  direction: rtl;
+  text-align: right;
+  padding-top: 36px;
+}
+
+body.words-page[data-world="Arabic"] .word-card .word,
+html[lang="ar"] body.words-page .word-card .word,
+body.words-page[data-world="Arabic"] .word-card .word-translation,
+html[lang="ar"] body.words-page .word-card .word-translation,
+body.words-page[data-world="Arabic"] .word-card .word-romanization,
+html[lang="ar"] body.words-page .word-card .word-romanization,
+body.phrases-page[data-world="Arabic"] .phrase-card .phrase-text,
+html[lang="ar"] body.phrases-page .phrase-card .phrase-text,
+body.phrases-page[data-world="Arabic"] .phrase-card .phrase-translation,
+html[lang="ar"] body.phrases-page .phrase-card .phrase-translation,
+body.phrases-page[data-world="Arabic"] .phrase-card .phrase-romanization,
+html[lang="ar"] body.phrases-page .phrase-card .phrase-romanization {
+  text-align: right;
+}
+
+body.words-page[data-world="Arabic"] .word-card .word-audio,
+html[lang="ar"] body.words-page .word-card .word-audio,
+body.phrases-page[data-world="Arabic"] .phrase-card .word-audio,
+html[lang="ar"] body.phrases-page .phrase-card .word-audio {
+  justify-self: start;
 }
 
 .letter-card,
@@ -1437,7 +1579,7 @@ html[lang="ar"] body.letters-page .letter-card {
   grid-template-rows: auto auto 1fr auto;
   gap: 8px;
   min-height: 154px;
-  padding: 16px 14px 12px;
+  padding: 34px 14px 12px;
   align-items: start;
 }
 
@@ -1578,3 +1720,4 @@ html[lang="ar"] body.letters-page .letter-card {
     transform: skewX(-16deg) translateX(330%);
   }
 }
+

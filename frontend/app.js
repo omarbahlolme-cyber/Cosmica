@@ -24,6 +24,7 @@ const warpText = document.getElementById("warpText");
 const worldCards = document.querySelectorAll(".world-card");
 const urlParams = new URLSearchParams(window.location.search);
 const currentPath = window.location.pathname.toLowerCase();
+const isHomePagePath = currentPath === "/" || currentPath.endsWith("/index.html");
 
 // Keep viewport-height based layout stable on mobile when browser UI bars expand/collapse.
 const setupDynamicViewportHeight = () => {
@@ -174,6 +175,12 @@ const normalizeStoredBaseLanguagePreference = (value) => {
 };
 const readStoredBaseLanguagePreference = () =>
   normalizeStoredBaseLanguagePreference(localStorage.getItem("cosmicaBaseLanguage"));
+
+if (isHomePagePath) {
+  try {
+    localStorage.removeItem("cosmicaBaseLanguage");
+  } catch {}
+}
 const WORLD_MAP_TITLE_TRANSLATIONS = {
   english: {
     letters: "Letters",
@@ -796,6 +803,10 @@ const createCosmicaAuthClient = () => {
   };
 
   const applyBaseLanguageFromAuthPayload = (payload) => {
+    if (isHomePagePath) {
+      localStorage.removeItem("cosmicaBaseLanguage");
+      return;
+    }
     const baseLanguage = normalizeStoredBaseLanguagePreference(
       payload?.data?.settings?.baseLanguage
     );
@@ -2155,7 +2166,7 @@ const setupAccountHub = () => {
     const accessLine = premiumEndDate
       ? `If you register again with the same account email before ${premiumEndDate}, your Premium access remains available until your current subscription period ends.`
       : "If you register again with the same account email while your current subscription is still active, your Premium access remains available until your current subscription period ends.";
-    return `Are you sure you want to permanently delete your account? This action cannot be undone. ${accessLine}`;
+    return `Are you sure you want to permanently delete your account? This action cannot be undone. ${accessLine} You can restore Premium later by pressing the "Restore Premium" button.`;
   };
   const toAvatarTwoLetters = (value, fallback = "GU") => {
     const chars = Array.from(String(value || "").replace(/\s+/g, "").trim());
@@ -2818,6 +2829,30 @@ const setupAccountHub = () => {
     if (subscriptionPanel) {
       subscriptionPanel.hidden = true;
     }
+  };
+
+  const scrollMenuPanelIntoView = (panelNode, { behavior = "smooth", block = "center" } = {}) => {
+    if (!(panelNode instanceof HTMLElement)) {
+      return;
+    }
+    const scrollSurface = dropdown.querySelector(".account-dropdown-card");
+    if (!(scrollSurface instanceof HTMLElement)) {
+      return;
+    }
+    const surfaceRect = scrollSurface.getBoundingClientRect();
+    const panelRect = panelNode.getBoundingClientRect();
+    const currentTop = scrollSurface.scrollTop;
+    const relativeTop = panelRect.top - surfaceRect.top;
+    let nextTop = currentTop + relativeTop;
+    if (block === "center") {
+      nextTop = currentTop + relativeTop - (scrollSurface.clientHeight - panelRect.height) / 2;
+    } else if (block === "end") {
+      nextTop = currentTop + relativeTop - (scrollSurface.clientHeight - panelRect.height);
+    }
+    scrollSurface.scrollTo({
+      top: Math.max(0, Math.round(nextTop)),
+      behavior,
+    });
   };
 
   const syncPremiumModalBodyLock = () => {
@@ -3851,7 +3886,7 @@ const setupAccountHub = () => {
       passwordPanel.dataset.open = "1";
       passwordPanel.hidden = false;
       requestAnimationFrame(() => {
-        passwordPanel.scrollIntoView({ behavior: "smooth", block: "center" });
+        scrollMenuPanelIntoView(passwordPanel, { behavior: "smooth", block: "center" });
       });
     }
     const currentPasswordInput = passwordChangeForm?.querySelector('input[name="currentPassword"]');
@@ -3932,10 +3967,11 @@ const setupAccountHub = () => {
     setDeleteConfirmationVisible(false);
     setSubscriptionCancelConfirmationVisible(false);
     setFeedback("");
-    await loadManageSubscriptionDetails({ showLoading: true });
+    const subscriptionDetailsLoadPromise = loadManageSubscriptionDetails({ showLoading: true });
     requestAnimationFrame(() => {
-      subscriptionPanel?.scrollIntoView({ behavior: "smooth", block: "center" });
+      scrollMenuPanelIntoView(subscriptionPanel, { behavior: "auto", block: "start" });
     });
+    await subscriptionDetailsLoadPromise;
   };
 
   const submitSubscriptionCancellation = async () => {
@@ -3978,11 +4014,15 @@ const setupAccountHub = () => {
       const status = Number(error?.status || 0);
       if (status === 404) {
         const message = "Subscription cancellation is temporarily unavailable. Please refresh and try again.";
-        setFeedback(message, "error");
+        if (!/No active Stripe subscription was found for this account/i.test(message)) {
+          setFeedback(message, "error");
+        }
         showTriggerNoticeBubble(message, "error", 10000);
       } else {
         const message = error?.message || "Could not schedule cancellation right now.";
-        setFeedback(message, "error");
+        if (!/No active Stripe subscription was found for this account/i.test(message)) {
+          setFeedback(message, "error");
+        }
         showTriggerNoticeBubble(message, "error", 10000);
       }
     } finally {
@@ -4241,6 +4281,11 @@ const setupAccountHub = () => {
           isSubscriptionPanelExpanded = false;
           if (subscriptionPanel) {
             subscriptionPanel.hidden = true;
+          }
+          if (!managePanel.hidden) {
+            requestAnimationFrame(() => {
+              scrollMenuPanelIntoView(managePanel, { behavior: "smooth", block: "center" });
+            });
           }
           if (managePanel.hidden) {
             if (passwordPanel) {
