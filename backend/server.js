@@ -1052,6 +1052,24 @@ const cloneObjectSafely = (value, fallbackValue, maxSerializedChars) => {
 };
 
 const normalizeEmail = (value) => String(value || "").trim().toLowerCase();
+const INVALID_BASE_LANGUAGE_SENTINELS = new Set([
+  "none",
+  "no-base",
+  "nobase",
+  "skip",
+  "null",
+  "undefined",
+]);
+const normalizeBaseLanguagePreference = (value) => {
+  const normalized = String(value || "")
+    .trim()
+    .toLowerCase()
+    .slice(0, 40);
+  if (!normalized || INVALID_BASE_LANGUAGE_SENTINELS.has(normalized)) {
+    return "";
+  }
+  return normalized;
+};
 const sanitizeDisplayName = (value, email = "") => {
   const explicit = String(value || "")
     .trim()
@@ -1103,7 +1121,7 @@ const normalizeUserData = (value) => {
   const base = createDefaultUserData();
   const candidate = cloneObjectSafely(value, createDefaultUserData, MAX_USER_DATA_SERIALIZED_CHARS);
   const settings = isPlainObject(candidate.settings) ? candidate.settings : {};
-  base.settings.baseLanguage = String(settings.baseLanguage || "").trim().slice(0, 40);
+  base.settings.baseLanguage = normalizeBaseLanguagePreference(settings.baseLanguage);
   base.profile = isPlainObject(candidate.profile)
     ? cloneObjectSafely(candidate.profile, () => ({}), 20000)
     : {};
@@ -2550,6 +2568,274 @@ const requireAdminSecurityAccess = (req, res, next) => {
   }
   return next();
 };
+
+const buildAdminUserSummary = (userRecord) => {
+  const safeRecord = userRecord && typeof userRecord === "object" ? userRecord : {};
+  const profile = isPlainObject(safeRecord.data?.profile) ? safeRecord.data.profile : {};
+  const normalizedEmail = normalizeEmail(safeRecord.email || profile.email || "");
+  const provider = String(
+    profile.authProvider ||
+      safeRecord.authProvider ||
+      profile.provider ||
+      "email"
+  )
+    .trim()
+    .toLowerCase();
+  const premiumStatus = String(
+    profile.premiumStatus || profile.premiumStripeSubscriptionStatus || ""
+  )
+    .trim()
+    .toLowerCase();
+  const premiumEndRaw = String(
+    profile.premiumCurrentPeriodEnd ||
+      profile.premiumEndsAt ||
+      profile.subscriptionEndsAt ||
+      ""
+  ).trim();
+  const premiumEndMs = Date.parse(premiumEndRaw);
+  const hasFuturePremiumEnd = Number.isFinite(premiumEndMs) && premiumEndMs > Date.now();
+  const hasPremiumAccess =
+    profile.isPremium === true ||
+    profile.premium === true ||
+    premiumStatus === "active" ||
+    premiumStatus === "trialing" ||
+    premiumStatus === "past_due" ||
+    premiumStatus === "canceling" ||
+    hasFuturePremiumEnd;
+
+  return {
+    userId: String(safeRecord.id || "").trim(),
+    email: normalizedEmail,
+    displayName: String(safeRecord.displayName || profile.displayName || "").trim(),
+    authProvider: provider || "email",
+    emailVerified: safeRecord.emailVerified === true,
+    isPremium: hasPremiumAccess,
+    premiumStatus: premiumStatus || (hasPremiumAccess ? "active" : "free"),
+    premiumCurrentPeriodEnd: premiumEndRaw || "",
+    createdAt: String(safeRecord.createdAt || "").trim(),
+    updatedAt: String(safeRecord.updatedAt || "").trim(),
+  };
+};
+
+app.get(
+  "/api/admin/security/users",
+  adminSecurityLimiter,
+  requireAdminSecurityAccess,
+  (req, res) => {
+    const requestedLimit = Number(req.query?.limit);
+    const limit = Number.isFinite(requestedLimit)
+      ? Math.max(1, Math.min(5000, Math.round(requestedLimit)))
+      : 200;
+    const emailFilter = normalizeEmail(req.query?.email);
+    const providerFilter = String(req.query?.provider || "")
+      .trim()
+      .toLowerCase();
+    const includePremiumOnly = String(req.query?.premiumOnly || "")
+      .trim()
+      .toLowerCase();
+    const premiumOnly = includePremiumOnly === "1" || includePremiumOnly === "true";
+    const requestedLastHours = Number(req.query?.lastHours);
+    const lastHours = Number.isFinite(requestedLastHours)
+      ? Math.max(1, Math.min(24 * 365, Math.round(requestedLastHours)))
+      : 0;
+    const sinceRaw = String(req.query?.since || "").trim();
+    const sinceMs = sinceRaw ? Date.parse(sinceRaw) : NaN;
+    if (sinceRaw && !Number.isFinite(sinceMs)) {
+      return res.status(400).json({
+        error: "Invalid since timestamp. Use ISO-8601 format, e.g. 2026-02-22T00:00:00Z",
+      });
+    }
+    const createdAfterMs = Number.isFinite(sinceMs)
+      ? sinceMs
+      : lastHours > 0
+        ? Date.now() - lastHours * 60 * 60 * 1000
+        : 0;
+
+    const allUsers = Object.values(authStore.users || {})
+      .map((record) => buildAdminUserSummary(record))
+      .filter((item) => item.userId && item.email);
+
+    const filteredUsers = allUsers.filter((item) => {
+      if (emailFilter && item.email !== emailFilter) {
+        return false;
+      }
+      if (providerFilter && item.authProvider !== providerFilter) {
+        return false;
+      }
+      if (premiumOnly && item.isPremium !== true) {
+        return false;
+      }
+      if (createdAfterMs > 0) {
+        const createdMs = Date.parse(String(item.createdAt || ""));
+        if (!Number.isFinite(createdMs) || createdMs < createdAfterMs) {
+          return false;
+        }
+      }
+      return true;
+    });
+
+    const users = filteredUsers
+      .sort((a, b) => Date.parse(String(b.createdAt || "")) - Date.parse(String(a.createdAt || "")))
+      .slice(0, limit);
+
+    return res.json({
+      ok: true,
+      totalUsers: allUsers.length,
+      matchedUsers: filteredUsers.length,
+      returnedUsers: users.length,
+      filters: {
+        email: emailFilter || null,
+        provider: providerFilter || null,
+        premiumOnly,
+        since: Number.isFinite(sinceMs) ? new Date(sinceMs).toISOString() : null,
+        lastHours: lastHours || null,
+      },
+      users,
+    });
+  }
+);
+
+app.post(
+  "/api/admin/security/users/grant-premium",
+  adminSecurityLimiter,
+  requireAdminSecurityAccess,
+  (req, res) => {
+    const email = normalizeEmail(req.body?.email);
+    if (!email) {
+      return res.status(400).json({ error: "email is required" });
+    }
+
+    const userId = String(authStore.emailIndex[email] || "").trim();
+    const userRecord = userId ? authStore.users[userId] : null;
+    if (!userRecord) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const untilRaw = String(req.body?.until || "").trim();
+    const requestedDays = Number(req.body?.days);
+    let untilIso = "";
+
+    if (untilRaw) {
+      const untilMs = Date.parse(untilRaw);
+      if (!Number.isFinite(untilMs)) {
+        return res.status(400).json({
+          error: "Invalid until timestamp. Use ISO-8601 or YYYY-MM-DD.",
+        });
+      }
+      untilIso = new Date(untilMs).toISOString();
+    } else if (Number.isFinite(requestedDays) && requestedDays > 0) {
+      const days = Math.max(1, Math.min(3650, Math.round(requestedDays)));
+      untilIso = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();
+    }
+
+    userRecord.data = normalizeUserData(userRecord.data);
+    if (!isPlainObject(userRecord.data.profile)) {
+      userRecord.data.profile = {};
+    }
+    const profile = userRecord.data.profile;
+    const nowIso = new Date().toISOString();
+
+    profile.isPremium = true;
+    profile.premium = true;
+    profile.plan = "premium";
+    profile.tier = "premium";
+    profile.membership = "premium";
+    profile.premiumProvider = "manual";
+    profile.premiumLastSource = "admin-manual-grant";
+    profile.premiumStatus = "active";
+    profile.subscriptionStatus = "active";
+    profile.premiumCancelAtPeriodEnd = false;
+    if (!profile.premiumActivatedAt) {
+      profile.premiumActivatedAt = nowIso;
+    }
+    profile.premiumDeactivatedAt = "";
+
+    if (untilIso) {
+      profile.premiumCurrentPeriodEnd = untilIso;
+      profile.currentPeriodEnd = untilIso;
+      profile.subscriptionEndsAt = untilIso;
+      profile.premiumEndsAt = untilIso;
+    }
+
+    userRecord.updatedAt = nowIso;
+    markAuthStoreDirty();
+
+    void appendSecurityEvent({
+      type: "admin-premium-grant",
+      req,
+      email,
+      userId: userRecord.id,
+      reason: "Manual premium grant via admin endpoint",
+      details: {
+        until: untilIso || null,
+      },
+    });
+
+    return res.json({
+      ok: true,
+      user: buildAdminUserSummary(userRecord),
+      grantedUntil: untilIso || null,
+    });
+  }
+);
+
+app.post(
+  "/api/admin/security/users/revoke-premium",
+  adminSecurityLimiter,
+  requireAdminSecurityAccess,
+  (req, res) => {
+    const email = normalizeEmail(req.body?.email);
+    if (!email) {
+      return res.status(400).json({ error: "email is required" });
+    }
+
+    const userId = String(authStore.emailIndex[email] || "").trim();
+    const userRecord = userId ? authStore.users[userId] : null;
+    if (!userRecord) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    userRecord.data = normalizeUserData(userRecord.data);
+    if (!isPlainObject(userRecord.data.profile)) {
+      userRecord.data.profile = {};
+    }
+    const profile = userRecord.data.profile;
+    const nowIso = new Date().toISOString();
+
+    profile.isPremium = false;
+    profile.premium = false;
+    profile.plan = "free";
+    profile.tier = "free";
+    profile.membership = "free";
+    profile.premiumStatus = "free";
+    profile.subscriptionStatus = "free";
+    profile.premiumCancelAtPeriodEnd = false;
+    profile.premiumCurrentPeriodEnd = "";
+    profile.currentPeriodEnd = "";
+    profile.subscriptionEndsAt = "";
+    profile.premiumEndsAt = "";
+    profile.premiumExpiresAt = "";
+    profile.premiumProvider = "";
+    profile.premiumLastSource = "admin-manual-revoke";
+    profile.premiumDeactivatedAt = nowIso;
+
+    userRecord.updatedAt = nowIso;
+    markAuthStoreDirty();
+
+    void appendSecurityEvent({
+      type: "admin-premium-revoke",
+      req,
+      email,
+      userId: userRecord.id,
+      reason: "Manual premium revoke via admin endpoint",
+    });
+
+    return res.json({
+      ok: true,
+      user: buildAdminUserSummary(userRecord),
+    });
+  }
+);
 
 app.get(
   "/api/admin/security/blocked",
@@ -4422,7 +4708,7 @@ app.post("/api/auth/signup", authSignupLimiter, async (req, res) => {
   const password = String(req.body?.password || "");
   const displayNameInput = String(req.body?.displayName || "").trim();
   const displayName = sanitizeDisplayName(displayNameInput, email);
-  const baseLanguage = String(req.body?.baseLanguage || "").trim().slice(0, 40);
+  const baseLanguage = normalizeBaseLanguagePreference(req.body?.baseLanguage);
   const returnTo = sanitizeReturnToPath(req.body?.returnTo);
 
   if (!isValidEmail(email)) {

@@ -155,6 +155,25 @@ const WORLD_NAME = isWorldLandingPage
   ? document.body.dataset.world || "English"
   : urlParams.get("world") || document.body.dataset.world || "English";
 const WORLD_KEY = WORLD_NAME.toLowerCase();
+const INVALID_BASE_LANGUAGE_SENTINELS = new Set([
+  "none",
+  "no-base",
+  "nobase",
+  "skip",
+  "null",
+  "undefined",
+]);
+const normalizeStoredBaseLanguagePreference = (value) => {
+  const normalized = String(value || "")
+    .trim()
+    .toLowerCase();
+  if (!normalized || INVALID_BASE_LANGUAGE_SENTINELS.has(normalized)) {
+    return "";
+  }
+  return normalized;
+};
+const readStoredBaseLanguagePreference = () =>
+  normalizeStoredBaseLanguagePreference(localStorage.getItem("cosmicaBaseLanguage"));
 const WORLD_MAP_TITLE_TRANSLATIONS = {
   english: {
     letters: "Letters",
@@ -376,9 +395,7 @@ const applyWorldMapBilingualTitles = () => {
     return;
   }
   const worldSet = WORLD_MAP_TITLE_TRANSLATIONS[WORLD_KEY] || WORLD_MAP_TITLE_TRANSLATIONS.english;
-  const selectedBaseLanguage = String(localStorage.getItem("cosmicaBaseLanguage") || "")
-    .trim()
-    .toLowerCase();
+  const selectedBaseLanguage = readStoredBaseLanguagePreference();
   const hasSelectedBaseLanguage =
     Boolean(selectedBaseLanguage) && selectedBaseLanguage !== WORLD_KEY;
   const selectedSet = hasSelectedBaseLanguage
@@ -453,9 +470,7 @@ const applyWorldMapBilingualTitles = () => {
       if (!resolved) {
         return;
       }
-      const activeBaseLanguage = String(localStorage.getItem("cosmicaBaseLanguage") || "")
-        .trim()
-        .toLowerCase();
+      const activeBaseLanguage = readStoredBaseLanguagePreference();
       if (activeBaseLanguage !== selectedBaseLanguage) {
         return;
       }
@@ -528,6 +543,31 @@ const isPhrasesPage = document.body.classList.contains("phrases-page");
 const isGrammarPage = document.body.classList.contains("grammar-page");
 const needsMapTranslations = isWordsPage || isPhrasesPage || isGrammarPage;
 const needsGrammarDetails = isGrammarPage;
+const TRANSLATION_WARM_RECENCY_MS = 90 * 1000;
+const TRANSLATION_WARM_DEDUP_WINDOW_MS = 12 * 1000;
+let mapTranslationsWarmPromise = null;
+let mapTranslationsLastWarmAt = 0;
+let worldTranslationsWarmPromise = null;
+let worldTranslationsLastWarmAt = 0;
+
+const readCacheSavedAt = (cacheKey) => {
+  try {
+    const raw = localStorage.getItem(cacheKey);
+    if (!raw) {
+      return 0;
+    }
+    const parsed = JSON.parse(raw);
+    const savedAt = Number(parsed?.savedAt || 0);
+    return Number.isFinite(savedAt) && savedAt > 0 ? savedAt : 0;
+  } catch {
+    return 0;
+  }
+};
+
+const isCacheEntryFresh = (cacheKey, maxAgeMs = TRANSLATION_WARM_RECENCY_MS) => {
+  const savedAt = readCacheSavedAt(cacheKey);
+  return savedAt > 0 && Date.now() - savedAt <= maxAgeMs;
+};
 
 const writeMapTranslationsCache = (payload) => {
   if (!payload || typeof payload !== "object") {
@@ -551,15 +591,31 @@ const warmMapTranslationsCache = async () => {
   if (!document.body.classList.contains("world-page")) {
     return;
   }
-  try {
-    // Keep map cache normalized to the base English->base-language table.
-    const response = await fetch(BASE_MAP_TRANSLATION_FILE, { cache: "no-store" });
-    if (!response.ok) {
-      return;
-    }
-    const payload = await response.json();
-    writeMapTranslationsCache(payload);
-  } catch {}
+  if (isCacheEntryFresh(MAP_TRANSLATIONS_CACHE_KEY)) {
+    mapTranslationsLastWarmAt = Date.now();
+    return;
+  }
+  if (mapTranslationsWarmPromise) {
+    return mapTranslationsWarmPromise;
+  }
+  if (Date.now() - mapTranslationsLastWarmAt < TRANSLATION_WARM_DEDUP_WINDOW_MS) {
+    return;
+  }
+  mapTranslationsWarmPromise = (async () => {
+    try {
+      // Keep map cache normalized to the base English->base-language table.
+      const response = await fetch(BASE_MAP_TRANSLATION_FILE, { cache: "no-store" });
+      if (!response.ok) {
+        return;
+      }
+      const payload = await response.json();
+      writeMapTranslationsCache(payload);
+    } catch {}
+  })().finally(() => {
+    mapTranslationsLastWarmAt = Date.now();
+    mapTranslationsWarmPromise = null;
+  });
+  return mapTranslationsWarmPromise;
 };
 
 const writeWorldTranslationsCache = (payload) => {
@@ -590,19 +646,36 @@ const warmWorldTranslationsCache = async () => {
   if (!isNonEnglishWorld || WORLD_TRANSLATION_FILE === BASE_MAP_TRANSLATION_FILE) {
     return;
   }
-  try {
-    const response = await fetch(WORLD_TRANSLATION_FILE, { cache: "no-store" });
-    if (!response.ok) {
-      return;
-    }
-    const payload = await response.json();
-    const packWorldLanguage = String(payload?.worldLanguage || "")
-      .trim()
-      .toLowerCase();
-    if (packWorldLanguage && packWorldLanguage === WORLD_KEY) {
-      writeWorldTranslationsCache(payload);
-    }
-  } catch {}
+  const worldCacheKey = buildWorldTranslationsCacheKey(WORLD_KEY);
+  if (isCacheEntryFresh(worldCacheKey)) {
+    worldTranslationsLastWarmAt = Date.now();
+    return;
+  }
+  if (worldTranslationsWarmPromise) {
+    return worldTranslationsWarmPromise;
+  }
+  if (Date.now() - worldTranslationsLastWarmAt < TRANSLATION_WARM_DEDUP_WINDOW_MS) {
+    return;
+  }
+  worldTranslationsWarmPromise = (async () => {
+    try {
+      const response = await fetch(WORLD_TRANSLATION_FILE, { cache: "no-store" });
+      if (!response.ok) {
+        return;
+      }
+      const payload = await response.json();
+      const packWorldLanguage = String(payload?.worldLanguage || "")
+        .trim()
+        .toLowerCase();
+      if (packWorldLanguage && packWorldLanguage === WORLD_KEY) {
+        writeWorldTranslationsCache(payload);
+      }
+    } catch {}
+  })().finally(() => {
+    worldTranslationsLastWarmAt = Date.now();
+    worldTranslationsWarmPromise = null;
+  });
+  return worldTranslationsWarmPromise;
 };
 
 const preloadMapsBundleAsset = () => {
@@ -630,8 +703,19 @@ const setScrollbarWidth = () => {
   document.documentElement.style.setProperty("--scrollbar-width", `${Math.max(0, width)}px`);
 };
 
+let scrollbarWidthResizeRaf = 0;
+const scheduleScrollbarWidthRefresh = () => {
+  if (scrollbarWidthResizeRaf) {
+    return;
+  }
+  scrollbarWidthResizeRaf = window.requestAnimationFrame(() => {
+    scrollbarWidthResizeRaf = 0;
+    setScrollbarWidth();
+  });
+};
+
 setScrollbarWidth();
-window.addEventListener("resize", setScrollbarWidth);
+window.addEventListener("resize", scheduleScrollbarWidthRefresh, { passive: true });
 
 const prefersReducedMotion = window.matchMedia(
   "(prefers-reduced-motion: reduce)"
@@ -709,10 +793,11 @@ const createCosmicaAuthClient = () => {
   };
 
   const applyBaseLanguageFromAuthPayload = (payload) => {
-    const baseLanguage = String(payload?.data?.settings?.baseLanguage || "")
-      .trim()
-      .toLowerCase();
+    const baseLanguage = normalizeStoredBaseLanguagePreference(
+      payload?.data?.settings?.baseLanguage
+    );
     if (!baseLanguage) {
+      localStorage.removeItem("cosmicaBaseLanguage");
       return;
     }
     try {
@@ -844,7 +929,7 @@ const createCosmicaAuthClient = () => {
             ? { ...currentData.settings }
             : {},
       };
-      nextData.settings.baseLanguage = String(baseLanguage || "").trim().toLowerCase();
+      nextData.settings.baseLanguage = normalizeStoredBaseLanguagePreference(baseLanguage);
       return request("/api/account/data", {
         method: "PUT",
         body: { data: nextData },
@@ -860,6 +945,7 @@ window.cosmicaAuth = createCosmicaAuthClient();
    Shared account session, progress state, and premium learning dashboard.
    ========================================================================== */
 const createCosmicaGamificationClient = () => {
+  const PREMIUM_ACCESS_HINT_KEY = "cosmicaPremiumAccessHint";
   const PREMIUM_PROGRESS_CHECKPOINT_INTERVAL_MS = 18000;
   const listeners = new Set();
   const recentEventMap = new Map();
@@ -875,6 +961,12 @@ const createCosmicaGamificationClient = () => {
   let premiumCheckpointDirty = false;
   let premiumCheckpointInFlight = false;
   let premiumCheckpointLifecycleBound = false;
+
+  const setPremiumAccessHint = (hasPremiumAccess) => {
+    try {
+      sessionStorage.setItem(PREMIUM_ACCESS_HINT_KEY, hasPremiumAccess ? "1" : "0");
+    } catch {}
+  };
 
   const hasPremiumCheckpointAccess = () =>
     Boolean(state.isAuthenticated && state.user?.isPremium === true && state.progress);
@@ -1118,6 +1210,7 @@ const createCosmicaGamificationClient = () => {
       state.user = null;
       state.progress = buildDefaultProgress();
       state.error = "";
+      setPremiumAccessHint(false);
       premiumCheckpointDirty = false;
       stopPremiumCheckpointTimer();
       return;
@@ -1208,6 +1301,7 @@ const createCosmicaGamificationClient = () => {
       premiumStatus === "grace";
     const hasPremiumAccess =
       hasPremiumAccessFromFlags || statusIndicatesPremium || hasFuturePremiumEnd;
+    setPremiumAccessHint(hasPremiumAccess);
     state.isAuthenticated = true;
     state.user = {
       ...user,
@@ -1299,7 +1393,7 @@ const createCosmicaGamificationClient = () => {
           email,
           password,
           displayName,
-          baseLanguage: String(localStorage.getItem("cosmicaBaseLanguage") || "").trim().toLowerCase(),
+          baseLanguage: readStoredBaseLanguagePreference(),
         });
         applyAuthPayload(payload);
         state.ready = true;
@@ -1921,6 +2015,7 @@ const setupAccountHub = () => {
   const authPanelNodes = Array.from(dropdown.querySelectorAll("[data-auth-panel-content]"));
   const managePanel = dropdown.querySelector(".account-manage-panel");
   const subscriptionPanel = dropdown.querySelector(".account-subscription-panel");
+  const userMenuLinks = dropdown.querySelector(".account-menu-links");
   const subscriptionStatusNode = dropdown.querySelector(".account-subscription-status");
   const subscriptionStatusBadge = dropdown.querySelector(".account-subscription-status-badge");
   const subscriptionUntilNode = dropdown.querySelector(".account-subscription-until");
@@ -1970,6 +2065,7 @@ const setupAccountHub = () => {
   const premiumCheckoutSecondaryBtn = premiumCheckoutOverlay.querySelector(".premium-checkout-secondary");
   let selectedPremiumCheckoutOption = null;
   let premiumCheckoutOptionsReady = false;
+  let isSubscriptionPanelExpanded = false;
   let activeAuthPanel = "login";
   let lastPremiumFocusNode = null;
   const triggerNoticeBubble = document.createElement("p");
@@ -1981,6 +2077,17 @@ const setupAccountHub = () => {
   const formatNumber = (value) => Intl.NumberFormat().format(Math.max(0, Math.round(Number(value) || 0)));
   const guestAvatarIconMarkup =
     '<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true"><path d="M12 12.2a4.6 4.6 0 1 0 0-9.2 4.6 4.6 0 0 0 0 9.2zm0 2.2c-4.7 0-8.5 2.8-8.5 6.3 0 .7.5 1.3 1.2 1.3h14.6c.7 0 1.2-.6 1.2-1.3 0-3.5-3.8-6.3-8.5-6.3z"></path></svg>';
+
+  if (
+    subscriptionPanel &&
+    managePanel &&
+    userMenuLinks &&
+    subscriptionPanel.parentElement === managePanel
+  ) {
+    subscriptionPanel.remove();
+    userMenuLinks.insertAdjacentElement("afterend", subscriptionPanel);
+    subscriptionPanel.hidden = true;
+  }
   const formatPremiumEndDate = (value) => {
     const raw = String(value || "").trim();
     if (!raw) {
@@ -2051,6 +2158,7 @@ const setupAccountHub = () => {
   let subscriptionCancelInFlight = false;
   let premiumModalBodyLockActive = false;
   let premiumModalBodyLockScrollY = 0;
+  let premiumModalTouchStartY = 0;
 
   const setFeedback = (message, tone = "") => {
     if (!feedbackNode) {
@@ -2665,6 +2773,10 @@ const setupAccountHub = () => {
     if (managePanel) {
       managePanel.hidden = true;
     }
+    isSubscriptionPanelExpanded = false;
+    if (subscriptionPanel) {
+      subscriptionPanel.hidden = true;
+    }
   };
 
   const syncPremiumModalBodyLock = () => {
@@ -2683,6 +2795,52 @@ const setupAccountHub = () => {
       premiumModalBodyLockActive = false;
       premiumModalBodyLockScrollY = 0;
     }
+  };
+
+  const canScrollElementForDelta = (element, deltaY) => {
+    if (!(element instanceof HTMLElement)) {
+      return false;
+    }
+    const maxScrollTop = element.scrollHeight - element.clientHeight;
+    if (!(maxScrollTop > 0)) {
+      return false;
+    }
+    if (deltaY < 0) {
+      return element.scrollTop > 0;
+    }
+    if (deltaY > 0) {
+      return element.scrollTop < maxScrollTop;
+    }
+    return true;
+  };
+
+  const maybeBlockPremiumModalBackgroundScroll = (event) => {
+    if (premiumSetupOverlay.hidden) {
+      return;
+    }
+
+    const eventTarget = event.target;
+    const insideSetupCard =
+      premiumSetupCard instanceof HTMLElement && eventTarget instanceof Node && premiumSetupCard.contains(eventTarget);
+
+    if (insideSetupCard) {
+      let deltaY = 0;
+      if (event.type === "wheel") {
+        deltaY = Number(event.deltaY) || 0;
+      } else if (event.type === "touchmove") {
+        const touchY = Number(event.touches?.[0]?.clientY);
+        if (Number.isFinite(touchY)) {
+          deltaY = premiumModalTouchStartY - touchY;
+          premiumModalTouchStartY = touchY;
+        }
+      }
+
+      if (canScrollElementForDelta(premiumSetupCard, deltaY)) {
+        return;
+      }
+    }
+
+    event.preventDefault();
   };
 
   const setPremiumCheckoutFeedback = (message, tone = "") => {
@@ -2992,11 +3150,6 @@ const setupAccountHub = () => {
       typeof window.cosmicaGamification?.getState === "function"
         ? window.cosmicaGamification.getState()
         : null;
-    if (!snapshot?.isAuthenticated) {
-      setAuthPanel("login", true);
-      openDropdown();
-      return;
-    }
     if (snapshotHasPremiumAccess(snapshot)) {
       return;
     }
@@ -3063,6 +3216,27 @@ const setupAccountHub = () => {
       event.preventDefault();
       closePremiumSetupModal();
     }
+  });
+
+  document.addEventListener(
+    "touchstart",
+    (event) => {
+      if (premiumSetupOverlay.hidden) {
+        return;
+      }
+      const touchY = Number(event.touches?.[0]?.clientY);
+      if (Number.isFinite(touchY)) {
+        premiumModalTouchStartY = touchY;
+      }
+    },
+    { passive: true }
+  );
+
+  document.addEventListener("touchmove", maybeBlockPremiumModalBackgroundScroll, {
+    passive: false,
+  });
+  document.addEventListener("wheel", maybeBlockPremiumModalBackgroundScroll, {
+    passive: false,
   });
 
   const existingAccountHub =
@@ -3209,9 +3383,10 @@ const setupAccountHub = () => {
       setSubscriptionCancelConfirmationVisible(false);
     }
     if (subscriptionPanel) {
-      subscriptionPanel.hidden = !showSubscriptionManagement;
+      subscriptionPanel.hidden = !showSubscriptionManagement || !isSubscriptionPanelExpanded;
       if (!showSubscriptionManagement) {
         latestSubscriptionManageState = null;
+        isSubscriptionPanelExpanded = false;
       }
     }
     if (showSubscriptionManagement) {
@@ -3683,11 +3858,26 @@ const setupAccountHub = () => {
   };
 
   const openManageSubscriptionPanel = async () => {
-    if (managePanel) {
-      managePanel.hidden = false;
+    const snapshot =
+      typeof window.cosmicaGamification?.getState === "function"
+        ? window.cosmicaGamification.getState()
+        : null;
+    if (!subscriptionPanel || !snapshotHasPremiumAccess(snapshot)) {
+      isSubscriptionPanelExpanded = false;
+      if (subscriptionPanel) {
+        subscriptionPanel.hidden = true;
+      }
+      return;
     }
-    if (subscriptionPanel) {
-      subscriptionPanel.hidden = false;
+    const nextExpanded = !isSubscriptionPanelExpanded;
+    isSubscriptionPanelExpanded = nextExpanded;
+    subscriptionPanel.hidden = !nextExpanded;
+    if (!nextExpanded) {
+      setSubscriptionCancelConfirmationVisible(false);
+      return;
+    }
+    if (managePanel) {
+      managePanel.hidden = true;
     }
     if (passwordPanel) {
       passwordPanel.dataset.open = "0";
@@ -3785,17 +3975,20 @@ const setupAccountHub = () => {
     }
     const restoreStartedAtMs = Date.now();
     const minLoadingMs = 550;
+    const minLoadingMsForActivePlan = 2600;
     const previousLabel = manageRestorePremiumBtn.textContent;
     manageRestorePremiumBtn.disabled = true;
     manageRestorePremiumBtn.textContent = "Restoring...";
     setFeedback("Restoring premium subscription...", "info");
     try {
       const result = await window.cosmicaGamification.restorePremiumSubscription();
-      const waitMs = Math.max(0, minLoadingMs - (Date.now() - restoreStartedAtMs));
+      const status = String(result?.restoreStatus || "").trim().toLowerCase();
+      const restoredFromActivePlan = status === "restored" || status === "already_active";
+      const requiredLoadingMs = restoredFromActivePlan ? minLoadingMsForActivePlan : minLoadingMs;
+      const waitMs = Math.max(0, requiredLoadingMs - (Date.now() - restoreStartedAtMs));
       if (waitMs > 0) {
         await new Promise((resolve) => window.setTimeout(resolve, waitMs));
       }
-      const status = String(result?.restoreStatus || "").trim().toLowerCase();
       if (status === "restored") {
         setFeedback(
           String(result?.restoreMessage || "Premium restored successfully."),
@@ -3963,23 +4156,13 @@ const setupAccountHub = () => {
         status === 409 &&
         (Boolean(conflictProvider) || /account already exists/i.test(String(error?.message || "")));
       if (isExistingAccountConflict) {
-        const loginEmailInput = loginForm?.querySelector('input[name="email"]');
-        const loginPasswordInput = loginForm?.querySelector('input[name="password"]');
-        if (loginEmailInput) {
-          loginEmailInput.value = email;
-          setInputInvalidState(loginEmailInput, false);
-        }
-        if (loginPasswordInput) {
-          loginPasswordInput.value = "";
-          setInputInvalidState(loginPasswordInput, false);
-        }
         setSignupResendButtonVisible(false);
-        setAuthPanel("login", true);
+        setAuthPanel("signup", true);
         if (conflictProvider === "google") {
-          setFeedback("Account already exists. Use Log in with Google account.", "error");
+          setFeedback("Account already exists. Open the Log in tab and use Google sign-in.", "error");
           return;
         }
-        setFeedback("Account already exists. Log in using your email and password.", "error");
+        setFeedback("Account already exists. Open the Log in tab and sign in with your password.", "error");
         return;
       }
       setSignupResendButtonVisible(false);
@@ -3996,6 +4179,10 @@ const setupAccountHub = () => {
       if (action === "manage") {
         if (managePanel) {
           managePanel.hidden = !managePanel.hidden;
+          isSubscriptionPanelExpanded = false;
+          if (subscriptionPanel) {
+            subscriptionPanel.hidden = true;
+          }
           if (managePanel.hidden) {
             if (passwordPanel) {
               passwordPanel.dataset.open = "0";
@@ -4003,8 +4190,6 @@ const setupAccountHub = () => {
             }
             setDeleteConfirmationVisible(false);
             setSubscriptionCancelConfirmationVisible(false);
-          } else if (subscriptionPanel && !subscriptionPanel.hidden) {
-            void loadManageSubscriptionDetails({ showLoading: true });
           }
         }
         return;
@@ -5245,11 +5430,7 @@ const setupLettersTitleTranslation = async () => {
   if (!document.body.classList.contains("letters-page")) {
     return;
   }
-  const selectedBaseLanguage = String(
-    localStorage.getItem("cosmicaBaseLanguage") || ""
-  )
-    .trim()
-    .toLowerCase();
+  const selectedBaseLanguage = readStoredBaseLanguagePreference();
   const lettersHeading = document.querySelector(".letters-grid-section .section-title h2");
   if (!lettersHeading) {
     return;
@@ -5427,12 +5608,8 @@ const setupLettersSectionCompleteButton = () => {
         typeof window.cosmicaGamification.getState === "function" &&
         !window.cosmicaGamification.getState()?.isAuthenticated
       ) {
-        if (window.cosmicaAccountHub && typeof window.cosmicaAccountHub.openAuth === "function") {
-          window.cosmicaAccountHub.openAuth({
-            panel: "login",
-            message: "Log in to save section completion.",
-            tone: "info",
-          });
+        if (typeof window.cosmicaOpenSignupPanelUpwards === "function") {
+          window.cosmicaOpenSignupPanelUpwards("Sign up to save section completion.");
         }
         return;
       }
@@ -5556,12 +5733,8 @@ const setupLettersCardPracticeButtons = () => {
           typeof window.cosmicaGamification.getState === "function" &&
           !window.cosmicaGamification.getState()?.isAuthenticated
         ) {
-          if (window.cosmicaAccountHub && typeof window.cosmicaAccountHub.openAuth === "function") {
-            window.cosmicaAccountHub.openAuth({
-              panel: "login",
-              message: "Log in to save card practice progress.",
-              tone: "info",
-            });
+          if (typeof window.cosmicaOpenSignupPanelUpwards === "function") {
+            window.cosmicaOpenSignupPanelUpwards("Sign up to save card practice progress.");
           }
           return;
         }
@@ -5681,11 +5854,7 @@ const setupLettersHelperTranslation = async () => {
     mainNode.textContent = nativeText;
   }
 
-  const selectedBaseLanguage = String(
-    localStorage.getItem("cosmicaBaseLanguage") || ""
-  )
-    .trim()
-    .toLowerCase();
+  const selectedBaseLanguage = readStoredBaseLanguagePreference();
   if (!selectedBaseLanguage || selectedBaseLanguage === WORLD_KEY) {
     translationNode.textContent = "";
     translationNode.hidden = true;
@@ -5719,28 +5888,44 @@ const setupLettersHelperTranslation = async () => {
 const LETTER_ROMANIZATION_MAP = Object.freeze({
   korean: Object.freeze({
     ㄱ: "g/k",
+    ㄲ: "kk",
     ㄴ: "n",
     ㄷ: "d/t",
+    ㄸ: "tt",
     ㄹ: "r/l",
     ㅁ: "m",
     ㅂ: "b/p",
+    ㅃ: "pp",
     ㅅ: "s",
+    ㅆ: "ss",
     ㅇ: "ng (silent initial)",
     ㅈ: "j",
+    ㅉ: "jj",
     ㅊ: "ch",
     ㅋ: "k",
     ㅌ: "t",
     ㅍ: "p",
     ㅎ: "h",
     ㅏ: "a",
+    ㅐ: "ae",
     ㅑ: "ya",
+    ㅒ: "yae",
     ㅓ: "eo",
+    ㅔ: "e",
     ㅕ: "yeo",
+    ㅖ: "ye",
     ㅗ: "o",
+    ㅘ: "wa",
+    ㅙ: "wae",
+    ㅚ: "oe",
     ㅛ: "yo",
     ㅜ: "u",
+    ㅝ: "wo",
+    ㅞ: "we",
+    ㅟ: "wi",
     ㅠ: "yu",
     ㅡ: "eu",
+    ㅢ: "ui",
     ㅣ: "i",
   }),
   chinese: Object.freeze({
@@ -5768,6 +5953,14 @@ const LETTER_ROMANIZATION_MAP = Object.freeze({
     文: "wén",
     天: "tiān",
     地: "dì",
+    上: "shàng",
+    下: "xià",
+    左: "zuǒ",
+    右: "yòu",
+    大: "dà",
+    小: "xiǎo",
+    风: "fēng",
+    雨: "yǔ",
   }),
   japanese: Object.freeze({
     あ: "a",
@@ -5816,6 +6009,52 @@ const LETTER_ROMANIZATION_MAP = Object.freeze({
     わ: "wa",
     を: "wo",
     ん: "n",
+    ア: "a",
+    イ: "i",
+    ウ: "u",
+    エ: "e",
+    オ: "o",
+    カ: "ka",
+    キ: "ki",
+    ク: "ku",
+    ケ: "ke",
+    コ: "ko",
+    サ: "sa",
+    シ: "shi",
+    ス: "su",
+    セ: "se",
+    ソ: "so",
+    タ: "ta",
+    チ: "chi",
+    ツ: "tsu",
+    テ: "te",
+    ト: "to",
+    ナ: "na",
+    ニ: "ni",
+    ヌ: "nu",
+    ネ: "ne",
+    ノ: "no",
+    ハ: "ha",
+    ヒ: "hi",
+    フ: "fu",
+    ヘ: "he",
+    ホ: "ho",
+    マ: "ma",
+    ミ: "mi",
+    ム: "mu",
+    メ: "me",
+    モ: "mo",
+    ヤ: "ya",
+    ユ: "yu",
+    ヨ: "yo",
+    ラ: "ra",
+    リ: "ri",
+    ル: "ru",
+    レ: "re",
+    ロ: "ro",
+    ワ: "wa",
+    ヲ: "wo",
+    ン: "n",
   }),
   arabic: Object.freeze({
     ا: "ʾalif",
@@ -5854,6 +6093,7 @@ const LETTER_ROMANIZATION_MAP = Object.freeze({
     ई: "ī",
     उ: "u",
     ऊ: "ū",
+    ऋ: "ṛi",
     ए: "e",
     ऐ: "ai",
     ओ: "o",
@@ -5893,8 +6133,35 @@ const LETTER_ROMANIZATION_MAP = Object.freeze({
     ष: "ṣa",
     स: "sa",
     ह: "ha",
+    क्ष: "kṣa",
+    त्र: "tra",
+    ज्ञ: "jña",
+    श्र: "śra",
   }),
 });
+
+const REPORTED_MISSING_ROMANIZATION_KEYS = new Set();
+
+const isRomanizationDiagnosticsEnabled = () => {
+  const host = String(window.location.hostname || "").trim().toLowerCase();
+  const isLocalHost =
+    host === "localhost" ||
+    host === "127.0.0.1" ||
+    host === "::1" ||
+    host.endsWith(".local");
+  if (!isLocalHost) {
+    return false;
+  }
+  try {
+    const override = String(localStorage.getItem("cosmicaRomanizationDiagnostics") || "")
+      .trim()
+      .toLowerCase();
+    if (["0", "false", "off"].includes(override)) {
+      return false;
+    }
+  } catch {}
+  return true;
+};
 
 const setupLetterRomanization = () => {
   if (!document.body.classList.contains("letters-page")) {
@@ -5904,6 +6171,8 @@ const setupLetterRomanization = () => {
   if (!worldMap) {
     return;
   }
+  const diagnosticsEnabled = isRomanizationDiagnosticsEnabled();
+  const missingSymbols = diagnosticsEnabled ? [] : null;
   document.querySelectorAll(".letter-card").forEach((card) => {
     const letterEl = card.querySelector(".letter");
     if (!letterEl) {
@@ -5915,6 +6184,9 @@ const setupLetterRomanization = () => {
     }
     const romanization = worldMap[symbol];
     if (!romanization) {
+      if (missingSymbols) {
+        missingSymbols.push(symbol);
+      }
       return;
     }
     let romanizationEl = card.querySelector(".letter-romanization");
@@ -5928,6 +6200,26 @@ const setupLetterRomanization = () => {
     }
     romanizationEl.textContent = romanization;
   });
+
+  if (missingSymbols && missingSymbols.length) {
+    const uniqueMissingSymbols = [];
+    missingSymbols.forEach((symbol) => {
+      const diagnosticKey = `${WORLD_KEY}:${symbol}`;
+      if (REPORTED_MISSING_ROMANIZATION_KEYS.has(diagnosticKey)) {
+        return;
+      }
+      REPORTED_MISSING_ROMANIZATION_KEYS.add(diagnosticKey);
+      uniqueMissingSymbols.push(symbol);
+    });
+
+    if (uniqueMissingSymbols.length) {
+      console.warn(
+        `[Cosmica][Romanization] Missing letter mapping(s) for world "${WORLD_KEY}": ${uniqueMissingSymbols.join(
+          ", "
+        )}. Add them to LETTER_ROMANIZATION_MAP in frontend/app.js.`
+      );
+    }
+  }
 };
 
 const getChatRequestTimeoutMs = () => {
@@ -8091,6 +8383,43 @@ worldCards.forEach((card) => {
    WORLD PAGE NAVIGATION + LANGUAGE PICKER
    Handles map-card navigation and base-language selection persistence.
    ========================================================================== */
+const openGuestSignupPanelUpwards = (message = "Sign up to save your progress.") => {
+  const openSignupPanel = () => {
+    if (window.cosmicaAccountHub && typeof window.cosmicaAccountHub.openAuth === "function") {
+      window.cosmicaAccountHub.openAuth({
+        panel: "signup",
+        message,
+        tone: "info",
+      });
+      return;
+    }
+    window.location.href = "/index.html?openAuth=1&authPanel=signup";
+  };
+
+  const startY = Math.max(0, window.scrollY || window.pageYOffset || 0);
+  if (startY <= 8) {
+    openSignupPanel();
+    return;
+  }
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+
+  const startTs = performance.now();
+  const maxWaitMs = 900;
+  const waitUntilAtTop = () => {
+    const currentY = Math.max(0, window.scrollY || window.pageYOffset || 0);
+    const elapsed = performance.now() - startTs;
+    if (currentY <= 8 || elapsed >= maxWaitMs) {
+      openSignupPanel();
+      return;
+    }
+    window.requestAnimationFrame(waitUntilAtTop);
+  };
+  window.requestAnimationFrame(waitUntilAtTop);
+};
+
+window.cosmicaOpenSignupPanelUpwards = openGuestSignupPanelUpwards;
+
 const applyMapComingSoonRules = () => {
   if (!document.body.classList.contains("world-page")) {
     return;
@@ -8100,7 +8429,6 @@ const applyMapComingSoonRules = () => {
   if (!grammarCard) {
     return;
   }
-
   const snapshot =
     typeof window.cosmicaGamification?.getState === "function"
       ? window.cosmicaGamification.getState()
@@ -8276,6 +8604,13 @@ const bindPremiumLockedInteraction = (element, {
     const isAuthenticated = Boolean(snapshot?.isAuthenticated);
     event.preventDefault();
     if (!isAuthenticated) {
+      if (typeof window.cosmicaAccountHub?.openPremium === "function") {
+        window.cosmicaAccountHub.openPremium({
+          message: "Upgrade to Premium to unlock this map.",
+          tone: "info",
+        });
+        return;
+      }
       if (typeof window.cosmicaAccountHub?.openAuth === "function") {
         window.cosmicaAccountHub.openAuth({
           panel: guestPanel,
@@ -8360,7 +8695,7 @@ const navigateToMapLink = (href) => {
       sectionKey: `${mapKey}-entry`,
     });
   }
-  const baseLanguage = localStorage.getItem("cosmicaBaseLanguage") || "";
+  const baseLanguage = readStoredBaseLanguagePreference();
   if (!baseLanguage) {
     window.location.href = href;
     return;
@@ -8543,9 +8878,7 @@ if (languagePills.length) {
     }
   });
   const mapsSection = document.querySelector("#maps");
-  const storedLanguageRaw = normalizeLanguageLabel(
-    localStorage.getItem("cosmicaBaseLanguage")
-  ).toLowerCase();
+  const storedLanguageRaw = readStoredBaseLanguagePreference();
   const storedLanguage = storedLanguageRaw === WORLD_KEY ? "" : storedLanguageRaw;
   if (storedLanguageRaw === WORLD_KEY) {
     localStorage.removeItem("cosmicaBaseLanguage");
@@ -8585,7 +8918,7 @@ if (languagePills.length) {
   };
   const skipLanguageButton = ensureLanguageSkipButton();
   const applyLanguageChoice = (selectedLanguage = "", selectedPill = null) => {
-    const selected = normalizeLanguageLabel(selectedLanguage).toLowerCase();
+    const selected = normalizeStoredBaseLanguagePreference(selectedLanguage);
     availableLanguagePills.forEach((btn) => btn.classList.remove("is-selected"));
     if (selectedPill) {
       selectedPill.classList.add("is-selected");
@@ -8630,6 +8963,39 @@ if (languagePills.length) {
     }
     applyLanguageChoice(selected, pill);
   };
+  const commitBaseLanguageSelectionOnWorldLeave = () => {
+    if (!document.body.classList.contains("world-page")) {
+      return;
+    }
+    const selectedPill = availableLanguagePills.find((pill) =>
+      pill.classList.contains("is-selected")
+    );
+    const selectedLanguage = normalizeStoredBaseLanguagePreference(
+      selectedPill ? getLanguagePillKey(selectedPill) : ""
+    );
+    if (selectedLanguage) {
+      localStorage.setItem("cosmicaBaseLanguage", selectedLanguage);
+    } else {
+      localStorage.removeItem("cosmicaBaseLanguage");
+    }
+    refreshMapsForBaseLanguage();
+    applyWorldMapBilingualTitles();
+    updateMapsTitleVisibility();
+  };
+  const handleWorldLeaveVisibility = () => {
+    if (document.visibilityState === "hidden") {
+      commitBaseLanguageSelectionOnWorldLeave();
+    }
+  };
+  window.addEventListener("pagehide", commitBaseLanguageSelectionOnWorldLeave, {
+    passive: true,
+  });
+  window.addEventListener("beforeunload", commitBaseLanguageSelectionOnWorldLeave, {
+    passive: true,
+  });
+  document.addEventListener("visibilitychange", handleWorldLeaveVisibility, {
+    passive: true,
+  });
   const touchTapMaxMovePx = 10;
   const touchPillState = new WeakMap();
 
@@ -9434,6 +9800,49 @@ const runWhenBrowserIdle = (task) => {
   }
   window.setTimeout(task, 280);
 };
+
+const applySafeMediaLoadingHints = () => {
+  const applyHints = () => {
+    const viewportHeight = Math.max(window.innerHeight || 0, 1);
+    const aboveFoldThreshold = viewportHeight * 1.2;
+
+    document.querySelectorAll("img").forEach((img) => {
+      if (!img.getAttribute("decoding")) {
+        img.decoding = "async";
+      }
+
+      const rect = img.getBoundingClientRect();
+      const isLikelyAboveFold = rect.top < aboveFoldThreshold && rect.bottom > -64;
+
+      if (!img.getAttribute("loading") && !isLikelyAboveFold) {
+        img.loading = "lazy";
+      }
+
+      if (!img.getAttribute("fetchpriority") && !isLikelyAboveFold) {
+        try {
+          img.fetchPriority = "low";
+        } catch {}
+      }
+    });
+
+    document.querySelectorAll("iframe").forEach((frame) => {
+      if (!frame.getAttribute("loading")) {
+        frame.loading = "lazy";
+      }
+    });
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => {
+      runWhenBrowserIdle(applyHints);
+    });
+    return;
+  }
+
+  runWhenBrowserIdle(applyHints);
+};
+
+applySafeMediaLoadingHints();
 
 /* ==========================================================================
    REAL-USER PERFORMANCE (CORE WEB VITALS)

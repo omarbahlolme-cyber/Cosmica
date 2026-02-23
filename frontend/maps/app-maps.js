@@ -42,6 +42,25 @@ const BASE_LANGUAGES = [
   "uzbek",
   "vietnamese",
 ];
+const MAPS_INVALID_BASE_LANGUAGE_SENTINELS = new Set([
+  "none",
+  "no-base",
+  "nobase",
+  "skip",
+  "null",
+  "undefined",
+]);
+const normalizeMapsBaseLanguagePreference = (value) => {
+  const normalized = String(value || "")
+    .trim()
+    .toLowerCase();
+  if (!normalized || MAPS_INVALID_BASE_LANGUAGE_SENTINELS.has(normalized)) {
+    return "";
+  }
+  return normalized;
+};
+const readMapsBaseLanguagePreference = () =>
+  normalizeMapsBaseLanguagePreference(localStorage.getItem("cosmicaBaseLanguage"));
 
 const WORD_SECTION_ORDER = [
   "Greetings",
@@ -3232,11 +3251,38 @@ const isSectionCompletedInProgressState = (mapKey, sectionKey, mode = "complete"
 };
 
 const getPremiumAccessState = () => {
+  const readPremiumAccessHint = () => {
+    try {
+      const value = String(sessionStorage.getItem("cosmicaPremiumAccessHint") || "")
+        .trim()
+        .toLowerCase();
+      if (value === "1" || value === "true" || value === "yes") {
+        return true;
+      }
+      if (value === "0" || value === "false" || value === "no") {
+        return false;
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  };
+
   const snapshot =
     typeof window.cosmicaGamification?.getState === "function"
       ? window.cosmicaGamification.getState()
       : null;
-  if (!snapshot || snapshot.ready !== true) {
+  if (!snapshot) {
+    return readPremiumAccessHint() === true ? "loading" : "non-premium";
+  }
+  if (snapshot.ready !== true) {
+    const premiumHint = readPremiumAccessHint();
+    if (premiumHint === true) {
+      return "loading";
+    }
+    if (snapshot.isAuthenticated !== true) {
+      return "non-premium";
+    }
     return "loading";
   }
   const user = snapshot && snapshot.user && typeof snapshot.user === "object" ? snapshot.user : null;
@@ -3362,11 +3408,24 @@ const createSectionCompleteButton = (mapKey, sectionKey, options = {}) => {
   button.addEventListener("click", async (event) => {
     event.preventDefault();
     event.stopPropagation();
+    const guestNotAuthenticated =
+      window.cosmicaGamification &&
+      typeof window.cosmicaGamification.getState === "function" &&
+      !window.cosmicaGamification.getState()?.isAuthenticated;
     const premiumAccessState = getPremiumAccessState();
     if (premiumAccessState === "loading") {
       return;
     }
     if (premiumAccessState !== "premium") {
+      if (
+        guestNotAuthenticated &&
+        typeof window.cosmicaOpenSignupPanelUpwards === "function"
+      ) {
+        window.cosmicaOpenSignupPanelUpwards(
+          "Sign up to save progress and unlock checkmarks."
+        );
+        return;
+      }
       if (typeof window.cosmicaAccountHub?.openPremium === "function") {
         window.cosmicaAccountHub.openPremium({
           message: "Upgrade to Premium to unlock section and card checkmarks.",
@@ -3398,12 +3457,8 @@ const createSectionCompleteButton = (mapKey, sectionKey, options = {}) => {
       typeof window.cosmicaGamification.getState === "function" &&
       !window.cosmicaGamification.getState()?.isAuthenticated
     ) {
-      if (window.cosmicaAccountHub && typeof window.cosmicaAccountHub.openAuth === "function") {
-        window.cosmicaAccountHub.openAuth({
-          panel: "login",
-          message: "Log in to save section completion.",
-          tone: "info",
-        });
+      if (typeof window.cosmicaOpenSignupPanelUpwards === "function") {
+        window.cosmicaOpenSignupPanelUpwards("Sign up to save section completion.");
       }
       return;
     }
@@ -3439,6 +3494,35 @@ const createSectionCompleteButton = (mapKey, sectionKey, options = {}) => {
   });
   return button;
 };
+
+const refreshAllSectionCompleteButtons = () => {
+  document.querySelectorAll(".map-section-complete-btn").forEach((button) => {
+    const mapKey = String(button?.dataset?.mapKey || "").trim().toLowerCase();
+    const sectionKey = String(button?.dataset?.sectionKey || "").trim();
+    const mode = String(button?.dataset?.toggleMode || "complete").trim().toLowerCase();
+    if (!mapKey || !sectionKey) {
+      return;
+    }
+    applySectionCompleteButtonState(button, mapKey, sectionKey, mode);
+  });
+};
+
+let refreshAllSectionCompleteButtonsRafId = 0;
+const scheduleRefreshAllSectionCompleteButtons = () => {
+  if (refreshAllSectionCompleteButtonsRafId) {
+    return;
+  }
+  refreshAllSectionCompleteButtonsRafId = window.requestAnimationFrame(() => {
+    refreshAllSectionCompleteButtonsRafId = 0;
+    refreshAllSectionCompleteButtons();
+  });
+};
+
+if (typeof window.cosmicaGamification?.subscribe === "function") {
+  window.cosmicaGamification.subscribe(() => {
+    scheduleRefreshAllSectionCompleteButtons();
+  });
+}
 
 const createCardPracticeButton = (mapKey, sectionKey, cardKey) => {
   const practiceSectionKey = buildCardPracticeSectionKey(sectionKey, cardKey);
@@ -7833,11 +7917,7 @@ const renderGrammarModal = (section, index) => {
     return;
   }
 
-  const grammarTranslationLanguage = String(
-    localStorage.getItem("cosmicaBaseLanguage") || ""
-  )
-    .trim()
-    .toLowerCase();
+  const grammarTranslationLanguage = readMapsBaseLanguagePreference();
   const shouldTranslateExplanation =
     !!grammarTranslationLanguage &&
     !isWorldNativeBaseLanguage(grammarTranslationLanguage);
@@ -8417,7 +8497,7 @@ const resolveWordTranslation = (section, englishWord, baseLanguage) => {
 };
 
 const applyWordTranslations = () => {
-  const baseLanguage = String(localStorage.getItem("cosmicaBaseLanguage") || "").trim();
+  const baseLanguage = readMapsBaseLanguagePreference();
   document.querySelectorAll(".word-card").forEach((card) => {
     const word = card.dataset.word || card.querySelector(".word")?.textContent?.trim() || "";
     const section = card.closest("[data-section]")?.dataset.section || "Core words";
@@ -8774,9 +8854,7 @@ const applySectionFilterButtonTranslations = (mapType) => {
     return;
   }
 
-  const baseLanguage = String(localStorage.getItem("cosmicaBaseLanguage") || "")
-    .trim()
-    .toLowerCase();
+  const baseLanguage = readMapsBaseLanguagePreference();
 
   controls.querySelectorAll(".words-filter").forEach((button) => {
     ensureFilterButtonMainText(button, "");
@@ -8828,9 +8906,7 @@ const applySectionTitleTranslations = (mapType) => {
     return;
   }
 
-  const baseLanguage = String(localStorage.getItem("cosmicaBaseLanguage") || "")
-    .trim()
-    .toLowerCase();
+  const baseLanguage = readMapsBaseLanguagePreference();
   const sectionSelector =
     mapKey === "words"
       ? ".words-group[data-section]"
@@ -8986,9 +9062,7 @@ const applyGrammarCardTitleTranslations = () => {
   if (!isGrammarPage) {
     return;
   }
-  const baseLanguage = String(localStorage.getItem("cosmicaBaseLanguage") || "")
-    .trim()
-    .toLowerCase();
+  const baseLanguage = readMapsBaseLanguagePreference();
   document.querySelectorAll(".grammar-card").forEach((card) => {
     const titleNode = card.querySelector(".grammar-text");
     if (!titleNode) {
@@ -9202,7 +9276,7 @@ const resolvePhraseTranslation = (section, englishPhrase, baseLanguage) => {
 };
 
 const applyPhraseTranslations = () => {
-  const baseLanguage = String(localStorage.getItem("cosmicaBaseLanguage") || "").trim();
+  const baseLanguage = readMapsBaseLanguagePreference();
   document.querySelectorAll(".phrase-card").forEach((card) => {
     const phrase =
       card.dataset.phrase || card.querySelector(".phrase-text")?.textContent?.trim() || "";
@@ -9360,11 +9434,7 @@ const resolveGrammarTranslation = (section, exampleSentence, baseLanguage) => {
 };
 
 refreshMapsForBaseLanguage = () => {
-  const selectedBaseLanguage = String(
-    localStorage.getItem("cosmicaBaseLanguage") || ""
-  )
-    .trim()
-    .toLowerCase();
+  const selectedBaseLanguage = readMapsBaseLanguagePreference();
   const shouldPrioritizeTranslations =
     !!selectedBaseLanguage && (isNonEnglishWorld || selectedBaseLanguage !== "english");
 
@@ -9499,41 +9569,58 @@ if (!shouldRenderLoadingSkeleton && isGrammarPage) {
 }
 if (isWordsPage) {
   updateWordsTopState();
+  let wordsTopStateRafId = 0;
   window.addEventListener(
     "scroll",
     () => {
-      window.requestAnimationFrame(updateWordsTopState);
+      if (wordsTopStateRafId) {
+        return;
+      }
+      wordsTopStateRafId = window.requestAnimationFrame(() => {
+        wordsTopStateRafId = 0;
+        updateWordsTopState();
+      });
     },
     { passive: true }
   );
 }
 if (isPhrasesPage) {
   updatePhrasesTopState();
+  let phrasesTopStateRafId = 0;
   window.addEventListener(
     "scroll",
     () => {
-      window.requestAnimationFrame(updatePhrasesTopState);
+      if (phrasesTopStateRafId) {
+        return;
+      }
+      phrasesTopStateRafId = window.requestAnimationFrame(() => {
+        phrasesTopStateRafId = 0;
+        updatePhrasesTopState();
+      });
     },
     { passive: true }
   );
 }
 if (isGrammarPage) {
   updateGrammarTopState();
+  let grammarTopStateRafId = 0;
   window.addEventListener(
     "scroll",
     () => {
-      window.requestAnimationFrame(updateGrammarTopState);
+      if (grammarTopStateRafId) {
+        return;
+      }
+      grammarTopStateRafId = window.requestAnimationFrame(() => {
+        grammarTopStateRafId = 0;
+        updateGrammarTopState();
+      });
     },
     { passive: true }
   );
 }
 
 if (needsMapTranslations) {
-  const selectedBaseLanguage = String(
-    localStorage.getItem("cosmicaBaseLanguage") || ""
-  )
-    .trim()
-    .toLowerCase();
+  const selectedBaseLanguage = readMapsBaseLanguagePreference();
   const shouldPrioritizeTranslations =
     !!selectedBaseLanguage && (isNonEnglishWorld || selectedBaseLanguage !== "english");
   const shouldAwaitNetworkHydration =

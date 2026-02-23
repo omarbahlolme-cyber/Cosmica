@@ -30,6 +30,28 @@ This file tracks important runtime decisions and guardrails for `frontend/app.js
    - Base maps: `cosmicaMapTranslationsCache:v3`
    - World packs: `cosmicaWorldTranslationsCache:v1:<world>`
 3. Keep cache formats stable unless coordinated with migration logic.
+4. Runtime now deduplicates warm calls and skips near-fresh cache rewrites to reduce redundant network bursts.
+
+## Base-Language Rules (2026-02)
+
+1. If user selects no base language, no base-language translation text should render across world maps and map pages.
+2. Sentinel values are treated as empty (no base language):
+   - `none`, `no-base`, `nobase`, `skip`, `null`, `undefined`
+3. Frontend normalization is centralized and reused in:
+   - world map title bilingual text,
+   - letters helper/title translation,
+   - words/phrases/grammar translation surfaces.
+4. On world-page leave (`pagehide`, `beforeunload`, hidden visibility), selected language state is committed and map translation visibility is refreshed immediately.
+
+## Runtime Performance Guardrails (2026-02)
+
+1. Scroll-driven top-state updates on Words/Phrases/Grammar maps are RAF-deduplicated to avoid callback backlog under fast scroll.
+2. Resize-driven scrollbar width updates are RAF-throttled to avoid repeated layout writes.
+3. Safe non-visual media hints are applied at idle time:
+   - images default to `decoding="async"` when unset,
+   - below-the-fold images/iframes default to `loading="lazy"` when unset,
+   - below-the-fold image fetch priority is lowered when unset.
+4. These updates are performance-only and must not alter layout/visual design.
 
 ## Cloudflare Analytics
 

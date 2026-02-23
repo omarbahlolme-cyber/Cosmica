@@ -162,6 +162,40 @@ body.letters-page main {
   width: 100%;
 }
 
+body.letters-page[data-world="Japanese"] .letters-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.letters-script-heading {
+  margin: 8px 4px 14px;
+  font-size: clamp(1rem, 1.8vw, 1.22rem);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: rgba(224, 238, 255, 0.96);
+}
+
+body.letters-page[data-world="Japanese"] .letters-script-group {
+  margin-top: 18px;
+  padding: 16px 14px 14px;
+  border: 1px solid rgba(126, 202, 255, 0.24);
+  border-radius: 18px;
+  background:
+    linear-gradient(160deg, rgba(10, 18, 40, 0.58), rgba(7, 12, 26, 0.44)),
+    radial-gradient(circle at 88% 12%, rgba(132, 214, 255, 0.12), transparent 54%);
+}
+
+body.letters-page[data-world="Japanese"] .letters-script-group .letters-script-heading {
+  margin-top: 0;
+}
+
+body.letters-page[data-world="Japanese"] .letters-script-group .letters-grid {
+  margin-top: 0;
+}
+
+body.letters-page[data-world="Japanese"] .letters-script-group-katakana {
+  margin-top: 34px;
+}
+
 .letter-card {
   position: relative;
   border-radius: 18px;
@@ -228,6 +262,9 @@ body.letters-page main {
 @media (max-width: 720px) {
   .letters-grid {
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+  body.letters-page[data-world="Japanese"] .letters-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
   }
   .letter-card {
     min-height: 114px;
@@ -1284,6 +1321,16 @@ body.letters-page .letters-grid-section .section-title .eyebrow {
 body.letters-page .letters-grid-section .section-title h2 {
   font-size: clamp(2.15rem, 4.3vw, 3.15rem);
   line-height: 1.1;
+}
+
+body.letters-page[data-world="Arabic"] .letters-grid,
+html[lang="ar"] body.letters-page .letters-grid {
+  direction: rtl;
+}
+
+body.letters-page[data-world="Arabic"] .letter-card,
+html[lang="ar"] body.letters-page .letter-card {
+  direction: rtl;
 }
 
 .letter-card,

@@ -148,6 +148,88 @@ Run before production deploys:
 
 Run these after billing/auth incidents, token rotation, or production redeploys.
 
+Live signup verification (admin token required):
+
+```bash
+curl -sS "https://YOUR_HOST/api/admin/security/users?since=2026-02-22T00:00:00Z&limit=200" \
+   -H "x-admin-token: YOUR_ADMIN_SECURITY_TOKEN"
+```
+
+PowerShell equivalent:
+
+```powershell
+$Token = "YOUR_ADMIN_SECURITY_TOKEN"
+$Headers = @{ "x-admin-token" = $Token }
+Invoke-WebRequest -Uri "https://YOUR_HOST/api/admin/security/users?since=2026-02-22T00:00:00Z&limit=200" -Method GET -Headers $Headers
+```
+
+Use `email=user@example.com` for an exact user lookup.
+
+Manual premium grant on live (no shell):
+
+```bash
+curl -sS -X POST "https://YOUR_HOST/api/admin/security/users/grant-premium" \
+   -H "Content-Type: application/json" \
+   -H "x-admin-token: YOUR_ADMIN_SECURITY_TOKEN" \
+   -d '{"email":"user@example.com","days":365}'
+```
+
+Manual premium lifetime grant (until revoked):
+
+```bash
+curl -sS -X POST "https://YOUR_HOST/api/admin/security/users/grant-premium" \
+   -H "Content-Type: application/json" \
+   -H "x-admin-token: YOUR_ADMIN_SECURITY_TOKEN" \
+   -d '{"email":"user@example.com"}'
+```
+
+Manual premium revoke on live (no shell):
+
+```bash
+curl -sS -X POST "https://YOUR_HOST/api/admin/security/users/revoke-premium" \
+   -H "Content-Type: application/json" \
+   -H "x-admin-token: YOUR_ADMIN_SECURITY_TOKEN" \
+   -d '{"email":"user@example.com"}'
+```
+
+PowerShell equivalent for grant + verify + revoke:
+
+```powershell
+$Token = "YOUR_ADMIN_SECURITY_TOKEN"
+$Email = "user@example.com"
+$Headers = @{ "x-admin-token" = $Token }
+
+$GrantBody = @{ email = $Email; days = 365 } | ConvertTo-Json -Compress
+Invoke-WebRequest -Uri "https://YOUR_HOST/api/admin/security/users/grant-premium" -Method POST -Headers $Headers -ContentType "application/json" -Body $GrantBody
+
+Invoke-WebRequest -Uri ("https://YOUR_HOST/api/admin/security/users?email=" + [uri]::EscapeDataString($Email)) -Method GET -Headers $Headers
+
+$RevokeBody = @{ email = $Email } | ConvertTo-Json -Compress
+Invoke-WebRequest -Uri "https://YOUR_HOST/api/admin/security/users/revoke-premium" -Method POST -Headers $Headers -ContentType "application/json" -Body $RevokeBody
+```
+
+Admin endpoint error guide:
+
+- `404 Not Found`: route not deployed to live backend yet; deploy latest `main`.
+- `401/403`: missing/invalid `x-admin-token`.
+- PowerShell `curl` parsing/`unmatched close brace` errors: use `Invoke-WebRequest` + `ConvertTo-Json`.
+
+Fallback when `404` blocks urgent live grant:
+
+```bash
+npm run admin:grant:premium -- --email user@example.com --days 365
+git add backend/data/accounts.json
+git commit -m "Grant premium for user@example.com"
+git push origin main
+```
+
+Optional cleanup after verification:
+
+```bash
+git revert HEAD --no-edit
+git push origin main
+```
+
 1. Rotate webhook token if exposed:
    - Regenerate in Ko-fi Webhooks UI.
    - Update `KOFI_WEBHOOK_VERIFICATION_TOKEN` in production env.
