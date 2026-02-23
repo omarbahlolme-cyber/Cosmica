@@ -4466,7 +4466,6 @@ const setupAccountHub = () => {
 
   logoutCancelBtn?.addEventListener("click", () => {
     setLogoutConfirmationVisible(false);
-    setFeedback("Logout canceled.", "info");
   });
 
   logoutConfirmBtn?.addEventListener("click", async () => {

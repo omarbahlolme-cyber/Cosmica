@@ -2224,6 +2224,24 @@ const appendRegisteredAccountAuditEntry = async ({ userRecord = null, req = null
   return true;
 };
 
+const resolveRegisteredAccountSourceByUserId = (userId) => {
+  const normalizedUserId = String(userId || "").trim();
+  if (!normalizedUserId || !Array.isArray(registeredAccountsAudit)) {
+    return "";
+  }
+  for (let index = registeredAccountsAudit.length - 1; index >= 0; index -= 1) {
+    const entry = registeredAccountsAudit[index];
+    if (!isPlainObject(entry)) {
+      continue;
+    }
+    if (String(entry.userId || "").trim() !== normalizedUserId) {
+      continue;
+    }
+    return String(entry.source || "").trim().toLowerCase();
+  }
+  return "";
+};
+
 const createEmailVerificationChallenge = () => {
   const rawToken = crypto.randomBytes(32).toString("base64url");
   return {
@@ -4347,6 +4365,17 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
       userRecord.data = normalizeUserData(userRecord.data);
       if (!isPlainObject(userRecord.data.profile)) {
         userRecord.data.profile = {};
+      }
+      const registrationSource = resolveRegisteredAccountSourceByUserId(userRecord.id);
+      if (registrationSource === "signup-email") {
+        return res.redirect(
+          302,
+          buildAuthErrorRedirectPath("google_account_exists_email", stateData.returnTo, {
+            authEmail: email,
+            openAuth: "1",
+            authPanel: "login",
+          })
+        );
       }
       const existingAuthProvider =
         String(userRecord.data.profile.authProvider || "email").trim().toLowerCase() || "email";
