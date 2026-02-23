@@ -6821,6 +6821,20 @@ const observeRevealElement = (el) => {
   observedRevealElements.add(el);
 };
 
+const activateRevealStateForElement = (el) => {
+  if (!el || !(el instanceof HTMLElement)) {
+    return;
+  }
+  const isLanguageSection = el.id === "language";
+  const rect = el.getBoundingClientRect();
+  const isInitiallyInViewport = rect.bottom > 0 && rect.top < window.innerHeight * 0.96;
+  el.dataset.revealActive = "1";
+  if (!isLanguageSection && isInitiallyInViewport) {
+    el.classList.add("is-visible");
+    revealState.set(el, true);
+  }
+};
+
 const createRafThrottled = (callback) => {
   let rafId = 0;
   return () => {
@@ -6844,8 +6858,10 @@ document.querySelectorAll(".section").forEach((el) => {
     return;
   }
   el.classList.add("reveal");
+  activateRevealStateForElement(el);
 });
 document.querySelectorAll(".reveal").forEach((el) => {
+  activateRevealStateForElement(el);
   observeRevealElement(el);
 });
 
