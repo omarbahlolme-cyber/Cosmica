@@ -361,6 +361,18 @@ body.letters-page[data-world="Japanese"] .letters-script-group-katakana {
   color: var(--text);
 }
 
+.words-controls-register-label {
+  margin-top: 4px;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(190, 206, 232, 0.82);
+}
+
+.words-register-list {
+  margin-top: -2px;
+}
+
 .words-controls-list {
   display: flex;
   flex-wrap: wrap;

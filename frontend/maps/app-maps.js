@@ -3186,6 +3186,158 @@ const createSectionFilterButton = (title, value, sourceTitle = title) => {
   return button;
 };
 
+const REGISTER_LEVEL_ORDER = ["informal", "neutral", "polite", "formal"];
+const REGISTER_FILTER_LABELS = {
+  all: "All Registers",
+  informal: "Informal",
+  neutral: "Neutral",
+  polite: "Polite",
+  formal: "Formal",
+};
+
+const normalizeRegisterValue = (value) => {
+  const raw = String(value || "")
+    .trim()
+    .toLowerCase();
+  if (!raw) {
+    return "neutral";
+  }
+  if (["casual", "friendly", "informal"].includes(raw)) {
+    return "informal";
+  }
+  if (["neutral", "standard", "default"].includes(raw)) {
+    return "neutral";
+  }
+  if (["polite", "respectful", "honorific"].includes(raw)) {
+    return "polite";
+  }
+  if (["formal", "very formal", "ceremonial"].includes(raw)) {
+    return "formal";
+  }
+  return "neutral";
+};
+
+const inferKoreanRegisterFromText = (value) => {
+  const text = String(value || "")
+    .trim()
+    .replace(/[.!?]+$/g, "");
+  if (!text) {
+    return "neutral";
+  }
+
+  const explicitInformal = new Set([
+    "안녕",
+    "잘 가",
+    "미안해",
+    "고마워",
+    "괜찮아",
+    "잘 지내?",
+    "요즘 어때?",
+    "요즘 어때",
+  ]);
+  if (explicitInformal.has(text)) {
+    return "informal";
+  }
+
+  if (/(습니다|ㅂ니다|드립니다|올립니다|죄송합니다)$/.test(text)) {
+    return "formal";
+  }
+
+  if (/(세요|십시오|요|예요|에요|까요|나요|군요|네요)$/.test(text)) {
+    return "polite";
+  }
+
+  if (/(해|해요|줘|가|와|어|아)\?$/.test(text)) {
+    return "informal";
+  }
+
+  return "neutral";
+};
+
+const resolveCardRegister = (registerValue, fallbackText = "") => {
+  const explicit = String(registerValue || "").trim();
+  if (explicit) {
+    return normalizeRegisterValue(explicit);
+  }
+  if (WORLD_KEY === "korean") {
+    return inferKoreanRegisterFromText(fallbackText);
+  }
+  return "neutral";
+};
+
+const getDefaultRegisterFilterForWorld = () => "all";
+
+const getRegisterFilterLabel = (register) => {
+  const key = String(register || "all").trim().toLowerCase();
+  return REGISTER_FILTER_LABELS[key] || REGISTER_FILTER_LABELS.neutral;
+};
+
+const ensureCardRegisterBadge = (card) => {
+  return null;
+};
+
+const applyCardRegisterBadge = (card, registerValue) => {
+  if (!card) {
+    return;
+  }
+  const normalized = resolveCardRegister(registerValue, card.dataset.word || card.dataset.phrase);
+  card.dataset.register = normalized;
+  const badge = card.querySelector(".map-register-badge");
+  if (badge) {
+    badge.remove();
+  }
+};
+
+const getRegisterFilterOptionsForSections = (sections, cardSelector) => {
+  const values = new Set();
+  sections.forEach((section) => {
+    section.querySelectorAll(cardSelector).forEach((card) => {
+      values.add(normalizeRegisterValue(card.dataset.register));
+    });
+  });
+  if (!values.size) {
+    return [];
+  }
+  const hasMeaningfulRegister = Array.from(values).some((value) => value !== "neutral");
+  if (!hasMeaningfulRegister) {
+    return [];
+  }
+  return ["all", ...REGISTER_LEVEL_ORDER.filter((value) => values.has(value))];
+};
+
+const applySectionAndRegisterFilter = (
+  sections,
+  sectionFilter,
+  registerFilter,
+  cardSelector,
+  onAfterApply
+) => {
+  const activeSection = String(sectionFilter || "all");
+  const activeRegister = String(registerFilter || "all").trim().toLowerCase();
+  sections.forEach((section) => {
+    const matchesSection = activeSection === "all" || section.dataset.section === activeSection;
+    let visibleCards = 0;
+    section.querySelectorAll(cardSelector).forEach((card) => {
+      const cardRegister = normalizeRegisterValue(card.dataset.register);
+      const matchesRegister = activeRegister === "all" || cardRegister === activeRegister;
+      card.style.display = matchesRegister ? "" : "none";
+      if (matchesRegister) {
+        visibleCards += 1;
+      }
+    });
+    const showSection = matchesSection && visibleCards > 0;
+    section.style.display = showSection ? "" : "none";
+    if (showSection) {
+      section.classList.add("is-visible");
+    } else {
+      section.classList.remove("is-visible");
+    }
+  });
+  if (typeof onAfterApply === "function") {
+    onAfterApply();
+  }
+};
+
 const trackMapSectionEvent = (mapKey, sectionKey, status = "started", score = null, questToggleMode = "") => {
   if (typeof window.cosmicaTrackLearningProgress !== "function") {
     return;
@@ -3582,6 +3734,8 @@ const renderWordsSections = () => {
           </svg>
         </button>
       `;
+      const worldEntry = WORLD_TRANSLATIONS?.words?.[sectionName]?.[word] || null;
+      applyCardRegisterBadge(card, worldEntry?.register);
       card.appendChild(createCardPracticeButton("words", sectionName, word));
       grid.appendChild(card);
     });
@@ -3599,6 +3753,7 @@ const renderWordsSections = () => {
 
   if (controls) {
     let activeFilter = "all";
+    let activeRegisterFilter = getDefaultRegisterFilterForWorld();
     const wordsUi = getWordsUiLabels();
     const eyebrow = document.createElement("div");
     eyebrow.className = "words-controls-eyebrow";
@@ -3624,21 +3779,17 @@ const renderWordsSections = () => {
       list.appendChild(createSectionFilterButton(displayName, sectionName, sectionName));
     });
 
-    const applyFilter = (filter) => {
-      activeFilter = String(filter || "all");
+    const applyFilter = () => {
       if (document.body.classList.contains("words-page")) {
-        document.body.dataset.wordsFilter = filter;
+        document.body.dataset.wordsFilter = activeFilter;
       }
-      sections.forEach((section) => {
-        const show = filter === "all" || section.dataset.section === filter;
-        section.style.display = show ? "" : "none";
-        if (show) {
-          section.classList.add("is-visible");
-        } else {
-          section.classList.remove("is-visible");
-        }
-      });
-      updateWordsTopState();
+      applySectionAndRegisterFilter(
+        sections,
+        activeFilter,
+        activeRegisterFilter,
+        ".word-card",
+        updateWordsTopState
+      );
     };
 
     list.addEventListener("click", (event) => {
@@ -3649,7 +3800,8 @@ const renderWordsSections = () => {
       list.querySelectorAll(".words-filter").forEach((btn) => btn.classList.remove("is-active"));
       button.classList.add("is-active");
       const filter = button.dataset.filter || "all";
-      applyFilter(filter);
+      activeFilter = filter;
+      applyFilter();
       if (filter !== "all") {
         trackMapSectionEvent("words", filter, "started");
       }
@@ -3680,9 +3832,46 @@ const renderWordsSections = () => {
       }
     });
 
+    const registerOptions = getRegisterFilterOptionsForSections(sections, ".word-card");
+    if (registerOptions.length && !registerOptions.includes(activeRegisterFilter)) {
+      activeRegisterFilter = "all";
+    }
+
     controls.appendChild(eyebrow);
     controls.appendChild(label);
     controls.appendChild(list);
+
+    if (registerOptions.length) {
+      const registerLabel = document.createElement("div");
+      registerLabel.className = "words-controls-register-label";
+      registerLabel.textContent = "Register";
+      const registerList = document.createElement("div");
+      registerList.className = "words-controls-list words-register-list";
+      registerOptions.forEach((value) => {
+        const button = createSectionFilterButton(getRegisterFilterLabel(value), value);
+        button.dataset.registerFilter = value;
+        if (value === activeRegisterFilter) {
+          button.classList.add("is-active");
+        }
+        registerList.appendChild(button);
+      });
+      registerList.addEventListener("click", (event) => {
+        const button = event.target.closest(".words-filter[data-register-filter]");
+        if (!button) {
+          return;
+        }
+        registerList
+          .querySelectorAll(".words-filter[data-register-filter]")
+          .forEach((btn) => btn.classList.remove("is-active"));
+        button.classList.add("is-active");
+        activeRegisterFilter = String(button.dataset.registerFilter || "all").toLowerCase();
+        applyFilter();
+      });
+      controls.appendChild(registerLabel);
+      controls.appendChild(registerList);
+    }
+
+    applyFilter();
   }
 };
 
@@ -3737,6 +3926,8 @@ const renderPhrasesSections = () => {
           </svg>
         </button>
       `;
+      const worldEntry = WORLD_TRANSLATIONS?.phrases?.[sectionName]?.[phrase] || null;
+      applyCardRegisterBadge(card, worldEntry?.register);
       card.appendChild(createCardPracticeButton("phrases", sectionName, phrase));
       grid.appendChild(card);
     });
@@ -3754,6 +3945,7 @@ const renderPhrasesSections = () => {
 
   if (controls) {
     let activeFilter = "all";
+    let activeRegisterFilter = getDefaultRegisterFilterForWorld();
     const phrasesUi = getPhrasesUiLabels();
     const eyebrow = document.createElement("div");
     eyebrow.className = "words-controls-eyebrow";
@@ -3778,21 +3970,17 @@ const renderPhrasesSections = () => {
       list.appendChild(createSectionFilterButton(displayName, sectionName, sectionName));
     });
 
-    const applyFilter = (filter) => {
-      activeFilter = String(filter || "all");
+    const applyFilter = () => {
       if (document.body.classList.contains("phrases-page")) {
-        document.body.dataset.phrasesFilter = filter;
+        document.body.dataset.phrasesFilter = activeFilter;
       }
-      sections.forEach((section) => {
-        const show = filter === "all" || section.dataset.section === filter;
-        section.style.display = show ? "" : "none";
-        if (show) {
-          section.classList.add("is-visible");
-        } else {
-          section.classList.remove("is-visible");
-        }
-      });
-      updatePhrasesTopState();
+      applySectionAndRegisterFilter(
+        sections,
+        activeFilter,
+        activeRegisterFilter,
+        ".phrase-card",
+        updatePhrasesTopState
+      );
     };
 
     list.addEventListener("click", (event) => {
@@ -3803,7 +3991,8 @@ const renderPhrasesSections = () => {
       list.querySelectorAll(".words-filter").forEach((btn) => btn.classList.remove("is-active"));
       button.classList.add("is-active");
       const filter = button.dataset.filter || "all";
-      applyFilter(filter);
+      activeFilter = filter;
+      applyFilter();
       if (filter !== "all") {
         trackMapSectionEvent("phrases", filter, "started");
       }
@@ -3834,9 +4023,46 @@ const renderPhrasesSections = () => {
       }
     });
 
+    const registerOptions = getRegisterFilterOptionsForSections(sections, ".phrase-card");
+    if (registerOptions.length && !registerOptions.includes(activeRegisterFilter)) {
+      activeRegisterFilter = "all";
+    }
+
     controls.appendChild(eyebrow);
     controls.appendChild(label);
     controls.appendChild(list);
+
+    if (registerOptions.length) {
+      const registerLabel = document.createElement("div");
+      registerLabel.className = "words-controls-register-label";
+      registerLabel.textContent = "Register";
+      const registerList = document.createElement("div");
+      registerList.className = "words-controls-list words-register-list";
+      registerOptions.forEach((value) => {
+        const button = createSectionFilterButton(getRegisterFilterLabel(value), value);
+        button.dataset.registerFilter = value;
+        if (value === activeRegisterFilter) {
+          button.classList.add("is-active");
+        }
+        registerList.appendChild(button);
+      });
+      registerList.addEventListener("click", (event) => {
+        const button = event.target.closest(".words-filter[data-register-filter]");
+        if (!button) {
+          return;
+        }
+        registerList
+          .querySelectorAll(".words-filter[data-register-filter]")
+          .forEach((btn) => btn.classList.remove("is-active"));
+        button.classList.add("is-active");
+        activeRegisterFilter = String(button.dataset.registerFilter || "all").toLowerCase();
+        applyFilter();
+      });
+      controls.appendChild(registerLabel);
+      controls.appendChild(registerList);
+    }
+
+    applyFilter();
   }
 };
 
@@ -8439,6 +8665,12 @@ const resolveWordRomanization = (section, worldWord) => {
   return String(worldEntry?.romanization || "").trim();
 };
 
+const resolveWordRegister = (section, worldWord) => {
+  const sectionKey = section || WORD_SECTION_ORDER[0];
+  const worldEntry = resolveWorldWordEntry(sectionKey, worldWord);
+  return resolveCardRegister(worldEntry?.register, worldWord);
+};
+
 const resolveWordTranslation = (section, englishWord, baseLanguage) => {
   if (!baseLanguage || !translationPayloadReady) {
     return "";
@@ -8524,6 +8756,8 @@ const applyWordTranslations = () => {
       card.insertBefore(romanizationEl, translationEl);
     }
     const romanization = resolveWordRomanization(section, word);
+    const register = resolveWordRegister(section, word);
+    applyCardRegisterBadge(card, register);
     romanizationEl.textContent = romanization;
     romanizationEl.hidden = !romanization;
     translationEl.textContent = resolveWordTranslation(section, word, baseLanguage);
@@ -9240,6 +9474,16 @@ const resolvePhraseRomanization = (section, worldPhrase) => {
   return String(worldEntry?.romanization || "").trim();
 };
 
+const resolvePhraseRegister = (section, worldPhrase) => {
+  const sectionKey = section || PHRASE_SECTION_ORDER[0];
+  const worldEntry = resolveWorldPhraseEntry(sectionKey, worldPhrase);
+  const resolved = resolveCardRegister(worldEntry?.register, worldPhrase);
+  if (["korean", "japanese", "hindi"].includes(WORLD_KEY) && resolved === "neutral") {
+    return "polite";
+  }
+  return resolved;
+};
+
 const resolvePhraseTranslation = (section, englishPhrase, baseLanguage) => {
   if (!baseLanguage || !translationPayloadReady) {
     return "";
@@ -9305,6 +9549,8 @@ const applyPhraseTranslations = () => {
       card.insertBefore(romanizationEl, translationEl);
     }
     const romanization = resolvePhraseRomanization(section, phrase);
+    const register = resolvePhraseRegister(section, phrase);
+    applyCardRegisterBadge(card, register);
     romanizationEl.textContent = romanization;
     romanizationEl.hidden = !romanization;
     const resolved = resolvePhraseTranslation(section, phrase, baseLanguage);

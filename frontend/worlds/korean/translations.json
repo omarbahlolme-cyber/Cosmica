@@ -42,13 +42,15 @@
         "source": "hi",
         "translations": {
           "english": "hi"
-        }
+        },
+        "register": "informal"
       },
       "안녕하세요": {
         "source": "hello",
         "translations": {
           "english": "hello"
-        }
+        },
+        "register": "polite"
       },
       "좋은 아침": {
         "source": "good morning",
@@ -78,13 +80,15 @@
         "source": "goodbye",
         "translations": {
           "english": "goodbye"
-        }
+        },
+        "register": "polite"
       },
       "잘 가": {
         "source": "bye",
         "translations": {
           "english": "bye"
-        }
+        },
+        "register": "informal"
       },
       "또 봐요": {
         "source": "see you",
@@ -108,19 +112,22 @@
         "source": "excuse me",
         "translations": {
           "english": "excuse me"
-        }
+        },
+        "register": "polite"
       },
-      "죄송합니다": {
+      "미안해": {
         "source": "sorry",
         "translations": {
           "english": "sorry"
-        }
+        },
+        "register": "informal"
       },
       "감사합니다": {
         "source": "thank you",
         "translations": {
           "english": "thank you"
-        }
+        },
+        "register": "polite"
       },
       "천만에요": {
         "source": "you're welcome",
@@ -128,11 +135,12 @@
           "english": "you're welcome"
         }
       },
-      "고마워요": {
+      "고마워": {
         "source": "thanks",
         "translations": {
           "english": "thanks"
-        }
+        },
+        "register": "informal"
       },
       "좋은 하루": {
         "source": "good day",
@@ -144,30 +152,27 @@
         "source": "how are you",
         "translations": {
           "english": "how are you"
-        }
+        },
+        "register": "polite"
       },
       "만나서 반갑습니다": {
         "source": "nice to meet you",
         "translations": {
           "english": "nice to meet you"
-        }
+        },
+        "register": "formal"
       },
       "만나서 기쁩니다": {
         "source": "pleased to meet you",
         "translations": {
           "english": "pleased to meet you"
-        }
+        },
+        "register": "formal"
       },
       "나중에 봐요": {
         "source": "see you later",
         "translations": {
           "english": "see you later"
-        }
-      },
-      "곧 봐요": {
-        "source": "see you soon",
-        "translations": {
-          "english": "see you soon"
         }
       },
       "내일 봐요": {
@@ -6349,25 +6354,29 @@
         "source": "how are you",
         "translations": {
           "english": "how are you"
-        }
+        },
+        "register": "polite"
       },
-      "잘 지내세요": {
+      "잘 지내?": {
         "source": "how are you doing",
         "translations": {
           "english": "how are you doing"
-        }
+        },
+        "register": "informal"
       },
-      "어떻게 지내고 있어요": {
+      "요즘 어때?": {
         "source": "how is it going",
         "translations": {
           "english": "how is it going"
-        }
+        },
+        "register": "informal"
       },
       "만나서 반가워요": {
         "source": "nice to see you",
         "translations": {
           "english": "nice to see you"
-        }
+        },
+        "register": "polite"
       },
       "다시 오신 것을 환영합니다": {
         "source": "welcome back",
@@ -6417,37 +6426,43 @@
         "source": "excuse me",
         "translations": {
           "english": "excuse me"
-        }
+        },
+        "register": "polite"
       },
       "죄송합니다": {
         "source": "i am sorry",
         "translations": {
           "english": "i am sorry"
-        }
+        },
+        "register": "polite"
       },
-      "그에 대해 죄송합니다": {
+      "미안해": {
         "source": "sorry about that",
         "translations": {
           "english": "sorry about that"
-        }
+        },
+        "register": "informal"
       },
       "감사합니다": {
         "source": "i appreciate it",
         "translations": {
           "english": "i appreciate it"
-        }
+        },
+        "register": "polite"
       },
       "대단히 감사합니다": {
         "source": "thank you very much",
         "translations": {
           "english": "thank you very much"
-        }
+        },
+        "register": "formal"
       },
-      "정말 감사합니다": {
+      "정말 고마워": {
         "source": "thanks a lot",
         "translations": {
           "english": "thanks a lot"
-        }
+        },
+        "register": "informal"
       },
       "천만에요": {
         "source": "you are welcome",
@@ -6455,17 +6470,19 @@
           "english": "you are welcome"
         }
       },
-      "문제 없어요": {
+      "괜찮아": {
         "source": "no problem",
         "translations": {
           "english": "no problem"
-        }
+        },
+        "register": "informal"
       },
       "괜찮아요": {
         "source": "that is okay",
         "translations": {
           "english": "that is okay"
-        }
+        },
+        "register": "polite"
       },
       "먼저 가세요": {
         "source": "after you",
@@ -6473,17 +6490,19 @@
           "english": "after you"
         }
       },
-      "제 사과를 드립니다": {
+      "진심으로 사과드립니다": {
         "source": "my apologies",
         "translations": {
           "english": "my apologies"
-        }
+        },
+        "register": "formal"
       },
-      "제발 용서해 주세요": {
+      "용서해 주세요": {
         "source": "please forgive me",
         "translations": {
           "english": "please forgive me"
-        }
+        },
+        "register": "polite"
       }
     },
     "Introductions": {
@@ -11826,10 +11845,10 @@
         "take care": "조심하세요",
         "welcome": "환영합니다",
         "excuse me": "실례합니다",
-        "sorry": "죄송합니다",
+        "sorry": "미안해",
         "thank you": "감사합니다",
         "you're welcome": "천만에요",
-        "thanks": "고마워요",
+        "thanks": "고마워",
         "good day": "좋은 하루",
         "how are you": "어떻게 지내세요",
         "nice to meet you": "만나서 반갑습니다",
@@ -12913,8 +12932,8 @@
         "good evening": "좋은 저녁",
         "good night": "안녕히 주무세요",
         "how are you": "어떻게 지내세요",
-        "how are you doing": "잘 지내세요",
-        "how is it going": "어떻게 지내고 있어요",
+        "how are you doing": "잘 지내?",
+        "how is it going": "요즘 어때?",
         "good to see you": "만나서 반가워요",
         "nice to see you": "만나서 반가워요",
         "welcome back": "다시 오신 것을 환영합니다",
@@ -12930,17 +12949,17 @@
         "excuse me": "실례합니다",
         "pardon me": "죄송합니다",
         "i am sorry": "죄송합니다",
-        "sorry about that": "그에 대해 죄송합니다",
+        "sorry about that": "미안해",
         "thank you": "감사합니다",
         "thank you very much": "대단히 감사합니다",
-        "thanks a lot": "정말 감사합니다",
+        "thanks a lot": "정말 고마워",
         "i appreciate it": "감사합니다",
         "you are welcome": "천만에요",
-        "no problem": "문제 없어요",
+        "no problem": "괜찮아",
         "that is okay": "괜찮아요",
         "after you": "먼저 가세요",
-        "my apologies": "제 사과를 드립니다",
-        "please forgive me": "제발 용서해 주세요"
+        "my apologies": "진심으로 사과드립니다",
+        "please forgive me": "용서해 주세요"
       },
       "Introductions": {
         "my name is": "내 이름은",
