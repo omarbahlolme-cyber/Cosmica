@@ -136,6 +136,27 @@ Source backups above protect repository history, but real user accounts live in 
      - verification email delivery failures
      - startup auth config audit warnings/errors
 
+### 4.4 Security audit allowlist (temporary upstream exception)
+
+The quality gate now runs `npm run security:audit` via `scripts/security-audit-check.js`.
+
+Current behavior:
+1. Fails on any new/unexpected vulnerability with severity `moderate` or higher.
+2. Temporarily allows only the known upstream transitive chain tied to:
+   - `google-gax`
+   - `rimraf`
+   - `glob`
+   - `minimatch`
+   - Advisory: `GHSA-3ppc-4f35-3m26`
+
+Why this exists:
+- The vulnerability is currently inherited via upstream package constraints and cannot be fully removed without upstream releases.
+
+Removal rule:
+1. Periodically run `npm audit --json` and check whether the advisory is still present.
+2. When upstream updates remove this chain, delete the allowlist entries in `scripts/security-audit-check.js`.
+3. Keep the strict fail-on-moderate-or-higher rule for everything else.
+
 ### 4.1 Auth readiness checks
 
 Run before production deploys:
