@@ -2519,6 +2519,11 @@ const setupAccountHub = () => {
         tone: "error",
         panel: "login",
       },
+      google_username_taken: {
+        message: "Username is already taken. Choose a different username in Sign up.",
+        tone: "error",
+        panel: "signup",
+      },
       google_flow: {
         message: "Google auth flow expired or mismatched. Start again from this panel.",
         tone: "error",

@@ -4264,10 +4264,21 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
           })
         );
       }
+      const displayName = sanitizeDisplayName(profile.name || profile.given_name || "", email);
+      const existingDisplayNameUser = findExistingUserByDisplayName(displayName);
+      if (existingDisplayNameUser) {
+        return res.redirect(
+          302,
+          buildAuthErrorRedirectPath("google_username_taken", stateData.returnTo, {
+            authEmail: email,
+            openAuth: "1",
+            authPanel: "signup",
+          })
+        );
+      }
       const userId = crypto.randomUUID();
       const generatedPassword = crypto.randomBytes(24).toString("base64url");
       const passwordRecord = await buildPasswordRecord(generatedPassword);
-      const displayName = sanitizeDisplayName(profile.name || profile.given_name || "", email);
       userRecord = {
         id: userId,
         email,
