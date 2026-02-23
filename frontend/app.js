@@ -945,6 +945,7 @@ window.cosmicaAuth = createCosmicaAuthClient();
    Shared account session, progress state, and premium learning dashboard.
    ========================================================================== */
 const createCosmicaGamificationClient = () => {
+  const AUTH_STATE_HINT_KEY = "cosmicaAuthStateHint";
   const PREMIUM_ACCESS_HINT_KEY = "cosmicaPremiumAccessHint";
   const PREMIUM_PROGRESS_CHECKPOINT_INTERVAL_MS = 18000;
   const listeners = new Set();
@@ -961,6 +962,12 @@ const createCosmicaGamificationClient = () => {
   let premiumCheckpointDirty = false;
   let premiumCheckpointInFlight = false;
   let premiumCheckpointLifecycleBound = false;
+
+  const setAuthStateHint = (isAuthenticated) => {
+    try {
+      sessionStorage.setItem(AUTH_STATE_HINT_KEY, isAuthenticated ? "1" : "0");
+    } catch {}
+  };
 
   const setPremiumAccessHint = (hasPremiumAccess) => {
     try {
@@ -1210,6 +1217,7 @@ const createCosmicaGamificationClient = () => {
       state.user = null;
       state.progress = buildDefaultProgress();
       state.error = "";
+      setAuthStateHint(false);
       setPremiumAccessHint(false);
       premiumCheckpointDirty = false;
       stopPremiumCheckpointTimer();
@@ -1301,6 +1309,7 @@ const createCosmicaGamificationClient = () => {
       premiumStatus === "grace";
     const hasPremiumAccess =
       hasPremiumAccessFromFlags || statusIndicatesPremium || hasFuturePremiumEnd;
+    setAuthStateHint(true);
     setPremiumAccessHint(hasPremiumAccess);
     state.isAuthenticated = true;
     state.user = {
@@ -2078,14 +2087,24 @@ const setupAccountHub = () => {
   const guestAvatarIconMarkup =
     '<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true"><path d="M12 12.2a4.6 4.6 0 1 0 0-9.2 4.6 4.6 0 0 0 0 9.2zm0 2.2c-4.7 0-8.5 2.8-8.5 6.3 0 .7.5 1.3 1.2 1.3h14.6c.7 0 1.2-.6 1.2-1.3 0-3.5-3.8-6.3-8.5-6.3z"></path></svg>';
 
-  if (
-    subscriptionPanel &&
-    managePanel &&
-    userMenuLinks &&
-    subscriptionPanel.parentElement === managePanel
-  ) {
-    subscriptionPanel.remove();
-    userMenuLinks.insertAdjacentElement("afterend", subscriptionPanel);
+  if (subscriptionPanel) {
+    const premiumAnchorParent = premiumCtaBtn?.parentElement || null;
+    const isAnchoredUnderPremiumButton =
+      Boolean(premiumAnchorParent) &&
+      subscriptionPanel.parentElement === premiumAnchorParent &&
+      subscriptionPanel.previousElementSibling === premiumCtaBtn;
+    if (!isAnchoredUnderPremiumButton && premiumCtaBtn) {
+      subscriptionPanel.remove();
+      premiumCtaBtn.insertAdjacentElement("afterend", subscriptionPanel);
+    } else if (
+      !premiumCtaBtn &&
+      managePanel &&
+      userMenuLinks &&
+      subscriptionPanel.parentElement === managePanel
+    ) {
+      subscriptionPanel.remove();
+      userMenuLinks.insertAdjacentElement("afterend", subscriptionPanel);
+    }
     subscriptionPanel.hidden = true;
   }
   const formatPremiumEndDate = (value) => {
@@ -2153,6 +2172,7 @@ const setupAccountHub = () => {
   let passwordProviderNoteAlertTimerId = 0;
   let authRedirectFeedbackLock = false;
   let authRedirectFeedbackLockTimerId = 0;
+  let noActivePlanFeedbackTimerId = 0;
   let latestSubscriptionManageState = null;
   let subscriptionManageInFlight = false;
   let subscriptionCancelInFlight = false;
@@ -2166,6 +2186,24 @@ const setupAccountHub = () => {
     }
     feedbackNode.textContent = String(message || "");
     feedbackNode.dataset.tone = tone;
+  };
+
+  const scheduleNoActivePlanFeedbackAutoClear = (durationMs = 2500) => {
+    if (noActivePlanFeedbackTimerId) {
+      window.clearTimeout(noActivePlanFeedbackTimerId);
+      noActivePlanFeedbackTimerId = 0;
+    }
+    noActivePlanFeedbackTimerId = window.setTimeout(() => {
+      noActivePlanFeedbackTimerId = 0;
+      if (!feedbackNode) {
+        return;
+      }
+      const currentMessage = String(feedbackNode.textContent || "").trim().toLowerCase();
+      const currentTone = String(feedbackNode.dataset?.tone || "").trim().toLowerCase();
+      if (currentMessage === "no active premium plan found." && currentTone === "error") {
+        setFeedback("");
+      }
+    }, Math.max(2000, Number(durationMs) || 2500));
   };
 
   const setAuthRedirectFeedbackLock = (durationMs = 9000) => {
@@ -3303,6 +3341,7 @@ const setupAccountHub = () => {
 
   const renderFromState = (snapshot) => {
     const isAuthenticated = Boolean(snapshot?.isAuthenticated);
+    const shouldSuppressGuestFlash = !snapshot?.ready && !isAuthenticated;
     const hasPremiumAccess = snapshotHasPremiumAccess(snapshot);
     const loading = Boolean(snapshot?.loading);
     const progress = snapshot?.progress || {};
@@ -3326,7 +3365,9 @@ const setupAccountHub = () => {
     const showGooglePasswordNote = Boolean(isAuthenticated && currentAuthProvider === "google");
 
     if (triggerMeta) {
-      triggerMeta.textContent = isAuthenticated
+      triggerMeta.textContent = shouldSuppressGuestFlash
+        ? "Loading..."
+        : isAuthenticated
         ? hasPremiumAccess
           ? `Level ${levelMeta.level}`
           : ""
@@ -3337,11 +3378,13 @@ const setupAccountHub = () => {
       trigger.disabled = loading;
     }
     if (triggerLabel) {
-      triggerLabel.textContent = isAuthenticated ? "Profile" : "Guest";
+      triggerLabel.textContent = isAuthenticated || shouldSuppressGuestFlash ? "Profile" : "Guest";
     }
     if (triggerAvatar) {
       if (isAuthenticated) {
         triggerAvatar.textContent = avatarLetters;
+      } else if (shouldSuppressGuestFlash) {
+        triggerAvatar.textContent = "...";
       } else {
         triggerAvatar.innerHTML = guestAvatarIconMarkup;
       }
@@ -3355,7 +3398,7 @@ const setupAccountHub = () => {
     }
 
     if (guestPane) {
-      guestPane.hidden = isAuthenticated;
+      guestPane.hidden = isAuthenticated || shouldSuppressGuestFlash;
     }
     if (userPane) {
       userPane.hidden = !isAuthenticated;
@@ -3976,6 +4019,7 @@ const setupAccountHub = () => {
     const restoreStartedAtMs = Date.now();
     const minLoadingMs = 550;
     const minLoadingMsForActivePlan = 2600;
+    const minLoadingMsForNoActivePlan = 2000;
     const previousLabel = manageRestorePremiumBtn.textContent;
     manageRestorePremiumBtn.disabled = true;
     manageRestorePremiumBtn.textContent = "Restoring...";
@@ -3984,7 +4028,12 @@ const setupAccountHub = () => {
       const result = await window.cosmicaGamification.restorePremiumSubscription();
       const status = String(result?.restoreStatus || "").trim().toLowerCase();
       const restoredFromActivePlan = status === "restored" || status === "already_active";
-      const requiredLoadingMs = restoredFromActivePlan ? minLoadingMsForActivePlan : minLoadingMs;
+      const noActivePlanResult = !restoredFromActivePlan;
+      const requiredLoadingMs = restoredFromActivePlan
+        ? minLoadingMsForActivePlan
+        : noActivePlanResult
+          ? minLoadingMsForNoActivePlan
+          : minLoadingMs;
       const waitMs = Math.max(0, requiredLoadingMs - (Date.now() - restoreStartedAtMs));
       if (waitMs > 0) {
         await new Promise((resolve) => window.setTimeout(resolve, waitMs));
@@ -4001,16 +4050,23 @@ const setupAccountHub = () => {
         );
       } else {
         setFeedback("No active premium plan found.", "error");
+        scheduleNoActivePlanFeedbackAutoClear(2500);
       }
       renderFromState(window.cosmicaGamification.getState());
     } catch (error) {
-      const waitMs = Math.max(0, minLoadingMs - (Date.now() - restoreStartedAtMs));
+      const code = String(error?.payload?.code || "").trim().toLowerCase();
+      const isNoActivePlanError =
+        code === "no_active_premium_plan_found" || Number(error?.status || 0) === 409;
+      const requiredLoadingMs = isNoActivePlanError
+        ? minLoadingMsForNoActivePlan
+        : minLoadingMs;
+      const waitMs = Math.max(0, requiredLoadingMs - (Date.now() - restoreStartedAtMs));
       if (waitMs > 0) {
         await new Promise((resolve) => window.setTimeout(resolve, waitMs));
       }
-      const code = String(error?.payload?.code || "").trim().toLowerCase();
       if (code === "no_active_premium_plan_found" || Number(error?.status || 0) === 409) {
         setFeedback("No active premium plan found.", "error");
+        scheduleNoActivePlanFeedbackAutoClear(2500);
       } else {
         setFeedback(error?.message || "Could not restore premium right now.", "error");
       }
