@@ -42,145 +42,169 @@
         "source": "good afternoon",
         "translations": {
           "english": "good afternoon"
-        }
+        },
+        "register": "polite"
       },
       "おはようございます": {
         "source": "good morning",
         "translations": {
           "english": "good morning"
-        }
+        },
+        "register": "polite"
       },
       "こんばんは": {
         "source": "good evening",
         "translations": {
           "english": "good evening"
-        }
+        },
+        "register": "polite"
       },
       "おやすみなさい": {
         "source": "good night",
         "translations": {
           "english": "good night"
-        }
+        },
+        "register": "polite"
       },
       "さようなら": {
         "source": "goodbye",
         "translations": {
           "english": "goodbye"
-        }
+        },
+        "register": "formal"
       },
       "バイ": {
         "source": "bye",
         "translations": {
           "english": "bye"
-        }
+        },
+        "register": "informal"
       },
       "またね": {
         "source": "see you",
         "translations": {
           "english": "see you"
-        }
+        },
+        "register": "informal"
       },
       "気をつけて": {
         "source": "take care",
         "translations": {
           "english": "take care"
-        }
+        },
+        "register": "informal"
       },
       "ようこそ": {
         "source": "welcome",
         "translations": {
           "english": "welcome"
-        }
+        },
+        "register": "polite"
       },
       "すみません": {
         "source": "excuse me",
         "translations": {
           "english": "excuse me"
-        }
+        },
+        "register": "polite"
       },
       "ごめんなさい": {
         "source": "sorry",
         "translations": {
           "english": "sorry"
-        }
+        },
+        "register": "informal"
       },
       "ありがとうございます": {
         "source": "thank you",
         "translations": {
           "english": "thank you"
-        }
+        },
+        "register": "polite"
       },
       "どういたしまして": {
         "source": "you're welcome",
         "translations": {
           "english": "you're welcome"
-        }
+        },
+        "register": "polite"
       },
       "ありがとう": {
         "source": "thanks",
         "translations": {
           "english": "thanks"
-        }
+        },
+        "register": "informal"
       },
       "良い一日を": {
         "source": "have a good day",
         "translations": {
           "english": "have a good day"
-        }
+        },
+        "register": "formal"
       },
       "お元気ですか": {
         "source": "how are you",
         "translations": {
           "english": "how are you"
-        }
+        },
+        "register": "polite"
       },
       "お会いできて嬉しいです": {
         "source": "nice to meet you",
         "translations": {
           "english": "nice to meet you"
-        }
+        },
+        "register": "polite"
       },
       "お会いできて光栄です": {
         "source": "pleased to meet you",
         "translations": {
           "english": "pleased to meet you"
-        }
+        },
+        "register": "formal"
       },
       "また後で": {
         "source": "see you later",
         "translations": {
           "english": "see you later"
-        }
+        },
+        "register": "informal"
       },
       "またすぐに": {
         "source": "see you soon",
         "translations": {
           "english": "see you soon"
-        }
+        },
+        "register": "informal"
       },
       "また明日": {
         "source": "see you tomorrow",
         "translations": {
           "english": "see you tomorrow"
-        }
+        },
+        "register": "informal"
       },
       "頑張って": {
         "source": "good luck",
         "translations": {
           "english": "good luck"
-        }
+        },
+        "register": "informal"
       },
       "お帰りなさい": {
         "source": "welcome back",
         "translations": {
           "english": "welcome back"
-        }
+        },
+        "register": "polite"
       },
       "問題ありません": {
         "source": "no problem",
         "translations": {
           "english": "no problem"
-        }
+        },
+        "register": "formal"
       }
     },
     "Pronouns": {
@@ -6321,97 +6345,113 @@
         "source": "good afternoon",
         "translations": {
           "english": "good afternoon"
-        }
+        },
+        "register": "polite"
       },
       "おはようございます": {
         "source": "good morning",
         "translations": {
           "english": "good morning"
-        }
+        },
+        "register": "polite"
       },
       "こんばんは": {
         "source": "good evening",
         "translations": {
           "english": "good evening"
-        }
+        },
+        "register": "polite"
       },
       "おやすみなさい": {
         "source": "good night",
         "translations": {
           "english": "good night"
-        }
+        },
+        "register": "polite"
       },
       "お元気ですか": {
         "source": "how are you",
         "translations": {
           "english": "how are you"
-        }
+        },
+        "register": "polite"
       },
       "調子はどうですか": {
         "source": "how are you doing",
         "translations": {
           "english": "how are you doing"
-        }
+        },
+        "register": "polite"
       },
       "どうですか": {
         "source": "how is it going",
         "translations": {
           "english": "how is it going"
-        }
+        },
+        "register": "polite"
       },
       "お会いできて嬉しいです": {
         "source": "good to see you",
         "translations": {
           "english": "good to see you"
-        }
+        },
+        "register": "polite"
       },
       "お会いできて良かったです": {
         "source": "nice to see you",
         "translations": {
           "english": "nice to see you"
-        }
+        },
+        "register": "polite"
       },
       "お帰りなさい": {
         "source": "welcome back",
         "translations": {
           "english": "welcome back"
-        }
+        },
+        "register": "polite"
       },
       "お久しぶりです": {
         "source": "long time no see",
         "translations": {
           "english": "long time no see"
-        }
+        },
+        "register": "polite"
       },
       "またね": {
         "source": "see you later",
         "translations": {
           "english": "see you later"
-        }
+        },
+        "register": "informal"
       },
       "またすぐに": {
         "source": "see you soon",
         "translations": {
           "english": "see you soon"
-        }
+        },
+        "register": "informal"
       },
       "また明日": {
         "source": "see you tomorrow",
         "translations": {
           "english": "see you tomorrow"
-        }
+        },
+        "register": "informal"
       },
       "気をつけて": {
         "source": "take care",
         "translations": {
           "english": "take care"
-        }
+        },
+        "register": "informal"
       },
       "良い一日を": {
         "source": "have a nice day",
         "translations": {
           "english": "have a nice day"
-        }
+        },
+        "register": "formal"
       }
     },
     "Politeness": {
@@ -6419,85 +6459,99 @@
         "source": "excuse me",
         "translations": {
           "english": "excuse me"
-        }
+        },
+        "register": "polite"
       },
       "失礼しました": {
         "source": "pardon me",
         "translations": {
           "english": "pardon me"
-        }
+        },
+        "register": "polite"
       },
       "ごめんなさい": {
         "source": "i am sorry",
         "translations": {
           "english": "i am sorry"
-        }
+        },
+        "register": "informal"
       },
       "それについては申し訳ありません": {
         "source": "sorry about that",
         "translations": {
           "english": "sorry about that"
-        }
+        },
+        "register": "formal"
       },
       "ありがとう": {
         "source": "thank you",
         "translations": {
           "english": "thank you"
-        }
+        },
+        "register": "informal"
       },
       "ありがとうございます": {
         "source": "thank you very much",
         "translations": {
           "english": "thank you very much"
-        }
+        },
+        "register": "polite"
       },
       "本当にありがとう": {
         "source": "thanks a lot",
         "translations": {
           "english": "thanks a lot"
-        }
+        },
+        "register": "informal"
       },
       "感謝します": {
         "source": "i appreciate it",
         "translations": {
           "english": "i appreciate it"
-        }
+        },
+        "register": "formal"
       },
       "どういたしまして": {
         "source": "you are welcome",
         "translations": {
           "english": "you are welcome"
-        }
+        },
+        "register": "polite"
       },
       "問題ありません": {
         "source": "no problem",
         "translations": {
           "english": "no problem"
-        }
+        },
+        "register": "formal"
       },
       "大丈夫です": {
         "source": "that is okay",
         "translations": {
           "english": "that is okay"
-        }
+        },
+        "register": "polite"
       },
       "お先にどうぞ": {
         "source": "after you",
         "translations": {
           "english": "after you"
-        }
+        },
+        "register": "polite"
       },
       "お詫び申し上げます": {
         "source": "my apologies",
         "translations": {
           "english": "my apologies"
-        }
+        },
+        "register": "formal"
       },
       "どうか許してください": {
         "source": "please forgive me",
         "translations": {
           "english": "please forgive me"
-        }
+        },
+        "register": "polite"
       }
     },
     "Introductions": {

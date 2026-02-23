@@ -56,25 +56,29 @@
         "source": "good morning",
         "translations": {
           "english": "good morning"
-        }
+        },
+        "register": "polite"
       },
       "좋은 오후": {
         "source": "good afternoon",
         "translations": {
           "english": "good afternoon"
-        }
+        },
+        "register": "polite"
       },
       "좋은 저녁": {
         "source": "good evening",
         "translations": {
           "english": "good evening"
-        }
+        },
+        "register": "polite"
       },
       "안녕히 주무세요": {
         "source": "good night",
         "translations": {
           "english": "good night"
-        }
+        },
+        "register": "polite"
       },
       "안녕히 가세요": {
         "source": "goodbye",
@@ -94,19 +98,22 @@
         "source": "see you",
         "translations": {
           "english": "see you"
-        }
+        },
+        "register": "polite"
       },
       "조심하세요": {
         "source": "take care",
         "translations": {
           "english": "take care"
-        }
+        },
+        "register": "polite"
       },
       "환영합니다": {
         "source": "welcome",
         "translations": {
           "english": "welcome"
-        }
+        },
+        "register": "formal"
       },
       "실례합니다": {
         "source": "excuse me",
@@ -133,7 +140,8 @@
         "source": "you're welcome",
         "translations": {
           "english": "you're welcome"
-        }
+        },
+        "register": "polite"
       },
       "고마워": {
         "source": "thanks",
@@ -173,37 +181,43 @@
         "source": "see you later",
         "translations": {
           "english": "see you later"
-        }
+        },
+        "register": "polite"
       },
       "내일 봐요": {
         "source": "see you tomorrow",
         "translations": {
           "english": "see you tomorrow"
-        }
+        },
+        "register": "polite"
       },
       "좋은 하루 되세요": {
         "source": "have a good day",
         "translations": {
           "english": "have a good day"
-        }
+        },
+        "register": "polite"
       },
       "행운을 빕니다": {
         "source": "good luck",
         "translations": {
           "english": "good luck"
-        }
+        },
+        "register": "formal"
       },
       "다시 오신 것을 환영합니다": {
         "source": "welcome back",
         "translations": {
           "english": "welcome back"
-        }
+        },
+        "register": "formal"
       },
       "문제 없어요": {
         "source": "no problem",
         "translations": {
           "english": "no problem"
-        }
+        },
+        "register": "polite"
       }
     },
     "Pronouns": {
@@ -211,13 +225,15 @@
         "source": "i",
         "translations": {
           "english": "i"
-        }
+        },
+        "register": "informal"
       },
       "너": {
         "source": "you",
         "translations": {
           "english": "you"
-        }
+        },
+        "register": "informal"
       },
       "그": {
         "source": "he",
@@ -6382,43 +6398,50 @@
         "source": "welcome back",
         "translations": {
           "english": "welcome back"
-        }
+        },
+        "register": "formal"
       },
       "오랜만이에요": {
         "source": "long time no see",
         "translations": {
           "english": "long time no see"
-        }
+        },
+        "register": "polite"
       },
       "나중에 봐요": {
         "source": "see you later",
         "translations": {
           "english": "see you later"
-        }
+        },
+        "register": "polite"
       },
       "곧 봐요": {
         "source": "see you soon",
         "translations": {
           "english": "see you soon"
-        }
+        },
+        "register": "polite"
       },
       "내일 봐요": {
         "source": "see you tomorrow",
         "translations": {
           "english": "see you tomorrow"
-        }
+        },
+        "register": "polite"
       },
       "조심하세요": {
         "source": "take care",
         "translations": {
           "english": "take care"
-        }
+        },
+        "register": "polite"
       },
       "좋은 하루 되세요": {
         "source": "have a nice day",
         "translations": {
           "english": "have a nice day"
-        }
+        },
+        "register": "polite"
       }
     },
     "Politeness": {
@@ -6468,7 +6491,8 @@
         "source": "you are welcome",
         "translations": {
           "english": "you are welcome"
-        }
+        },
+        "register": "polite"
       },
       "괜찮아": {
         "source": "no problem",
@@ -6488,7 +6512,8 @@
         "source": "after you",
         "translations": {
           "english": "after you"
-        }
+        },
+        "register": "polite"
       },
       "진심으로 사과드립니다": {
         "source": "my apologies",

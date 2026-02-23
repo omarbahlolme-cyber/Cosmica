@@ -42,151 +42,176 @@
         "source": "hello",
         "translations": {
           "english": "hello"
-        }
+        },
+        "register": "polite"
       },
       "शुभ प्रभात": {
         "source": "good morning",
         "translations": {
           "english": "good morning"
-        }
+        },
+        "register": "polite"
       },
       "शुभ अपराह्न": {
         "source": "good afternoon",
         "translations": {
           "english": "good afternoon"
-        }
+        },
+        "register": "polite"
       },
       "शुभ संध्या": {
         "source": "good evening",
         "translations": {
           "english": "good evening"
-        }
+        },
+        "register": "polite"
       },
       "शुभ रात्रि": {
         "source": "good night",
         "translations": {
           "english": "good night"
-        }
+        },
+        "register": "polite"
       },
       "अलविदा": {
         "source": "goodbye",
         "translations": {
           "english": "goodbye"
-        }
+        },
+        "register": "formal"
       },
       "बाय": {
         "source": "bye",
         "translations": {
           "english": "bye"
-        }
+        },
+        "register": "informal"
       },
       "फिर मिलेंगे": {
         "source": "see you",
         "translations": {
           "english": "see you"
-        }
+        },
+        "register": "polite"
       },
       "अपना ख्याल रखना": {
         "source": "take care",
         "translations": {
           "english": "take care"
-        }
+        },
+        "register": "informal"
       },
       "स्वागत है": {
         "source": "welcome",
         "translations": {
           "english": "welcome"
-        }
+        },
+        "register": "polite"
       },
       "माफ कीजिए": {
         "source": "excuse me",
         "translations": {
           "english": "excuse me"
-        }
+        },
+        "register": "polite"
       },
       "मुझे खेद है": {
         "source": "sorry",
         "translations": {
           "english": "sorry"
-        }
+        },
+        "register": "formal"
       },
       "धन्यवाद": {
         "source": "thanks",
         "translations": {
           "english": "thanks"
-        }
+        },
+        "register": "polite"
       },
       "आपका स्वागत है": {
         "source": "you're welcome",
         "translations": {
           "english": "you're welcome"
-        }
+        },
+        "register": "polite"
       },
       "शुभ दिन": {
         "source": "good day",
         "translations": {
           "english": "good day"
-        }
+        },
+        "register": "formal"
       },
       "आप कैसे हैं": {
         "source": "how are you",
         "translations": {
           "english": "how are you"
-        }
+        },
+        "register": "polite"
       },
       "आपसे मिलकर खुशी हुई": {
         "source": "pleased to meet you",
         "translations": {
           "english": "pleased to meet you"
-        }
+        },
+        "register": "polite"
       },
       "बाद में मिलते हैं": {
         "source": "see you later",
         "translations": {
           "english": "see you later"
-        }
+        },
+        "register": "informal"
       },
       "जल्द मिलेंगे": {
         "source": "see you soon",
         "translations": {
           "english": "see you soon"
-        }
+        },
+        "register": "polite"
       },
       "कल मिलेंगे": {
         "source": "see you tomorrow",
         "translations": {
           "english": "see you tomorrow"
-        }
+        },
+        "register": "polite"
       },
       "आपका दिन शुभ हो": {
         "source": "have a nice day",
         "translations": {
           "english": "have a nice day"
-        }
+        },
+        "register": "polite"
       },
       "आपका दिन अच्छा हो": {
         "source": "have a good day",
         "translations": {
           "english": "have a good day"
-        }
+        },
+        "register": "polite"
       },
       "शुभकामनाएँ": {
         "source": "good luck",
         "translations": {
           "english": "good luck"
-        }
+        },
+        "register": "formal"
       },
       "फिर से स्वागत है": {
         "source": "welcome back",
         "translations": {
           "english": "welcome back"
-        }
+        },
+        "register": "polite"
       },
       "कोई बात नहीं": {
         "source": "no problem",
         "translations": {
           "english": "no problem"
-        }
+        },
+        "register": "informal"
       }
     },
     "Pronouns": {
@@ -200,7 +225,8 @@
         "source": "you",
         "translations": {
           "english": "you"
-        }
+        },
+        "register": "informal"
       },
       "वह": {
         "source": "that",
@@ -6121,103 +6147,120 @@
         "source": "hello there",
         "translations": {
           "english": "hello there"
-        }
+        },
+        "register": "polite"
       },
       "शुभ प्रभात": {
         "source": "good morning",
         "translations": {
           "english": "good morning"
-        }
+        },
+        "register": "polite"
       },
       "शुभ अपराह्न": {
         "source": "good afternoon",
         "translations": {
           "english": "good afternoon"
-        }
+        },
+        "register": "polite"
       },
       "शुभ संध्या": {
         "source": "good evening",
         "translations": {
           "english": "good evening"
-        }
+        },
+        "register": "polite"
       },
       "शुभ रात्रि": {
         "source": "good night",
         "translations": {
           "english": "good night"
-        }
+        },
+        "register": "polite"
       },
       "आप कैसे हैं": {
         "source": "how are you",
         "translations": {
           "english": "how are you"
-        }
+        },
+        "register": "polite"
       },
       "आप कैसे कर रहे हैं": {
         "source": "how are you doing",
         "translations": {
           "english": "how are you doing"
-        }
+        },
+        "register": "polite"
       },
       "कैसा चल रहा है": {
         "source": "how is it going",
         "translations": {
           "english": "how is it going"
-        }
+        },
+        "register": "informal"
       },
       "आपसे मिलकर अच्छा लगा": {
         "source": "nice to see you",
         "translations": {
           "english": "nice to see you"
-        }
+        },
+        "register": "polite"
       },
       "स्वागत है वापस": {
         "source": "welcome back",
         "translations": {
           "english": "welcome back"
-        }
+        },
+        "register": "polite"
       },
       "काफी समय बाद मिले": {
         "source": "long time no see",
         "translations": {
           "english": "long time no see"
-        }
+        },
+        "register": "informal"
       },
       "फिर मिलेंगे": {
         "source": "see you later",
         "translations": {
           "english": "see you later"
-        }
+        },
+        "register": "polite"
       },
       "जल्द मिलेंगे": {
         "source": "see you soon",
         "translations": {
           "english": "see you soon"
-        }
+        },
+        "register": "polite"
       },
       "कल मिलेंगे": {
         "source": "see you tomorrow",
         "translations": {
           "english": "see you tomorrow"
-        }
+        },
+        "register": "polite"
       },
       "ख्याल रखना": {
         "source": "take care",
         "translations": {
           "english": "take care"
-        }
+        },
+        "register": "informal"
       },
       "आपका दिन शुभ हो": {
         "source": "have a good day",
         "translations": {
           "english": "have a good day"
-        }
+        },
+        "register": "polite"
       },
       "आपका दिन अच्छा हो": {
         "source": "have a nice day",
         "translations": {
           "english": "have a nice day"
-        }
+        },
+        "register": "polite"
       }
     },
     "Politeness": {
@@ -6225,79 +6268,92 @@
         "source": "excuse me",
         "translations": {
           "english": "excuse me"
-        }
+        },
+        "register": "polite"
       },
       "मुझे माफ करें": {
         "source": "pardon me",
         "translations": {
           "english": "pardon me"
-        }
+        },
+        "register": "polite"
       },
       "मुझे खेद है": {
         "source": "i am sorry",
         "translations": {
           "english": "i am sorry"
-        }
+        },
+        "register": "formal"
       },
       "इसके लिए खेद है": {
         "source": "sorry about that",
         "translations": {
           "english": "sorry about that"
-        }
+        },
+        "register": "formal"
       },
       "धन्यवाद": {
         "source": "thank you",
         "translations": {
           "english": "thank you"
-        }
+        },
+        "register": "polite"
       },
       "बहुत धन्यवाद": {
         "source": "thank you very much",
         "translations": {
           "english": "thank you very much"
-        }
+        },
+        "register": "formal"
       },
       "बहुत-बहुत धन्यवाद": {
         "source": "thanks a lot",
         "translations": {
           "english": "thanks a lot"
-        }
+        },
+        "register": "formal"
       },
       "मैं इसकी सराहना करता हूँ": {
         "source": "i appreciate it",
         "translations": {
           "english": "i appreciate it"
-        }
+        },
+        "register": "formal"
       },
       "आपका स्वागत है": {
         "source": "you are welcome",
         "translations": {
           "english": "you are welcome"
-        }
+        },
+        "register": "polite"
       },
       "कोई बात नहीं": {
         "source": "that is okay",
         "translations": {
           "english": "that is okay"
-        }
+        },
+        "register": "polite"
       },
       "आप पहले": {
         "source": "after you",
         "translations": {
           "english": "after you"
-        }
+        },
+        "register": "polite"
       },
       "मेरी क्षमा": {
         "source": "my apologies",
         "translations": {
           "english": "my apologies"
-        }
+        },
+        "register": "formal"
       },
       "कृपया मुझे माफ करें": {
         "source": "please forgive me",
         "translations": {
           "english": "please forgive me"
-        }
+        },
+        "register": "polite"
       }
     },
     "Introductions": {
