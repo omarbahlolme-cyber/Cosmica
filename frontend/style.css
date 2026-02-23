@@ -6316,6 +6316,7 @@ body.world-page .is-energized {
     border-radius: 20px;
     padding: 10px;
     gap: 10px;
+    touch-action: pan-y;
   }
 
   .chat-header {
@@ -6326,7 +6327,14 @@ body.world-page .is-energized {
   .chat-log {
     height: clamp(160px, calc(var(--vh) * 22), 230px);
     overflow-y: hidden;
+    overscroll-behavior-y: auto;
+    -webkit-overflow-scrolling: auto;
+    touch-action: pan-y;
     padding: 9px 6px;
+  }
+
+  .chat-log.has-user-messages {
+    overflow-y: hidden;
   }
 
   .chat-bubble {
@@ -6341,6 +6349,10 @@ body.world-page .is-energized {
   .chat-chip {
     font-size: 10px;
     padding: 6px 9px;
+  }
+
+  .chat-input {
+    touch-action: pan-y;
   }
 }
 
