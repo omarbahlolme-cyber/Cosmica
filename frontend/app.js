@@ -3449,22 +3449,14 @@ const setupAccountHub = () => {
         window.location.href = "/index.html?openAuth=1&authPanel=signup#support";
       };
 
-      const startY = Math.max(0, window.scrollY || window.pageYOffset || 0);
-      if (startY > 8) {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }
-
-      const initialDelayMs = startY > 8 ? 420 : 0;
+      openAuthDropdown();
       window.setTimeout(() => {
-        openAuthDropdown();
-        window.setTimeout(() => {
-          const dropdownNode = document.querySelector(".account-dropdown");
-          const isOpen = Boolean(dropdownNode instanceof HTMLElement && dropdownNode.hidden === false);
-          if (!isOpen) {
-            openAuthDropdown();
-          }
-        }, 170);
-      }, initialDelayMs);
+        const dropdownNode = document.querySelector(".account-dropdown");
+        const isOpen = Boolean(dropdownNode instanceof HTMLElement && dropdownNode.hidden === false);
+        if (!isOpen) {
+          openAuthDropdown();
+        }
+      }, 170);
       return;
     }
     void openPremiumCheckoutModal();
@@ -3947,6 +3939,16 @@ const setupAccountHub = () => {
     },
     { passive: true }
   );
+  let hasShownEntryMenuPrompt = false;
+  const showEntryMenuPrompt = () => {
+    if (hasShownEntryMenuPrompt || !trigger || !trigger.isConnected) {
+      return;
+    }
+    hasShownEntryMenuPrompt = true;
+    showTriggerNoticeBubble("Become an explorer now.", "info", 4000);
+  };
+  window.setTimeout(showEntryMenuPrompt, 520);
+
   document.addEventListener("keydown", (event) => {
     if (event.key !== "Escape") {
       return;
