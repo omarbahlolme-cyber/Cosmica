@@ -8457,12 +8457,18 @@ if (chatForm && speechText) {
 }
 
 const MOBILE_HOME_ANCHOR_DOWN_SHIFT = Object.freeze({
-  default: -40,
+  default: 0,
+  "#how": 34,
+  "#worlds": 34,
+  "#guide": 46,
+  "#join": 62,
+  "#support": -8,
 });
 const getMobileHomeAnchorDownShift = (hash) =>
   MOBILE_HOME_ANCHOR_DOWN_SHIFT[hash] ?? MOBILE_HOME_ANCHOR_DOWN_SHIFT.default;
 const DESKTOP_HOME_ANCHOR_DOWN_SHIFT = Object.freeze({
   default: -30,
+  "#join": -84,
 });
 const getDesktopHomeAnchorDownShift = (hash) =>
   DESKTOP_HOME_ANCHOR_DOWN_SHIFT[hash] ?? 0;
