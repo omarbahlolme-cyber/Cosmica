@@ -104,6 +104,42 @@ const jaccard = (a, b) => {
   return union > 0 ? intersection / union : 0;
 };
 
+const stripForCharacterSimilarity = (value) =>
+  normalize(value).replace(/[^a-z0-9\u0600-\u06ff\u0900-\u097f\u3040-\u30ff\u4e00-\u9fff\u1100-\u11ff\u3130-\u318f\uac00-\ud7af]+/gi, "");
+
+const buildCharacterNgrams = (value, size = 2) => {
+  const source = stripForCharacterSimilarity(value);
+  if (!source) {
+    return new Set();
+  }
+  if (source.length <= size) {
+    return new Set([source]);
+  }
+  const grams = new Set();
+  for (let index = 0; index <= source.length - size; index += 1) {
+    grams.add(source.slice(index, index + size));
+  }
+  return grams;
+};
+
+const charNgramSimilarity = (a, b) => {
+  const gramsA = buildCharacterNgrams(a, 2);
+  const gramsB = buildCharacterNgrams(b, 2);
+  if (!gramsA.size || !gramsB.size) {
+    return 0;
+  }
+  let intersection = 0;
+  gramsA.forEach((gram) => {
+    if (gramsB.has(gram)) {
+      intersection += 1;
+    }
+  });
+  const union = gramsA.size + gramsB.size - intersection;
+  return union > 0 ? intersection / union : 0;
+};
+
+const semanticSimilarity = (a, b) => Math.max(jaccard(a, b), charNgramSimilarity(a, b));
+
 const hasLetterOrNumber = (value) => /[\p{L}\p{N}]/u.test(String(value || ""));
 
 const isBoundaryChar = (char) => !char || !/[\p{L}\p{N}]/u.test(char);
@@ -493,7 +529,10 @@ const checkWorldPacks = () => {
                   `First mistake wrong===fix at ${cardTag}.`
                 );
               } else {
-                const relation = Math.max(jaccard(fix, example), jaccard(wrong, example));
+                const relation = Math.max(
+                  semanticSimilarity(fix, example),
+                  semanticSimilarity(wrong, example)
+                );
                 if (relation < 0.15) {
                   pushFinding(
                     "medium",

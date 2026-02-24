@@ -6501,37 +6501,19 @@
       },
       "j'apprends le français": {
         "source": "i am learning french",
+        "intent": "learn_world_language",
         "translations": {
           "english": "i am learning french"
         }
       },
       "je parle français": {
         "source": "i speak french",
-        "translations": {
-          "english": "i speak french"
-        }
-      },
-      "je ne parle pas français": {
-        "source": "i do not speak french",
-        "translations": {
-          "english": "i do not speak french"
-        }
-      },
-      "j'apprends le fran?ais": {
-        "source": "i am learning french",
-        "intent": "learn_world_language",
-        "translations": {
-          "english": "i am learning french"
-        }
-      },
-      "je parle fran?ais": {
-        "source": "i speak french",
         "intent": "speak_world_language",
         "translations": {
           "english": "i speak french"
         }
       },
-      "je ne parle pas fran?ais": {
+      "je ne parle pas français": {
         "source": "i do not speak french",
         "intent": "not_speak_world_language",
         "translations": {
@@ -6710,7 +6692,7 @@
           "english": "what is your name"
         }
       },
-      "parles-tu fran?ais": {
+      "parles-tu français": {
         "source": "do you speak french",
         "intent": "ask_speak_world_language",
         "translations": {
@@ -12989,9 +12971,9 @@
         "this is my sister": "c'est ma sœur",
         "nice to meet you": "enchanté(e) de vous rencontrer",
         "pleased to meet you": "heureux/heureuse de vous rencontrer",
-        "i am learning french": "j'apprends le fran?ais",
-        "i speak french": "je parle fran?ais",
-        "i do not speak french": "je ne parle pas fran?ais"
+        "i am learning french": "j'apprends le français",
+        "i speak french": "je parle français",
+        "i do not speak french": "je ne parle pas français"
       },
       "Conversation": {
         "can you repeat that": "peux-tu répéter ça",
@@ -13025,7 +13007,7 @@
         "are you ready": "es-tu prêt",
         "what do you think": "que penses-tu",
         "what is your name": "comment t'appelles-tu",
-        "do you speak french": "parles-tu fran?ais"
+        "do you speak french": "parles-tu français"
       },
       "Requests": {
         "can you help me": "peux-tu m'aider",

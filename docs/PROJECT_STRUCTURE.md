@@ -56,6 +56,7 @@
 |-- docs/
 |   |-- PROJECT_STRUCTURE.md          # This file
 |   |-- HANDOFF_ZERO_TO_HERO.md       # Beginner onboarding + release handoff guide
+|   |-- LINGUIST_WORLD_REVIEW_CHECKLIST.md # Per-world human QA checklist (letters/words/phrases/grammar)
 |   |-- FRONTEND_RUNTIME_NOTES.md     # Frontend runtime guardrails + recent behavior notes
 |   |-- OPERATIONS_HARDENING.md       # Platform hardening + backup runbook
 |   |-- ROLLBACK_RUNBOOK.md           # Rollback procedures and recovery commands

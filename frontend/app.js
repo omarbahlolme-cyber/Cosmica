@@ -759,6 +759,24 @@ const shouldUseConservativeAnimationBudget =
 const conservativeAnimationFrameMinMs = shouldUseConservativeAnimationBudget ? 34 : 16;
 const shouldUseLiteInteractiveEffects =
   prefersReducedMotion || shouldUseConservativeAnimationBudget;
+const shouldUseMobileLiteVisualMode = () => {
+  const isMobileLikeViewport = window.matchMedia("(max-width: 960px)").matches;
+  const isCoarsePointer = window.matchMedia("(hover: none), (pointer: coarse)").matches;
+  return shouldUseConservativeAnimationBudget || (isMobileLikeViewport && isCoarsePointer);
+};
+
+const applyRuntimePerformanceClass = () => {
+  document.body.classList.toggle("perf-compact", shouldUseMobileLiteVisualMode());
+};
+
+applyRuntimePerformanceClass();
+window.addEventListener(
+  "resize",
+  () => {
+    window.requestAnimationFrame(applyRuntimePerformanceClass);
+  },
+  { passive: true }
+);
 
 /* ==========================================================================
    AUTH + PROGRESS API CLIENT
@@ -4837,6 +4855,139 @@ const prefetchDocument = (href) => {
   link.addEventListener("error", () => link.remove(), { once: true });
   document.head.appendChild(link);
 };
+
+const prefetchDocumentForWorldWarm = (href) => {
+  const normalizedUrl = normalizeInternalDocumentUrl(href);
+  if (!normalizedUrl || normalizedUrl === currentDocumentKey || prefetchedDocuments.has(normalizedUrl)) {
+    return;
+  }
+  prefetchedDocuments.add(normalizedUrl);
+  const link = document.createElement("link");
+  link.rel = "prefetch";
+  link.as = "document";
+  link.href = normalizedUrl;
+  try {
+    link.fetchPriority = "low";
+  } catch {}
+  link.addEventListener("load", () => link.remove(), { once: true });
+  link.addEventListener("error", () => link.remove(), { once: true });
+  document.head.appendChild(link);
+};
+
+const resolveWorldMapDocumentHref = (mapKey = "") => {
+  const normalizedMapKey = String(mapKey || "")
+    .trim()
+    .toLowerCase();
+  if (!normalizedMapKey) {
+    return "";
+  }
+  const mapCard = document.querySelector(`.map-card.map-${normalizedMapKey}`);
+  const cardHref =
+    mapCard?.getAttribute("href") ||
+    mapCard?.dataset?.originalHref ||
+    mapCard?.dataset?.href ||
+    "";
+  if (cardHref) {
+    return cardHref;
+  }
+  if (WORLD_KEY === "english") {
+    return `english-${normalizedMapKey}.html`;
+  }
+  return `${normalizedMapKey}-${WORLD_KEY}.html`;
+};
+
+const ENABLE_WORLD_ENTRY_MAP_WARM = true;
+const CAN_WORLD_ENTRY_MAP_WARM =
+  ENABLE_WORLD_ENTRY_MAP_WARM &&
+  document.body.classList.contains("world-page") &&
+  !prefersReducedData &&
+  !isSlowNetwork &&
+  !isLowPowerDevice;
+let worldEntryMapWarmRunId = 0;
+let worldEntryMapWarmIdleTimer = 0;
+const worldEntryMapWarmTimers = new Set();
+
+const clearWorldEntryMapWarmTimers = () => {
+  if (worldEntryMapWarmIdleTimer) {
+    window.clearTimeout(worldEntryMapWarmIdleTimer);
+    worldEntryMapWarmIdleTimer = 0;
+  }
+  worldEntryMapWarmTimers.forEach((timerId) => {
+    window.clearTimeout(timerId);
+  });
+  worldEntryMapWarmTimers.clear();
+};
+
+const scheduleWorldEntryMapWarm = ({ source = "init" } = {}) => {
+  if (!CAN_WORLD_ENTRY_MAP_WARM || document.visibilityState === "hidden") {
+    return;
+  }
+  const snapshot =
+    typeof window.cosmicaGamification?.getState === "function"
+      ? window.cosmicaGamification.getState()
+      : null;
+  const user = snapshot?.user && typeof snapshot.user === "object" ? snapshot.user : null;
+  const hasPremiumAccess = userHasPremiumAccess(user);
+  const prioritizedMapKeys = hasPremiumAccess
+    ? ["letters", "words", "phrases", "grammar"]
+    : ["letters", "words", "phrases"];
+  const warmRoutes = prioritizedMapKeys
+    .map((mapKey) => resolveWorldMapDocumentHref(mapKey))
+    .filter(Boolean);
+  const uniqueWarmRoutes = [...new Set(warmRoutes)].slice(0, hasPremiumAccess ? 4 : 3);
+  if (!uniqueWarmRoutes.length) {
+    return;
+  }
+
+  clearWorldEntryMapWarmTimers();
+  const runId = ++worldEntryMapWarmRunId;
+  const runWarmQueue = () => {
+    uniqueWarmRoutes.forEach((route, index) => {
+      const timerId = window.setTimeout(() => {
+        worldEntryMapWarmTimers.delete(timerId);
+        if (runId !== worldEntryMapWarmRunId || document.visibilityState === "hidden") {
+          return;
+        }
+        prefetchDocumentForWorldWarm(route);
+      }, index * 320);
+      worldEntryMapWarmTimers.add(timerId);
+    });
+  };
+
+  if ("requestIdleCallback" in window) {
+    window.requestIdleCallback(
+      () => {
+        if (runId !== worldEntryMapWarmRunId || document.visibilityState === "hidden") {
+          return;
+        }
+        runWarmQueue();
+      },
+      { timeout: source === "language" ? 900 : 2000 }
+    );
+    return;
+  }
+
+  worldEntryMapWarmIdleTimer = window.setTimeout(runWarmQueue, source === "language" ? 120 : 420);
+};
+
+const cancelWorldEntryMapWarm = () => {
+  worldEntryMapWarmRunId += 1;
+  clearWorldEntryMapWarmTimers();
+};
+
+if (document.body.classList.contains("world-page")) {
+  window.addEventListener("pagehide", cancelWorldEntryMapWarm, { passive: true });
+  window.addEventListener("beforeunload", cancelWorldEntryMapWarm, { passive: true });
+  document.addEventListener(
+    "visibilitychange",
+    () => {
+      if (document.visibilityState === "hidden") {
+        cancelWorldEntryMapWarm();
+      }
+    },
+    { passive: true }
+  );
+}
 
 const bindNavigationPrefetch = (element, resolveHref) => {
   if (!element || typeof resolveHref !== "function" || !CAN_PREFETCH_NAVIGATION) {
@@ -9153,56 +9304,7 @@ const applyMapComingSoonRules = () => {
       ? window.cosmicaGamification.getState()
       : null;
   const user = snapshot && snapshot.user && typeof snapshot.user === "object" ? snapshot.user : null;
-  const premiumFlagRaw = user?.isPremium ?? user?.premium;
-  const premiumFlagText = String(premiumFlagRaw ?? "")
-    .trim()
-    .toLowerCase();
-  const premiumTier = String(
-    user?.planTier || user?.tier || user?.plan || user?.membership || ""
-  )
-    .trim()
-    .toLowerCase();
-  const premiumStatus = String(
-    user?.premiumStatus ||
-      user?.subscriptionStatus ||
-      user?.premiumStripeSubscriptionStatus ||
-      user?.stripeSubscriptionStatus ||
-      ""
-  )
-    .trim()
-    .toLowerCase();
-  const premiumEndRaw = String(
-    user?.premiumCurrentPeriodEnd ||
-      user?.premiumEndsAt ||
-      user?.premiumExpiresAt ||
-      user?.subscriptionEndsAt ||
-      user?.currentPeriodEnd ||
-      user?.planEndsAt ||
-      user?.expiresAt ||
-      ""
-  ).trim();
-  const premiumEndMs = Date.parse(premiumEndRaw);
-  const hasFuturePremiumEnd = Number.isFinite(premiumEndMs) && premiumEndMs > Date.now();
-  const statusIndicatesPremium =
-    premiumStatus === "active" ||
-    premiumStatus === "trialing" ||
-    premiumStatus === "past_due" ||
-    premiumStatus === "canceling" ||
-    premiumStatus === "grace";
-  const hasPremiumAccess =
-    premiumFlagRaw === true ||
-    premiumFlagText === "1" ||
-    premiumFlagText === "true" ||
-    premiumFlagText === "yes" ||
-    premiumFlagText === "premium" ||
-    premiumFlagText === "pro" ||
-    premiumFlagText === "plus" ||
-    premiumTier === "premium" ||
-    premiumTier === "pro" ||
-    premiumTier === "plus" ||
-    premiumTier === "paid" ||
-    statusIndicatesPremium ||
-    hasFuturePremiumEnd;
+  const hasPremiumAccess = userHasPremiumAccess(user);
 
   const forceComingSoon = grammarCard.dataset.forceComingSoon === "true";
   const lockForPremium = !hasPremiumAccess;
@@ -9278,9 +9380,13 @@ const applyMapComingSoonRules = () => {
 };
 
 applyMapComingSoonRules();
+if (document.body.classList.contains("world-page")) {
+  scheduleWorldEntryMapWarm({ source: "entry" });
+}
 if (document.body.classList.contains("world-page") && typeof window.cosmicaGamification?.subscribe === "function") {
   window.cosmicaGamification.subscribe(() => {
     applyMapComingSoonRules();
+    scheduleWorldEntryMapWarm({ source: "auth" });
   });
 }
 
@@ -9646,8 +9752,10 @@ if (languagePills.length) {
       localStorage.setItem("cosmicaBaseLanguage", selected);
       void warmMapTranslationsCache();
       void warmWorldTranslationsCache();
+      scheduleWorldEntryMapWarm({ source: "language" });
     } else {
       localStorage.removeItem("cosmicaBaseLanguage");
+      scheduleWorldEntryMapWarm({ source: "language" });
     }
     if (window.cosmicaAuth && typeof window.cosmicaAuth.syncBaseLanguageToAccount === "function") {
       void window.cosmicaAuth.syncBaseLanguageToAccount(selected).catch(() => {});
@@ -9792,6 +9900,7 @@ if (languagePills.length) {
 
   void warmMapTranslationsCache();
   void warmWorldTranslationsCache();
+  scheduleWorldEntryMapWarm({ source: "entry" });
 }
 
 const languageSearch = document.getElementById("languageSearch");

@@ -3790,7 +3790,103 @@ const createCardPracticeButton = (mapKey, sectionKey, cardKey) => {
   return button;
 };
 
+const getMapRenderBatchSize = () => {
+  const isMobileViewport = window.matchMedia("(max-width: 960px)").matches;
+  if (isMobileViewport) {
+    return 1;
+  }
+  const connectionInfo =
+    navigator.connection || navigator.mozConnection || navigator.webkitConnection || null;
+  const prefersReducedData = Boolean(connectionInfo && connectionInfo.saveData === true);
+  const effectiveNetworkType = String((connectionInfo && connectionInfo.effectiveType) || "").toLowerCase();
+  const isSlowNetwork = effectiveNetworkType === "slow-2g" || effectiveNetworkType === "2g";
+  const deviceMemoryGb = Number(navigator.deviceMemory || 0);
+  const cpuThreadCount = Number(navigator.hardwareConcurrency || 0);
+  const isLowPowerDevice =
+    (deviceMemoryGb > 0 && deviceMemoryGb <= 4) ||
+    (cpuThreadCount > 0 && cpuThreadCount <= 4);
+  return isLowPowerDevice || prefersReducedData || isSlowNetwork ? 1 : 2;
+};
+
+const scheduleMapRenderStep = (callback) => {
+  if (typeof window.requestAnimationFrame === "function") {
+    window.requestAnimationFrame(callback);
+    return;
+  }
+  window.setTimeout(callback, 0);
+};
+
+const renderSectionsProgressively = ({
+  entries,
+  buildSection,
+  onSectionReady,
+  onFirstSectionReady,
+  onComplete,
+  shouldContinue,
+}) => {
+  if (typeof shouldContinue === "function" && !shouldContinue()) {
+    return;
+  }
+  if (!Array.isArray(entries) || !entries.length) {
+    if (
+      typeof onComplete === "function" &&
+      (typeof shouldContinue !== "function" || shouldContinue())
+    ) {
+      onComplete();
+    }
+    return;
+  }
+
+  let index = 0;
+  const batchSize = Math.max(1, getMapRenderBatchSize());
+
+  const renderBatch = () => {
+    if (typeof shouldContinue === "function" && !shouldContinue()) {
+      return;
+    }
+    let rendered = 0;
+    while (index < entries.length && rendered < batchSize) {
+      if (typeof shouldContinue === "function" && !shouldContinue()) {
+        return;
+      }
+      const entry = entries[index];
+      const section = buildSection(entry);
+      if (typeof onSectionReady === "function") {
+        onSectionReady(section, entry, index);
+      }
+      if (index === 0 && typeof onFirstSectionReady === "function") {
+        onFirstSectionReady(section, entry, index);
+      }
+      index += 1;
+      rendered += 1;
+    }
+
+    if (index < entries.length) {
+      if (typeof shouldContinue === "function" && !shouldContinue()) {
+        return;
+      }
+      scheduleMapRenderStep(renderBatch);
+      return;
+    }
+
+    if (
+      typeof onComplete === "function" &&
+      (typeof shouldContinue !== "function" || shouldContinue())
+    ) {
+      onComplete();
+    }
+  };
+
+  renderBatch();
+};
+
+let wordsSectionsRenderRunId = 0;
+let phrasesSectionsRenderRunId = 0;
+let grammarSectionsRenderRunId = 0;
+
 const renderWordsSections = () => {
+  const renderRunId = ++wordsSectionsRenderRunId;
+  const isActiveRender = () => renderRunId === wordsSectionsRenderRunId;
   const container = document.getElementById("wordsSections");
   const controls = document.getElementById("wordsControls");
   if (!container) {
@@ -3801,12 +3897,23 @@ const renderWordsSections = () => {
     controls.innerHTML = "";
   }
 
-  const sections = [];
+  const sectionEntries = [];
   WORD_SECTION_ORDER.forEach((sectionName) => {
     const words = getWorldWordList(sectionName);
     if (!Array.isArray(words) || !words.length) {
       return;
     }
+    sectionEntries.push({ sectionName, words });
+  });
+
+  if (!sectionEntries.length) {
+    container.appendChild(buildMapUnavailableState("Words"));
+    return;
+  }
+
+  const sections = [];
+
+  const buildWordsSection = ({ sectionName, words }) => {
     const section = document.createElement("section");
     section.className = "section words-group reveal";
     section.dataset.section = sectionName;
@@ -3848,17 +3955,13 @@ const renderWordsSections = () => {
     });
     section.appendChild(title);
     section.appendChild(grid);
-    container.appendChild(section);
-    sections.push(section);
-  });
+    return section;
+  };
 
-  if (!sections.length) {
-    container.appendChild(buildMapUnavailableState("Words"));
-    return;
-  }
-  document.body.classList.remove("maps-loading");
-
-  if (controls) {
+  const initializeWordsControls = () => {
+    if (!controls) {
+      return;
+    }
     let activeFilter = "all";
     let activeRegisterFilter = getDefaultRegisterFilterForWorld();
     const wordsUi = getWordsUiLabels();
@@ -3979,10 +4082,37 @@ const renderWordsSections = () => {
     }
 
     applyFilter();
-  }
+  };
+
+  renderSectionsProgressively({
+    entries: sectionEntries,
+    buildSection: buildWordsSection,
+    onSectionReady: (section) => {
+      if (!isActiveRender()) {
+        return;
+      }
+      container.appendChild(section);
+      sections.push(section);
+    },
+    onFirstSectionReady: () => {
+      if (!isActiveRender()) {
+        return;
+      }
+      document.body.classList.remove("maps-loading");
+    },
+    onComplete: () => {
+      if (!isActiveRender()) {
+        return;
+      }
+      initializeWordsControls();
+    },
+    shouldContinue: isActiveRender,
+  });
 };
 
 const renderPhrasesSections = () => {
+  const renderRunId = ++phrasesSectionsRenderRunId;
+  const isActiveRender = () => renderRunId === phrasesSectionsRenderRunId;
   const container = document.getElementById("phrasesSections");
   const controls = document.getElementById("phrasesControls");
   if (!container) {
@@ -3993,12 +4123,23 @@ const renderPhrasesSections = () => {
     controls.innerHTML = "";
   }
 
-  const sections = [];
+  const sectionEntries = [];
   PHRASE_SECTION_ORDER.forEach((sectionName) => {
     const phrases = getWorldPhraseList(sectionName);
     if (!Array.isArray(phrases) || !phrases.length) {
       return;
     }
+    sectionEntries.push({ sectionName, phrases });
+  });
+
+  if (!sectionEntries.length) {
+    container.appendChild(buildMapUnavailableState("Phrases"));
+    return;
+  }
+
+  const sections = [];
+
+  const buildPhrasesSection = ({ sectionName, phrases }) => {
     const section = document.createElement("section");
     section.className = "section phrases-group reveal";
     section.dataset.section = sectionName;
@@ -4039,17 +4180,13 @@ const renderPhrasesSections = () => {
     });
     section.appendChild(title);
     section.appendChild(grid);
-    container.appendChild(section);
-    sections.push(section);
-  });
+    return section;
+  };
 
-  if (!sections.length) {
-    container.appendChild(buildMapUnavailableState("Phrases"));
-    return;
-  }
-  document.body.classList.remove("maps-loading");
-
-  if (controls) {
+  const initializePhrasesControls = () => {
+    if (!controls) {
+      return;
+    }
     let activeFilter = "all";
     let activeRegisterFilter = getDefaultRegisterFilterForWorld();
     const phrasesUi = getPhrasesUiLabels();
@@ -4169,10 +4306,37 @@ const renderPhrasesSections = () => {
     }
 
     applyFilter();
-  }
+  };
+
+  renderSectionsProgressively({
+    entries: sectionEntries,
+    buildSection: buildPhrasesSection,
+    onSectionReady: (section) => {
+      if (!isActiveRender()) {
+        return;
+      }
+      container.appendChild(section);
+      sections.push(section);
+    },
+    onFirstSectionReady: () => {
+      if (!isActiveRender()) {
+        return;
+      }
+      document.body.classList.remove("maps-loading");
+    },
+    onComplete: () => {
+      if (!isActiveRender()) {
+        return;
+      }
+      initializePhrasesControls();
+    },
+    shouldContinue: isActiveRender,
+  });
 };
 
 const renderGrammarSections = () => {
+  const renderRunId = ++grammarSectionsRenderRunId;
+  const isActiveRender = () => renderRunId === grammarSectionsRenderRunId;
   const container = document.getElementById("grammarSections");
   const controls = document.getElementById("grammarControls");
   if (!container) {
@@ -4183,12 +4347,23 @@ const renderGrammarSections = () => {
     controls.innerHTML = "";
   }
 
-  const sections = [];
+  const sectionEntries = [];
   GRAMMAR_SECTION_ORDER.forEach((sectionName) => {
     const concepts = getGrammarCardsForSection(sectionName);
     if (!Array.isArray(concepts) || !concepts.length) {
       return;
     }
+    sectionEntries.push({ sectionName, concepts });
+  });
+
+  if (!sectionEntries.length) {
+    container.appendChild(buildMapUnavailableState("Grammar"));
+    return;
+  }
+
+  const sections = [];
+
+  const buildGrammarSection = ({ sectionName, concepts }) => {
     const section = document.createElement("section");
     section.className = "section grammar-group reveal";
     section.dataset.section = sectionName;
@@ -4248,17 +4423,13 @@ const renderGrammarSections = () => {
     });
     section.appendChild(title);
     section.appendChild(grid);
-    container.appendChild(section);
-    sections.push(section);
-  });
+    return section;
+  };
 
-  if (!sections.length) {
-    container.appendChild(buildMapUnavailableState("Grammar"));
-    return;
-  }
-  document.body.classList.remove("maps-loading");
-
-  if (controls) {
+  const initializeGrammarControls = () => {
+    if (!controls) {
+      return;
+    }
     let activeFilter = "all";
     const grammarUi = getGrammarUiLabels();
     const eyebrow = document.createElement("div");
@@ -4347,7 +4518,32 @@ const renderGrammarSections = () => {
     controls.appendChild(eyebrow);
     controls.appendChild(label);
     controls.appendChild(list);
-  }
+  };
+
+  renderSectionsProgressively({
+    entries: sectionEntries,
+    buildSection: buildGrammarSection,
+    onSectionReady: (section) => {
+      if (!isActiveRender()) {
+        return;
+      }
+      container.appendChild(section);
+      sections.push(section);
+    },
+    onFirstSectionReady: () => {
+      if (!isActiveRender()) {
+        return;
+      }
+      document.body.classList.remove("maps-loading");
+    },
+    onComplete: () => {
+      if (!isActiveRender()) {
+        return;
+      }
+      initializeGrammarControls();
+    },
+    shouldContinue: isActiveRender,
+  });
 };
 
 const buildAltGrammarExample = (() => {

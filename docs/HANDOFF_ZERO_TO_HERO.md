@@ -80,6 +80,8 @@ Local app usually runs at:
 5. `docs/BILLING_OPS_QUICK_COMMANDS.md` - billing diagnostics and recovery commands.
 6. `docs/ENFORCEMENT_RUNBOOK.md` - policy enforcement process.
 7. `docs/ROLLBACK_RUNBOOK.md` - rollback procedure.
+9. `docs/LINGUIST_WORLD_REVIEW_CHECKLIST.md` - per-world linguist QA checklist (letters/words/phrases/grammar).
+10. `docs/LINGUIST_WORLD_REVIEW_TEMPLATE.csv` - spreadsheet-style tracker (one row per world x map).
 
 ---
 
@@ -317,6 +319,45 @@ npm run billing:contract
 ```
 
 6. Create fresh backups before deploy:
+
+---
+
+## 13) Latest checkpoint (2026-02-24)
+
+Use this as the resume point for the next maintainer.
+
+### Completed since previous checkpoint
+
+1. Fixed duplicate "Choose a section" controls regression on map pages.
+   - Root cause: overlapping progressive render passes could append stale controls.
+   - Fix: render-run guards/run IDs added in `frontend/maps/app-maps.js` to cancel stale async batches.
+
+2. Ran full world content audit and pedagogical consistency checks.
+   - `node scripts/audit-learning-maps.js` now reports zero findings.
+   - `npm run check:intents` passes.
+
+3. Fixed real French content conflict in `frontend/worlds/french/translations.json`.
+   - Removed mojibake duplicate variants (`fran?ais`).
+   - Kept canonical accented forms (`français`) with intent tags.
+
+4. Improved audit robustness for CJK/no-space scripts.
+   - Updated `scripts/audit-learning-maps.js` with character n-gram similarity fallback to reduce false positives.
+
+5. Added linguist handoff artifacts for all 4 maps per world.
+   - `docs/LINGUIST_WORLD_REVIEW_CHECKLIST.md`
+   - `docs/LINGUIST_WORLD_REVIEW_TEMPLATE.csv`
+
+### Validation at checkpoint
+
+1. `npm run quality` -> PASS
+2. `node scripts/audit-learning-maps.js` -> PASS (0 findings)
+3. `npm run check:intents` -> PASS
+
+### If you continue work next
+
+1. Start with linguist review tracker completion (all worlds x letters/words/phrases/grammar).
+2. Keep edits scoped to world packs unless runtime behavior is explicitly targeted.
+3. Re-run `npm run quality` before handoff/deploy.
 
 ```bash
 npm run backup:create
