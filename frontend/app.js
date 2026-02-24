@@ -8459,10 +8459,10 @@ if (chatForm && speechText) {
 const MOBILE_HOME_ANCHOR_DOWN_SHIFT = Object.freeze({
   default: 0,
   "#how": 34,
-  "#worlds": 34,
-  "#guide": 46,
+  "#worlds": 30,
+  "#guide": 34,
   "#join": 62,
-  "#support": -8,
+  "#support": -24,
 });
 const getMobileHomeAnchorDownShift = (hash) =>
   MOBILE_HOME_ANCHOR_DOWN_SHIFT[hash] ?? MOBILE_HOME_ANCHOR_DOWN_SHIFT.default;
