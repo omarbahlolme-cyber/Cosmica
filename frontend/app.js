@@ -2566,7 +2566,7 @@ const setupAccountHub = () => {
     }
     const authErrorTextMap = {
       google_no_account: {
-        message: "No account was found for this Google email. Please create your account first using Sign up with Google.",
+        message: "We couldn’t complete Google sign-in for this email right now. If this account already exists, please try Log in with Google account again.",
         tone: "error",
         panel: "signup",
       },
@@ -7666,14 +7666,30 @@ const setupWorldPageInteractiveFx = () => {
     if (!worldAmbient.querySelector(".world-fx-comets")) {
       const comets = document.createElement("div");
       comets.className = "world-fx-comets";
-      const cometCount = shouldUseConservativeAnimationBudget ? 1 : prefersReducedMotion ? 1 : 3;
+      const cometCount = prefersReducedMotion ? 1 : 3;
+      const baseTopSlots = [14, 34, 56];
+      const topSlots = baseTopSlots
+        .slice(0, cometCount)
+        .sort(() => Math.random() - 0.5)
+        .map((slot) => Math.max(8, Math.min(64, slot + (Math.random() * 6 - 3))));
+      const isMobileMeteorCadence = window.matchMedia("(max-width: 960px)").matches;
+      const baseDurationSec = isMobileMeteorCadence ? 6.4 + Math.random() * 0.6 : 5.8 + Math.random() * 2.2;
+      const launchStrideSec = isMobileMeteorCadence
+        ? baseDurationSec / Math.max(1, cometCount)
+        : Math.max(1.2, baseDurationSec * 0.34);
       for (let i = 0; i < cometCount; i += 1) {
         const comet = document.createElement("span");
         comet.className = "world-fx-comet";
-        comet.style.setProperty("--c-top", `${(8 + Math.random() * 56).toFixed(2)}%`);
+        comet.style.setProperty("--c-top", `${(topSlots[i] ?? (8 + Math.random() * 56)).toFixed(2)}%`);
         comet.style.setProperty("--c-size", `${(78 + Math.random() * 44).toFixed(2)}px`);
-        comet.style.setProperty("--c-delay", `${(Math.random() * 8).toFixed(2)}s`);
-        comet.style.setProperty("--c-duration", `${(5.2 + Math.random() * 3.8).toFixed(2)}s`);
+        comet.style.setProperty(
+          "--c-delay",
+          `${(i * launchStrideSec + (isMobileMeteorCadence ? 0 : Math.random() * 0.35)).toFixed(2)}s`
+        );
+        comet.style.setProperty(
+          "--c-duration",
+          `${(isMobileMeteorCadence ? baseDurationSec : baseDurationSec + (Math.random() * 0.6 - 0.3)).toFixed(2)}s`
+        );
         comets.appendChild(comet);
       }
       worldAmbient.appendChild(comets);
@@ -8441,17 +8457,12 @@ if (chatForm && speechText) {
 }
 
 const MOBILE_HOME_ANCHOR_DOWN_SHIFT = Object.freeze({
-  default: 92,
-  "#how": 110,
-  "#worlds": 126,
-  "#guide": 158,
-  "#join": 169,
-  "#support": 220,
+  default: -40,
 });
 const getMobileHomeAnchorDownShift = (hash) =>
   MOBILE_HOME_ANCHOR_DOWN_SHIFT[hash] ?? MOBILE_HOME_ANCHOR_DOWN_SHIFT.default;
 const DESKTOP_HOME_ANCHOR_DOWN_SHIFT = Object.freeze({
-  "#guide": 64,
+  default: -30,
 });
 const getDesktopHomeAnchorDownShift = (hash) =>
   DESKTOP_HOME_ANCHOR_DOWN_SHIFT[hash] ?? 0;
@@ -10811,14 +10822,30 @@ const setupHomeAltInteractivity = () => {
     const layer = document.createElement("div");
     layer.className = "home-fx-comets";
     layer.setAttribute("aria-hidden", "true");
-    const cometCount = shouldUseConservativeAnimationBudget ? 1 : prefersReducedMotion ? 1 : 3;
+    const cometCount = prefersReducedMotion ? 1 : 3;
+    const baseTopSlots = [14, 34, 56];
+    const topSlots = baseTopSlots
+      .slice(0, cometCount)
+      .sort(() => Math.random() - 0.5)
+      .map((slot) => Math.max(8, Math.min(64, slot + (Math.random() * 6 - 3))));
+    const isMobileMeteorCadence = window.matchMedia("(max-width: 960px)").matches;
+    const baseDurationSec = isMobileMeteorCadence ? 6.4 + Math.random() * 0.6 : 5.8 + Math.random() * 2.2;
+    const launchStrideSec = isMobileMeteorCadence
+      ? baseDurationSec / Math.max(1, cometCount)
+      : Math.max(1.2, baseDurationSec * 0.34);
     for (let i = 0; i < cometCount; i += 1) {
       const comet = document.createElement("span");
       comet.className = "home-fx-comet";
-      comet.style.setProperty("--c-top", `${(8 + Math.random() * 56).toFixed(2)}%`);
+      comet.style.setProperty("--c-top", `${(topSlots[i] ?? (8 + Math.random() * 56)).toFixed(2)}%`);
       comet.style.setProperty("--c-size", `${(78 + Math.random() * 44).toFixed(2)}px`);
-      comet.style.setProperty("--c-delay", `${(Math.random() * 8).toFixed(2)}s`);
-      comet.style.setProperty("--c-duration", `${(5.2 + Math.random() * 3.8).toFixed(2)}s`);
+      comet.style.setProperty(
+        "--c-delay",
+        `${(i * launchStrideSec + (isMobileMeteorCadence ? 0 : Math.random() * 0.35)).toFixed(2)}s`
+      );
+      comet.style.setProperty(
+        "--c-duration",
+        `${(isMobileMeteorCadence ? baseDurationSec : baseDurationSec + (Math.random() * 0.6 - 0.3)).toFixed(2)}s`
+      );
       layer.appendChild(comet);
     }
     document.body.appendChild(layer);

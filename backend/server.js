@@ -399,11 +399,7 @@ app.use((req, res, next) => {
   if (!versionTag) {
     return next();
   }
-  if (FRESH_ASSET_EXTENSIONS.has(ext)) {
-    res.setHeader("Cache-Control", "public, max-age=0, must-revalidate");
-    return next();
-  }
-  if (CACHEABLE_MEDIA_EXTENSIONS.has(ext)) {
+  if (FRESH_ASSET_EXTENSIONS.has(ext) || CACHEABLE_MEDIA_EXTENSIONS.has(ext)) {
     res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
   }
   return next();
@@ -2226,24 +2222,6 @@ const appendRegisteredAccountAuditEntry = async ({ userRecord = null, req = null
   registeredAccountsAudit.push(entry);
   await queuePersistRegisteredAccountsAudit();
   return true;
-};
-
-const resolveRegisteredAccountSourceByUserId = (userId) => {
-  const normalizedUserId = String(userId || "").trim();
-  if (!normalizedUserId || !Array.isArray(registeredAccountsAudit)) {
-    return "";
-  }
-  for (let index = registeredAccountsAudit.length - 1; index >= 0; index -= 1) {
-    const entry = registeredAccountsAudit[index];
-    if (!isPlainObject(entry)) {
-      continue;
-    }
-    if (String(entry.userId || "").trim() !== normalizedUserId) {
-      continue;
-    }
-    return String(entry.source || "").trim().toLowerCase();
-  }
-  return "";
 };
 
 const createEmailVerificationChallenge = () => {
@@ -4298,8 +4276,26 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
     const nowIso = new Date().toISOString();
     const oauthMode =
       String(stateData?.mode || "login").trim().toLowerCase() === "signup" ? "signup" : "login";
-    const existingUserId = authStore.emailIndex[email];
-    let userRecord = existingUserId ? authStore.users[existingUserId] : null;
+    const indexedUserId = String(authStore.emailIndex[email] || "").trim();
+    let userRecord = indexedUserId ? authStore.users[indexedUserId] : null;
+    if (indexedUserId && !userRecord) {
+      delete authStore.emailIndex[email];
+      markAuthStoreDirty();
+    }
+    if (!userRecord) {
+      const matchedUserEntry = Object.entries(authStore.users || {}).find(([, candidateUser]) => {
+        if (!candidateUser || typeof candidateUser !== "object") {
+          return false;
+        }
+        return normalizeEmail(candidateUser.email) === email;
+      });
+      if (matchedUserEntry) {
+        const [matchedUserId, matchedUserRecord] = matchedUserEntry;
+        userRecord = matchedUserRecord;
+        authStore.emailIndex[email] = String(matchedUserId || "").trim();
+        markAuthStoreDirty();
+      }
+    }
     let createdNewGoogleUser = false;
     if (
       userRecord &&
@@ -4369,17 +4365,6 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
       userRecord.data = normalizeUserData(userRecord.data);
       if (!isPlainObject(userRecord.data.profile)) {
         userRecord.data.profile = {};
-      }
-      const registrationSource = resolveRegisteredAccountSourceByUserId(userRecord.id);
-      if (registrationSource === "signup-email") {
-        return res.redirect(
-          302,
-          buildAuthErrorRedirectPath("google_account_exists_email", stateData.returnTo, {
-            authEmail: email,
-            openAuth: "1",
-            authPanel: "login",
-          })
-        );
       }
       const existingAuthProvider =
         String(userRecord.data.profile.authProvider || "email").trim().toLowerCase() || "email";
