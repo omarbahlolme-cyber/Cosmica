@@ -26,6 +26,19 @@ Cosmica is a static language-learning site with a small Node/Express backend for
 - World organization folder: `frontend/worlds/`
 - Translation generators: `scripts/`
 
+## Auth incident quick triage
+
+If a user reports: “Account does not exist,” run lifecycle diagnosis first:
+
+```bash
+npm run auth:user:lifecycle -- --email=user@example.com
+```
+
+This summarizes whether the account is currently active, previously deleted, or missing from current store state.
+
+For full recovery and incident workflow, use:
+- `docs/OPERATIONS_HARDENING.md` (section `3.7 Auth-store corruption recovery + user lifecycle triage`)
+
 ## Organization standards
 
 1. Keep URL-facing HTML files in root unless route changes are intentional.
@@ -324,6 +337,8 @@ This verifies `robots.txt`, `sitemap.xml`, canonical tags, and JSON-LD on key pa
 - Optional server error webhook alerts can be enabled with `ERROR_WEBHOOK_URL`.
 - Optional auth-specific alert webhook can be enabled with `AUTH_ALERT_WEBHOOK_URL`.
 - Optional real-user performance webhook forwarding can be enabled with `RUM_WEBHOOK_URL`.
+- Auth store backend can be selected with `AUTH_STORE_BACKEND` (`file` default, `postgres` optional).
+- For `AUTH_STORE_BACKEND=postgres`, set `AUTH_POSTGRES_URL` (or `DATABASE_URL`).
 
 Auth runtime readiness check:
 

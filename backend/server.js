@@ -806,6 +806,7 @@ const hasAnyEmailDeliveryConfig = () =>
 const runAuthRuntimeConfigAudit = () => {
   const issues = [];
   const warnings = [];
+  let hasFatalStartupIssue = false;
   const publicOrigin = String(process.env.PUBLIC_APP_ORIGIN || "").trim();
   const senderAddress = String(
     process.env.AUTH_FROM || process.env.FEEDBACK_FROM || process.env.SMTP_USER || ""
@@ -822,24 +823,39 @@ const runAuthRuntimeConfigAudit = () => {
   }
   if (isProduction) {
     if (!publicOrigin) {
-      warnings.push("Missing PUBLIC_APP_ORIGIN in production; verification links will depend on request host.");
+      issues.push("Missing PUBLIC_APP_ORIGIN in production.");
+      hasFatalStartupIssue = true;
     } else {
       try {
         const parsed = new URL(publicOrigin);
         if (parsed.protocol !== "https:") {
           issues.push("PUBLIC_APP_ORIGIN must use https:// in production.");
+          hasFatalStartupIssue = true;
         }
       } catch {
         issues.push("PUBLIC_APP_ORIGIN is not a valid URL.");
+        hasFatalStartupIssue = true;
       }
     }
     if (!AUTH_ALERT_WEBHOOK_URL) {
       warnings.push("AUTH_ALERT_WEBHOOK_URL/ERROR_WEBHOOK_URL not set; auth security alerts will not be forwarded.");
     }
+    if (AUTH_STORE_BACKEND === "file") {
+      warnings.push(
+        "Auth store is file-backed; production should run on persistent storage and a single instance, or migrate auth data to a shared database."
+      );
+    }
+    if (AUTH_STORE_BACKEND === "postgres" && !AUTH_POSTGRES_URL) {
+      issues.push("AUTH_STORE_BACKEND=postgres requires AUTH_POSTGRES_URL (or DATABASE_URL).");
+      hasFatalStartupIssue = true;
+    }
+  }
+  if (AUTH_STORE_BACKEND === "postgres" && !AUTH_POSTGRES_URL) {
+    warnings.push("AUTH_STORE_BACKEND=postgres requested but AUTH_POSTGRES_URL/DATABASE_URL is empty.");
   }
 
   if (!issues.length && !warnings.length) {
-    return;
+    return { hasFatalStartupIssue: false };
   }
 
   if (issues.length) {
@@ -859,6 +875,7 @@ const runAuthRuntimeConfigAudit = () => {
     warnings,
     environment: process.env.NODE_ENV || "development",
   });
+  return { hasFatalStartupIssue };
 };
 
 const sendTransactionalEmail = async ({ to, subject, text, replyTo = "" }) => {
@@ -908,10 +925,24 @@ const sendTransactionalEmail = async ({ to, subject, text, replyTo = "" }) => {
 
 /* --------------------------------------------------------------------------
    AUTH + ACCOUNT DATA STORE
-   Lightweight file-backed persistence for accounts, sessions, and progress.
+   Account/session persistence (file by default, optional Postgres backend).
    -------------------------------------------------------------------------- */
 const AUTH_DATA_ROOT = path.join(__dirname, "data");
 const AUTH_STORE_FILE = path.join(AUTH_DATA_ROOT, "accounts.json");
+const AUTH_STORE_LAST_KNOWN_GOOD_FILE = path.join(AUTH_DATA_ROOT, "accounts.last-known-good.json");
+const AUTH_STORE_BACKEND_DEFAULT = "file";
+let AUTH_STORE_BACKEND = String(process.env.AUTH_STORE_BACKEND || AUTH_STORE_BACKEND_DEFAULT)
+  .trim()
+  .toLowerCase();
+if (AUTH_STORE_BACKEND !== "file" && AUTH_STORE_BACKEND !== "postgres") {
+  AUTH_STORE_BACKEND = AUTH_STORE_BACKEND_DEFAULT;
+}
+const AUTH_POSTGRES_URL = String(process.env.AUTH_POSTGRES_URL || process.env.DATABASE_URL || "").trim();
+const AUTH_POSTGRES_TABLE = String(process.env.AUTH_POSTGRES_TABLE || "auth_store")
+  .trim()
+  .toLowerCase()
+  .replace(/[^a-z0-9_]/g, "") || "auth_store";
+const AUTH_POSTGRES_ROW_KEY = String(process.env.AUTH_POSTGRES_ROW_KEY || "primary").trim().slice(0, 120) || "primary";
 const DELETED_ACCOUNTS_AUDIT_FILE = path.join(AUTH_DATA_ROOT, "deleted-accounts.json");
 const REGISTERED_ACCOUNTS_AUDIT_FILE = path.join(AUTH_DATA_ROOT, "registered-accounts.json");
 const BLOCKED_USERS_STORE_FILE = path.join(AUTH_DATA_ROOT, "blocked-users.json");
@@ -1050,6 +1081,10 @@ const createEmptyAuthStore = () => ({
   users: {},
   emailIndex: {},
   sessions: {},
+  deletedUsers: {
+    userIds: {},
+    emails: {},
+  },
 });
 
 const createEmptyBlockedUsersStore = () => ({
@@ -1495,6 +1530,44 @@ const normalizeUserRecord = (candidate, fallbackUserId) => {
   };
 };
 
+const normalizeAuthStoreDeletedUsers = (candidate) => {
+  const normalized = {
+    userIds: {},
+    emails: {},
+  };
+  const source = isPlainObject(candidate) ? candidate : {};
+  const userIds = isPlainObject(source.userIds) ? source.userIds : {};
+  Object.entries(userIds).forEach(([userId, at]) => {
+    const normalizedUserId = String(userId || "").trim().slice(0, 120);
+    const normalizedAt = String(at || "").trim().slice(0, 40);
+    if (!normalizedUserId || !normalizedAt || !Number.isFinite(Date.parse(normalizedAt))) {
+      return;
+    }
+    normalized.userIds[normalizedUserId] = normalizedAt;
+  });
+  const emails = isPlainObject(source.emails) ? source.emails : {};
+  Object.entries(emails).forEach(([email, at]) => {
+    const normalizedEmail = normalizeEmail(email);
+    const normalizedAt = String(at || "").trim().slice(0, 40);
+    if (!normalizedEmail || !normalizedAt || !Number.isFinite(Date.parse(normalizedAt))) {
+      return;
+    }
+    normalized.emails[normalizedEmail] = normalizedAt;
+  });
+  return normalized;
+};
+
+const toEpochMs = (value) => {
+  const epoch = Date.parse(String(value || ""));
+  return Number.isFinite(epoch) ? epoch : 0;
+};
+
+const pickNewestTimestamp = (left, right) => {
+  const leftValue = String(left || "").trim();
+  const rightValue = String(right || "").trim();
+  return toEpochMs(leftValue) >= toEpochMs(rightValue) ? leftValue : rightValue;
+};
+
 const normalizeAuthStore = (candidate) => {
   const normalized = createEmptyAuthStore();
   if (!isPlainObject(candidate)) {
@@ -1533,6 +1606,7 @@ const normalizeAuthStore = (candidate) => {
   normalized.schemaVersion =
     Number(candidate.schemaVersion) > 0 ? Number(candidate.schemaVersion) : AUTH_STORE_SCHEMA_VERSION;
   normalized.updatedAt = String(candidate.updatedAt || new Date().toISOString());
+  normalized.deletedUsers = normalizeAuthStoreDeletedUsers(candidate.deletedUsers);
   return normalized;
 };
 
@@ -1628,6 +1702,13 @@ const writeAuthStoreSync = (store) => {
   fs.writeFileSync(AUTH_STORE_FILE, JSON.stringify(store, null, 2), "utf8");
 };
 
+const writeAuthStoreLastKnownGoodSync = (store) => {
+  if (!fs.existsSync(AUTH_DATA_ROOT)) {
+    fs.mkdirSync(AUTH_DATA_ROOT, { recursive: true });
+  }
+  fs.writeFileSync(AUTH_STORE_LAST_KNOWN_GOOD_FILE, JSON.stringify(store, null, 2), "utf8");
+};
+
 const writeDeletedAccountsAuditSync = (entries) => {
   if (!fs.existsSync(AUTH_DATA_ROOT)) {
     fs.mkdirSync(AUTH_DATA_ROOT, { recursive: true });
@@ -1668,21 +1749,279 @@ const loadAuthStoreFromDisk = () => {
     if (!fs.existsSync(AUTH_STORE_FILE)) {
       const initialStore = createEmptyAuthStore();
       writeAuthStoreSync(initialStore);
+      writeAuthStoreLastKnownGoodSync(initialStore);
       return initialStore;
     }
     const raw = fs.readFileSync(AUTH_STORE_FILE, "utf8");
     const parsed = raw.trim() ? JSON.parse(raw) : createEmptyAuthStore();
     const normalized = normalizeAuthStore(parsed);
     writeAuthStoreSync(normalized);
+    writeAuthStoreLastKnownGoodSync(normalized);
     return normalized;
   } catch (error) {
-    console.error("[auth-store] Failed to read auth store, resetting:", error?.message || error);
-    const fallback = createEmptyAuthStore();
+    console.error("[auth-store] Failed to read auth store, attempting last-known-good recovery:", error?.message || error);
     try {
-      writeAuthStoreSync(fallback);
+      if (!fs.existsSync(AUTH_DATA_ROOT)) {
+        fs.mkdirSync(AUTH_DATA_ROOT, { recursive: true });
+      }
+      if (fs.existsSync(AUTH_STORE_FILE)) {
+        const suffix = new Date().toISOString().replace(/[.:]/g, "-");
+        const corruptSnapshotPath = path.join(AUTH_DATA_ROOT, `accounts.corrupt-${suffix}.json`);
+        fs.copyFileSync(AUTH_STORE_FILE, corruptSnapshotPath);
+      }
     } catch {}
+
+    try {
+      if (fs.existsSync(AUTH_STORE_LAST_KNOWN_GOOD_FILE)) {
+        const rawLastKnownGood = fs.readFileSync(AUTH_STORE_LAST_KNOWN_GOOD_FILE, "utf8");
+        const parsedLastKnownGood = rawLastKnownGood.trim()
+          ? JSON.parse(rawLastKnownGood)
+          : createEmptyAuthStore();
+        const normalizedLastKnownGood = normalizeAuthStore(parsedLastKnownGood);
+        writeAuthStoreSync(normalizedLastKnownGood);
+        writeAuthStoreLastKnownGoodSync(normalizedLastKnownGood);
+        console.warn("[auth-store] Recovered auth store from last-known-good snapshot");
+        return normalizedLastKnownGood;
+      }
+    } catch (lastKnownGoodError) {
+      console.error(
+        "[auth-store] Failed to recover from last-known-good snapshot:",
+        lastKnownGoodError?.message || lastKnownGoodError
+      );
+    }
+
+    const fallback = createEmptyAuthStore();
+    console.error("[auth-store] No recoverable snapshot found; starting with empty in-memory store");
     return fallback;
   }
+};
+
+let authStorePostgresPool = null;
+let authStorePostgresRevision = 0;
+
+const getAuthStorePostgresPool = () => {
+  if (authStorePostgresPool) {
+    return authStorePostgresPool;
+  }
+  let Pool = null;
+  try {
+    ({ Pool } = require("pg"));
+  } catch (error) {
+    throw new Error(`Postgres backend requested but pg package is missing: ${error?.message || error}`);
+  }
+  authStorePostgresPool = new Pool({
+    connectionString: AUTH_POSTGRES_URL,
+    ssl: isProduction ? { rejectUnauthorized: false } : undefined,
+  });
+  return authStorePostgresPool;
+};
+
+const getAuthStorePostgresTableName = () => `"${AUTH_POSTGRES_TABLE}"`;
+
+const ensureAuthStorePostgresTable = async () => {
+  const pool = getAuthStorePostgresPool();
+  const tableName = getAuthStorePostgresTableName();
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS ${tableName} (
+      store_key TEXT PRIMARY KEY,
+      revision BIGINT NOT NULL,
+      payload JSONB NOT NULL,
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
+};
+
+const readAuthStoreSnapshotFromPostgres = async () => {
+  const pool = getAuthStorePostgresPool();
+  const tableName = getAuthStorePostgresTableName();
+  const result = await pool.query(
+    `SELECT revision, payload FROM ${tableName} WHERE store_key = $1 LIMIT 1`,
+    [AUTH_POSTGRES_ROW_KEY]
+  );
+  if (!result.rowCount) {
+    return null;
+  }
+  const row = result.rows[0] || {};
+  return {
+    revision: Number(row.revision) || 0,
+    payload: row.payload,
+  };
+};
+
+const upsertAuthStoreSnapshotInPostgres = async ({ revision, store }) => {
+  const pool = getAuthStorePostgresPool();
+  const tableName = getAuthStorePostgresTableName();
+  const payloadJson = JSON.stringify(normalizeAuthStore(store));
+  await pool.query(
+    `
+      INSERT INTO ${tableName} (store_key, revision, payload, updated_at)
+      VALUES ($1, $2, $3::jsonb, NOW())
+      ON CONFLICT (store_key)
+      DO UPDATE SET revision = EXCLUDED.revision, payload = EXCLUDED.payload, updated_at = NOW()
+    `,
+    [AUTH_POSTGRES_ROW_KEY, Math.max(1, Number(revision) || 1), payloadJson]
+  );
+};
+
+const mergeAuthStoresForConflictResolution = ({ remoteStore, localStore }) => {
+  const merged = createEmptyAuthStore();
+  const normalizedRemote = normalizeAuthStore(remoteStore);
+  const normalizedLocal = normalizeAuthStore(localStore);
+  const mergedDeletedUsers = {
+    userIds: {},
+    emails: {},
+  };
+  Object.entries(normalizedRemote.deletedUsers?.userIds || {}).forEach(([userId, at]) => {
+    mergedDeletedUsers.userIds[userId] = String(at || "");
+  });
+  Object.entries(normalizedLocal.deletedUsers?.userIds || {}).forEach(([userId, at]) => {
+    mergedDeletedUsers.userIds[userId] = pickNewestTimestamp(mergedDeletedUsers.userIds[userId], at);
+  });
+  Object.entries(normalizedRemote.deletedUsers?.emails || {}).forEach(([email, at]) => {
+    mergedDeletedUsers.emails[email] = String(at || "");
+  });
+  Object.entries(normalizedLocal.deletedUsers?.emails || {}).forEach(([email, at]) => {
+    mergedDeletedUsers.emails[email] = pickNewestTimestamp(mergedDeletedUsers.emails[email], at);
+  });
+
+  const allUserIds = new Set([
+    ...Object.keys(normalizedRemote.users || {}),
+    ...Object.keys(normalizedLocal.users || {}),
+  ]);
+  allUserIds.forEach((userId) => {
+    const remoteUser = normalizedRemote.users[userId];
+    const localUser = normalizedLocal.users[userId];
+    const userCandidate = (() => {
+      if (remoteUser && !localUser) {
+        return remoteUser;
+      }
+      if (!remoteUser && localUser) {
+        return localUser;
+      }
+      if (!remoteUser && !localUser) {
+        return null;
+      }
+      const remoteUpdatedAtMs = toEpochMs(remoteUser.updatedAt || remoteUser.createdAt);
+      const localUpdatedAtMs = toEpochMs(localUser.updatedAt || localUser.createdAt);
+      return localUpdatedAtMs >= remoteUpdatedAtMs ? localUser : remoteUser;
+    })();
+    if (!userCandidate) {
+      return;
+    }
+    const userUpdatedAtMs = toEpochMs(userCandidate.updatedAt || userCandidate.createdAt);
+    const userIdDeletedAtMs = toEpochMs(mergedDeletedUsers.userIds[userId]);
+    const userEmailDeletedAtMs = toEpochMs(
+      mergedDeletedUsers.emails[normalizeEmail(userCandidate.email)]
+    );
+    if (Math.max(userIdDeletedAtMs, userEmailDeletedAtMs) >= userUpdatedAtMs) {
+      return;
+    }
+    merged.users[userId] = userCandidate;
+  });
+
+  Object.entries(merged.users).forEach(([userId, userRecord]) => {
+    const normalizedEmail = normalizeEmail(userRecord.email);
+    if (!normalizedEmail) {
+      return;
+    }
+    merged.emailIndex[normalizedEmail] = userId;
+  });
+
+  const allSessionHashes = new Set([
+    ...Object.keys(normalizedRemote.sessions || {}),
+    ...Object.keys(normalizedLocal.sessions || {}),
+  ]);
+  allSessionHashes.forEach((sessionHash) => {
+    const remoteSession = normalizedRemote.sessions[sessionHash];
+    const localSession = normalizedLocal.sessions[sessionHash];
+    const sessionCandidate = (() => {
+      if (remoteSession && !localSession) {
+        return remoteSession;
+      }
+      if (!remoteSession && localSession) {
+        return localSession;
+      }
+      if (!remoteSession && !localSession) {
+        return null;
+      }
+      const remoteUpdatedAtMs = toEpochMs(remoteSession.updatedAt || remoteSession.createdAt);
+      const localUpdatedAtMs = toEpochMs(localSession.updatedAt || localSession.createdAt);
+      return localUpdatedAtMs >= remoteUpdatedAtMs ? localSession : remoteSession;
+    })();
+    if (!sessionCandidate) {
+      return;
+    }
+    const sessionUserId = String(sessionCandidate.userId || "").trim();
+    if (!sessionUserId || !merged.users[sessionUserId]) {
+      return;
+    }
+    const expiryMs = toEpochMs(sessionCandidate.expiresAt);
+    if (!expiryMs || expiryMs <= Date.now()) {
+      return;
+    }
+    merged.sessions[sessionHash] = sessionCandidate;
+  });
+
+  merged.deletedUsers = mergedDeletedUsers;
+  merged.schemaVersion = Math.max(
+    Number(normalizedRemote.schemaVersion) || AUTH_STORE_SCHEMA_VERSION,
+    Number(normalizedLocal.schemaVersion) || AUTH_STORE_SCHEMA_VERSION
+  );
+  merged.updatedAt = pickNewestTimestamp(normalizedRemote.updatedAt, normalizedLocal.updatedAt) || new Date().toISOString();
+  return normalizeAuthStore(merged);
+};
+
+const persistAuthStoreToPostgres = async (localStore) => {
+  const maxAttempts = 4;
+  let candidateStore = normalizeAuthStore(localStore);
+  for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
+    const pool = getAuthStorePostgresPool();
+    const tableName = getAuthStorePostgresTableName();
+    const currentSnapshot = await readAuthStoreSnapshotFromPostgres();
+    if (!currentSnapshot) {
+      await upsertAuthStoreSnapshotInPostgres({ revision: 1, store: candidateStore });
+      authStorePostgresRevision = 1;
+      authStore = normalizeAuthStore(candidateStore);
+      return;
+    }
+
+    const remoteRevision = Number(currentSnapshot.revision) || 0;
+    const remoteStore = normalizeAuthStore(currentSnapshot.payload);
+    const mergedStore = mergeAuthStoresForConflictResolution({
+      remoteStore,
+      localStore: candidateStore,
+    });
+    const payloadJson = JSON.stringify(mergedStore);
+    const result = await pool.query(
+      `
+        UPDATE ${tableName}
+        SET revision = $1, payload = $2::jsonb, updated_at = NOW()
+        WHERE store_key = $3 AND revision = $4
+      `,
+      [remoteRevision + 1, payloadJson, AUTH_POSTGRES_ROW_KEY, remoteRevision]
+    );
+    if (result.rowCount === 1) {
+      authStorePostgresRevision = remoteRevision + 1;
+      authStore = normalizeAuthStore(mergedStore);
+      return;
+    }
+    candidateStore = mergedStore;
+  }
+  throw new Error("Failed to persist auth store to Postgres after conflict retries.");
+};
+
+const initializeAuthStoreFromPostgres = async () => {
+  await ensureAuthStorePostgresTable();
+  const existingSnapshot = await readAuthStoreSnapshotFromPostgres();
+  if (existingSnapshot) {
+    authStore = normalizeAuthStore(existingSnapshot.payload);
+    authStorePostgresRevision = Number(existingSnapshot.revision) || 0;
+    return;
+  }
+  const bootstrappedStore = normalizeAuthStore(authStore);
+  await upsertAuthStoreSnapshotInPostgres({ revision: 1, store: bootstrappedStore });
+  authStore = bootstrappedStore;
+  authStorePostgresRevision = 1;
 };
 
 const normalizeDeletedAccountPremiumSnapshot = (snapshot) => {
@@ -1937,10 +2276,17 @@ const queuePersistAuthStore = () => {
   authStorePersistQueue = authStorePersistQueue
     .catch(() => {})
     .then(async () => {
+      if (AUTH_STORE_BACKEND === "postgres") {
+        await persistAuthStoreToPostgres(authStore);
+        return;
+      }
       await fs.promises.mkdir(AUTH_DATA_ROOT, { recursive: true });
       const tmpPath = `${AUTH_STORE_FILE}.tmp`;
       await fs.promises.writeFile(tmpPath, payload, "utf8");
       await fs.promises.rename(tmpPath, AUTH_STORE_FILE);
+      const lastKnownGoodTmpPath = `${AUTH_STORE_LAST_KNOWN_GOOD_FILE}.tmp`;
+      await fs.promises.writeFile(lastKnownGoodTmpPath, payload, "utf8");
+      await fs.promises.rename(lastKnownGoodTmpPath, AUTH_STORE_LAST_KNOWN_GOOD_FILE);
     })
     .catch((error) => {
       reportServerError("auth-store-persist", error);
@@ -2461,6 +2807,27 @@ const purgeUserFromAuthStore = ({ userId, email = "" } = {}) => {
       userIdsToPurge.add(normalizedIndexedUserId);
     }
   });
+
+  const deletedAt = new Date().toISOString();
+  if (!isPlainObject(authStore.deletedUsers)) {
+    authStore.deletedUsers = { userIds: {}, emails: {} };
+  }
+  if (!isPlainObject(authStore.deletedUsers.userIds)) {
+    authStore.deletedUsers.userIds = {};
+  }
+  if (!isPlainObject(authStore.deletedUsers.emails)) {
+    authStore.deletedUsers.emails = {};
+  }
+  userIdsToPurge.forEach((candidateUserId) => {
+    const normalizedCandidateUserId = String(candidateUserId || "").trim();
+    if (!normalizedCandidateUserId) {
+      return;
+    }
+    authStore.deletedUsers.userIds[normalizedCandidateUserId] = deletedAt;
+  });
+  if (resolvedEmail) {
+    authStore.deletedUsers.emails[resolvedEmail] = deletedAt;
+  }
 
   if (resolvedEmail && authStore.emailIndex[resolvedEmail]) {
     delete authStore.emailIndex[resolvedEmail];
@@ -4504,11 +4871,11 @@ app.get("/api/auth/verify-email", authGoogleLimiter, (req, res) => {
         })
       );
     }
-    // Token was already consumed or no longer associated; keep UX on the login success path.
+    // Unknown/consumed token without a verified email hint should be treated as invalid.
     return res.redirect(
       302,
-      buildAuthErrorRedirectPath("email_verified", returnTo, {
-        authEmail: hintEmail,
+      buildAuthErrorRedirectPath("email_verify_invalid", returnTo, {
+        authEmail: normalizeEmail(hintedUser?.email) || hintEmail,
         openAuth: "1",
         authPanel: "login",
       })
@@ -5179,7 +5546,7 @@ app.post("/api/auth/login", authLoginLimiter, async (req, res) => {
       email,
       reason: "Unknown email",
     });
-    return res.status(401).json({ error: "Account does not exist. Try signing up first." });
+    return res.status(401).json({ error: "Invalid email or password" });
   }
   if (
     rejectBlockedAccess({
@@ -7429,9 +7796,28 @@ process.on("uncaughtException", (error) => {
 /* --------------------------------------------------------------------------
    SERVER STARTUP
    -------------------------------------------------------------------------- */
-runAuthRuntimeConfigAudit();
+const startServer = async () => {
+  const authRuntimeAuditResult = runAuthRuntimeConfigAudit();
+  if (authRuntimeAuditResult?.hasFatalStartupIssue) {
+    console.error("[auth-config] Fatal auth configuration issue detected. Server startup aborted.");
+    process.exit(1);
+  }
+  if (AUTH_STORE_BACKEND === "postgres") {
+    try {
+      await initializeAuthStoreFromPostgres();
+      console.log("[auth-store] Using Postgres backend for accounts and sessions.");
+    } catch (error) {
+      reportServerError("auth-store-postgres-init", error);
+      console.error("[auth-store] Failed to initialize Postgres backend. Server startup aborted.");
+      process.exit(1);
+    }
+  } else {
+    console.log("[auth-store] Using file backend for accounts and sessions.");
+  }
+  app.listen(port, () => {
+    console.log(`Server listening on http://localhost:${port}`);
+  });
+};
 
-app.listen(port, () => {
-  console.log(`Server listening on http://localhost:${port}`);
-});
+void startServer();
 

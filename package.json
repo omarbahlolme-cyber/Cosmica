@@ -32,6 +32,7 @@
     "security:audit": "node scripts/security-audit-check.js",
     "security:live": "node scripts/live-security-check.js",
     "auth:check:readiness": "node scripts/check-auth-readiness.js",
+    "auth:user:lifecycle": "node scripts/check-user-lifecycle.js",
     "auth-backup:create": "node scripts/create-auth-data-backup.js",
     "auth-backup:verify": "node scripts/verify-auth-data-backup.js",
     "auth-backup:restore": "node scripts/restore-auth-data-backup.js",
@@ -64,6 +65,7 @@
     "helmet": "^8.1.0",
     "nodemailer": "^7.0.11",
     "openai": "^6.22.0",
+    "pg": "^8.16.3",
     "stripe": "^20.3.1"
   },
   "overrides": {

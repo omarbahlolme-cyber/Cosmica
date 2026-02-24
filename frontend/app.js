@@ -2671,8 +2671,8 @@ const setupAccountHub = () => {
         panel: "login",
       },
       email_verify_invalid: {
-        message: "Account already verified or link already used. You can log in now.",
-        tone: "success",
+        message: "Verification link is invalid or already used. Please verify email again.",
+        tone: "warning",
         panel: "login",
       },
       email_verify_expired: {

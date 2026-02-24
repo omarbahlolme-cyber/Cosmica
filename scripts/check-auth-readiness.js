@@ -89,9 +89,30 @@ try {
   }
 
   const publicOrigin = String(process.env.PUBLIC_APP_ORIGIN || "").trim();
+  const authStoreBackend = String(process.env.AUTH_STORE_BACKEND || "file").trim().toLowerCase() || "file";
+  const authPostgresUrl = String(process.env.AUTH_POSTGRES_URL || process.env.DATABASE_URL || "").trim();
+  if (authStoreBackend === "postgres") {
+    if (authPostgresUrl) {
+      addResult("pass", "Postgres auth store URL configured.");
+    } else {
+      addResult("fail", "AUTH_STORE_BACKEND=postgres requires AUTH_POSTGRES_URL (or DATABASE_URL).");
+    }
+  } else if (authStoreBackend === "file") {
+    if (isProduction) {
+      addResult(
+        "warn",
+        "AUTH_STORE_BACKEND=file in production. Ensure persistent disk + single instance, or switch to Postgres."
+      );
+    } else {
+      addResult("pass", "File auth store backend selected for non-production.");
+    }
+  } else {
+    addResult("fail", `Unsupported AUTH_STORE_BACKEND value (${authStoreBackend}). Use file or postgres.`);
+  }
+
   if (isProduction) {
     if (!publicOrigin) {
-      addResult("warn", "Missing PUBLIC_APP_ORIGIN in production.");
+      addResult("fail", "Missing PUBLIC_APP_ORIGIN in production.");
     } else {
       try {
         const parsed = new URL(publicOrigin);
@@ -165,4 +186,3 @@ try {
   console.error(`- ${error.message || error}`);
   process.exit(1);
 }
-

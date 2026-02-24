@@ -118,6 +118,32 @@ Source backups above protect repository history, but real user accounts live in 
 5. Optional offsite auth snapshot mirror:
    - set `AUTH_DATA_BACKUP_OFFSITE_DIR` to a mounted/synced path before running create.
 
+### 3.7 Auth-store corruption recovery + user lifecycle triage
+
+Recent hardening added a safer startup path for `backend/data/accounts.json`:
+
+1. The backend now maintains a rolling last-known-good snapshot:
+   - `backend/data/accounts.last-known-good.json`
+2. If `accounts.json` is unreadable/corrupted at startup:
+   - the current broken file is copied to `backend/data/accounts.corrupt-<timestamp>.json`
+   - the server attempts restore from `accounts.last-known-good.json`
+   - this avoids destructive auto-reset-to-empty behavior on parse failures
+
+Operator checklist when users report “Account does not exist”:
+
+1. Run per-email lifecycle diagnosis:
+   - `npm run auth:user:lifecycle -- --email=user@example.com`
+2. Interpret `likelyState` quickly:
+   - `active-account` → account exists now (likely wrong env/email/client confusion)
+   - `previously-deleted` → user self-deleted in past (re-signup path expected)
+   - `registered-but-missing-from-current-store` → investigate store drift/reset/recovery incident
+   - `never-registered-or-different-email` → user likely used another email/provider
+3. If corruption snapshot files exist, archive and inspect before cleanup:
+   - `backend/data/accounts.corrupt-*.json`
+4. If last-known-good recovery was used, verify with:
+   - `npm run auth:user:lifecycle -- --email=<affected-user-email>`
+   - plus normal readiness/quality checks before redeploy
+
 ## 4) Ongoing Security Monitoring
 
 1. `Live Security Check` workflow validates:
@@ -166,6 +192,24 @@ Notes:
 2. Signup webhook payload currently includes:
    - `event` (`user_signup`)
    - `email`, `displayName`, `source`, `userId`, `requestId`, `createdAt`
+
+### 4.6 Auth store backend mode (file vs Postgres)
+
+Use this to control where account/session state is stored.
+
+1. Default mode is file-backed:
+   - `AUTH_STORE_BACKEND=file`
+   - Uses `backend/data/accounts.json` (+ last-known-good snapshot).
+2. Optional Postgres mode:
+   - `AUTH_STORE_BACKEND=postgres`
+   - Set `AUTH_POSTGRES_URL` (or fallback `DATABASE_URL`).
+3. Production behavior:
+   - If Postgres mode is enabled without URL, startup fails fast.
+   - If file mode is used in production, readiness emits a warning (acceptable only with persistent disk + single instance).
+4. Recommended migration flow:
+   - Deploy once with Postgres env keys configured.
+   - Server auto-bootstraps Postgres store from current in-memory/file state if DB row is empty.
+   - Run `npm run auth:check:readiness` and verify no `FAIL`.
 
 ### 4.4 Security audit allowlist (temporary upstream exception)
 
