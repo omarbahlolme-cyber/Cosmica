@@ -9162,7 +9162,7 @@ body.home-alt-luxe .hero .eyebrow {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-top: 44px;
+  margin-top: 28px;
   margin-bottom: 20px;
   padding: 0;
   color: rgba(236, 246, 255, 0.92);
@@ -10976,7 +10976,7 @@ section,
   }
 
   body.home-alt-luxe .hero .eyebrow {
-    margin-top: 24px;
+    margin-top: 10px;
     margin-bottom: 12px;
     font-size: 10px;
     letter-spacing: 0.22em;
@@ -11554,13 +11554,76 @@ body.is-ipad .nav-controls {
   transform: translateX(14px) !important;
 }
 
-.nav-controls .sound-toggle {
-  position: relative;
-  left: -10px;
+body.is-ipad.legal-page > main {
+  padding-top: calc(var(--global-nav-offset) + 108px) !important;
 }
 
-.nav-controls .account-slot {
+body.is-ipad .nav-controls .sound-toggle {
   position: relative;
-  left: 6px;
+  left: -12px;
+}
+
+body.is-ipad .nav-controls .account-slot {
+  position: relative;
+  left: 8px;
+}
+
+body.is-ipad.home-alt-luxe .hero .eyebrow {
+  margin-top: 70px;
+}
+
+body.is-ipad:not(.world-page) .hero-actions {
+  gap: 6px !important;
+}
+
+body.is-ipad:not(.world-page) .hero-actions #talkButton {
+  margin-left: 10px !important;
+}
+
+body.is-ipad:not(.world-page) .support-panel {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+body.is-ipad:not(.world-page) .support-copy {
+  text-align: center;
+  max-width: 760px;
+}
+
+body.is-ipad:not(.world-page) .support-button {
+  align-self: center;
+}
+
+body.is-ipad.world-page .world-hero.section {
+  margin-top: 96px;
+}
+
+body.is-ipad.world-page .world-maps {
+  margin-top: 268px;
+}
+
+body.is-ipad.world-page :is(#world, #language, #maps) {
+  scroll-margin-top: 268px;
+}
+
+body.is-ipad .footer {
+  grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
+  align-items: center;
+  gap: 24px;
+}
+
+body.is-ipad .footer > :first-child {
+  grid-column: 1;
+  justify-self: start;
+  align-self: center;
+  transform: translateY(-2px) !important;
+}
+
+body.is-ipad .footer-inline-links {
+  grid-column: 2;
+  justify-self: stretch;
+  justify-content: flex-end;
+  align-items: center;
 }
 

@@ -8496,31 +8496,27 @@ if (chatForm && speechText) {
 }
 
 const MOBILE_HOME_ANCHOR_DOWN_SHIFT = Object.freeze({
-  default: -8,
-  "#how": -8,
-  "#worlds": -10,
-  "#guide": -8,
-  "#join": 28,
-  "#support": -48,
+  default: 0,
+  "#how": 34,
+  "#worlds": 30,
+  "#guide": 34,
+  "#join": 62,
+  "#support": -24,
 });
 const getMobileHomeAnchorDownShift = (hash) =>
   MOBILE_HOME_ANCHOR_DOWN_SHIFT[hash] ?? MOBILE_HOME_ANCHOR_DOWN_SHIFT.default;
 const IPAD_HOME_ANCHOR_DOWN_SHIFT = Object.freeze({
   default: -6,
-  "#how": -10,
-  "#worlds": -12,
-  "#guide": -10,
-  "#join": 10,
-  "#support": -24,
+  "#how": -40,
+  "#worlds": -98,
+  "#guide": -56,
+  "#join": -120,
+  "#support": -230,
 });
 const getIpadHomeAnchorDownShift = (hash) =>
   IPAD_HOME_ANCHOR_DOWN_SHIFT[hash] ?? IPAD_HOME_ANCHOR_DOWN_SHIFT.default;
 const DESKTOP_HOME_ANCHOR_DOWN_SHIFT = Object.freeze({
   default: -30,
-  "#how": -18,
-  "#worlds": -22,
-  "#guide": -18,
-  "#support": -20,
   "#join": -84,
 });
 const getDesktopHomeAnchorDownShift = (hash) =>
@@ -8536,7 +8532,8 @@ const scrollToAnchor = (hash) => {
       && (document.body.classList.contains("is-ipad")
         || window.matchMedia("(min-width: 768px) and (max-width: 1024px) and (hover: none) and (pointer: coarse)").matches);
     const isHomeMobile = !document.body.classList.contains("world-page")
-      && window.matchMedia("(max-width: 767px)").matches;
+      && !isHomeIpad
+      && window.matchMedia("(max-width: 960px)").matches;
     const isHomeDesktop = !document.body.classList.contains("world-page")
       && !isHomeIpad
       && window.matchMedia("(min-width: 961px)").matches;
@@ -11163,11 +11160,12 @@ const setupHomeAltInteractivity = () => {
       return trackedSections[trackedSections.length - 1].hash;
     }
     const navElement = document.querySelector("header.nav, .nav");
+    const isIpadNavSpy = document.body.classList.contains("is-ipad");
     const navBottomY =
       navElement instanceof HTMLElement
         ? window.scrollY + navElement.getBoundingClientRect().bottom
         : window.scrollY;
-    const triggerY = navBottomY + 22;
+    const triggerY = navBottomY + (isIpadNavSpy ? 110 : 22);
     let winner = trackedSections[0].hash;
     trackedSections.forEach(({ hash, section }) => {
       const sectionTop = section.getBoundingClientRect().top + window.scrollY;
@@ -11178,7 +11176,7 @@ const setupHomeAltInteractivity = () => {
     const remainingScroll =
       document.documentElement.scrollHeight - (window.scrollY + window.innerHeight);
     if (remainingScroll <= window.innerHeight * 0.85) {
-      const lateViewportTriggerY = window.scrollY + window.innerHeight - 120;
+      const lateViewportTriggerY = window.scrollY + window.innerHeight - (isIpadNavSpy ? 220 : 120);
       trackedSections.forEach(({ hash, section }) => {
         const sectionTop = section.getBoundingClientRect().top + window.scrollY;
         if (sectionTop <= lateViewportTriggerY) {
