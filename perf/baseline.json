@@ -1,70 +1,70 @@
 {
-  "generatedAt": "2026-02-23T08:03:17.723Z",
+  "generatedAt": "2026-02-24T07:04:21.266Z",
   "baseUrl": "http://127.0.0.1:4174",
   "routes": {
     "/index.html": {
       "status": 200,
-      "durationMs": 18,
-      "bytes": 23229,
+      "durationMs": 14,
+      "bytes": 23226,
       "cacheControl": "public, max-age=0, must-revalidate"
     },
     "/english-world.html": {
       "status": 200,
-      "durationMs": 6,
-      "bytes": 13369,
+      "durationMs": 5,
+      "bytes": 13366,
       "cacheControl": "public, max-age=0, must-revalidate"
     },
     "/english-letters.html": {
       "status": 200,
-      "durationMs": 5,
-      "bytes": 22826,
+      "durationMs": 6,
+      "bytes": 22823,
       "cacheControl": "public, max-age=0, must-revalidate"
     },
     "/english-words.html": {
       "status": 200,
-      "durationMs": 4,
-      "bytes": 5223,
+      "durationMs": 5,
+      "bytes": 5220,
       "cacheControl": "public, max-age=0, must-revalidate"
     },
     "/english-phrases.html": {
       "status": 200,
-      "durationMs": 4,
-      "bytes": 5238,
+      "durationMs": 5,
+      "bytes": 5235,
       "cacheControl": "public, max-age=0, must-revalidate"
     },
     "/english-grammar.html": {
       "status": 200,
-      "durationMs": 4,
-      "bytes": 5216,
+      "durationMs": 6,
+      "bytes": 5213,
       "cacheControl": "public, max-age=0, must-revalidate"
     },
     "/style.css": {
       "status": 200,
       "durationMs": 5,
-      "bytes": 253731,
+      "bytes": 271795,
       "cacheControl": "public, max-age=600, stale-while-revalidate=86400"
     },
     "/style-maps.css": {
       "status": 200,
-      "durationMs": 5,
-      "bytes": 54436,
+      "durationMs": 6,
+      "bytes": 66450,
       "cacheControl": "public, max-age=0"
     },
     "/app.js": {
       "status": 200,
-      "durationMs": 5,
-      "bytes": 379146,
+      "durationMs": 4,
+      "bytes": 401056,
       "cacheControl": "public, max-age=600, stale-while-revalidate=86400"
     },
     "/app-maps.js": {
       "status": 200,
       "durationMs": 9,
-      "bytes": 287349,
+      "bytes": 303205,
       "cacheControl": "public, max-age=0"
     },
     "/translations.json": {
       "status": 200,
-      "durationMs": 13,
+      "durationMs": 8,
       "bytes": 1591307,
       "cacheControl": "public, max-age=0"
     }

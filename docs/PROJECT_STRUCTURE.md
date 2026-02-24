@@ -55,6 +55,7 @@
 |   `-- naverc3bcca6a08043c716e45b0c95a298a16.html  # Naver ownership verification
 |-- docs/
 |   |-- PROJECT_STRUCTURE.md          # This file
+|   |-- HANDOFF_ZERO_TO_HERO.md       # Beginner onboarding + release handoff guide
 |   |-- FRONTEND_RUNTIME_NOTES.md     # Frontend runtime guardrails + recent behavior notes
 |   |-- OPERATIONS_HARDENING.md       # Platform hardening + backup runbook
 |   |-- ROLLBACK_RUNBOOK.md           # Rollback procedures and recovery commands
