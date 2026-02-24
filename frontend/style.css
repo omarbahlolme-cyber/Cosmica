@@ -1220,7 +1220,7 @@ body.world-page .nav-links a {
 }
 
 .account-dropdown {
-  position: absolute;
+  position: fixed;
   z-index: 1205;
   width: min(402px, calc(100vw - 16px));
   max-height: min(calc(var(--app-height) - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 20px), 648px);
@@ -1318,6 +1318,17 @@ body.account-dropdown-lock {
   width: 100%;
   left: 0;
   right: 0;
+}
+
+body.account-dropdown-lock::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 998;
+  background: rgba(4, 10, 24, 0.24);
+  backdrop-filter: blur(8px) saturate(110%);
+  -webkit-backdrop-filter: blur(8px) saturate(110%);
+  pointer-events: none;
 }
 
 body.premium-setup-lock {
@@ -2826,6 +2837,10 @@ body.premium-setup-lock {
 .account-menu-summary.is-free-plan {
   justify-content: flex-start;
   flex-wrap: nowrap;
+}
+
+.account-menu-summary.is-free-plan .account-menu-stat-achievement {
+  display: none !important;
 }
 
 .account-menu-stat {
@@ -11245,6 +11260,10 @@ body.world-page > main {
     padding: 9px 14px;
   }
 
+  .premium-checkout-title-break {
+    display: block;
+  }
+
   body.home-alt-luxe > main {
     padding-top: calc(var(--global-nav-offset) + 46px) !important;
   }
@@ -11384,6 +11403,10 @@ body.world-page > main {
   .premium-setup-secondary {
     font-size: 0.76rem;
     padding: 8px 12px;
+  }
+
+  .premium-checkout-title-break {
+    display: block;
   }
 
   body.home-alt-luxe .orbit-system {

@@ -2005,7 +2005,7 @@ const setupAccountHub = () => {
   premiumCheckoutOverlay.innerHTML = `
     <section class="premium-checkout-card" role="dialog" aria-modal="true" aria-labelledby="premiumCheckoutTitle">
       <button type="button" class="premium-checkout-close" aria-label="Close checkout">×</button>
-      <h3 id="premiumCheckoutTitle">Choose a secure Premium checkout option</h3>
+      <h3 id="premiumCheckoutTitle">Choose a secure Premium <span class="premium-checkout-title-break">checkout option</span></h3>
       <p class="premium-checkout-message">You will be redirected to complete your subscription securely.</p>
       <div class="premium-checkout-options" role="list"></div>
       <p class="premium-checkout-note">Payments are handled by our secure billing provider.</p>
@@ -2866,15 +2866,17 @@ const setupAccountHub = () => {
       return;
     }
     const triggerRect = trigger.getBoundingClientRect();
-    const pageScrollX = window.scrollX || window.pageXOffset || 0;
-    const pageScrollY = window.scrollY || window.pageYOffset || 0;
+    const navRect = nav?.getBoundingClientRect?.() || { bottom: triggerRect.bottom };
     const width = Math.min(360, Math.max(280, window.innerWidth - 16));
     dropdown.style.width = `${width}px`;
     const maxLeft = Math.max(8, window.innerWidth - width - 8);
     const left = Math.max(8, Math.min(maxLeft, triggerRect.right - width));
-    const top = Math.max(12, triggerRect.bottom + 24);
-    dropdown.style.left = `${left + pageScrollX}px`;
-    dropdown.style.top = `${top + pageScrollY}px`;
+    const topAnchor = Math.max(triggerRect.bottom, Number(navRect.bottom) || triggerRect.bottom);
+    const top = Math.max(12, topAnchor + 14);
+    const maxHeight = Math.max(220, window.innerHeight - top - 8);
+    dropdown.style.left = `${left}px`;
+    dropdown.style.top = `${top}px`;
+    dropdown.style.maxHeight = `${maxHeight}px`;
   };
 
   const openDropdown = () => {
@@ -3823,7 +3825,7 @@ const setupAccountHub = () => {
       menuAchievements.textContent = `${achievementCount} Achievements`;
       const achievementsStatNode = menuAchievements.closest(".account-menu-stat");
       if (achievementsStatNode) {
-        achievementsStatNode.hidden = !showPremiumStatus;
+        achievementsStatNode.hidden = !hasPremiumAccess;
       }
     }
 
@@ -3937,7 +3939,14 @@ const setupAccountHub = () => {
     },
     { passive: true }
   );
-  window.addEventListener("scroll", positionTriggerNoticeBubble, { passive: true });
+  window.addEventListener(
+    "scroll",
+    () => {
+      positionDropdown();
+      positionTriggerNoticeBubble();
+    },
+    { passive: true }
+  );
   document.addEventListener("keydown", (event) => {
     if (event.key !== "Escape") {
       return;
