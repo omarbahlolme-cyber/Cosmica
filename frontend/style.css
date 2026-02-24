@@ -11632,13 +11632,32 @@ body.is-ipad .footer-inline-links {
 }
 
 @media (max-width: 820px) {
+  body.is-ipad.home-alt-luxe .hero-right {
+    height: clamp(470px, 60vw, 620px);
+  }
+
   body.is-ipad.home-alt-luxe .orbit-system {
-    transform: scale(0.92);
+    transform: scale(1.02) !important;
     transform-origin: center;
   }
 
   body.is-ipad.home-alt-luxe .hero-right.is-orbit-focused .orbit-system {
-    transform: translate3d(0, -2px, 0) scale(0.928);
+    transform: translate3d(0, -2px, 0) scale(1.03) !important;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1366px) {
+  body.is-ipad.home-alt-luxe .hero-right {
+    height: clamp(420px, 48vw, 520px);
+  }
+
+  body.is-ipad.home-alt-luxe .orbit-system {
+    transform: scale(0.9) !important;
+    transform-origin: center;
+  }
+
+  body.is-ipad.home-alt-luxe .hero-right.is-orbit-focused .orbit-system {
+    transform: translate3d(0, -2px, 0) scale(0.908) !important;
   }
 }
 
@@ -11657,6 +11676,75 @@ body.is-ipad .footer-inline-links {
 
   body.world-page :is(#world, #language, #maps) {
     scroll-margin-top: 248px !important;
+  }
+}
+
+@media (min-width: 1000px) and (max-width: 1060px) and (min-height: 1300px) and (max-height: 1400px) and (orientation: portrait) {
+  body,
+  body.home-alt-luxe,
+  body.world-page {
+    overflow-x: hidden !important;
+  }
+
+  body .nav,
+  body.world-page .nav {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden !important;
+  }
+
+  body .nav-controls {
+    transform: translateX(0) !important;
+    gap: 10px;
+  }
+
+  body .nav-controls .sound-toggle,
+  body .nav-controls .account-slot {
+    left: 0 !important;
+    margin-left: 0 !important;
+  }
+
+  body.home-alt-luxe .hero-right {
+    height: clamp(430px, 50vw, 540px);
+    overflow: visible;
+  }
+
+  body.home-alt-luxe .orbit-system {
+    transform: scale(0.86) !important;
+    transform-origin: center;
+  }
+
+  body.home-alt-luxe .hero-right.is-orbit-focused .orbit-system {
+    transform: translate3d(0, -2px, 0) scale(0.868) !important;
+  }
+
+  body.world-page .world-hero.section,
+  body.world-page main > section.section:first-of-type {
+    margin-top: 106px !important;
+  }
+
+  body.world-page > main {
+    padding-top: calc(var(--global-nav-offset) + 96px) !important;
+  }
+
+  body.world-page main > :not(.visually-hidden):first-child {
+    margin-top: 106px !important;
+  }
+
+  body.world-page :is(#wordsSections, #grammarSections) {
+    margin-top: 106px !important;
+  }
+
+  body.world-page :is(.section.words-group, .section.phrases-group, .section.letters-grid-section) {
+    margin-top: 106px !important;
+  }
+
+  body.world-page .world-maps {
+    margin-top: 312px !important;
+  }
+
+  body.world-page :is(#world, #language, #maps) {
+    scroll-margin-top: 312px !important;
   }
 }
 
