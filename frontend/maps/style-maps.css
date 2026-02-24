@@ -1974,3 +1974,9 @@ html[lang="ar"] body.phrases-page .phrase-card .word-audio {
   }
 }
 
+@media (min-width: 768px) and (max-width: 1024px) and (max-height: 1299px) {
+  body:is(.words-page, .phrases-page, .grammar-page) .words-controls {
+    margin-top: 82px !important;
+  }
+}
+
