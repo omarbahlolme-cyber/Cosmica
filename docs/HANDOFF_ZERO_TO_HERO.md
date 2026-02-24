@@ -376,3 +376,43 @@ npm run verify:prod-integrations
 ```
 
 10. If any critical failure appears, follow `docs/ROLLBACK_RUNBOOK.md` immediately.
+
+---
+
+## 14) Practical go-live checklist (auth + UX)
+
+Run local health checks:
+
+```bash
+npm run quality
+npm run auth:check:readiness
+```
+
+Test manually on real browsers/devices:
+
+1. Chrome + Safari (or Firefox) on desktop.
+2. 1 real phone.
+
+Test critical user flows end-to-end:
+
+1. Email sign up -> verify link -> login.
+2. Forgot password -> reset link -> new password login.
+3. Google sign in/sign up.
+4. Delete account.
+5. Open worlds/maps, switch base language, open grammar modal, play audio.
+
+Check for visible issues:
+
+1. No overlapping text.
+2. No broken buttons/dropdowns.
+3. No console errors in browser devtools.
+4. No server errors in terminal.
+
+If all pass:
+
+1. You are good. No immediate fix needed.
+
+Optional hardening (not urgent):
+
+1. Add an alert webhook for auth/security events.
+2. Remove `shell: true` from `scripts/security-audit-check.js`.
