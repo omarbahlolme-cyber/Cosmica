@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-02-23T21:36:00.368Z",
-  "baseUrl": "http://127.0.0.1:4175",
+  "generatedAt": "2026-02-24T20:45:11.744Z",
+  "baseUrl": "http://127.0.0.1:4180",
   "routes": [
     "/",
     "/english-world.html",
@@ -13,9 +13,7 @@
     "/terms.html"
   ],
   "browsers": [
-    "chromium",
-    "firefox",
-    "webkit"
+    "chromium"
   ],
   "viewports": [
     {
@@ -145,6 +143,6 @@
     }
   ],
   "failures": [],
-  "checks": 675,
-  "passed": 675
+  "checks": 225,
+  "passed": 225
 }

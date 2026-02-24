@@ -5757,7 +5757,9 @@ body.world-page :is(.world-section, #world, #language, #maps) {
     inset 0 -1px 0 rgba(86, 146, 214, 0.18);
   backdrop-filter: blur(14px) saturate(135%);
   -webkit-backdrop-filter: blur(14px) saturate(135%);
-  overflow: hidden;
+  /* Keep vertical clipping for layered effects while allowing horizontal content flow. */
+  overflow-y: hidden;
+  overflow-x: visible;
   isolation: isolate;
   transition: transform 320ms cubic-bezier(0.2, 0.85, 0.3, 1),
     box-shadow 320ms ease,
@@ -5815,7 +5817,8 @@ body.world-page :is(.world-section, #world, #language, #maps)::after {
 }
 
 body.world-page #world {
-  overflow: hidden;
+  overflow-y: hidden;
+  overflow-x: visible;
 }
 
 body.world-page :is(.world-section, #world, #language, #maps) > * {
@@ -10619,6 +10622,11 @@ section,
   .hero-right,
   body.home-alt-luxe .hero-right {
     overflow: visible;
+  }
+
+  /* Prevent decorative orbit layers from widening page layout at 1024x768. */
+  body.home-alt-luxe .hero-right {
+    overflow: clip;
   }
 
   body.home-alt-luxe .orbit-system::after {

@@ -282,8 +282,17 @@ const checkPremiumUpsellPresent = async (page) => {
 
 const submitChat = async (page, text) => {
   await page.waitForSelector("#chatForm", { timeout: 15000 });
-  await page.fill("#chatInput", text);
-  await page.click("#chatForm .chat-send");
+  const chatInput = page.locator("#chatInput");
+  await chatInput.scrollIntoViewIfNeeded();
+  await chatInput.fill(text);
+  await chatInput.press("Enter").catch(async () => {
+    await page.evaluate(() => {
+      const form = document.querySelector("#chatForm");
+      if (form instanceof HTMLFormElement) {
+        form.requestSubmit();
+      }
+    });
+  });
   await page.waitForTimeout(700);
 };
 

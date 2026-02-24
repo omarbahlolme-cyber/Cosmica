@@ -185,6 +185,13 @@ npm run billing:contract
 - `backend/server.js` auth/session routes
 - `backend/data/accounts.json`
 - `backend/data/security-events.json`
+- Run per-user lifecycle triage:
+
+```bash
+npm run auth:user:lifecycle -- --email=user@example.com
+```
+
+- See recovery + triage details in `docs/OPERATIONS_HARDENING.md` (section `3.7 Auth-store corruption recovery + user lifecycle triage`)
 
 2. Premium/billing issues:
 - `docs/BILLING_OPS_QUICK_COMMANDS.md`
