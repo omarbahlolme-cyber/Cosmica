@@ -135,6 +135,37 @@ Source backups above protect repository history, but real user accounts live in 
      - login failure spikes
      - verification email delivery failures
      - startup auth config audit warnings/errors
+7. Optional signup event forwarding:
+   - Configure `SIGNUP_WEBHOOK_URL` to receive `user_signup` notifications.
+
+### 4.5 Signup webhook setup (Slack example)
+
+Use this when you want a channel alert every time a new user signs up.
+
+1. Create Slack incoming webhook:
+   - Slack -> `api.slack.com/apps` -> create/select app.
+   - Enable `Incoming Webhooks`.
+   - Add webhook to target channel.
+   - Copy webhook URL (`https://hooks.slack.com/services/...`).
+
+2. Set runtime env key (production host, e.g., Render):
+   - `SIGNUP_WEBHOOK_URL=<your_slack_webhook_url>`
+
+3. Optional local parity in `.env`:
+   - `SIGNUP_WEBHOOK_URL=<your_slack_webhook_url>`
+
+4. Redeploy/restart backend after env update.
+
+5. Verify delivery:
+   - Trigger a test signup (email or Google).
+   - Confirm webhook message appears in Slack channel.
+   - Check backend logs for `signup-webhook` errors if delivery fails.
+
+Notes:
+1. Keep webhook URLs secret (never commit to git).
+2. Signup webhook payload currently includes:
+   - `event` (`user_signup`)
+   - `email`, `displayName`, `source`, `userId`, `requestId`, `createdAt`
 
 ### 4.4 Security audit allowlist (temporary upstream exception)
 

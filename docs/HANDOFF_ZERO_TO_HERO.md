@@ -192,6 +192,7 @@ Check:
 1. `backend/server.js` auth routes and session cookie handling.
 2. `backend/data/accounts.json` (runtime auth store).
 3. `backend/data/security-events.json` for auth/security event context.
+4. For signup notifications setup, see `docs/OPERATIONS_HARDENING.md` section `4.5 Signup webhook setup (Slack example)`.
 
 ### 2) Premium/billing issues
 
