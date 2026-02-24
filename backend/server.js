@@ -359,6 +359,7 @@ const basicAuthChallenge = (res) => {
   return res.status(401).type("text/plain").send("Authentication required.");
 };
 
+// Admin-only static page guarded by HTTP Basic auth (separate from API admin token auth).
 app.get("/admin-security.html", (req, res) => {
   res.setHeader("X-Robots-Tag", "noindex, nofollow");
   res.setHeader("Cache-Control", "no-store");
@@ -400,6 +401,7 @@ const sendMapAssetAlias = (fileName) => (req, res) => {
   return res.sendFile(path.join(FRONTEND_MAPS_ROOT, fileName));
 };
 
+// Backward-compatible aliases for map bundle assets expected at root paths.
 app.get("/app-maps.js", sendMapAssetAlias("app-maps.js"));
 app.get("/style-maps.css", sendMapAssetAlias("style-maps.css"));
 app.get("/translations.json", sendMapAssetAlias("translations.json"));
@@ -463,11 +465,13 @@ app.use("/api", apiLimiter);
 /* --------------------------------------------------------------------------
    SECURITY CONTACT FILE
    -------------------------------------------------------------------------- */
+// Security contact disclosure file used by scanners and responsible disclosure workflows.
 app.get("/.well-known/security.txt", (req, res) => {
   res.type("text/plain");
   return res.sendFile(path.join(FRONTEND_ROOT, "security.txt"));
 });
 
+// Keep favicon URL stable while serving the current SVG icon.
 app.get("/favicon.ico", (req, res) => {
   return res.redirect(302, "/favicon.svg");
 });
@@ -2707,6 +2711,10 @@ const buildAdminUserSummary = (userRecord) => {
   };
 };
 
+/* --------------------------------------------------------------------------
+   ROUTE: ADMIN SECURITY API
+   -------------------------------------------------------------------------- */
+// Read-only user index for ops triage (filters by email/provider/premium/time window).
 app.get(
   "/api/admin/security/users",
   adminSecurityLimiter,
@@ -2785,6 +2793,7 @@ app.get(
   }
 );
 
+// Emergency/manual premium grant for support operations.
 app.post(
   "/api/admin/security/users/grant-premium",
   adminSecurityLimiter,
@@ -2869,6 +2878,7 @@ app.post(
   }
 );
 
+// Emergency/manual premium revoke for support operations.
 app.post(
   "/api/admin/security/users/revoke-premium",
   adminSecurityLimiter,
@@ -2927,6 +2937,7 @@ app.post(
   }
 );
 
+// Snapshot of block lists (email/userId/ip hash).
 app.get(
   "/api/admin/security/blocked",
   adminSecurityLimiter,
@@ -2944,6 +2955,7 @@ app.get(
   }
 );
 
+// Pull recent security event log entries for incident review.
 app.get(
   "/api/admin/security/events",
   adminSecurityLimiter,
@@ -2962,6 +2974,7 @@ app.get(
   }
 );
 
+// Add user/email/ip targets to the block lists and revoke active sessions.
 app.post(
   "/api/admin/security/block",
   adminSecurityLimiter,
@@ -3025,6 +3038,7 @@ app.post(
   }
 );
 
+// Remove user/email/ip targets from block lists.
 app.post(
   "/api/admin/security/unblock",
   adminSecurityLimiter,
@@ -4214,16 +4228,20 @@ const startGoogleOauthFlow = (req, res, forcedMode = "") => {
   return res.json({ ok: true, redirectUrl, mode });
 };
 
+// Start Google OAuth explicitly in login mode.
 app.get("/api/auth/google/start/login", authGoogleLimiter, (req, res) =>
   startGoogleOauthFlow(req, res, "login")
 );
 
+// Start Google OAuth explicitly in signup mode.
 app.get("/api/auth/google/start/signup", authGoogleLimiter, (req, res) =>
   startGoogleOauthFlow(req, res, "signup")
 );
 
+// Start Google OAuth using query-param driven mode fallback.
 app.get("/api/auth/google/start", authGoogleLimiter, (req, res) => startGoogleOauthFlow(req, res));
 
+// Handle Google OAuth callback, reconcile account, then create session.
 app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
   if (!isGoogleOauthConfigured()) {
     return res.redirect(302, buildAuthErrorRedirectPath("google_not_configured"));
@@ -4447,6 +4465,7 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
   }
 });
 
+// Consume email verification token and redirect user back with UI status flags.
 app.get("/api/auth/verify-email", authGoogleLimiter, (req, res) => {
   const rawToken = String(req.query?.token || "").trim();
   const returnTo = sanitizeReturnToPath(req.query?.returnTo);
@@ -4538,6 +4557,7 @@ app.get("/api/auth/verify-email", authGoogleLimiter, (req, res) => {
   );
 });
 
+// Validate password-reset link and redirect frontend with ready/expired/invalid state.
 app.get("/api/auth/password/reset", authVerifyLimiter, (req, res) => {
   const rawToken = String(req.query?.token || "").trim();
   const returnTo = sanitizeReturnToPath(req.query?.returnTo);
@@ -4577,6 +4597,7 @@ app.get("/api/auth/password/reset", authVerifyLimiter, (req, res) => {
   );
 });
 
+// Request password-reset email without revealing account existence.
 app.post("/api/auth/password/forgot", authVerifyLimiter, async (req, res) => {
   const email = normalizeEmail(req.body?.email);
   const returnTo = sanitizeReturnToPath(req.body?.returnTo);
@@ -4694,6 +4715,7 @@ app.post("/api/auth/password/forgot", authVerifyLimiter, async (req, res) => {
   }
 });
 
+// Complete password reset using token plus new password confirmation.
 app.post("/api/auth/password/reset", authVerifyLimiter, async (req, res) => {
   const rawToken = String(req.body?.token || "").trim();
   const newPassword = String(req.body?.newPassword || "");
@@ -4761,6 +4783,7 @@ app.post("/api/auth/password/reset", authVerifyLimiter, async (req, res) => {
   }
 });
 
+// Change password for authenticated email/password users.
 app.post("/api/auth/password/change", authSessionLimiter, requireAuthenticatedUser, async (req, res) => {
   const userRecord = req.authUser;
   const authProvider = String(userRecord?.data?.profile?.authProvider || "email").trim().toLowerCase() || "email";
@@ -4823,6 +4846,7 @@ app.post("/api/auth/password/change", authSessionLimiter, requireAuthenticatedUs
   }
 });
 
+// Create account and send email verification challenge.
 app.post("/api/auth/signup", authSignupLimiter, async (req, res) => {
   const email = normalizeEmail(req.body?.email);
   const password = String(req.body?.password || "");
@@ -5002,6 +5026,7 @@ app.post("/api/auth/signup", authSignupLimiter, async (req, res) => {
   }
 });
 
+// Resend verification challenge for unverified email/password accounts.
 app.post("/api/auth/verification/resend", authVerifyLimiter, async (req, res) => {
   const email = normalizeEmail(req.body?.email);
   const returnTo = sanitizeReturnToPath(req.body?.returnTo);
@@ -5111,6 +5136,7 @@ app.post("/api/auth/verification/resend", authVerifyLimiter, async (req, res) =>
   }
 });
 
+// Email/password login gate (requires verified email and active account).
 app.post("/api/auth/login", authLoginLimiter, async (req, res) => {
   const email = normalizeEmail(req.body?.email);
   const password = String(req.body?.password || "");
@@ -5225,6 +5251,7 @@ app.post("/api/auth/login", authLoginLimiter, async (req, res) => {
   }
 });
 
+// Revoke current session cookie/token.
 app.post("/api/auth/logout", authSessionLimiter, (req, res) => {
   if (req.auth?.sessionHash) {
     removeSessionByHash(req.auth.sessionHash);
@@ -5233,6 +5260,7 @@ app.post("/api/auth/logout", authSessionLimiter, (req, res) => {
   return res.json({ ok: true });
 });
 
+// Return authenticated public profile plus account flags used by frontend.
 app.get("/api/auth/me", authSessionLimiter, requireAuthenticatedUser, (req, res) => {
   const userRecord = req.authUser;
   reconcileExpiredStripePremiumFromLocalProfile(userRecord, {
@@ -5246,6 +5274,7 @@ app.get("/api/auth/me", authSessionLimiter, requireAuthenticatedUser, (req, res)
   });
 });
 
+// Permanently delete own account, append audit snapshot, and clear session.
 app.delete("/api/auth/account", authSessionLimiter, requireAuthenticatedUser, async (req, res) => {
   const userRecord = req.authUser;
   try {
@@ -5315,6 +5344,7 @@ app.delete("/api/auth/account", authSessionLimiter, requireAuthenticatedUser, as
   }
 });
 
+// Read user-owned mutable data blob (settings/profile extensions).
 app.get("/api/account/data", authSessionLimiter, requireAuthenticatedUser, (req, res) => {
   const userRecord = req.authUser;
   userRecord.data = normalizeUserData(userRecord.data);
@@ -5324,6 +5354,7 @@ app.get("/api/account/data", authSessionLimiter, requireAuthenticatedUser, (req,
   });
 });
 
+// Replace user-owned mutable data blob with size/shape guardrails.
 app.put(
   "/api/account/data",
   accountMutationLimiter,
@@ -5357,6 +5388,7 @@ app.put(
   }
 );
 
+// Manual/test-only premium upgrade endpoint (guarded by env flag).
 app.post(
   "/api/account/premium/upgrade",
   accountMutationLimiter,
@@ -5399,6 +5431,7 @@ app.post(
   }
 );
 
+// Manual/test-only premium downgrade endpoint.
 app.post(
   "/api/account/premium/downgrade",
   accountMutationLimiter,
@@ -5662,6 +5695,7 @@ const applyPremiumDowngradeToUserRecord = (
   };
 };
 
+// Ko-fi webhook receiver: validates token, matches payer email, syncs premium state.
 app.post(
   "/api/billing/webhooks/kofi",
   billingWebhookLimiter,
@@ -5873,6 +5907,7 @@ app.post(
   }
 );
 
+// Stripe webhook receiver: verifies signature and syncs subscription state.
 app.post(
   "/api/billing/webhooks/stripe",
   billingWebhookLimiter,
@@ -6741,6 +6776,7 @@ const applyStripeRestoreToUserRecord = (userRecord, stripeMatch) => {
   return true;
 };
 
+// Attempt premium restoration from deleted-account audit and/or Stripe customer linkage.
 app.post(
   "/api/billing/subscription/restore",
   accountMutationLimiter,
@@ -6817,6 +6853,7 @@ app.post(
   }
 );
 
+// Read current subscription manage-state (active/canceling/inactive + cancel ability).
 app.get(
   "/api/billing/subscription/manage",
   authSessionLimiter,
@@ -6910,6 +6947,7 @@ app.get(
   }
 );
 
+// Return hosted Stripe portal URL wrapper for frontend manage-account flow.
 app.post(
   "/api/billing/subscription/portal/session",
   authSessionLimiter,
@@ -6929,6 +6967,7 @@ app.post(
   }
 );
 
+// List configured premium checkout options for authenticated user.
 app.get(
   "/api/billing/premium/options",
   authSessionLimiter,
@@ -6949,6 +6988,7 @@ app.get(
   }
 );
 
+// Start premium checkout flow (Stripe redirect or Ko-fi fallback redirect).
 app.get(
   "/api/billing/premium/checkout/start",
   authSessionLimiter,
@@ -6989,6 +7029,7 @@ app.get(
   }
 );
 
+// Read normalized progress snapshot for current user.
 app.get("/api/progress", progressLimiter, requireAuthenticatedUser, (req, res) => {
   req.authUser.progress = normalizeProgress(req.authUser.progress);
   return res.json({
@@ -6997,6 +7038,7 @@ app.get("/api/progress", progressLimiter, requireAuthenticatedUser, (req, res) =
   });
 });
 
+// Replace full progress payload (write allowed only when premium access is active).
 app.put("/api/progress", progressLimiter, requireAuthenticatedUser, (req, res) => {
   if (!userHasPremiumAccessForProgress(req.authUser)) {
     req.authUser.progress = normalizeProgress(req.authUser.progress);
@@ -7028,6 +7070,7 @@ app.put("/api/progress", progressLimiter, requireAuthenticatedUser, (req, res) =
   });
 });
 
+// Track one progress event and return updated XP/stars/streak deltas.
 app.post("/api/progress/track", progressLimiter, requireAuthenticatedUser, (req, res) => {
   const trackResult = trackProgressEventForUser(req.authUser, req.body || {});
   if (!trackResult.ok) {

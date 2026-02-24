@@ -38,6 +38,7 @@
 |   `-- security.txt
 |-- docs/
 |   |-- HANDOFF_ZERO_TO_HERO.md       # Beginner handoff and release flow
+|   |-- CHANGE_GUIDE.md               # Change impact matrix (what else to update/check)
 |   |-- FRONTEND_RUNTIME_NOTES.md      # Runtime guardrails and decisions
 |   |-- OPERATIONS_HARDENING.md
 |   |-- BILLING_OPS_QUICK_COMMANDS.md

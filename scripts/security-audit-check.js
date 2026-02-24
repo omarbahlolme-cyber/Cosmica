@@ -39,10 +39,14 @@ const isAllowedVulnerability = (name, vulnerability) => {
   return advisoryObjects.every((entry) => ALLOWED_ADVISORY_URLS.has(String(entry.url || "").trim()));
 };
 
-const result = spawnSync("npm", ["audit", "--json"], {
-  encoding: "utf8",
-  shell: true,
-});
+const npmExecPath = String(process.env.npm_execpath || "").trim();
+const result = npmExecPath
+  ? spawnSync(process.execPath, [npmExecPath, "audit", "--json"], {
+      encoding: "utf8",
+    })
+  : spawnSync(process.platform === "win32" ? "npm.cmd" : "npm", ["audit", "--json"], {
+      encoding: "utf8",
+    });
 
 if (result.error) {
   console.error("SECURITY AUDIT FAILED");

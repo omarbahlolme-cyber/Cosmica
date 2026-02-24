@@ -79,6 +79,7 @@ Local URL:
 1. Read in order:
 - `README.md`
 - `docs/PROJECT_STRUCTURE.md`
+- `docs/CHANGE_GUIDE.md`
 - `docs/FRONTEND_RUNTIME_NOTES.md`
 - `docs/OPERATIONS_HARDENING.md`
 

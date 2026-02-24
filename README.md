@@ -7,6 +7,7 @@ Cosmica is a static language-learning site with a small Node/Express backend for
 - Full file-by-file map: `docs/PROJECT_STRUCTURE.md`
 - Beginner full handoff guide: `docs/HANDOFF_ZERO_TO_HERO.md`
 - Beginner edit intent map (feature -> file): `docs/BEGINNER_EDIT_MAP.md`
+- Change impact map (change X -> also check Y): `docs/CHANGE_GUIDE.md`
 - Per-world linguist QA checklist (all 4 maps): `docs/LINGUIST_WORLD_REVIEW_CHECKLIST.md`
 - Per-world linguist CSV tracker: `docs/LINGUIST_WORLD_REVIEW_TEMPLATE.csv`
 - Frontend runtime guardrails: `docs/FRONTEND_RUNTIME_NOTES.md`

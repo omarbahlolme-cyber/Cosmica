@@ -37,6 +37,7 @@ const urlParams = new URLSearchParams(window.location.search);
 const currentPath = window.location.pathname.toLowerCase();
 const isHomePagePath = currentPath === "/" || currentPath.endsWith("/index.html");
 
+// Detect iPad (including desktop-mode Safari) so CSS can apply tablet-specific layout fixes.
 const applyIpadBodyClass = () => {
   const platform = String(navigator.platform || "").toLowerCase();
   const ua = String(navigator.userAgent || "").toLowerCase();
@@ -708,6 +709,7 @@ const warmWorldTranslationsCache = async () => {
   return worldTranslationsWarmPromise;
 };
 
+// Warm the maps bundle in cache so map-page navigation feels instant.
 const preloadMapsBundleAsset = () => {
   if (!needsMapTranslations && !document.body.classList.contains("world-page")) {
     return;
@@ -793,6 +795,7 @@ window.addEventListener(
    AUTH + PROGRESS API CLIENT
    Exposed globally for upcoming account UI and gamification flows.
    ========================================================================== */
+// Thin API wrapper for auth/account/progress/billing endpoints used across UI modules.
 const createCosmicaAuthClient = () => {
   const parseJsonResponse = async (response) => {
     try {
@@ -1001,6 +1004,7 @@ window.cosmicaAuth = createCosmicaAuthClient();
    GAMIFICATION STATE + ACCOUNT HUB UI
    Shared account session, progress state, and premium learning dashboard.
    ========================================================================== */
+// Central auth + progress state store with subscription hooks for UI updates.
 const createCosmicaGamificationClient = () => {
   const AUTH_STATE_HINT_KEY = "cosmicaAuthStateHint";
   const PREMIUM_ACCESS_HINT_KEY = "cosmicaPremiumAccessHint";
@@ -1693,6 +1697,7 @@ window.cosmicaGetSectionCompletionOverride = getSectionCompletionOverride;
 window.cosmicaSetSectionCompletionOverride = setSectionCompletionOverride;
 window.cosmicaClearSectionCompletionOverrides = clearSectionCompletionOverrides;
 
+// Build and wire the header account dropdown (guest/login/signup/manage account flows).
 const setupAccountHub = () => {
   if (document.body.dataset.accountHubBound === "1") {
     return;
@@ -5045,6 +5050,7 @@ const clearWorldEntryMapWarmTimers = () => {
   worldEntryMapWarmTimers.clear();
 };
 
+// Warm likely next map documents while the user is on world landing pages.
 const scheduleWorldEntryMapWarm = ({ source = "init" } = {}) => {
   if (!CAN_WORLD_ENTRY_MAP_WARM || document.visibilityState === "hidden") {
     return;
@@ -5912,6 +5918,7 @@ const createAbortController = () => {
   return new AbortController();
 };
 
+// Kept as an extension hook; currently no visible API health badge is rendered.
 const setupApiHealthIndicator = () => {
   // Intentionally no-op: keep chat status text, remove separate API health badge.
 };
@@ -5936,6 +5943,7 @@ const isLocalDevHost = (hostname) => {
   return false;
 };
 
+// Resolve chat API fallback order for production, local dev, and cross-device testing.
 const getApiEndpointCandidates = () => {
   const endpoint = MIMI_CONFIG.endpoint || "/api/chat";
   if (endpoint.startsWith("http")) {
@@ -6096,6 +6104,7 @@ const requestLettersTitleTranslation = async (titleText, targetLanguage) => {
   return "";
 };
 
+// Add translated subtitle for letters-page heading based on selected base language.
 const setupLettersTitleTranslation = async () => {
   if (!document.body.classList.contains("letters-page")) {
     return;
@@ -6146,6 +6155,7 @@ const setupLettersTitleTranslation = async () => {
   translationNode.hidden = false;
 };
 
+// Keep legacy letters completion button behavior (now icon-only) for continuity.
 const setupLettersSectionCompleteButton = () => {
   if (!document.body.classList.contains("letters-page")) {
     return;
@@ -6338,6 +6348,7 @@ const buildLettersCardPracticeSectionKey = (sectionKey, cardKey) => {
   return `card::${normalizedSection}::${normalizedCard}`;
 };
 
+// Handle letters card practice taps and sync completion progress per card.
 const setupLettersCardPracticeButtons = () => {
   if (!document.body.classList.contains("letters-page")) {
     return;
@@ -7040,6 +7051,7 @@ const isRomanizationDiagnosticsEnabled = () => {
   return true;
 };
 
+// Render optional romanization helpers (currently focused on Hindi variants).
 const setupLetterRomanization = () => {
   if (!document.body.classList.contains("letters-page")) {
     return;
@@ -7926,6 +7938,7 @@ if (document.body.classList.contains("world-page")) {
   }
 }
 
+// Attach world-page ambient visuals, pointer reactions, and card hover effects.
 const setupWorldPageInteractiveFx = () => {
   if (!document.body.classList.contains("world-page")) {
     return;
@@ -8259,6 +8272,7 @@ const resetAmbientEngine = () => {
   barCount = 0;
 };
 
+// Build the procedural ambient audio graph (strings/pulse/sparkle layers).
 const createAmbientSound = () => {
   if (audioContext) {
     resetAmbientEngine();
@@ -8526,6 +8540,7 @@ const createAmbientSound = () => {
     scheduleBar(nextBarTime);
   }
 };
+// Sync visual state for the header sound toggle.
 const setSoundUi = (isOn) => {
   if (!soundToggle || !soundLabel) {
     return;
@@ -8643,6 +8658,7 @@ if (soundToggle) {
 
 setSoundUi(false);
 
+// Force ambient soundtrack off on map pages to avoid conflict with learning audio playback.
 const enforceSoundOffForMaps = () => {
   const isMapPage =
     document.body.classList.contains("letters-page") ||
@@ -9691,6 +9707,7 @@ mapLinks.forEach((link) => {
   });
 });
 
+// Add pointer and press interactions for world-map entry cards.
 const setupInteractiveMapCards = () => {
   const mapCards = document.querySelectorAll(".map-card");
   if (!mapCards.length) {
@@ -10061,6 +10078,7 @@ if (languageSearch && availableLanguagePills.length) {
    CARD AUDIO (LETTER / WORD / PHRASE)
    Unifies click, keyboard, and touch behavior for pronunciation playback.
    ========================================================================== */
+// Wire click/touch pronunciation playback for letters/words/phrases cards.
 const setupSpeechCards = () => {
   const letterButtons = document.querySelectorAll(".letter-audio");
   const wordButtons = document.querySelectorAll(".word-audio");
@@ -10740,7 +10758,7 @@ const setupSpeechCards = () => {
    ========================================================================== */
 let refreshMapsForBaseLanguage = () => {};
 
-const runWhenBrowserIdle = (task) => {
+const runWhenBrowserIdle = (task, { timeoutMs = 1400, fallbackDelayMs = 280 } = {}) => {
   if (typeof task !== "function") {
     return;
   }
@@ -10749,11 +10767,38 @@ const runWhenBrowserIdle = (task) => {
       () => {
         task();
       },
-      { timeout: 1400 }
+      { timeout: timeoutMs }
     );
     return;
   }
-  window.setTimeout(task, 280);
+  window.setTimeout(task, fallbackDelayMs);
+};
+
+// Schedule decorative/non-critical setup after initial render to protect LCP/INP.
+const scheduleNonCriticalShellSetup = (task, { fallbackDelayMs = 1800 } = {}) => {
+  if (typeof task !== "function") {
+    return;
+  }
+  let hasRun = false;
+  const executeOnce = () => {
+    if (hasRun) {
+      return;
+    }
+    hasRun = true;
+    task();
+  };
+  const scheduleIdleRun = () => {
+    runWhenBrowserIdle(executeOnce, {
+      timeoutMs: 2000,
+      fallbackDelayMs: 320,
+    });
+  };
+  if (document.readyState === "complete") {
+    scheduleIdleRun();
+  } else {
+    window.addEventListener("load", scheduleIdleRun, { once: true });
+  }
+  window.setTimeout(scheduleIdleRun, fallbackDelayMs);
 };
 
 const applySafeMediaLoadingHints = () => {
@@ -10805,6 +10850,7 @@ applySafeMediaLoadingHints();
    ========================================================================== */
 const WEB_VITAL_SAMPLE_RATE = 0.35;
 
+// Collect sampled real-user Core Web Vitals and send batched metrics to backend.
 const setupWebVitalsReporting = () => {
   if (
     typeof window === "undefined" ||
@@ -10942,6 +10988,7 @@ const setupWebVitalsReporting = () => {
   window.addEventListener("pagehide", flushMetrics);
 };
 
+// Home-page motion/hover system for hero, cards, and premium-focused visual hooks.
 const setupHomeAltInteractivity = () => {
   const homeBrand = document.querySelector(".nav .brand");
   if (homeBrand && homeBrand.dataset.logoFxBound !== "1") {
@@ -11492,6 +11539,7 @@ const syncRuntimeNavHeightVar = () => {
 
 const COOKIE_NOTICE_DISMISSED_KEY = "cosmicaEssentialCookieNoticeDismissed";
 
+// Show first-visit essential-cookie disclosure and persist dismissal locally.
 const setupEssentialCookieNotice = () => {
   if (!document.body || document.body.dataset.cookieNoticeBound === "1") {
     return;
@@ -11543,6 +11591,7 @@ const setupEssentialCookieNotice = () => {
   });
 };
 
+// Lazy-load maps runtime only on map pages to keep base bundle lightweight.
 const loadMapsBundle = () =>
   new Promise((resolve, reject) => {
     const existing = document.querySelector('script[data-cosmica-bundle="maps"]');
@@ -11582,21 +11631,24 @@ const loadMapsBundle = () =>
     document.head.appendChild(script);
   });
 
+// Bootstrap non-map pages by wiring shared UI runtime modules.
 const initializeCommonShell = () => {
   setupAccountHub();
   document.querySelectorAll(".reveal").forEach((el) => observeRevealElement(el));
-  setupHomeAltInteractivity();
-  void setupLettersTitleTranslation();
-  void setupLettersHelperTranslation();
-  setupLettersSectionCompleteButton();
-  setupLettersCardPracticeButtons();
-  setupLetterRomanization();
-  setupSpeechCards();
-  setupBackToTopButton();
   syncRuntimeNavHeightVar();
   window.addEventListener("resize", syncRuntimeNavHeightVar, { passive: true });
   window.addEventListener("orientationchange", syncRuntimeNavHeightVar, { passive: true });
-  setupEssentialCookieNotice();
+  scheduleNonCriticalShellSetup(() => {
+    setupHomeAltInteractivity();
+    void setupLettersTitleTranslation();
+    void setupLettersHelperTranslation();
+    setupLettersSectionCompleteButton();
+    setupLettersCardPracticeButtons();
+    setupLetterRomanization();
+    setupSpeechCards();
+    setupBackToTopButton();
+    setupEssentialCookieNotice();
+  });
 };
 
 /* ==========================================================================
