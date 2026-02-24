@@ -1930,7 +1930,7 @@ const setupAccountHub = () => {
           </div>
           <div class="account-actions-divider" aria-hidden="true"></div>
         </div>
-        <button class="account-logout" type="button">Logout</button>
+        <button class="account-logout account-logout-trigger" type="button">Logout</button>
         <div class="account-logout-confirm" hidden>
           <p class="account-logout-warning">Are you sure you want to log out?</p>
           <div class="account-logout-actions">
@@ -2075,7 +2075,7 @@ const setupAccountHub = () => {
   const resendVerificationSignupBtn = dropdown.querySelector(".account-resend-button-signup");
   const loginForgotPasswordBtn = dropdown.querySelector(".account-login-forgot");
   const resetBackToLoginBtn = dropdown.querySelector(".account-reset-back-login");
-  const logoutBtn = dropdown.querySelector(".account-logout");
+  const logoutBtn = dropdown.querySelector(".account-logout-trigger");
   const logoutConfirmPanel = dropdown.querySelector(".account-logout-confirm");
   const logoutCancelBtn = dropdown.querySelector(".account-logout-cancel");
   const logoutConfirmBtn = dropdown.querySelector(".account-logout-confirm-btn");
@@ -2242,14 +2242,13 @@ const setupAccountHub = () => {
   let latestSubscriptionManageState = null;
   let subscriptionManageInFlight = false;
   let subscriptionPortalInFlight = false;
-  let premiumModalBodyLockActive = false;
-  let premiumModalBodyLockScrollY = 0;
+  let overlayBodyLockActive = false;
+  let overlayBodyLockScrollY = 0;
   let premiumModalTouchStartY = 0;
   let pendingPremiumWelcomeMode = "";
   let hasShownPremiumWelcome = false;
-  let authDropdownBodyLockActive = false;
-  let authDropdownBodyLockScrollY = 0;
   let authDropdownTouchStartY = 0;
+  let logoutConfirmArmedAtMs = 0;
 
   const setFeedback = (message, tone = "") => {
     if (!feedbackNode) {
@@ -2374,7 +2373,11 @@ const setupAccountHub = () => {
       return;
     }
     logoutConfirmPanel.hidden = !visible;
+    if (!visible) {
+      logoutConfirmArmedAtMs = 0;
+    }
     if (visible) {
+      logoutConfirmArmedAtMs = Date.now();
       scrollExpandedAccountPanelIntoView(logoutConfirmPanel);
     }
   };
@@ -2955,44 +2958,36 @@ const setupAccountHub = () => {
     scrollSurface.scrollTo({ top: 0, behavior });
   };
 
-  const syncPremiumModalBodyLock = () => {
+  const syncOverlayBodyLock = () => {
     const hasOpenPremiumModal =
       !premiumSetupOverlay.hidden || !premiumCheckoutOverlay.hidden || !premiumSuccessOverlay.hidden;
-    document.body.classList.toggle("premium-setup-lock", hasOpenPremiumModal);
-    document.documentElement.classList.toggle("premium-setup-lock", hasOpenPremiumModal);
-    if (hasOpenPremiumModal && !premiumModalBodyLockActive) {
-      premiumModalBodyLockScrollY = Math.max(0, window.scrollY || window.pageYOffset || 0);
-      document.body.style.top = `-${premiumModalBodyLockScrollY}px`;
-      premiumModalBodyLockActive = true;
+    const hasOpenAccountMenu = !dropdown.hidden;
+    const shouldLock = hasOpenPremiumModal || hasOpenAccountMenu;
+    if (shouldLock && !overlayBodyLockActive) {
+      overlayBodyLockScrollY = Math.max(0, window.scrollY || window.pageYOffset || 0);
+      document.body.style.top = `-${overlayBodyLockScrollY}px`;
+      overlayBodyLockActive = true;
+    } else if (!shouldLock && overlayBodyLockActive) {
+      document.body.classList.remove("premium-setup-lock", "account-dropdown-lock");
+      document.documentElement.classList.remove("premium-setup-lock", "account-dropdown-lock");
+      document.body.style.top = "";
+      window.scrollTo({ top: overlayBodyLockScrollY, left: 0, behavior: "auto" });
+      overlayBodyLockActive = false;
+      overlayBodyLockScrollY = 0;
       return;
     }
-    if (!hasOpenPremiumModal && premiumModalBodyLockActive) {
-      document.body.style.top = "";
-      window.scrollTo({ top: premiumModalBodyLockScrollY, left: 0, behavior: "auto" });
-      premiumModalBodyLockActive = false;
-      premiumModalBodyLockScrollY = 0;
-    }
+    document.body.classList.toggle("premium-setup-lock", hasOpenPremiumModal);
+    document.documentElement.classList.toggle("premium-setup-lock", hasOpenPremiumModal);
+    document.body.classList.toggle("account-dropdown-lock", hasOpenAccountMenu);
+    document.documentElement.classList.toggle("account-dropdown-lock", hasOpenAccountMenu);
+  };
+
+  const syncPremiumModalBodyLock = () => {
+    syncOverlayBodyLock();
   };
 
   const syncAuthDropdownBodyLock = () => {
-    if (premiumModalBodyLockActive) {
-      return;
-    }
-    const shouldLock = !dropdown.hidden;
-    document.body.classList.toggle("account-dropdown-lock", shouldLock);
-    document.documentElement.classList.toggle("account-dropdown-lock", shouldLock);
-    if (shouldLock && !authDropdownBodyLockActive) {
-      authDropdownBodyLockScrollY = Math.max(0, window.scrollY || window.pageYOffset || 0);
-      document.body.style.top = `-${authDropdownBodyLockScrollY}px`;
-      authDropdownBodyLockActive = true;
-      return;
-    }
-    if (!shouldLock && authDropdownBodyLockActive) {
-      document.body.style.top = "";
-      window.scrollTo({ top: authDropdownBodyLockScrollY, left: 0, behavior: "auto" });
-      authDropdownBodyLockActive = false;
-      authDropdownBodyLockScrollY = 0;
-    }
+    syncOverlayBodyLock();
   };
 
   const canScrollElementForDelta = (element, deltaY) => {
@@ -3828,7 +3823,7 @@ const setupAccountHub = () => {
       menuAchievements.textContent = `${achievementCount} Achievements`;
       const achievementsStatNode = menuAchievements.closest(".account-menu-stat");
       if (achievementsStatNode) {
-        achievementsStatNode.hidden = !showPremiumStatus && !showFreeStreakOnly;
+        achievementsStatNode.hidden = !showPremiumStatus;
       }
     }
 
@@ -4622,6 +4617,12 @@ const setupAccountHub = () => {
   });
 
   logoutConfirmBtn?.addEventListener("click", async () => {
+    if (logoutConfirmPanel?.hidden) {
+      return;
+    }
+    if (Date.now() - logoutConfirmArmedAtMs < 260) {
+      return;
+    }
     setLogoutConfirmationVisible(false);
     setFeedback("Logging out...", "info");
     try {
