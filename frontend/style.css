@@ -5,6 +5,15 @@
    3) Page-specific sections (home/world/maps)
    4) Responsive overrides and reduced-motion support
    ========================================================================== */
+/* --------------------------------------------------------------------------
+   QUICK NAVIGATION (BEGINNER MAP)
+   1) :root tokens and global reset
+   2) Header/nav + account dropdown system
+   3) Home sections (hero/world cards/how/join/support)
+   4) World-page layout and map entry cards
+   5) Footer/legal/policy layouts
+   6) Responsive/mobile overrides near the bottom
+   -------------------------------------------------------------------------- */
 :root {
   color-scheme: dark;
   --vh: 1vh;
@@ -10989,6 +10998,17 @@ section,
   .premium-success-card,
   .grammar-modal {
     max-height: calc(var(--app-height) - 10px);
+  }
+}
+
+@media (hover: none) and (pointer: coarse) and (max-height: 760px) {
+  .account-dropdown {
+    max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 8px) !important;
+  }
+
+  .account-dropdown-card {
+    max-height: inherit;
+    padding-bottom: calc(13px + env(safe-area-inset-bottom));
   }
 }
 

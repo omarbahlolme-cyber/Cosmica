@@ -2,6 +2,18 @@
    COSMICA API SERVER
    Serves static site assets and exposes feedback/chat API endpoints.
    ========================================================================== */
+/* --------------------------------------------------------------------------
+   QUICK NAVIGATION (BEGINNER MAP)
+   1) Express/security/cors/rate-limit foundation
+   2) Static hosting + cache policy + security.txt
+   3) Service clients (OpenAI, email, TTS) + alert webhooks
+   4) Auth/account store + normalization helpers
+   5) Auth routes (signup/login/google/reset/delete)
+   6) Progress/gamification routes and tracking
+   7) Billing routes + Stripe/Ko-fi webhooks
+   8) Feedback/translation/tts/chat API routes
+   9) Health + web vitals + startup wiring
+   -------------------------------------------------------------------------- */
 const path = require("path");
 const crypto = require("crypto");
 const fs = require("fs");

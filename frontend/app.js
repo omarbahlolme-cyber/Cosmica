@@ -2,6 +2,17 @@
    DOM HOOKS AND GLOBAL PAGE REFERENCES
    Collect shared elements once so all page modules reuse the same references.
    ========================================================================== */
+/* --------------------------------------------------------------------------
+   QUICK NAVIGATION (BEGINNER MAP)
+   1) DOM hooks + world context + translation cache warmup
+   2) Auth/progress API client + gamification state
+   3) Account hub dropdown UI + auth forms/manage-account actions
+   4) Home/world interactions (navigation, hero, cards, warp)
+   5) Ambient audio + sound toggle
+   6) World language picker + map bridge helpers
+   7) Card speech logic (letters/words/phrases)
+   8) Performance telemetry + bootstrap loader
+   -------------------------------------------------------------------------- */
 const starfields = document.querySelectorAll(".starfield");
 const soundToggle = document.getElementById("soundToggle");
 const soundLabel = soundToggle ? soundToggle.querySelector(".sound-label") : null;
@@ -2915,22 +2926,109 @@ const setupAccountHub = () => {
     }
   };
 
+  const isFocusableAuthControl = (node) => {
+    if (!(node instanceof HTMLElement)) {
+      return false;
+    }
+    if (node.matches("input, textarea, select")) {
+      return true;
+    }
+    return node.getAttribute("contenteditable") === "true";
+  };
+
+  const getViewportBounds = () => {
+    const viewport = window.visualViewport;
+    if (viewport) {
+      const width = Math.max(1, Math.round(Number(viewport.width) || 0));
+      const height = Math.max(1, Math.round(Number(viewport.height) || 0));
+      const left = Math.round(Number(viewport.offsetLeft) || 0);
+      const top = Math.round(Number(viewport.offsetTop) || 0);
+      return {
+        width,
+        height,
+        left,
+        top,
+      };
+    }
+    return {
+      width: Math.max(1, Math.round(window.innerWidth || document.documentElement.clientWidth || 0)),
+      height: Math.max(1, Math.round(window.innerHeight || document.documentElement.clientHeight || 0)),
+      left: 0,
+      top: 0,
+    };
+  };
+
   const positionDropdown = () => {
     if (dropdown.hidden) {
       return;
     }
+    const viewport = getViewportBounds();
+    const viewportLeft = viewport.left;
+    const viewportTop = viewport.top;
+    const viewportRight = viewportLeft + viewport.width;
+    const viewportBottom = viewportTop + viewport.height;
     const triggerRect = trigger.getBoundingClientRect();
     const navRect = nav?.getBoundingClientRect?.() || { bottom: triggerRect.bottom };
-    const width = Math.min(360, Math.max(280, window.innerWidth - 16));
+    const width = Math.min(360, Math.max(280, viewport.width - 16));
     dropdown.style.width = `${width}px`;
-    const maxLeft = Math.max(8, window.innerWidth - width - 8);
-    const left = Math.max(8, Math.min(maxLeft, triggerRect.right - width));
+    const maxLeft = Math.max(viewportLeft + 8, viewportRight - width - 8);
+    const left = Math.max(viewportLeft + 8, Math.min(maxLeft, triggerRect.right - width));
     const topAnchor = Math.max(triggerRect.bottom, Number(navRect.bottom) || triggerRect.bottom);
-    const top = Math.max(12, topAnchor + 14);
-    const maxHeight = Math.max(220, window.innerHeight - top - 8);
+    const preferredTop = topAnchor + 14;
+    const minTop = viewportTop + 8;
+    const maxTop = Math.max(minTop, viewportBottom - 200);
+    const top = Math.max(minTop, Math.min(maxTop, preferredTop));
+    const maxHeight = Math.max(140, viewportBottom - top - 8);
     dropdown.style.left = `${left}px`;
     dropdown.style.top = `${top}px`;
     dropdown.style.maxHeight = `${maxHeight}px`;
+  };
+
+  const ensureFocusedAuthControlVisible = (targetNode, { behavior = "smooth" } = {}) => {
+    if (!(targetNode instanceof HTMLElement) || dropdown.hidden) {
+      return;
+    }
+    if (!(accountDropdownCard instanceof HTMLElement) || !accountDropdownCard.contains(targetNode)) {
+      return;
+    }
+    const surfaceRect = accountDropdownCard.getBoundingClientRect();
+    const targetRect = targetNode.getBoundingClientRect();
+    const topPadding = 18;
+    const bottomPadding = 26;
+    const isAbove = targetRect.top < surfaceRect.top + topPadding;
+    const isBelow = targetRect.bottom > surfaceRect.bottom - bottomPadding;
+    if (!isAbove && !isBelow) {
+      return;
+    }
+    const relativeTop = targetRect.top - surfaceRect.top;
+    const relativeBottom = targetRect.bottom - surfaceRect.top;
+    let nextTop = accountDropdownCard.scrollTop;
+    if (isAbove) {
+      nextTop += relativeTop - topPadding;
+    } else if (isBelow) {
+      nextTop += relativeBottom - accountDropdownCard.clientHeight + bottomPadding;
+    }
+    accountDropdownCard.scrollTo({
+      top: Math.max(0, Math.round(nextTop)),
+      behavior,
+    });
+  };
+
+  let dropdownRepositionRafId = 0;
+  const scheduleDropdownReposition = (focusedNode = null) => {
+    if (dropdown.hidden) {
+      return;
+    }
+    if (dropdownRepositionRafId) {
+      return;
+    }
+    dropdownRepositionRafId = window.requestAnimationFrame(() => {
+      dropdownRepositionRafId = 0;
+      positionDropdown();
+      if (focusedNode instanceof HTMLElement) {
+        ensureFocusedAuthControlVisible(focusedNode);
+      }
+    });
   };
 
   const openDropdown = () => {
@@ -2951,7 +3049,11 @@ const setupAccountHub = () => {
     }
     positionDropdown();
     window.setTimeout(() => {
-      resolveInitialFocusElement()?.focus?.();
+      const initialFocusNode = resolveInitialFocusElement();
+      initialFocusNode?.focus?.();
+      if (initialFocusNode instanceof HTMLElement) {
+        scheduleDropdownReposition(initialFocusNode);
+      }
     }, 20);
   };
 
@@ -3982,7 +4084,7 @@ const setupAccountHub = () => {
   window.addEventListener(
     "resize",
     () => {
-      positionDropdown();
+      scheduleDropdownReposition();
       positionTriggerNoticeBubble();
     },
     { passive: true }
@@ -3990,11 +4092,36 @@ const setupAccountHub = () => {
   window.addEventListener(
     "scroll",
     () => {
-      positionDropdown();
+      scheduleDropdownReposition();
       positionTriggerNoticeBubble();
     },
     { passive: true }
   );
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener(
+      "resize",
+      () => {
+        scheduleDropdownReposition(document.activeElement instanceof HTMLElement ? document.activeElement : null);
+      },
+      { passive: true }
+    );
+    window.visualViewport.addEventListener(
+      "scroll",
+      () => {
+        scheduleDropdownReposition(document.activeElement instanceof HTMLElement ? document.activeElement : null);
+      },
+      { passive: true }
+    );
+  }
+  dropdown.addEventListener("focusin", (event) => {
+    const focusTarget = event.target instanceof HTMLElement ? event.target : null;
+    if (!isFocusableAuthControl(focusTarget)) {
+      return;
+    }
+    window.setTimeout(() => {
+      scheduleDropdownReposition(focusTarget);
+    }, 30);
+  });
   document.addEventListener("keydown", (event) => {
     if (event.key !== "Escape") {
       return;

@@ -42,6 +42,14 @@ const BASE_LANGUAGES = [
   "uzbek",
   "vietnamese",
 ];
+/* --------------------------------------------------------------------------
+   QUICK NAVIGATION (BEGINNER MAP)
+   1) Learning datasets (words/phrases/grammar source lists)
+   2) Translation caches/loaders and world-pack hydration
+   3) Dynamic map renderers (words/phrases/grammar sections + filters)
+   4) Grammar modal and explanation runtime translation
+   5) Map-page bootstrap and post-hydration refresh flow
+   -------------------------------------------------------------------------- */
 const MAPS_INVALID_BASE_LANGUAGE_SENTINELS = new Set([
   "none",
   "no-base",

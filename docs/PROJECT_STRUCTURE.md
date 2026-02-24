@@ -5,124 +5,105 @@
 ```text
 .
 |-- backend/
-|   `-- server.js                     # API server (Express): chat, translate, feedback, health, tts
+|   `-- server.js                     # Main API server (auth/progress/billing/chat/tts/static hosting)
 |-- frontend/
-|   |-- index.html                    # Home/landing page
-|   |-- english-world.html            # English world entry page
+|   |-- index.html                    # Home page
+|   |-- english-world.html            # English world landing page
 |   |-- english-letters.html          # English letters map
 |   |-- english-words.html            # English words map
 |   |-- english-phrases.html          # English phrases map
 |   |-- english-grammar.html          # English grammar map
-|   |-- world-<language>.html         # Non-English world entry pages (french, german, spanish, portuguese, dutch, swedish, arabic, chinese, japanese, korean, hindi)
+|   |-- world-<language>.html         # Non-English world landing pages
 |   |-- letters-<language>.html       # Non-English letters maps
 |   |-- words-<language>.html         # Non-English words maps
 |   |-- phrases-<language>.html       # Non-English phrases maps
 |   |-- grammar-<language>.html       # Non-English grammar maps
-|   |-- privacy.html                  # Privacy policy
-|   |-- terms.html                    # Terms of use
-|   |-- license.html                  # License page
-|   |-- app.js                        # Base front-end behavior + lazy map bundle loader
-|   |-- style.css                     # Shared stylesheet
-|   |-- robots.txt                    # Robots directives
-|   |-- sitemap.xml                   # Sitemap for indexed pages
-|   |-- security.txt                  # Served at /.well-known/security.txt
-|   |-- favicon.svg                   # Site icon
+|   |-- app.js                        # Shared frontend runtime
+|   |-- style.css                     # Shared styles
 |   |-- maps/
-|   |   |-- app-maps.js               # Map bundle (datasets/renderers/translations)
-|   |   |-- style-maps.css            # Map-only stylesheet
-|   |   `-- translations.json         # Base translation pack (English/shared fallback)
+|   |   |-- app-maps.js               # Map runtime bundle
+|   |   |-- style-maps.css            # Map-only styles
+|   |   `-- translations.json         # Base translation pack
 |   |-- worlds/
-|   |   |-- README.md                 # World folder convention
-|   |   |-- english/
-|   |   |   |-- english.map-routes.json
-|   |   |   |-- english.world.meta.json
-|   |   |   `-- README.md
-|   |   |-- french/
-|   |   |-- german/
-|   |   |-- spanish/
-|   |   |-- portuguese/
-|   |   |-- dutch/
-|   |   |-- swedish/
-|   |   |-- arabic/
-|   |   |-- chinese/
-|   |   |-- japanese/
-|   |   |-- korean/
-|   |   `-- hindi/
+|   |   `-- <world-key>/
 |   |       |-- <world>.map-routes.json
 |   |       |-- <world>.world.meta.json
-|   |       |-- translations.json     # World-specific pack (when generated)
+|   |       |-- translations.json     # World-specific translation pack
 |   |       `-- README.md
-|   `-- naverc3bcca6a08043c716e45b0c95a298a16.html  # Naver ownership verification
+|   |-- robots.txt
+|   |-- sitemap.xml
+|   |-- privacy.html
+|   |-- terms.html
+|   |-- license.html
+|   `-- security.txt
 |-- docs/
-|   |-- PROJECT_STRUCTURE.md          # This file
-|   |-- HANDOFF_ZERO_TO_HERO.md       # Beginner onboarding + release handoff guide
-|   |-- LINGUIST_WORLD_REVIEW_CHECKLIST.md # Per-world human QA checklist (letters/words/phrases/grammar)
-|   |-- FRONTEND_RUNTIME_NOTES.md     # Frontend runtime guardrails + recent behavior notes
-|   |-- OPERATIONS_HARDENING.md       # Platform hardening + backup runbook
-|   |-- ROLLBACK_RUNBOOK.md           # Rollback procedures and recovery commands
-|   `-- SECURITY.md                   # Vulnerability reporting/security policy
-|-- scripts/
-|   |-- apply-html-baseline.js
-|   |-- apply-world-phrase-intents.js
-|   |-- apply-github-hardening.js
-|   |-- bloat-allowlist.json
-|   |-- check-accessibility-baseline.js
-|   |-- check-asset-version-consistency.js
-|   |-- check-bloat.js
-|   |-- check-external-integrity.js
-|   |-- check-literal-escapes.js
-|   |-- check-release.js
-|   |-- check-security-txt.js
-|   |-- check-seo-baseline.js
-|   |-- check-world-phrase-intents.js
-|   |-- create-backup.js
-|   |-- generate-translations.js
-|   |-- generate-world-translations.js
-|   |-- indexing-followup.js
-|   |-- live-security-check.js
-|   |-- perf-check.js
-|   |-- perf-snapshot.js
-|   |-- rollback-info.js
-|   |-- scaffold-bulk-worlds.js
-|   |-- smoke.js
-|   `-- verify-backup.js
-|-- perf/
-|   `-- baseline.json                 # Performance baseline used by perf checks
-|-- backups/                          # Local backup outputs (*.zip, *.bundle, *.json) [gitignored]
-|-- .github/
-|   |-- dependabot.yml
-|   `-- workflows/
+|   |-- HANDOFF_ZERO_TO_HERO.md       # Beginner handoff and release flow
+|   |-- FRONTEND_RUNTIME_NOTES.md      # Runtime guardrails and decisions
+|   |-- OPERATIONS_HARDENING.md
+|   |-- BILLING_OPS_QUICK_COMMANDS.md
+|   |-- ENFORCEMENT_RUNBOOK.md
+|   |-- ROLLBACK_RUNBOOK.md
+|   `-- SECURITY.md
+|-- scripts/                          # Checks, backups, generators, repair tools
+|-- perf/                             # Performance baseline and reports
+|-- backups/                          # Generated backups (gitignored)
 |-- server.js                         # Bootstrap entry point (loads backend/server.js)
 |-- package.json
-|-- package-lock.json
-|-- README.md
-|-- CHANGELOG.md
-|-- LICENSE
-|-- .editorconfig
-|-- .gitignore
-`-- .prettierrc.json
+`-- README.md
 ```
+
+## Ownership map (edit intent -> file)
+
+1. Auth dropdown, world shell, shared UI logic:
+- `frontend/app.js`
+- `frontend/style.css`
+
+2. Words/Phrases/Grammar rendering and map interactions:
+- `frontend/maps/app-maps.js`
+- `frontend/maps/style-maps.css`
+
+3. API behavior and data contracts (auth/progress/billing/security):
+- `backend/server.js`
+
+4. SEO/indexing/legal content:
+- `frontend/robots.txt`
+- `frontend/sitemap.xml`
+- `frontend/privacy.html`
+- `frontend/terms.html`
+- `frontend/license.html`
+
+5. Operational procedures:
+- `docs/OPERATIONS_HARDENING.md`
+- `docs/BILLING_OPS_QUICK_COMMANDS.md`
+- `docs/ROLLBACK_RUNBOOK.md`
 
 ## Organization rules
 
 1. Keep URL-facing HTML files under `frontend/` unless route behavior is intentionally changed.
-2. Keep shared behavior in `frontend/app.js`; keep map-heavy code in `frontend/maps/app-maps.js`.
+2. Keep shared behavior in `frontend/app.js`; keep map-heavy logic in `frontend/maps/app-maps.js`.
 3. Keep global styles in `frontend/style.css`; keep map styles in `frontend/maps/style-maps.css`.
-4. Keep world-specific route/meta/pack files in `frontend/worlds/<world-key>/`.
-5. Keep operational/reference docs in `docs/`.
-6. Keep utility scripts under `scripts/` with clear section headers and scoped purpose.
+4. Keep world-specific route/meta/translation files in `frontend/worlds/<world-key>/`.
+5. Keep operational docs in `docs/`.
+6. Keep utility and verification scripts in `scripts/`.
 7. Update `perf/baseline.json` intentionally (`npm run perf:baseline`) after verified performance changes.
 8. Update bloat allowlist intentionally (`npm run check:bloat:refresh`) only after verified cleanup.
-9. Review `docs/FRONTEND_RUNTIME_NOTES.md` before changing prefetch, translation hydration, or analytics loading behavior.
 
 ## Git workflow quick reference
 
-1. Default branch is `main`; prefer branch + PR for anything non-trivial so tests/review can run.
-2. Fastest safe branch flow:
-	- `git checkout -b <topic-branch>`
-	- `git add <paths>`
-	- `git commit -m "<scope>: <summary>"`
-	- `git push origin <topic-branch>` and open PR to `main`.
-3. Direct-to-main is only for low-risk, small changes; flow: `git add <paths>` → `git commit -m "<scope>: <summary>"` → `git push origin main`.
-4. Commit messages should be descriptive (e.g., `chore: preload css and defer app bundle across frontend`, `ops: document manual premium grant flow`), not generic like `update`.
-5. Keep changes scoped per commit (perf vs. docs vs. data). Split if needed rather than batching unrelated changes.
+1. Default branch is `main`; prefer branch + PR for non-trivial work.
+2. Safe branch flow:
+- `git checkout -b <topic-branch>`
+- `git add <paths>`
+- `git commit -m "<scope>: <summary>"`
+- `git push origin <topic-branch>` and open PR to `main`
+3. Direct-to-main should be limited to very small low-risk fixes:
+- `git add <paths>` -> `git commit -m "<scope>: <summary>"` -> `git push origin main`
+4. Use descriptive commit messages; avoid generic `update` commits.
+5. Keep commits scoped by concern (runtime, docs, data, ops).
+
+## Beginner orientation
+
+1. Start with `docs/HANDOFF_ZERO_TO_HERO.md`.
+2. Use section headers in large files as your primary navigation.
+3. Run `npm run check:syntax` and `npm run smoke` before and after your first change.
+4. Do not deploy without `npm run quality` passing.
