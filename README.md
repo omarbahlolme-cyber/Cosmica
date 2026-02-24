@@ -68,6 +68,13 @@ Stripe (recommended):
 - `STRIPE_PREMIUM_CANCEL_PATH` (optional, default `/index.html?premium=cancel`)
 - `STRIPE_PREMIUM_TRIAL_DAYS` (optional, integer trial days)
 
+Test redirect URLs (copy-ready):
+
+- Premium success (local): `http://127.0.0.1:3000/index.html?premium=success`
+- Premium success (live): `https://your-domain.com/index.html?premium=success`
+- Premium congratulations test modal (local): `http://127.0.0.1:3000/index.html?premium=test`
+- Premium congratulations test modal (live): `https://your-domain.com/index.html?premium=test`
+
 Ko-fi fallback:
 
 - `KOFI_PREMIUM_MONTHLY_URL`

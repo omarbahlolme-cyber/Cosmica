@@ -26,6 +26,18 @@ const urlParams = new URLSearchParams(window.location.search);
 const currentPath = window.location.pathname.toLowerCase();
 const isHomePagePath = currentPath === "/" || currentPath.endsWith("/index.html");
 
+const applyIpadBodyClass = () => {
+  const platform = String(navigator.platform || "").toLowerCase();
+  const ua = String(navigator.userAgent || "").toLowerCase();
+  const maxTouchPoints = Number(navigator.maxTouchPoints || 0);
+  const isIpadUa = /ipad/.test(ua);
+  const isIpadOsDesktopMode = platform === "macintel" && maxTouchPoints > 1;
+  const isIpad = isIpadUa || isIpadOsDesktopMode;
+  document.body.classList.toggle("is-ipad", isIpad);
+};
+
+applyIpadBodyClass();
+
 // Keep viewport-height based layout stable on mobile when browser UI bars expand/collapse.
 const setupDynamicViewportHeight = () => {
   const root = document.documentElement;
@@ -2249,6 +2261,7 @@ const setupAccountHub = () => {
   let hasShownPremiumWelcome = false;
   let authDropdownTouchStartY = 0;
   let logoutConfirmArmedAtMs = 0;
+  let hasShownEntryMenuPrompt = false;
 
   const setFeedback = (message, tone = "") => {
     if (!feedbackNode) {
@@ -2293,11 +2306,10 @@ const setupAccountHub = () => {
       return;
     }
     const triggerRect = trigger.getBoundingClientRect();
-    const navRect = nav.getBoundingClientRect();
     const bubbleRect = triggerNoticeBubble.getBoundingClientRect();
     const bubbleWidth = bubbleRect.width || 260;
     const left = Math.max(8, Math.min(window.innerWidth - bubbleWidth - 8, triggerRect.right - bubbleWidth));
-    const top = Math.max(8, navRect.bottom + 8);
+    const top = Math.max(8, triggerRect.bottom + 12);
     triggerNoticeBubble.style.left = `${left}px`;
     triggerNoticeBubble.style.top = `${top}px`;
   };
@@ -2310,11 +2322,17 @@ const setupAccountHub = () => {
     triggerNoticeBubble.hidden = true;
     triggerNoticeBubble.textContent = "";
     triggerNoticeBubble.removeAttribute("data-tone");
+    triggerNoticeBubble.removeAttribute("data-compact");
     triggerNoticeBubble.style.left = "";
     triggerNoticeBubble.style.top = "";
   };
 
-  const showTriggerNoticeBubble = (message, tone = "error", durationMs = 9000) => {
+  const showTriggerNoticeBubble = (
+    message,
+    tone = "error",
+    durationMs = 9000,
+    { compact = false } = {}
+  ) => {
     const text = String(message || "").trim();
     if (!text) {
       hideTriggerNoticeBubble();
@@ -2326,12 +2344,30 @@ const setupAccountHub = () => {
     }
     triggerNoticeBubble.textContent = text;
     triggerNoticeBubble.dataset.tone = String(tone || "error");
+    if (compact) {
+      triggerNoticeBubble.dataset.compact = "1";
+    } else {
+      triggerNoticeBubble.removeAttribute("data-compact");
+    }
     triggerNoticeBubble.hidden = false;
     positionTriggerNoticeBubble();
     window.requestAnimationFrame(positionTriggerNoticeBubble);
     triggerNoticeTimerId = window.setTimeout(() => {
       hideTriggerNoticeBubble();
     }, Math.max(1200, Number(durationMs) || 9000));
+  };
+
+  const maybeShowEntryMenuPrompt = (snapshot) => {
+    if (hasShownEntryMenuPrompt || !trigger || !trigger.isConnected) {
+      return;
+    }
+    const isAuthenticated = Boolean(snapshot?.isAuthenticated);
+    const isReady = snapshot?.ready !== false;
+    if (isAuthenticated || !isReady) {
+      return;
+    }
+    hasShownEntryMenuPrompt = true;
+    showTriggerNoticeBubble("Become an explorer now.", "success", 4000, { compact: true });
   };
 
   const scrollExpandedAccountPanelIntoView = (panelNode) => {
@@ -3664,6 +3700,8 @@ const setupAccountHub = () => {
     const showPasswordManagement = Boolean(isAuthenticated && currentAuthProvider !== "google");
     const showGooglePasswordNote = Boolean(isAuthenticated && currentAuthProvider === "google");
 
+    maybeShowEntryMenuPrompt(snapshot);
+
     if (!hasShownPremiumWelcome && pendingPremiumWelcomeMode === "test") {
       openPremiumSuccessModal({ testMode: true });
     } else if (!hasShownPremiumWelcome && pendingPremiumWelcomeMode === "success") {
@@ -3939,16 +3977,6 @@ const setupAccountHub = () => {
     },
     { passive: true }
   );
-  let hasShownEntryMenuPrompt = false;
-  const showEntryMenuPrompt = () => {
-    if (hasShownEntryMenuPrompt || !trigger || !trigger.isConnected) {
-      return;
-    }
-    hasShownEntryMenuPrompt = true;
-    showTriggerNoticeBubble("Become an explorer now.", "info", 4000);
-  };
-  window.setTimeout(showEntryMenuPrompt, 520);
-
   document.addEventListener("keydown", (event) => {
     if (event.key !== "Escape") {
       return;
@@ -8468,21 +8496,35 @@ if (chatForm && speechText) {
 }
 
 const MOBILE_HOME_ANCHOR_DOWN_SHIFT = Object.freeze({
-  default: 0,
-  "#how": 34,
-  "#worlds": 30,
-  "#guide": 34,
-  "#join": 62,
-  "#support": -24,
+  default: -8,
+  "#how": -8,
+  "#worlds": -10,
+  "#guide": -8,
+  "#join": 28,
+  "#support": -48,
 });
 const getMobileHomeAnchorDownShift = (hash) =>
   MOBILE_HOME_ANCHOR_DOWN_SHIFT[hash] ?? MOBILE_HOME_ANCHOR_DOWN_SHIFT.default;
+const IPAD_HOME_ANCHOR_DOWN_SHIFT = Object.freeze({
+  default: -6,
+  "#how": -10,
+  "#worlds": -12,
+  "#guide": -10,
+  "#join": 10,
+  "#support": -24,
+});
+const getIpadHomeAnchorDownShift = (hash) =>
+  IPAD_HOME_ANCHOR_DOWN_SHIFT[hash] ?? IPAD_HOME_ANCHOR_DOWN_SHIFT.default;
 const DESKTOP_HOME_ANCHOR_DOWN_SHIFT = Object.freeze({
   default: -30,
+  "#how": -18,
+  "#worlds": -22,
+  "#guide": -18,
+  "#support": -20,
   "#join": -84,
 });
 const getDesktopHomeAnchorDownShift = (hash) =>
-  DESKTOP_HOME_ANCHOR_DOWN_SHIFT[hash] ?? 0;
+  DESKTOP_HOME_ANCHOR_DOWN_SHIFT[hash] ?? DESKTOP_HOME_ANCHOR_DOWN_SHIFT.default;
 
 const scrollToAnchor = (hash) => {
     const targetId = hash.slice(1);
@@ -8490,11 +8532,16 @@ const scrollToAnchor = (hash) => {
     if (!target) {
       return false;
     }
+    const isHomeIpad = !document.body.classList.contains("world-page")
+      && (document.body.classList.contains("is-ipad")
+        || window.matchMedia("(min-width: 768px) and (max-width: 1024px) and (hover: none) and (pointer: coarse)").matches);
     const isHomeMobile = !document.body.classList.contains("world-page")
-      && window.matchMedia("(max-width: 960px)").matches;
+      && window.matchMedia("(max-width: 767px)").matches;
     const isHomeDesktop = !document.body.classList.contains("world-page")
+      && !isHomeIpad
       && window.matchMedia("(min-width: 961px)").matches;
     const mobileDownShift = isHomeMobile ? getMobileHomeAnchorDownShift(hash) : 0;
+    const ipadDownShift = isHomeIpad ? getIpadHomeAnchorDownShift(hash) : 0;
     const desktopDownShift = isHomeDesktop ? getDesktopHomeAnchorDownShift(hash) : 0;
     const baseOffset =
       Number.parseFloat(window.getComputedStyle(target).scrollMarginTop) || 0;
@@ -8504,6 +8551,7 @@ const scrollToAnchor = (hash) => {
         + window.scrollY
         - baseOffset
         + mobileDownShift
+        + ipadDownShift
         + desktopDownShift;
     history.replaceState(null, "", `${baseUrl}${hash}`);
     window.scrollTo({ top, behavior: "smooth" });
