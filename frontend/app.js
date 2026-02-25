@@ -5401,6 +5401,20 @@ const MAX_VISIBLE_CHAT_MESSAGES = 16;
 let userHasMessagedMimi = false;
 let lastMimiReply = "";
 let chatFreshPulseTimer;
+let mimiBubbleFollowSessionEndsAt = 0;
+let mimiBubbleFollowUserOverride = false;
+let mimiBubbleFollowRaf = 0;
+let mimiBubbleFollowPendingOptions = null;
+let mimiBubbleFollowStopTimer;
+const MIMI_BUBBLE_SCROLL_ABORT_KEYS = new Set([
+  "ArrowDown",
+  "ArrowUp",
+  "PageDown",
+  "PageUp",
+  "Home",
+  "End",
+  " ",
+]);
 const MIMI_CHAT_HISTORY_KEY_PREFIX = "cosmicaMimiChatHistory:v2";
 const MIMI_CHAT_HISTORY_LEGACY_KEY = "cosmicaMimiChatHistory:v1";
 const MIMI_CHAT_HISTORY_SCOPE_GUEST = "guest";
@@ -5601,28 +5615,46 @@ const speakLine = (text, mood = "happy", options = {}) => {
   if (!speechText || !speechBubble) {
     return;
   }
-  const { instant = false } = options;
-  activeLine = String(text || "").trim() || activeLine;
+  const { instant = false, followBubble = false } = options;
+  const line = String(text || "");
+  activeLine = line.trim() || activeLine;
   speechText.dataset.text = activeLine;
   window.clearTimeout(typingTimer);
   window.clearTimeout(speakingTimer);
+  if (followBubble) {
+    const estimatedFollowDurationMs = Math.min(32000, Math.max(9000, line.length * 70));
+    startMimiBubbleFollowSession({ durationMs: estimatedFollowDurationMs });
+    queueMimiBubbleFollow({
+      behavior: prefersReducedMotion ? "auto" : "smooth",
+      force: true,
+    });
+  }
   speechBubble.classList.add("speaking");
   pulseGuideInteractivity(1200);
   setMood(mood);
   if (instant) {
-    speechText.textContent = text;
+    speechText.textContent = line;
     stopSpeaking();
+    if (followBubble) {
+      stopMimiBubbleFollowSoon(460);
+    }
     return;
   }
   let index = 0;
   speechText.textContent = "";
   const step = () => {
     index += 1;
-    speechText.textContent = text.slice(0, index);
-    if (index < text.length) {
+    speechText.textContent = line.slice(0, index);
+    if (followBubble) {
+      queueMimiBubbleFollow({ behavior: "auto" });
+    }
+    if (index < line.length) {
       typingTimer = window.setTimeout(step, 18 + Math.random() * 22);
     } else {
       stopSpeaking();
+      if (followBubble) {
+        stopMimiBubbleFollowSoon(420);
+      }
     }
   };
   step();
@@ -5688,21 +5720,128 @@ const normalizeChatStatusState = (text) => {
   return "ready";
 };
 
+const isEditableTypingTarget = (target) => {
+  if (!(target instanceof Element)) {
+    return false;
+  }
+  if (target.isContentEditable) {
+    return true;
+  }
+  return Boolean(target.closest('input, textarea, select, [contenteditable="true"]'));
+};
+
+const isMimiBubbleFollowActive = () =>
+  Boolean(speechBubble) && Date.now() < mimiBubbleFollowSessionEndsAt && !mimiBubbleFollowUserOverride;
+
+const stopMimiBubbleFollowSession = () => {
+  mimiBubbleFollowSessionEndsAt = 0;
+  mimiBubbleFollowUserOverride = false;
+  mimiBubbleFollowPendingOptions = null;
+  window.clearTimeout(mimiBubbleFollowStopTimer);
+  if (mimiBubbleFollowRaf) {
+    window.cancelAnimationFrame(mimiBubbleFollowRaf);
+    mimiBubbleFollowRaf = 0;
+  }
+};
+
+const stopMimiBubbleFollowSoon = (delayMs = 420) => {
+  window.clearTimeout(mimiBubbleFollowStopTimer);
+  mimiBubbleFollowStopTimer = window.setTimeout(() => {
+    stopMimiBubbleFollowSession();
+  }, delayMs);
+};
+
+const startMimiBubbleFollowSession = ({ durationMs = 12000 } = {}) => {
+  mimiBubbleFollowSessionEndsAt = Date.now() + Math.max(1000, Number(durationMs) || 12000);
+  mimiBubbleFollowUserOverride = false;
+  window.clearTimeout(mimiBubbleFollowStopTimer);
+};
+
+const cancelMimiBubbleFollowOnUserScroll = () => {
+  if (!isMimiBubbleFollowActive()) {
+    return;
+  }
+  mimiBubbleFollowUserOverride = true;
+  if (mimiBubbleFollowRaf) {
+    window.cancelAnimationFrame(mimiBubbleFollowRaf);
+    mimiBubbleFollowRaf = 0;
+  }
+  mimiBubbleFollowPendingOptions = null;
+};
+
+const getMimiViewportHeight = () => {
+  const viewport = window.visualViewport;
+  if (viewport && Number.isFinite(viewport.height) && viewport.height > 0) {
+    return viewport.height;
+  }
+  return window.innerHeight || document.documentElement.clientHeight || 0;
+};
+
+const scrollMimiBubbleIntoView = ({ behavior = "smooth", force = false } = {}) => {
+  if (!speechBubble) {
+    return;
+  }
+  const viewportHeight = getMimiViewportHeight();
+  if (!viewportHeight) {
+    return;
+  }
+  const rect = speechBubble.getBoundingClientRect();
+  const targetTop = Math.max(16, viewportHeight * 0.1);
+  const delta = rect.top - targetTop;
+  if (!force && Math.abs(delta) < 18) {
+    return;
+  }
+  const nextTop = Math.max(0, window.scrollY + delta);
+  if (!Number.isFinite(nextTop)) {
+    return;
+  }
+  window.scrollTo({ top: nextTop, behavior });
+};
+
+const queueMimiBubbleFollow = ({ behavior = "auto", force = false } = {}) => {
+  if (!isMimiBubbleFollowActive()) {
+    return;
+  }
+  const pending = mimiBubbleFollowPendingOptions || { behavior: "auto", force: false };
+  pending.behavior = behavior || pending.behavior;
+  pending.force = Boolean(pending.force || force);
+  mimiBubbleFollowPendingOptions = pending;
+  if (mimiBubbleFollowRaf) {
+    return;
+  }
+  mimiBubbleFollowRaf = window.requestAnimationFrame(() => {
+    mimiBubbleFollowRaf = 0;
+    if (!isMimiBubbleFollowActive()) {
+      mimiBubbleFollowPendingOptions = null;
+      return;
+    }
+    const nextOptions = mimiBubbleFollowPendingOptions || { behavior: "auto", force: false };
+    mimiBubbleFollowPendingOptions = null;
+    scrollMimiBubbleIntoView(nextOptions);
+  });
+};
+
+window.addEventListener("wheel", cancelMimiBubbleFollowOnUserScroll, { passive: true });
+window.addEventListener("touchmove", cancelMimiBubbleFollowOnUserScroll, { passive: true });
+window.addEventListener("keydown", (event) => {
+  if (!MIMI_BUBBLE_SCROLL_ABORT_KEYS.has(event.key)) {
+    return;
+  }
+  if (isEditableTypingTarget(event.target)) {
+    return;
+  }
+  cancelMimiBubbleFollowOnUserScroll();
+});
+
 const revealMimiBubbleOnMobile = () => {
   if (!speechBubble) {
     return;
   }
-  if (!window.matchMedia("(max-width: 960px)").matches) {
-    return;
-  }
-  const rect = speechBubble.getBoundingClientRect();
-  const targetTop = Math.max(18, window.innerHeight * 0.12);
-  const delta = rect.top - targetTop;
-  if (Math.abs(delta) < 24) {
-    return;
-  }
-  const nextTop = Math.max(0, window.scrollY + delta);
-  window.scrollTo({ top: nextTop, behavior: "smooth" });
+  const shouldSmooth = window.matchMedia("(max-width: 960px)").matches && !prefersReducedMotion;
+  scrollMimiBubbleIntoView({
+    behavior: shouldSmooth ? "smooth" : "auto",
+    force: false,
+  });
 };
 
 const trimVisibleChatMessages = () => {
@@ -5805,6 +5944,7 @@ const resetMimiConversationState = ({ resetPromptText = false, clearStorage = tr
   chatHistory.length = 0;
   userHasMessagedMimi = false;
   lastMimiReply = "";
+  stopMimiBubbleFollowSession();
   if (clearStorage) {
     clearChatHistoryFromStorage();
   }
@@ -7299,7 +7439,7 @@ const sendChatMessage = async (message) => {
       setChatStatus("Mimi ready");
     }
     lastMimiReply = reply.content;
-    speakLine(reply.content, "curious");
+    speakLine(reply.content, "curious", { followBubble: true });
     revealMimiBubbleOnMobile();
   } finally {
     chatRequestInFlight = false;
