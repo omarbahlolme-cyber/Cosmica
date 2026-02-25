@@ -451,6 +451,7 @@ app.use((req, res, next) => {
   const redirectParams = new URLSearchParams();
   redirectParams.set("premium", "required");
   redirectParams.set("source", "grammar-url");
+  redirectParams.set("deleteNotice", "Grammar maps are Premium-only. Upgrade to unlock them.");
   const redirectUrl = `${targetWorldPath}?${redirectParams.toString()}`;
   res.setHeader("Cache-Control", "no-store");
   return res.redirect(302, redirectUrl);
