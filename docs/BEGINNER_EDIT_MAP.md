@@ -39,6 +39,12 @@ Use this when you know what you want to change, but not where.
 - `frontend/terms.html`
 - `frontend/license.html`
 
+9. Test users, QA account roles, and usage:
+- `docs/TEST_USERS_REGISTRY.md`
+
+10. Third-party services and who manages what:
+- `docs/THIRD_PARTY_SERVICES_MAP.md`
+
 ## Fast decision rules
 
 1. If it is visual only, start with CSS.

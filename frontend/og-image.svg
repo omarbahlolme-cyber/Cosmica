@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Cosmica Language Worlds</title>
+  <desc id="desc">Cosmica premium language learning worlds with guided maps and AI support.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#07152f"/>
+      <stop offset="45%" stop-color="#102a54"/>
+      <stop offset="100%" stop-color="#1f3e73"/>
+    </linearGradient>
+    <linearGradient id="orb" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#67f1d3"/>
+      <stop offset="100%" stop-color="#6bc8ff"/>
+    </linearGradient>
+    <linearGradient id="ring" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8ed9ff"/>
+      <stop offset="100%" stop-color="#7bf4de"/>
+    </linearGradient>
+    <filter id="softGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <circle cx="170" cy="110" r="2.5" fill="#ffffff" opacity="0.65"/>
+  <circle cx="290" cy="190" r="1.8" fill="#ffffff" opacity="0.45"/>
+  <circle cx="370" cy="90" r="1.6" fill="#ffffff" opacity="0.55"/>
+  <circle cx="1120" cy="80" r="2.1" fill="#ffffff" opacity="0.6"/>
+  <circle cx="980" cy="170" r="1.7" fill="#ffffff" opacity="0.45"/>
+  <circle cx="1060" cy="250" r="1.5" fill="#ffffff" opacity="0.5"/>
+
+  <g transform="translate(120 70)">
+    <circle cx="175" cy="175" r="120" fill="none" stroke="url(#ring)" stroke-width="7" opacity="0.95"/>
+    <circle cx="175" cy="175" r="82" fill="none" stroke="#9de7ff" stroke-width="2.2" opacity="0.4"/>
+    <circle cx="175" cy="175" r="44" fill="url(#orb)" filter="url(#softGlow)"/>
+  </g>
+
+  <g fill="#d7ebff">
+    <text x="470" y="240" font-family="Space Grotesk, Rajdhani, Arial, sans-serif" font-size="86" font-weight="700">Cosmica</text>
+    <text x="470" y="302" font-family="Space Grotesk, Rajdhani, Arial, sans-serif" font-size="34" font-weight="600" opacity="0.95">Language Worlds</text>
+    <text x="470" y="372" font-family="Space Grotesk, Rajdhani, Arial, sans-serif" font-size="30" font-weight="500" opacity="0.85">
+      Learn letters, words, phrases, and grammar
+    </text>
+    <text x="470" y="420" font-family="Space Grotesk, Rajdhani, Arial, sans-serif" font-size="30" font-weight="500" opacity="0.85">
+      with structured maps and AI guidance.
+    </text>
+  </g>
+
+  <g transform="translate(470 472)">
+    <rect x="0" y="0" width="420" height="58" rx="29" fill="#123768" opacity="0.92"/>
+    <text x="210" y="38" text-anchor="middle" font-family="Space Grotesk, Rajdhani, Arial, sans-serif" font-size="26" font-weight="600" fill="#cfe6ff">
+      cosmicalearn.com
+    </text>
+  </g>
+</svg>

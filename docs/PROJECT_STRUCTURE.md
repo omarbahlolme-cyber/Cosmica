@@ -42,6 +42,8 @@
 |   |-- FRONTEND_RUNTIME_NOTES.md      # Runtime guardrails and decisions
 |   |-- OPERATIONS_HARDENING.md
 |   |-- BILLING_OPS_QUICK_COMMANDS.md
+|   |-- TEST_USERS_REGISTRY.md        # QA/test accounts, roles, and usage notes
+|   |-- THIRD_PARTY_SERVICES_MAP.md   # External platforms, ownership, and ops checks
 |   |-- ENFORCEMENT_RUNBOOK.md
 |   |-- ROLLBACK_RUNBOOK.md
 |   `-- SECURITY.md
@@ -77,6 +79,12 @@
 - `docs/OPERATIONS_HARDENING.md`
 - `docs/BILLING_OPS_QUICK_COMMANDS.md`
 - `docs/ROLLBACK_RUNBOOK.md`
+
+6. Test-user roles and QA account notes:
+- `docs/TEST_USERS_REGISTRY.md`
+
+7. Third-party platform ownership and operations:
+- `docs/THIRD_PARTY_SERVICES_MAP.md`
 
 ## Organization rules
 

@@ -58,6 +58,12 @@ for (const fileName of htmlFiles) {
   const ogUrlMatch = content.match(
     /<meta[^>]*property=["']og:url["'][^>]*content=["']([^"']+)["'][^>]*>/i
   );
+  const ogImageMatch = content.match(
+    /<meta[^>]*property=["']og:image["'][^>]*content=["']([^"']+)["'][^>]*>/i
+  );
+  const twitterImageMatch = content.match(
+    /<meta[^>]*name=["']twitter:image["'][^>]*content=["']([^"']+)["'][^>]*>/i
+  );
 
   if (!titleMatch || !titleMatch[1].trim()) {
     failures.push(`${fileName}: missing non-empty <title>`);
@@ -81,6 +87,14 @@ for (const fileName of htmlFiles) {
 
   if (!ogUrlMatch || ogUrlMatch[1].trim() !== expectedCanonical) {
     failures.push(`${fileName}: missing/invalid og:url (expected ${expectedCanonical})`);
+  }
+
+  if (!ogImageMatch || !ogImageMatch[1].trim()) {
+    failures.push(`${fileName}: missing/invalid og:image`);
+  }
+
+  if (!twitterImageMatch || !twitterImageMatch[1].trim()) {
+    failures.push(`${fileName}: missing/invalid twitter:image`);
   }
 
   if (!/application\/ld\+json/i.test(content)) {

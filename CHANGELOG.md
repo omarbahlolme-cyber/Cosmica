@@ -4,36 +4,61 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
-### Added
-- Scheduled uptime monitoring workflow with automatic incident issue handling.
-- Automated release workflow for `v*` tags plus manual backfill trigger.
-- Enforced bloat allowlist baseline (`scripts/bloat-allowlist.json`).
-- Security dependency audit workflow.
-- Legal/security pages (`privacy.html`, `terms.html`, `license.html`), `LICENSE`, and `docs/SECURITY.md`.
-- Security contact file served at `/.well-known/security.txt`.
-- Weekly backup workflow and backup scripts (`create-backup`, `verify-backup`).
-- Live production security monitoring workflow (redirect/header/health checks).
-- Manual GitHub hardening workflow + API automation script for branch protection/security features.
-- Dependabot configuration for weekly dependency/security update PRs.
-- Operations hardening runbook (`docs/OPERATIONS_HARDENING.md`).
-- Monthly backup restore drill workflow.
-- Accessibility/SEO/integrity/security.txt baseline check scripts added to quality pipeline.
-- HTML baseline updater script for consistent skip links, main landmarks, semantic h1, and JSON-LD.
-- Real-user performance telemetry endpoint (`/api/web-vitals`) and client-side Core Web Vitals reporting.
-- Frontend runtime notes document (`docs/FRONTEND_RUNTIME_NOTES.md`) with guardrails for prefetch, map hydration, and analytics mode.
-
 ### Changed
-- Server error monitoring with request IDs, structured error reporting, and optional webhook alerts.
-- Health endpoint now returns status + version + uptime metadata for monitoring integrations.
-- Server transport hardening with production HTTPS enforcement, Helmet headers/CSP/HSTS, and API rate limiting.
-- Repository ignores generated local backups under `backups/`.
-- All HTML pages now include explicit main landmark IDs, structured data, and third-party integrity exemptions.
-- Performance baseline refreshed after intentional metadata/accessibility additions.
-- Background navigation prefetch was disabled in `frontend/app.js` to prevent burst prefetch `503` noise and partial-load regressions.
-- Map pages now include loading/fallback rendering states during translation hydration to avoid blank sections.
-- Mobile letter-card tuning was adjusted for romanization-heavy worlds, and related dynamic classes were allowlisted for bloat checks.
-- Cache-busted `app.js` reference advanced to `v=20260303` across HTML pages to force stale-client recovery after runtime fixes.
-- Temporary accepted transitive `npm audit` risk documented in `docs/SECURITY.md` (`minimatch` via Google SDK chain), with no dependency overrides to preserve production stability.
+- No entries yet.
+
+## [1.2.0] - 2026-02-25
+
+### SEO and Discoverability
+- Added automated sitemap generator (`scripts/generate-sitemap.js`) and npm command `generate:sitemap`.
+- Updated `check:seo` to regenerate sitemap before baseline checks.
+- Made `frontend/sitemap.xml` generator-driven and aligned to current indexable pages.
+- Added social preview metadata support (`og:image`, `twitter:image`) across indexable pages.
+- Added shared social preview image asset (`frontend/og-image.svg`).
+- Updated canonical navigation targets from `/index.html` to `/` where applicable.
+
+### Auth and Premium
+- Normalized auth-related return paths and redirects to root canonical path (`/`).
+- Updated Stripe premium success/cancel default paths to root-based query routes.
+- Updated environment guidance for premium/auth posture:
+  - `AUTH_STORE_BACKEND`
+  - `AUTH_POSTGRES_URL`
+  - `ALLOW_SELF_PREMIUM_UPGRADE`
+- Improved no-shell live premium operational guidance and source-of-truth references in runbooks.
+
+### Frontend UX and Runtime
+- Improved auth dropdown behavior for mobile virtual keyboards (notably iOS/Safari):
+  - visual viewport-aware sizing
+  - keyboard inset handling
+  - focused-field reveal and scroll behavior
+- Kept translation hydration fallback behavior and map loading resilience updates in runtime flows.
+- Kept prefetch safety posture to avoid burst-loading regressions.
+
+### Security and Operations
+- Added/maintained scheduled uptime monitoring workflow and incident issue handling.
+- Added/maintained live production security monitoring workflow.
+- Added/maintained security dependency audit workflow.
+- Added/maintained backup automation:
+  - weekly backups
+  - monthly restore drill
+- Added/maintained GitHub hardening automation and Dependabot update flow.
+- Retained accepted transitive audit-risk documentation (`minimatch` via Google SDK chain) without forced dependency overrides.
+
+### Quality and Tooling
+- Added/maintained quality pipeline checks for accessibility, SEO, integrity, and security.txt.
+- Added/maintained HTML baseline updater behavior (landmarks/structured-data consistency plus social metadata upsert support).
+- Added/maintained real-user performance telemetry endpoint (`/api/web-vitals`) and client reporting.
+- Kept repository hygiene for generated backup artifacts.
+
+### Documentation
+- Added/updated operations and runtime docs:
+  - `docs/OPERATIONS_HARDENING.md`
+  - `docs/FRONTEND_RUNTIME_NOTES.md`
+  - `docs/SECURITY.md`
+- Added clear ownership docs:
+  - `docs/THIRD_PARTY_SERVICES_MAP.md`
+  - `docs/TEST_USERS_REGISTRY.md`
+- Clarified notes-map structure and removed duplicated procedure text in non-canonical docs.
 
 ## [1.1.0] - 2026-02-08
 

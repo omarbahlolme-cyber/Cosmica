@@ -8,6 +8,41 @@ Use this guide to understand:
 3. what checks to run before deploy,
 4. how to avoid breaking production.
 
+Docs usage rule:
+1. Use this file for onboarding flow and release checklist.
+2. Use runbooks for deep operational procedures (do not duplicate full procedures here).
+
+---
+
+## 0) Notes Map Roles
+
+1. `docs/HANDOFF_ZERO_TO_HERO.md`
+- Entry flow for new developers and release checklist.
+
+2. `docs/BEGINNER_EDIT_MAP.md`
+- "I need to change X, where is the file?" quick locator.
+
+3. `docs/PROJECT_STRUCTURE.md`
+- High-level repo map and ownership boundaries.
+
+4. `docs/CHANGE_GUIDE.md`
+- Impact matrix: if you change X, what else must be validated.
+
+5. `docs/OPERATIONS_HARDENING.md`
+- Canonical operations/security runbook.
+
+6. `docs/BILLING_OPS_QUICK_COMMANDS.md`
+- Canonical billing and premium incident commands.
+
+7. `docs/ROLLBACK_RUNBOOK.md`
+- Canonical rollback procedure.
+
+8. `docs/THIRD_PARTY_SERVICES_MAP.md`
+- Canonical external platform ownership map.
+
+9. `docs/TEST_USERS_REGISTRY.md`
+- Canonical QA/test-user registry.
+
 ---
 
 ## 1) Project at a glance
@@ -72,6 +107,12 @@ Local URL:
 - `docs/ROLLBACK_RUNBOOK.md`
 - `docs/BILLING_OPS_QUICK_COMMANDS.md`
 
+7. Test users and QA account roles:
+- `docs/TEST_USERS_REGISTRY.md`
+
+8. Third-party platform ownership and operations map:
+- `docs/THIRD_PARTY_SERVICES_MAP.md`
+
 ---
 
 ## 4) New developer first hour
@@ -82,6 +123,7 @@ Local URL:
 - `docs/CHANGE_GUIDE.md`
 - `docs/FRONTEND_RUNTIME_NOTES.md`
 - `docs/OPERATIONS_HARDENING.md`
+- `docs/THIRD_PARTY_SERVICES_MAP.md`
 
 2. Start app and verify baseline:
 
@@ -130,6 +172,7 @@ npm run quality
 B) SEO/legal/indexing changes:
 
 ```bash
+npm run generate:sitemap
 npm run check:seo
 npm run indexing:check
 npm run quality
@@ -157,6 +200,29 @@ npm run backup:create
 npm run backup:verify
 npm run auth-backup:create
 npm run auth-backup:verify
+```
+
+F) Auth provider/email flow changes:
+
+```bash
+npm run auth:check:readiness
+npm run auth:provider:contract
+npm run verify:prod-integrations
+```
+
+G) Accessibility + cross-device confidence:
+
+```bash
+npm run check:a11y
+npm run verify:pc-mobile
+npm run verify:viewport:browsers
+```
+
+H) End-to-end user-flow confidence (high impact changes):
+
+```bash
+npm run test:user-matrix
+npm run smoke:premium:continuity
 ```
 
 ---
@@ -312,3 +378,26 @@ Look for:
 1. Keep this file updated when command names, deploy criteria, or critical routes change.
 2. Keep checkpoint/history notes in a separate section or dedicated changelog to avoid breaking checklist flow.
 3. If this file moves, update links in `README.md`.
+4. Keep detailed operational procedures in runbooks, then link from here instead of duplicating.
+
+---
+
+## 13) Operational Sources of Truth
+
+Use these files directly for detailed procedures:
+
+1. No-shell Render/Postgres auth verification:
+- `docs/OPERATIONS_HARDENING.md` section `4.6` and section `4.1`.
+
+2. Manual premium (local and live):
+- `docs/OPERATIONS_HARDENING.md` section `6` and section `7`.
+- `docs/BILLING_OPS_QUICK_COMMANDS.md` for billing diagnostics/resync.
+
+3. Billing incident response and Stripe/Ko-fi checks:
+- `docs/BILLING_OPS_QUICK_COMMANDS.md`.
+
+4. Rollback process:
+- `docs/ROLLBACK_RUNBOOK.md`.
+
+5. Platform ownership and external dashboards:
+- `docs/THIRD_PARTY_SERVICES_MAP.md`.

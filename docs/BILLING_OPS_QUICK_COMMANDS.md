@@ -95,69 +95,10 @@ Invoke-WebRequest -Uri $Uri -Method GET -Headers $Headers
 
 ## 1.2) Manually grant Premium on live (no shell)
 
-Grant Premium by email via protected admin API:
+Canonical manual premium procedure now lives in:
+- `docs/OPERATIONS_HARDENING.md` section `7` (live) and section `6` (local).
 
-```bash
-curl -sS -X POST "https://YOUR_HOST/api/admin/security/users/grant-premium" \
-  -H "Content-Type: application/json" \
-  -H "x-admin-token: YOUR_ADMIN_SECURITY_TOKEN" \
-  -d '{"email":"user@example.com","days":30}'
-```
-
-Grant for 1 year:
-
-```bash
-curl -sS -X POST "https://YOUR_HOST/api/admin/security/users/grant-premium" \
-  -H "Content-Type: application/json" \
-  -H "x-admin-token: YOUR_ADMIN_SECURITY_TOKEN" \
-  -d '{"email":"user@example.com","days":365}'
-```
-
-Alternative explicit end date:
-
-```bash
-curl -sS -X POST "https://YOUR_HOST/api/admin/security/users/grant-premium" \
-  -H "Content-Type: application/json" \
-  -H "x-admin-token: YOUR_ADMIN_SECURITY_TOKEN" \
-  -d '{"email":"user@example.com","until":"2026-12-31T23:59:59Z"}'
-```
-
-Grant lifetime (manual, until revoked):
-
-```bash
-curl -sS -X POST "https://YOUR_HOST/api/admin/security/users/grant-premium" \
-  -H "Content-Type: application/json" \
-  -H "x-admin-token: YOUR_ADMIN_SECURITY_TOKEN" \
-  -d '{"email":"user@example.com"}'
-```
-
-Revoke Premium by email:
-
-```bash
-curl -sS -X POST "https://YOUR_HOST/api/admin/security/users/revoke-premium" \
-  -H "Content-Type: application/json" \
-  -H "x-admin-token: YOUR_ADMIN_SECURITY_TOKEN" \
-  -d '{"email":"user@example.com"}'
-```
-
-PowerShell equivalent (recommended on Windows):
-
-```powershell
-$Token = "YOUR_ADMIN_SECURITY_TOKEN"
-$Email = "user@example.com"
-$Headers = @{ "x-admin-token" = $Token }
-
-# Grant 365 days
-$GrantBody = @{ email = $Email; days = 365 } | ConvertTo-Json -Compress
-Invoke-WebRequest -Uri "https://YOUR_HOST/api/admin/security/users/grant-premium" -Method POST -Headers $Headers -ContentType "application/json" -Body $GrantBody
-
-# Verify user state
-Invoke-WebRequest -Uri ("https://YOUR_HOST/api/admin/security/users?email=" + [uri]::EscapeDataString($Email)) -Method GET -Headers $Headers
-
-# Revoke when needed
-$RevokeBody = @{ email = $Email } | ConvertTo-Json -Compress
-Invoke-WebRequest -Uri "https://YOUR_HOST/api/admin/security/users/revoke-premium" -Method POST -Headers $Headers -ContentType "application/json" -Body $RevokeBody
-```
+Use this billing runbook for Stripe/Ko-fi diagnostics and premium reconciliation, not as the primary manual-grant guide.
 
 ## 2) Troubleshooting admin endpoint errors
 
@@ -166,21 +107,9 @@ Invoke-WebRequest -Uri "https://YOUR_HOST/api/admin/security/users/revoke-premiu
 - `curl: unmatched close brace/bracket`: JSON quoting issue; use `Invoke-WebRequest` with `ConvertTo-Json`.
 - `{"error":"Internal server error","requestId":null}` while using curl-style flags in PowerShell usually indicates malformed body parsing.
 
-If live endpoint is missing and you need an immediate grant:
-
-```bash
-npm run admin:grant:premium -- --email user@example.com --days 365
-git add backend/data/accounts.json
-git commit -m "Grant premium for user@example.com"
-git push origin main
-```
-
-After verification, optional cleanup commit:
-
-```bash
-git revert HEAD --no-edit
-git push origin main
-```
+If live endpoint is missing:
+1. Deploy latest `main` first.
+2. Follow fallback guidance in `docs/OPERATIONS_HARDENING.md` section `7.5`.
 
 ## 3) Dry-run one-user resync
 

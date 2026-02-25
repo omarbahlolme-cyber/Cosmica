@@ -12,6 +12,18 @@ const path = require("path");
 const ROOT = path.resolve(__dirname, "..");
 const FRONTEND_ROOT = path.join(ROOT, "frontend");
 const SITE_ORIGIN = "https://www.cosmicalearn.com";
+const DEFAULT_SOCIAL_IMAGE_URL = `${SITE_ORIGIN}/og-image.svg`;
+const shouldSkipHtmlFile = (name) => {
+  const lower = String(name || "").toLowerCase();
+  return (
+    lower === "admin-security.html" ||
+    lower.startsWith("live_") ||
+    /^naver[a-z0-9]+\.html$/i.test(lower) ||
+    /^google[a-z0-9]+\.html$/i.test(lower) ||
+    /^bing[a-z0-9]+\.html$/i.test(lower) ||
+    /^baidu_verify_[a-z0-9]+\.html$/i.test(lower)
+  );
+};
 
 /* --------------------------------------------------------------------------
    HELPERS
@@ -32,12 +44,31 @@ const toCanonicalPath = (canonicalUrl) => {
 };
 
 const escapeJson = (value) => JSON.stringify(String(value || ""));
+const escapeRegex = (value) => String(value || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 const addAttributeToTag = (tag, attributeText) => {
   if (tag.endsWith("/>")) {
     return tag.replace(/\/>$/, ` ${attributeText} />`);
   }
   return tag.replace(/>$/, ` ${attributeText}>`);
+};
+
+const upsertMetaTag = (html, { attribute, key, content }) => {
+  const normalizedAttribute = String(attribute || "").trim();
+  const normalizedKey = String(key || "").trim();
+  const normalizedContent = String(content || "").trim();
+  if (!normalizedAttribute || !normalizedKey || !normalizedContent) {
+    return html;
+  }
+  const tagPattern = new RegExp(
+    `<meta[^>]*${escapeRegex(normalizedAttribute)}=["']${escapeRegex(normalizedKey)}["'][^>]*>`,
+    "i"
+  );
+  const normalizedTag = `<meta ${normalizedAttribute}="${normalizedKey}" content="${normalizedContent}" />`;
+  if (tagPattern.test(html)) {
+    return html.replace(tagPattern, normalizedTag);
+  }
+  return html.replace(/<\/head>/i, `    ${normalizedTag}\n  </head>`);
 };
 
 const annotateThirdPartyTags = (html) => {
@@ -132,6 +163,17 @@ const applyPageBaseline = (fileName) => {
     }
   }
 
+  html = upsertMetaTag(html, {
+    attribute: "property",
+    key: "og:image",
+    content: DEFAULT_SOCIAL_IMAGE_URL,
+  });
+  html = upsertMetaTag(html, {
+    attribute: "name",
+    key: "twitter:image",
+    content: DEFAULT_SOCIAL_IMAGE_URL,
+  });
+
   if (html !== original) {
     fs.writeFileSync(filePath, html, "utf8");
     return true;
@@ -145,7 +187,7 @@ const applyPageBaseline = (fileName) => {
 const htmlFiles = fs
   .readdirSync(FRONTEND_ROOT)
   .filter((fileName) => fileName.toLowerCase().endsWith(".html"))
-  .filter((fileName) => !fileName.toLowerCase().startsWith("live_"))
+  .filter((fileName) => !shouldSkipHtmlFile(fileName))
   .sort();
 
 let updatedCount = 0;

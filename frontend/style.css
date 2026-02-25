@@ -1253,7 +1253,10 @@ body.world-page .nav-links a {
   position: fixed;
   z-index: 1205;
   width: min(402px, calc(100vw - 16px));
-  max-height: min(calc(var(--app-height) - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 20px), 648px);
+  max-height: var(
+    --auth-dropdown-max-height,
+    min(calc(var(--app-height) - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 20px), 648px)
+  );
   overflow: visible;
 }
 
@@ -1282,6 +1285,8 @@ body.world-page .nav-links a {
   overflow: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
+  scroll-padding-bottom: var(--auth-dropdown-scroll-padding-bottom, 20px);
+  touch-action: pan-y;
   backdrop-filter: blur(16px) saturate(1.16);
   animation: accountDropdownEnter 0.24s ease-out;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
@@ -8382,7 +8387,7 @@ body.world-page.start-lesson-transition #language.language-reveal {
 
   .account-dropdown {
     width: min(360px, calc(100vw - 12px));
-    max-height: min(78vh, 560px);
+    max-height: var(--auth-dropdown-max-height, min(78vh, 560px));
   }
 
   .account-dropdown-card {
@@ -10731,7 +10736,7 @@ section,
   .premium-checkout-card,
   .premium-success-card,
   .grammar-modal {
-    max-height: calc(var(--app-height) - 8px);
+    max-height: var(--auth-dropdown-max-height, calc(var(--app-height) - 8px));
   }
 }
 
@@ -10756,7 +10761,10 @@ section,
   }
 
   .account-dropdown {
-    max-height: min(calc(var(--app-height) - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 12px), 620px);
+    max-height: var(
+      --auth-dropdown-max-height,
+      min(calc(var(--app-height) - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 12px), 620px)
+    );
   }
 }
 
@@ -10998,7 +11006,7 @@ section,
   }
 
   .account-dropdown {
-    max-height: calc(var(--app-height) - 8px);
+    max-height: var(--auth-dropdown-max-height, calc(var(--app-height) - 8px));
   }
 
   .premium-setup-card,
@@ -11011,7 +11019,10 @@ section,
 
 @media (hover: none) and (pointer: coarse) and (max-height: 760px) {
   .account-dropdown {
-    max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 8px) !important;
+    max-height: var(
+      --auth-dropdown-max-height,
+      calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 8px)
+    ) !important;
   }
 
   .account-dropdown-card {

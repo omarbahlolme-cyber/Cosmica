@@ -2941,6 +2941,34 @@ const setupAccountHub = () => {
     return node.getAttribute("contenteditable") === "true";
   };
 
+  const isFocusedControlInsideAuthDropdown = () => {
+    const activeNode = document.activeElement;
+    if (!(activeNode instanceof HTMLElement)) {
+      return false;
+    }
+    if (!isFocusableAuthControl(activeNode)) {
+      return false;
+    }
+    return accountDropdownCard instanceof HTMLElement && accountDropdownCard.contains(activeNode);
+  };
+
+  const getKeyboardInsetPx = () => {
+    const viewport = window.visualViewport;
+    if (!viewport) {
+      return 0;
+    }
+    const innerHeight = Math.max(0, Number(window.innerHeight) || 0);
+    const visualBottom = Math.max(0, (Number(viewport.offsetTop) || 0) + (Number(viewport.height) || 0));
+    return Math.max(0, Math.round(innerHeight - visualBottom));
+  };
+
+  const isLikelyVirtualKeyboardOpen = () => {
+    if (!isFocusedControlInsideAuthDropdown()) {
+      return false;
+    }
+    return getKeyboardInsetPx() >= 96;
+  };
+
   const getViewportBounds = () => {
     const viewport = window.visualViewport;
     if (viewport) {
@@ -2984,9 +3012,18 @@ const setupAccountHub = () => {
     const maxTop = Math.max(minTop, viewportBottom - 200);
     const top = Math.max(minTop, Math.min(maxTop, preferredTop));
     const maxHeight = Math.max(140, viewportBottom - top - 8);
+    const keyboardInsetPx = getKeyboardInsetPx();
     dropdown.style.left = `${left}px`;
     dropdown.style.top = `${top}px`;
+    dropdown.style.setProperty("--auth-dropdown-max-height", `${maxHeight}px`);
+    dropdown.style.setProperty("--auth-dropdown-keyboard-inset", `${keyboardInsetPx}px`);
+    dropdown.style.setProperty(
+      "--auth-dropdown-scroll-padding-bottom",
+      keyboardInsetPx > 0 ? `${Math.min(220, keyboardInsetPx + 32)}px` : "20px"
+    );
     dropdown.style.maxHeight = `${maxHeight}px`;
+    dropdown.style.setProperty("max-height", `${maxHeight}px`, "important");
+    dropdown.dataset.keyboardOpen = keyboardInsetPx > 0 ? "1" : "0";
   };
 
   const ensureFocusedAuthControlVisible = (targetNode, { behavior = "smooth" } = {}) => {
@@ -2999,7 +3036,8 @@ const setupAccountHub = () => {
     const surfaceRect = accountDropdownCard.getBoundingClientRect();
     const targetRect = targetNode.getBoundingClientRect();
     const topPadding = 18;
-    const bottomPadding = 26;
+    const keyboardInsetPx = getKeyboardInsetPx();
+    const bottomPadding = keyboardInsetPx > 0 ? 44 : 26;
     const isAbove = targetRect.top < surfaceRect.top + topPadding;
     const isBelow = targetRect.bottom > surfaceRect.bottom - bottomPadding;
     if (!isAbove && !isBelow) {
@@ -3036,6 +3074,18 @@ const setupAccountHub = () => {
     });
   };
 
+  const scheduleFocusedAuthControlReveal = (focusedNode) => {
+    if (!(focusedNode instanceof HTMLElement)) {
+      return;
+    }
+    scheduleDropdownReposition(focusedNode);
+    [90, 210, 360].forEach((delayMs) => {
+      window.setTimeout(() => {
+        scheduleDropdownReposition(focusedNode);
+      }, delayMs);
+    });
+  };
+
   const openDropdown = () => {
     dropdown.hidden = false;
     trigger?.setAttribute("aria-expanded", "true");
@@ -3057,7 +3107,7 @@ const setupAccountHub = () => {
       const initialFocusNode = resolveInitialFocusElement();
       initialFocusNode?.focus?.();
       if (initialFocusNode instanceof HTMLElement) {
-        scheduleDropdownReposition(initialFocusNode);
+        scheduleFocusedAuthControlReveal(initialFocusNode);
       }
     }, 20);
   };
@@ -3234,6 +3284,9 @@ const setupAccountHub = () => {
       }
 
       if (canScrollElementForDelta(accountDropdownCard, deltaY)) {
+        return;
+      }
+      if (event.type === "touchmove" && isLikelyVirtualKeyboardOpen()) {
         return;
       }
     }
@@ -3607,7 +3660,7 @@ const setupAccountHub = () => {
           });
           return;
         }
-        window.location.href = "/index.html?openAuth=1&authPanel=signup#support";
+        window.location.href = "/?openAuth=1&authPanel=signup#support";
       };
 
       openAuthDropdown();
@@ -4060,7 +4113,7 @@ const setupAccountHub = () => {
     if (window.location.pathname.toLowerCase().endsWith("/index.html") || window.location.pathname === "/") {
       return;
     }
-    window.location.href = `/index.html${safeHash}`;
+    window.location.href = `/${safeHash}`;
   };
 
   trigger?.addEventListener("click", () => {
@@ -4106,7 +4159,11 @@ const setupAccountHub = () => {
     window.visualViewport.addEventListener(
       "resize",
       () => {
-        scheduleDropdownReposition(document.activeElement instanceof HTMLElement ? document.activeElement : null);
+        const activeNode = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+        scheduleDropdownReposition(activeNode);
+        if (isFocusableAuthControl(activeNode)) {
+          scheduleFocusedAuthControlReveal(activeNode);
+        }
       },
       { passive: true }
     );
@@ -4124,7 +4181,7 @@ const setupAccountHub = () => {
       return;
     }
     window.setTimeout(() => {
-      scheduleDropdownReposition(focusTarget);
+      scheduleFocusedAuthControlReveal(focusTarget);
     }, 30);
   });
   document.addEventListener("keydown", (event) => {
@@ -4846,7 +4903,7 @@ const setupAccountHub = () => {
       if (deleteMessage) {
         params.set("deleteNotice", deleteMessage);
       }
-      const nextUrl = `/index.html?${params.toString()}`;
+      const nextUrl = `/?${params.toString()}`;
       window.location.href = nextUrl;
     } catch {}
   });
@@ -7371,7 +7428,7 @@ function showMimiPremiumBubble() {
       supportSection.scrollIntoView({ behavior: "smooth", block: "start" });
       return;
     }
-    window.location.href = "/index.html#support";
+    window.location.href = "/#support";
   };
   body.appendChild(btn);
   bubble.appendChild(body);
@@ -9398,15 +9455,15 @@ const openGuestSignupPanelUpwards = (message = "Sign up to save your progress.")
             if (retryOpen) {
               return;
             }
-            window.location.href = "/index.html?openAuth=1&authPanel=signup#support";
+            window.location.href = "/?openAuth=1&authPanel=signup#support";
           }, 140);
           return;
         }
-        window.location.href = "/index.html?openAuth=1&authPanel=signup#support";
+        window.location.href = "/?openAuth=1&authPanel=signup#support";
       }, 120);
       return;
     }
-    window.location.href = "/index.html?openAuth=1&authPanel=signup#support";
+    window.location.href = "/?openAuth=1&authPanel=signup#support";
   };
 
   const startY = Math.max(0, window.scrollY || window.pageYOffset || 0);
@@ -9558,7 +9615,7 @@ const bindPremiumLockedInteraction = (element, {
       window.location.hash = safeHash;
       return;
     }
-    window.location.href = `/index.html${safeHash}`;
+    window.location.href = `/${safeHash}`;
   };
 
   const onPremiumLockedInteract = (event) => {
@@ -9588,7 +9645,7 @@ const bindPremiumLockedInteraction = (element, {
         return;
       }
       const panel = encodeURIComponent(String(guestPanel || "login").trim().toLowerCase() || "login");
-      window.location.href = `/index.html?openAuth=1&authPanel=${panel}#support`;
+      window.location.href = `/?openAuth=1&authPanel=${panel}#support`;
       return;
     }
     if (typeof window.cosmicaAccountHub?.openPremium === "function") {

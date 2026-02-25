@@ -1,6 +1,7 @@
 # Operations Hardening Runbook
 
 This runbook covers the remaining account/platform controls that cannot be set from source code alone.
+For platform ownership (Render/Cloudflare/Stripe/Google/Slack/etc.), see `docs/THIRD_PARTY_SERVICES_MAP.md`.
 
 ## 1) Cloudflare and Domain Lock (manual in account UI)
 
@@ -129,15 +130,15 @@ Recent hardening added a safer startup path for `backend/data/accounts.json`:
    - the server attempts restore from `accounts.last-known-good.json`
    - this avoids destructive auto-reset-to-empty behavior on parse failures
 
-Operator checklist when users report “Account does not exist”:
+Operator checklist when users report "Account does not exist":
 
 1. Run per-email lifecycle diagnosis:
    - `npm run auth:user:lifecycle -- --email=user@example.com`
 2. Interpret `likelyState` quickly:
-   - `active-account` → account exists now (likely wrong env/email/client confusion)
-   - `previously-deleted` → user self-deleted in past (re-signup path expected)
-   - `registered-but-missing-from-current-store` → investigate store drift/reset/recovery incident
-   - `never-registered-or-different-email` → user likely used another email/provider
+   - `active-account` -> account exists now (likely wrong env/email/client confusion)
+   - `previously-deleted` -> user self-deleted in past (re-signup path expected)
+   - `registered-but-missing-from-current-store` -> investigate store drift/reset/recovery incident
+   - `never-registered-or-different-email` -> user likely used another email/provider
 3. If corruption snapshot files exist, archive and inspect before cleanup:
    - `backend/data/accounts.corrupt-*.json`
 4. If last-known-good recovery was used, verify with:
@@ -261,48 +262,9 @@ Invoke-WebRequest -Uri "https://YOUR_HOST/api/admin/security/users?since=2026-02
 
 Use `email=user@example.com` for an exact user lookup.
 
-Manual premium grant on live (no shell):
-
-```bash
-curl -sS -X POST "https://YOUR_HOST/api/admin/security/users/grant-premium" \
-   -H "Content-Type: application/json" \
-   -H "x-admin-token: YOUR_ADMIN_SECURITY_TOKEN" \
-   -d '{"email":"user@example.com","days":365}'
-```
-
-Manual premium lifetime grant (until revoked):
-
-```bash
-curl -sS -X POST "https://YOUR_HOST/api/admin/security/users/grant-premium" \
-   -H "Content-Type: application/json" \
-   -H "x-admin-token: YOUR_ADMIN_SECURITY_TOKEN" \
-   -d '{"email":"user@example.com"}'
-```
-
-Manual premium revoke on live (no shell):
-
-```bash
-curl -sS -X POST "https://YOUR_HOST/api/admin/security/users/revoke-premium" \
-   -H "Content-Type: application/json" \
-   -H "x-admin-token: YOUR_ADMIN_SECURITY_TOKEN" \
-   -d '{"email":"user@example.com"}'
-```
-
-PowerShell equivalent for grant + verify + revoke:
-
-```powershell
-$Token = "YOUR_ADMIN_SECURITY_TOKEN"
-$Email = "user@example.com"
-$Headers = @{ "x-admin-token" = $Token }
-
-$GrantBody = @{ email = $Email; days = 365 } | ConvertTo-Json -Compress
-Invoke-WebRequest -Uri "https://YOUR_HOST/api/admin/security/users/grant-premium" -Method POST -Headers $Headers -ContentType "application/json" -Body $GrantBody
-
-Invoke-WebRequest -Uri ("https://YOUR_HOST/api/admin/security/users?email=" + [uri]::EscapeDataString($Email)) -Method GET -Headers $Headers
-
-$RevokeBody = @{ email = $Email } | ConvertTo-Json -Compress
-Invoke-WebRequest -Uri "https://YOUR_HOST/api/admin/security/users/revoke-premium" -Method POST -Headers $Headers -ContentType "application/json" -Body $RevokeBody
-```
+Manual premium grant/revoke commands are canonical in:
+- section `7` (local/live manual premium operations).
+- `docs/BILLING_OPS_QUICK_COMMANDS.md` for billing-oriented incident command flow.
 
 Admin endpoint error guide:
 
@@ -310,21 +272,12 @@ Admin endpoint error guide:
 - `401/403`: missing/invalid `x-admin-token`.
 - PowerShell `curl` parsing/`unmatched close brace` errors: use `Invoke-WebRequest` + `ConvertTo-Json`.
 
-Fallback when `404` blocks urgent live grant:
+If `404` appears, use this order:
 
-```bash
-npm run admin:grant:premium -- --email user@example.com --days 365
-git add backend/data/accounts.json
-git commit -m "Grant premium for user@example.com"
-git push origin main
-```
-
-Optional cleanup after verification:
-
-```bash
-git revert HEAD --no-edit
-git push origin main
-```
+1. Confirm your host is correct (`https://www.cosmicalearn.com`).
+2. Deploy latest `main` so admin routes are live.
+3. Retry endpoint call.
+4. Only if live is intentionally file-backed (not Postgres), use the file-based fallback in section `7.5`.
 
 1. Rotate webhook token if exposed:
    - Regenerate in Ko-fi Webhooks UI.
@@ -385,13 +338,18 @@ $token="YOUR_KOFI_WEBHOOK_TOKEN"; $email="target-user@example.com"; $url="https:
 
 ### 4.3 Premium continuity guardrails
 
-1. Keep `AUTH_STORE_FAIL_FAST_ON_LOAD_ERROR=true` in every environment (staging and production) so startup halts on corrupt auth-store loads.
-2. Set `PREMIUM_CONTINUITY_CANARY_INTERVAL_MS` per environment:
+1. Keep production auth store on Postgres:
+   - `AUTH_STORE_BACKEND=postgres`
+   - `AUTH_POSTGRES_URL=<internal-db-url>` (or `DATABASE_URL`)
+2. Keep self-upgrade endpoint disabled in production:
+   - leave `ALLOW_SELF_PREMIUM_UPGRADE` unset, or set it to `false`
+   - only `true` enables `/api/account/premium/upgrade`
+3. Set `PREMIUM_CONTINUITY_CANARY_INTERVAL_MS` per environment:
    - Production: `900000` (15 minutes) to catch regressions quickly.
    - Staging: `3600000` (60 minutes) to reduce noise while still exercising the path.
-3. Ensure the premium continuity smoke runs in CI (see `quality` workflow) so failures block merges.
-4. If you create a staging service later, copy all required env keys from prod, then set:
-   - `AUTH_STORE_FAIL_FAST_ON_LOAD_ERROR=true`
+4. Ensure the premium continuity smoke runs in CI (see `quality` workflow) so failures block merges.
+5. If you create a staging service later, copy all required env keys from prod, then set:
+   - `AUTH_STORE_BACKEND=postgres`
    - `PREMIUM_CONTINUITY_CANARY_INTERVAL_MS=3600000` (or `600000` if you want staging to match prod cadence).
 
 ## 5) Policy Enforcement Process
@@ -402,62 +360,235 @@ For privacy/terms/license violations and response steps, use:
 
 ## 6) Admin: Premium (local/dev)
 
-Use the helper script; avoid hand-editing unless you need a manual revoke. Applies only to your local server.
+Use local script commands for local testing only.
 
-- Backup first: stop local server CTRL+C; run `npm run auth-backup:create`.
-- Grant local premium:
-   - Unlimited: `npm run admin:grant:premium -- --email user@example.com`
-   - Timed trial: `npm run admin:grant:premium -- --email user@example.com --days 30`
-   - Custom date: `npm run admin:grant:premium -- --email user@example.com --until YYYY-MM-DD`
-- Restart local server "npm start"; verify on localhost.
-- Revoke locally:
-   - Fast: `npm run admin:grant:premium -- --email user@example.com --until 2000-01-01`
-   - Manual edit: stop server; edit `backend/data/accounts.json` for that user; clear premium flags/end dates (`isPremium/premium/plan/tier/membership=false/""`; clear `premiumProvider/premiumLastSource`, `premiumStripeSubscriptionStatus`, end-date fields, `premiumCancelAtPeriodEnd`); save; restart.
-- Local recovery/QA:
-   - Wrong user: revert flags in `backend/data/accounts.json` or restore the latest `backups/auth-data/` snapshot, then restart.
-   - Wrong duration: re-run the grant with correct `--days` or `--until`.
-   - Corrupted store: restore the latest `backups/auth-data/` snapshot locally, then re-apply intended grants.
-   - Backups: one before edits is enough; fix/restore using it, then optionally take a fresh one after.
+1. Backup local auth data:
+- Stop local server, then run `npm run auth-backup:create`.
 
-## 7) Admin: Premium (production/live, Render free has no shell)
+2. Grant local premium:
+- Unlimited: `npm run admin:grant:premium -- --email user@example.com`
+- 30-day trial: `npm run admin:grant:premium -- --email user@example.com --days 30`
+- Until date: `npm run admin:grant:premium -- --email user@example.com --until YYYY-MM-DD`
 
-- Private repo (simple path):
-   - Backup first: stop live server/service if you control it; locally run `npm run auth-backup:create` (keeps a copy if you need to revert).
-   - Grant: edit `backend/data/accounts.json` locally to mark your email as premium (same fields as local flow: isPremium/premium true, plan/tier/membership "premium", provider/manual, premiumCurrentPeriodEnd future date, etc.).
-   - Deploy: commit and push to `main`; Render redeploys and picks it up.
-   - Verify: log in on the live site; confirm Premium.
-   - Optional cleanup: after verifying live, make a follow-up commit reverting `backend/data/accounts.json`. The live instance keeps the premium state it already loaded.
+3. Revoke local premium:
+- Quick revoke: `npm run admin:grant:premium -- --email user@example.com --until 2000-01-01`
 
-- Public repo (avoid committing auth data):
-   - Option 1: temporarily upgrade to a plan with Shell, run `npm run admin:grant:premium -- --email you@example.com --days 30` on the live box, then downgrade.
-   - Option 2: have a dev add a temporary protected grant endpoint, deploy, call it once, then remove and redeploy.
+4. Verify locally:
+- Restart server: `npm start`
+- Login with that account on localhost and confirm Premium state.
 
-- Revoke live (if needed):
-   - Fast: `npm run admin:grant:premium -- --email user@example.com --until 2000-01-01` (requires shell-capable plan).
-   - File edit path (private repo): edit `backend/data/accounts.json` to clear premium flags/end dates, commit/push, let Render redeploy.
+## 7) Admin: Premium (production/live, no Render Shell)
 
-- Live recovery/QA scenarios:
-   - Wrong user: clear that user’s premium fields in `backend/data/accounts.json`, commit/push, redeploy; or restore the latest `backups/auth-data/` snapshot and redeploy.
-   - Wrong duration: adjust fields in `backend/data/accounts.json` (or rerun grant via shell if available), then commit/push and redeploy.
-   - Corrupted store: restore the latest `backups/auth-data/` snapshot locally, commit/push, redeploy.
-   - Backups: one before edits is enough; fix/restore using it, then optionally take a fresh one after things look correct.
+Use the admin security API. This is the easiest and safest live method when Shell is unavailable.
 
-- Reminder: local changes don’t reach live unless you push them; only what’s in git (or executed on the live box) goes to production.
+Prerequisites:
+1. `ADMIN_SECURITY_TOKEN` is set in Render Environment.
+2. Live is deployed with current backend (contains `/api/admin/security/users/grant-premium`).
+3. User already exists on live.
 
-- Runtime note: the manual premium congrats message appears once per session/login for manual grants; it resets on page reload or logout/login and does not show for Stripe users.
+### 7.0 Beginner step-by-step (copy/paste)
 
-### 7.1 Cleanup: remove accounts.json change from git (after live is verified)
+Follow these exact steps in order.
 
-- If the grant was your latest commit (simplest):
-   1) In a terminal at the repo root: `git revert HEAD --no-edit`
-   2) Push: `git push origin main`
-   Done. Live keeps the premium state it already loaded.
+1. Open Render Dashboard -> your Web Service -> `Environment`.
+2. Confirm key `ADMIN_SECURITY_TOKEN` exists.
+3. Pick the user email you want to grant, for example `user@example.com`.
+4. Open Windows PowerShell on your computer.
+5. Paste this block and replace token/email values:
 
-- If the grant was not the latest commit:
-   1) Target the grant commit directly and revert it: `git revert <grant-commit-sha> --no-edit`
-       - If you prefer a file reset: `git checkout <pre-grant-commit> -- backend/data/accounts.json` (if it’s one back, use `HEAD~1`).
-   2) Commit (if you used checkout): `git commit -am "Revert accounts.json"`
-   3) Push: `git push origin main`
-   Live keeps the premium state it already loaded.
+```powershell
+$Host = "https://www.cosmicalearn.com"
+$Token = "PASTE_YOUR_ADMIN_SECURITY_TOKEN_HERE"
+$Email = "user@example.com"
+$Headers = @{ "x-admin-token" = $Token }
+```
 
-- You can do this cleanup anytime later (even weeks/months later); it only cleans the repo. The live server keeps the premium state it already loaded.
+6. Grant Premium for 30 days:
+
+```powershell
+$GrantBody = @{ email = $Email; days = 30 } | ConvertTo-Json -Compress
+$GrantResp = Invoke-RestMethod -Uri "$Host/api/admin/security/users/grant-premium" -Method POST -Headers $Headers -ContentType "application/json" -Body $GrantBody
+$GrantResp | ConvertTo-Json -Depth 8
+```
+
+Expected result:
+1. Response shows `"ok": true`
+2. Response shows `"user"` object with premium status active
+
+7. Verify user state:
+
+```powershell
+$VerifyUri = $Host + "/api/admin/security/users?email=" + [uri]::EscapeDataString($Email)
+$VerifyResp = Invoke-RestMethod -Uri $VerifyUri -Method GET -Headers $Headers
+$VerifyResp | ConvertTo-Json -Depth 8
+```
+
+Expected result:
+1. `"matchedUsers"` is `1`
+2. Returned user has premium enabled
+
+8. Revoke later (if needed):
+
+```powershell
+$RevokeBody = @{ email = $Email } | ConvertTo-Json -Compress
+$RevokeResp = Invoke-RestMethod -Uri "$Host/api/admin/security/users/revoke-premium" -Method POST -Headers $Headers -ContentType "application/json" -Body $RevokeBody
+$RevokeResp | ConvertTo-Json -Depth 8
+```
+
+Expected result:
+1. Response shows `"ok": true`
+2. Returned user becomes free
+
+### 7.0.1 Terminal curl copy/paste (alternative)
+
+Use this if you prefer terminal `curl` style.
+
+Grant 30 days:
+
+```bash
+curl -sS -X POST "https://www.cosmicalearn.com/api/admin/security/users/grant-premium" \
+  -H "Content-Type: application/json" \
+  -H "x-admin-token: YOUR_ADMIN_SECURITY_TOKEN" \
+  -d '{"email":"user@example.com","days":30}'
+```
+
+Verify:
+
+```bash
+curl -sS "https://www.cosmicalearn.com/api/admin/security/users?email=user@example.com" \
+  -H "x-admin-token: YOUR_ADMIN_SECURITY_TOKEN"
+```
+
+Revoke:
+
+```bash
+curl -sS -X POST "https://www.cosmicalearn.com/api/admin/security/users/revoke-premium" \
+  -H "Content-Type: application/json" \
+  -H "x-admin-token: YOUR_ADMIN_SECURITY_TOKEN" \
+  -d '{"email":"user@example.com"}'
+```
+
+### 7.1 Grant live premium (PowerShell)
+
+```powershell
+$Host = "https://www.cosmicalearn.com"
+$Token = "YOUR_ADMIN_SECURITY_TOKEN"
+$Email = "user@example.com"
+$Headers = @{ "x-admin-token" = $Token }
+
+# Timed grant (365 days)
+$GrantBody = @{ email = $Email; days = 365 } | ConvertTo-Json -Compress
+Invoke-WebRequest -Uri "$Host/api/admin/security/users/grant-premium" -Method POST -Headers $Headers -ContentType "application/json" -Body $GrantBody
+
+# Verify user state
+Invoke-WebRequest -Uri ($Host + "/api/admin/security/users?email=" + [uri]::EscapeDataString($Email)) -Method GET -Headers $Headers
+```
+
+Lifetime grant (until revoked):
+
+```powershell
+$GrantBody = @{ email = $Email } | ConvertTo-Json -Compress
+Invoke-WebRequest -Uri "$Host/api/admin/security/users/grant-premium" -Method POST -Headers $Headers -ContentType "application/json" -Body $GrantBody
+```
+
+### 7.2 Revoke live premium (PowerShell)
+
+```powershell
+$RevokeBody = @{ email = $Email } | ConvertTo-Json -Compress
+Invoke-WebRequest -Uri "$Host/api/admin/security/users/revoke-premium" -Method POST -Headers $Headers -ContentType "application/json" -Body $RevokeBody
+```
+
+### 7.3 Error guide (live admin API)
+
+1. `404 Not Found` on endpoint:
+- Route not deployed to live yet or wrong host/path.
+- Deploy latest `main` and retry.
+
+2. `401/403`:
+- Missing/invalid `x-admin-token`.
+- Check `ADMIN_SECURITY_TOKEN` in Render Environment.
+
+3. `404 User not found`:
+- That email is not registered on live.
+- Ask user to sign up first, then run grant again.
+
+### 7.4 Critical note for Postgres live
+
+If production uses `AUTH_STORE_BACKEND=postgres`, do not use repo `backend/data/accounts.json` edits for live premium grants. Those file edits do not control Postgres live data.
+
+### 7.5 Legacy fallback (file backend only)
+
+Use this only if live is intentionally file-backed (not Postgres):
+1. Run local script to update `backend/data/accounts.json`.
+2. Commit/push.
+3. Redeploy.
+4. Optionally revert the data commit afterward.
+
+### 7.6 Direct `isPremium` flag edit (advanced fallback)
+
+Yes, this method is real, but use it only when:
+1. Live is file-backed auth (`AUTH_STORE_BACKEND=file`), and
+2. Admin API method is unavailable.
+
+Do not use this method for Postgres live (`AUTH_STORE_BACKEND=postgres`).
+
+Step-by-step:
+1. Backup auth data first:
+- `npm run auth-backup:create`
+2. Stop local server/editor process that may write auth data.
+3. Open `backend/data/accounts.json`.
+4. Find the user record by email in `users` map.
+5. Edit premium fields.
+6. Save file.
+7. Commit + push + redeploy.
+8. Verify on live with admin users endpoint and by logging in as that user.
+
+Grant premium example (set fields under `user.data.profile`):
+
+```json
+{
+  "isPremium": true,
+  "premium": true,
+  "plan": "premium",
+  "tier": "premium",
+  "membership": "premium",
+  "premiumProvider": "manual",
+  "premiumLastSource": "admin-manual-grant",
+  "premiumStatus": "active",
+  "subscriptionStatus": "active",
+  "premiumCancelAtPeriodEnd": false,
+  "premiumCurrentPeriodEnd": "2027-12-31T23:59:59.000Z",
+  "currentPeriodEnd": "2027-12-31T23:59:59.000Z",
+  "subscriptionEndsAt": "2027-12-31T23:59:59.000Z",
+  "premiumEndsAt": "2027-12-31T23:59:59.000Z"
+}
+```
+
+Revoke premium example (set fields under `user.data.profile`):
+
+```json
+{
+  "isPremium": false,
+  "premium": false,
+  "plan": "free",
+  "tier": "free",
+  "membership": "free",
+  "premiumStatus": "free",
+  "subscriptionStatus": "free",
+  "premiumCancelAtPeriodEnd": false,
+  "premiumCurrentPeriodEnd": "",
+  "currentPeriodEnd": "",
+  "subscriptionEndsAt": "",
+  "premiumEndsAt": "",
+  "premiumExpiresAt": "",
+  "premiumProvider": "",
+  "premiumLastSource": "admin-manual-revoke"
+}
+```
+
+Quick verify command (after deploy):
+
+```bash
+curl -sS "https://www.cosmicalearn.com/api/admin/security/users?email=user@example.com" \
+  -H "x-admin-token: YOUR_ADMIN_SECURITY_TOKEN"
+```

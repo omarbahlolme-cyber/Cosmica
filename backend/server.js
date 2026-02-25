@@ -319,6 +319,7 @@ const RETIRED_WORLD_PATHS = new Set([
 ]);
 
 const LEGACY_WORLD_ROUTE_REDIRECTS = new Map([
+  ["/index.html", "/"],
   ["/world.html", "/english-world.html"],
   ["/letters.html", "/english-letters.html"],
   ["/words.html", "/english-words.html"],
@@ -3499,13 +3500,13 @@ const getPublicAppOrigin = (req) => {
 const sanitizeReturnToPath = (rawValue) => {
   const raw = String(rawValue || "").trim();
   if (!raw.startsWith("/") || raw.startsWith("//")) {
-    return "/index.html";
+    return "/";
   }
   try {
     const parsed = new URL(raw, "http://localhost");
     return `${parsed.pathname}${parsed.search}${parsed.hash}`;
   } catch {
-    return "/index.html";
+    return "/";
   }
 };
 
@@ -3527,7 +3528,7 @@ const cleanupExpiredGoogleOauthStates = () => {
   }
 };
 
-const createGoogleOauthState = ({ mode = "login", returnTo = "/index.html", flowToken = "" } = {}) => {
+const createGoogleOauthState = ({ mode = "login", returnTo = "/", flowToken = "" } = {}) => {
   cleanupExpiredGoogleOauthStates();
   const stateToken = crypto.randomBytes(20).toString("base64url");
   googleOauthStateStore.set(stateToken, {
@@ -3605,7 +3606,7 @@ const fetchGoogleUserProfile = async ({ accessToken, idToken }) => {
   throw new Error("Failed to fetch Google profile");
 };
 
-const buildEmailVerificationLink = (req, rawToken, returnTo = "/index.html", email = "") => {
+const buildEmailVerificationLink = (req, rawToken, returnTo = "/", email = "") => {
   const origin = getPublicAppOrigin(req);
   const verifyUrl = new URL("/api/auth/verify-email", origin);
   verifyUrl.searchParams.set("token", String(rawToken || "").trim());
@@ -3617,7 +3618,7 @@ const buildEmailVerificationLink = (req, rawToken, returnTo = "/index.html", ema
   return verifyUrl.toString();
 };
 
-const buildPasswordResetLink = (req, rawToken, returnTo = "/index.html") => {
+const buildPasswordResetLink = (req, rawToken, returnTo = "/") => {
   const origin = getPublicAppOrigin(req);
   const resetUrl = new URL("/api/auth/password/reset", origin);
   resetUrl.searchParams.set("token", String(rawToken || "").trim());
@@ -3669,7 +3670,7 @@ const sendPasswordResetEmail = async ({ req, email, displayName, rawToken, retur
   });
 };
 
-const buildAuthErrorRedirectPath = (code, returnTo = "/index.html", extraParams = {}) => {
+const buildAuthErrorRedirectPath = (code, returnTo = "/", extraParams = {}) => {
   const safeTarget = sanitizeReturnToPath(returnTo);
   const extras = isPlainObject(extraParams) ? extraParams : {};
   try {
@@ -3701,7 +3702,7 @@ const buildAuthErrorRedirectPath = (code, returnTo = "/index.html", extraParams 
       }
       params.set(normalizedKey, normalizedValue);
     });
-    return `/index.html?${params.toString()}`;
+    return `/?${params.toString()}`;
   }
 };
 
@@ -6606,8 +6607,8 @@ const createStripePremiumCheckoutSession = async (req, userRecord, optionId = "m
   const trialDays = Number.isFinite(trialDaysRaw) ? Math.max(0, Math.floor(trialDaysRaw)) : 0;
 
   const origin = getPublicAppOrigin(req);
-  const successPath = String(process.env.STRIPE_PREMIUM_SUCCESS_PATH || "/index.html?premium=success").trim();
-  const cancelPath = String(process.env.STRIPE_PREMIUM_CANCEL_PATH || "/index.html?premium=cancel").trim();
+  const successPath = String(process.env.STRIPE_PREMIUM_SUCCESS_PATH || "/?premium=success").trim();
+  const cancelPath = String(process.env.STRIPE_PREMIUM_CANCEL_PATH || "/?premium=cancel").trim();
   const successUrl = new URL(successPath.startsWith("/") ? successPath : `/${successPath}`, origin);
   const cancelUrl = new URL(cancelPath.startsWith("/") ? cancelPath : `/${cancelPath}`, origin);
 
