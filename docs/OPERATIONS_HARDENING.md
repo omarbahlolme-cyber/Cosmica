@@ -558,3 +558,47 @@ Use this only if live is intentionally file-backed (not Postgres):
 2. Commit/push.
 3. Redeploy.
 4. Optionally revert the data commit afterward.
+
+### 7.6 Gift-link flow (manual premium + custom message)
+
+Use this when you want to gift premium manually and send a branded link message.
+
+Important:
+1. Gift link UI does not grant premium by itself.
+2. Grant premium first (section `7.0` / `7.1`), then send gift link.
+
+Recommended order:
+1. Grant premium to recipient email via admin API.
+2. Verify premium is active.
+3. Send gift link with your custom text.
+
+Gift URL template:
+
+```text
+https://www.cosmicalearn.com/?gift=1&giftTitle=...&giftMessage=...&giftFrom=...&giftOpenText=...&giftCheckText=...&giftLaterText=...
+```
+
+Supported query params:
+1. Required:
+   - `gift=1`
+2. Optional:
+   - `giftTitle`
+   - `giftMessage`
+   - `giftFrom`
+   - `giftOpenText`
+   - `giftCheckText`
+   - `giftLaterText`
+
+Behavior:
+1. If recipient is logged out:
+   - auth panel auto-opens first (signup/login),
+   - then gift flow continues after login.
+2. If recipient is logged in:
+   - gift modal opens directly.
+3. Recipient can tap `Check activation` to refresh account state.
+
+Example ready link:
+
+```text
+https://www.cosmicalearn.com/?gift=1&giftTitle=A%20Premium%20Gift%20For%20You&giftMessage=Here%E2%80%99s%20your%20free%20Cosmica%20Premium%20gift.%20Enjoy%20full%20learning%20access%20and%20have%20the%20most%20joyful%20language%20exploration%20across%20every%20world.&giftFrom=Andy%20%EC%95%A4%EB%94%94
+```

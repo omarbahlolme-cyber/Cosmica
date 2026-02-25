@@ -7,6 +7,8 @@ All notable changes to this project are documented in this file.
 ### Changed
 - Mimi chat UX now auto-reveals Mimi's speech bubble when a user sends a message, and follows bubble growth during live reply typing.
 - Mimi bubble follow behavior is user-controlled: manual wheel/touch/keyboard scrolling cancels auto-follow for the current reply (no scroll lock).
+- Added premium gift-link modal flow on homepage with customizable URL text fields (`gift=1`, `giftTitle`, `giftMessage`, `giftFrom`, button labels).
+- Gift links now auto-open auth panel for logged-out users, then continue gift activation flow after login/signup.
 
 ## [1.2.0] - 2026-02-25
 

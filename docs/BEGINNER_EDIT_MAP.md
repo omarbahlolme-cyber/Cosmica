@@ -7,6 +7,7 @@ Use this when you know what you want to change, but not where.
 1. Header/nav behavior, sign-in dropdown, account menu:
 - `frontend/app.js`
 - `frontend/style.css`
+- Gift-link premium popup customization (`gift=1`, `giftTitle`, `giftMessage`, `giftFrom`, button labels) is in `frontend/app.js`.
 
 2. Login/signup/reset/delete API behavior:
 - `backend/server.js`

@@ -83,6 +83,7 @@ Local URL:
 1. Auth dropdown/login/signup/reset UI:
 - `frontend/app.js`
 - `frontend/style.css`
+- Gift-link premium modal and custom URL parameters (`gift=1`, `giftTitle`, etc.) also live in `frontend/app.js`.
 
 2. Words/Phrases/Grammar rendering and filters:
 - `frontend/maps/app-maps.js`

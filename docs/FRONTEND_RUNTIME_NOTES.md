@@ -61,6 +61,30 @@ This file tracks important runtime decisions and guardrails for `frontend/app.js
 3. Cancel notice trigger is query param `premium=cancel`.
 4. The frontend consumes these params, shows the corresponding UI, then cleans the URL via `history.replaceState`.
 
+## Premium Gift Link Flow (2026-02)
+
+1. Gift links are URL-driven and start with `?gift=1`.
+2. Supported optional params:
+   - `giftTitle`
+   - `giftMessage`
+   - `giftFrom`
+   - `giftOpenText`
+   - `giftCheckText`
+   - `giftLaterText`
+3. Runtime parsing lives in `setupAccountHub()` in `frontend/app.js`:
+   - params are sanitized/capped,
+   - modal state is staged,
+   - URL params are removed via `history.replaceState`.
+4. Guest behavior:
+   - when a gift link is opened while logged out, auth panel auto-opens first,
+   - after login/signup, gift flow resumes.
+5. Activation behavior:
+   - gift UI does not grant premium by itself,
+   - premium must already be granted (Stripe/admin),
+   - `Check activation` re-fetches auth/user state and opens premium success modal when active.
+6. Programmatic entry point:
+   - `window.cosmicaAccountHub.openGift({...})` for opening a custom gift modal without URL params.
+
 ## Mimi Speech Bubble Follow (2026-02)
 
 1. When a user sends a Mimi chat message, the page reveals the speech bubble area automatically so users can see Mimi's response start immediately.

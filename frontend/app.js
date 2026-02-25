@@ -2117,6 +2117,25 @@ const setupAccountHub = () => {
   `;
   document.body.appendChild(premiumSuccessOverlay);
 
+  const premiumGiftOverlay = document.createElement("div");
+  premiumGiftOverlay.className = "premium-checkout-overlay premium-gift-overlay";
+  premiumGiftOverlay.hidden = true;
+  premiumGiftOverlay.innerHTML = `
+    <section class="premium-setup-card premium-gift-card" role="dialog" aria-modal="true" aria-labelledby="premiumGiftTitle">
+      <button type="button" class="premium-checkout-close premium-gift-close" aria-label="Close gift">×</button>
+      <h3 id="premiumGiftTitle" class="premium-gift-title">A Premium Gift Awaits You</h3>
+      <p class="premium-setup-message premium-gift-message">Someone sent you a Cosmica Premium gift. Open the gift to continue.</p>
+      <p class="premium-gift-from" hidden></p>
+      <p class="premium-gift-feedback" aria-live="polite"></p>
+      <div class="premium-setup-actions premium-gift-actions">
+        <button type="button" class="premium-setup-primary premium-gift-open">Open Gift</button>
+        <button type="button" class="premium-setup-secondary premium-gift-check">Check activation</button>
+        <button type="button" class="premium-setup-secondary premium-gift-later">Maybe later</button>
+      </div>
+    </section>
+  `;
+  document.body.appendChild(premiumGiftOverlay);
+
   const feedbackNode = dropdown.querySelector(".account-feedback");
   const guestPane = dropdown.querySelector(".account-guest-pane");
   const userPane = dropdown.querySelector(".account-user-pane");
@@ -2190,6 +2209,15 @@ const setupAccountHub = () => {
   const premiumSuccessCard = premiumSuccessOverlay.querySelector(".premium-success-card");
   const premiumSuccessCloseBtn = premiumSuccessOverlay.querySelector(".premium-success-close");
   const premiumSuccessCtaBtn = premiumSuccessOverlay.querySelector(".premium-success-cta");
+  const premiumGiftCard = premiumGiftOverlay.querySelector(".premium-gift-card");
+  const premiumGiftTitle = premiumGiftOverlay.querySelector(".premium-gift-title");
+  const premiumGiftMessage = premiumGiftOverlay.querySelector(".premium-gift-message");
+  const premiumGiftFrom = premiumGiftOverlay.querySelector(".premium-gift-from");
+  const premiumGiftFeedback = premiumGiftOverlay.querySelector(".premium-gift-feedback");
+  const premiumGiftCloseBtn = premiumGiftOverlay.querySelector(".premium-gift-close");
+  const premiumGiftOpenBtn = premiumGiftOverlay.querySelector(".premium-gift-open");
+  const premiumGiftCheckBtn = premiumGiftOverlay.querySelector(".premium-gift-check");
+  const premiumGiftLaterBtn = premiumGiftOverlay.querySelector(".premium-gift-later");
   let selectedPremiumCheckoutOption = null;
   let premiumCheckoutOptionsReady = false;
   let isSubscriptionPanelExpanded = false;
@@ -2298,6 +2326,12 @@ const setupAccountHub = () => {
   let overlayBodyLockScrollY = 0;
   let pendingPremiumWelcomeMode = "";
   let hasShownPremiumWelcome = false;
+  let pendingPremiumGiftPrompt = null;
+  let hasShownPremiumGiftPrompt = false;
+  let premiumGiftCheckInFlight = false;
+  let pendingGiftRequiresAuth = false;
+  let hasAutoOpenedGiftAuth = false;
+  let reopenPremiumGiftAfterAuth = false;
   let logoutConfirmArmedAtMs = 0;
   let hasShownEntryMenuPrompt = false;
 
@@ -2798,9 +2832,73 @@ const setupAccountHub = () => {
     window.history.replaceState({}, "", nextUrl);
   };
 
+  // Gift-link text comes from URL query params. Normalize and cap length so
+  // user-provided text cannot break layout or overflow controls.
+  const sanitizeGiftText = (value, maxLength = 220) =>
+    String(value || "")
+      .replace(/\s+/g, " ")
+      .trim()
+      .slice(0, Math.max(0, Number(maxLength) || 0));
+
+  const isGiftFlagEnabled = (rawValue) => {
+    const normalized = String(rawValue || "")
+      .trim()
+      .toLowerCase();
+    return (
+      normalized === "1" ||
+      normalized === "true" ||
+      normalized === "yes" ||
+      normalized === "open" ||
+      normalized === "gift"
+    );
+  };
+
+  // Parse one-time gift-link params from URL, stage them in runtime state,
+  // then clean the URL so refresh/share does not keep extra query text.
+  const consumePremiumGiftPromptFromUrl = () => {
+    const params = new URLSearchParams(window.location.search);
+    if (!isGiftFlagEnabled(params.get("gift"))) {
+      return;
+    }
+    const title = sanitizeGiftText(params.get("giftTitle"), 90) || "A Premium Gift Awaits You";
+    const message =
+      sanitizeGiftText(params.get("giftMessage"), 320) ||
+      "Someone sent you a Cosmica Premium gift. Open the gift to continue.";
+    const from = sanitizeGiftText(params.get("giftFrom"), 70);
+    const openText = sanitizeGiftText(params.get("giftOpenText"), 28) || "Open Gift";
+    const checkText = sanitizeGiftText(params.get("giftCheckText"), 32) || "Check activation";
+    const laterText = sanitizeGiftText(params.get("giftLaterText"), 24) || "Maybe later";
+    pendingPremiumGiftPrompt = {
+      title,
+      message,
+      from,
+      openText,
+      checkText,
+      laterText,
+    };
+    hasShownPremiumGiftPrompt = false;
+    pendingGiftRequiresAuth = true;
+    hasAutoOpenedGiftAuth = false;
+
+    [
+      "gift",
+      "giftTitle",
+      "giftMessage",
+      "giftFrom",
+      "giftOpenText",
+      "giftCheckText",
+      "giftLaterText",
+    ].forEach((key) => params.delete(key));
+    const nextQuery = params.toString();
+    const nextUrl =
+      window.location.pathname + (nextQuery ? `?${nextQuery}` : "") + window.location.hash;
+    window.history.replaceState({}, "", nextUrl);
+  };
+
   consumeAuthErrorFromUrl();
   consumeAccountDeletedNoticeFromUrl();
   consumePremiumCheckoutNoticeFromUrl();
+  consumePremiumGiftPromptFromUrl();
   loginForm?.setAttribute("novalidate", "novalidate");
   signupForm?.setAttribute("novalidate", "novalidate");
   resetForm?.setAttribute("novalidate", "novalidate");
@@ -3165,7 +3263,10 @@ const setupAccountHub = () => {
 
   const syncOverlayBodyLock = () => {
     const hasOpenPremiumModal =
-      !premiumSetupOverlay.hidden || !premiumCheckoutOverlay.hidden || !premiumSuccessOverlay.hidden;
+      !premiumSetupOverlay.hidden ||
+      !premiumCheckoutOverlay.hidden ||
+      !premiumSuccessOverlay.hidden ||
+      !premiumGiftOverlay.hidden;
     const hasOpenAccountMenu = !dropdown.hidden;
     const shouldLock = hasOpenPremiumModal || hasOpenAccountMenu;
     if (shouldLock && !overlayBodyLockActive) {
@@ -3197,7 +3298,10 @@ const setupAccountHub = () => {
 
   const maybeBlockPremiumModalBackgroundScroll = (event) => {
     const hasOpenPremiumModal =
-      !premiumSetupOverlay.hidden || !premiumCheckoutOverlay.hidden || !premiumSuccessOverlay.hidden;
+      !premiumSetupOverlay.hidden ||
+      !premiumCheckoutOverlay.hidden ||
+      !premiumSuccessOverlay.hidden ||
+      !premiumGiftOverlay.hidden;
     if (!hasOpenPremiumModal) {
       return;
     }
@@ -3213,8 +3317,12 @@ const setupAccountHub = () => {
       premiumSuccessCard instanceof HTMLElement &&
       eventTarget instanceof Node &&
       premiumSuccessCard.contains(eventTarget);
+    const insideGiftCard =
+      premiumGiftCard instanceof HTMLElement &&
+      eventTarget instanceof Node &&
+      premiumGiftCard.contains(eventTarget);
 
-    if (insideSetupCard || insideCheckoutCard || insideSuccessCard) {
+    if (insideSetupCard || insideCheckoutCard || insideSuccessCard || insideGiftCard) {
       // Always allow native scrolling/gestures inside modal cards.
       // Blocking is only needed for the backdrop/background area.
       return;
@@ -3548,6 +3656,115 @@ const setupAccountHub = () => {
     );
   };
 
+  const setPremiumGiftFeedback = (message = "", tone = "") => {
+    if (!premiumGiftFeedback) {
+      return;
+    }
+    premiumGiftFeedback.textContent = String(message || "");
+    premiumGiftFeedback.dataset.tone = String(tone || "").trim().toLowerCase();
+  };
+
+  const closePremiumGiftModal = ({ restoreFocus = true } = {}) => {
+    premiumGiftOverlay.hidden = true;
+    setPremiumGiftFeedback("");
+    syncPremiumModalBodyLock();
+    if (restoreFocus && lastPremiumFocusNode && typeof lastPremiumFocusNode.focus === "function") {
+      lastPremiumFocusNode.focus();
+    }
+  };
+
+  const openPremiumGiftModal = () => {
+    if (!pendingPremiumGiftPrompt || hasShownPremiumGiftPrompt) {
+      return;
+    }
+    hasShownPremiumGiftPrompt = true;
+    closeDropdown();
+    lastPremiumFocusNode = document.activeElement;
+    const prompt = pendingPremiumGiftPrompt;
+    if (premiumGiftTitle) {
+      premiumGiftTitle.textContent = prompt.title;
+    }
+    if (premiumGiftMessage) {
+      premiumGiftMessage.textContent = prompt.message;
+    }
+    if (premiumGiftFrom) {
+      const hasFrom = Boolean(prompt.from);
+      premiumGiftFrom.hidden = !hasFrom;
+      premiumGiftFrom.textContent = hasFrom ? `From: ${prompt.from}` : "";
+    }
+    if (premiumGiftOpenBtn) {
+      premiumGiftOpenBtn.textContent = prompt.openText;
+    }
+    if (premiumGiftCheckBtn) {
+      premiumGiftCheckBtn.textContent = prompt.checkText;
+    }
+    if (premiumGiftLaterBtn) {
+      premiumGiftLaterBtn.textContent = prompt.laterText;
+    }
+    setPremiumGiftFeedback("");
+    premiumGiftOverlay.hidden = false;
+    syncPremiumModalBodyLock();
+    window.setTimeout(() => {
+      if (premiumGiftOpenBtn && typeof premiumGiftOpenBtn.focus === "function") {
+        premiumGiftOpenBtn.focus();
+        return;
+      }
+      premiumGiftCard?.focus?.();
+    }, 20);
+  };
+
+  const redirectGiftFlowToAuth = () => {
+    reopenPremiumGiftAfterAuth = true;
+    closePremiumGiftModal({ restoreFocus: false });
+    if (typeof window.cosmicaAccountHub?.openAuth === "function") {
+      window.cosmicaAccountHub.openAuth({
+        panel: "signup",
+        message: "Log in or sign up first, then tap Check activation in your gift box.",
+        tone: "info",
+      });
+      return;
+    }
+    window.location.href = "/?openAuth=1&authPanel=signup#support";
+  };
+
+  const checkPremiumGiftActivation = async ({ showPendingMessage = true } = {}) => {
+    if (premiumGiftCheckInFlight) {
+      return false;
+    }
+    premiumGiftCheckInFlight = true;
+    if (showPendingMessage) {
+      setPremiumGiftFeedback("Checking activation...", "info");
+    }
+    try {
+      if (typeof window.cosmicaGamification?.init === "function") {
+        await window.cosmicaGamification.init(true);
+      }
+      const snapshot =
+        typeof window.cosmicaGamification?.getState === "function"
+          ? window.cosmicaGamification.getState()
+          : null;
+      if (!snapshot?.isAuthenticated) {
+        setPremiumGiftFeedback("Please log in first to activate your gift.", "error");
+        return false;
+      }
+      if (!snapshotHasPremiumAccess(snapshot)) {
+        setPremiumGiftFeedback(
+          "Gift not active yet. If premium was granted manually, tap Check activation again in a few seconds.",
+          "info"
+        );
+        return false;
+      }
+      closePremiumGiftModal();
+      openPremiumSuccessModal({ testMode: false });
+      return true;
+    } catch {
+      setPremiumGiftFeedback("Could not verify activation right now. Please try again.", "error");
+      return false;
+    } finally {
+      premiumGiftCheckInFlight = false;
+    }
+  };
+
   const openPremiumSetupModal = ({ message = "Upgrade to Premium to unlock this content." } = {}) => {
     const snapshot =
       typeof window.cosmicaGamification?.getState === "function"
@@ -3678,6 +3895,52 @@ const setupAccountHub = () => {
     }
   });
 
+  premiumGiftCloseBtn?.addEventListener("click", () => {
+    closePremiumGiftModal();
+  });
+
+  premiumGiftLaterBtn?.addEventListener("click", () => {
+    closePremiumGiftModal();
+  });
+
+  premiumGiftOpenBtn?.addEventListener("click", async () => {
+    const snapshot =
+      typeof window.cosmicaGamification?.getState === "function"
+        ? window.cosmicaGamification.getState()
+        : null;
+    if (!snapshot?.isAuthenticated) {
+      redirectGiftFlowToAuth();
+      return;
+    }
+    if (snapshotHasPremiumAccess(snapshot)) {
+      closePremiumGiftModal();
+      openPremiumSuccessModal({ testMode: false });
+      return;
+    }
+    setPremiumGiftFeedback(
+      "Gift opened. Once premium is granted to your account, tap Check activation.",
+      "info"
+    );
+  });
+
+  premiumGiftCheckBtn?.addEventListener("click", async () => {
+    const snapshot =
+      typeof window.cosmicaGamification?.getState === "function"
+        ? window.cosmicaGamification.getState()
+        : null;
+    if (!snapshot?.isAuthenticated) {
+      redirectGiftFlowToAuth();
+      return;
+    }
+    await checkPremiumGiftActivation({ showPendingMessage: true });
+  });
+
+  premiumGiftOverlay.addEventListener("click", (event) => {
+    if (event.target === premiumGiftOverlay) {
+      closePremiumGiftModal();
+    }
+  });
+
   document.addEventListener("keydown", (event) => {
     if (event.key !== "Escape") {
       return;
@@ -3695,6 +3958,11 @@ const setupAccountHub = () => {
     if (!premiumSetupOverlay.hidden) {
       event.preventDefault();
       closePremiumSetupModal();
+      return;
+    }
+    if (!premiumGiftOverlay.hidden) {
+      event.preventDefault();
+      closePremiumGiftModal();
     }
   });
 
@@ -3733,6 +4001,30 @@ const setupAccountHub = () => {
     },
     openPremium: ({ message = "Upgrade to Premium to unlock this content." } = {}) => {
       openPremiumFlow({ message });
+    },
+    // Runtime helper: open a gift modal from code without relying on URL params.
+    openGift: ({
+      title = "A Premium Gift Awaits You",
+      message = "Someone sent you a Cosmica Premium gift. Open the gift to continue.",
+      from = "",
+      openText = "Open Gift",
+      checkText = "Check activation",
+      laterText = "Maybe later",
+    } = {}) => {
+      pendingPremiumGiftPrompt = {
+        title: sanitizeGiftText(title, 90) || "A Premium Gift Awaits You",
+        message:
+          sanitizeGiftText(message, 320) ||
+          "Someone sent you a Cosmica Premium gift. Open the gift to continue.",
+        from: sanitizeGiftText(from, 70),
+        openText: sanitizeGiftText(openText, 28) || "Open Gift",
+        checkText: sanitizeGiftText(checkText, 32) || "Check activation",
+        laterText: sanitizeGiftText(laterText, 24) || "Maybe later",
+      };
+      hasShownPremiumGiftPrompt = false;
+      pendingGiftRequiresAuth = false;
+      hasAutoOpenedGiftAuth = false;
+      openPremiumGiftModal();
     },
   };
 
@@ -3806,6 +4098,34 @@ const setupAccountHub = () => {
       if (isAuthenticated && hasPremiumAccess) {
         openPremiumSuccessModal({ testMode: false });
       }
+    }
+    // For gift links opened by guests: auto-open auth panel first, then continue
+    // to gift modal after authentication succeeds.
+    if (pendingGiftRequiresAuth && !isAuthenticated) {
+      if (!hasAutoOpenedGiftAuth) {
+        hasAutoOpenedGiftAuth = true;
+        pendingAuthNoticeMessage = "Log in or sign up first to open your premium gift.";
+        pendingAuthNoticeTone = "info";
+        setAuthPanel("signup", false);
+        openDropdown();
+      }
+    } else if (pendingGiftRequiresAuth && isAuthenticated) {
+      pendingGiftRequiresAuth = false;
+      hasAutoOpenedGiftAuth = false;
+    }
+    if (reopenPremiumGiftAfterAuth && isAuthenticated) {
+      reopenPremiumGiftAfterAuth = false;
+      hasShownPremiumGiftPrompt = false;
+    }
+    if (
+      (!pendingGiftRequiresAuth || isAuthenticated) &&
+      (!reopenPremiumGiftAfterAuth || isAuthenticated) &&
+      !hasShownPremiumGiftPrompt &&
+      pendingPremiumGiftPrompt &&
+      pendingPremiumWelcomeMode !== "success" &&
+      premiumSuccessOverlay.hidden
+    ) {
+      openPremiumGiftModal();
     }
 
     if (triggerMeta) {

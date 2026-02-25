@@ -2087,6 +2087,47 @@ body.premium-setup-lock {
   color: #a9e8ff;
 }
 
+.premium-gift-card {
+  max-width: min(560px, 92vw);
+}
+
+.premium-gift-title {
+  margin-bottom: 8px;
+}
+
+.premium-gift-message {
+  margin-bottom: 6px;
+}
+
+.premium-gift-from {
+  margin: 0 0 10px;
+  font-size: 0.8rem;
+  color: rgba(255, 234, 189, 0.9);
+}
+
+.premium-gift-feedback {
+  min-height: 20px;
+  margin: 0;
+  font-size: 0.8rem;
+  color: rgba(204, 227, 248, 0.95);
+}
+
+.premium-gift-feedback[data-tone="error"] {
+  color: #ff9cb7;
+}
+
+.premium-gift-feedback[data-tone="success"] {
+  color: #8ff5cc;
+}
+
+.premium-gift-feedback[data-tone="info"] {
+  color: #a9e8ff;
+}
+
+.premium-gift-actions {
+  justify-content: flex-end;
+}
+
 .premium-checkout-actions {
   display: flex;
   gap: 10px;
