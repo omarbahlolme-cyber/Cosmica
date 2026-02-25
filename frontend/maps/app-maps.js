@@ -3552,6 +3552,9 @@ const getPremiumAccessState = () => {
     }
     return "loading";
   }
+  if (snapshot.isAuthenticated !== true) {
+    return "non-premium";
+  }
   const user = snapshot && snapshot.user && typeof snapshot.user === "object" ? snapshot.user : null;
   const premiumFlagRaw = user?.isPremium ?? user?.premium;
   const premiumFlagText = String(premiumFlagRaw ?? "")
@@ -3616,6 +3619,14 @@ const normalizeGrammarSectionKey = (value = "") =>
 
 const isGrammarSectionFreePreviewUnlocked = (sectionName = "") =>
   GRAMMAR_FREE_PREVIEW_UNLOCKED_SECTIONS.has(normalizeGrammarSectionKey(sectionName));
+
+const isGrammarSectionLockedForCurrentAccess = (sectionName = "") => {
+  const premiumAccessState = getPremiumAccessState();
+  if (premiumAccessState === "premium" || premiumAccessState === "loading") {
+    return false;
+  }
+  return !isGrammarSectionFreePreviewUnlocked(sectionName);
+};
 
 const openGrammarPremiumUpgrade = ({
   message = "Upgrade to Premium to unlock the full grammar map.",
@@ -8977,6 +8988,12 @@ const renderGrammarModal = (section, index) => {
 
 
 const openGrammarModal = (section, index) => {
+  if (isGrammarSectionLockedForCurrentAccess(section)) {
+    openGrammarPremiumUpgrade({
+      message: "Upgrade to Premium to open full grammar card explanations.",
+    });
+    return;
+  }
   const overlay = ensureGrammarOverlay();
   if (!overlay) {
     return;
@@ -9072,7 +9089,10 @@ const setupGrammarModal = () => {
     if (!card) {
       return;
     }
-    if (card.dataset.premiumLocked === "true") {
+    if (
+      card.dataset.premiumLocked === "true" ||
+      isGrammarSectionLockedForCurrentAccess(card.dataset.section)
+    ) {
       event.preventDefault();
       openGrammarPremiumUpgrade({
         message: "Upgrade to Premium to open full grammar card explanations.",
@@ -9096,7 +9116,10 @@ const setupGrammarModal = () => {
     }
     event.preventDefault();
     markTouchActivation(card);
-    if (card.dataset.premiumLocked === "true") {
+    if (
+      card.dataset.premiumLocked === "true" ||
+      isGrammarSectionLockedForCurrentAccess(card.dataset.section)
+    ) {
       openGrammarPremiumUpgrade({
         message: "Upgrade to Premium to open full grammar card explanations.",
       });
@@ -9115,7 +9138,10 @@ const setupGrammarModal = () => {
       return;
     }
     event.preventDefault();
-    if (card.dataset.premiumLocked === "true") {
+    if (
+      card.dataset.premiumLocked === "true" ||
+      isGrammarSectionLockedForCurrentAccess(card.dataset.section)
+    ) {
       openGrammarPremiumUpgrade({
         message: "Upgrade to Premium to open full grammar card explanations.",
       });

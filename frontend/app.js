@@ -1476,7 +1476,7 @@ const createCosmicaGamificationClient = () => {
         state.ready = true;
         return snapshot();
       }),
-    logOut: () =>
+    logOut: ({ refresh = true } = {}) =>
       withLoading(async () => {
         await flushPremiumCheckpoint({ force: true });
         await window.cosmicaAuth.logOut();
@@ -1484,7 +1484,13 @@ const createCosmicaGamificationClient = () => {
           window.cosmicaClearSectionCompletionOverrides();
         }
         applyAuthPayload(null);
-        return snapshot();
+        const nextSnapshot = snapshot();
+        if (refresh) {
+          window.setTimeout(() => {
+            window.location.reload();
+          }, 0);
+        }
+        return nextSnapshot;
       }),
     deleteAccount: () =>
       withLoading(async () => {
@@ -3813,6 +3819,7 @@ const setupAccountHub = () => {
     }
     if (trigger) {
       trigger.classList.toggle("is-authenticated", isAuthenticated);
+      trigger.classList.toggle("is-premium-user", isAuthenticated && hasPremiumAccess);
       trigger.disabled = loading;
     }
     if (triggerLabel) {
@@ -4788,7 +4795,6 @@ const setupAccountHub = () => {
     try {
       await window.cosmicaGamification.logOut();
       setFeedback("Logged out.", "success");
-      window.location.reload();
     } catch {}
   });
 
