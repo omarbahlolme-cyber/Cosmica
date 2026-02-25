@@ -2774,6 +2774,12 @@ const setupAccountHub = () => {
       hasShownPremiumWelcome = false;
     } else if (premiumState === "cancel") {
       showTriggerNoticeBubble("Premium checkout was cancelled. No charge was made.", "info", 7000);
+    } else if (premiumState === "required") {
+      showTriggerNoticeBubble(
+        "Grammar maps are Premium-only. Upgrade to unlock them.",
+        "info",
+        9000
+      );
     }
     if (!premiumState) {
       return;
