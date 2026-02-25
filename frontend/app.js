@@ -2290,10 +2290,8 @@ const setupAccountHub = () => {
   let subscriptionPortalInFlight = false;
   let overlayBodyLockActive = false;
   let overlayBodyLockScrollY = 0;
-  let premiumModalTouchStartY = 0;
   let pendingPremiumWelcomeMode = "";
   let hasShownPremiumWelcome = false;
-  let authDropdownTouchStartY = 0;
   let logoutConfirmArmedAtMs = 0;
   let hasShownEntryMenuPrompt = false;
 
@@ -2941,17 +2939,6 @@ const setupAccountHub = () => {
     return node.getAttribute("contenteditable") === "true";
   };
 
-  const isFocusedControlInsideAuthDropdown = () => {
-    const activeNode = document.activeElement;
-    if (!(activeNode instanceof HTMLElement)) {
-      return false;
-    }
-    if (!isFocusableAuthControl(activeNode)) {
-      return false;
-    }
-    return accountDropdownCard instanceof HTMLElement && accountDropdownCard.contains(activeNode);
-  };
-
   const getKeyboardInsetPx = () => {
     const viewport = window.visualViewport;
     if (!viewport) {
@@ -2960,13 +2947,6 @@ const setupAccountHub = () => {
     const innerHeight = Math.max(0, Number(window.innerHeight) || 0);
     const visualBottom = Math.max(0, (Number(viewport.offsetTop) || 0) + (Number(viewport.height) || 0));
     return Math.max(0, Math.round(innerHeight - visualBottom));
-  };
-
-  const isLikelyVirtualKeyboardOpen = () => {
-    if (!isFocusedControlInsideAuthDropdown()) {
-      return false;
-    }
-    return getKeyboardInsetPx() >= 96;
   };
 
   const getViewportBounds = () => {
@@ -3203,23 +3183,6 @@ const setupAccountHub = () => {
     syncOverlayBodyLock();
   };
 
-  const canScrollElementForDelta = (element, deltaY) => {
-    if (!(element instanceof HTMLElement)) {
-      return false;
-    }
-    const maxScrollTop = element.scrollHeight - element.clientHeight;
-    if (!(maxScrollTop > 0)) {
-      return false;
-    }
-    if (deltaY < 0) {
-      return element.scrollTop > 0;
-    }
-    if (deltaY > 0) {
-      return element.scrollTop < maxScrollTop;
-    }
-    return true;
-  };
-
   const maybeBlockPremiumModalBackgroundScroll = (event) => {
     const hasOpenPremiumModal =
       !premiumSetupOverlay.hidden || !premiumCheckoutOverlay.hidden || !premiumSuccessOverlay.hidden;
@@ -3240,21 +3203,9 @@ const setupAccountHub = () => {
       premiumSuccessCard.contains(eventTarget);
 
     if (insideSetupCard || insideCheckoutCard || insideSuccessCard) {
-      let deltaY = 0;
-      if (event.type === "wheel") {
-        deltaY = Number(event.deltaY) || 0;
-      } else if (event.type === "touchmove") {
-        const touchY = Number(event.touches?.[0]?.clientY);
-        if (Number.isFinite(touchY)) {
-          deltaY = premiumModalTouchStartY - touchY;
-          premiumModalTouchStartY = touchY;
-        }
-      }
-
-      const targetCard = insideSetupCard ? premiumSetupCard : insideCheckoutCard ? premiumCheckoutCard : premiumSuccessCard;
-      if (canScrollElementForDelta(targetCard, deltaY)) {
-        return;
-      }
+      // Always allow native scrolling/gestures inside modal cards.
+      // Blocking is only needed for the backdrop/background area.
+      return;
     }
 
     event.preventDefault();
@@ -3272,23 +3223,9 @@ const setupAccountHub = () => {
       accountDropdownCard.contains(eventTarget);
 
     if (insideDropdownCard) {
-      let deltaY = 0;
-      if (event.type === "wheel") {
-        deltaY = Number(event.deltaY) || 0;
-      } else if (event.type === "touchmove") {
-        const touchY = Number(event.touches?.[0]?.clientY);
-        if (Number.isFinite(touchY)) {
-          deltaY = authDropdownTouchStartY - touchY;
-          authDropdownTouchStartY = touchY;
-        }
-      }
-
-      if (canScrollElementForDelta(accountDropdownCard, deltaY)) {
-        return;
-      }
-      if (event.type === "touchmove" && isLikelyVirtualKeyboardOpen()) {
-        return;
-      }
+      // Keep all dropdown panels scrollable (manage/subscription/password/etc.).
+      // Only block scrolling when gesture happens outside the dropdown card.
+      return;
     }
 
     event.preventDefault();
@@ -3748,35 +3685,6 @@ const setupAccountHub = () => {
       closePremiumSetupModal();
     }
   });
-
-  document.addEventListener(
-    "touchstart",
-    (event) => {
-      const hasOpenPremiumModal =
-        !premiumSetupOverlay.hidden || !premiumCheckoutOverlay.hidden || !premiumSuccessOverlay.hidden;
-      if (!hasOpenPremiumModal) {
-        const touchTarget = event.target;
-        if (
-          dropdown.hidden ||
-          !(touchTarget instanceof Node) ||
-          !(accountDropdownCard instanceof HTMLElement) ||
-          !accountDropdownCard.contains(touchTarget)
-        ) {
-          return;
-        }
-        const authTouchY = Number(event.touches?.[0]?.clientY);
-        if (Number.isFinite(authTouchY)) {
-          authDropdownTouchStartY = authTouchY;
-        }
-        return;
-      }
-      const touchY = Number(event.touches?.[0]?.clientY);
-      if (Number.isFinite(touchY)) {
-        premiumModalTouchStartY = touchY;
-      }
-    },
-    { passive: true }
-  );
 
   document.addEventListener("touchmove", maybeBlockPremiumModalBackgroundScroll, {
     passive: false,

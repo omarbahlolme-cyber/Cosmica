@@ -386,7 +386,7 @@ Prerequisites:
 2. Live is deployed with current backend (contains `/api/admin/security/users/grant-premium`).
 3. User already exists on live.
 
-### 7.0 Beginner step-by-step (copy/paste)
+### 7.0 Step-by-step (copy/paste)
 
 Follow these exact steps in order.
 
@@ -397,42 +397,50 @@ Follow these exact steps in order.
 5. Paste this block and replace token/email values:
 
 ```powershell
-$Host = "https://www.cosmicalearn.com"
-$Token = "PASTE_YOUR_ADMIN_SECURITY_TOKEN_HERE"
-$Email = "user@example.com"
-$Headers = @{ "x-admin-token" = $Token }
+$BaseUrl = "https://www.cosmicalearn.com"
+$Token = "PASTE_YOUR_ADMIN_SECURITY_TOKEN_HERE".Trim()
+$Email = "user@example.com".Trim().ToLower()
+"TokenLen=$($Token.Length)"
 ```
 
-6. Grant Premium for 30 days:
+6. Verify token + user state first:
+
+```powershell
+$VerifyUri = $BaseUrl + "/api/admin/security/users?email=" + [uri]::EscapeDataString($Email)
+Invoke-RestMethod -Uri $VerifyUri -Method GET -Headers @{ "x-admin-token" = $Token } | ConvertTo-Json -Depth 8
+```
+
+Expected result:
+1. Response shows `"ok": true`
+2. `"matchedUsers"` is `1`
+
+7. Grant Premium for 30 days:
 
 ```powershell
 $GrantBody = @{ email = $Email; days = 30 } | ConvertTo-Json -Compress
-$GrantResp = Invoke-RestMethod -Uri "$Host/api/admin/security/users/grant-premium" -Method POST -Headers $Headers -ContentType "application/json" -Body $GrantBody
-$GrantResp | ConvertTo-Json -Depth 8
+Invoke-RestMethod -Uri "$BaseUrl/api/admin/security/users/grant-premium" -Method POST -Headers @{ "x-admin-token" = $Token } -ContentType "application/json" -Body $GrantBody | ConvertTo-Json -Depth 8
 ```
 
 Expected result:
 1. Response shows `"ok": true`
 2. Response shows `"user"` object with premium status active
 
-7. Verify user state:
+8. Verify user state after grant:
 
 ```powershell
-$VerifyUri = $Host + "/api/admin/security/users?email=" + [uri]::EscapeDataString($Email)
-$VerifyResp = Invoke-RestMethod -Uri $VerifyUri -Method GET -Headers $Headers
-$VerifyResp | ConvertTo-Json -Depth 8
+$VerifyUri = $BaseUrl + "/api/admin/security/users?email=" + [uri]::EscapeDataString($Email)
+Invoke-RestMethod -Uri $VerifyUri -Method GET -Headers @{ "x-admin-token" = $Token } | ConvertTo-Json -Depth 8
 ```
 
 Expected result:
-1. `"matchedUsers"` is `1`
-2. Returned user has premium enabled
+1. Returned user has `isPremium: true`
+2. `premiumStatus` is `"active"`
 
-8. Revoke later (if needed):
+9. Revoke later (if needed):
 
 ```powershell
 $RevokeBody = @{ email = $Email } | ConvertTo-Json -Compress
-$RevokeResp = Invoke-RestMethod -Uri "$Host/api/admin/security/users/revoke-premium" -Method POST -Headers $Headers -ContentType "application/json" -Body $RevokeBody
-$RevokeResp | ConvertTo-Json -Depth 8
+Invoke-RestMethod -Uri "$BaseUrl/api/admin/security/users/revoke-premium" -Method POST -Headers @{ "x-admin-token" = $Token } -ContentType "application/json" -Body $RevokeBody | ConvertTo-Json -Depth 8
 ```
 
 Expected result:
@@ -468,34 +476,61 @@ curl -sS -X POST "https://www.cosmicalearn.com/api/admin/security/users/revoke-p
   -d '{"email":"user@example.com"}'
 ```
 
-### 7.1 Grant live premium (PowerShell)
+### 7.1 Grant live premium (PowerShell examples)
 
 ```powershell
-$Host = "https://www.cosmicalearn.com"
-$Token = "YOUR_ADMIN_SECURITY_TOKEN"
-$Email = "user@example.com"
-$Headers = @{ "x-admin-token" = $Token }
-
-# Timed grant (365 days)
-$GrantBody = @{ email = $Email; days = 365 } | ConvertTo-Json -Compress
-Invoke-WebRequest -Uri "$Host/api/admin/security/users/grant-premium" -Method POST -Headers $Headers -ContentType "application/json" -Body $GrantBody
-
-# Verify user state
-Invoke-WebRequest -Uri ($Host + "/api/admin/security/users?email=" + [uri]::EscapeDataString($Email)) -Method GET -Headers $Headers
+$BaseUrl = "https://www.cosmicalearn.com"
+$Token = "YOUR_ADMIN_SECURITY_TOKEN".Trim()
+$Email = "user@example.com".Trim().ToLower()
 ```
 
-Lifetime grant (until revoked):
+Grant for 30 days:
+
+```powershell
+$GrantBody = @{ email = $Email; days = 30 } | ConvertTo-Json -Compress
+Invoke-RestMethod -Uri "$BaseUrl/api/admin/security/users/grant-premium" -Method POST -Headers @{ "x-admin-token" = $Token } -ContentType "application/json" -Body $GrantBody | ConvertTo-Json -Depth 8
+```
+
+Grant for 1 month (same as 30 days):
+
+```powershell
+$GrantBody = @{ email = $Email; days = 30 } | ConvertTo-Json -Compress
+Invoke-RestMethod -Uri "$BaseUrl/api/admin/security/users/grant-premium" -Method POST -Headers @{ "x-admin-token" = $Token } -ContentType "application/json" -Body $GrantBody | ConvertTo-Json -Depth 8
+```
+
+Grant for 1 year (365 days):
+
+```powershell
+$GrantBody = @{ email = $Email; days = 365 } | ConvertTo-Json -Compress
+Invoke-RestMethod -Uri "$BaseUrl/api/admin/security/users/grant-premium" -Method POST -Headers @{ "x-admin-token" = $Token } -ContentType "application/json" -Body $GrantBody | ConvertTo-Json -Depth 8
+```
+
+Grant until a fixed date/time:
+
+```powershell
+$GrantBody = @{ email = $Email; until = "2026-12-31T23:59:59Z" } | ConvertTo-Json -Compress
+Invoke-RestMethod -Uri "$BaseUrl/api/admin/security/users/grant-premium" -Method POST -Headers @{ "x-admin-token" = $Token } -ContentType "application/json" -Body $GrantBody | ConvertTo-Json -Depth 8
+```
+
+Permanent grant (until manually revoked):
 
 ```powershell
 $GrantBody = @{ email = $Email } | ConvertTo-Json -Compress
-Invoke-WebRequest -Uri "$Host/api/admin/security/users/grant-premium" -Method POST -Headers $Headers -ContentType "application/json" -Body $GrantBody
+Invoke-RestMethod -Uri "$BaseUrl/api/admin/security/users/grant-premium" -Method POST -Headers @{ "x-admin-token" = $Token } -ContentType "application/json" -Body $GrantBody | ConvertTo-Json -Depth 8
+```
+
+Verify after any grant:
+
+```powershell
+$VerifyUri = $BaseUrl + "/api/admin/security/users?email=" + [uri]::EscapeDataString($Email)
+Invoke-RestMethod -Uri $VerifyUri -Method GET -Headers @{ "x-admin-token" = $Token } | ConvertTo-Json -Depth 8
 ```
 
 ### 7.2 Revoke live premium (PowerShell)
 
 ```powershell
 $RevokeBody = @{ email = $Email } | ConvertTo-Json -Compress
-Invoke-WebRequest -Uri "$Host/api/admin/security/users/revoke-premium" -Method POST -Headers $Headers -ContentType "application/json" -Body $RevokeBody
+Invoke-RestMethod -Uri "$BaseUrl/api/admin/security/users/revoke-premium" -Method POST -Headers @{ "x-admin-token" = $Token } -ContentType "application/json" -Body $RevokeBody | ConvertTo-Json -Depth 8
 ```
 
 ### 7.3 Error guide (live admin API)
@@ -523,72 +558,3 @@ Use this only if live is intentionally file-backed (not Postgres):
 2. Commit/push.
 3. Redeploy.
 4. Optionally revert the data commit afterward.
-
-### 7.6 Direct `isPremium` flag edit (advanced fallback)
-
-Yes, this method is real, but use it only when:
-1. Live is file-backed auth (`AUTH_STORE_BACKEND=file`), and
-2. Admin API method is unavailable.
-
-Do not use this method for Postgres live (`AUTH_STORE_BACKEND=postgres`).
-
-Step-by-step:
-1. Backup auth data first:
-- `npm run auth-backup:create`
-2. Stop local server/editor process that may write auth data.
-3. Open `backend/data/accounts.json`.
-4. Find the user record by email in `users` map.
-5. Edit premium fields.
-6. Save file.
-7. Commit + push + redeploy.
-8. Verify on live with admin users endpoint and by logging in as that user.
-
-Grant premium example (set fields under `user.data.profile`):
-
-```json
-{
-  "isPremium": true,
-  "premium": true,
-  "plan": "premium",
-  "tier": "premium",
-  "membership": "premium",
-  "premiumProvider": "manual",
-  "premiumLastSource": "admin-manual-grant",
-  "premiumStatus": "active",
-  "subscriptionStatus": "active",
-  "premiumCancelAtPeriodEnd": false,
-  "premiumCurrentPeriodEnd": "2027-12-31T23:59:59.000Z",
-  "currentPeriodEnd": "2027-12-31T23:59:59.000Z",
-  "subscriptionEndsAt": "2027-12-31T23:59:59.000Z",
-  "premiumEndsAt": "2027-12-31T23:59:59.000Z"
-}
-```
-
-Revoke premium example (set fields under `user.data.profile`):
-
-```json
-{
-  "isPremium": false,
-  "premium": false,
-  "plan": "free",
-  "tier": "free",
-  "membership": "free",
-  "premiumStatus": "free",
-  "subscriptionStatus": "free",
-  "premiumCancelAtPeriodEnd": false,
-  "premiumCurrentPeriodEnd": "",
-  "currentPeriodEnd": "",
-  "subscriptionEndsAt": "",
-  "premiumEndsAt": "",
-  "premiumExpiresAt": "",
-  "premiumProvider": "",
-  "premiumLastSource": "admin-manual-revoke"
-}
-```
-
-Quick verify command (after deploy):
-
-```bash
-curl -sS "https://www.cosmicalearn.com/api/admin/security/users?email=user@example.com" \
-  -H "x-admin-token: YOUR_ADMIN_SECURITY_TOKEN"
-```

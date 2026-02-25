@@ -1,0 +1,148 @@
+{
+  "generatedAt": "2026-02-25T01:27:51.113Z",
+  "baseUrl": "http://127.0.0.1:4175",
+  "routes": [
+    "/",
+    "/english-world.html",
+    "/world-french.html",
+    "/english-letters.html",
+    "/english-words.html",
+    "/english-phrases.html",
+    "/english-grammar.html",
+    "/privacy.html",
+    "/terms.html"
+  ],
+  "browsers": [
+    "chromium"
+  ],
+  "viewports": [
+    {
+      "id": "280x653",
+      "width": 280,
+      "height": 653
+    },
+    {
+      "id": "320x568",
+      "width": 320,
+      "height": 568
+    },
+    {
+      "id": "344x882",
+      "width": 344,
+      "height": 882
+    },
+    {
+      "id": "360x640",
+      "width": 360,
+      "height": 640
+    },
+    {
+      "id": "360x800",
+      "width": 360,
+      "height": 800
+    },
+    {
+      "id": "375x667",
+      "width": 375,
+      "height": 667
+    },
+    {
+      "id": "375x812",
+      "width": 375,
+      "height": 812
+    },
+    {
+      "id": "390x844",
+      "width": 390,
+      "height": 844
+    },
+    {
+      "id": "412x915",
+      "width": 412,
+      "height": 915
+    },
+    {
+      "id": "430x932",
+      "width": 430,
+      "height": 932
+    },
+    {
+      "id": "540x720",
+      "width": 540,
+      "height": 720
+    },
+    {
+      "id": "600x960",
+      "width": 600,
+      "height": 960
+    },
+    {
+      "id": "768x1024",
+      "width": 768,
+      "height": 1024
+    },
+    {
+      "id": "810x1080",
+      "width": 810,
+      "height": 1080
+    },
+    {
+      "id": "820x1180",
+      "width": 820,
+      "height": 1180
+    },
+    {
+      "id": "912x1368",
+      "width": 912,
+      "height": 1368
+    },
+    {
+      "id": "1024x768",
+      "width": 1024,
+      "height": 768
+    },
+    {
+      "id": "1024x1366",
+      "width": 1024,
+      "height": 1366
+    },
+    {
+      "id": "1280x720",
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "id": "1366x768",
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "id": "1440x900",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "id": "1536x864",
+      "width": 1536,
+      "height": 864
+    },
+    {
+      "id": "1600x900",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "1920x1080",
+      "width": 1920,
+      "height": 1080
+    },
+    {
+      "id": "2560x1440",
+      "width": 2560,
+      "height": 1440
+    }
+  ],
+  "failures": [],
+  "checks": 225,
+  "passed": 225
+}
