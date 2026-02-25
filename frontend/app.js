@@ -1,4 +1,4 @@
-﻿/* ==========================================================================
+/* ==========================================================================
    DOM HOOKS AND GLOBAL PAGE REFERENCES
    Collect shared elements once so all page modules reuse the same references.
    ========================================================================== */
@@ -8787,11 +8787,11 @@ const DESKTOP_HOME_ANCHOR_DOWN_SHIFT = Object.freeze({
 const getDesktopHomeAnchorDownShift = (hash) =>
   DESKTOP_HOME_ANCHOR_DOWN_SHIFT[hash] ?? DESKTOP_HOME_ANCHOR_DOWN_SHIFT.default;
 
-const scrollToAnchor = (hash) => {
+const getAnchorScrollTargetTop = (hash) => {
     const targetId = hash.slice(1);
     const target = document.getElementById(targetId);
     if (!target) {
-      return false;
+      return null;
     }
     const isHomeIpad = !document.body.classList.contains("world-page")
       && (document.body.classList.contains("is-ipad")
@@ -8815,6 +8815,14 @@ const scrollToAnchor = (hash) => {
         + mobileDownShift
         + ipadDownShift
         + desktopDownShift;
+    return Math.max(0, Math.round(top));
+};
+
+const scrollToAnchor = (hash) => {
+    const top = getAnchorScrollTargetTop(hash);
+    if (!Number.isFinite(top)) {
+      return false;
+    }
     history.replaceState(null, "", `${baseUrl}${hash}`);
     window.scrollTo({ top, behavior: "smooth" });
     return true;
@@ -8843,19 +8851,87 @@ const scrollToAnchor = (hash) => {
     "#policies",
   ]);
   const baseUrl = `${window.location.pathname}${window.location.search}`;
-const navEntry = performance.getEntriesByType("navigation")[0];
-const navType = navEntry?.type
-  ?? (performance.navigation && performance.navigation.type === 1 ? "reload" : "navigate");
-
-window.addEventListener("load", () => {
-  if (navType !== "reload") {
-    return;
-  }
-  if (window.location.hash) {
-    history.replaceState(null, "", baseUrl);
-  }
-  window.scrollTo({ top: 0, behavior: "auto" });
-});
+  const getNavigationEntryType = () => {
+    const navEntry = performance.getEntriesByType("navigation")[0];
+    return (
+      navEntry?.type ??
+      (performance.navigation && performance.navigation.type === 2
+        ? "back_forward"
+        : performance.navigation && performance.navigation.type === 1
+          ? "reload"
+          : "navigate")
+    );
+  };
+  const isLikelySamePageReload = () => {
+    const navType = getNavigationEntryType();
+    if (navType === "reload") {
+      return true;
+    }
+    const ref = String(document.referrer || "").trim();
+    if (!ref) {
+      return false;
+    }
+    try {
+      const refUrl = new URL(ref);
+      return (
+        refUrl.origin === window.location.origin &&
+        refUrl.pathname === window.location.pathname &&
+        refUrl.search === window.location.search
+      );
+    } catch (_error) {
+      return false;
+    }
+  };
+  const forceScrollToHomeTop = () => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  };
+  // Keep homepage refresh landing deterministic across browsers/devices.
+  const stabilizeHomeEntryScroll = () => {
+    if (!isHomePagePath) {
+      return;
+    }
+    const navType = getNavigationEntryType();
+    if (navType === "back_forward") {
+      return;
+    }
+    const currentHash = String(window.location.hash || "").trim().toLowerCase();
+    const hasManagedHash = currentHash && anchorTargets.has(currentHash);
+    const hasAuthIntentParams =
+      urlParams.has("openAuth") ||
+      urlParams.has("authPanel") ||
+      urlParams.has("authError") ||
+      urlParams.has("emailVerified") ||
+      urlParams.has("accountDeleted");
+    const samePageReload = isLikelySamePageReload();
+    if (hasManagedHash && samePageReload && !hasAuthIntentParams) {
+      history.replaceState(null, "", baseUrl);
+    } else if (currentHash) {
+      // Preserve explicit deep links on normal navigation.
+      return;
+    }
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+    forceScrollToHomeTop();
+    window.requestAnimationFrame(forceScrollToHomeTop);
+    window.setTimeout(forceScrollToHomeTop, 120);
+  };
+  window.addEventListener("load", stabilizeHomeEntryScroll);
+  window.addEventListener("pageshow", (event) => {
+    if (event.persisted) {
+      return;
+    }
+    stabilizeHomeEntryScroll();
+  });
+  window.addEventListener(
+    "pagehide",
+    () => {
+      if ("scrollRestoration" in history) {
+        history.scrollRestoration = "auto";
+      }
+    },
+    { passive: true }
+  );
 
   navLinks.forEach((link) => {
     const hash = link.getAttribute("href");
@@ -9226,16 +9302,135 @@ if (canUseParallax) {
   });
 }
 
+const HOME_RETURN_WARP_KEY = "cosmica:return-home-warp";
+const HOME_RETURN_WARP_MAX_AGE_MS = 120000;
+
+const setPendingHomeReturnWarp = (worldName, source = "home-click") => {
+  try {
+    sessionStorage.setItem(
+      HOME_RETURN_WARP_KEY,
+      JSON.stringify({
+        world: String(worldName || "").trim(),
+        source: String(source || "unknown").trim(),
+        path: String(window.location.pathname || "").trim(),
+        ts: Date.now(),
+      })
+    );
+  } catch (_error) {
+    // Ignore storage failures (private mode / blocked storage).
+  }
+};
+
+
+const readPendingHomeReturnWarp = () => {
+  try {
+    const raw = sessionStorage.getItem(HOME_RETURN_WARP_KEY);
+    if (!raw) {
+      return null;
+    }
+    const parsed = JSON.parse(raw);
+    const ts = Number(parsed?.ts || 0);
+    if (!Number.isFinite(ts) || ts <= 0 || Date.now() - ts > HOME_RETURN_WARP_MAX_AGE_MS) {
+      sessionStorage.removeItem(HOME_RETURN_WARP_KEY);
+      return null;
+    }
+    return parsed;
+  } catch (_error) {
+    return null;
+  }
+};
+
+const consumePendingHomeReturnWarp = () => {
+  try {
+    const parsed = readPendingHomeReturnWarp();
+    if (!parsed) {
+      return false;
+    }
+    sessionStorage.removeItem(HOME_RETURN_WARP_KEY);
+    return parsed;
+  } catch (_error) {
+    return false;
+  }
+};
+
+const clearPendingHomeReturnWarp = () => {
+  try {
+    sessionStorage.removeItem(HOME_RETURN_WARP_KEY);
+  } catch (_error) {
+    // Ignore storage failures.
+  }
+};
+
+const isWorldPageReferrer = () => {
+  const ref = String(document.referrer || "").trim();
+  if (!ref) {
+    return false;
+  }
+  try {
+    const refUrl = new URL(ref);
+    return /\/[a-z-]+-world\.html$/i.test(refUrl.pathname || "");
+  } catch (_error) {
+    return /\/[a-z-]+-world\.html$/i.test(ref);
+  }
+};
+
+const getNavigationType = () => {
+  const navEntry = performance.getEntriesByType("navigation")[0];
+  return (
+    navEntry?.type ??
+    (performance.navigation && performance.navigation.type === 2
+      ? "back_forward"
+      : performance.navigation && performance.navigation.type === 1
+        ? "reload"
+        : "navigate")
+  );
+};
+
+const clearWarpOverlayState = () => {
+  if (!warpOverlay) {
+    return;
+  }
+  warpOverlay.classList.remove("active", "returning", "returning-touchdown");
+  document.body.classList.remove("warp-lock");
+  window.clearTimeout(triggerWarp.timer);
+  window.clearTimeout(triggerWarp.cleanupTimer);
+  window.clearTimeout(triggerWarp.returnCleanupTimer);
+  window.clearTimeout(triggerWarp.returnTouchdownTimer);
+};
+
+const triggerReturnToHomepageWarp = () => {
+  if (!warpOverlay || !isHomePagePath) {
+    return;
+  }
+  clearWarpOverlayState();
+  if (warpText) {
+    warpText.textContent = "Returning to homepage";
+    warpText.dataset.text = warpText.textContent;
+  }
+  warpOverlay.classList.add("returning", "active");
+  document.body.classList.add("warp-lock");
+  triggerWarp.returnTouchdownTimer = window.setTimeout(() => {
+    warpOverlay.classList.add("returning-touchdown");
+  }, 500);
+  triggerWarp.returnCleanupTimer = window.setTimeout(() => {
+    clearWarpOverlayState();
+    updateStarEnergy(0.4);
+  }, 1750);
+};
+
 const triggerWarp = (worldName, onDone) => {
-  if (!warpOverlay || !warpText) {
+  if (!warpOverlay) {
     if (typeof onDone === "function") {
       onDone();
     }
     return;
   }
 
-  warpText.textContent = `Entering ${worldName} World`;
-  warpText.dataset.text = warpText.textContent;
+  if (warpText) {
+    warpText.textContent = `Entering ${worldName} World`;
+    warpText.dataset.text = warpText.textContent;
+  }
+  warpOverlay.classList.remove("returning", "returning-touchdown");
   speakLine(`Plotting course to ${worldName}.`, "curious");
   warpOverlay.classList.add("active");
   document.body.classList.add("warp-lock");
@@ -9246,6 +9441,8 @@ const triggerWarp = (worldName, onDone) => {
   updateStarEnergy(1);
   window.clearTimeout(triggerWarp.timer);
   window.clearTimeout(triggerWarp.cleanupTimer);
+  window.clearTimeout(triggerWarp.returnCleanupTimer);
+  window.clearTimeout(triggerWarp.returnTouchdownTimer);
 
   if (typeof onDone === "function") {
     triggerWarp.timer = window.setTimeout(() => {
@@ -9253,8 +9450,8 @@ const triggerWarp = (worldName, onDone) => {
       triggerWarp.cleanupTimer = window.setTimeout(() => {
         warpOverlay.classList.remove("active");
         document.body.classList.remove("warp-lock");
-      }, 2200);
-    }, 850);
+      }, 1800);
+    }, 980);
     return;
   }
 
@@ -9265,8 +9462,74 @@ const triggerWarp = (worldName, onDone) => {
     if (typeof onDone === "function") {
       onDone();
     }
-  }, 1500);
+  }, 1650);
 };
+
+if (isHomePagePath) {
+  window.addEventListener("pageshow", (event) => {
+    const isHistoryTraversal =
+      event.persisted === true || getNavigationType() === "back_forward";
+    const pendingReturnWarp = consumePendingHomeReturnWarp();
+    const isExplicitHomeButtonReturn =
+      Boolean(pendingReturnWarp) &&
+      String(pendingReturnWarp?.source || "").trim().toLowerCase() === "world-home-button";
+    clearWarpOverlayState();
+    if (!isHistoryTraversal && !isExplicitHomeButtonReturn) {
+      clearPendingHomeReturnWarp();
+      return;
+    }
+    const cameFromWorldEntry =
+      isExplicitHomeButtonReturn || (isHistoryTraversal && (Boolean(pendingReturnWarp) || isWorldPageReferrer()));
+    if (cameFromWorldEntry) {
+      triggerReturnToHomepageWarp();
+    }
+  });
+  window.addEventListener("pagehide", clearWarpOverlayState, { passive: true });
+  window.addEventListener("beforeunload", clearWarpOverlayState, { passive: true });
+}
+
+if (document.body.classList.contains("world-page")) {
+  document.addEventListener(
+    "click",
+    (event) => {
+      if (event.defaultPrevented || event.button !== 0) {
+        return;
+      }
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+        return;
+      }
+      const anchor = event.target instanceof Element ? event.target.closest("a[href]") : null;
+      if (!anchor) {
+        return;
+      }
+      let targetUrl;
+      try {
+        targetUrl = new URL(anchor.href, window.location.href);
+      } catch (_error) {
+        return;
+      }
+      const sameOrigin = targetUrl.origin === window.location.origin;
+      const targetPath = String(targetUrl.pathname || "").toLowerCase();
+      const isHomePath = targetPath === "/" || targetPath.endsWith("/index.html");
+      const isHomeHash = !targetUrl.hash || targetUrl.hash === "#home";
+      if (sameOrigin && isHomePath && isHomeHash) {
+        setPendingHomeReturnWarp("", "world-home-button");
+      }
+    },
+    { capture: true }
+  );
+
+  const markWorldExitForReturnWarp = () => {
+    const existing = readPendingHomeReturnWarp();
+    const existingSource = String(existing?.source || "").trim().toLowerCase();
+    if (existingSource === "world-home-button") {
+      return;
+    }
+    setPendingHomeReturnWarp("", "world-unload");
+  };
+  window.addEventListener("pagehide", markWorldExitForReturnWarp, { passive: true });
+  window.addEventListener("beforeunload", markWorldExitForReturnWarp, { passive: true });
+}
 
 const markTouchActivation = (element) => {
   if (!element) {
@@ -9295,6 +9558,7 @@ worldCards.forEach((card) => {
       return;
     }
     if (targetWorldUrl) {
+      setPendingHomeReturnWarp(worldName);
       triggerWarp(worldName, () => {
         window.location.href = targetWorldUrl;
       });
@@ -9419,26 +9683,53 @@ const applyMapComingSoonRules = () => {
       : null;
   const user = snapshot && snapshot.user && typeof snapshot.user === "object" ? snapshot.user : null;
   const hasPremiumAccess = userHasPremiumAccess(user);
-
+  const lockLookForFree = !hasPremiumAccess;
   const forceComingSoon = grammarCard.dataset.forceComingSoon === "true";
-  const lockForPremium = !hasPremiumAccess;
-  if (!forceComingSoon && !lockForPremium) {
+  if (!forceComingSoon) {
     grammarCard.classList.remove("coming-soon");
-    grammarCard.classList.remove("premium-locked");
+    grammarCard.classList.toggle("premium-locked", lockLookForFree);
     grammarCard.classList.add("map-link");
     grammarCard.dataset.comingSoon = "false";
     grammarCard.dataset.premiumLocked = "false";
     grammarCard.removeAttribute("aria-disabled");
-    grammarCard.removeAttribute("title");
+    if (lockLookForFree) {
+      grammarCard.setAttribute("title", "Preview available");
+    } else {
+      grammarCard.removeAttribute("title");
+    }
     const originalHref =
       grammarCard.getAttribute("href") || grammarCard.dataset.originalHref || "";
     if (originalHref) {
       grammarCard.setAttribute("href", originalHref);
       grammarCard.dataset.originalHref = originalHref;
     }
-    grammarCard
-      .querySelector(".coming-soon-badge, .premium-map-upgrade-button")
-      ?.remove();
+    const existingMarker = grammarCard.querySelector(
+      ".coming-soon-badge, .premium-map-upgrade-button"
+    );
+    if (!lockLookForFree) {
+      existingMarker?.remove();
+      return;
+    }
+    if (!(existingMarker instanceof HTMLElement) || existingMarker.tagName !== "BUTTON") {
+      existingMarker?.remove();
+      const upgradeBtn = document.createElement("button");
+      upgradeBtn.type = "button";
+      upgradeBtn.className = "premium-setup-primary premium-map-upgrade-button";
+      upgradeBtn.textContent = "Upgrade to Premium";
+      upgradeBtn.dataset.passThrough = "true";
+      upgradeBtn.setAttribute("aria-hidden", "true");
+      upgradeBtn.tabIndex = -1;
+      grammarCard.appendChild(upgradeBtn);
+      return;
+    }
+    existingMarker.className = "premium-setup-primary premium-map-upgrade-button";
+    existingMarker.textContent = "Upgrade to Premium";
+    if (existingMarker instanceof HTMLButtonElement) {
+      existingMarker.type = "button";
+      existingMarker.dataset.passThrough = "true";
+      existingMarker.setAttribute("aria-hidden", "true");
+      existingMarker.tabIndex = -1;
+    }
     return;
   }
 
@@ -9448,16 +9739,16 @@ const applyMapComingSoonRules = () => {
   }
 
   grammarCard.classList.toggle("coming-soon", forceComingSoon);
-  grammarCard.classList.toggle("premium-locked", !forceComingSoon && lockForPremium);
+  grammarCard.classList.remove("premium-locked");
   grammarCard.classList.remove("map-link");
   grammarCard.dataset.comingSoon = forceComingSoon ? "true" : "false";
-  grammarCard.dataset.premiumLocked = lockForPremium ? "true" : "false";
+  grammarCard.dataset.premiumLocked = "false";
   if (forceComingSoon) {
     grammarCard.setAttribute("aria-disabled", "true");
   } else {
     grammarCard.removeAttribute("aria-disabled");
   }
-  grammarCard.setAttribute("title", forceComingSoon ? "Coming soon" : "Premium feature");
+  grammarCard.setAttribute("title", "Coming soon");
   grammarCard.removeAttribute("href");
 
   const existingMarker = grammarCard.querySelector(
@@ -9475,21 +9766,6 @@ const applyMapComingSoonRules = () => {
       existingMarker.textContent = "Coming soon";
     }
     return;
-  }
-
-  if (!(existingMarker instanceof HTMLElement) || existingMarker.tagName !== "BUTTON") {
-    existingMarker?.remove();
-    const upgradeBtn = document.createElement("button");
-    upgradeBtn.type = "button";
-    upgradeBtn.className = "premium-setup-primary premium-map-upgrade-button";
-    upgradeBtn.textContent = "Upgrade to Premium";
-    grammarCard.appendChild(upgradeBtn);
-  } else {
-    existingMarker.className = "premium-setup-primary premium-map-upgrade-button";
-    existingMarker.textContent = "Upgrade to Premium";
-    if (existingMarker instanceof HTMLButtonElement) {
-      existingMarker.type = "button";
-    }
   }
 };
 
@@ -9598,6 +9874,9 @@ const setupGrammarPremiumUpsell = () => {
     return;
   }
   const grammarCard = document.querySelector(".map-card.map-grammar");
+  if (!grammarCard || grammarCard.dataset.premiumLocked !== "true") {
+    return;
+  }
   bindPremiumLockedInteraction(grammarCard, {
     guestMessage: "Sign in or create an account to continue. Upgrade to Premium to unlock this map.",
   });
@@ -11419,7 +11698,8 @@ const setupHomeAltInteractivity = () => {
       navElement instanceof HTMLElement
         ? window.scrollY + navElement.getBoundingClientRect().bottom
         : window.scrollY;
-    const triggerY = navBottomY + (isIpadNavSpy ? 110 : 22);
+    // Activate nav highlight a bit earlier so the header state matches what users see on screen.
+    const triggerY = navBottomY + (isIpadNavSpy ? 150 : 64);
     let winner = trackedSections[0].hash;
     trackedSections.forEach(({ hash, section }) => {
       const sectionTop = section.getBoundingClientRect().top + window.scrollY;
@@ -11636,6 +11916,3 @@ if (needsMapTranslations) {
 }
 
 setupWebVitalsReporting();
-
-
-

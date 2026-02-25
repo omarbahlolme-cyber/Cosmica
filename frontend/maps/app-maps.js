@@ -3605,6 +3605,103 @@ const getPremiumAccessState = () => {
   return hasPremiumAccess ? "premium" : "non-premium";
 };
 
+const GRAMMAR_PREVIEW_SECTION_LIMIT = 2;
+const GRAMMAR_PREVIEW_CARD_LIMIT = 4;
+const GRAMMAR_FREE_PREVIEW_UNLOCKED_SECTIONS = new Set(["sentence structure", "verbs"]);
+
+const normalizeGrammarSectionKey = (value = "") =>
+  String(value || "")
+    .trim()
+    .toLowerCase();
+
+const isGrammarSectionFreePreviewUnlocked = (sectionName = "") =>
+  GRAMMAR_FREE_PREVIEW_UNLOCKED_SECTIONS.has(normalizeGrammarSectionKey(sectionName));
+
+const openGrammarPremiumUpgrade = ({
+  message = "Upgrade to Premium to unlock the full grammar map.",
+} = {}) => {
+  if (typeof window.cosmicaAccountHub?.openPremium === "function") {
+    window.cosmicaAccountHub.openPremium({ message });
+    return;
+  }
+  const supportSection = document.getElementById("support");
+  if (supportSection) {
+    supportSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    return;
+  }
+  window.location.href = "/?openAuth=1&authPanel=signup#support";
+};
+
+const createGrammarPreviewBanner = ({
+  lockedSectionCount = 0,
+  lockedTopicCount = 0,
+  unlockedSectionNames = [],
+} = {}) => {
+  const banner = document.createElement("div");
+  banner.className = "grammar-preview-banner";
+  const title = document.createElement("p");
+  title.className = "grammar-preview-title";
+  title.textContent = "Free preview mode";
+  const details = document.createElement("p");
+  details.className = "grammar-preview-details";
+  const unlockedLead = Array.isArray(unlockedSectionNames) && unlockedSectionNames.length
+    ? `${unlockedSectionNames.join(" + ")} are fully open for free. `
+    : "";
+  details.textContent =
+    lockedSectionCount > 0 || lockedTopicCount > 0
+      ? `${unlockedLead}${lockedSectionCount} sections and ${lockedTopicCount} topics stay Premium-only.`
+      : `${unlockedLead}Full grammar depth is available with Premium.`;
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "premium-setup-primary";
+  button.textContent = "Unlock full grammar map";
+  button.addEventListener("click", () => {
+    openGrammarPremiumUpgrade({
+      message: "Upgrade to Premium to unlock all grammar sections, cards, and explanations.",
+    });
+  });
+  banner.appendChild(title);
+  banner.appendChild(details);
+  banner.appendChild(button);
+  return banner;
+};
+
+const createGrammarPreviewUpgradeSection = ({
+  lockedSectionCount = 0,
+  lockedTopicCount = 0,
+  unlockedSectionNames = [],
+} = {}) => {
+  const section = document.createElement("section");
+  section.className = "section grammar-group grammar-preview-upgrade reveal";
+  const titleWrap = document.createElement("div");
+  titleWrap.className = "section-title";
+  const heading = document.createElement("h2");
+  heading.textContent = "Ready for full grammar?";
+  titleWrap.appendChild(heading);
+  const copy = document.createElement("p");
+  copy.className = "grammar-preview-upgrade-copy";
+  const unlockedLead = Array.isArray(unlockedSectionNames) && unlockedSectionNames.length
+    ? `${unlockedSectionNames.join(" + ")} are free right now. `
+    : "";
+  copy.textContent =
+    lockedSectionCount > 0 || lockedTopicCount > 0
+      ? `${unlockedLead}Unlock ${lockedSectionCount} more sections and ${lockedTopicCount} more topics with Premium.`
+      : `${unlockedLead}Unlock full grammar depth with Premium.`;
+  const action = document.createElement("button");
+  action.type = "button";
+  action.className = "premium-setup-primary";
+  action.textContent = "Upgrade to Premium";
+  action.addEventListener("click", () => {
+    openGrammarPremiumUpgrade({
+      message: "Upgrade to Premium to unlock all grammar sections, cards, and explanations.",
+    });
+  });
+  section.appendChild(titleWrap);
+  section.appendChild(copy);
+  section.appendChild(action);
+  return section;
+};
+
 const applySectionCompleteButtonState = (button, mapKey, sectionKey, mode = "complete") => {
   if (!button) {
     return;
@@ -4355,6 +4452,13 @@ const renderGrammarSections = () => {
     controls.innerHTML = "";
   }
 
+  const premiumAccessState = getPremiumAccessState();
+  if (premiumAccessState === "loading") {
+    renderMapLoadingState("grammar");
+    return;
+  }
+  const isPreviewMode = premiumAccessState !== "premium";
+
   const sectionEntries = [];
   GRAMMAR_SECTION_ORDER.forEach((sectionName) => {
     const concepts = getGrammarCardsForSection(sectionName);
@@ -4368,6 +4472,32 @@ const renderGrammarSections = () => {
     container.appendChild(buildMapUnavailableState("Grammar"));
     return;
   }
+
+  const totalSectionCount = sectionEntries.length;
+  const totalTopicCount = sectionEntries.reduce((sum, entry) => sum + entry.concepts.length, 0);
+  const namedUnlockedPreviewEntries = sectionEntries.filter(({ sectionName }) =>
+    isGrammarSectionFreePreviewUnlocked(sectionName)
+  );
+  const hasNamedUnlockedPreviewEntries = namedUnlockedPreviewEntries.length > 0;
+  const renderEntries = isPreviewMode
+    ? hasNamedUnlockedPreviewEntries
+      ? namedUnlockedPreviewEntries.map(({ sectionName, concepts }) => ({
+          sectionName,
+          concepts: concepts.slice(),
+        }))
+      : sectionEntries
+          .slice(0, GRAMMAR_PREVIEW_SECTION_LIMIT)
+          .map(({ sectionName, concepts }) => ({
+            sectionName,
+            concepts: concepts.slice(0, GRAMMAR_PREVIEW_CARD_LIMIT),
+          }))
+    : sectionEntries;
+  const unlockedSectionNames = renderEntries.map((entry) => entry.sectionName);
+  const previewSectionSet = new Set(renderEntries.map((entry) => entry.sectionName));
+  const previewSectionCount = renderEntries.length;
+  const previewTopicCount = renderEntries.reduce((sum, entry) => sum + entry.concepts.length, 0);
+  const lockedSectionCount = Math.max(0, totalSectionCount - previewSectionCount);
+  const lockedTopicCount = Math.max(0, totalTopicCount - previewTopicCount);
 
   const sections = [];
 
@@ -4386,7 +4516,9 @@ const renderGrammarSections = () => {
     titleMain.textContent = displaySectionName;
     titleHeading.appendChild(titleMain);
     title.appendChild(titleHeading);
-    section.appendChild(createSectionCompleteButton("grammar", sectionName));
+    if (!isPreviewMode) {
+      section.appendChild(createSectionCompleteButton("grammar", sectionName));
+    }
     const grid = document.createElement("div");
     grid.className = "words-grid";
     concepts.forEach((concept, conceptIndex) => {
@@ -4408,6 +4540,14 @@ const renderGrammarSections = () => {
         : getWorldGrammarTitle(sectionName, concept.title);
       card.dataset.sourceTitle = sourceTitle || displayTitle;
       card.setAttribute("aria-label", displayTitle);
+      const lockThisCardForPreview =
+        isPreviewMode &&
+        hasNamedUnlockedPreviewEntries &&
+        !isGrammarSectionFreePreviewUnlocked(sectionName);
+      if (lockThisCardForPreview) {
+        card.dataset.premiumLocked = "true";
+        card.title = "Premium feature";
+      }
       const text = document.createElement("div");
       text.className = "grammar-text";
       const textMain = document.createElement("span");
@@ -4420,13 +4560,21 @@ const renderGrammarSections = () => {
       text.appendChild(document.createTextNode(" "));
       text.appendChild(textTranslation);
       card.appendChild(text);
-      card.appendChild(
-        createCardPracticeButton(
-          "grammar",
-          sectionName,
-          `${sourceTitle || displayTitle || concept.title || "concept"}-${conceptIndex}`
-        )
-      );
+      if (lockThisCardForPreview) {
+        const lockBadge = document.createElement("span");
+        lockBadge.className = "grammar-preview-lock";
+        lockBadge.textContent = "Premium";
+        card.appendChild(lockBadge);
+      }
+      if (!isPreviewMode || !lockThisCardForPreview) {
+        card.appendChild(
+          createCardPracticeButton(
+            "grammar",
+            sectionName,
+            `${sourceTitle || displayTitle || concept.title || "concept"}-${conceptIndex}`
+          )
+        );
+      }
       grid.appendChild(card);
     });
     section.appendChild(title);
@@ -4457,14 +4605,20 @@ const renderGrammarSections = () => {
       document.body.dataset.grammarFilter = "all";
     }
 
-    GRAMMAR_SECTION_ORDER.forEach((sectionName) => {
-      list.appendChild(
-        createSectionFilterButton(
-          getWorldGrammarSectionLabel(sectionName),
-          sectionName,
-          sectionName
-        )
+    sectionEntries.forEach(({ sectionName }) => {
+      const button = createSectionFilterButton(
+        getWorldGrammarSectionLabel(sectionName),
+        sectionName,
+        sectionName
       );
+      const isLockedPreviewSection = isPreviewMode && !previewSectionSet.has(sectionName);
+      if (isLockedPreviewSection) {
+        button.classList.add("is-locked");
+        button.disabled = true;
+        button.setAttribute("aria-disabled", "true");
+        button.title = "Premium only";
+      }
+      list.appendChild(button);
     });
 
     const applyFilter = (filter) => {
@@ -4487,6 +4641,9 @@ const renderGrammarSections = () => {
     list.addEventListener("click", (event) => {
       const button = event.target.closest(".words-filter");
       if (!button) {
+        return;
+      }
+      if (button.disabled || button.classList.contains("is-locked")) {
         return;
       }
       list.querySelectorAll(".words-filter").forEach((btn) => btn.classList.remove("is-active"));
@@ -4526,10 +4683,19 @@ const renderGrammarSections = () => {
     controls.appendChild(eyebrow);
     controls.appendChild(label);
     controls.appendChild(list);
+    if (isPreviewMode) {
+      controls.appendChild(
+        createGrammarPreviewBanner({
+          lockedSectionCount,
+          lockedTopicCount,
+          unlockedSectionNames,
+        })
+      );
+    }
   };
 
   renderSectionsProgressively({
-    entries: sectionEntries,
+    entries: renderEntries,
     buildSection: buildGrammarSection,
     onSectionReady: (section) => {
       if (!isActiveRender()) {
@@ -4549,6 +4715,15 @@ const renderGrammarSections = () => {
         return;
       }
       initializeGrammarControls();
+      if (isPreviewMode) {
+        container.appendChild(
+          createGrammarPreviewUpgradeSection({
+            lockedSectionCount,
+            lockedTopicCount,
+            unlockedSectionNames,
+          })
+        );
+      }
     },
     shouldContinue: isActiveRender,
   });
@@ -8897,6 +9072,13 @@ const setupGrammarModal = () => {
     if (!card) {
       return;
     }
+    if (card.dataset.premiumLocked === "true") {
+      event.preventDefault();
+      openGrammarPremiumUpgrade({
+        message: "Upgrade to Premium to open full grammar card explanations.",
+      });
+      return;
+    }
     if (isRecentTouchActivation(card)) {
       return;
     }
@@ -8914,6 +9096,12 @@ const setupGrammarModal = () => {
     }
     event.preventDefault();
     markTouchActivation(card);
+    if (card.dataset.premiumLocked === "true") {
+      openGrammarPremiumUpgrade({
+        message: "Upgrade to Premium to open full grammar card explanations.",
+      });
+      return;
+    }
     const section = card.dataset.section;
     const index = Number(card.dataset.index);
     openGrammarModal(section, index);
@@ -8927,6 +9115,12 @@ const setupGrammarModal = () => {
       return;
     }
     event.preventDefault();
+    if (card.dataset.premiumLocked === "true") {
+      openGrammarPremiumUpgrade({
+        message: "Upgrade to Premium to open full grammar card explanations.",
+      });
+      return;
+    }
     const section = card.dataset.section;
     const index = Number(card.dataset.index);
     openGrammarModal(section, index);
@@ -10395,4 +10589,27 @@ if (needsMapTranslations) {
   } else {
     runWhenBrowserIdle(refreshAfterTranslations);
   }
+}
+
+if (isGrammarPage && typeof window.cosmicaGamification?.subscribe === "function") {
+  let lastGrammarAccessState = getPremiumAccessState();
+  let grammarModeRerenderTimerId = 0;
+  window.cosmicaGamification.subscribe(() => {
+    const nextGrammarAccessState = getPremiumAccessState();
+    if (nextGrammarAccessState === lastGrammarAccessState) {
+      return;
+    }
+    lastGrammarAccessState = nextGrammarAccessState;
+    if (grammarModeRerenderTimerId) {
+      window.clearTimeout(grammarModeRerenderTimerId);
+    }
+    grammarModeRerenderTimerId = window.setTimeout(() => {
+      grammarModeRerenderTimerId = 0;
+      renderGrammarSections();
+      setupGrammarModal();
+      if (typeof refreshMapsForBaseLanguage === "function") {
+        refreshMapsForBaseLanguage();
+      }
+    }, 0);
+  });
 }

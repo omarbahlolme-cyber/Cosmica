@@ -608,6 +608,23 @@ body.letters-page[data-world="Japanese"] .letters-script-group-katakana {
   border-color: rgba(255, 210, 120, 0.6);
 }
 
+.words-filter.is-locked {
+  opacity: 0.44;
+  cursor: not-allowed;
+  pointer-events: none;
+  transform: none !important;
+  border-color: rgba(161, 174, 196, 0.3);
+  background: rgba(12, 16, 30, 0.42);
+  box-shadow: none;
+}
+
+.words-filter-lock-tag {
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 211, 132, 0.9);
+}
+
 .words-complete-section-btn {
   justify-self: start;
   padding: 10px 14px;
@@ -1449,6 +1466,69 @@ body:is(.letters-page, .words-page, .phrases-page, .grammar-page) main {
 
 .words-controls-list {
   gap: 8px;
+}
+
+.grammar-preview-banner {
+  margin-top: 12px;
+  border: 1px solid rgba(255, 209, 124, 0.34);
+  border-radius: 14px;
+  padding: 12px;
+  background: linear-gradient(155deg, rgba(28, 22, 8, 0.76), rgba(16, 13, 7, 0.66));
+  box-shadow:
+    0 12px 24px rgba(7, 6, 3, 0.34),
+    inset 0 1px 0 rgba(255, 236, 186, 0.14);
+}
+
+.grammar-preview-title {
+  margin: 0;
+  font-size: 0.84rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 221, 152, 0.94);
+}
+
+.grammar-preview-details {
+  margin: 6px 0 12px;
+  color: rgba(241, 233, 212, 0.9);
+  font-size: 0.89rem;
+  line-height: 1.45;
+}
+
+.grammar-preview-upgrade {
+  margin-top: clamp(14px, 2vw, 20px);
+}
+
+.grammar-preview-upgrade-copy {
+  margin: 8px 0 14px;
+  color: rgba(223, 233, 247, 0.9);
+  font-size: 0.97rem;
+}
+
+.grammar-card[data-premium-locked="true"] {
+  cursor: pointer;
+  border-color: rgba(255, 206, 114, 0.36);
+  box-shadow:
+    0 14px 26px rgba(8, 6, 2, 0.4),
+    inset 0 1px 0 rgba(255, 238, 186, 0.16);
+}
+
+.grammar-card[data-premium-locked="true"]:is(:hover, :focus-visible, .is-card-engaged) {
+  border-color: rgba(255, 216, 138, 0.56);
+}
+
+.grammar-preview-lock {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 218, 143, 0.4);
+  padding: 4px 10px;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 221, 151, 0.95);
+  background: rgba(38, 28, 10, 0.7);
 }
 
 .words-filter {

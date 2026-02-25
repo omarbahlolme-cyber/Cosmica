@@ -328,44 +328,6 @@ const LEGACY_WORLD_ROUTE_REDIRECTS = new Map([
 ]);
 const PREMIUM_GRAMMAR_ROUTE_PATTERN = /^\/(?:english-grammar|grammar-[a-z0-9-]+)\.html$/;
 
-const getWorldRouteForGrammarPath = (requestPath) => {
-  const normalizedPath = String(requestPath || "").trim().toLowerCase();
-  if (!normalizedPath) {
-    return "/english-world.html";
-  }
-  if (normalizedPath === "/english-grammar.html") {
-    return "/english-world.html";
-  }
-  const match = normalizedPath.match(/^\/grammar-([a-z0-9-]+)\.html$/);
-  if (!match) {
-    return "/english-world.html";
-  }
-  const worldKey = String(match[1] || "").trim().toLowerCase();
-  if (!worldKey) {
-    return "/english-world.html";
-  }
-  return `/world-${worldKey}.html`;
-};
-
-const getPageAuthUser = (req) => {
-  const cookies = parseCookieHeader(req.headers.cookie || "");
-  const rawToken = String(cookies[AUTH_COOKIE_NAME] || "");
-  if (!rawToken) {
-    return null;
-  }
-  const sessionHash = hashSessionToken(rawToken);
-  const session = authStore.sessions?.[sessionHash];
-  if (!session) {
-    return null;
-  }
-  const expiresMs = Date.parse(String(session.expiresAt || ""));
-  if (!Number.isFinite(expiresMs) || expiresMs <= Date.now()) {
-    return null;
-  }
-  const user = authStore.users?.[String(session.userId || "")];
-  return user && typeof user === "object" ? user : null;
-};
-
 const parseBasicAuthHeader = (authorizationHeader = "") => {
   const raw = String(authorizationHeader || "").trim();
   if (!raw.toLowerCase().startsWith("basic ")) {
@@ -437,24 +399,13 @@ app.use((req, res, next) => {
   return res.redirect(308, redirectTarget);
 });
 
-// Enforce premium access on grammar map pages even when URLs are opened directly.
+// Premium grammar URLs stay indexable; frontend enforces preview-vs-premium depth.
 app.use((req, res, next) => {
   const requestPath = String(req.path || "").toLowerCase();
   if (!PREMIUM_GRAMMAR_ROUTE_PATTERN.test(requestPath)) {
     return next();
   }
-  const authUser = getPageAuthUser(req);
-  if (authUser && userHasPremiumAccessForProgress(authUser)) {
-    return next();
-  }
-  const targetWorldPath = getWorldRouteForGrammarPath(requestPath);
-  const redirectParams = new URLSearchParams();
-  redirectParams.set("premium", "required");
-  redirectParams.set("source", "grammar-url");
-  redirectParams.set("deleteNotice", "Grammar maps are Premium-only. Upgrade to unlock them.");
-  const redirectUrl = `${targetWorldPath}?${redirectParams.toString()}`;
-  res.setHeader("Cache-Control", "no-store");
-  return res.redirect(302, redirectUrl);
+  return next();
 });
 
 const sendMapAssetAlias = (fileName) => (req, res) => {

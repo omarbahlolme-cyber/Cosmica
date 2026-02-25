@@ -1,4 +1,4 @@
-﻿/* ==========================================================================
+/* ==========================================================================
    COSMICA STYLESHEET ARCHITECTURE
    1) Tokens and global defaults
    2) Shared layout/components
@@ -2637,14 +2637,42 @@ body.premium-setup-lock {
 }
 
 .account-menu-header.is-user-premium {
-  border-color: rgba(255, 219, 146, 0.72);
+  border-color: rgba(255, 229, 168, 0.82);
   background:
-    radial-gradient(circle at 86% -20%, rgba(255, 227, 166, 0.3), transparent 48%),
-    linear-gradient(150deg, rgba(40, 28, 10, 0.92), rgba(53, 34, 11, 0.9));
+    radial-gradient(circle at 84% -22%, rgba(255, 241, 198, 0.42), transparent 52%),
+    radial-gradient(circle at 12% 124%, rgba(255, 201, 112, 0.26), transparent 56%),
+    linear-gradient(150deg, rgba(18, 29, 64, 0.94), rgba(37, 31, 72, 0.92) 46%, rgba(67, 50, 16, 0.9));
   box-shadow:
-    inset 0 1px 0 rgba(255, 241, 208, 0.24),
-    inset 0 -1px 0 rgba(186, 132, 57, 0.28),
-    0 0 0 1px rgba(255, 214, 132, 0.14);
+    inset 0 1px 0 rgba(255, 244, 214, 0.3),
+    inset 0 -1px 0 rgba(225, 180, 96, 0.34),
+    0 0 0 1px rgba(255, 219, 148, 0.2),
+    0 14px 30px rgba(14, 12, 24, 0.34),
+    0 0 26px rgba(255, 208, 126, 0.2);
+}
+
+.account-menu-header.is-user-premium .account-menu-avatar {
+  border-color: rgba(255, 224, 164, 0.74);
+  color: #fff7e6;
+  background:
+    radial-gradient(circle at 28% 22%, rgba(255, 245, 216, 0.36), rgba(255, 211, 128, 0.24) 40%, transparent 56%),
+    radial-gradient(circle at 76% 76%, rgba(196, 164, 255, 0.2), transparent 54%),
+    linear-gradient(160deg, rgba(146, 103, 33, 0.94), rgba(86, 58, 17, 0.96));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 244, 214, 0.26),
+    0 10px 18px rgba(18, 11, 4, 0.45),
+    0 0 16px rgba(255, 207, 122, 0.24);
+}
+
+.account-menu-header.is-user-premium .account-menu-name {
+  color: rgba(255, 247, 225, 0.98);
+  text-shadow:
+    0 2px 12px rgba(0, 0, 0, 0.32),
+    0 0 12px rgba(255, 215, 142, 0.16);
+}
+
+.account-menu-header.is-user-premium .account-menu-level,
+.account-menu-header.is-user-premium .account-menu-xp {
+  color: rgba(245, 227, 192, 0.96);
 }
 
 .account-menu-avatar {
@@ -5195,6 +5223,10 @@ body.hide-worlds-overlap .worlds {
   max-width: min(176px, calc(100% - 24px));
 }
 
+.premium-map-upgrade-button[data-pass-through="true"] {
+  pointer-events: none;
+}
+
 .world-card:hover {
   transform: translateY(-10px) scale(1.02);
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
@@ -5762,9 +5794,8 @@ body.world-page :is(.world-section, #world, #language, #maps) {
     inset 0 -1px 0 rgba(86, 146, 214, 0.18);
   backdrop-filter: blur(14px) saturate(135%);
   -webkit-backdrop-filter: blur(14px) saturate(135%);
-  /* Keep vertical clipping for layered effects while allowing horizontal content flow. */
-  overflow-y: hidden;
-  overflow-x: visible;
+  /* Prevent scrollbar flicker caused by mixed-axis overflow computation on animated sections. */
+  overflow: clip;
   isolation: isolate;
   transition: transform 320ms cubic-bezier(0.2, 0.85, 0.3, 1),
     box-shadow 320ms ease,
@@ -5822,8 +5853,7 @@ body.world-page :is(.world-section, #world, #language, #maps)::after {
 }
 
 body.world-page #world {
-  overflow-y: hidden;
-  overflow-x: visible;
+  overflow: clip;
 }
 
 body.world-page :is(.world-section, #world, #language, #maps) > * {
@@ -7345,17 +7375,19 @@ body:not(.world-page) .footer {
 .warp-overlay {
   position: fixed;
   inset: 0;
-  background-color: #030713;
+  background-color: #02050d;
   background:
-    radial-gradient(circle at 20% 20%, rgba(104, 225, 255, 0.32), transparent 46%),
-    radial-gradient(circle at 80% 80%, rgba(255, 111, 177, 0.32), transparent 52%),
-    radial-gradient(circle at 50% 30%, rgba(110, 247, 194, 0.16), transparent 58%),
-    linear-gradient(160deg, #040916 0%, #050b1a 55%, #030611 100%);
+    radial-gradient(circle at 50% 90%, rgba(253, 166, 96, 0.12), transparent 42%),
+    radial-gradient(circle at 50% 22%, rgba(89, 148, 255, 0.18), transparent 46%),
+    radial-gradient(circle at 12% 14%, rgba(255, 255, 255, 0.1), transparent 30%),
+    linear-gradient(180deg, #02040c 0%, #050916 58%, #0a111c 100%);
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
   z-index: 9999;
   pointer-events: none;
+  overflow: hidden;
+  contain: paint;
 }
 
 .warp-overlay.active {
@@ -7366,53 +7398,105 @@ body:not(.world-page) .footer {
   cursor: wait;
 }
 
+.warp-overlay.active:not(.returning) {
+  animation: warp-enter-travel 1.62s cubic-bezier(0.16, 0.74, 0.22, 1) both;
+}
+
 .warp-smoke {
   position: absolute;
-  width: 60vmax;
-  height: 60vmax;
+  left: 50%;
+  bottom: -28vh;
+  width: 130vmax;
+  height: 130vmax;
   background: radial-gradient(
-    circle,
-    rgba(237, 243, 255, 0.25),
-    rgba(104, 225, 255, 0.25) 40%,
-    transparent 70%
+    circle at 50% 82%,
+    rgba(255, 255, 255, 0.84) 0%,
+    rgba(218, 228, 243, 0.56) 21%,
+    rgba(168, 185, 214, 0.32) 39%,
+    rgba(102, 122, 162, 0.14) 54%,
+    rgba(10, 16, 26, 0) 73%
   );
-  filter: blur(40px);
+  filter: blur(28px) saturate(1.05);
   opacity: 0;
-  transform: translate3d(0, 0, 0) scale(0.7);
-  animation: smoke 1.6s ease-out forwards;
+  transform: translate3d(-50%, 38%, 0) scale(0.28);
+  transform-origin: 50% 100%;
+  will-change: transform, opacity;
+  pointer-events: none;
 }
 
 .warp-overlay.active .warp-smoke {
-  opacity: 1;
+  animation: rocket-smoke-screen 1.7s cubic-bezier(0.14, 0.72, 0.2, 1) forwards;
+}
+
+.warp-overlay.returning {
+  background-color: #0a1122;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(47, 68, 136, 0.58), transparent 48%),
+    radial-gradient(circle at 16% 14%, rgba(104, 225, 255, 0.22), transparent 42%),
+    radial-gradient(circle at 84% 16%, rgba(255, 111, 177, 0.16), transparent 46%),
+    linear-gradient(180deg, #0b1530 0%, #091127 56%, #070c1b 100%);
+}
+
+.warp-overlay.returning.active {
+  animation: warp-return-descent 1.58s cubic-bezier(0.15, 0.72, 0.2, 1) both;
+}
+
+.warp-overlay.returning .warp-smoke,
+.warp-overlay.returning .warp-flare {
+  opacity: 0;
+}
+
+.warp-overlay.returning .warp-flare {
+  bottom: 10vh;
+  filter: blur(5px);
+}
+
+.warp-overlay.returning.active .warp-flare,
+.warp-overlay.returning.active .warp-smoke {
+  animation: none;
+}
+
+.warp-overlay.returning.returning-touchdown .warp-flare {
+  animation: return-touchdown-flare 0.96s ease-out forwards;
+}
+
+.warp-overlay.returning.returning-touchdown .warp-smoke {
+  animation: return-touchdown-smoke 0.98s cubic-bezier(0.12, 0.72, 0.2, 1) forwards;
 }
 
 .smoke-a {
-  top: -20%;
-  left: -10%;
-  animation-delay: 0s;
+  --sd: 0.12s;
+  animation-delay: var(--sd);
 }
 
 .smoke-b {
-  bottom: -30%;
-  right: -10%;
-  animation-delay: 0.15s;
+  width: 140vmax;
+  height: 140vmax;
+  filter: blur(34px);
+  --sd: 0.24s;
+  animation-delay: var(--sd);
 }
 
 .smoke-c {
-  top: 10%;
-  right: 20%;
-  animation-delay: 0.3s;
+  width: 116vmax;
+  height: 116vmax;
+  filter: blur(24px);
+  --sd: 0.02s;
+  animation-delay: var(--sd);
 }
 
 .warp-dust {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(2px 2px at 20% 30%, rgba(255, 255, 255, 0.6), transparent 50%),
-    radial-gradient(2px 2px at 80% 20%, rgba(255, 255, 255, 0.5), transparent 50%),
-    radial-gradient(2px 2px at 50% 70%, rgba(255, 255, 255, 0.5), transparent 50%);
+    radial-gradient(1.7px 1.7px at 20% 25%, rgba(255, 255, 255, 0.78), transparent 55%),
+    radial-gradient(1.5px 1.5px at 84% 18%, rgba(255, 255, 255, 0.7), transparent 55%),
+    radial-gradient(1.6px 1.6px at 52% 30%, rgba(186, 223, 255, 0.8), transparent 55%),
+    radial-gradient(1.5px 1.5px at 12% 68%, rgba(234, 244, 255, 0.62), transparent 55%),
+    radial-gradient(1.4px 1.4px at 78% 76%, rgba(255, 255, 255, 0.56), transparent 55%);
   opacity: 0.4;
-  animation: warp-dust 1.6s ease-in-out infinite;
+  transform-origin: 50% 52%;
+  pointer-events: none;
 }
 
 .warp-dust::after {
@@ -7420,11 +7504,55 @@ body:not(.world-page) .footer {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(1.5px 1.5px at 12% 18%, rgba(255, 255, 255, 0.7), transparent 50%),
-    radial-gradient(1.5px 1.5px at 24% 62%, rgba(255, 255, 255, 0.6), transparent 50%),
-    radial-gradient(1.5px 1.5px at 66% 24%, rgba(255, 255, 255, 0.6), transparent 50%),
-    radial-gradient(1.5px 1.5px at 78% 66%, rgba(255, 255, 255, 0.6), transparent 50%);
-  opacity: 0.35;
+    radial-gradient(1.3px 1.3px at 14% 16%, rgba(255, 255, 255, 0.72), transparent 55%),
+    radial-gradient(1.3px 1.3px at 37% 11%, rgba(214, 233, 255, 0.62), transparent 55%),
+    radial-gradient(1.3px 1.3px at 66% 26%, rgba(255, 255, 255, 0.56), transparent 55%),
+    radial-gradient(1.4px 1.4px at 88% 34%, rgba(211, 232, 255, 0.62), transparent 55%),
+    radial-gradient(1.3px 1.3px at 28% 76%, rgba(255, 255, 255, 0.52), transparent 55%);
+  opacity: 0.34;
+}
+
+.warp-overlay.active:not(.returning) .warp-dust {
+  animation: warp-star-rise 1.56s cubic-bezier(0.12, 0.74, 0.2, 1) forwards;
+}
+
+.warp-overlay.active:not(.returning) .warp-dust::after {
+  animation: warp-star-rise-layer 1.7s cubic-bezier(0.14, 0.72, 0.2, 1) forwards;
+}
+
+.warp-overlay.returning.active .warp-dust {
+  animation: warp-star-fall 1.45s cubic-bezier(0.2, 0.66, 0.24, 1) forwards;
+}
+
+.warp-overlay.returning.active .warp-dust::after {
+  animation: warp-star-fall-layer 1.55s cubic-bezier(0.2, 0.68, 0.24, 1) forwards;
+}
+
+.warp-overlay::before {
+  content: "";
+  position: absolute;
+  inset: -12% -20% -8%;
+  background:
+    radial-gradient(circle at 50% 6%, rgba(183, 222, 255, 0.28), transparent 52%),
+    radial-gradient(circle at 20% 20%, rgba(88, 156, 255, 0.2), transparent 45%),
+    radial-gradient(circle at 80% 16%, rgba(252, 165, 97, 0.14), transparent 52%),
+    radial-gradient(circle at 50% 100%, rgba(252, 173, 103, 0.16), transparent 42%);
+  opacity: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.warp-overlay.active:not(.returning)::before {
+  animation: warp-star-canopy 1.68s ease-out forwards;
+}
+
+.warp-overlay.returning.active::before {
+  background:
+    radial-gradient(circle at 50% 6%, rgba(178, 216, 255, 0.18), transparent 54%),
+    radial-gradient(circle at 50% 96%, rgba(255, 181, 108, 0.38), transparent 46%),
+    radial-gradient(circle at 18% 82%, rgba(255, 214, 170, 0.16), transparent 42%),
+    radial-gradient(circle at 82% 78%, rgba(255, 198, 140, 0.14), transparent 44%);
+  animation: warp-return-atmosphere 1.62s ease-out forwards;
 }
 
 .warp-overlay::after {
@@ -7432,29 +7560,17 @@ body:not(.world-page) .footer {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(2px 2px at 12% 18%, rgba(255, 255, 255, 1), transparent 55%),
-    radial-gradient(2px 2px at 28% 64%, rgba(255, 255, 255, 0.95), transparent 55%),
-    radial-gradient(2px 2px at 46% 26%, rgba(255, 255, 255, 0.9), transparent 55%),
-    radial-gradient(2px 2px at 64% 42%, rgba(255, 255, 255, 0.95), transparent 55%),
-    radial-gradient(2px 2px at 78% 18%, rgba(255, 255, 255, 0.9), transparent 55%),
-    radial-gradient(2px 2px at 88% 72%, rgba(255, 255, 255, 0.95), transparent 55%),
-    radial-gradient(1.5px 1.5px at 20% 38%, rgba(255, 255, 255, 0.8), transparent 55%),
-    radial-gradient(1.5px 1.5px at 72% 62%, rgba(255, 255, 255, 0.8), transparent 55%),
-    radial-gradient(1.5px 1.5px at 34% 14%, rgba(255, 255, 255, 0.8), transparent 55%),
-    radial-gradient(1.5px 1.5px at 58% 18%, rgba(255, 255, 255, 0.85), transparent 55%),
-    radial-gradient(1.5px 1.5px at 40% 52%, rgba(255, 255, 255, 0.75), transparent 55%),
-    radial-gradient(1.5px 1.5px at 52% 70%, rgba(255, 255, 255, 0.8), transparent 55%),
-    radial-gradient(1.5px 1.5px at 66% 78%, rgba(255, 255, 255, 0.85), transparent 55%),
-    radial-gradient(1.5px 1.5px at 14% 82%, rgba(255, 255, 255, 0.8), transparent 55%),
-    radial-gradient(1.5px 1.5px at 82% 36%, rgba(255, 255, 255, 0.8), transparent 55%),
-    radial-gradient(1.5px 1.5px at 90% 46%, rgba(255, 255, 255, 0.85), transparent 55%),
-    radial-gradient(1.5px 1.5px at 8% 42%, rgba(255, 255, 255, 0.8), transparent 55%),
-    radial-gradient(1.5px 1.5px at 24% 26%, rgba(255, 255, 255, 0.8), transparent 55%),
-    radial-gradient(1.5px 1.5px at 76% 52%, rgba(255, 255, 255, 0.75), transparent 55%),
-    radial-gradient(1.5px 1.5px at 48% 10%, rgba(255, 255, 255, 0.85), transparent 55%);
-  opacity: 0.85;
+    radial-gradient(circle at 50% 100%, rgba(254, 206, 140, 0.18), transparent 34%),
+    linear-gradient(to top, rgba(4, 8, 18, 0.52), rgba(4, 8, 18, 0.08) 44%, rgba(2, 4, 9, 0.5));
+  opacity: 0.9;
   pointer-events: none;
   z-index: 1;
+}
+
+.warp-overlay.returning::after {
+  background:
+    radial-gradient(circle at 50% 100%, rgba(255, 186, 118, 0.34), transparent 31%),
+    linear-gradient(to top, rgba(11, 18, 34, 0.7), rgba(11, 18, 34, 0.18) 46%, rgba(8, 14, 27, 0.5));
 }
 
 .warp-overlay > * {
@@ -7464,55 +7580,214 @@ body:not(.world-page) .footer {
 
 .warp-streaks {
   position: absolute;
-  inset: 0;
-  overflow: hidden;
+  inset: -12% -8% 0;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
 }
 
 .warp-streaks span {
   position: absolute;
-  width: var(--l, 180px);
-  height: 2px;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.9), rgba(104, 225, 255, 0.2), transparent);
-  top: var(--y, 50%);
-  left: var(--x, 50%);
+  left: var(--x);
+  top: var(--y);
+  width: max(1px, 0.13vmin);
+  height: var(--l);
+  transform: translate3d(0, 0, 0);
+  transform-origin: 50% 0%;
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(186, 226, 255, 0.86) 22%, rgba(111, 176, 255, 0.8) 60%, rgba(111, 176, 255, 0));
   opacity: 0;
-  transform: translateX(-40vw);
-  animation: warp-streak var(--t, 1.4s) ease-in-out infinite;
-  animation-delay: var(--d, 0s);
+  filter: drop-shadow(0 0 7px rgba(134, 194, 255, 0.46));
 }
 
-.warp-overlay.active .warp-streaks span {
+.warp-overlay.active:not(.returning) .warp-streaks {
   opacity: 1;
+}
+
+.warp-overlay.active:not(.returning) .warp-streaks span {
+  animation: warp-streak-up var(--t) linear infinite;
+  animation-delay: var(--d);
+}
+
+.warp-overlay.returning.active .warp-streaks {
+  opacity: 0.62;
+}
+
+.warp-overlay.returning.active .warp-streaks span {
+  height: calc(var(--l) * 0.72);
+  background:
+    linear-gradient(180deg, rgba(255, 241, 225, 0), rgba(255, 227, 189, 0.8) 28%, rgba(255, 191, 132, 0.74) 66%, rgba(255, 175, 115, 0));
+  filter: drop-shadow(0 0 7px rgba(255, 178, 102, 0.34));
+  animation: warp-streak-down calc(var(--t) + 0.28s) linear infinite;
+  animation-delay: var(--d);
 }
 
 .warp-flare {
   position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at center, rgba(104, 225, 255, 0.35), transparent 55%);
-  opacity: 0.6;
+  left: 50%;
+  bottom: 11vh;
+  width: min(56vmin, 420px);
+  height: min(56vmin, 420px);
+  transform: translateX(-50%) scale(0.7);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 70%, rgba(255, 183, 117, 0.94), rgba(255, 149, 90, 0.7) 26%, rgba(92, 153, 255, 0.2) 56%, transparent 72%),
+    radial-gradient(circle at 50% 62%, rgba(255, 255, 255, 0.74), transparent 44%);
+  opacity: 0;
+  filter: blur(4px);
+  pointer-events: none;
 }
 
-@keyframes warp-streak {
-  0% {
-    transform: translateX(-40vw);
-    opacity: 0;
-  }
-  20% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(60vw);
-    opacity: 0;
-  }
+.warp-overlay.active .warp-flare {
+  animation: ignition-flash 1.08s ease-out forwards;
 }
 
-@keyframes warp-dust {
+@keyframes warp-star-drift {
   0%,
   100% {
-    opacity: 0.35;
+    transform: translateY(0);
+    opacity: 0.34;
   }
   50% {
-    opacity: 0.6;
+    transform: translateY(-8px);
+    opacity: 0.54;
+  }
+}
+
+@keyframes warp-enter-travel {
+  0% {
+    filter: saturate(0.94) brightness(0.92);
+  }
+  34% {
+    filter: saturate(1.06) brightness(0.98);
+  }
+  100% {
+    filter: saturate(1.2) brightness(1.05);
+  }
+}
+
+@keyframes warp-return-descent {
+  0% {
+    filter: saturate(1.12) brightness(0.98);
+  }
+  62% {
+    filter: saturate(0.98) brightness(1.03);
+  }
+  100% {
+    filter: saturate(0.9) brightness(1.06);
+  }
+}
+
+@keyframes warp-star-canopy {
+  0% {
+    opacity: 0.02;
+    transform: translate3d(0, 16%, 0) scale(0.9);
+  }
+  30% {
+    opacity: 0.42;
+  }
+  100% {
+    opacity: 0.9;
+    transform: translate3d(0, -10%, 0) scale(1.08);
+  }
+}
+
+@keyframes warp-return-atmosphere {
+  0% {
+    opacity: 0.08;
+    transform: translate3d(0, -9%, 0) scale(1.04);
+  }
+  58% {
+    opacity: 0.56;
+  }
+  100% {
+    opacity: 0.78;
+    transform: translate3d(0, 2%, 0) scale(1);
+  }
+}
+
+@keyframes warp-star-rise {
+  0% {
+    opacity: 0.16;
+    transform: translate3d(0, 22%, 0) scale(0.86);
+  }
+  28% {
+    opacity: 0.52;
+  }
+  100% {
+    opacity: 0.72;
+    transform: translate3d(0, -24%, 0) scale(1.25);
+  }
+}
+
+@keyframes warp-star-rise-layer {
+  0% {
+    opacity: 0.12;
+    transform: translate3d(0, 24%, 0) scale(0.82);
+  }
+  34% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0.76;
+    transform: translate3d(0, -34%, 0) scale(1.42);
+  }
+}
+
+@keyframes warp-star-fall {
+  0% {
+    opacity: 0.56;
+    transform: translate3d(0, -18%, 0) scale(1.2);
+  }
+  52% {
+    opacity: 0.62;
+  }
+  100% {
+    opacity: 0.46;
+    transform: translate3d(0, 12%, 0) scale(1.02);
+  }
+}
+
+@keyframes warp-star-fall-layer {
+  0% {
+    opacity: 0.52;
+    transform: translate3d(0, -22%, 0) scale(1.34);
+  }
+  54% {
+    opacity: 0.58;
+  }
+  100% {
+    opacity: 0.42;
+    transform: translate3d(0, 16%, 0) scale(1.08);
+  }
+}
+
+@keyframes warp-streak-up {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 44vh, 0) scaleY(0.7);
+  }
+  16% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, -124vh, 0) scaleY(1.2);
+  }
+}
+
+@keyframes warp-streak-down {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -90vh, 0) scaleY(0.74);
+  }
+  20% {
+    opacity: 0.76;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 116vh, 0) scaleY(1.08);
   }
 }
 
@@ -7521,95 +7796,214 @@ body:not(.world-page) .footer {
   inset: 0;
   display: grid;
   place-items: center;
-  gap: 20px;
+  gap: 6px;
   text-align: center;
   color: var(--text);
 }
 
 .ship {
   position: relative;
-  width: 140px;
-  height: 140px;
-  transform: translate3d(-40vw, 30vh, 0) rotate(-12deg) scale(0.8);
+  width: clamp(72px, 9.8vw, 120px);
+  height: clamp(168px, 22vh, 228px);
+  bottom: clamp(-108px, -15vh, -74px);
+  transform: translate3d(0, 0, 0) scale(0.92);
+  transform-origin: 50% 100%;
   opacity: 0;
+  will-change: transform, opacity;
 }
 
 .warp-overlay.active .ship {
-  animation: ship-fly 1.4s ease-out forwards;
+  animation: ship-launch 1.56s cubic-bezier(0.18, 0.75, 0.24, 1) forwards;
+}
+
+.warp-overlay.returning.active .ship {
+  animation: ship-land 1.45s cubic-bezier(0.2, 0.72, 0.22, 1) forwards;
 }
 
 .ship-body {
   position: absolute;
-  width: 120px;
-  height: 60px;
-  background: linear-gradient(120deg, #e8f7ff, #68e1ff);
-  border-radius: 60px 80px 60px 60px;
-  top: 40px;
-  left: 10px;
-  box-shadow: 0 0 24px rgba(104, 225, 255, 0.3);
+  width: 58%;
+  height: 66%;
+  left: 50%;
+  bottom: 19%;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, #f5f8ff 0%, #d6e7ff 54%, #9db7d9 100%);
+  border-radius: 999px 999px 26px 26px;
+  box-shadow:
+    0 12px 20px rgba(2, 10, 22, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.26) inset;
+}
+
+.ship-body::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -28%;
+  width: 75%;
+  height: 40%;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, #ffffff 0%, #d7e6ff 60%, #b0c5e4 100%);
+  clip-path: polygon(50% 0%, 100% 100%, 0 100%);
 }
 
 .ship-body::after {
   content: "";
   position: absolute;
-  width: 50px;
-  height: 36px;
-  background: linear-gradient(120deg, #d6f0ff, #ff6fb1);
-  border-radius: 40px 40px 10px 10px;
-  top: -18px;
-  left: 35px;
+  left: 50%;
+  bottom: -13%;
+  width: 130%;
+  height: 38%;
+  transform: translateX(-50%);
+  background:
+    linear-gradient(145deg, rgba(188, 212, 240, 0.92) 0%, rgba(112, 139, 176, 0.9) 54%, rgba(75, 92, 122, 0.9) 100%);
+  clip-path: polygon(0 100%, 16% 30%, 34% 56%, 50% 26%, 66% 56%, 84% 30%, 100% 100%);
 }
 
 .ship-window {
   position: absolute;
-  width: 24px;
-  height: 24px;
-  background: #071a2b;
+  width: 22%;
+  aspect-ratio: 1;
+  left: 50%;
+  top: 33%;
+  transform: translateX(-50%);
+  background: radial-gradient(circle at 42% 34%, #cbebff 0%, #6aa6de 44%, #163157 100%);
+  border: 1px solid rgba(255, 255, 255, 0.42);
   border-radius: 50%;
-  top: 54px;
-  left: 54px;
-  box-shadow: inset 0 0 10px rgba(104, 225, 255, 0.3);
+  box-shadow:
+    0 0 11px rgba(130, 194, 255, 0.45),
+    inset 0 0 10px rgba(141, 211, 255, 0.35);
 }
 
 .ship-flame {
   position: absolute;
-  width: 40px;
-  height: 26px;
-  background: radial-gradient(
-    circle at 20% 50%,
-    #ffe29f,
-    #68e1ff 60%,
-    transparent 70%
-  );
-  top: 57px;
-  left: -10px;
-  border-radius: 50% 60% 60% 50%;
-  animation: flame 0.4s ease-in-out infinite;
+  left: 50%;
+  bottom: 3.6%;
+  width: 27%;
+  height: 34%;
+  transform: translateX(-50%);
+  transform-origin: 50% 0%;
+  background:
+    radial-gradient(circle at 50% 10%, #fffde4 0%, #ffd377 36%, #ff8f3d 66%, transparent 100%);
+  filter: blur(0.35px) drop-shadow(0 0 16px rgba(255, 132, 53, 0.68));
+  clip-path: polygon(50% 0%, 100% 100%, 70% 82%, 50% 100%, 30% 82%, 0 100%);
+  animation: rocket-flame 0.17s ease-in-out infinite alternate;
+}
+
+.warp-overlay.returning .ship-flame {
+  animation:
+    return-flame-flicker 0.15s ease-in-out infinite alternate,
+    return-flame-shutdown 1.45s linear forwards;
+}
+
+.ship-flame::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 16%;
+  width: 56%;
+  height: 64%;
+  transform: translateX(-50%);
+  background: radial-gradient(circle at 50% 22%, rgba(218, 245, 255, 0.96), rgba(105, 179, 255, 0.3) 58%, transparent 100%);
+  clip-path: polygon(50% 0%, 95% 100%, 50% 80%, 5% 100%);
 }
 
 .warp-text {
+  margin-top: clamp(-8px, -1vh, -2px);
+  padding: 10px 20px;
+  border-radius: 999px;
   font-family: "Oxanium", var(--font-title);
-  font-weight: 600;
-  font-size: clamp(1.4rem, 3vw, 2.2rem);
-  letter-spacing: 0.12em;
+  font-size: clamp(0.88rem, 1.5vw, 1.06rem);
+  font-weight: 700;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: #e8f7ff;
-  text-shadow:
-    0 0 12px rgba(104, 225, 255, 0.6),
-    0 0 26px rgba(104, 225, 255, 0.35);
+  color: #ebf7ff;
+  border: 1px solid rgba(155, 204, 255, 0.38);
+  background:
+    linear-gradient(120deg, rgba(22, 40, 77, 0.66), rgba(22, 67, 110, 0.42) 48%, rgba(16, 43, 78, 0.66) 100%);
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.34),
+    inset 0 0 16px rgba(130, 189, 255, 0.2),
+    0 0 20px rgba(92, 156, 255, 0.24);
+  position: relative;
+  overflow: hidden;
+  animation: warp-text-glow 1.25s ease-in-out infinite alternate;
+}
+
+.warp-overlay.returning .warp-text {
+  border-color: rgba(255, 198, 130, 0.44);
+  background:
+    linear-gradient(122deg, rgba(53, 73, 118, 0.66), rgba(65, 96, 147, 0.48) 48%, rgba(42, 64, 106, 0.7) 100%);
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.36),
+    inset 0 0 17px rgba(255, 208, 153, 0.2),
+    0 0 22px rgba(252, 173, 103, 0.24);
+}
+
+.warp-text::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -52%;
+  width: 36%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.54), transparent);
+  transform: skewX(-16deg);
+  animation: warp-text-sweep 1.4s ease-in-out infinite;
 }
 
 @media (max-width: 960px) {
-  .warp-text {
-    font-size: clamp(1.02rem, 2.6vw, 1.46rem);
-    letter-spacing: 0.1em;
+  .warp-flare {
+    bottom: 18vh;
+    width: min(62vmin, 360px);
+    height: min(62vmin, 360px);
+  }
+
+  .ship {
+    bottom: clamp(-136px, -18vh, -98px);
   }
 }
 
 @media (max-width: 600px) {
-  .warp-text {
-    font-size: clamp(0.88rem, 2.4vw, 1.18rem);
-    letter-spacing: 0.08em;
+  .warp-flare {
+    bottom: 22vh;
+    width: min(72vmin, 320px);
+    height: min(72vmin, 320px);
+  }
+
+  .ship {
+    width: clamp(66px, 21vw, 92px);
+    height: clamp(142px, 31vh, 196px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .warp-overlay.active .ship,
+  .warp-overlay.active .warp-flare,
+  .warp-overlay.active .warp-smoke,
+  .ship-flame,
+  .warp-dust,
+  .warp-dust::after,
+  .warp-overlay::before,
+  .warp-streaks span {
+    animation: none !important;
+  }
+
+  .warp-overlay.active .ship {
+    opacity: 1;
+    transform: translate3d(0, -18vh, 0);
+  }
+
+  .warp-overlay.returning.active .ship {
+    transform: translate3d(0, 0, 0);
+  }
+
+  .warp-overlay.active .warp-smoke {
+    opacity: 0.75;
+    transform: translate3d(-50%, 0, 0) scale(1);
+  }
+
+  .warp-overlay.active .warp-streaks {
+    opacity: 0;
   }
 }
 
@@ -7869,41 +8263,188 @@ body.world-page.start-lesson-transition #language.language-reveal {
   }
 }
 
-@keyframes ship-fly {
+@keyframes ignition-flash {
   0% {
-    transform: translate3d(-40vw, 30vh, 0) rotate(-12deg) scale(0.7);
     opacity: 0;
+    transform: translateX(-50%) scale(0.45);
   }
-  40% {
+  18% {
+    opacity: 0.94;
+  }
+  48% {
+    opacity: 0.72;
+    transform: translateX(-50%) scale(1.02);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) scale(1.5);
+  }
+}
+
+@keyframes rocket-smoke-screen {
+  0% {
+    opacity: 0;
+    transform: translate3d(-50%, 38%, 0) scale(0.26);
+  }
+  24% {
+    opacity: 0.68;
+  }
+  64% {
+    opacity: 0.86;
+  }
+  100% {
+    opacity: 0.94;
+    transform: translate3d(-50%, -8%, 0) scale(1.28);
+  }
+}
+
+@keyframes ship-launch {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 14vh, 0) scale(0.88);
+  }
+  14% {
+    opacity: 1;
+    transform: translate3d(-0.8px, 2vh, 0) scale(0.94);
+  }
+  24% {
+    transform: translate3d(0.8px, -1vh, 0) scale(0.96);
+  }
+  45% {
+    transform: translate3d(0, -16vh, 0) scale(0.99);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, -108vh, 0) scale(0.74);
+  }
+}
+
+@keyframes ship-land {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -108vh, 0) scale(0.74);
+  }
+  20% {
     opacity: 1;
   }
+  64% {
+    opacity: 1;
+    transform: translate3d(0, -10vh, 0) scale(0.9);
+  }
+  82% {
+    transform: translate3d(0, 1.5vh, 0) scale(0.94);
+  }
   100% {
-    transform: translate3d(35vw, -30vh, 0) rotate(12deg) scale(1.1);
-    opacity: 0;
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(0.92);
   }
 }
 
-@keyframes smoke {
+@keyframes return-flame-shutdown {
   0% {
-    transform: scale(0.6);
-    opacity: 0;
+    opacity: 1;
   }
-  60% {
-    opacity: 0.8;
+  82% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 0.38;
+  }
+  97% {
+    opacity: 0.04;
   }
   100% {
-    transform: scale(1.1);
     opacity: 0;
   }
 }
 
-@keyframes flame {
-  0%,
+@keyframes return-flame-flicker {
+  0% {
+    transform: translateX(-50%) scale(0.92, 1.04);
+  }
   100% {
-    transform: scale(0.9);
+    transform: translateX(-50%) scale(1.12, 1.2);
+  }
+}
+
+@keyframes return-touchdown-flare {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.5);
+  }
+  12% {
+    opacity: 0.9;
+    transform: translateX(-50%) scale(0.84);
+  }
+  48% {
+    opacity: 0.62;
+    transform: translateX(-50%) scale(1.04);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) scale(1.24);
+  }
+}
+
+@keyframes return-touchdown-smoke {
+  0% {
+    opacity: 0;
+    transform: translate3d(-50%, 40%, 0) scale(0.22);
+  }
+  14% {
+    opacity: 0.68;
+    transform: translate3d(-50%, 25%, 0) scale(0.7);
   }
   50% {
-    transform: scale(1.1);
+    opacity: 0.9;
+    transform: translate3d(-50%, 11%, 0) scale(1.02);
+  }
+  100% {
+    opacity: 0.78;
+    transform: translate3d(-50%, -2%, 0) scale(1.18);
+  }
+}
+
+@keyframes rocket-flame {
+  0% {
+    opacity: 0.9;
+    transform: translateX(-50%) scale(0.9, 1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.15, 1.22);
+  }
+}
+
+@keyframes warp-text-glow {
+  0% {
+    box-shadow:
+      0 8px 20px rgba(0, 0, 0, 0.34),
+      inset 0 0 14px rgba(130, 189, 255, 0.18),
+      0 0 14px rgba(92, 156, 255, 0.18);
+  }
+  100% {
+    box-shadow:
+      0 10px 24px rgba(0, 0, 0, 0.36),
+      inset 0 0 20px rgba(145, 206, 255, 0.3),
+      0 0 26px rgba(92, 156, 255, 0.3);
+  }
+}
+
+@keyframes warp-text-sweep {
+  0% {
+    left: -56%;
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.7;
+  }
+  70% {
+    opacity: 0.35;
+  }
+  100% {
+    left: 122%;
+    opacity: 0;
   }
 }
 
