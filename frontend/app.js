@@ -5615,6 +5615,8 @@ const speakLine = (text, mood = "happy", options = {}) => {
   if (!speechText || !speechBubble) {
     return;
   }
+  // `followBubble` is used for live Mimi replies so the expanding speech bubble
+  // stays in view, while still allowing the user to manually scroll away.
   const { instant = false, followBubble = false } = options;
   const line = String(text || "");
   activeLine = line.trim() || activeLine;
@@ -5821,6 +5823,7 @@ const queueMimiBubbleFollow = ({ behavior = "auto", force = false } = {}) => {
   });
 };
 
+// Stop auto-follow immediately if user starts their own navigation input.
 window.addEventListener("wheel", cancelMimiBubbleFollowOnUserScroll, { passive: true });
 window.addEventListener("touchmove", cancelMimiBubbleFollowOnUserScroll, { passive: true });
 window.addEventListener("keydown", (event) => {

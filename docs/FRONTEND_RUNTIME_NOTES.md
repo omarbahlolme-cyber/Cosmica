@@ -61,6 +61,15 @@ This file tracks important runtime decisions and guardrails for `frontend/app.js
 3. Cancel notice trigger is query param `premium=cancel`.
 4. The frontend consumes these params, shows the corresponding UI, then cleans the URL via `history.replaceState`.
 
+## Mimi Speech Bubble Follow (2026-02)
+
+1. When a user sends a Mimi chat message, the page reveals the speech bubble area automatically so users can see Mimi's response start immediately.
+2. While Mimi types and the speech bubble grows vertically, the viewport follow logic keeps the bubble visible.
+3. Auto-follow is intentionally cancellable:
+   - wheel/touch scroll or scroll keys cancel follow for that reply cycle,
+   - users can scroll away freely (no scroll locking).
+4. Follow behavior is routed through `speakLine(..., { followBubble: true })` in `frontend/app.js` and should stay scoped to live Mimi replies only.
+
 ## Cloudflare Analytics
 
 1. Manual analytics snippet injection was removed from frontend code.
