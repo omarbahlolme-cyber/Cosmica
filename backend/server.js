@@ -399,6 +399,17 @@ app.use((req, res, next) => {
   return res.redirect(308, redirectTarget);
 });
 
+// Gift redeem links route through homepage runtime where account + modal logic lives.
+app.get("/gift/redeem", (req, res) => {
+  const token = String(req.query?.token || "").trim().slice(0, 240);
+  const params = new URLSearchParams();
+  if (token) {
+    params.set("giftToken", token);
+  }
+  const search = params.toString();
+  return res.redirect(302, `/${search ? `?${search}` : ""}`);
+});
+
 // Premium grammar URLs stay indexable; frontend enforces preview-vs-premium depth.
 app.use((req, res, next) => {
   const requestPath = String(req.path || "").toLowerCase();
@@ -991,6 +1002,15 @@ const PASSWORD_RESET_TOKEN_TTL_MS = Math.max(
   5 * 60 * 1000,
   Number(process.env.PASSWORD_RESET_TTL_MS || 1000 * 60 * 60 * 2)
 );
+const PREMIUM_GIFT_TOKEN_DEFAULT_PREMIUM_DAYS = Math.max(
+  1,
+  Number(process.env.PREMIUM_GIFT_DEFAULT_DAYS || 30)
+);
+const PREMIUM_GIFT_TOKEN_DEFAULT_TTL_DAYS = Math.max(
+  1,
+  Number(process.env.PREMIUM_GIFT_TOKEN_TTL_DAYS || 90)
+);
+const PREMIUM_GIFT_TOKEN_MAX_DAYS = 3650;
 const googleOauthStateStore = new Map();
 
 const isPlainObject = (value) =>
@@ -1086,12 +1106,17 @@ const createDefaultProgress = () => ({
   updatedAt: null,
 });
 
+const createEmptyGiftTokenStore = () => ({
+  tokens: {},
+});
+
 const createEmptyAuthStore = () => ({
   schemaVersion: AUTH_STORE_SCHEMA_VERSION,
   updatedAt: new Date().toISOString(),
   users: {},
   emailIndex: {},
   sessions: {},
+  giftTokens: createEmptyGiftTokenStore(),
   deletedUsers: {
     userIds: {},
     emails: {},
@@ -1111,6 +1136,106 @@ const createEmptySecurityEventsStore = () => ({
   updatedAt: new Date().toISOString(),
   events: [],
 });
+
+const normalizeGiftTokenStatus = (value) => {
+  const normalized = String(value || "")
+    .trim()
+    .toLowerCase();
+  if (normalized === "used" || normalized === "expired" || normalized === "revoked") {
+    return normalized;
+  }
+  return "active";
+};
+
+const sanitizeGiftTemplateText = (value, maxLength = 220) =>
+  String(value || "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, Math.max(0, Number(maxLength) || 0));
+
+const normalizeGiftTokenRecord = (value, fallbackTokenHash = "") => {
+  if (!isPlainObject(value)) {
+    return null;
+  }
+  const tokenHash = String(value.tokenHash || fallbackTokenHash || "")
+    .trim()
+    .slice(0, 160);
+  if (!tokenHash) {
+    return null;
+  }
+  const createdAtRaw = String(value.createdAt || "").trim();
+  const createdAt = Number.isFinite(Date.parse(createdAtRaw))
+    ? new Date(createdAtRaw).toISOString()
+    : new Date().toISOString();
+  const updatedAtRaw = String(value.updatedAt || "").trim();
+  const updatedAt = Number.isFinite(Date.parse(updatedAtRaw))
+    ? new Date(updatedAtRaw).toISOString()
+    : createdAt;
+  const expiresAtRaw = String(value.expiresAt || "").trim();
+  const expiresAt = Number.isFinite(Date.parse(expiresAtRaw))
+    ? new Date(expiresAtRaw).toISOString()
+    : "";
+  const grantUntilRaw = String(value.grantUntil || "").trim();
+  const grantUntil = Number.isFinite(Date.parse(grantUntilRaw))
+    ? new Date(grantUntilRaw).toISOString()
+    : "";
+  const rawGrantDays = Number(value.grantDays);
+  const grantDays = Number.isFinite(rawGrantDays)
+    ? Math.max(1, Math.min(PREMIUM_GIFT_TOKEN_MAX_DAYS, Math.round(rawGrantDays)))
+    : PREMIUM_GIFT_TOKEN_DEFAULT_PREMIUM_DAYS;
+  const usedAtRaw = String(value.usedAt || "").trim();
+  const usedAt = Number.isFinite(Date.parse(usedAtRaw))
+    ? new Date(usedAtRaw).toISOString()
+    : "";
+  const grantedUntilRaw = String(value.grantedUntil || "").trim();
+  const grantedUntil = Number.isFinite(Date.parse(grantedUntilRaw))
+    ? new Date(grantedUntilRaw).toISOString()
+    : "";
+  const revokedAtRaw = String(value.revokedAt || "").trim();
+  const revokedAt = Number.isFinite(Date.parse(revokedAtRaw))
+    ? new Date(revokedAtRaw).toISOString()
+    : "";
+  return {
+    id: String(value.id || "").trim().slice(0, 120) || crypto.randomUUID(),
+    tokenHash,
+    status: normalizeGiftTokenStatus(value.status),
+    createdAt,
+    updatedAt,
+    expiresAt,
+    createdBy: String(value.createdBy || "admin").trim().slice(0, 120) || "admin",
+    recipientEmail: normalizeEmail(value.recipientEmail),
+    grantDays,
+    grantUntil,
+    title: sanitizeGiftTemplateText(value.title, 90) || "A Premium Gift Awaits You",
+    message:
+      sanitizeGiftTemplateText(value.message, 320) ||
+      "Someone sent you a Cosmica Premium gift. Open the gift to continue.",
+    from: sanitizeGiftTemplateText(value.from, 70),
+    openText: sanitizeGiftTemplateText(value.openText, 28) || "Open Gift",
+    checkText: sanitizeGiftTemplateText(value.checkText, 32) || "Check activation",
+    laterText: sanitizeGiftTemplateText(value.laterText, 24) || "Maybe later",
+    note: sanitizeGiftTemplateText(value.note, 300),
+    usedAt,
+    usedByUserId: String(value.usedByUserId || "").trim().slice(0, 120),
+    usedByEmail: normalizeEmail(value.usedByEmail),
+    grantedUntil,
+    revokedAt,
+  };
+};
+
+const normalizeGiftTokenStore = (value) => {
+  const normalized = createEmptyGiftTokenStore();
+  const candidate = isPlainObject(value) ? value : {};
+  const tokens = isPlainObject(candidate.tokens) ? candidate.tokens : {};
+  Object.entries(tokens).forEach(([tokenHash, rawRecord]) => {
+    const record = normalizeGiftTokenRecord(rawRecord, tokenHash);
+    if (!record) {
+      return;
+    }
+    normalized.tokens[record.tokenHash] = record;
+  });
+  return normalized;
+};
 
 const cloneObjectSafely = (value, fallbackValue, maxSerializedChars) => {
   if (!isPlainObject(value)) {
@@ -1617,6 +1742,7 @@ const normalizeAuthStore = (candidate) => {
   normalized.schemaVersion =
     Number(candidate.schemaVersion) > 0 ? Number(candidate.schemaVersion) : AUTH_STORE_SCHEMA_VERSION;
   normalized.updatedAt = String(candidate.updatedAt || new Date().toISOString());
+  normalized.giftTokens = normalizeGiftTokenStore(candidate.giftTokens);
   normalized.deletedUsers = normalizeAuthStoreDeletedUsers(candidate.deletedUsers);
   return normalized;
 };
@@ -1971,6 +2097,43 @@ const mergeAuthStoresForConflictResolution = ({ remoteStore, localStore }) => {
       return;
     }
     merged.sessions[sessionHash] = sessionCandidate;
+  });
+
+  const remoteGiftTokens = normalizeGiftTokenStore(normalizedRemote.giftTokens);
+  const localGiftTokens = normalizeGiftTokenStore(normalizedLocal.giftTokens);
+  const allGiftTokenHashes = new Set([
+    ...Object.keys(remoteGiftTokens.tokens || {}),
+    ...Object.keys(localGiftTokens.tokens || {}),
+  ]);
+  allGiftTokenHashes.forEach((tokenHash) => {
+    const remoteToken = remoteGiftTokens.tokens[tokenHash];
+    const localToken = localGiftTokens.tokens[tokenHash];
+    const selectedToken = (() => {
+      if (remoteToken && !localToken) {
+        return remoteToken;
+      }
+      if (!remoteToken && localToken) {
+        return localToken;
+      }
+      if (!remoteToken && !localToken) {
+        return null;
+      }
+      const remoteUpdatedAtMs = toEpochMs(
+        remoteToken.updatedAt || remoteToken.usedAt || remoteToken.createdAt
+      );
+      const localUpdatedAtMs = toEpochMs(
+        localToken.updatedAt || localToken.usedAt || localToken.createdAt
+      );
+      return localUpdatedAtMs >= remoteUpdatedAtMs ? localToken : remoteToken;
+    })();
+    if (!selectedToken) {
+      return;
+    }
+    const normalizedSelected = normalizeGiftTokenRecord(selectedToken, tokenHash);
+    if (!normalizedSelected) {
+      return;
+    }
+    merged.giftTokens.tokens[tokenHash] = normalizedSelected;
   });
 
   merged.deletedUsers = mergedDeletedUsers;
@@ -2388,6 +2551,144 @@ const hashText = (value) => crypto.createHash("sha256").update(String(value || "
 const hashSessionToken = (token) => hashText(token);
 const hashEmailVerificationToken = (token) => hashText(`email-verify:${String(token || "")}`);
 const hashPasswordResetToken = (token) => hashText(`password-reset:${String(token || "")}`);
+const hashGiftRedeemToken = (token) => hashText(`gift-redeem:${String(token || "")}`);
+const createGiftRedeemToken = () => crypto.randomBytes(32).toString("base64url");
+
+const resolvePremiumCurrentPeriodEndMs = (profile = {}) => {
+  const safeProfile = isPlainObject(profile) ? profile : {};
+  const raw = String(
+    safeProfile.premiumCurrentPeriodEnd ||
+      safeProfile.premiumEndsAt ||
+      safeProfile.premiumExpiresAt ||
+      safeProfile.subscriptionEndsAt ||
+      safeProfile.currentPeriodEnd ||
+      safeProfile.planEndsAt ||
+      safeProfile.expiresAt ||
+      ""
+  ).trim();
+  const ms = Date.parse(raw);
+  return Number.isFinite(ms) ? ms : 0;
+};
+
+const resolvePremiumGrantUntilIso = ({ profile = {}, grantUntil = "", grantDays = 0 } = {}) => {
+  const nowMs = Date.now();
+  const existingEndMs = resolvePremiumCurrentPeriodEndMs(profile);
+  const baseMs = existingEndMs > nowMs ? existingEndMs : nowMs;
+  const untilRaw = String(grantUntil || "").trim();
+  if (untilRaw) {
+    const untilMs = Date.parse(untilRaw);
+    if (Number.isFinite(untilMs)) {
+      const resolvedMs = Math.max(untilMs, existingEndMs);
+      return new Date(resolvedMs).toISOString();
+    }
+  }
+  const normalizedDays = Number.isFinite(Number(grantDays))
+    ? Math.max(1, Math.min(PREMIUM_GIFT_TOKEN_MAX_DAYS, Math.round(Number(grantDays))))
+    : PREMIUM_GIFT_TOKEN_DEFAULT_PREMIUM_DAYS;
+  return new Date(baseMs + normalizedDays * 24 * 60 * 60 * 1000).toISOString();
+};
+
+const applyManualPremiumGrantToUserRecord = (
+  userRecord,
+  { grantUntil = "", grantDays = PREMIUM_GIFT_TOKEN_DEFAULT_PREMIUM_DAYS, source = "manual-grant" } = {}
+) => {
+  if (!isPlainObject(userRecord)) {
+    return { grantedUntil: "", nowIso: new Date().toISOString() };
+  }
+  userRecord.data = normalizeUserData(userRecord.data);
+  if (!isPlainObject(userRecord.data.profile)) {
+    userRecord.data.profile = {};
+  }
+  const profile = userRecord.data.profile;
+  const nowIso = new Date().toISOString();
+  const grantedUntil = resolvePremiumGrantUntilIso({
+    profile,
+    grantUntil,
+    grantDays,
+  });
+
+  profile.isPremium = true;
+  profile.premium = true;
+  profile.plan = "premium";
+  profile.tier = "premium";
+  profile.membership = "premium";
+  profile.premiumProvider = "manual";
+  profile.premiumLastSource = String(source || "manual-grant").trim().slice(0, 80) || "manual-grant";
+  profile.premiumStatus = "active";
+  profile.subscriptionStatus = "active";
+  profile.premiumCancelAtPeriodEnd = false;
+  if (!profile.premiumActivatedAt) {
+    profile.premiumActivatedAt = nowIso;
+  }
+  profile.premiumDeactivatedAt = "";
+  profile.premiumCurrentPeriodEnd = grantedUntil;
+  profile.currentPeriodEnd = grantedUntil;
+  profile.subscriptionEndsAt = grantedUntil;
+  profile.premiumEndsAt = grantedUntil;
+  userRecord.updatedAt = nowIso;
+  return { grantedUntil, nowIso };
+};
+
+const findGiftTokenByRawToken = (rawToken) => {
+  const token = String(rawToken || "").trim().slice(0, 240);
+  if (!token) {
+    return { token: "", tokenHash: "", record: null };
+  }
+  const tokenHash = hashGiftRedeemToken(token);
+  const giftTokens = normalizeGiftTokenStore(authStore.giftTokens);
+  authStore.giftTokens = giftTokens;
+  const record = giftTokens.tokens[tokenHash] || null;
+  return { token, tokenHash, record };
+};
+
+const maskGiftRecipientEmail = (email) => {
+  const normalizedEmail = normalizeEmail(email);
+  if (!normalizedEmail || !normalizedEmail.includes("@")) {
+    return "";
+  }
+  const [localPart, domainPart] = normalizedEmail.split("@");
+  const safeLocal = String(localPart || "").trim();
+  const safeDomain = String(domainPart || "").trim();
+  if (!safeLocal || !safeDomain) {
+    return "";
+  }
+  const maskedLocal =
+    safeLocal.length <= 2
+      ? `${safeLocal[0] || "*"}*`
+      : `${safeLocal.slice(0, 2)}${"*".repeat(Math.max(1, safeLocal.length - 2))}`;
+  return `${maskedLocal}@${safeDomain}`;
+};
+
+const buildGiftTokenSummary = (record = {}) => {
+  const safeRecord = normalizeGiftTokenRecord(record) || null;
+  if (!safeRecord) {
+    return null;
+  }
+  return {
+    id: safeRecord.id,
+    status: safeRecord.status,
+    createdAt: safeRecord.createdAt,
+    updatedAt: safeRecord.updatedAt,
+    expiresAt: safeRecord.expiresAt || null,
+    createdBy: safeRecord.createdBy || null,
+    recipientEmail: safeRecord.recipientEmail || null,
+    recipientHint: safeRecord.recipientEmail ? maskGiftRecipientEmail(safeRecord.recipientEmail) : null,
+    grantDays: safeRecord.grantDays,
+    grantUntil: safeRecord.grantUntil || null,
+    title: safeRecord.title,
+    message: safeRecord.message,
+    from: safeRecord.from,
+    openText: safeRecord.openText,
+    checkText: safeRecord.checkText,
+    laterText: safeRecord.laterText,
+    usedAt: safeRecord.usedAt || null,
+    usedByUserId: safeRecord.usedByUserId || null,
+    usedByEmail: safeRecord.usedByEmail || null,
+    grantedUntil: safeRecord.grantedUntil || null,
+    revokedAt: safeRecord.revokedAt || null,
+    note: safeRecord.note || "",
+  };
+};
 
 const getRequestIpAddress = (req) => {
   const forwardedFor = String(req.get("x-forwarded-for") || "")
@@ -3190,51 +3491,19 @@ app.post(
 
     const untilRaw = String(req.body?.until || "").trim();
     const requestedDays = Number(req.body?.days);
-    let untilIso = "";
-
-    if (untilRaw) {
-      const untilMs = Date.parse(untilRaw);
-      if (!Number.isFinite(untilMs)) {
-        return res.status(400).json({
-          error: "Invalid until timestamp. Use ISO-8601 or YYYY-MM-DD.",
-        });
-      }
-      untilIso = new Date(untilMs).toISOString();
-    } else if (Number.isFinite(requestedDays) && requestedDays > 0) {
-      const days = Math.max(1, Math.min(3650, Math.round(requestedDays)));
-      untilIso = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();
+    if (untilRaw && !Number.isFinite(Date.parse(untilRaw))) {
+      return res.status(400).json({
+        error: "Invalid until timestamp. Use ISO-8601 or YYYY-MM-DD.",
+      });
     }
-
-    userRecord.data = normalizeUserData(userRecord.data);
-    if (!isPlainObject(userRecord.data.profile)) {
-      userRecord.data.profile = {};
-    }
-    const profile = userRecord.data.profile;
-    const nowIso = new Date().toISOString();
-
-    profile.isPremium = true;
-    profile.premium = true;
-    profile.plan = "premium";
-    profile.tier = "premium";
-    profile.membership = "premium";
-    profile.premiumProvider = "manual";
-    profile.premiumLastSource = "admin-manual-grant";
-    profile.premiumStatus = "active";
-    profile.subscriptionStatus = "active";
-    profile.premiumCancelAtPeriodEnd = false;
-    if (!profile.premiumActivatedAt) {
-      profile.premiumActivatedAt = nowIso;
-    }
-    profile.premiumDeactivatedAt = "";
-
-    if (untilIso) {
-      profile.premiumCurrentPeriodEnd = untilIso;
-      profile.currentPeriodEnd = untilIso;
-      profile.subscriptionEndsAt = untilIso;
-      profile.premiumEndsAt = untilIso;
-    }
-
-    userRecord.updatedAt = nowIso;
+    const normalizedDays = Number.isFinite(requestedDays) && requestedDays > 0
+      ? Math.max(1, Math.min(PREMIUM_GIFT_TOKEN_MAX_DAYS, Math.round(requestedDays)))
+      : PREMIUM_GIFT_TOKEN_DEFAULT_PREMIUM_DAYS;
+    const grantResult = applyManualPremiumGrantToUserRecord(userRecord, {
+      grantUntil: untilRaw,
+      grantDays: normalizedDays,
+      source: "admin-manual-grant",
+    });
     markAuthStoreDirty();
 
     void appendSecurityEvent({
@@ -3244,14 +3513,16 @@ app.post(
       userId: userRecord.id,
       reason: "Manual premium grant via admin endpoint",
       details: {
-        until: untilIso || null,
+        until: grantResult.grantedUntil || null,
+        requestedUntil: untilRaw || null,
+        requestedDays: normalizedDays,
       },
     });
 
     return res.json({
       ok: true,
       user: buildAdminUserSummary(userRecord),
-      grantedUntil: untilIso || null,
+      grantedUntil: grantResult.grantedUntil || null,
     });
   }
 );
@@ -3314,6 +3585,348 @@ app.post(
     });
   }
 );
+
+// Create a one-time premium gift token for recipient claim links.
+app.post(
+  "/api/admin/security/gifts/create",
+  adminSecurityLimiter,
+  requireAdminSecurityAccess,
+  (req, res) => {
+    const recipientEmail = normalizeEmail(req.body?.recipientEmail || req.body?.email);
+    if (recipientEmail && !isValidEmail(recipientEmail)) {
+      return res.status(400).json({ error: "recipientEmail must be a valid email" });
+    }
+
+    const untilRaw = String(req.body?.until || "").trim();
+    if (untilRaw && !Number.isFinite(Date.parse(untilRaw))) {
+      return res.status(400).json({
+        error: "Invalid until timestamp. Use ISO-8601 or YYYY-MM-DD.",
+      });
+    }
+    const requestedDays = Number(req.body?.days);
+    const normalizedDays =
+      Number.isFinite(requestedDays) && requestedDays > 0
+        ? Math.max(1, Math.min(PREMIUM_GIFT_TOKEN_MAX_DAYS, Math.round(requestedDays)))
+        : PREMIUM_GIFT_TOKEN_DEFAULT_PREMIUM_DAYS;
+    const grantUntilIso = untilRaw ? new Date(Date.parse(untilRaw)).toISOString() : "";
+
+    const expiresAtRaw = String(req.body?.expiresAt || "").trim();
+    const tokenTtlDaysRaw = Number(req.body?.tokenTtlDays);
+    let expiresAtIso = "";
+    if (expiresAtRaw) {
+      const expiresAtMs = Date.parse(expiresAtRaw);
+      if (!Number.isFinite(expiresAtMs)) {
+        return res.status(400).json({
+          error: "Invalid expiresAt timestamp. Use ISO-8601 or YYYY-MM-DD.",
+        });
+      }
+      if (expiresAtMs <= Date.now()) {
+        return res.status(400).json({
+          error: "expiresAt must be in the future.",
+        });
+      }
+      expiresAtIso = new Date(expiresAtMs).toISOString();
+    } else {
+      const normalizedTokenTtlDays =
+        Number.isFinite(tokenTtlDaysRaw) && tokenTtlDaysRaw > 0
+          ? Math.max(1, Math.min(PREMIUM_GIFT_TOKEN_MAX_DAYS, Math.round(tokenTtlDaysRaw)))
+          : PREMIUM_GIFT_TOKEN_DEFAULT_TTL_DAYS;
+      expiresAtIso = new Date(Date.now() + normalizedTokenTtlDays * 24 * 60 * 60 * 1000).toISOString();
+    }
+
+    const rawToken = createGiftRedeemToken();
+    const tokenHash = hashGiftRedeemToken(rawToken);
+    const nowIso = new Date().toISOString();
+    const giftTokens = normalizeGiftTokenStore(authStore.giftTokens);
+    const record = normalizeGiftTokenRecord({
+      id: crypto.randomUUID(),
+      tokenHash,
+      status: "active",
+      createdAt: nowIso,
+      updatedAt: nowIso,
+      expiresAt: expiresAtIso,
+      createdBy: "admin",
+      recipientEmail,
+      grantDays: normalizedDays,
+      grantUntil: grantUntilIso,
+      title: sanitizeGiftTemplateText(req.body?.title, 90),
+      message: sanitizeGiftTemplateText(req.body?.message, 320),
+      from: sanitizeGiftTemplateText(req.body?.from, 70),
+      openText: sanitizeGiftTemplateText(req.body?.openText, 28),
+      checkText: sanitizeGiftTemplateText(req.body?.checkText, 32),
+      laterText: sanitizeGiftTemplateText(req.body?.laterText, 24),
+      note: sanitizeGiftTemplateText(req.body?.note, 300),
+    });
+    if (!record) {
+      return res.status(500).json({ error: "Failed to create gift token record." });
+    }
+    giftTokens.tokens[tokenHash] = record;
+    authStore.giftTokens = giftTokens;
+    markAuthStoreDirty();
+
+    const redeemPath = `/gift/redeem?token=${encodeURIComponent(rawToken)}`;
+    const redeemUrl = `${getPublicAppOrigin(req)}${redeemPath}`;
+    void appendSecurityEvent({
+      type: "admin-gift-create",
+      req,
+      email: recipientEmail,
+      reason: "Created one-time premium gift token",
+      details: {
+        giftId: record.id,
+        expiresAt: record.expiresAt,
+        grantDays: record.grantDays,
+        grantUntil: record.grantUntil || null,
+      },
+    });
+
+    return res.status(201).json({
+      ok: true,
+      token: rawToken,
+      redeemPath,
+      redeemUrl,
+      gift: buildGiftTokenSummary(record),
+    });
+  }
+);
+
+// List gift tokens for support/admin operations.
+app.get(
+  "/api/admin/security/gifts",
+  adminSecurityLimiter,
+  requireAdminSecurityAccess,
+  (req, res) => {
+    const requestedLimit = Number(req.query?.limit);
+    const limit = Number.isFinite(requestedLimit)
+      ? Math.max(1, Math.min(5000, Math.round(requestedLimit)))
+      : 200;
+    const statusFilter = String(req.query?.status || "")
+      .trim()
+      .toLowerCase();
+    const recipientEmailFilter = normalizeEmail(req.query?.recipientEmail || req.query?.email);
+    const all = Object.values(normalizeGiftTokenStore(authStore.giftTokens).tokens || {})
+      .map((record) => buildGiftTokenSummary(record))
+      .filter(Boolean);
+    const filtered = all.filter((item) => {
+      if (statusFilter && String(item.status || "").toLowerCase() !== statusFilter) {
+        return false;
+      }
+      if (recipientEmailFilter && normalizeEmail(item.recipientEmail) !== recipientEmailFilter) {
+        return false;
+      }
+      return true;
+    });
+    const gifts = filtered
+      .sort((a, b) => Date.parse(String(b.createdAt || "")) - Date.parse(String(a.createdAt || "")))
+      .slice(0, limit);
+    return res.json({
+      ok: true,
+      totalGifts: all.length,
+      matchedGifts: filtered.length,
+      returnedGifts: gifts.length,
+      gifts,
+      filters: {
+        status: statusFilter || null,
+        recipientEmail: recipientEmailFilter || null,
+      },
+    });
+  }
+);
+
+// Revoke an active gift token by raw token or gift ID.
+app.post(
+  "/api/admin/security/gifts/revoke",
+  adminSecurityLimiter,
+  requireAdminSecurityAccess,
+  (req, res) => {
+    const rawToken = String(req.body?.token || "").trim();
+    const giftId = String(req.body?.giftId || "").trim();
+    if (!rawToken && !giftId) {
+      return res.status(400).json({ error: "Provide token or giftId." });
+    }
+    const giftTokens = normalizeGiftTokenStore(authStore.giftTokens);
+    authStore.giftTokens = giftTokens;
+    let tokenHash = "";
+    let record = null;
+    if (rawToken) {
+      const resolved = findGiftTokenByRawToken(rawToken);
+      tokenHash = resolved.tokenHash;
+      record = resolved.record;
+    } else {
+      const match = Object.entries(giftTokens.tokens || {}).find(
+        ([, candidate]) => String(candidate?.id || "").trim() === giftId
+      );
+      if (match) {
+        tokenHash = String(match[0] || "");
+        record = match[1];
+      }
+    }
+    if (!record || !tokenHash) {
+      return res.status(404).json({ error: "Gift token not found." });
+    }
+    if (record.status === "used") {
+      return res.status(409).json({ error: "Gift token already used and cannot be revoked." });
+    }
+    if (record.status === "revoked") {
+      return res.json({
+        ok: true,
+        changed: false,
+        gift: buildGiftTokenSummary(record),
+      });
+    }
+    const nowIso = new Date().toISOString();
+    record.status = "revoked";
+    record.revokedAt = nowIso;
+    record.updatedAt = nowIso;
+    giftTokens.tokens[tokenHash] = normalizeGiftTokenRecord(record, tokenHash);
+    authStore.giftTokens = giftTokens;
+    markAuthStoreDirty();
+    void appendSecurityEvent({
+      type: "admin-gift-revoke",
+      req,
+      email: record.recipientEmail,
+      reason: "Revoked premium gift token",
+      details: {
+        giftId: record.id,
+        tokenHash,
+      },
+    });
+    return res.json({
+      ok: true,
+      changed: true,
+      gift: buildGiftTokenSummary(giftTokens.tokens[tokenHash]),
+    });
+  }
+);
+
+// Public preview endpoint for gift redeem links.
+app.get("/api/gifts/redeem/preview", authVerifyLimiter, (req, res) => {
+  const rawToken = String(req.query?.token || "").trim();
+  if (!rawToken) {
+    return res.status(400).json({ error: "Gift token is required.", code: "gift_missing" });
+  }
+  const { tokenHash, record } = findGiftTokenByRawToken(rawToken);
+  if (!record || !tokenHash) {
+    return res.status(404).json({ error: "Gift link is invalid.", code: "gift_invalid" });
+  }
+  const nowMs = Date.now();
+  const expiresMs = Date.parse(String(record.expiresAt || ""));
+  if (record.status === "revoked") {
+    return res.status(410).json({ error: "Gift link is no longer available.", code: "gift_revoked" });
+  }
+  if (record.status === "used") {
+    return res.status(409).json({ error: "Gift link has already been used.", code: "gift_used" });
+  }
+  if (Number.isFinite(expiresMs) && expiresMs <= nowMs) {
+    record.status = "expired";
+    record.updatedAt = new Date().toISOString();
+    authStore.giftTokens.tokens[tokenHash] = normalizeGiftTokenRecord(record, tokenHash);
+    markAuthStoreDirty();
+    return res.status(410).json({ error: "Gift link expired.", code: "gift_expired" });
+  }
+  return res.json({
+    ok: true,
+    status: "ready",
+    gift: buildGiftTokenSummary(record),
+  });
+});
+
+// Claim gift token on authenticated account and activate premium.
+app.post("/api/gifts/redeem/claim", authSessionLimiter, requireAuthenticatedUser, (req, res) => {
+  const rawToken = String(req.body?.token || "").trim();
+  if (!rawToken) {
+    return res.status(400).json({ error: "Gift token is required.", code: "gift_missing" });
+  }
+  const { tokenHash, record } = findGiftTokenByRawToken(rawToken);
+  if (!record || !tokenHash) {
+    return res.status(404).json({ error: "Gift link is invalid.", code: "gift_invalid" });
+  }
+
+  const nowMs = Date.now();
+  const nowIso = new Date(nowMs).toISOString();
+  const expiresMs = Date.parse(String(record.expiresAt || ""));
+  const userRecord = req.authUser;
+  const userEmail = normalizeEmail(userRecord?.email);
+  const recipientEmail = normalizeEmail(record.recipientEmail);
+
+  if (record.status === "revoked") {
+    return res.status(410).json({ error: "Gift link is no longer available.", code: "gift_revoked" });
+  }
+  if (record.status === "used") {
+    const alreadyUsedBySameUser =
+      (record.usedByUserId && record.usedByUserId === userRecord.id) ||
+      (record.usedByEmail && normalizeEmail(record.usedByEmail) === userEmail);
+    if (alreadyUsedBySameUser) {
+      return res.json({
+        ok: true,
+        status: "already_used_by_you",
+        message: "Gift already activated on this account.",
+        gift: buildGiftTokenSummary(record),
+        user: toPublicUser(userRecord),
+        data: cloneForResponse(normalizeUserData(userRecord.data)),
+        progress: cloneForResponse(normalizeProgress(userRecord.progress)),
+      });
+    }
+    return res.status(409).json({ error: "Gift link has already been used.", code: "gift_used" });
+  }
+  if (Number.isFinite(expiresMs) && expiresMs <= nowMs) {
+    record.status = "expired";
+    record.updatedAt = nowIso;
+    authStore.giftTokens.tokens[tokenHash] = normalizeGiftTokenRecord(record, tokenHash);
+    markAuthStoreDirty();
+    return res.status(410).json({ error: "Gift link expired.", code: "gift_expired" });
+  }
+  if (recipientEmail && recipientEmail !== userEmail) {
+    return res.status(403).json({
+      error: "This gift is assigned to a different email account.",
+      code: "gift_email_mismatch",
+      recipientHint: maskGiftRecipientEmail(recipientEmail),
+    });
+  }
+
+  const grantResult = applyManualPremiumGrantToUserRecord(userRecord, {
+    grantUntil: record.grantUntil,
+    grantDays: record.grantDays,
+    source: "gift-token-claim",
+  });
+  if (!isPlainObject(userRecord.data.profile)) {
+    userRecord.data.profile = {};
+  }
+  userRecord.data.profile.premiumGiftTokenId = record.id;
+  userRecord.data.profile.premiumGiftClaimedAt = nowIso;
+  userRecord.data.profile.premiumGiftSender = record.from || "";
+  record.status = "used";
+  record.usedAt = nowIso;
+  record.usedByUserId = userRecord.id;
+  record.usedByEmail = userEmail;
+  record.grantedUntil = grantResult.grantedUntil || "";
+  record.updatedAt = nowIso;
+  authStore.giftTokens.tokens[tokenHash] = normalizeGiftTokenRecord(record, tokenHash);
+  markAuthStoreDirty();
+
+  void appendSecurityEvent({
+    type: "gift-claim-success",
+    req,
+    email: userEmail,
+    userId: userRecord.id,
+    reason: "Premium activated from gift token",
+    details: {
+      giftId: record.id,
+      tokenHash,
+      grantedUntil: grantResult.grantedUntil || null,
+    },
+  });
+
+  return res.json({
+    ok: true,
+    status: "claimed",
+    message: "Premium activated from gift.",
+    grantedUntil: grantResult.grantedUntil || null,
+    gift: buildGiftTokenSummary(record),
+    user: toPublicUser(userRecord),
+    data: cloneForResponse(normalizeUserData(userRecord.data)),
+    progress: cloneForResponse(normalizeProgress(userRecord.progress)),
+  });
+});
 
 // Snapshot of block lists (email/userId/ip hash).
 app.get(

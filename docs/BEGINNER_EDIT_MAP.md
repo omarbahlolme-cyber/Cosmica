@@ -8,6 +8,7 @@ Use this when you know what you want to change, but not where.
 - `frontend/app.js`
 - `frontend/style.css`
 - Gift-link premium popup customization (`gift=1`, `giftTitle`, `giftMessage`, `giftFrom`, button labels) is in `frontend/app.js`.
+- One-time gift-token redeem flow (`giftToken`, preview/claim integration) is in `frontend/app.js` + `backend/server.js`.
 
 2. Login/signup/reset/delete API behavior:
 - `backend/server.js`

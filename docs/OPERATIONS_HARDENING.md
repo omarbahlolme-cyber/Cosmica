@@ -559,46 +559,70 @@ Use this only if live is intentionally file-backed (not Postgres):
 3. Redeploy.
 4. Optionally revert the data commit afterward.
 
-### 7.6 Gift-link flow (manual premium + custom message)
+### 7.6 Gift-token flow (recommended)
 
-Use this when you want to gift premium manually and send a branded link message.
+Use this flow when you want one-time redeem links that claim premium after login/signup.
 
-Important:
-1. Gift link UI does not grant premium by itself.
-2. Grant premium first (section `7.0` / `7.1`), then send gift link.
+How it works:
+1. Admin creates a gift token.
+2. System returns redeem URL (`/gift/redeem?token=...`).
+3. Recipient opens link:
+   - if logged out: auth panel auto-opens first,
+   - after login/signup: token is verified and claimed automatically.
+4. If valid and unused: premium is activated and token becomes used (one-time).
 
-Recommended order:
-1. Grant premium to recipient email via admin API.
-2. Verify premium is active.
-3. Send gift link with your custom text.
+Create gift token (PowerShell):
 
-Gift URL template:
+```powershell
+$BaseUrl = "https://www.cosmicalearn.com"
+$Token = "YOUR_ADMIN_SECURITY_TOKEN".Trim()
+$Body = @{
+  recipientEmail = "friend@example.com"   # optional; omit for any-email redeem
+  days = 30                                # premium duration
+  tokenTtlDays = 60                        # link validity
+  title = "A Premium Gift For You"
+  message = "Here’s your free Cosmica Premium gift. Enjoy full learning access and have the most joyful language exploration across every world."
+  from = "Andy 앤디"
+  openText = "Open Gift"
+  checkText = "Activate Now"
+  laterText = "Later"
+} | ConvertTo-Json -Compress
+
+$Create = Invoke-RestMethod -Uri "$BaseUrl/api/admin/security/gifts/create" -Method POST -Headers @{ "x-admin-token" = $Token } -ContentType "application/json" -Body $Body
+$Create | ConvertTo-Json -Depth 8
+```
+
+Expected output:
+1. `ok: true`
+2. `redeemUrl` (send this to recipient)
+3. `gift.status = "active"`
+
+List existing gifts:
+
+```powershell
+Invoke-RestMethod -Uri "$BaseUrl/api/admin/security/gifts?limit=50" -Method GET -Headers @{ "x-admin-token" = $Token } | ConvertTo-Json -Depth 8
+```
+
+Revoke gift token (before use):
+
+```powershell
+$RevokeBody = @{ token = "PASTE_RAW_GIFT_TOKEN_HERE" } | ConvertTo-Json -Compress
+Invoke-RestMethod -Uri "$BaseUrl/api/admin/security/gifts/revoke" -Method POST -Headers @{ "x-admin-token" = $Token } -ContentType "application/json" -Body $RevokeBody | ConvertTo-Json -Depth 8
+```
+
+Live API endpoints:
+1. Admin create: `POST /api/admin/security/gifts/create`
+2. Admin list: `GET /api/admin/security/gifts`
+3. Admin revoke: `POST /api/admin/security/gifts/revoke`
+4. Public preview: `GET /api/gifts/redeem/preview?token=...`
+5. Authenticated claim: `POST /api/gifts/redeem/claim`
+
+### 7.7 Gift-modal text-only link (legacy/manual UI)
+
+This is UI-only customization and does not enforce one-time token claim logic.
+
+Template:
 
 ```text
 https://www.cosmicalearn.com/?gift=1&giftTitle=...&giftMessage=...&giftFrom=...&giftOpenText=...&giftCheckText=...&giftLaterText=...
-```
-
-Supported query params:
-1. Required:
-   - `gift=1`
-2. Optional:
-   - `giftTitle`
-   - `giftMessage`
-   - `giftFrom`
-   - `giftOpenText`
-   - `giftCheckText`
-   - `giftLaterText`
-
-Behavior:
-1. If recipient is logged out:
-   - auth panel auto-opens first (signup/login),
-   - then gift flow continues after login.
-2. If recipient is logged in:
-   - gift modal opens directly.
-3. Recipient can tap `Check activation` to refresh account state.
-
-Example ready link:
-
-```text
-https://www.cosmicalearn.com/?gift=1&giftTitle=A%20Premium%20Gift%20For%20You&giftMessage=Here%E2%80%99s%20your%20free%20Cosmica%20Premium%20gift.%20Enjoy%20full%20learning%20access%20and%20have%20the%20most%20joyful%20language%20exploration%20across%20every%20world.&giftFrom=Andy%20%EC%95%A4%EB%94%94
 ```

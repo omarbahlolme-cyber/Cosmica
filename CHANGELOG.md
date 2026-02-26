@@ -9,6 +9,10 @@ All notable changes to this project are documented in this file.
 - Mimi bubble follow behavior is user-controlled: manual wheel/touch/keyboard scrolling cancels auto-follow for the current reply (no scroll lock).
 - Added premium gift-link modal flow on homepage with customizable URL text fields (`gift=1`, `giftTitle`, `giftMessage`, `giftFrom`, button labels).
 - Gift links now auto-open auth panel for logged-out users, then continue gift activation flow after login/signup.
+- Added one-time gift-token backend flow:
+  - admin create/list/revoke (`/api/admin/security/gifts/*`)
+  - public preview + authenticated claim (`/api/gifts/redeem/*`)
+  - homepage auto-claim after auth when a valid gift token is present.
 
 ## [1.2.0] - 2026-02-25
 

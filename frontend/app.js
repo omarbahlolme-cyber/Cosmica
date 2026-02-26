@@ -925,6 +925,13 @@ const createCosmicaAuthClient = () => {
         body: { data },
       }),
     getPremiumBillingOptions: () => request("/api/billing/premium/options"),
+    previewPremiumGiftToken: ({ token } = {}) =>
+      request(`/api/gifts/redeem/preview?token=${encodeURIComponent(String(token || "").trim())}`),
+    claimPremiumGiftToken: ({ token } = {}) =>
+      request("/api/gifts/redeem/claim", {
+        method: "POST",
+        body: { token: String(token || "").trim() },
+      }),
     getPremiumSubscriptionManagement: () => request("/api/billing/subscription/manage"),
     getPremiumHostedSubscriptionPortal: () =>
       request("/api/billing/subscription/portal/session", {
@@ -2329,11 +2336,17 @@ const setupAccountHub = () => {
   let pendingPremiumGiftPrompt = null;
   let hasShownPremiumGiftPrompt = false;
   let premiumGiftCheckInFlight = false;
+  let pendingGiftRedeemToken = "";
+  let pendingGiftTokenPreviewInFlight = false;
+  let pendingGiftTokenPreviewResolved = false;
+  let pendingGiftTokenClaimInFlight = false;
+  let pendingGiftTokenAutoClaimedForUserId = "";
   let pendingGiftRequiresAuth = false;
   let hasAutoOpenedGiftAuth = false;
   let reopenPremiumGiftAfterAuth = false;
   let logoutConfirmArmedAtMs = 0;
   let hasShownEntryMenuPrompt = false;
+  const PREMIUM_GIFT_TOKEN_STORAGE_KEY = "cosmicaPendingGiftToken";
 
   const setFeedback = (message, tone = "") => {
     if (!feedbackNode) {
@@ -2832,6 +2845,54 @@ const setupAccountHub = () => {
     window.history.replaceState({}, "", nextUrl);
   };
 
+  const sanitizeGiftToken = (value) => String(value || "").trim().slice(0, 240);
+
+  const persistPendingGiftRedeemToken = (token) => {
+    const normalized = sanitizeGiftToken(token);
+    pendingGiftRedeemToken = normalized;
+    try {
+      if (normalized) {
+        sessionStorage.setItem(PREMIUM_GIFT_TOKEN_STORAGE_KEY, normalized);
+      } else {
+        sessionStorage.removeItem(PREMIUM_GIFT_TOKEN_STORAGE_KEY);
+      }
+    } catch {}
+  };
+
+  const clearPendingGiftRedeemToken = () => {
+    pendingGiftRedeemToken = "";
+    try {
+      sessionStorage.removeItem(PREMIUM_GIFT_TOKEN_STORAGE_KEY);
+    } catch {}
+  };
+
+  const consumePremiumGiftTokenFromUrl = () => {
+    const params = new URLSearchParams(window.location.search);
+    const urlToken = sanitizeGiftToken(params.get("giftToken") || params.get("gift_token"));
+    let storedToken = "";
+    try {
+      storedToken = sanitizeGiftToken(sessionStorage.getItem(PREMIUM_GIFT_TOKEN_STORAGE_KEY));
+    } catch {}
+    const resolvedToken = urlToken || storedToken;
+    if (!resolvedToken) {
+      return;
+    }
+    persistPendingGiftRedeemToken(resolvedToken);
+    pendingGiftTokenPreviewResolved = false;
+    pendingGiftRequiresAuth = true;
+    hasAutoOpenedGiftAuth = false;
+    hasShownPremiumGiftPrompt = false;
+    if (!urlToken) {
+      return;
+    }
+    params.delete("giftToken");
+    params.delete("gift_token");
+    const nextQuery = params.toString();
+    const nextUrl =
+      window.location.pathname + (nextQuery ? `?${nextQuery}` : "") + window.location.hash;
+    window.history.replaceState({}, "", nextUrl);
+  };
+
   // Gift-link text comes from URL query params. Normalize and cap length so
   // user-provided text cannot break layout or overflow controls.
   const sanitizeGiftText = (value, maxLength = 220) =>
@@ -2898,6 +2959,7 @@ const setupAccountHub = () => {
   consumeAuthErrorFromUrl();
   consumeAccountDeletedNoticeFromUrl();
   consumePremiumCheckoutNoticeFromUrl();
+  consumePremiumGiftTokenFromUrl();
   consumePremiumGiftPromptFromUrl();
   loginForm?.setAttribute("novalidate", "novalidate");
   signupForm?.setAttribute("novalidate", "novalidate");
@@ -3664,6 +3726,163 @@ const setupAccountHub = () => {
     premiumGiftFeedback.dataset.tone = String(tone || "").trim().toLowerCase();
   };
 
+  const syncGiftPromptFromServerGift = (gift = {}) => {
+    pendingPremiumGiftPrompt = {
+      title: sanitizeGiftText(gift?.title, 90) || "A Premium Gift Awaits You",
+      message:
+        sanitizeGiftText(gift?.message, 320) ||
+        "Someone sent you a Cosmica Premium gift. Open the gift to continue.",
+      from: sanitizeGiftText(gift?.from, 70),
+      openText: sanitizeGiftText(gift?.openText, 28) || "Open Gift",
+      checkText: sanitizeGiftText(gift?.checkText, 32) || "Check activation",
+      laterText: sanitizeGiftText(gift?.laterText, 24) || "Maybe later",
+    };
+    hasShownPremiumGiftPrompt = false;
+  };
+
+  const clearPendingGiftTokenState = ({ clearPrompt = false } = {}) => {
+    clearPendingGiftRedeemToken();
+    pendingGiftTokenPreviewResolved = false;
+    pendingGiftTokenPreviewInFlight = false;
+    pendingGiftTokenClaimInFlight = false;
+    pendingGiftTokenAutoClaimedForUserId = "";
+    pendingGiftRequiresAuth = false;
+    hasAutoOpenedGiftAuth = false;
+    if (clearPrompt) {
+      pendingPremiumGiftPrompt = null;
+      hasShownPremiumGiftPrompt = false;
+    }
+  };
+
+  const getGiftClaimErrorCode = (error) =>
+    String(error?.payload?.code || "")
+      .trim()
+      .toLowerCase();
+
+  const loadPendingGiftTokenPreview = async () => {
+    const token = sanitizeGiftToken(pendingGiftRedeemToken);
+    if (!token || pendingGiftTokenPreviewInFlight || pendingGiftTokenPreviewResolved) {
+      return false;
+    }
+    pendingGiftTokenPreviewInFlight = true;
+    try {
+      const payload =
+        typeof window.cosmicaAuth?.previewPremiumGiftToken === "function"
+          ? await window.cosmicaAuth.previewPremiumGiftToken({ token })
+          : null;
+      if (payload?.ok && payload?.gift) {
+        syncGiftPromptFromServerGift(payload.gift);
+        pendingGiftRequiresAuth = true;
+        hasAutoOpenedGiftAuth = false;
+        pendingGiftTokenPreviewResolved = true;
+        return true;
+      }
+      pendingGiftTokenPreviewResolved = true;
+      return false;
+    } catch (error) {
+      const code = getGiftClaimErrorCode(error);
+      if (code === "gift_used") {
+        showTriggerNoticeBubble("This gift link has already been used.", "info", 9000);
+      } else if (code === "gift_expired") {
+        showTriggerNoticeBubble("This gift link has expired.", "warning", 9000);
+      } else if (code === "gift_revoked") {
+        showTriggerNoticeBubble("This gift link is no longer available.", "warning", 9000);
+      } else {
+        showTriggerNoticeBubble("Gift link is invalid or unavailable.", "error", 9000);
+      }
+      clearPendingGiftTokenState({ clearPrompt: true });
+      pendingGiftTokenPreviewResolved = true;
+      return false;
+    } finally {
+      pendingGiftTokenPreviewInFlight = false;
+    }
+  };
+
+  const claimPendingGiftToken = async ({ auto = false } = {}) => {
+    const token = sanitizeGiftToken(pendingGiftRedeemToken);
+    if (!token || pendingGiftTokenClaimInFlight) {
+      return false;
+    }
+    const snapshot =
+      typeof window.cosmicaGamification?.getState === "function"
+        ? window.cosmicaGamification.getState()
+        : null;
+    if (!snapshot?.isAuthenticated) {
+      if (!auto) {
+        redirectGiftFlowToAuth();
+      }
+      return false;
+    }
+    pendingGiftTokenClaimInFlight = true;
+    if (!auto) {
+      setPremiumGiftFeedback("Claiming your gift...", "info");
+    }
+    try {
+      const payload =
+        typeof window.cosmicaAuth?.claimPremiumGiftToken === "function"
+          ? await window.cosmicaAuth.claimPremiumGiftToken({ token })
+          : null;
+      if (!payload?.ok) {
+        if (!auto) {
+          setPremiumGiftFeedback("Could not claim gift right now. Please try again.", "error");
+        }
+        return false;
+      }
+      if (payload?.gift) {
+        syncGiftPromptFromServerGift(payload.gift);
+      }
+      clearPendingGiftTokenState({ clearPrompt: false });
+      if (typeof window.cosmicaGamification?.init === "function") {
+        await window.cosmicaGamification.init(true);
+      }
+      closePremiumGiftModal();
+      openPremiumSuccessModal({ testMode: false });
+      return true;
+    } catch (error) {
+      const code = getGiftClaimErrorCode(error);
+      if (code === "gift_email_mismatch") {
+        showTriggerNoticeBubble(
+          "This gift is assigned to a different email account. Please switch account and try again.",
+          "warning",
+          9000
+        );
+        if (auto && pendingPremiumGiftPrompt) {
+          hasShownPremiumGiftPrompt = false;
+          openPremiumGiftModal();
+        }
+        setPremiumGiftFeedback("This gift is assigned to a different email account.", "error");
+      } else if (code === "gift_used") {
+        clearPendingGiftTokenState({ clearPrompt: true });
+        showTriggerNoticeBubble("This gift link has already been used.", "info", 9000);
+        setPremiumGiftFeedback("This gift link has already been used.", "error");
+      } else if (code === "gift_expired") {
+        clearPendingGiftTokenState({ clearPrompt: true });
+        showTriggerNoticeBubble("This gift link has expired.", "warning", 9000);
+        setPremiumGiftFeedback("This gift link has expired.", "error");
+      } else if (code === "gift_revoked" || code === "gift_invalid") {
+        clearPendingGiftTokenState({ clearPrompt: true });
+        showTriggerNoticeBubble("This gift link is no longer available.", "warning", 9000);
+        setPremiumGiftFeedback("This gift link is no longer available.", "error");
+      } else if (Number(error?.status) === 401) {
+        if (!auto) {
+          redirectGiftFlowToAuth();
+        }
+      } else {
+        if (auto) {
+          showTriggerNoticeBubble("Could not claim gift right now. Please try again.", "error", 9000);
+          if (pendingPremiumGiftPrompt) {
+            hasShownPremiumGiftPrompt = false;
+            openPremiumGiftModal();
+          }
+        }
+        setPremiumGiftFeedback("Could not claim gift right now. Please try again.", "error");
+      }
+      return false;
+    } finally {
+      pendingGiftTokenClaimInFlight = false;
+    }
+  };
+
   const closePremiumGiftModal = ({ restoreFocus = true } = {}) => {
     premiumGiftOverlay.hidden = true;
     setPremiumGiftFeedback("");
@@ -3716,10 +3935,13 @@ const setupAccountHub = () => {
   const redirectGiftFlowToAuth = () => {
     reopenPremiumGiftAfterAuth = true;
     closePremiumGiftModal({ restoreFocus: false });
+    const authMessage = pendingGiftRedeemToken
+      ? "Log in or sign up first to claim your premium gift."
+      : "Log in or sign up first, then tap Check activation in your gift box.";
     if (typeof window.cosmicaAccountHub?.openAuth === "function") {
       window.cosmicaAccountHub.openAuth({
         panel: "signup",
-        message: "Log in or sign up first, then tap Check activation in your gift box.",
+        message: authMessage,
         tone: "info",
       });
       return;
@@ -3908,6 +4130,14 @@ const setupAccountHub = () => {
       typeof window.cosmicaGamification?.getState === "function"
         ? window.cosmicaGamification.getState()
         : null;
+    if (pendingGiftRedeemToken) {
+      if (!snapshot?.isAuthenticated) {
+        redirectGiftFlowToAuth();
+        return;
+      }
+      await claimPendingGiftToken({ auto: false });
+      return;
+    }
     if (!snapshot?.isAuthenticated) {
       redirectGiftFlowToAuth();
       return;
@@ -3928,6 +4158,14 @@ const setupAccountHub = () => {
       typeof window.cosmicaGamification?.getState === "function"
         ? window.cosmicaGamification.getState()
         : null;
+    if (pendingGiftRedeemToken) {
+      if (!snapshot?.isAuthenticated) {
+        redirectGiftFlowToAuth();
+        return;
+      }
+      await claimPendingGiftToken({ auto: false });
+      return;
+    }
     if (!snapshot?.isAuthenticated) {
       redirectGiftFlowToAuth();
       return;
@@ -4011,6 +4249,7 @@ const setupAccountHub = () => {
       checkText = "Check activation",
       laterText = "Maybe later",
     } = {}) => {
+      clearPendingGiftTokenState({ clearPrompt: false });
       pendingPremiumGiftPrompt = {
         title: sanitizeGiftText(title, 90) || "A Premium Gift Awaits You",
         message:
@@ -4099,12 +4338,17 @@ const setupAccountHub = () => {
         openPremiumSuccessModal({ testMode: false });
       }
     }
+    if (pendingGiftRedeemToken && !pendingGiftTokenPreviewResolved && !pendingGiftTokenPreviewInFlight) {
+      void loadPendingGiftTokenPreview();
+    }
     // For gift links opened by guests: auto-open auth panel first, then continue
     // to gift modal after authentication succeeds.
     if (pendingGiftRequiresAuth && !isAuthenticated) {
       if (!hasAutoOpenedGiftAuth) {
         hasAutoOpenedGiftAuth = true;
-        pendingAuthNoticeMessage = "Log in or sign up first to open your premium gift.";
+        pendingAuthNoticeMessage = pendingGiftRedeemToken
+          ? "Log in or sign up first to claim your premium gift."
+          : "Log in or sign up first to open your premium gift.";
         pendingAuthNoticeTone = "info";
         setAuthPanel("signup", false);
         openDropdown();
@@ -4113,11 +4357,23 @@ const setupAccountHub = () => {
       pendingGiftRequiresAuth = false;
       hasAutoOpenedGiftAuth = false;
     }
+    if (pendingGiftRedeemToken && isAuthenticated && pendingGiftTokenPreviewResolved) {
+      const currentUserId = String(snapshot?.user?.id || "").trim();
+      if (
+        currentUserId &&
+        pendingGiftTokenAutoClaimedForUserId !== currentUserId &&
+        !pendingGiftTokenClaimInFlight
+      ) {
+        pendingGiftTokenAutoClaimedForUserId = currentUserId;
+        void claimPendingGiftToken({ auto: true });
+      }
+    }
     if (reopenPremiumGiftAfterAuth && isAuthenticated) {
       reopenPremiumGiftAfterAuth = false;
       hasShownPremiumGiftPrompt = false;
     }
     if (
+      (!pendingGiftRedeemToken || !isAuthenticated) &&
       (!pendingGiftRequiresAuth || isAuthenticated) &&
       (!reopenPremiumGiftAfterAuth || isAuthenticated) &&
       !hasShownPremiumGiftPrompt &&

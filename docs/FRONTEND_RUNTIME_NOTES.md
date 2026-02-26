@@ -63,27 +63,23 @@ This file tracks important runtime decisions and guardrails for `frontend/app.js
 
 ## Premium Gift Link Flow (2026-02)
 
-1. Gift links are URL-driven and start with `?gift=1`.
-2. Supported optional params:
-   - `giftTitle`
-   - `giftMessage`
-   - `giftFrom`
-   - `giftOpenText`
-   - `giftCheckText`
-   - `giftLaterText`
-3. Runtime parsing lives in `setupAccountHub()` in `frontend/app.js`:
-   - params are sanitized/capped,
-   - modal state is staged,
-   - URL params are removed via `history.replaceState`.
-4. Guest behavior:
-   - when a gift link is opened while logged out, auth panel auto-opens first,
-   - after login/signup, gift flow resumes.
-5. Activation behavior:
-   - gift UI does not grant premium by itself,
-   - premium must already be granted (Stripe/admin),
-   - `Check activation` re-fetches auth/user state and opens premium success modal when active.
+1. Recommended live flow uses one-time token links:
+   - `/gift/redeem?token=...` (server redirects to homepage runtime with `giftToken` query).
+2. Frontend token runtime:
+   - reads/stages `giftToken`,
+   - stores pending token in `sessionStorage` to survive auth redirects (including Google OAuth),
+   - loads preview via `GET /api/gifts/redeem/preview`,
+   - clears URL query after consume.
+3. Guest behavior:
+   - auth panel auto-opens for logged-out users,
+   - after login/signup, frontend auto-claims via `POST /api/gifts/redeem/claim`.
+4. Claim behavior:
+   - valid + unused token activates premium and opens premium success modal,
+   - used/expired/revoked/mismatch states surface user-facing warning feedback and stop auto-claim loops.
+5. Legacy/manual UI mode still supported:
+   - `?gift=1&giftTitle=...&giftMessage=...` for custom popup copy.
 6. Programmatic entry point:
-   - `window.cosmicaAccountHub.openGift({...})` for opening a custom gift modal without URL params.
+   - `window.cosmicaAccountHub.openGift({...})` opens custom gift modal without URL params.
 
 ## Mimi Speech Bubble Follow (2026-02)
 

@@ -84,6 +84,7 @@ Local URL:
 - `frontend/app.js`
 - `frontend/style.css`
 - Gift-link premium modal and custom URL parameters (`gift=1`, `giftTitle`, etc.) also live in `frontend/app.js`.
+- One-time gift-token redeem APIs (`/api/admin/security/gifts/*`, `/api/gifts/redeem/*`) live in `backend/server.js`.
 
 2. Words/Phrases/Grammar rendering and filters:
 - `frontend/maps/app-maps.js`
