@@ -45,6 +45,9 @@ const CSS_ID_REGEX = /(^|[\s>+~,(])#([A-Za-z_][A-Za-z0-9_-]*)/gm;
 const HTML_CLASS_ATTR_REGEX = /\bclass\s*=\s*["']([^"']+)["']/gi;
 const HTML_ID_ATTR_REGEX = /\bid\s*=\s*["']([^"']+)["']/gi;
 const JS_SELECTOR_REGEX = /["'`](?:[#.]([A-Za-z_][A-Za-z0-9_-]*))/g;
+const JS_CLASSNAME_ASSIGN_REGEX = /\bclassName\s*=\s*["'`]([^"'`]+)["'`]/g;
+const JS_CLASSLIST_CALL_REGEX = /\bclassList\.(?:add|remove|toggle|contains)\(([^)]*)\)/g;
+const JS_QUOTED_CLASS_TOKEN_REGEX = /["'`]([A-Za-z_][A-Za-z0-9_-]*)["'`]/g;
 const HEX_COLOR_TOKEN_REGEX = /^[A-Fa-f0-9]{3,8}$/;
 const WRITE_ALLOWLIST = process.argv.includes("--write-allowlist");
 
@@ -182,6 +185,24 @@ const collectUsedTokens = () => {
         ids.add(value);
       } else {
         classes.add(value);
+      }
+    }
+
+    let classNameAssign;
+    while ((classNameAssign = JS_CLASSNAME_ASSIGN_REGEX.exec(content)) !== null) {
+      String(classNameAssign[1] || "")
+        .split(/\s+/)
+        .map((item) => item.trim())
+        .filter(Boolean)
+        .forEach((item) => classes.add(item));
+    }
+
+    let classListCall;
+    while ((classListCall = JS_CLASSLIST_CALL_REGEX.exec(content)) !== null) {
+      const argList = String(classListCall[1] || "");
+      let tokenMatch;
+      while ((tokenMatch = JS_QUOTED_CLASS_TOKEN_REGEX.exec(argList)) !== null) {
+        classes.add(tokenMatch[1]);
       }
     }
   }

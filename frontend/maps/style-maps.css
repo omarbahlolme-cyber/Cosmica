@@ -618,13 +618,6 @@ body.letters-page[data-world="Japanese"] .letters-script-group-katakana {
   box-shadow: none;
 }
 
-.words-filter-lock-tag {
-  font-size: 0.62rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(255, 211, 132, 0.9);
-}
-
 .words-complete-section-btn {
   justify-self: start;
   padding: 10px 14px;

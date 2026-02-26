@@ -26,6 +26,7 @@
     "check:integrity": "node scripts/check-external-integrity.js",
     "check:securitytxt": "node scripts/check-security-txt.js",
     "check:intents": "node scripts/check-world-phrase-intents.js",
+    "check:worlds:deep": "node scripts/check-world-content-deep.js",
     "check:bloat": "node scripts/check-bloat.js",
     "check:bloat:refresh": "node scripts/check-bloat.js --write-allowlist",
     "perf:baseline": "node scripts/perf-snapshot.js --write",
@@ -48,7 +49,7 @@
     "backup:create": "node scripts/create-backup.js",
     "backup:verify": "node scripts/verify-backup.js",
     "release:check": "node scripts/check-release.js",
-    "quality": "npm run check:syntax && npm run check:literal-escapes && npm run check:a11y && npm run check:seo && npm run check:assets && npm run check:html-cache && npm run check:integrity && npm run check:securitytxt && npm run check:intents && npm run check:bloat && npm run perf:check && npm run security:audit && npm run release:check && npm run smoke && npm run billing:user-state:contract",
+    "quality": "npm run check:syntax && npm run check:literal-escapes && npm run check:a11y && npm run check:seo && npm run check:assets && npm run check:html-cache && npm run check:integrity && npm run check:securitytxt && npm run check:intents && npm run check:worlds:deep && npm run check:bloat && npm run perf:check && npm run security:audit && npm run release:check && npm run smoke && npm run billing:user-state:contract",
     "verify:pc-mobile": "npm run check:syntax && npm run smoke && npm run smoke:checkout:cross-device && npm run smoke:premium:continuity",
     "verify:prod-integrations": "node scripts/verify-prod-integrations.js",
     "format": "prettier --write \"**/*.{html,css,js,json,md}\""
