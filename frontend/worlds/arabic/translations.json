@@ -589,7 +589,7 @@
         }
       },
       "افتح": {
-        "source": "open",
+        "source": "open (verb)",
         "translations": {
           "english": "open"
         }
@@ -1475,7 +1475,7 @@
         }
       },
       "الثاني": {
-        "source": "second",
+        "source": "second (ordinal)",
         "translations": {
           "english": "second"
         }
@@ -1681,7 +1681,7 @@
         }
       },
       "ثانية": {
-        "source": "second",
+        "source": "second (time unit)",
         "translations": {
           "english": "second"
         }
@@ -2127,7 +2127,7 @@
         }
       },
       "مفتوح": {
-        "source": "open",
+        "source": "open (adjective)",
         "translations": {
           "english": "open"
         }
@@ -2361,7 +2361,7 @@
         }
       },
       "مربع": {
-        "source": "square",
+        "source": "square (shape)",
         "translations": {
           "english": "square"
         }
@@ -2605,7 +2605,7 @@
         }
       },
       "سحاب": {
-        "source": "cloud",
+        "source": "cloud (weather)",
         "translations": {
           "english": "cloud"
         }
@@ -3111,7 +3111,7 @@
         }
       },
       "ساحة": {
-        "source": "square",
+        "source": "square (plaza)",
         "translations": {
           "english": "square"
         }
@@ -5823,7 +5823,7 @@
         }
       },
       "سحابة": {
-        "source": "cloud",
+        "source": "cloud (computing)",
         "translations": {
           "english": "cloud"
         }
@@ -7629,7 +7629,7 @@
           "english": "i am studying"
         }
       },
-      "أحتاج مساعدة في": {
+      "????? ?????? ?? ...": {
         "source": "i need help with",
         "translations": {
           "english": "i need help with"
@@ -7671,7 +7671,7 @@
           "english": "i work from home"
         }
       },
-      "أعمل في": {
+      "???? ?? ...": {
         "source": "i work in",
         "translations": {
           "english": "i work in"
@@ -7715,28 +7715,22 @@
           "english": "i am lost"
         }
       },
-      "فقدت": {
+      "???? ...?": {
         "source": "i lost my",
         "translations": {
           "english": "i lost my"
         }
       },
-      "لا أستطيع أن أجد": {
+      "?? ?????? ?????? ??? ...": {
         "source": "i cannot find",
         "translations": {
           "english": "i cannot find"
         }
       },
-      "فاتني": {
+      "?????? ... (????/?????)": {
         "source": "i missed my",
         "translations": {
           "english": "i missed my"
-        }
-      },
-      "نسيت": {
-        "source": "i forgot my",
-        "translations": {
-          "english": "i forgot my"
         }
       },
       "ارتكبت خطأ": {
@@ -7763,13 +7757,13 @@
           "english": "i have no money"
         }
       },
-      "هاتفى ميت": {
+      "????? ???? ???????": {
         "source": "my phone is dead",
         "translations": {
           "english": "my phone is dead"
         }
       },
-      "نفد مني": {
+      "??? ???? ...": {
         "source": "i ran out of",
         "translations": {
           "english": "i ran out of"
@@ -8239,7 +8233,8 @@
           "example": "أكل الطالب التفاحة.",
           "ruleOrder": [
             "الفاعل",
-            "الفعل"
+            "الفعل",
+            "مفعول به"
           ],
           "exampleHighlights": [
             {
@@ -8248,13 +8243,17 @@
             },
             {
               "label": "الفعل",
+              "text": "أكل"
+            },
+            {
+              "label": "مفعول به",
               "text": "التفاحة"
             }
           ],
           "mistakes": [
             {
               "wrong": "الطلاب أكل التفاح.",
-              "fix": "أكل الطلاب التفاح."
+              "fix": "الطلاب أكلوا التفاح."
             }
           ]
         },
@@ -8876,8 +8875,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "أنت تكتب رسالة.",
-              "fix": "أنتَ تكتب رسالة."
+              "wrong": "أنا يكتب رسالة.",
+              "fix": "أنا أكتب رسالة."
             }
           ]
         },
@@ -12815,14 +12814,14 @@
         "i have a project": "لدي مشروع",
         "i am working": "أنا أعمل",
         "i am studying": "أنا أدرس",
-        "i need help with": "أحتاج مساعدة في",
+        "i need help with": "????? ?????? ?? ...",
         "i have a deadline": "لدي موعد نهائي",
         "i have a question": "لدي سؤال",
         "i am on a break": "أنا في استراحة",
         "i am late for class": "أنا متأخر عن الحصة",
         "i am early for work": "أنا مبكر للعمل",
         "i work from home": "أعمل من المنزل",
-        "i work in": "أعمل في"
+        "i work in": "???? ?? ..."
       },
       "Problems": {
         "i have a problem": "لدي مشكلة",
@@ -12831,16 +12830,16 @@
         "it is broken": "إنه مكسور",
         "i need help": "أحتاج مساعدة",
         "i am lost": "أنا ضائع",
-        "i lost my": "فقدت",
-        "i cannot find": "لا أستطيع أن أجد",
-        "i missed my": "فاتني",
-        "i forgot my": "نسيت",
+        "i lost my": "???? ...?",
+        "i cannot find": "?? ?????? ?????? ??? ...",
+        "i missed my": "?????? ... (????/?????)",
+        "i forgot my": "???? ...?",
         "i made a mistake": "ارتكبت خطأ",
         "i need to cancel": "أحتاج إلى إلغاء",
         "i need to reschedule": "أحتاج إلى إعادة جدولة",
         "i have no money": "ليس لدي مال",
-        "my phone is dead": "هاتفى ميت",
-        "i ran out of": "نفد مني",
+        "my phone is dead": "????? ???? ???????",
+        "i ran out of": "??? ???? ...",
         "i do not know": "لا أعرف",
         "i am stuck": "أنا عالق",
         "there is a mistake": "هناك خطأ"

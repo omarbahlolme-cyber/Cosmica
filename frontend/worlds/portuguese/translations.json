@@ -553,9 +553,9 @@
         }
       },
       "abrir": {
-        "source": "open",
+        "source": "open (verb)",
         "translations": {
-          "english": "open"
+          "english": "open (verb)"
         }
       },
       "fechar": {
@@ -1409,9 +1409,9 @@
         }
       },
       "segundo": {
-        "source": "second",
+        "source": "second (ordinal)",
         "translations": {
-          "english": "second"
+          "english": "second (ordinal)"
         }
       },
       "terceiro": {
@@ -1645,9 +1645,9 @@
         }
       },
       "segundo": {
-        "source": "second",
+        "source": "second (time unit)",
         "translations": {
-          "english": "second"
+          "english": "second (time unit)"
         }
       },
       "dia": {
@@ -2061,9 +2061,9 @@
         }
       },
       "aberto": {
-        "source": "open",
+        "source": "open (adjective)",
         "translations": {
-          "english": "open"
+          "english": "open (adjective)"
         }
       },
       "fechado": {
@@ -2301,9 +2301,9 @@
         }
       },
       "quadrado": {
-        "source": "square",
+        "source": "square (shape)",
         "translations": {
-          "english": "square"
+          "english": "square (shape)"
         }
       },
       "plano": {
@@ -2551,9 +2551,9 @@
         }
       },
       "nuvem": {
-        "source": "cloud",
+        "source": "cloud (weather)",
         "translations": {
-          "english": "cloud"
+          "english": "cloud (weather)"
         }
       },
       "nublado": {
@@ -3051,9 +3051,9 @@
         }
       },
       "praça": {
-        "source": "square",
+        "source": "square (plaza)",
         "translations": {
-          "english": "square"
+          "english": "square (plaza)"
         }
       },
       "shopping": {
@@ -5799,9 +5799,9 @@
         }
       },
       "nuvem": {
-        "source": "cloud",
+        "source": "cloud (computing)",
         "translations": {
-          "english": "cloud"
+          "english": "cloud (computing)"
         }
       },
       "atualizar": {
@@ -7653,7 +7653,7 @@
           "english": "i am studying"
         }
       },
-      "preciso de ajuda com": {
+      "preciso de ajuda com ...": {
         "source": "i need help with",
         "translations": {
           "english": "i need help with"
@@ -7695,7 +7695,7 @@
           "english": "i work from home"
         }
       },
-      "trabalho em": {
+      "trabalho em ...": {
         "source": "i work in",
         "translations": {
           "english": "i work in"
@@ -7739,7 +7739,7 @@
           "english": "i am lost"
         }
       },
-      "eu perdi meu": {
+      "eu perdi meu ...": {
         "source": "i lost my",
         "translations": {
           "english": "i lost my"
@@ -7751,13 +7751,13 @@
           "english": "i cannot find"
         }
       },
-      "perdi meu": {
+      "perdi meu ... (compromisso/transporte)": {
         "source": "i missed my",
         "translations": {
           "english": "i missed my"
         }
       },
-      "esqueci meu": {
+      "esqueci meu ...": {
         "source": "i forgot my",
         "translations": {
           "english": "i forgot my"
@@ -7793,7 +7793,7 @@
           "english": "my phone is dead"
         }
       },
-      "eu fiquei sem": {
+      "eu fiquei sem ...": {
         "source": "i ran out of",
         "translations": {
           "english": "i ran out of"
@@ -10957,7 +10957,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ele deve estar em casa.",
+              "wrong": "Ele deve em casa agora.",
               "fix": "Ele deve estar em casa agora."
             }
           ]
@@ -12067,7 +12067,7 @@
         "leave": "deixar",
         "move": "mover",
         "live": "viver",
-        "open": "abrir",
+        "open (verb)": "abrir",
         "close": "fechar",
         "start": "começar",
         "finish": "terminar",
@@ -12222,7 +12222,7 @@
         "million": "milhão",
         "billion": "bilhão",
         "first": "primeiro",
-        "second": "segundo",
+        "second (ordinal)": "segundo",
         "third": "terceiro",
         "fourth": "quarto",
         "fifth": "quinto",
@@ -12264,7 +12264,7 @@
         "clock": "relógio",
         "hour": "hora",
         "minute": "minuto",
-        "second": "segundo",
+        "second (time unit)": "segundo",
         "day": "dia",
         "week": "semana",
         "month": "mês",
@@ -12341,7 +12341,7 @@
         "important": "importante",
         "different": "diferente",
         "same": "mesmo",
-        "open": "aberto",
+        "open (adjective)": "aberto",
         "closed": "fechado",
         "full": "cheio",
         "empty": "vazio",
@@ -12383,7 +12383,7 @@
         "fresh": "fresco",
         "stale": "velho",
         "round": "redondo",
-        "square": "quadrado",
+        "square (shape)": "quadrado",
         "flat": "plano",
         "thin": "fino",
         "thick": "grosso",
@@ -12430,7 +12430,7 @@
         "snowy": "neve",
         "wind": "vento",
         "windy": "ventoso",
-        "cloud": "nuvem",
+        "cloud (weather)": "nuvem",
         "cloudy": "nublado",
         "storm": "tempestade",
         "fog": "neblina",
@@ -12517,7 +12517,7 @@
         "forest": "floresta",
         "island": "ilha",
         "bridge": "ponte",
-        "square": "praça",
+        "square (plaza)": "praça",
         "mall": "shopping",
         "store": "loja",
         "bakery": "padaria",
@@ -12987,7 +12987,7 @@
         "printer": "impressora",
         "scanner": "scanner",
         "storage": "armazenamento",
-        "cloud": "nuvem",
+        "cloud (computing)": "nuvem",
         "update": "atualizar",
         "settings": "configurações",
         "stream": "transmitir"
@@ -13328,14 +13328,14 @@
         "i have a project": "tenho um projeto",
         "i am working": "estou trabalhando",
         "i am studying": "estou estudando",
-        "i need help with": "preciso de ajuda com",
+        "i need help with": "preciso de ajuda com ...",
         "i have a deadline": "tenho um prazo",
         "i have a question": "tenho uma pergunta",
         "i am on a break": "estou em um intervalo",
         "i am late for class": "estou atrasado para a aula",
         "i am early for work": "estou cedo para o trabalho",
         "i work from home": "trabalho de casa",
-        "i work in": "trabalho em"
+        "i work in": "trabalho em ..."
       },
       "Problems": {
         "i have a problem": "eu tenho um problema",
@@ -13344,16 +13344,16 @@
         "it is broken": "está quebrado",
         "i need help": "eu preciso de ajuda",
         "i am lost": "estou perdido",
-        "i lost my": "eu perdi meu",
+        "i lost my": "eu perdi meu ...",
         "i cannot find": "não consigo encontrar",
-        "i missed my": "perdi meu",
-        "i forgot my": "esqueci meu",
+        "i missed my": "perdi meu ... (compromisso/transporte)",
+        "i forgot my": "esqueci meu ...",
         "i made a mistake": "eu cometi um erro",
         "i need to cancel": "eu preciso cancelar",
         "i need to reschedule": "eu preciso remarcar",
         "i have no money": "eu não tenho dinheiro",
         "my phone is dead": "meu telefone está sem bateria",
-        "i ran out of": "eu fiquei sem",
+        "i ran out of": "eu fiquei sem ...",
         "i do not know": "eu não sei",
         "i am stuck": "estou preso",
         "there is a mistake": "há um erro"

@@ -3727,15 +3727,6 @@ const applySectionCompleteButtonState = (button, mapKey, sectionKey, mode = "com
     button.setAttribute("data-status-label", "");
     return;
   }
-  if (premiumAccessState !== "premium") {
-    button.hidden = true;
-    button.classList.remove("is-complete");
-    button.setAttribute("aria-pressed", "false");
-    button.setAttribute("aria-label", "Premium only");
-    button.title = "Premium only";
-    button.setAttribute("data-status-label", "Premium only");
-    return;
-  }
 
   button.hidden = false;
   const normalizedMode = String(mode || "complete").trim().toLowerCase();
@@ -3766,7 +3757,6 @@ const applySectionCompleteButtonState = (button, mapKey, sectionKey, mode = "com
 
 const createSectionCompleteButton = (mapKey, sectionKey, options = {}) => {
   const mode = String(options?.mode || "complete").trim().toLowerCase() || "complete";
-  const isPracticeMode = mode === "practice";
   const button = document.createElement("button");
   button.type = "button";
   button.className = "map-section-complete-btn";
@@ -3791,23 +3781,6 @@ const createSectionCompleteButton = (mapKey, sectionKey, options = {}) => {
     if (premiumAccessState === "loading") {
       return;
     }
-    if (premiumAccessState !== "premium") {
-      if (
-        guestNotAuthenticated &&
-        typeof window.cosmicaOpenSignupPanelUpwards === "function"
-      ) {
-        window.cosmicaOpenSignupPanelUpwards(
-          "Sign up to save progress and unlock checkmarks."
-        );
-        return;
-      }
-      if (typeof window.cosmicaAccountHub?.openPremium === "function") {
-        window.cosmicaAccountHub.openPremium({
-          message: "Upgrade to Premium to unlock section and card checkmarks.",
-        });
-      }
-      return;
-    }
     const targetMapKey = String(button.dataset.mapKey || "").trim().toLowerCase();
     const targetSectionKey = String(button.dataset.sectionKey || "").trim();
     const targetMode = String(button.dataset.toggleMode || "complete").trim().toLowerCase();
@@ -3827,23 +3800,13 @@ const createSectionCompleteButton = (mapKey, sectionKey, options = {}) => {
       });
     }
 
-    if (
-      window.cosmicaGamification &&
-      typeof window.cosmicaGamification.getState === "function" &&
-      !window.cosmicaGamification.getState()?.isAuthenticated
-    ) {
-      if (typeof window.cosmicaOpenSignupPanelUpwards === "function") {
-        window.cosmicaOpenSignupPanelUpwards("Sign up to save section completion.");
-      }
-      return;
-    }
-
     button.dataset.busy = "1";
     button.disabled = true;
     try {
       if (
         window.cosmicaGamification &&
-        typeof window.cosmicaGamification.trackProgress === "function"
+        typeof window.cosmicaGamification.trackProgress === "function" &&
+        !guestNotAuthenticated
       ) {
         await window.cosmicaGamification.trackProgress({
           worldKey: WORLD_KEY,
@@ -4527,9 +4490,7 @@ const renderGrammarSections = () => {
     titleMain.textContent = displaySectionName;
     titleHeading.appendChild(titleMain);
     title.appendChild(titleHeading);
-    if (!isPreviewMode) {
-      section.appendChild(createSectionCompleteButton("grammar", sectionName));
-    }
+    section.appendChild(createSectionCompleteButton("grammar", sectionName));
     const grid = document.createElement("div");
     grid.className = "words-grid";
     concepts.forEach((concept, conceptIndex) => {
@@ -4627,7 +4588,7 @@ const renderGrammarSections = () => {
         button.classList.add("is-locked");
         button.disabled = true;
         button.setAttribute("aria-disabled", "true");
-        button.title = "Premium only";
+        button.title = "Locked section";
       }
       list.appendChild(button);
     });

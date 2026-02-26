@@ -559,7 +559,7 @@
         }
       },
       "abrir": {
-        "source": "open",
+        "source": "open (verb)",
         "translations": {
           "english": "open"
         }
@@ -1445,7 +1445,7 @@
         }
       },
       "segundo": {
-        "source": "second",
+        "source": "second (ordinal)",
         "translations": {
           "english": "second"
         }
@@ -1681,7 +1681,7 @@
         }
       },
       "segundo": {
-        "source": "second",
+        "source": "second (time unit)",
         "translations": {
           "english": "second"
         }
@@ -2103,7 +2103,7 @@
         }
       },
       "abierto": {
-        "source": "open",
+        "source": "open (adjective)",
         "translations": {
           "english": "open"
         }
@@ -2343,7 +2343,7 @@
         }
       },
       "cuadrado": {
-        "source": "square",
+        "source": "square (shape)",
         "translations": {
           "english": "square"
         }
@@ -2599,7 +2599,7 @@
         }
       },
       "nube": {
-        "source": "cloud",
+        "source": "cloud (weather)",
         "translations": {
           "english": "cloud"
         }
@@ -3111,7 +3111,7 @@
         }
       },
       "plaza": {
-        "source": "square",
+        "source": "square (plaza)",
         "translations": {
           "english": "square"
         }
@@ -7011,7 +7011,7 @@
         }
       },
       "nube": {
-        "source": "cloud",
+        "source": "cloud (computing)",
         "translations": {
           "english": "cloud"
         }
@@ -8949,7 +8949,7 @@
           "english": "i am studying"
         }
       },
-      "necesito ayuda con": {
+      "necesito ayuda con ...": {
         "source": "i need help with",
         "translations": {
           "english": "i need help with"
@@ -8991,7 +8991,7 @@
           "english": "i work from home"
         }
       },
-      "trabajo en": {
+      "trabajo en ...": {
         "source": "i work in",
         "translations": {
           "english": "i work in"
@@ -9035,7 +9035,13 @@
           "english": "i am lost"
         }
       },
-      "perdí mi": {
+      "perdí mi ...": {
+        "source": "i lost my",
+        "translations": {
+          "english": "i lost my"
+        }
+      },
+      "perdí mi ... (cita/autobús)": {
         "source": "i missed my",
         "translations": {
           "english": "i missed my"
@@ -9047,7 +9053,7 @@
           "english": "i cannot find"
         }
       },
-      "olvidé mi": {
+      "olvidé mi ...": {
         "source": "i forgot my",
         "translations": {
           "english": "i forgot my"
@@ -9077,13 +9083,13 @@
           "english": "i have no money"
         }
       },
-      "mi teléfono está muerto": {
+      "mi tel?fono se qued? sin bater?a": {
         "source": "my phone is dead",
         "translations": {
           "english": "my phone is dead"
         }
       },
-      "me quedé sin": {
+      "me quedé sin ...": {
         "source": "i ran out of",
         "translations": {
           "english": "i ran out of"
@@ -12043,7 +12049,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Debes estar cansado.",
+              "wrong": "Debes de cansado.",
               "fix": "Debes de estar cansado."
             }
           ]
@@ -12092,7 +12098,7 @@
           "example": "¿Puedo salir temprano?",
           "ruleOrder": [
             "verbo",
-            "sujeto",
+            "infinitivo",
             "complemento"
           ],
           "exampleHighlights": [
@@ -12101,7 +12107,7 @@
               "text": "Puedo"
             },
             {
-              "label": "sujeto",
+              "label": "infinitivo",
               "text": "salir"
             },
             {
@@ -12145,7 +12151,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Deberías descansar.",
+              "wrong": "Deberías descansas más.",
               "fix": "Deberías descansar más."
             }
           ]
@@ -12179,7 +12185,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Prefiero pizza.",
+              "wrong": "Prefiero comer de pizza.",
               "fix": "Prefiero comer pizza."
             }
           ]
@@ -14350,14 +14356,14 @@
         "i have a project": "tengo un proyecto",
         "i am working": "estoy trabajando",
         "i am studying": "estoy estudiando",
-        "i need help with": "necesito ayuda con",
+        "i need help with": "necesito ayuda con ...",
         "i have a deadline": "tengo una fecha límite",
         "i have a question": "tengo una pregunta",
         "i am on a break": "estoy en un descanso",
         "i am late for class": "llego tarde a clase",
         "i am early for work": "llego temprano al trabajo",
         "i work from home": "trabajo desde casa",
-        "i work in": "trabajo en"
+        "i work in": "trabajo en ..."
       },
       "Problems": {
         "i have a problem": "tengo un problema",
@@ -14366,16 +14372,16 @@
         "it is broken": "está roto",
         "i need help": "necesito ayuda",
         "i am lost": "estoy perdido",
-        "i lost my": "perdí mi",
+        "i lost my": "perdí mi ...",
         "i cannot find": "no puedo encontrar",
-        "i missed my": "perdí mi",
-        "i forgot my": "olvidé mi",
+        "i missed my": "perdí mi ... (cita/autobús)",
+        "i forgot my": "olvidé mi ...",
         "i made a mistake": "cometí un error",
         "i need to cancel": "necesito cancelar",
         "i need to reschedule": "necesito reprogramar",
         "i have no money": "no tengo dinero",
-        "my phone is dead": "mi teléfono está muerto",
-        "i ran out of": "me quedé sin",
+        "my phone is dead": "mi tel?fono se qued? sin bater?a",
+        "i ran out of": "me quedé sin ...",
         "i do not know": "no sé",
         "i am stuck": "estoy atascado",
         "there is a mistake": "hay un error"

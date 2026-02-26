@@ -637,7 +637,7 @@
         }
       },
       "開く": {
-        "source": "open",
+        "source": "open (verb)",
         "translations": {
           "english": "open"
         }
@@ -1523,7 +1523,7 @@
         }
       },
       "第二": {
-        "source": "second",
+        "source": "second (ordinal)",
         "translations": {
           "english": "second"
         }
@@ -1759,7 +1759,7 @@
         }
       },
       "秒": {
-        "source": "second",
+        "source": "second (time unit)",
         "translations": {
           "english": "second"
         }
@@ -2199,7 +2199,7 @@
         }
       },
       "開いている": {
-        "source": "open",
+        "source": "open (adjective)",
         "translations": {
           "english": "open"
         }
@@ -2445,7 +2445,7 @@
         }
       },
       "四角い": {
-        "source": "square",
+        "source": "square (shape)",
         "translations": {
           "english": "square"
         }
@@ -2707,7 +2707,7 @@
         }
       },
       "雲": {
-        "source": "cloud",
+        "source": "cloud (weather)",
         "translations": {
           "english": "cloud"
         }
@@ -3219,7 +3219,7 @@
         }
       },
       "広場": {
-        "source": "square",
+        "source": "square (plaza)",
         "translations": {
           "english": "square"
         }
@@ -5963,7 +5963,7 @@
         }
       },
       "クラウド": {
-        "source": "cloud",
+        "source": "cloud (computing)",
         "translations": {
           "english": "cloud"
         }
@@ -7915,7 +7915,7 @@
       }
     },
     "Problems": {
-      "私は問題があります": {
+      "問題があります": {
         "source": "i have a problem",
         "translations": {
           "english": "i have a problem"
@@ -7945,13 +7945,13 @@
           "english": "i need help"
         }
       },
-      "私は迷っています": {
+      "道に迷っています": {
         "source": "i am lost",
         "translations": {
           "english": "i am lost"
         }
       },
-      "私は私のを失いました": {
+      "〜をなくしました": {
         "source": "i lost my",
         "translations": {
           "english": "i lost my"
@@ -7963,13 +7963,13 @@
           "english": "i cannot find"
         }
       },
-      "私は私のを逃しました": {
+      "〜に乗り遅れました": {
         "source": "i missed my",
         "translations": {
           "english": "i missed my"
         }
       },
-      "私は私のを忘れました": {
+      "〜を忘れました": {
         "source": "i forgot my",
         "translations": {
           "english": "i forgot my"
@@ -7999,25 +7999,25 @@
           "english": "i have no money"
         }
       },
-      "私の電話は壊れています": {
+      "スマホの電池が切れました": {
         "source": "my phone is dead",
         "translations": {
           "english": "my phone is dead"
         }
       },
-      "私は～がなくなりました": {
+      "〜がなくなりました": {
         "source": "i ran out of",
         "translations": {
           "english": "i ran out of"
         }
       },
-      "私は知りません": {
+      "分かりません": {
         "source": "i do not know",
         "translations": {
           "english": "i do not know"
         }
       },
-      "私は行き詰まっています": {
+      "行き詰まっています": {
         "source": "i am stuck",
         "translations": {
           "english": "i am stuck"
@@ -10798,7 +10798,7 @@
           "exampleHighlights": [
             {
               "label": "主語",
-              "text": "宿題"
+              "text": "宿題を"
             },
             {
               "label": "動詞",
@@ -10827,7 +10827,7 @@
           "exampleHighlights": [
             {
               "label": "主語",
-              "text": "明日"
+              "text": "雨が"
             },
             {
               "label": "動詞",
@@ -10988,15 +10988,15 @@
           "exampleHighlights": [
             {
               "label": "主語",
-              "text": "来年日本"
+              "text": "来年"
             },
             {
               "label": "動詞",
-              "text": "に行くつ"
+              "text": "日本に行く"
             },
             {
               "label": "目的語",
-              "text": "もりだ"
+              "text": "つもりだ"
             }
           ],
           "mistakes": [
@@ -11021,7 +11021,7 @@
           "exampleHighlights": [
             {
               "label": "主語",
-              "text": "彼"
+              "text": "彼は"
             },
             {
               "label": "動詞",
@@ -13211,24 +13211,24 @@
         "i work in": "〜で働いています"
       },
       "Problems": {
-        "i have a problem": "私は問題があります",
+        "i have a problem": "問題があります",
         "something is wrong": "何かがおかしいです",
         "it does not work": "それは動きません",
         "it is broken": "それは壊れています",
         "i need help": "助けが必要です",
-        "i am lost": "私は迷っています",
-        "i lost my": "私は私のを失いました",
+        "i am lost": "道に迷っています",
+        "i lost my": "〜をなくしました",
         "i cannot find": "見つけられません",
-        "i missed my": "私は私のを逃しました",
-        "i forgot my": "私は私のを忘れました",
+        "i missed my": "〜に乗り遅れました",
+        "i forgot my": "〜を忘れました",
         "i made a mistake": "私は間違いを犯しました",
         "i need to cancel": "キャンセルする必要があります",
         "i need to reschedule": "再スケジュールする必要があります",
         "i have no money": "お金がありません",
-        "my phone is dead": "私の電話は壊れています",
-        "i ran out of": "私は～がなくなりました",
-        "i do not know": "私は知りません",
-        "i am stuck": "私は行き詰まっています",
+        "my phone is dead": "スマホの電池が切れました",
+        "i ran out of": "〜がなくなりました",
+        "i do not know": "分かりません",
+        "i am stuck": "行き詰まっています",
         "there is a mistake": "間違いがあります"
       },
       "Everyday Expressions": {

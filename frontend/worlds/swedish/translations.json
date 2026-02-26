@@ -571,9 +571,9 @@
         }
       },
       "öppna": {
-        "source": "open",
+        "source": "open (verb)",
         "translations": {
-          "english": "open"
+          "english": "open (verb)"
         }
       },
       "stänga": {
@@ -1439,9 +1439,9 @@
         }
       },
       "andra": {
-        "source": "second",
+        "source": "second (ordinal)",
         "translations": {
-          "english": "second"
+          "english": "second (ordinal)"
         }
       },
       "tredje": {
@@ -1675,9 +1675,9 @@
         }
       },
       "sekund": {
-        "source": "second",
+        "source": "second (time unit)",
         "translations": {
-          "english": "second"
+          "english": "second (time unit)"
         }
       },
       "dag": {
@@ -2115,9 +2115,9 @@
         }
       },
       "öppen": {
-        "source": "open",
+        "source": "open (adjective)",
         "translations": {
-          "english": "open"
+          "english": "open (adjective)"
         }
       },
       "stängd": {
@@ -2343,9 +2343,9 @@
         }
       },
       "fyrkantig": {
-        "source": "square",
+        "source": "square (shape)",
         "translations": {
-          "english": "square"
+          "english": "square (shape)"
         }
       },
       "platt": {
@@ -2599,9 +2599,9 @@
         }
       },
       "moln": {
-        "source": "cloud",
+        "source": "cloud (weather)",
         "translations": {
-          "english": "cloud"
+          "english": "cloud (weather)"
         }
       },
       "molnigt": {
@@ -3105,9 +3105,9 @@
         }
       },
       "torg": {
-        "source": "square",
+        "source": "square (plaza)",
         "translations": {
-          "english": "square"
+          "english": "square (plaza)"
         }
       },
       "galleria": {
@@ -6987,9 +6987,9 @@
         }
       },
       "moln": {
-        "source": "cloud",
+        "source": "cloud (computing)",
         "translations": {
-          "english": "cloud"
+          "english": "cloud (computing)"
         }
       },
       "uppdatera": {
@@ -8829,7 +8829,7 @@
           "english": "i am studying"
         }
       },
-      "jag behöver hjälp med": {
+      "jag behöver hjälp med ...": {
         "source": "i need help with",
         "translations": {
           "english": "i need help with"
@@ -8871,7 +8871,7 @@
           "english": "i work from home"
         }
       },
-      "jag arbetar inom": {
+      "jag arbetar inom ...": {
         "source": "i work in",
         "translations": {
           "english": "i work in"
@@ -8915,7 +8915,7 @@
           "english": "i am lost"
         }
       },
-      "jag har tappat min": {
+      "jag har tappat min ...": {
         "source": "i lost my",
         "translations": {
           "english": "i lost my"
@@ -8927,13 +8927,13 @@
           "english": "i cannot find"
         }
       },
-      "jag missade min": {
+      "jag missade min ... (avgång/tid)": {
         "source": "i missed my",
         "translations": {
           "english": "i missed my"
         }
       },
-      "jag glömde min": {
+      "jag glömde min ...": {
         "source": "i forgot my",
         "translations": {
           "english": "i forgot my"
@@ -8963,13 +8963,13 @@
           "english": "i have no money"
         }
       },
-      "min telefon är död": {
+      "min telefon har slut p? batteri": {
         "source": "my phone is dead",
         "translations": {
           "english": "my phone is dead"
         }
       },
-      "jag har slut på": {
+      "jag har slut på ...": {
         "source": "i ran out of",
         "translations": {
           "english": "i ran out of"
@@ -12109,7 +12109,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Hon kan inte tala tre språk.",
+              "wrong": "Hon kan talar tre språk.",
               "fix": "Hon kan tala tre språk."
             }
           ]
@@ -13183,7 +13183,7 @@
         "leave": "lämna",
         "move": "flytta",
         "live": "leva",
-        "open": "öppna",
+        "open (verb)": "öppna",
         "close": "stänga",
         "start": "börja",
         "finish": "avsluta",
@@ -13338,7 +13338,7 @@
         "million": "miljon",
         "billion": "miljard",
         "first": "första",
-        "second": "andra",
+        "second (ordinal)": "andra",
         "third": "tredje",
         "fourth": "fjärde",
         "fifth": "femte",
@@ -13380,7 +13380,7 @@
         "clock": "klocka",
         "hour": "timme",
         "minute": "minut",
-        "second": "sekund",
+        "second (time unit)": "sekund",
         "day": "dag",
         "week": "vecka",
         "month": "månad",
@@ -13457,7 +13457,7 @@
         "important": "viktig",
         "different": "olika",
         "same": "samma",
-        "open": "öppen",
+        "open (adjective)": "öppen",
         "closed": "stängd",
         "full": "full",
         "empty": "tom",
@@ -13499,7 +13499,7 @@
         "fresh": "färsk",
         "stale": "gammal",
         "round": "rund",
-        "square": "fyrkantig",
+        "square (shape)": "fyrkantig",
         "flat": "platt",
         "thin": "tunn",
         "thick": "tjock",
@@ -13546,7 +13546,7 @@
         "snowy": "snöigt",
         "wind": "vind",
         "windy": "blåsigt",
-        "cloud": "moln",
+        "cloud (weather)": "moln",
         "cloudy": "molnigt",
         "storm": "storm",
         "fog": "dimma",
@@ -13633,7 +13633,7 @@
         "forest": "skog",
         "island": "ö",
         "bridge": "bro",
-        "square": "torg",
+        "square (plaza)": "torg",
         "mall": "galleria",
         "store": "affär",
         "bakery": "bageri",
@@ -14104,7 +14104,7 @@
         "printer": "skrivare",
         "scanner": "skanner",
         "storage": "lagring",
-        "cloud": "moln",
+        "cloud (computing)": "moln",
         "update": "uppdatera",
         "settings": "inställningar",
         "stream": "strömma"
@@ -14445,14 +14445,14 @@
         "i have a project": "jag har ett projekt",
         "i am working": "jag arbetar",
         "i am studying": "jag studerar",
-        "i need help with": "jag behöver hjälp med",
+        "i need help with": "jag behöver hjälp med ...",
         "i have a deadline": "jag har en deadline",
         "i have a question": "jag har en fråga",
         "i am on a break": "jag är på rast",
         "i am late for class": "jag är sen till lektionen",
         "i am early for work": "jag är tidig till jobbet",
         "i work from home": "jag arbetar hemifrån",
-        "i work in": "jag arbetar inom"
+        "i work in": "jag arbetar inom ..."
       },
       "Problems": {
         "i have a problem": "jag har ett problem",
@@ -14461,16 +14461,16 @@
         "it is broken": "det är trasigt",
         "i need help": "jag behöver hjälp",
         "i am lost": "jag är vilse",
-        "i lost my": "jag har tappat min",
+        "i lost my": "jag har tappat min ...",
         "i cannot find": "jag kan inte hitta",
-        "i missed my": "jag missade min",
-        "i forgot my": "jag glömde min",
+        "i missed my": "jag missade min ... (avgång/tid)",
+        "i forgot my": "jag glömde min ...",
         "i made a mistake": "jag gjorde ett misstag",
         "i need to cancel": "jag behöver avboka",
         "i need to reschedule": "jag behöver boka om",
         "i have no money": "jag har inga pengar",
-        "my phone is dead": "min telefon är död",
-        "i ran out of": "jag har slut på",
+        "my phone is dead": "min telefon har slut p? batteri",
+        "i ran out of": "jag har slut på ...",
         "i do not know": "jag vet inte",
         "i am stuck": "jag är fast",
         "there is a mistake": "det finns ett misstag"

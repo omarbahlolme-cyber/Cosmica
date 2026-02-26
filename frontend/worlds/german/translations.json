@@ -649,7 +649,7 @@
         }
       },
       "öffnen": {
-        "source": "open",
+        "source": "open (verb)",
         "translations": {
           "english": "open"
         }
@@ -1541,7 +1541,7 @@
         }
       },
       "zweite": {
-        "source": "second",
+        "source": "second (ordinal)",
         "translations": {
           "english": "second"
         }
@@ -1807,7 +1807,7 @@
         }
       },
       "Sekunde": {
-        "source": "second",
+        "source": "second (time unit)",
         "translations": {
           "english": "second"
         }
@@ -2080,12 +2080,6 @@
         "source": "minute",
         "translations": {
           "english": "minute"
-        }
-      },
-      "sekunde": {
-        "source": "second",
-        "translations": {
-          "english": "second"
         }
       },
       "tag": {
@@ -2379,7 +2373,7 @@
         }
       },
       "offen": {
-        "source": "open",
+        "source": "open (adjective)",
         "translations": {
           "english": "open"
         }
@@ -2619,7 +2613,7 @@
         }
       },
       "quadratisch": {
-        "source": "square",
+        "source": "square (shape)",
         "translations": {
           "english": "square"
         }
@@ -2887,7 +2881,7 @@
         }
       },
       "Wolke": {
-        "source": "cloud",
+        "source": "cloud (weather)",
         "translations": {
           "english": "cloud"
         }
@@ -3100,12 +3094,6 @@
         "source": "wind",
         "translations": {
           "english": "wind"
-        }
-      },
-      "wolke": {
-        "source": "cloud",
-        "translations": {
-          "english": "cloud"
         }
       },
       "sturm": {
@@ -3537,7 +3525,7 @@
         }
       },
       "Platz": {
-        "source": "square",
+        "source": "square (plaza)",
         "translations": {
           "english": "square"
         }
@@ -3906,12 +3894,6 @@
         "source": "bridge",
         "translations": {
           "english": "bridge"
-        }
-      },
-      "platz": {
-        "source": "square",
-        "translations": {
-          "english": "square"
         }
       },
       "einkaufszentrum": {
@@ -8721,7 +8703,7 @@
         }
       },
       "Cloud": {
-        "source": "cloud",
+        "source": "cloud (computing)",
         "translations": {
           "english": "cloud"
         }
@@ -9024,12 +9006,6 @@
         "source": "storage",
         "translations": {
           "english": "storage"
-        }
-      },
-      "cloud": {
-        "source": "cloud",
-        "translations": {
-          "english": "cloud"
         }
       },
       "aktualisierung": {
@@ -9849,12 +9825,6 @@
           "english": "how are you doing"
         }
       },
-      "wie geht's?": {
-        "source": "how is it going",
-        "translations": {
-          "english": "how is it going"
-        }
-      },
       "schön, dich zu sehen": {
         "source": "nice to see you",
         "translations": {
@@ -10061,12 +10031,6 @@
           "english": "after you"
         }
       },
-      "meine entschuldigung": {
-        "source": "my apologies",
-        "translations": {
-          "english": "my apologies"
-        }
-      },
       "bitte verzeihen sie mir": {
         "source": "please forgive me",
         "translations": {
@@ -10186,12 +10150,6 @@
           "english": "i do not speak german"
         }
       },
-      "mein name ist": {
-        "source": "my name is",
-        "translations": {
-          "english": "my name is"
-        }
-      },
       "ich bin ein student": {
         "source": "i am a student",
         "translations": {
@@ -10208,24 +10166,6 @@
         "source": "let me introduce myself",
         "translations": {
           "english": "let me introduce myself"
-        }
-      },
-      "das ist mein freund": {
-        "source": "this is my friend",
-        "translations": {
-          "english": "this is my friend"
-        }
-      },
-      "das ist mein bruder": {
-        "source": "this is my brother",
-        "translations": {
-          "english": "this is my brother"
-        }
-      },
-      "das ist meine schwester": {
-        "source": "this is my sister",
-        "translations": {
-          "english": "this is my sister"
         }
       },
       "schön, sie kennenzulernen": {
@@ -10594,12 +10534,6 @@
         "translations": {
           "english": "can you speak slowly"
         }
-      },
-      "bitte warte einen moment": {
-        "source": "please wait a moment",
-        "translations": {
-          "english": "please wait a moment"
-        }
       }
     },
     "Time & Plans": {
@@ -10831,18 +10765,6 @@
           "english": "next week"
         }
       },
-      "dieses wochenende": {
-        "source": "this weekend",
-        "translations": {
-          "english": "this weekend"
-        }
-      },
-      "heute nachmittag": {
-        "source": "this afternoon",
-        "translations": {
-          "english": "this afternoon"
-        }
-      },
       "heute abend um": {
         "source": "tonight at",
         "translations": {
@@ -11005,12 +10927,6 @@
         "source": "at the corner",
         "translations": {
           "english": "at the corner"
-        }
-      },
-      "in dieser straße": {
-        "source": "on this street",
-        "translations": {
-          "english": "on this street"
         }
       },
       "einen block entfernt": {
@@ -11353,12 +11269,6 @@
           "english": "i am looking for"
         }
       },
-      "haben sie eine andere farbe?": {
-        "source": "do you have another color",
-        "translations": {
-          "english": "do you have another color"
-        }
-      },
       "haben sie eine kleinere größe?": {
         "source": "do you have a smaller size",
         "translations": {
@@ -11369,12 +11279,6 @@
         "source": "do you have a larger size",
         "translations": {
           "english": "do you have a larger size"
-        }
-      },
-      "kann ich es anprobieren?": {
-        "source": "can i try it on",
-        "translations": {
-          "english": "can i try it on"
         }
       },
       "wie viel kostet das?": {
@@ -11435,12 +11339,6 @@
         "source": "i need a receipt",
         "translations": {
           "english": "i need a receipt"
-        }
-      },
-      "es ist zu teuer": {
-        "source": "it is too expensive",
-        "translations": {
-          "english": "it is too expensive"
         }
       }
     },
@@ -11605,12 +11503,6 @@
         "source": "i have an allergy",
         "translations": {
           "english": "i have an allergy"
-        }
-      },
-      "mein bauch tut weh": {
-        "source": "my stomach hurts",
-        "translations": {
-          "english": "my stomach hurts"
         }
       },
       "ich habe einen termin": {
@@ -11887,36 +11779,6 @@
           "english": "i do not like it"
         }
       },
-      "es ist gut": {
-        "source": "it is good",
-        "translations": {
-          "english": "it is good"
-        }
-      },
-      "es ist schlecht": {
-        "source": "it is bad",
-        "translations": {
-          "english": "it is bad"
-        }
-      },
-      "es ist okay": {
-        "source": "it is okay",
-        "translations": {
-          "english": "it is okay"
-        }
-      },
-      "es ist besser": {
-        "source": "it is better",
-        "translations": {
-          "english": "it is better"
-        }
-      },
-      "es ist schlechter": {
-        "source": "it is worse",
-        "translations": {
-          "english": "it is worse"
-        }
-      },
       "ich bevorzuge": {
         "source": "i prefer",
         "translations": {
@@ -11933,12 +11795,6 @@
         "source": "i disagree",
         "translations": {
           "english": "i disagree"
-        }
-      },
-      "meiner meinung nach": {
-        "source": "in my opinion",
-        "translations": {
-          "english": "in my opinion"
         }
       },
       "ich glaube": {
@@ -12033,7 +11889,7 @@
           "english": "i am studying"
         }
       },
-      "ich brauche Hilfe mit": {
+      "ich brauche Hilfe mit ...": {
         "source": "i need help with",
         "translations": {
           "english": "i need help with"
@@ -12075,7 +11931,7 @@
           "english": "i work from home"
         }
       },
-      "ich arbeite in": {
+      "ich arbeite in ...": {
         "source": "i work in",
         "translations": {
           "english": "i work in"
@@ -12121,12 +11977,6 @@
         "source": "i have a project",
         "translations": {
           "english": "i have a project"
-        }
-      },
-      "ich brauche hilfe mit": {
-        "source": "i need help with",
-        "translations": {
-          "english": "i need help with"
         }
       },
       "ich habe eine frist": {
@@ -12197,31 +12047,31 @@
           "english": "i need help"
         }
       },
-      "ich bin verloren": {
+      "ich habe mich verlaufen": {
         "source": "i am lost",
         "translations": {
           "english": "i am lost"
         }
       },
-      "ich habe mein(e) verloren": {
+      "ich habe mein(e) ... verloren": {
         "source": "i lost my",
         "translations": {
           "english": "i lost my"
         }
       },
-      "ich kann nicht finden": {
+      "ich kann es nicht finden": {
         "source": "i cannot find",
         "translations": {
           "english": "i cannot find"
         }
       },
-      "ich habe mein(e) verpasst": {
+      "ich habe mein(e) ... verpasst": {
         "source": "i missed my",
         "translations": {
           "english": "i missed my"
         }
       },
-      "ich habe mein(e) vergessen": {
+      "ich habe mein(e) ... vergessen": {
         "source": "i forgot my",
         "translations": {
           "english": "i forgot my"
@@ -12251,13 +12101,13 @@
           "english": "i have no money"
         }
       },
-      "mein Telefon ist tot": {
+      "mein Handy hat keinen Akku mehr": {
         "source": "my phone is dead",
         "translations": {
           "english": "my phone is dead"
         }
       },
-      "ich habe kein(e) mehr": {
+      "ich habe kein(e) ... mehr": {
         "source": "i ran out of",
         "translations": {
           "english": "i ran out of"
@@ -12276,42 +12126,6 @@
         }
       },
       "es gibt einen Fehler": {
-        "source": "there is a mistake",
-        "translations": {
-          "english": "there is a mistake"
-        }
-      },
-      "ich habe ein problem": {
-        "source": "i have a problem",
-        "translations": {
-          "english": "i have a problem"
-        }
-      },
-      "ich brauche hilfe": {
-        "source": "i need help",
-        "translations": {
-          "english": "i need help"
-        }
-      },
-      "ich habe einen fehler gemacht": {
-        "source": "i made a mistake",
-        "translations": {
-          "english": "i made a mistake"
-        }
-      },
-      "ich habe kein geld": {
-        "source": "i have no money",
-        "translations": {
-          "english": "i have no money"
-        }
-      },
-      "mein telefon ist tot": {
-        "source": "my phone is dead",
-        "translations": {
-          "english": "my phone is dead"
-        }
-      },
-      "es gibt einen fehler": {
         "source": "there is a mistake",
         "translations": {
           "english": "there is a mistake"
@@ -15409,7 +15223,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Du darfst nicht hier rauchen.",
+              "wrong": "Du darfst hier rauchen nicht.",
               "fix": "Du darfst hier nicht rauchen."
             }
           ]
@@ -17790,14 +17604,14 @@
         "i have a project": "ich habe ein Projekt",
         "i am working": "ich arbeite",
         "i am studying": "ich lerne",
-        "i need help with": "ich brauche Hilfe mit",
+        "i need help with": "ich brauche Hilfe mit ...",
         "i have a deadline": "ich habe eine Frist",
         "i have a question": "ich habe eine Frage",
         "i am on a break": "ich mache eine Pause",
         "i am late for class": "ich bin zu spät zum Unterricht",
         "i am early for work": "ich bin früh zur Arbeit",
         "i work from home": "ich arbeite von zu Hause",
-        "i work in": "ich arbeite in"
+        "i work in": "ich arbeite in ..."
       },
       "Problems": {
         "i have a problem": "ich habe ein Problem",
@@ -17805,17 +17619,17 @@
         "it does not work": "es funktioniert nicht",
         "it is broken": "es ist kaputt",
         "i need help": "ich brauche Hilfe",
-        "i am lost": "ich bin verloren",
-        "i lost my": "ich habe mein(e) verloren",
-        "i cannot find": "ich kann nicht finden",
-        "i missed my": "ich habe mein(e) verpasst",
-        "i forgot my": "ich habe mein(e) vergessen",
+        "i am lost": "ich habe mich verlaufen",
+        "i lost my": "ich habe mein(e) ... verloren",
+        "i cannot find": "ich kann es nicht finden",
+        "i missed my": "ich habe mein(e) ... verpasst",
+        "i forgot my": "ich habe mein(e) ... vergessen",
         "i made a mistake": "ich habe einen Fehler gemacht",
         "i need to cancel": "ich muss stornieren",
         "i need to reschedule": "ich muss umplanen",
         "i have no money": "ich habe kein Geld",
-        "my phone is dead": "mein Telefon ist tot",
-        "i ran out of": "ich habe kein(e) mehr",
+        "my phone is dead": "mein Handy hat keinen Akku mehr",
+        "i ran out of": "ich habe kein(e) ... mehr",
         "i do not know": "ich weiß nicht",
         "i am stuck": "ich stecke fest",
         "there is a mistake": "es gibt einen Fehler"

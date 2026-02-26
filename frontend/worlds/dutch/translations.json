@@ -577,9 +577,9 @@
         }
       },
       "openen": {
-        "source": "open",
+        "source": "open (verb)",
         "translations": {
-          "english": "open"
+          "english": "open (verb)"
         }
       },
       "sluiten": {
@@ -1427,9 +1427,9 @@
         }
       },
       "tweede": {
-        "source": "second",
+        "source": "second (ordinal)",
         "translations": {
-          "english": "second"
+          "english": "second (ordinal)"
         }
       },
       "derde": {
@@ -1669,9 +1669,9 @@
         }
       },
       "seconde": {
-        "source": "second",
+        "source": "second (time unit)",
         "translations": {
-          "english": "second"
+          "english": "second (time unit)"
         }
       },
       "dag": {
@@ -2109,9 +2109,9 @@
         }
       },
       "open": {
-        "source": "open",
+        "source": "open (adjective)",
         "translations": {
-          "english": "open"
+          "english": "open (adjective)"
         }
       },
       "gesloten": {
@@ -2337,9 +2337,9 @@
         }
       },
       "vierkant": {
-        "source": "square",
+        "source": "square (shape)",
         "translations": {
-          "english": "square"
+          "english": "square (shape)"
         }
       },
       "vlak": {
@@ -2587,9 +2587,9 @@
         }
       },
       "wolk": {
-        "source": "cloud",
+        "source": "cloud (weather)",
         "translations": {
-          "english": "cloud"
+          "english": "cloud (weather)"
         }
       },
       "bewolkt": {
@@ -3087,9 +3087,9 @@
         }
       },
       "plein": {
-        "source": "square",
+        "source": "square (plaza)",
         "translations": {
-          "english": "square"
+          "english": "square (plaza)"
         }
       },
       "winkelcentrum": {
@@ -6963,9 +6963,9 @@
         }
       },
       "cloud": {
-        "source": "cloud",
+        "source": "cloud (computing)",
         "translations": {
-          "english": "cloud"
+          "english": "cloud (computing)"
         }
       },
       "bijwerken": {
@@ -8841,7 +8841,7 @@
           "english": "i am studying"
         }
       },
-      "ik heb hulp nodig met": {
+      "ik heb hulp nodig met ...": {
         "source": "i need help with",
         "translations": {
           "english": "i need help with"
@@ -8883,7 +8883,7 @@
           "english": "i work from home"
         }
       },
-      "ik werk in": {
+      "ik werk in ...": {
         "source": "i work in",
         "translations": {
           "english": "i work in"
@@ -8927,7 +8927,7 @@
           "english": "i am lost"
         }
       },
-      "ik ben mijn kwijt": {
+      "ik ben mijn ... kwijt": {
         "source": "i lost my",
         "translations": {
           "english": "i lost my"
@@ -8939,13 +8939,13 @@
           "english": "i cannot find"
         }
       },
-      "ik heb mijn gemist": {
+      "ik heb mijn ... gemist": {
         "source": "i missed my",
         "translations": {
           "english": "i missed my"
         }
       },
-      "ik ben mijn vergeten": {
+      "ik ben mijn ... vergeten": {
         "source": "i forgot my",
         "translations": {
           "english": "i forgot my"
@@ -8975,13 +8975,13 @@
           "english": "i have no money"
         }
       },
-      "mijn telefoon is dood": {
+      "mijn telefoon is leeg": {
         "source": "my phone is dead",
         "translations": {
           "english": "my phone is dead"
         }
       },
-      "ik heb geen meer": {
+      "ik heb geen ... meer": {
         "source": "i ran out of",
         "translations": {
           "english": "i ran out of"
@@ -12051,16 +12051,16 @@
             },
             {
               "label": "verb",
-              "text": "naar het"
+              "text": "ga"
             },
             {
               "label": "object",
-              "text": "feest"
+              "text": "naar het feest"
             }
           ],
           "mistakes": [
             {
-              "wrong": "Ik ga misschien naar het feest.",
+              "wrong": "Misschien ik ga naar het feest.",
               "fix": "Misschien ga ik naar het feest."
             }
           ]
@@ -13131,7 +13131,7 @@
         "leave": "verlaten",
         "move": "bewegen",
         "live": "leven",
-        "open": "openen",
+        "open (verb)": "openen",
         "close": "sluiten",
         "start": "beginnen",
         "finish": "afmaken",
@@ -13286,7 +13286,7 @@
         "million": "miljoen",
         "billion": "miljard",
         "first": "eerste",
-        "second": "tweede",
+        "second (ordinal)": "tweede",
         "third": "derde",
         "fourth": "vierde",
         "fifth": "vijfde",
@@ -13328,7 +13328,7 @@
         "clock": "klok",
         "hour": "uur",
         "minute": "minuut",
-        "second": "seconde",
+        "second (time unit)": "seconde",
         "day": "dag",
         "week": "week",
         "month": "maand",
@@ -13405,7 +13405,7 @@
         "important": "belangrijk",
         "different": "verschillend",
         "same": "dezelfde",
-        "open": "open",
+        "open (adjective)": "open",
         "closed": "gesloten",
         "full": "vol",
         "empty": "leeg",
@@ -13447,7 +13447,7 @@
         "fresh": "vers",
         "stale": "oud",
         "round": "rond",
-        "square": "vierkant",
+        "square (shape)": "vierkant",
         "flat": "vlak",
         "thin": "dun",
         "thick": "dik",
@@ -13494,7 +13494,7 @@
         "snowy": "sneeuwachtig",
         "wind": "wind",
         "windy": "winderig",
-        "cloud": "wolk",
+        "cloud (weather)": "wolk",
         "cloudy": "bewolkt",
         "storm": "storm",
         "fog": "mist",
@@ -13581,7 +13581,7 @@
         "forest": "bos",
         "island": "eiland",
         "bridge": "brug",
-        "square": "plein",
+        "square (plaza)": "plein",
         "mall": "winkelcentrum",
         "store": "winkel",
         "bakery": "bakkerij",
@@ -14052,7 +14052,7 @@
         "printer": "printer",
         "scanner": "scanner",
         "storage": "opslag",
-        "cloud": "cloud",
+        "cloud (computing)": "cloud",
         "update": "bijwerken",
         "settings": "instellingen",
         "stream": "streamen"
@@ -14393,14 +14393,14 @@
         "i have a project": "ik heb een project",
         "i am working": "ik ben aan het werk",
         "i am studying": "ik ben aan het studeren",
-        "i need help with": "ik heb hulp nodig met",
+        "i need help with": "ik heb hulp nodig met ...",
         "i have a deadline": "ik heb een deadline",
         "i have a question": "ik heb een vraag",
         "i am on a break": "ik ben op een pauze",
         "i am late for class": "ik ben te laat voor les",
         "i am early for work": "ik ben vroeg op het werk",
         "i work from home": "ik werk vanuit huis",
-        "i work in": "ik werk in"
+        "i work in": "ik werk in ..."
       },
       "Problems": {
         "i have a problem": "ik heb een probleem",
@@ -14409,16 +14409,16 @@
         "it is broken": "het is kapot",
         "i need help": "ik heb hulp nodig",
         "i am lost": "ik ben verdwaald",
-        "i lost my": "ik ben mijn kwijt",
+        "i lost my": "ik ben mijn ... kwijt",
         "i cannot find": "ik kan niet vinden",
-        "i missed my": "ik heb mijn gemist",
-        "i forgot my": "ik ben mijn vergeten",
+        "i missed my": "ik heb mijn ... gemist",
+        "i forgot my": "ik ben mijn ... vergeten",
         "i made a mistake": "ik heb een fout gemaakt",
         "i need to cancel": "ik moet annuleren",
         "i need to reschedule": "ik moet het opnieuw inplannen",
         "i have no money": "ik heb geen geld",
-        "my phone is dead": "mijn telefoon is dood",
-        "i ran out of": "ik heb geen meer",
+        "my phone is dead": "mijn telefoon is leeg",
+        "i ran out of": "ik heb geen ... meer",
         "i do not know": "ik weet het niet",
         "i am stuck": "ik zit vast",
         "there is a mistake": "er is een fout"

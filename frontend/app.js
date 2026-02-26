@@ -6883,63 +6883,6 @@ const setupLettersSectionCompleteButton = () => {
     lettersSection.appendChild(button);
   }
 
-  const currentUserHasPremiumAccess = () => {
-    const snapshot =
-      window.cosmicaGamification && typeof window.cosmicaGamification.getState === "function"
-        ? window.cosmicaGamification.getState()
-        : null;
-    const user = snapshot && snapshot.user && typeof snapshot.user === "object" ? snapshot.user : null;
-    const premiumFlagRaw = user?.isPremium ?? user?.premium;
-    const premiumFlagText = String(premiumFlagRaw ?? "")
-      .trim()
-      .toLowerCase();
-    const premiumTier = String(user?.planTier || user?.tier || user?.plan || user?.membership || "")
-      .trim()
-      .toLowerCase();
-    const premiumStatus = String(
-      user?.premiumStatus ||
-        user?.subscriptionStatus ||
-        user?.premiumStripeSubscriptionStatus ||
-        user?.stripeSubscriptionStatus ||
-        ""
-    )
-      .trim()
-      .toLowerCase();
-    const premiumEndRaw = String(
-      user?.premiumCurrentPeriodEnd ||
-        user?.premiumEndsAt ||
-        user?.premiumExpiresAt ||
-        user?.subscriptionEndsAt ||
-        user?.currentPeriodEnd ||
-        user?.planEndsAt ||
-        user?.expiresAt ||
-        ""
-    ).trim();
-    const premiumEndMs = Date.parse(premiumEndRaw);
-    const hasFuturePremiumEnd = Number.isFinite(premiumEndMs) && premiumEndMs > Date.now();
-    const statusIndicatesPremium =
-      premiumStatus === "active" ||
-      premiumStatus === "trialing" ||
-      premiumStatus === "past_due" ||
-      premiumStatus === "canceling" ||
-      premiumStatus === "grace";
-    return (
-      premiumFlagRaw === true ||
-      premiumFlagText === "1" ||
-      premiumFlagText === "true" ||
-      premiumFlagText === "yes" ||
-      premiumFlagText === "premium" ||
-      premiumFlagText === "pro" ||
-      premiumFlagText === "plus" ||
-      premiumTier === "premium" ||
-      premiumTier === "pro" ||
-      premiumTier === "plus" ||
-      premiumTier === "paid" ||
-      statusIndicatesPremium ||
-      hasFuturePremiumEnd
-    );
-  };
-
   const syncButtonState = () => {
     const mapKey = String(button.dataset.mapKey || "letters").trim().toLowerCase();
     const sectionKey = String(button.dataset.sectionKey || "letters-core").trim();
@@ -6964,8 +6907,7 @@ const setupLettersSectionCompleteButton = () => {
         ? overrideValue
         : String(progress?.status || "").trim().toLowerCase() === "completed" ||
           Boolean(progress?.firstCompletedAt);
-    const hasPremiumAccess = currentUserHasPremiumAccess();
-    const statusLabel = hasPremiumAccess ? (isComplete ? "Completed" : "") : isComplete ? "Completed" : "";
+    const statusLabel = isComplete ? "Completed" : "";
     button.classList.toggle("is-complete", isComplete);
     button.setAttribute("aria-pressed", isComplete ? "true" : "false");
     const incompleteLabel = "";
@@ -6981,18 +6923,13 @@ const setupLettersSectionCompleteButton = () => {
       event.stopPropagation();
       const shouldUncheck = button.classList.contains("is-complete");
       const statusToSend = shouldUncheck ? "uncompleted" : "completed";
-      if (button.dataset.busy === "1") {
-        return;
-      }
-
-      if (
+      const gamificationState =
         window.cosmicaGamification &&
-        typeof window.cosmicaGamification.getState === "function" &&
-        !window.cosmicaGamification.getState()?.isAuthenticated
-      ) {
-        if (typeof window.cosmicaOpenSignupPanelUpwards === "function") {
-          window.cosmicaOpenSignupPanelUpwards("Sign up to save section completion.");
-        }
+        typeof window.cosmicaGamification.getState === "function"
+          ? window.cosmicaGamification.getState()
+          : null;
+      const isAuthenticated = Boolean(gamificationState?.isAuthenticated);
+      if (button.dataset.busy === "1") {
         return;
       }
 
@@ -7010,7 +6947,8 @@ const setupLettersSectionCompleteButton = () => {
       try {
         if (
           window.cosmicaGamification &&
-          typeof window.cosmicaGamification.trackProgress === "function"
+          typeof window.cosmicaGamification.trackProgress === "function" &&
+          isAuthenticated
         ) {
           await window.cosmicaGamification.trackProgress({
             worldKey: WORLD_KEY,
@@ -7110,17 +7048,12 @@ const setupLettersCardPracticeButtons = () => {
         }
         const shouldUncheck = button.classList.contains("is-complete");
         const statusToSend = shouldUncheck ? "uncompleted" : "completed";
-
-        if (
+        const gamificationState =
           window.cosmicaGamification &&
-          typeof window.cosmicaGamification.getState === "function" &&
-          !window.cosmicaGamification.getState()?.isAuthenticated
-        ) {
-          if (typeof window.cosmicaOpenSignupPanelUpwards === "function") {
-            window.cosmicaOpenSignupPanelUpwards("Sign up to save card practice progress.");
-          }
-          return;
-        }
+          typeof window.cosmicaGamification.getState === "function"
+            ? window.cosmicaGamification.getState()
+            : null;
+        const isAuthenticated = Boolean(gamificationState?.isAuthenticated);
 
         if (typeof window.cosmicaSetSectionCompletionOverride === "function") {
           window.cosmicaSetSectionCompletionOverride({
@@ -7136,7 +7069,8 @@ const setupLettersCardPracticeButtons = () => {
         try {
           if (
             window.cosmicaGamification &&
-            typeof window.cosmicaGamification.trackProgress === "function"
+            typeof window.cosmicaGamification.trackProgress === "function" &&
+            isAuthenticated
           ) {
             await window.cosmicaGamification.trackProgress({
               worldKey: WORLD_KEY,

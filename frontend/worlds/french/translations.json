@@ -565,7 +565,7 @@
         }
       },
       "ouvrir": {
-        "source": "open",
+        "source": "open (verb)",
         "translations": {
           "english": "open"
         }
@@ -1687,7 +1687,7 @@
         }
       },
       "seconde": {
-        "source": "second",
+        "source": "second (time unit)",
         "translations": {
           "english": "second"
         }
@@ -2127,7 +2127,7 @@
         }
       },
       "ouvert": {
-        "source": "open",
+        "source": "open (adjective)",
         "translations": {
           "english": "open"
         }
@@ -2623,7 +2623,7 @@
         }
       },
       "nuage": {
-        "source": "cloud",
+        "source": "cloud (weather)",
         "translations": {
           "english": "cloud"
         }
@@ -3129,7 +3129,7 @@
         }
       },
       "place": {
-        "source": "square",
+        "source": "square (plaza)",
         "translations": {
           "english": "square"
         }
@@ -5859,7 +5859,7 @@
         }
       },
       "nuage": {
-        "source": "cloud",
+        "source": "cloud (computing)",
         "translations": {
           "english": "cloud"
         }
@@ -6395,7 +6395,7 @@
           "english": "after you"
         }
       },
-      "mes excuses": {
+      "toutes mes excuses": {
         "source": "my apologies",
         "translations": {
           "english": "my apologies"
@@ -6469,7 +6469,7 @@
           "english": "let me introduce myself"
         }
       },
-      "c'est mon ami/ma amie": {
+      "c'est mon ami/mon amie": {
         "source": "this is my friend",
         "translations": {
           "english": "this is my friend"
@@ -7689,7 +7689,7 @@
           "english": "i am studying"
         }
       },
-      "j'ai besoin d'aide avec": {
+      "j'ai besoin d'aide avec ...": {
         "source": "i need help with",
         "translations": {
           "english": "i need help with"
@@ -7731,7 +7731,7 @@
           "english": "i work from home"
         }
       },
-      "je travaille dans": {
+      "je travaille dans ...": {
         "source": "i work in",
         "translations": {
           "english": "i work in"
@@ -7775,7 +7775,7 @@
           "english": "i am lost"
         }
       },
-      "j'ai perdu mon": {
+      "j'ai perdu mon/ma ...": {
         "source": "i lost my",
         "translations": {
           "english": "i lost my"
@@ -7787,13 +7787,13 @@
           "english": "i cannot find"
         }
       },
-      "j'ai raté mon": {
+      "j'ai raté mon/ma ...": {
         "source": "i missed my",
         "translations": {
           "english": "i missed my"
         }
       },
-      "j'ai oublié mon": {
+      "j'ai oublié mon/ma ...": {
         "source": "i forgot my",
         "translations": {
           "english": "i forgot my"
@@ -7823,13 +7823,13 @@
           "english": "i have no money"
         }
       },
-      "mon téléphone est mort": {
+      "mon t?l?phone n'a plus de batterie": {
         "source": "my phone is dead",
         "translations": {
           "english": "my phone is dead"
         }
       },
-      "je n'ai plus de": {
+      "je n'ai plus de ...": {
         "source": "i ran out of",
         "translations": {
           "english": "i ran out of"
@@ -10850,7 +10850,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Je sais parler le français.",
+              "wrong": "Je sais parler de français.",
               "fix": "Je sais parler français."
             }
           ]
@@ -10894,7 +10894,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Je suis sûr que je vais réussir.",
+              "wrong": "Je suis sûr réussir.",
               "fix": "Je suis sûr de réussir."
             }
           ]
@@ -12940,7 +12940,7 @@
         "no problem": "pas de problème",
         "that is okay": "c'est bon",
         "after you": "après vous",
-        "my apologies": "mes excuses",
+        "my apologies": "toutes mes excuses",
         "please forgive me": "s'il vous plaît, pardonnez-moi"
       },
       "Introductions": {
@@ -12954,7 +12954,7 @@
         "i am a teacher": "je suis enseignant(e)",
         "i am new here": "je suis nouveau/nouvelle ici",
         "let me introduce myself": "permettez-moi de me présenter",
-        "this is my friend": "c'est mon ami/ma amie",
+        "this is my friend": "c'est mon ami/mon amie",
         "this is my brother": "c'est mon frère",
         "this is my sister": "c'est ma sœur",
         "nice to meet you": "enchanté(e) de vous rencontrer",
@@ -13181,14 +13181,14 @@
         "i have a project": "j'ai un projet",
         "i am working": "je travaille",
         "i am studying": "j'étudie",
-        "i need help with": "j'ai besoin d'aide avec",
+        "i need help with": "j'ai besoin d'aide avec ...",
         "i have a deadline": "j'ai une date limite",
         "i have a question": "j'ai une question",
         "i am on a break": "je suis en pause",
         "i am late for class": "je suis en retard pour le cours",
         "i am early for work": "je suis en avance pour le travail",
         "i work from home": "je travaille de chez moi",
-        "i work in": "je travaille dans"
+        "i work in": "je travaille dans ..."
       },
       "Problems": {
         "i have a problem": "j'ai un problème",
@@ -13197,16 +13197,16 @@
         "it is broken": "c'est cassé",
         "i need help": "j'ai besoin d'aide",
         "i am lost": "je suis perdu",
-        "i lost my": "j'ai perdu mon",
+        "i lost my": "j'ai perdu mon/ma ...",
         "i cannot find": "je ne peux pas trouver",
-        "i missed my": "j'ai raté mon",
-        "i forgot my": "j'ai oublié mon",
+        "i missed my": "j'ai raté mon/ma ...",
+        "i forgot my": "j'ai oublié mon/ma ...",
         "i made a mistake": "j'ai fait une erreur",
         "i need to cancel": "j'ai besoin d'annuler",
         "i need to reschedule": "j'ai besoin de reprogrammer",
         "i have no money": "je n'ai pas d'argent",
-        "my phone is dead": "mon téléphone est mort",
-        "i ran out of": "je n'ai plus de",
+        "my phone is dead": "mon t?l?phone n'a plus de batterie",
+        "i ran out of": "je n'ai plus de ...",
         "i do not know": "je ne sais pas",
         "i am stuck": "je suis coincé",
         "there is a mistake": "il y a une erreur"

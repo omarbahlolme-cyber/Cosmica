@@ -634,7 +634,7 @@
         }
       },
       "열다": {
-        "source": "open",
+        "source": "open (verb)",
         "translations": {
           "english": "open"
         }
@@ -1526,7 +1526,7 @@
         }
       },
       "둘째": {
-        "source": "second",
+        "source": "second (ordinal)",
         "translations": {
           "english": "second"
         }
@@ -1762,7 +1762,7 @@
         }
       },
       "초": {
-        "source": "second",
+        "source": "second (time unit)",
         "translations": {
           "english": "second"
         }
@@ -2196,7 +2196,7 @@
         }
       },
       "열린": {
-        "source": "open",
+        "source": "open (adjective)",
         "translations": {
           "english": "open"
         }
@@ -2448,7 +2448,7 @@
         }
       },
       "네모난": {
-        "source": "square",
+        "source": "square (shape)",
         "translations": {
           "english": "square"
         }
@@ -2710,7 +2710,7 @@
         }
       },
       "구름": {
-        "source": "cloud",
+        "source": "cloud (weather)",
         "translations": {
           "english": "cloud"
         }
@@ -3222,7 +3222,7 @@
         }
       },
       "광장": {
-        "source": "square",
+        "source": "square (plaza)",
         "translations": {
           "english": "square"
         }
@@ -5970,7 +5970,7 @@
         }
       },
       "클라우드": {
-        "source": "cloud",
+        "source": "cloud (computing)",
         "translations": {
           "english": "cloud"
         }
@@ -7487,7 +7487,7 @@
           "english": "where is the pharmacy"
         }
       },
-      "여기가 아프다": {
+      "여기가 아파요": {
         "source": "it hurts here",
         "translations": {
           "english": "it hurts here"
@@ -7511,7 +7511,7 @@
           "english": "i feel worse"
         }
       },
-      "내 배가 아프다": {
+      "배가 아파요": {
         "source": "my stomach hurts",
         "translations": {
           "english": "my stomach hurts"
@@ -7903,7 +7903,7 @@
           "english": "i am lost"
         }
       },
-      "내가 잃어버렸어요": {
+      "〜을/를 잃어버렸어요": {
         "source": "i lost my",
         "translations": {
           "english": "i lost my"
@@ -7915,13 +7915,13 @@
           "english": "i cannot find"
         }
       },
-      "내가 놓쳤어요": {
+      "〜을/를 놓쳤어요": {
         "source": "i missed my",
         "translations": {
           "english": "i missed my"
         }
       },
-      "내가 잊어버렸어요": {
+      "〜을/를 잊어버렸어요": {
         "source": "i forgot my",
         "translations": {
           "english": "i forgot my"
@@ -7957,7 +7957,7 @@
           "english": "my phone is dead"
         }
       },
-      "다 떨어졌어요": {
+      "〜이/가 다 떨어졌어요": {
         "source": "i ran out of",
         "translations": {
           "english": "i ran out of"
@@ -10910,7 +10910,7 @@
             "주어와 동사 사이에 확신 표현이 온다.",
             "자신의 생각을 상대방에게 전달한다."
           ],
-          "example": "그녀는 오늘 올 것 같다.",
+          "example": "그녀는 오늘 분명히 올 것이다.",
           "ruleOrder": [
             "주어",
             "동사",
@@ -10927,13 +10927,13 @@
             },
             {
               "label": "확신 표현",
-              "text": "것 같다"
+              "text": "것이다"
             }
           ],
           "mistakes": [
             {
-              "wrong": "그녀는 오늘 올 것 같아요.",
-              "fix": "그녀는 오늘 반드시 올 거예요."
+              "wrong": "그녀는 오늘 올 것 같다.",
+              "fix": "그녀는 오늘 분명히 올 것이다."
             }
           ]
         },
@@ -13123,11 +13123,11 @@
         "call an ambulance": "구급차를 불러라",
         "i need medicine": "나는 약이 필요하다",
         "where is the pharmacy": "약국이 어디에 있나요",
-        "it hurts here": "여기가 아프다",
+        "it hurts here": "여기가 아파요",
         "i have an allergy": "나는 알레르기가 있다",
         "i feel better": "나는 나아졌다",
         "i feel worse": "나는 더 나빠졌다",
-        "my stomach hurts": "내 배가 아프다",
+        "my stomach hurts": "배가 아파요",
         "i have an appointment": "나는 예약이 있다"
       },
       "Feelings": {
@@ -13200,16 +13200,16 @@
         "it is broken": "고장났어요",
         "i need help": "도움이 필요해요",
         "i am lost": "길을 잃었어요",
-        "i lost my": "내가 잃어버렸어요",
+        "i lost my": "〜을/를 잃어버렸어요",
         "i cannot find": "찾을 수 없어요",
-        "i missed my": "내가 놓쳤어요",
-        "i forgot my": "내가 잊어버렸어요",
+        "i missed my": "〜을/를 놓쳤어요",
+        "i forgot my": "〜을/를 잊어버렸어요",
         "i made a mistake": "실수를 했어요",
         "i need to cancel": "취소해야 해요",
         "i need to reschedule": "일정을 변경해야 해요",
         "i have no money": "돈이 없어요",
         "my phone is dead": "내 전화가 꺼졌어요",
-        "i ran out of": "다 떨어졌어요",
+        "i ran out of": "〜이/가 다 떨어졌어요",
         "i do not know": "모르겠어요",
         "i am stuck": "갇혔어요",
         "there is a mistake": "실수가 있어요"

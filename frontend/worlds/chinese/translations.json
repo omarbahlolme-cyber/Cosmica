@@ -568,7 +568,7 @@
         }
       },
       "打开": {
-        "source": "open",
+        "source": "open (verb)",
         "translations": {
           "english": "open"
         }
@@ -1448,7 +1448,7 @@
         }
       },
       "第二": {
-        "source": "second",
+        "source": "second (ordinal)",
         "translations": {
           "english": "second"
         }
@@ -1684,7 +1684,7 @@
         }
       },
       "秒": {
-        "source": "second",
+        "source": "second (time unit)",
         "translations": {
           "english": "second"
         }
@@ -2130,7 +2130,7 @@
         }
       },
       "打开": {
-        "source": "open",
+        "source": "open (adjective)",
         "translations": {
           "english": "open"
         }
@@ -2376,7 +2376,7 @@
         }
       },
       "方形的": {
-        "source": "square",
+        "source": "square (shape)",
         "translations": {
           "english": "square"
         }
@@ -2632,7 +2632,7 @@
         }
       },
       "云": {
-        "source": "cloud",
+        "source": "cloud (weather)",
         "translations": {
           "english": "cloud"
         }
@@ -3132,7 +3132,7 @@
         }
       },
       "广场": {
-        "source": "square",
+        "source": "square (plaza)",
         "translations": {
           "english": "square"
         }
@@ -5880,7 +5880,7 @@
         }
       },
       "云": {
-        "source": "cloud",
+        "source": "cloud (computing)",
         "translations": {
           "english": "cloud"
         }
@@ -7702,7 +7702,7 @@
           "english": "i am studying"
         }
       },
-      "我需要帮助": {
+      "????...?????": {
         "source": "i need help with",
         "translations": {
           "english": "i need help with"
@@ -7744,7 +7744,7 @@
           "english": "i work from home"
         }
       },
-      "我在...工作": {
+      "??...??": {
         "source": "i work in",
         "translations": {
           "english": "i work in"
@@ -7788,25 +7788,25 @@
           "english": "i am lost"
         }
       },
-      "我丢失了我的": {
+      "??...???": {
         "source": "i lost my",
         "translations": {
           "english": "i lost my"
         }
       },
-      "我找不到": {
+      "????...": {
         "source": "i cannot find",
         "translations": {
           "english": "i cannot find"
         }
       },
-      "我错过了我的": {
+      "??????...??/???": {
         "source": "i missed my",
         "translations": {
           "english": "i missed my"
         }
       },
-      "我忘记了我的": {
+      "?????...": {
         "source": "i forgot my",
         "translations": {
           "english": "i forgot my"
@@ -7836,16 +7836,10 @@
           "english": "i have no money"
         }
       },
-      "我的手机没电了": {
+      "???????": {
         "source": "my phone is dead",
         "translations": {
           "english": "my phone is dead"
-        }
-      },
-      "我用完了": {
-        "source": "i ran out of",
-        "translations": {
-          "english": "i ran out of"
         }
       },
       "我不知道": {
@@ -10970,12 +10964,12 @@
             },
             {
               "label": "作业",
-              "text": "业"
+              "text": "作业"
             }
           ],
           "mistakes": [
             {
-              "wrong": "你应该完成作业。",
+              "wrong": "你必须完成了作业。",
               "fix": "你必须完成作业。"
             }
           ]
@@ -11014,7 +11008,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "他一定会来。",
+              "wrong": "他会可能来。",
               "fix": "他可能会来。"
             }
           ]
@@ -11048,7 +11042,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "我可以游泳。",
+              "wrong": "我能会游泳。",
               "fix": "我能游泳。"
             }
           ]
@@ -11087,7 +11081,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "她可能会来。",
+              "wrong": "她肯定来会。",
               "fix": "她肯定会来。"
             }
           ]
@@ -11131,7 +11125,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "我认为这个主意不错。",
+              "wrong": "我觉得这个主意不。",
               "fix": "我觉得这个主意不错。"
             }
           ]
@@ -11175,7 +11169,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "你最好多喝水。",
+              "wrong": "你应该喝水多。",
               "fix": "你应该多喝水。"
             }
           ]
@@ -11214,7 +11208,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "我希望去旅行。",
+              "wrong": "我想旅行去。",
               "fix": "我想去旅行。"
             }
           ]
@@ -11248,12 +11242,12 @@
             },
             {
               "label": "我",
-              "text": "吗"
+              "text": "我"
             }
           ],
           "mistakes": [
             {
-              "wrong": "你能帮我吗？",
+              "wrong": "你可以帮吗我？",
               "fix": "你可以帮我吗？"
             }
           ]
@@ -13514,14 +13508,14 @@
         "i have a project": "我有一个项目",
         "i am working": "我在工作",
         "i am studying": "我在学习",
-        "i need help with": "我需要帮助",
+        "i need help with": "????...?????",
         "i have a deadline": "我有截止日期",
         "i have a question": "我有一个问题",
         "i am on a break": "我在休息",
         "i am late for class": "我上课迟到了",
         "i am early for work": "我上班早到了",
         "i work from home": "我在家工作",
-        "i work in": "我在...工作"
+        "i work in": "??...??"
       },
       "Problems": {
         "i have a problem": "我有一个问题",
@@ -13530,16 +13524,16 @@
         "it is broken": "它坏了",
         "i need help": "我需要帮助",
         "i am lost": "我迷路了",
-        "i lost my": "我丢失了我的",
-        "i cannot find": "我找不到",
-        "i missed my": "我错过了我的",
-        "i forgot my": "我忘记了我的",
+        "i lost my": "??...???",
+        "i cannot find": "????...",
+        "i missed my": "??????...??/???",
+        "i forgot my": "?????...",
         "i made a mistake": "我犯了一个错误",
         "i need to cancel": "我需要取消",
         "i need to reschedule": "我需要重新安排",
         "i have no money": "我没有钱",
-        "my phone is dead": "我的手机没电了",
-        "i ran out of": "我用完了",
+        "my phone is dead": "???????",
+        "i ran out of": "??...???",
         "i do not know": "我不知道",
         "i am stuck": "我卡住了",
         "there is a mistake": "有一个错误"
