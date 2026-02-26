@@ -3624,7 +3624,7 @@ const getPremiumAccessState = () => {
 const GRAMMAR_PREVIEW_SECTION_LIMIT = 2;
 const GRAMMAR_PREVIEW_CARD_LIMIT = 4;
 const GRAMMAR_FREE_PREVIEW_UNLOCKED_SECTIONS = new Set(["sentence structure", "verbs"]);
-const GRAMMAR_UNDER_EXPERT_REVIEW_WORLDS = new Set([
+const MAPS_GRAMMAR_UNDER_EXPERT_REVIEW_WORLDS = new Set([
   "arabic",
   "chinese",
   "japanese",
@@ -3638,7 +3638,7 @@ const normalizeGrammarSectionKey = (value = "") =>
     .toLowerCase();
 
 const isGrammarWorldUnderExpertReview = () =>
-  GRAMMAR_UNDER_EXPERT_REVIEW_WORLDS.has(
+  MAPS_GRAMMAR_UNDER_EXPERT_REVIEW_WORLDS.has(
     String(WORLD_KEY || "")
       .trim()
       .toLowerCase()
