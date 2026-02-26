@@ -13,6 +13,8 @@ All notable changes to this project are documented in this file.
   - admin create/list/revoke (`/api/admin/security/gifts/*`)
   - public preview + authenticated claim (`/api/gifts/redeem/*`)
   - homepage auto-claim after auth when a valid gift token is present.
+- Added multilingual SEO hreflang clusters (12 languages + `x-default`) across homepage and all world landing pages.
+- Updated homepage `description`, `og:description`, and `twitter:description` to concise Naver-friendly copy.
 
 ## [1.2.0] - 2026-02-25
 

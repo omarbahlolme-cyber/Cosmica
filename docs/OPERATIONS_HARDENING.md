@@ -715,3 +715,39 @@ Invoke-RestMethod -Uri "$BaseUrl/api/admin/security/users/revoke-premium" -Metho
 $VerifyUri = $BaseUrl + "/api/admin/security/users?email=" + [uri]::EscapeDataString($Email)
 Invoke-RestMethod -Uri $VerifyUri -Method GET -Headers @{ "x-admin-token" = $Token } | ConvertTo-Json -Depth 8
 ```
+
+## 8) Multilingual SEO (hreflang) - Phase 1
+
+Phase 1 is now applied on homepage + world landing pages.
+
+Coverage:
+1. Languages: `en`, `ar`, `zh`, `nl`, `fr`, `de`, `hi`, `ja`, `ko`, `pt`, `es`, `sv`
+2. Fallback: `x-default`
+3. Canonical behavior: unchanged (self-canonical per page)
+
+Pages updated:
+1. `frontend/index.html`
+2. `frontend/english-world.html`
+3. `frontend/world-arabic.html`
+4. `frontend/world-chinese.html`
+5. `frontend/world-dutch.html`
+6. `frontend/world-french.html`
+7. `frontend/world-german.html`
+8. `frontend/world-hindi.html`
+9. `frontend/world-japanese.html`
+10. `frontend/world-korean.html`
+11. `frontend/world-portuguese.html`
+12. `frontend/world-spanish.html`
+13. `frontend/world-swedish.html`
+
+Validation commands:
+
+```bash
+npm run check:seo
+npm run indexing:check
+```
+
+Submission guidance:
+1. Deploy first.
+2. Resubmitting sitemap in Google/Bing/Naver is recommended once after deploy (not strictly required).
+3. For faster pickup, inspect/request indexing for homepage and a few world pages.
