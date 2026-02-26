@@ -13245,8 +13245,7 @@
           "example": "Der Hund bellt.",
           "ruleOrder": [
             "Nomen",
-            "Artikel",
-            "Verb"
+            "Artikel"
           ],
           "exampleHighlights": [
             {
@@ -13275,8 +13274,7 @@
           "example": "Eine Katze schläft.",
           "ruleOrder": [
             "Nomen",
-            "Artikel",
-            "Verb"
+            "Artikel"
           ],
           "exampleHighlights": [
             {
@@ -13305,8 +13303,7 @@
           "example": "Das Mädchen ist klug.",
           "ruleOrder": [
             "Nomen",
-            "Artikel",
-            "Verb"
+            "Artikel"
           ],
           "exampleHighlights": [
             {
@@ -13755,8 +13752,7 @@
           "ruleOrder": [
             "subjekt",
             "verb",
-            "adjektiv",
-            "nomen"
+            "adjektiv"
           ],
           "exampleHighlights": [
             {
@@ -13790,8 +13786,7 @@
           "ruleOrder": [
             "subjekt",
             "verb",
-            "komparativ",
-            "objekt"
+            "komparativ"
           ],
           "exampleHighlights": [
             {
@@ -13976,8 +13971,7 @@
           "ruleOrder": [
             "subjekt",
             "verb",
-            "adjektive",
-            "nomen"
+            "adjektive"
           ],
           "exampleHighlights": [
             {
@@ -14241,8 +14235,7 @@
           "example": "Ich weiß nicht, ob er kommt.",
           "ruleOrder": [
             "Subjekt",
-            "Verb",
-            "Objekt"
+            "Verb"
           ],
           "exampleHighlights": [
             {
@@ -14335,8 +14328,7 @@
           "ruleOrder": [
             "Subjekt",
             "Verb",
-            "Objekt",
-            "Partikel"
+            "Objekt"
           ],
           "exampleHighlights": [
             {
@@ -15747,8 +15739,7 @@
           "ruleOrder": [
             "Subjekt",
             "verb",
-            "dass",
-            "Objekt"
+            "dass"
           ],
           "exampleHighlights": [
             {
@@ -15856,8 +15847,7 @@
           "example": "Könnten Sie mir bitte helfen?",
           "ruleOrder": [
             "Subjekt",
-            "Verb",
-            "Objekt"
+            "Verb"
           ],
           "exampleHighlights": [
             {
@@ -15920,8 +15910,7 @@
           "example": "Könnten Sie mir bitte das Buch geben?",
           "ruleOrder": [
             "Subjekt",
-            "Verb",
-            "Objekt"
+            "Verb"
           ],
           "exampleHighlights": [
             {
@@ -16018,8 +16007,7 @@
           "example": "Entschuldigung, könnten Sie mir helfen?",
           "ruleOrder": [
             "Subjekt",
-            "Verb",
-            "Objekt"
+            "Verb"
           ],
           "exampleHighlights": [
             {
@@ -16322,8 +16310,7 @@
           "example": "Wenn es regnet, bleibe ich zu Hause.",
           "ruleOrder": [
             "Subjekt",
-            "Verb",
-            "Objekt"
+            "Verb"
           ],
           "exampleHighlights": [
             {

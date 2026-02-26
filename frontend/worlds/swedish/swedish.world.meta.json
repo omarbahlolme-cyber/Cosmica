@@ -14,5 +14,9 @@
       "ask_speak_world_language": "talar du svenska?"
     }
   },
-  "translationPack": "frontend/worlds/swedish/translations.json"
+  "translationPack": "frontend/worlds/swedish/translations.json",
+  "grammarDisplayModes": [
+    "english",
+    "base"
+  ]
 }

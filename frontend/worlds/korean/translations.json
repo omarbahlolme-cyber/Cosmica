@@ -8774,8 +8774,7 @@
           "example": "그는 학생이에요.",
           "ruleOrder": [
             "주어",
-            "목적어",
-            "동사"
+            "목적어"
           ],
           "exampleHighlights": [
             {
@@ -8943,8 +8942,7 @@
           "ruleOrder": [
             "소유자",
             "소유격 조사",
-            "목적어",
-            "형용사"
+            "목적어"
           ],
           "exampleHighlights": [
             {
@@ -9011,9 +9009,7 @@
           "example": "나는 친구와 함께 간다.",
           "ruleOrder": [
             "주어",
-            "목적어",
-            "조사",
-            "동사"
+            "목적어"
           ],
           "exampleHighlights": [
             {
@@ -9193,8 +9189,7 @@
           "ruleOrder": [
             "주어",
             "소유 대명사",
-            "명사",
-            "동사"
+            "명사"
           ],
           "exampleHighlights": [
             {
@@ -9256,8 +9251,7 @@
           "example": "먹었다.",
           "ruleOrder": [
             "주어가 명확할 경우 생략할",
-            "주어 생략은 주로 구어체에서",
-            "주어 생략은 문맥에 따라"
+            "주어 생략은 주로 구어체에서"
           ],
           "exampleHighlights": [
             {
@@ -9346,8 +9340,7 @@
           "example": "예쁜 꽃이 피었다.",
           "ruleOrder": [
             "형용사",
-            "명사",
-            "동사"
+            "명사"
           ],
           "exampleHighlights": [
             {
@@ -9411,8 +9404,7 @@
           "ruleOrder": [
             "주어",
             "비교급 형용사",
-            "대상",
-            "동사"
+            "대상"
           ],
           "exampleHighlights": [
             {
@@ -9485,8 +9477,7 @@
           "ruleOrder": [
             "주어",
             "강조 부사",
-            "형용사",
-            "동사"
+            "형용사"
           ],
           "exampleHighlights": [
             {
@@ -9520,8 +9511,7 @@
           "ruleOrder": [
             "주어",
             "정도 부사",
-            "형용사",
-            "동사"
+            "형용사"
           ],
           "exampleHighlights": [
             {
@@ -9667,8 +9657,7 @@
           "ruleOrder": [
             "주어",
             "강조 표현",
-            "동사",
-            "목적어"
+            "동사"
           ],
           "exampleHighlights": [
             {
@@ -9703,8 +9692,7 @@
           "example": "너는 어디에 가니?",
           "ruleOrder": [
             "주어",
-            "동사",
-            "목적어"
+            "동사"
           ],
           "exampleHighlights": [
             {
@@ -9734,8 +9722,7 @@
           "ruleOrder": [
             "의문사",
             "주어",
-            "동사",
-            "목적어"
+            "동사"
           ],
           "exampleHighlights": [
             {
@@ -9768,8 +9755,7 @@
           "example": "어디에 가세요?",
           "ruleOrder": [
             "주어",
-            "동사",
-            "목적어"
+            "동사"
           ],
           "exampleHighlights": [
             {
@@ -9832,9 +9818,7 @@
           "example": "어떤 영화를 보고 싶으세요?",
           "ruleOrder": [
             "주어",
-            "의문사",
-            "동사",
-            "목적어"
+            "의문사"
           ],
           "exampleHighlights": [
             {
@@ -10066,8 +10050,7 @@
           "ruleOrder": [
             "주어",
             "부정어",
-            "강조어",
-            "동사"
+            "강조어"
           ],
           "exampleHighlights": [
             {
@@ -10180,8 +10163,7 @@
           "example": "나는 사과를 먹는다.",
           "ruleOrder": [
             "주어",
-            "동사",
-            "목적어"
+            "동사"
           ],
           "exampleHighlights": [
             {
@@ -10210,8 +10192,7 @@
           "example": "그는 책을 읽는다.",
           "ruleOrder": [
             "주어",
-            "동사",
-            "목적어"
+            "동사"
           ],
           "exampleHighlights": [
             {
@@ -10386,9 +10367,7 @@
           "example": "너는 사과를 먹니?",
           "ruleOrder": [
             "주어",
-            "동사",
-            "목적어",
-            "의문어"
+            "동사"
           ],
           "exampleHighlights": [
             {
@@ -11036,8 +11015,7 @@
           "example": "같이 가자.",
           "ruleOrder": [
             "주어",
-            "동사",
-            "제안 표현"
+            "동사"
           ],
           "exampleHighlights": [
             {
@@ -11102,8 +11080,7 @@
           "example": "그는 '나는 학교에 간다'고 말했다.",
           "ruleOrder": [
             "주어",
-            "동사",
-            "인용구"
+            "동사"
           ],
           "exampleHighlights": [
             {
@@ -11132,8 +11109,7 @@
           "example": "그는 학교에 간다고 말했다.",
           "ruleOrder": [
             "주어",
-            "동사",
-            "보조 동사"
+            "동사"
           ],
           "exampleHighlights": [
             {
@@ -11162,8 +11138,7 @@
           "example": "그는 내가 간다고 말했다.",
           "ruleOrder": [
             "주어",
-            "동사",
-            "인용구"
+            "동사"
           ],
           "exampleHighlights": [
             {
@@ -11192,8 +11167,7 @@
           "example": "그는 학교에 간다고 하셨습니다.",
           "ruleOrder": [
             "주어",
-            "동사",
-            "보조 동사"
+            "동사"
           ],
           "exampleHighlights": [
             {
@@ -11222,8 +11196,7 @@
           "example": "그는 '내일 오세요'라고 하셨습니다.",
           "ruleOrder": [
             "주어",
-            "동사",
-            "인용구"
+            "동사"
           ],
           "exampleHighlights": [
             {
@@ -11252,8 +11225,7 @@
           "example": "그는 내가 학교에 간다고 하면서, 친구도 간다고 했습니다.",
           "ruleOrder": [
             "주어",
-            "동사",
-            "인용구"
+            "동사"
           ],
           "exampleHighlights": [
             {
@@ -11284,8 +11256,7 @@
           "example": "안녕하세요, 어떻게 지내세요?",
           "ruleOrder": [
             "주어",
-            "동사",
-            "목적어"
+            "동사"
           ],
           "exampleHighlights": [
             {
@@ -11314,8 +11285,7 @@
           "example": "선생님, 수업이 언제 시작되나요?",
           "ruleOrder": [
             "주어",
-            "동사",
-            "목적어"
+            "동사"
           ],
           "exampleHighlights": [
             {
@@ -11344,8 +11314,7 @@
           "example": "너 오늘 뭐 해?",
           "ruleOrder": [
             "주어",
-            "동사",
-            "목적어"
+            "동사"
           ],
           "exampleHighlights": [
             {
@@ -11374,8 +11343,7 @@
           "example": "의사 선생님, 건강은 어떠신가요?",
           "ruleOrder": [
             "주어",
-            "동사",
-            "목적어"
+            "동사"
           ],
           "exampleHighlights": [
             {
@@ -11404,8 +11372,7 @@
           "example": "안녕하세요, 김 선생님. 회의 일정에 대해 문의드립니다.",
           "ruleOrder": [
             "주어",
-            "동사",
-            "목적어"
+            "동사"
           ],
           "exampleHighlights": [
             {
@@ -11434,8 +11401,7 @@
           "example": "형, 오늘 뭐 해?",
           "ruleOrder": [
             "주어",
-            "동사",
-            "목적어"
+            "동사"
           ],
           "exampleHighlights": [
             {
@@ -11464,8 +11430,7 @@
           "example": "할아버지, 오늘 기분이 어떠세요?",
           "ruleOrder": [
             "주어",
-            "동사",
-            "목적어"
+            "동사"
           ],
           "exampleHighlights": [
             {
@@ -11496,9 +11461,7 @@
           "example": "나는 사과를 좋아한다.",
           "ruleOrder": [
             "주어",
-            "주제",
-            "동사",
-            "목적어"
+            "주제"
           ],
           "exampleHighlights": [
             {
@@ -11528,8 +11491,7 @@
           "ruleOrder": [
             "주어",
             "목적어",
-            "동사",
-            "연결어"
+            "동사"
           ],
           "exampleHighlights": [
             {
@@ -11563,8 +11525,7 @@
           "ruleOrder": [
             "주어",
             "시간",
-            "동사",
-            "목적어"
+            "동사"
           ],
           "exampleHighlights": [
             {
@@ -11598,8 +11559,7 @@
           "ruleOrder": [
             "주어",
             "목적어",
-            "동사",
-            "대조"
+            "동사"
           ],
           "exampleHighlights": [
             {
@@ -11672,8 +11632,7 @@
           "ruleOrder": [
             "주어",
             "목적어",
-            "동사",
-            "이유"
+            "동사"
           ],
           "exampleHighlights": [
             {
@@ -11707,8 +11666,7 @@
           "ruleOrder": [
             "주어",
             "목적어",
-            "동사",
-            "예시"
+            "동사"
           ],
           "exampleHighlights": [
             {
@@ -11776,8 +11734,7 @@
           "ruleOrder": [
             "주어",
             "목적어",
-            "동사",
-            "감정"
+            "동사"
           ],
           "exampleHighlights": [
             {
@@ -11811,8 +11768,7 @@
           "ruleOrder": [
             "주어",
             "목적어",
-            "동사",
-            "목적"
+            "동사"
           ],
           "exampleHighlights": [
             {

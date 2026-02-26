@@ -45,6 +45,8 @@
 |   |-- TEST_USERS_REGISTRY.md        # QA/test accounts, roles, and usage notes
 |   |-- THIRD_PARTY_SERVICES_MAP.md   # External platforms, ownership, and ops checks
 |   |-- ENFORCEMENT_RUNBOOK.md
+|   |-- PEDAGOGY_REMEDIATION_TOP10.md # Pedagogy quality priorities + release gate
+|   |-- WORLD_BY_WORLD_REMEDIATION_STATUS.md # Current remediation phase and world review order
 |   |-- ROLLBACK_RUNBOOK.md
 |   `-- SECURITY.md
 |-- scripts/                          # Checks, backups, generators, repair tools

@@ -1,4 +1,4 @@
-﻿{
+{
   "worldKey": "spanish",
   "nativeName": "Español",
   "tts": {
@@ -14,5 +14,9 @@
       "ask_speak_world_language": "¿hablas español?"
     }
   },
-  "translationPack": "frontend/worlds/spanish/translations.json"
+  "translationPack": "frontend/worlds/spanish/translations.json",
+  "grammarDisplayModes": [
+    "english",
+    "base"
+  ]
 }

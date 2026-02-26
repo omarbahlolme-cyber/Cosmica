@@ -14,5 +14,9 @@
       "ask_speak_world_language": "日本語を話せますか？"
     }
   },
-  "translationPack": "frontend/worlds/japanese/translations.json"
+  "translationPack": "frontend/worlds/japanese/translations.json",
+  "grammarDisplayModes": [
+    "english",
+    "base"
+  ]
 }

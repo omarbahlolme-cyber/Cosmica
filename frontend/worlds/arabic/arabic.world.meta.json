@@ -14,5 +14,9 @@
       "ask_speak_world_language": "هل تتحدث العربية؟"
     }
   },
-  "translationPack": "frontend/worlds/arabic/translations.json"
+  "translationPack": "frontend/worlds/arabic/translations.json",
+  "grammarDisplayModes": [
+    "english",
+    "base"
+  ]
 }

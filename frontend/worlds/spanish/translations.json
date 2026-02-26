@@ -10041,9 +10041,9 @@
         {
           "title": "Singular y plural",
           "points": [
-            "El singular nombra una unidad; el plural nombra dos o m?s.",
-            "La mayor?a de sustantivos forma plural con -s o -es.",
-            "Art?culo y sustantivo concuerdan en n?mero: el/un -> los/unos."
+            "El singular nombra una unidad; el plural nombra dos o más.",
+            "La mayoría de sustantivos forma plural con -s o -es.",
+            "Artículo y sustantivo concuerdan en número: el/un -> los/unos."
           ],
           "example": "Los libros están en la mesa.",
           "ruleOrder": [
@@ -10388,9 +10388,7 @@
           "example": "Me lavo las manos.",
           "ruleOrder": [
             "sujeto",
-            "pronombre reflexivo",
-            "verbo",
-            "objeto"
+            "pronombre reflexivo"
           ],
           "exampleHighlights": [
             {
@@ -10664,9 +10662,7 @@
           "example": "Es muy interesante.",
           "ruleOrder": [
             "sujeto",
-            "verbo",
-            "intensificador",
-            "adjetivo"
+            "verbo"
           ],
           "exampleHighlights": [
             {
@@ -11161,9 +11157,7 @@
           "example": "Nunca como carne.",
           "ruleOrder": [
             "sujeto",
-            "nunca",
-            "verbo",
-            "complemento"
+            "nunca"
           ],
           "exampleHighlights": [
             {
@@ -11192,10 +11186,7 @@
           "example": "No tengo ninguna idea.",
           "ruleOrder": [
             "sujeto",
-            "no",
-            "verbo",
-            "ninguna",
-            "sustantivo"
+            "no"
           ],
           "exampleHighlights": [
             {
@@ -11224,9 +11215,7 @@
           "example": "Vivo sin preocupaciones.",
           "ruleOrder": [
             "sujeto",
-            "verbo",
-            "sin",
-            "sustantivo"
+            "verbo"
           ],
           "exampleHighlights": [
             {
@@ -11256,9 +11245,7 @@
           "ruleOrder": [
             "sujeto",
             "no",
-            "verbo",
-            "a",
-            "nadie"
+            "verbo"
           ],
           "exampleHighlights": [
             {
@@ -11291,10 +11278,7 @@
           "example": "No tengo nada que decir.",
           "ruleOrder": [
             "sujeto",
-            "no",
-            "verbo",
-            "nada",
-            "complemento"
+            "no"
           ],
           "exampleHighlights": [
             {
@@ -11638,8 +11622,7 @@
           "example": "¿Podrías ayudarme, por favor?",
           "ruleOrder": [
             "verbo",
-            "sujeto",
-            "complemento"
+            "sujeto"
           ],
           "exampleHighlights": [
             {
@@ -11669,8 +11652,7 @@
           "ruleOrder": [
             "si",
             "sujeto",
-            "verbo",
-            "complemento"
+            "verbo"
           ],
           "exampleHighlights": [
             {
@@ -11846,8 +11828,7 @@
           "example": "Las manzanas fueron comidas.",
           "ruleOrder": [
             "sujeto",
-            "verbo",
-            "objeto"
+            "verbo"
           ],
           "exampleHighlights": [
             {
@@ -11877,8 +11858,7 @@
           "ruleOrder": [
             "sujeto",
             "verbo",
-            "adverbio",
-            "objeto"
+            "adverbio"
           ],
           "exampleHighlights": [
             {
@@ -11911,8 +11891,7 @@
           "example": "Las como.",
           "ruleOrder": [
             "sujeto",
-            "verbo",
-            "objeto"
+            "verbo"
           ],
           "exampleHighlights": [
             {
@@ -12540,8 +12519,7 @@
           "example": "¿Podría ayudarme, por favor? / ¿Puedes ayudarme?",
           "ruleOrder": [
             "verbo",
-            "sujeto",
-            "objeto"
+            "sujeto"
           ],
           "exampleHighlights": [
             {
@@ -12570,8 +12548,7 @@
           "example": "Señor Pérez, ¿cómo está? / Juan, ¿cómo estás?",
           "ruleOrder": [
             "título",
-            "apellido",
-            "pregunta"
+            "apellido"
           ],
           "exampleHighlights": [
             {
@@ -12600,8 +12577,7 @@
           "example": "¿Me podría pasar la sal, por favor? / Pásame la sal.",
           "ruleOrder": [
             "verbo",
-            "objeto",
-            "cortesía"
+            "objeto"
           ],
           "exampleHighlights": [
             {
@@ -12797,8 +12773,7 @@
           "example": "Aunque llovía, salí a correr.",
           "ruleOrder": [
             "sujeto",
-            "verbo",
-            "complemento"
+            "verbo"
           ],
           "exampleHighlights": [
             {
@@ -12861,8 +12836,7 @@
           "example": "¿Por qué no viniste, aunque te invité?",
           "ruleOrder": [
             "verbo",
-            "sujeto",
-            "complemento"
+            "sujeto"
           ],
           "exampleHighlights": [
             {

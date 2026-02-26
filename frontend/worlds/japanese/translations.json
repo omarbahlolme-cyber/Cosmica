@@ -8975,8 +8975,7 @@
             "主語",
             "助詞",
             "数詞",
-            "名詞",
-            "動詞"
+            "名詞"
           ],
           "exampleHighlights": [
             {
@@ -9014,8 +9013,7 @@
           "ruleOrder": [
             "主語",
             "助詞",
-            "名詞",
-            "動詞"
+            "名詞"
           ],
           "exampleHighlights": [
             {
@@ -9164,8 +9162,7 @@
           "example": "私は学生です。",
           "ruleOrder": [
             "主語",
-            "動詞",
-            "補語"
+            "動詞"
           ],
           "exampleHighlights": [
             {
@@ -9194,8 +9191,7 @@
           "example": "行きます。",
           "ruleOrder": [
             "主語を省略",
-            "動詞",
-            "補語"
+            "動詞"
           ],
           "exampleHighlights": [
             {
@@ -9224,8 +9220,7 @@
           "example": "これは本です。",
           "ruleOrder": [
             "主語",
-            "動詞",
-            "補語"
+            "動詞"
           ],
           "exampleHighlights": [
             {
@@ -9322,8 +9317,7 @@
           "example": "私たちは学生です。",
           "ruleOrder": [
             "主語",
-            "動詞",
-            "補語"
+            "動詞"
           ],
           "exampleHighlights": [
             {
@@ -9352,8 +9346,7 @@
           "example": "彼は明日来ます。",
           "ruleOrder": [
             "主語",
-            "動詞",
-            "補語"
+            "動詞"
           ],
           "exampleHighlights": [
             {
@@ -9453,8 +9446,7 @@
           "ruleOrder": [
             "主語",
             "比較対象",
-            "形容詞",
-            "動詞"
+            "形容詞"
           ],
           "exampleHighlights": [
             {
@@ -9527,8 +9519,7 @@
           "ruleOrder": [
             "主語",
             "強調語",
-            "形容詞",
-            "動詞"
+            "形容詞"
           ],
           "exampleHighlights": [
             {
@@ -9561,8 +9552,7 @@
           "example": "日本の文化が好きです。",
           "ruleOrder": [
             "名詞",
-            "修飾名詞",
-            "動詞"
+            "修飾名詞"
           ],
           "exampleHighlights": [
             {
@@ -9592,8 +9582,7 @@
           "ruleOrder": [
             "数量詞",
             "名詞",
-            "助詞",
-            "動詞"
+            "助詞"
           ],
           "exampleHighlights": [
             {
@@ -9746,8 +9735,7 @@
           "ruleOrder": [
             "主語",
             "は",
-            "述語",
-            "か"
+            "述語"
           ],
           "exampleHighlights": [
             {
@@ -9781,8 +9769,7 @@
           "ruleOrder": [
             "疑問詞",
             "は",
-            "動詞",
-            "か"
+            "動詞"
           ],
           "exampleHighlights": [
             {
@@ -9818,8 +9805,7 @@
             "は",
             "選択肢1",
             "か",
-            "選択肢2",
-            "が"
+            "選択肢2"
           ],
           "exampleHighlights": [
             {
@@ -9861,8 +9847,7 @@
           "ruleOrder": [
             "疑問詞",
             "動詞",
-            "述語",
-            "か"
+            "述語"
           ],
           "exampleHighlights": [
             {
@@ -9896,8 +9881,7 @@
           "ruleOrder": [
             "主語",
             "は",
-            "述語",
-            "ね"
+            "述語"
           ],
           "exampleHighlights": [
             {
@@ -10211,8 +10195,7 @@
           "example": "私は日本語を勉強しています。",
           "ruleOrder": [
             "主題",
-            "動詞",
-            "目的語"
+            "動詞"
           ],
           "exampleHighlights": [
             {
@@ -10520,8 +10503,7 @@
           "example": "もし勉強していたら、試験に合格していた。",
           "ruleOrder": [
             "主語",
-            "動詞",
-            "目的語"
+            "動詞"
           ],
           "exampleHighlights": [
             {
@@ -10654,8 +10636,7 @@
           "example": "私は日本語を勉強しています。",
           "ruleOrder": [
             "主題",
-            "動詞",
-            "目的語"
+            "動詞"
           ],
           "exampleHighlights": [
             {
@@ -10812,8 +10793,7 @@
           "example": "宿題をしなければならない。",
           "ruleOrder": [
             "主語",
-            "動詞",
-            "目的語"
+            "動詞"
           ],
           "exampleHighlights": [
             {
@@ -10842,8 +10822,7 @@
           "example": "明日雨が降るかもしれない。",
           "ruleOrder": [
             "主語",
-            "動詞",
-            "目的語"
+            "動詞"
           ],
           "exampleHighlights": [
             {
@@ -10906,8 +10885,7 @@
           "example": "彼は来るに違いない。",
           "ruleOrder": [
             "主語",
-            "動詞",
-            "目的語"
+            "動詞"
           ],
           "exampleHighlights": [
             {
@@ -11038,8 +11016,7 @@
           "example": "彼はもう帰っただろう。",
           "ruleOrder": [
             "主語",
-            "動詞",
-            "目的語"
+            "動詞"
           ],
           "exampleHighlights": [
             {
@@ -11070,8 +11047,7 @@
           "example": "彼は「明日、行く」と言った。",
           "ruleOrder": [
             "主語",
-            "動詞",
-            "引用"
+            "動詞"
           ],
           "exampleHighlights": [
             {
@@ -11100,8 +11076,7 @@
           "example": "彼は明日行くと言った。",
           "ruleOrder": [
             "主語",
-            "動詞",
-            "内容"
+            "動詞"
           ],
           "exampleHighlights": [
             {
@@ -11130,8 +11105,7 @@
           "example": "彼は「私は行く」と言った。→ 彼は行くと言った。",
           "ruleOrder": [
             "主語",
-            "動詞",
-            "内容"
+            "動詞"
           ],
           "exampleHighlights": [
             {
@@ -11160,8 +11134,7 @@
           "example": "先生は「宿題を出してください」とおっしゃった。",
           "ruleOrder": [
             "主語",
-            "動詞",
-            "内容"
+            "動詞"
           ],
           "exampleHighlights": [
             {
@@ -11190,8 +11163,7 @@
           "example": "彼は行くと言った。",
           "ruleOrder": [
             "主語",
-            "動詞",
-            "内容"
+            "動詞"
           ],
           "exampleHighlights": [
             {
@@ -11220,8 +11192,7 @@
           "example": "お客様は「これをください」とおっしゃった。",
           "ruleOrder": [
             "主語",
-            "動詞",
-            "内容"
+            "動詞"
           ],
           "exampleHighlights": [
             {
@@ -11252,8 +11223,7 @@
           "example": "先生はおっしゃいました。",
           "ruleOrder": [
             "主語",
-            "動詞",
-            "目的語"
+            "動詞"
           ],
           "exampleHighlights": [
             {
@@ -11350,8 +11320,7 @@
           "example": "私が伺います。",
           "ruleOrder": [
             "主語",
-            "動詞",
-            "目的語"
+            "動詞"
           ],
           "exampleHighlights": [
             {
@@ -11380,8 +11349,7 @@
           "example": "手伝っていただけますか？",
           "ruleOrder": [
             "主語",
-            "動詞",
-            "目的語"
+            "動詞"
           ],
           "exampleHighlights": [
             {
@@ -11410,8 +11378,7 @@
           "example": "おはようございます。",
           "ruleOrder": [
             "主語",
-            "動詞",
-            "目的語"
+            "動詞"
           ],
           "exampleHighlights": [
             {
@@ -11440,8 +11407,7 @@
           "example": "元気？",
           "ruleOrder": [
             "主語",
-            "動詞",
-            "目的語"
+            "動詞"
           ],
           "exampleHighlights": [
             {
@@ -11473,8 +11439,7 @@
           "ruleOrder": [
             "主語",
             "は",
-            "動詞",
-            "目的語"
+            "動詞"
           ],
           "exampleHighlights": [
             {
@@ -11659,8 +11624,7 @@
           "ruleOrder": [
             "もし",
             "条件",
-            "なら",
-            "動詞"
+            "なら"
           ],
           "exampleHighlights": [
             {

@@ -8368,8 +8368,7 @@
           "example": "Il faut que tu viennes.",
           "ruleOrder": [
             "sujet",
-            "verbe",
-            "complément"
+            "verbe"
           ],
           "exampleHighlights": [
             {
@@ -8944,7 +8943,7 @@
         {
           "title": "Singulier et pluriel",
           "points": [
-            "Le singulier d?signe une seule entit?, le pluriel plusieurs.",
+            "Le singulier désigne une seule entité, le pluriel plusieurs.",
             "La plupart des noms prennent -s au pluriel; certains prennent -x (ex. -eau, -au, -eu).",
             "Les articles s'accordent: le/la/un/une -> les/des."
           ],
@@ -9082,8 +9081,7 @@
           "example": "Je le vois.",
           "ruleOrder": [
             "sujet",
-            "verbe",
-            "objet direct"
+            "verbe"
           ],
           "exampleHighlights": [
             {
@@ -9112,8 +9110,7 @@
           "example": "Elle se lave.",
           "ruleOrder": [
             "sujet",
-            "verbe",
-            "objet réfléchi"
+            "verbe"
           ],
           "exampleHighlights": [
             {
@@ -9408,8 +9405,7 @@
             "sujet",
             "verbe",
             "article",
-            "superlatif",
-            "nom"
+            "superlatif"
           ],
           "exampleHighlights": [
             {
@@ -11335,8 +11331,7 @@
           "example": "Madame, puis-je vous poser une question ?",
           "ruleOrder": [
             "sujet",
-            "verbe",
-            "complément"
+            "verbe"
           ],
           "exampleHighlights": [
             {
@@ -11365,8 +11360,7 @@
           "example": "Je souhaiterais demander un rendez-vous.",
           "ruleOrder": [
             "sujet",
-            "verbe",
-            "complément"
+            "verbe"
           ],
           "exampleHighlights": [
             {
@@ -11395,8 +11389,7 @@
           "example": "Je vous remercie pour votre compréhension.",
           "ruleOrder": [
             "sujet",
-            "verbe",
-            "complément"
+            "verbe"
           ],
           "exampleHighlights": [
             {
@@ -11425,8 +11418,7 @@
           "example": "Docteur, avez-vous un moment ?",
           "ruleOrder": [
             "sujet",
-            "verbe",
-            "complément"
+            "verbe"
           ],
           "exampleHighlights": [
             {
@@ -11455,8 +11447,7 @@
           "example": "Je vous remercie pour votre aide précieuse.",
           "ruleOrder": [
             "sujet",
-            "verbe",
-            "complément"
+            "verbe"
           ],
           "exampleHighlights": [
             {
@@ -11487,8 +11478,7 @@
           "example": "J'aime le chocolat et je préfère le noir.",
           "ruleOrder": [
             "sujet",
-            "verbe",
-            "complément"
+            "verbe"
           ],
           "exampleHighlights": [
             {
@@ -11517,8 +11507,7 @@
           "example": "J'aime le chocolat, mais je préfère le noir.",
           "ruleOrder": [
             "sujet",
-            "verbe",
-            "complément"
+            "verbe"
           ],
           "exampleHighlights": [
             {
@@ -11751,8 +11740,7 @@
           "example": "Nous allons au marché, ensuite nous ferons les courses.",
           "ruleOrder": [
             "sujet",
-            "verbe",
-            "complément"
+            "verbe"
           ],
           "exampleHighlights": [
             {

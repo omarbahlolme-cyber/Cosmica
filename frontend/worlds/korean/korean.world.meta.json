@@ -14,5 +14,9 @@
       "ask_speak_world_language": "한국어를 할 수 있어요?"
     }
   },
-  "translationPack": "frontend/worlds/korean/translations.json"
+  "translationPack": "frontend/worlds/korean/translations.json",
+  "grammarDisplayModes": [
+    "english",
+    "base"
+  ]
 }

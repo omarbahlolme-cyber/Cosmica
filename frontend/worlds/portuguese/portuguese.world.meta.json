@@ -14,5 +14,9 @@
       "ask_speak_world_language": "você fala português?"
     }
   },
-  "translationPack": "frontend/worlds/portuguese/translations.json"
+  "translationPack": "frontend/worlds/portuguese/translations.json",
+  "grammarDisplayModes": [
+    "english",
+    "base"
+  ]
 }

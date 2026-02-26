@@ -14,5 +14,9 @@
       "ask_speak_world_language": "spreek je Nederlands?"
     }
   },
-  "translationPack": "frontend/worlds/dutch/translations.json"
+  "translationPack": "frontend/worlds/dutch/translations.json",
+  "grammarDisplayModes": [
+    "english",
+    "base"
+  ]
 }

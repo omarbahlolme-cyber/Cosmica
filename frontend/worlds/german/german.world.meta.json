@@ -1,4 +1,4 @@
-﻿{
+{
   "worldKey": "german",
   "nativeName": "Deutsch",
   "tts": {
@@ -14,6 +14,9 @@
       "ask_speak_world_language": "sprichst du Deutsch"
     }
   },
-  "translationPack": "frontend/worlds/german/translations.json"
+  "translationPack": "frontend/worlds/german/translations.json",
+  "grammarDisplayModes": [
+    "english",
+    "base"
+  ]
 }
-

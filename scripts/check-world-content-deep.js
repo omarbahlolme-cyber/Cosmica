@@ -17,6 +17,7 @@ const REQUIRED_INTENTS = [
   "ask_speak_world_language",
 ];
 const INTENT_SCAN_SECTIONS = ["Introductions", "Questions"];
+const REQUIRED_NON_ENGLISH_GRAMMAR_DISPLAY_MODES = ["english", "base"];
 
 const readJson = (filePath) => {
   const raw = fs.readFileSync(filePath, "utf8").replace(/^\uFEFF/, "");
@@ -37,6 +38,44 @@ const resolveWorldDirs = () =>
     .filter((entry) => entry.isDirectory())
     .map((entry) => entry.name)
     .sort();
+
+const scanMapEntries = (mapObject, worldKey, mapKey, failures) => {
+  if (!isObject(mapObject)) {
+    return 0;
+  }
+  let entryCount = 0;
+  Object.entries(mapObject).forEach(([sectionName, section]) => {
+    if (sectionName === "sectionLabels") {
+      return;
+    }
+    if (!isObject(section)) {
+      fail(failures, worldKey, `${mapKey}.${sectionName} is not an object.`);
+      return;
+    }
+    Object.entries(section).forEach(([nativeKey, entry]) => {
+      entryCount += 1;
+      if (!isObject(entry)) {
+        fail(failures, worldKey, `${mapKey}.${sectionName}.${nativeKey} is not an object.`);
+        return;
+      }
+      if (!hasNonEmptyString(entry.source)) {
+        fail(
+          failures,
+          worldKey,
+          `${mapKey}.${sectionName}.${nativeKey} is missing source text.`
+        );
+      }
+      if (!hasNonEmptyString(entry?.translations?.english)) {
+        fail(
+          failures,
+          worldKey,
+          `${mapKey}.${sectionName}.${nativeKey} is missing translations.english.`
+        );
+      }
+    });
+  });
+  return entryCount;
+};
 
 const main = () => {
   const worldKeys = resolveWorldDirs();
@@ -70,6 +109,12 @@ const main = () => {
       }
       if (!hasNonEmptyString(meta.translationPack)) {
         fail(failures, worldKey, "Missing translationPack in english world meta.");
+      }
+      const grammarDisplayModes = Array.isArray(meta.grammarDisplayModes)
+        ? meta.grammarDisplayModes.map((item) => String(item || "").trim().toLowerCase())
+        : [];
+      if (!grammarDisplayModes.includes("english")) {
+        fail(failures, worldKey, "english world meta.grammarDisplayModes must include english.");
       }
       report.push({
         worldKey,
@@ -108,6 +153,25 @@ const main = () => {
       });
     }
 
+    if (!hasNonEmptyString(meta.nativeName)) {
+      fail(failures, worldKey, "Missing nativeName in world meta.");
+    } else if (String(meta.nativeName).includes("?")) {
+      fail(
+        failures,
+        worldKey,
+        `nativeName appears corrupted ("${String(meta.nativeName)}").`
+      );
+    }
+
+    const grammarDisplayModes = Array.isArray(meta.grammarDisplayModes)
+      ? meta.grammarDisplayModes.map((item) => String(item || "").trim().toLowerCase())
+      : [];
+    REQUIRED_NON_ENGLISH_GRAMMAR_DISPLAY_MODES.forEach((mode) => {
+      if (!grammarDisplayModes.includes(mode)) {
+        fail(failures, worldKey, `meta.grammarDisplayModes must include "${mode}".`);
+      }
+    });
+
     if (!isObject(pack.words)) {
       fail(failures, worldKey, "Missing words object in translations.json.");
     }
@@ -122,12 +186,8 @@ const main = () => {
     const phrasesSectionCount = isObject(pack.phrases) ? Object.keys(pack.phrases).length : 0;
     const grammarSectionCount = isObject(pack?.grammar?.cards) ? Object.keys(pack.grammar.cards).length : 0;
 
-    const wordsEntryCount = isObject(pack.words)
-      ? Object.values(pack.words).reduce((sum, section) => sum + Object.keys(section || {}).length, 0)
-      : 0;
-    const phrasesEntryCount = isObject(pack.phrases)
-      ? Object.values(pack.phrases).reduce((sum, section) => sum + Object.keys(section || {}).length, 0)
-      : 0;
+    const wordsEntryCount = scanMapEntries(pack.words, worldKey, "words", failures);
+    const phrasesEntryCount = scanMapEntries(pack.phrases, worldKey, "phrases", failures);
     const grammarCardCount = isObject(pack?.grammar?.cards)
       ? Object.values(pack.grammar.cards).reduce((sum, cards) => sum + (Array.isArray(cards) ? cards.length : 0), 0)
       : 0;
@@ -140,6 +200,71 @@ const main = () => {
     }
     if (grammarSectionCount === 0 || grammarCardCount === 0) {
       fail(failures, worldKey, "Grammar cards are empty.");
+    }
+
+    Object.entries(pack?.grammar?.cards || {}).forEach(([sectionName, cards]) => {
+      if (!Array.isArray(cards)) {
+        fail(failures, worldKey, `grammar.cards.${sectionName} is not an array.`);
+        return;
+      }
+      cards.forEach((card, cardIndex) => {
+        const ruleOrder = Array.isArray(card?.ruleOrder)
+          ? card.ruleOrder.map((entry) => String(entry || "").trim()).filter(Boolean)
+          : [];
+        const highlights = Array.isArray(card?.exampleHighlights)
+          ? card.exampleHighlights.filter(
+              (entry) =>
+                hasNonEmptyString(entry?.label) && hasNonEmptyString(entry?.text)
+            )
+          : [];
+        if (ruleOrder.length >= 2 && highlights.length >= 2 && ruleOrder.length !== highlights.length) {
+          fail(
+            failures,
+            worldKey,
+            `Grammar card mismatch in ${sectionName} #${cardIndex + 1} (${ruleOrder.length} rule slots vs ${highlights.length} highlights).`
+          );
+        }
+      });
+    });
+
+    const modalityCards = Array.isArray(pack?.grammar?.cards?.Modality)
+      ? pack.grammar.cards.Modality
+      : [];
+    if (!modalityCards.length) {
+      fail(failures, worldKey, "Missing Modality grammar section cards.");
+    } else {
+      modalityCards.forEach((card, cardIndex) => {
+        const ruleOrder = Array.isArray(card?.ruleOrder)
+          ? card.ruleOrder.map((entry) => String(entry || "").trim()).filter(Boolean)
+          : [];
+        const highlights = Array.isArray(card?.exampleHighlights)
+          ? card.exampleHighlights.filter(
+              (entry) =>
+                hasNonEmptyString(entry?.label) && hasNonEmptyString(entry?.text)
+            )
+          : [];
+        if (ruleOrder.length < 2) {
+          fail(
+            failures,
+            worldKey,
+            `Modality card #${cardIndex + 1} has insufficient ruleOrder entries.`
+          );
+        }
+        if (highlights.length < 2) {
+          fail(
+            failures,
+            worldKey,
+            `Modality card #${cardIndex + 1} has insufficient exampleHighlights entries.`
+          );
+        }
+        if (ruleOrder.length !== highlights.length) {
+          fail(
+            failures,
+            worldKey,
+            `Modality card #${cardIndex + 1} ruleOrder/exampleHighlights length mismatch (${ruleOrder.length} vs ${highlights.length}).`
+          );
+        }
+      });
     }
 
     const intentHits = new Set();

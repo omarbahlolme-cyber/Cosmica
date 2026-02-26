@@ -8127,9 +8127,7 @@
           "ruleOrder": [
             "sujeito",
             "verbo",
-            "preposição",
-            "artigo",
-            "substantivo"
+            "preposição"
           ],
           "exampleHighlights": [
             {
@@ -8799,8 +8797,8 @@
           "title": "Singular e plural",
           "points": [
             "O singular indica uma unidade; o plural indica mais de uma.",
-            "Plural regular com -s; h? mudan?as frequentes como -l > -is e -?o > -?es/-?es/-?os.",
-            "Artigo e substantivo concordam em n?mero: o/um -> os/uns."
+            "Plural regular com -s; há mudanças frequentes como -l > -is e -ão > -ões/-ães/-ãos.",
+            "Artigo e substantivo concordam em número: o/um -> os/uns."
           ],
           "example": "Os livros estão na mesa.",
           "ruleOrder": [
@@ -9327,8 +9325,7 @@
           "example": "A casa bonita é cara.",
           "ruleOrder": [
             "adjetivo",
-            "substantivo",
-            "verbo"
+            "substantivo"
           ],
           "exampleHighlights": [
             {
@@ -9990,8 +9987,7 @@
           "ruleOrder": [
             "ninguém",
             "verbo",
-            "sujeito",
-            "objeto"
+            "sujeito"
           ],
           "exampleHighlights": [
             {
@@ -10222,8 +10218,7 @@
           "ruleOrder": [
             "sujeito",
             "verbo",
-            "objeto",
-            "frase relativa"
+            "objeto"
           ],
           "exampleHighlights": [
             {
@@ -11438,8 +11433,7 @@
           "example": "Com licença, posso passar?",
           "ruleOrder": [
             "sujeito",
-            "verbo",
-            "objeto"
+            "verbo"
           ],
           "exampleHighlights": [
             {
@@ -11497,8 +11491,7 @@
           "example": "Por gentileza, poderia me ajudar?",
           "ruleOrder": [
             "sujeito",
-            "verbo",
-            "objeto"
+            "verbo"
           ],
           "exampleHighlights": [
             {

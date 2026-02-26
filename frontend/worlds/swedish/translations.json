@@ -9523,8 +9523,7 @@
           "ruleOrder": [
             "subjekt",
             "hjälpverb",
-            "verb",
-            "adverb"
+            "verb"
           ],
           "exampleHighlights": [
             {
@@ -10057,8 +10056,8 @@
           "title": "Singular och plural",
           "points": [
             "Singular uttrycker en enhet; plural uttrycker flera.",
-            "Vanliga plural?ndelser ?r -or, -ar, -er och -n.",
-            "Best?md plural bildas ofta med ?ndelser som -na eller -en."
+            "Vanliga pluraländelser är -or, -ar, -er och -n.",
+            "Bestämd plural bildas ofta med ändelser som -na eller -en."
           ],
           "example": "Katterna sover.",
           "ruleOrder": [
@@ -11501,8 +11500,7 @@
           "example": "Trots att det regnade, gick vi ut.",
           "ruleOrder": [
             "subjekt",
-            "verb",
-            "objekt"
+            "verb"
           ],
           "exampleHighlights": [
             {
@@ -11565,8 +11563,7 @@
           "example": "Om det regnar, stannar vi inne.",
           "ruleOrder": [
             "subjekt",
-            "verb",
-            "objekt"
+            "verb"
           ],
           "exampleHighlights": [
             {
@@ -12026,8 +12023,7 @@
           "ruleOrder": [
             "subjekt",
             "måste",
-            "verb",
-            "objekt"
+            "verb"
           ],
           "exampleHighlights": [
             {
@@ -12095,8 +12091,7 @@
           "ruleOrder": [
             "subjekt",
             "kan",
-            "verb",
-            "objekt"
+            "verb"
           ],
           "exampleHighlights": [
             {
@@ -12130,8 +12125,7 @@
           "ruleOrder": [
             "subjekt",
             "kan",
-            "verb",
-            "objekt"
+            "verb"
           ],
           "exampleHighlights": [
             {
@@ -12165,8 +12159,7 @@
           "ruleOrder": [
             "subjekt",
             "måste",
-            "verb",
-            "objekt"
+            "verb"
           ],
           "exampleHighlights": [
             {
@@ -12200,8 +12193,7 @@
           "ruleOrder": [
             "subjekt",
             "får",
-            "verb",
-            "objekt"
+            "verb"
           ],
           "exampleHighlights": [
             {
@@ -12235,8 +12227,7 @@
           "ruleOrder": [
             "kan",
             "subjekt",
-            "verb",
-            "objekt"
+            "verb"
           ],
           "exampleHighlights": [
             {
@@ -12270,8 +12261,7 @@
           "ruleOrder": [
             "subjekt",
             "måste",
-            "verb",
-            "objekt"
+            "verb"
           ],
           "exampleHighlights": [
             {
@@ -12512,8 +12502,7 @@
           "example": "Hej, hur mår du?",
           "ruleOrder": [
             "hälsning",
-            "subjekt",
-            "verb"
+            "subjekt"
           ],
           "exampleHighlights": [
             {
@@ -12879,8 +12868,7 @@
           "example": "Trots att det regnade gick vi ut.",
           "ruleOrder": [
             "subjekt",
-            "verb",
-            "objekt"
+            "verb"
           ],
           "exampleHighlights": [
             {
@@ -12943,8 +12931,7 @@
           "example": "Jag studerar för att lära mig svenska.",
           "ruleOrder": [
             "subjekt",
-            "verb",
-            "objekt"
+            "verb"
           ],
           "exampleHighlights": [
             {

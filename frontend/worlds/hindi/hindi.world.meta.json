@@ -14,5 +14,9 @@
       "ask_speak_world_language": "क्या आप हिंदी बोलते हैं?"
     }
   },
-  "translationPack": "frontend/worlds/hindi/translations.json"
+  "translationPack": "frontend/worlds/hindi/translations.json",
+  "grammarDisplayModes": [
+    "english",
+    "base"
+  ]
 }

@@ -1,6 +1,6 @@
 {
   "worldKey": "french",
-  "nativeName": "Fran?ais",
+  "nativeName": "Français",
   "tts": {
     "languageCode": "fr-FR",
     "voice": "fr-FR-Neural2-C"
@@ -8,10 +8,10 @@
   "phraseIntents": {
     "englishLanguageLabel": "french",
     "forms": {
-      "learn_world_language": "j'apprends le fran?ais",
-      "speak_world_language": "je parle fran?ais",
-      "not_speak_world_language": "je ne parle pas fran?ais",
-      "ask_speak_world_language": "parlez-vous fran?ais ?"
+      "learn_world_language": "j'apprends le français",
+      "speak_world_language": "je parle français",
+      "not_speak_world_language": "je ne parle pas français",
+      "ask_speak_world_language": "parlez-vous français ?"
     }
   },
   "grammarDisplayModes": [

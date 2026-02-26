@@ -14,5 +14,9 @@
       "ask_speak_world_language": "你会说中文吗？"
     }
   },
-  "translationPack": "frontend/worlds/chinese/translations.json"
+  "translationPack": "frontend/worlds/chinese/translations.json",
+  "grammarDisplayModes": [
+    "english",
+    "base"
+  ]
 }

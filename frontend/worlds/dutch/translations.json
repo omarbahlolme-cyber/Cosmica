@@ -9271,8 +9271,7 @@
           "ruleOrder": [
             "voegwoord",
             "onderwerp",
-            "werkwoord",
-            "plaats"
+            "werkwoord"
           ],
           "exampleHighlights": [
             {
@@ -9928,8 +9927,7 @@
           "example": "De hond blaft.",
           "ruleOrder": [
             "onderwerp",
-            "werkwoord",
-            "object"
+            "werkwoord"
           ],
           "exampleHighlights": [
             {
@@ -9985,7 +9983,7 @@
         {
           "title": "Enkelvoud en meervoud",
           "points": [
-            "Enkelvoud benoemt ??n entiteit; meervoud benoemt meerdere entiteiten.",
+            "Enkelvoud benoemt één entiteit; meervoud benoemt meerdere entiteiten.",
             "Meervoud wordt vaak gevormd met -en of -s, soms met spellingaanpassing.",
             "In het meervoud is het bepaalde lidwoord meestal \"de\"."
           ],
@@ -10112,8 +10110,7 @@
           "ruleOrder": [
             "onderwerp",
             "werkwoord",
-            "bijvoeglijk naamwoord",
-            "zelfstandig naamwoord"
+            "bijvoeglijk naamwoord"
           ],
           "exampleHighlights": [
             {
@@ -10868,8 +10865,7 @@
           "ruleOrder": [
             "vraagwoord",
             "werkwoord",
-            "onderwerp",
-            "rest"
+            "onderwerp"
           ],
           "exampleHighlights": [
             {
@@ -10902,8 +10898,7 @@
           "example": "Ik vraag me af waar de bibliotheek is.",
           "ruleOrder": [
             "onderwerp",
-            "werkwoord",
-            "rest"
+            "werkwoord"
           ],
           "exampleHighlights": [
             {
@@ -11503,8 +11498,7 @@
           "ruleOrder": [
             "als",
             "onderwerp",
-            "werkwoord",
-            "object"
+            "werkwoord"
           ],
           "exampleHighlights": [
             {
@@ -11578,8 +11572,7 @@
             "onderwerp",
             "werkwoord",
             "object",
-            "tenzij",
-            "voorwaarde"
+            "tenzij"
           ],
           "exampleHighlights": [
             {
@@ -11696,8 +11689,7 @@
             "onderwerp",
             "werkwoord",
             "object",
-            "mits",
-            "voorwaarde"
+            "mits"
           ],
           "exampleHighlights": [
             {
@@ -12584,8 +12576,7 @@
           "example": "Met vriendelijke groet, mevrouw Jansen.",
           "ruleOrder": [
             "onderwerp",
-            "werkwoord",
-            "object"
+            "werkwoord"
           ],
           "exampleHighlights": [
             {
@@ -12820,8 +12811,7 @@
           "example": "Als het regent, blijf ik thuis.",
           "ruleOrder": [
             "onderwerp",
-            "werkwoord",
-            "voorwerp"
+            "werkwoord"
           ],
           "exampleHighlights": [
             {
