@@ -414,6 +414,31 @@ Expected result:
 1. Response shows `"ok": true`
 2. `"matchedUsers"` is `1`
 
+### 7.0.2 PowerShell token sanity checks (important)
+
+PowerShell keeps variables in memory across commands.  
+If `$Token` or `$AdminToken` was set earlier, requests can still include it even if you think it is "empty" now.
+
+Run these checks when behavior looks confusing:
+
+```powershell
+$Token
+$Token.Length
+```
+
+If you want to prove admin auth is enforced:
+
+```powershell
+Remove-Variable Token -ErrorAction SilentlyContinue
+Remove-Variable AdminToken -ErrorAction SilentlyContinue
+Invoke-WebRequest -Uri "$BaseUrl/api/admin/security/users?limit=1" -Method GET -UseBasicParsing
+```
+
+Expected result:
+1. Without token header, request returns `401 Unauthorized` (or `503` if token is not configured on server).
+2. With correct header `@{ "x-admin-token" = $Token }`, request succeeds.
+3. If it "worked with empty header" earlier, your shell likely still had `$Token` or `$AdminToken` in memory from previous commands.
+
 7. Grant Premium for 30 days:
 
 ```powershell
@@ -561,17 +586,37 @@ Use this only if live is intentionally file-backed (not Postgres):
 
 ### 7.6 Gift-token flow (recommended)
 
-Use this flow when you want one-time redeem links that claim premium after login/signup.
+Use this flow for one-time premium gift links.
 
 How it works:
 1. Admin creates a gift token.
-2. System returns redeem URL (`/gift/redeem?token=...`).
+2. Backend returns `redeemUrl` (`/gift/redeem?token=...`).
 3. Recipient opens link:
-   - if logged out: auth panel auto-opens first,
-   - after login/signup: token is verified and claimed automatically.
-4. If valid and unused: premium is activated and token becomes used (one-time).
+   - if logged out: auth panel auto-opens,
+   - after login/signup: token is claimed automatically.
+4. If valid and unused: premium activates and token becomes used (one-time).
 
-Create gift token (PowerShell):
+Important:
+1. Manual premium grant by email requires user to exist already.
+2. Gift tokens remove this friction: recipient can sign up first from the gift link, then claim immediately.
+
+Minimal quick path (copy/paste):
+
+```powershell
+$BaseUrl = "https://www.cosmicalearn.com"
+$Token = "YOUR_ADMIN_SECURITY_TOKEN".Trim()
+$Headers = @{ "x-admin-token" = $Token }
+$Body = @{
+  days = 30
+  title = "A Premium Gift For You"
+  message = "Here is your free Cosmica Premium gift. Enjoy full learning access and joyful language exploration."
+  from = "Andy"
+} | ConvertTo-Json -Compress
+$Create = Invoke-RestMethod -Uri "$BaseUrl/api/admin/security/gifts/create" -Method POST -Headers $Headers -ContentType "application/json" -Body $Body
+$Create.redeemUrl
+```
+
+Create gift token (full options):
 
 ```powershell
 $BaseUrl = "https://www.cosmicalearn.com"
@@ -581,8 +626,8 @@ $Body = @{
   days = 30                                # premium duration
   tokenTtlDays = 60                        # link validity
   title = "A Premium Gift For You"
-  message = "Here’s your free Cosmica Premium gift. Enjoy full learning access and have the most joyful language exploration across every world."
-  from = "Andy 앤디"
+  message = "Here is your free Cosmica Premium gift. Enjoy full learning access and have the most joyful language exploration across every world."
+  from = "Andy"
   openText = "Open Gift"
   checkText = "Activate Now"
   laterText = "Later"
@@ -610,6 +655,19 @@ $RevokeBody = @{ token = "PASTE_RAW_GIFT_TOKEN_HERE" } | ConvertTo-Json -Compres
 Invoke-RestMethod -Uri "$BaseUrl/api/admin/security/gifts/revoke" -Method POST -Headers @{ "x-admin-token" = $Token } -ContentType "application/json" -Body $RevokeBody | ConvertTo-Json -Depth 8
 ```
 
+Verify recipient premium after claim:
+
+```powershell
+$Email = "friend@example.com".Trim().ToLower()
+$VerifyUri = $BaseUrl + "/api/admin/security/users?email=" + [uri]::EscapeDataString($Email)
+Invoke-RestMethod -Uri $VerifyUri -Method GET -Headers @{ "x-admin-token" = $Token } | ConvertTo-Json -Depth 8
+```
+
+Troubleshooting:
+1. `404 Not Found` on `/api/admin/security/gifts/create`: latest backend not deployed to live host yet.
+2. `401/403`: missing/invalid `x-admin-token` header.
+3. `matchedUsers: 0` on verify: that exact email is not registered yet.
+
 Live API endpoints:
 1. Admin create: `POST /api/admin/security/gifts/create`
 2. Admin list: `GET /api/admin/security/gifts`
@@ -625,4 +683,35 @@ Template:
 
 ```text
 https://www.cosmicalearn.com/?gift=1&giftTitle=...&giftMessage=...&giftFrom=...&giftOpenText=...&giftCheckText=...&giftLaterText=...
+```
+
+### 7.8 If a token is exposed (immediate response)
+
+Use this checklist if `ADMIN_SECURITY_TOKEN` or a gift token was leaked in chat/screenshot/logs.
+
+1. Rotate `ADMIN_SECURITY_TOKEN` in Render:
+   - Render -> Service -> Environment -> update `ADMIN_SECURITY_TOKEN` with a new random value.
+   - Save and redeploy.
+2. Revoke any exposed gift token:
+
+```powershell
+$BaseUrl = "https://www.cosmicalearn.com"
+$Token = "YOUR_NEW_ADMIN_SECURITY_TOKEN".Trim()
+$RevokeBody = @{ token = "EXPOSED_RAW_GIFT_TOKEN" } | ConvertTo-Json -Compress
+Invoke-RestMethod -Uri "$BaseUrl/api/admin/security/gifts/revoke" -Method POST -Headers @{ "x-admin-token" = $Token } -ContentType "application/json" -Body $RevokeBody | ConvertTo-Json -Depth 8
+```
+
+3. Revoke premium from an account if needed:
+
+```powershell
+$Email = "user@example.com".Trim().ToLower()
+$RevokeBody = @{ email = $Email } | ConvertTo-Json -Compress
+Invoke-RestMethod -Uri "$BaseUrl/api/admin/security/users/revoke-premium" -Method POST -Headers @{ "x-admin-token" = $Token } -ContentType "application/json" -Body $RevokeBody | ConvertTo-Json -Depth 8
+```
+
+4. Verify final state:
+
+```powershell
+$VerifyUri = $BaseUrl + "/api/admin/security/users?email=" + [uri]::EscapeDataString($Email)
+Invoke-RestMethod -Uri $VerifyUri -Method GET -Headers @{ "x-admin-token" = $Token } | ConvertTo-Json -Depth 8
 ```

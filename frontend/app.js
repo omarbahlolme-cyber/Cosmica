@@ -2352,8 +2352,14 @@ const setupAccountHub = () => {
     if (!feedbackNode) {
       return;
     }
-    feedbackNode.textContent = String(message || "");
+    const resolvedMessage = String(message || "");
+    const normalizedMessage = resolvedMessage.trim().toLowerCase();
+    const isGiftClaimPrompt =
+      normalizedMessage === "log in or sign up first to claim your premium gift." ||
+      normalizedMessage === "log in or sign up first, then tap check activation in your gift box.";
+    feedbackNode.textContent = resolvedMessage;
     feedbackNode.dataset.tone = tone;
+    feedbackNode.classList.toggle("account-feedback-gift-claim", isGiftClaimPrompt);
   };
 
   const scheduleNoActivePlanFeedbackAutoClear = (durationMs = 2500) => {
