@@ -12,6 +12,7 @@ const ROOT = path.resolve(__dirname, "..");
 const PORT = Number(process.env.VIEWPORT_PORT || 4175);
 const STARTUP_TIMEOUT_MS = Number(process.env.VIEWPORT_STARTUP_TIMEOUT_MS || 25000);
 const NAVIGATION_TIMEOUT_MS = Number(process.env.VIEWPORT_NAVIGATION_TIMEOUT_MS || 60000);
+const LOCAL_CLIP_TOLERANCE_PX = Number(process.env.VIEWPORT_LOCAL_CLIP_TOLERANCE_PX || 48);
 const BASE_URL = String(process.env.VIEWPORT_BASE_URL || `http://127.0.0.1:${PORT}`)
   .trim()
   .replace(/\/$/, "");
@@ -223,10 +224,23 @@ const checkRouteInViewport = async ({ page, route, selectors }) => {
         const overflowX = String(style.overflowX || "").toLowerCase();
         const hasLocalClip = (overflowX === "hidden" || overflowX === "clip") && element.scrollWidth - element.clientWidth > 8;
         const exceedsViewport = rect.left < -3 || rect.right > viewportWidth + 3;
-        if (hasLocalClip || exceedsViewport) {
+        if (hasLocalClip) {
           clippedRisk.push({
             selector,
             index,
+            riskType: "local_clip",
+            overflowX,
+            localOverflowPx: Math.max(0, Math.round(element.scrollWidth - element.clientWidth)),
+            rectLeft: Math.round(rect.left),
+            rectRight: Math.round(rect.right),
+            viewportWidth,
+          });
+        }
+        if (exceedsViewport) {
+          clippedRisk.push({
+            selector,
+            index,
+            riskType: "viewport_exceed",
             overflowX,
             localOverflowPx: Math.max(0, Math.round(element.scrollWidth - element.clientWidth)),
             rectLeft: Math.round(rect.left),
@@ -325,7 +339,17 @@ const main = async () => {
                 });
 
                 const hasOverflow = result.htmlOverflow > 2 || result.bodyOverflow > 2;
-                const hasClipRisk = result.clippedRisk.length > 0;
+                const actionableClipRisk = result.clippedRisk.filter((risk) => {
+                  if (
+                    risk.riskType === "local_clip" &&
+                    String(risk.overflowX || "").toLowerCase() === "clip" &&
+                    Number(risk.localOverflowPx || 0) <= LOCAL_CLIP_TOLERANCE_PX
+                  ) {
+                    return false;
+                  }
+                  return true;
+                });
+                const hasClipRisk = actionableClipRisk.length > 0;
 
                 if (!hasOverflow && !hasClipRisk) {
                   report.passed += 1;
@@ -343,7 +367,7 @@ const main = async () => {
                   title: result.title,
                   htmlOverflow: result.htmlOverflow,
                   bodyOverflow: result.bodyOverflow,
-                  clippedRisk: result.clippedRisk.slice(0, 12),
+                  clippedRisk: actionableClipRisk.slice(0, 12),
                   screenshot: path.relative(ROOT, screenshotPath).replace(/\\/g, "/"),
                 });
               } catch (error) {

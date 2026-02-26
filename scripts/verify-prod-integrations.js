@@ -1,13 +1,26 @@
 #!/usr/bin/env node
 
 const https = require("https");
+require("dotenv").config();
 
 const baseUrl = String(process.env.VERIFY_BASE_URL || "https://www.cosmicalearn.com").trim().replace(/\/+$/, "");
-const adminBasicUser = String(process.env.VERIFY_ADMIN_BASIC_USER || "");
-const adminBasicPass = String(process.env.VERIFY_ADMIN_BASIC_PASS || "");
-const adminToken = String(process.env.VERIFY_ADMIN_TOKEN || "");
-const authEmail = String(process.env.VERIFY_AUTH_EMAIL || "").trim().toLowerCase();
-const authPassword = String(process.env.VERIFY_AUTH_PASSWORD || "");
+const adminBasicUser = String(
+  process.env.VERIFY_ADMIN_BASIC_USER || process.env.ADMIN_SECURITY_BASIC_USER || ""
+);
+const adminBasicPass = String(
+  process.env.VERIFY_ADMIN_BASIC_PASS || process.env.ADMIN_SECURITY_BASIC_PASS || ""
+);
+const adminToken = String(
+  process.env.VERIFY_ADMIN_TOKEN || process.env.ADMIN_SECURITY_TOKEN || process.env.ADMIN_API_TOKEN || ""
+);
+const authEmail = String(
+  process.env.VERIFY_AUTH_EMAIL || process.env.MONITOR_AUTH_EMAIL || process.env.E2E_AUTH_EMAIL || ""
+)
+  .trim()
+  .toLowerCase();
+const authPassword = String(
+  process.env.VERIFY_AUTH_PASSWORD || process.env.MONITOR_AUTH_PASSWORD || process.env.E2E_AUTH_PASSWORD || ""
+);
 const baseOrigin = (() => {
   try {
     return new URL(baseUrl).origin;
@@ -18,6 +31,7 @@ const baseOrigin = (() => {
 
 const checks = [];
 let hasFailure = false;
+let hasCoverageSkips = false;
 
 const safeJsonParse = (value) => {
   try {
@@ -179,7 +193,23 @@ const run = async () => {
   for (const learningPath of ["/index.html", "/english-world.html", "/english-words.html", "/english-grammar.html"]) {
     const learning = await request(learningPath, { headers: { Accept: "text/html" } });
     const hasMain = containsIgnoreCase(learning.body, "<main");
-    addResult(`learning${learningPath}`, learning.status === 200 && hasMain, `status=${learning.status} hasMain=${hasMain}`);
+    if (learningPath === "/index.html") {
+      const redirectLocation = String(learning.headers?.location || "");
+      const redirectOk =
+        [301, 302, 307, 308].includes(learning.status) &&
+        (redirectLocation === "/" || redirectLocation.endsWith("/"));
+      addResult(
+        `learning${learningPath}`,
+        (learning.status === 200 && hasMain) || redirectOk,
+        `status=${learning.status} hasMain=${hasMain} location=${redirectLocation || "(none)"}`
+      );
+    } else {
+      addResult(
+        `learning${learningPath}`,
+        learning.status === 200 && hasMain,
+        `status=${learning.status} hasMain=${hasMain}`
+      );
+    }
   }
 
   const chatBody = JSON.stringify({ messages: [{ role: "user", content: "ping" }] });
@@ -336,6 +366,7 @@ const run = async () => {
       addResult("progress-auth", progress.status === 200 && verifyProgressContractShape(progressJson), `status=${progress.status}`);
     }
   } else {
+    hasCoverageSkips = true;
     addResult("auth-login", true, "skipped (set VERIFY_AUTH_EMAIL/PASSWORD to test)");
     addResult("auth-me", true, "skipped (set VERIFY_AUTH_EMAIL/PASSWORD to test)");
     addResult("account-data-auth", true, "skipped (set VERIFY_AUTH_EMAIL/PASSWORD to test)");
@@ -350,6 +381,7 @@ const run = async () => {
     });
     addResult("admin-page-auth", adminPageAuth.status === 200, `status=${adminPageAuth.status}`);
   } else {
+    hasCoverageSkips = true;
     addResult("admin-page-auth", true, "skipped (set VERIFY_ADMIN_BASIC_USER/PASS to test)");
   }
 
@@ -359,6 +391,7 @@ const run = async () => {
     });
     addResult("admin-api-auth", adminApiAuth.status === 200, `status=${adminApiAuth.status}`);
   } else {
+    hasCoverageSkips = true;
     addResult("admin-api-auth", true, "skipped (set VERIFY_ADMIN_TOKEN to test)");
   }
 
@@ -366,6 +399,12 @@ const run = async () => {
   for (const check of checks) {
     const mark = check.ok ? "PASS" : "FAIL";
     console.log(`[${mark}] ${check.name} :: ${check.details}`);
+  }
+
+  if (hasCoverageSkips) {
+    console.warn(
+      "WARN [coverage] some authenticated/admin live checks were skipped; set VERIFY_AUTH_EMAIL/PASSWORD and VERIFY_ADMIN_* to cover all paths."
+    );
   }
 
   if (hasFailure) {

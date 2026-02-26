@@ -180,6 +180,19 @@ const WORLD_NAME = isWorldLandingPage
   ? document.body.dataset.world || "English"
   : urlParams.get("world") || document.body.dataset.world || "English";
 const WORLD_KEY = WORLD_NAME.toLowerCase();
+const GRAMMAR_UNDER_EXPERT_REVIEW_WORLDS = new Set([
+  "arabic",
+  "chinese",
+  "japanese",
+  "hindi",
+  "korean",
+]);
+const isGrammarUnderExpertReviewWorld = (worldKey = WORLD_KEY) =>
+  GRAMMAR_UNDER_EXPERT_REVIEW_WORLDS.has(
+    String(worldKey || "")
+      .trim()
+      .toLowerCase()
+  );
 const INVALID_BASE_LANGUAGE_SENTINELS = new Set([
   "none",
   "no-base",
@@ -5620,13 +5633,14 @@ const scheduleWorldEntryMapWarm = ({ source = "init" } = {}) => {
       : null;
   const user = snapshot?.user && typeof snapshot.user === "object" ? snapshot.user : null;
   const hasPremiumAccess = userHasPremiumAccess(user);
-  const prioritizedMapKeys = hasPremiumAccess
-    ? ["letters", "words", "phrases", "grammar"]
-    : ["letters", "words", "phrases"];
+  const prioritizedMapKeys = ["letters", "words", "phrases"];
+  if (hasPremiumAccess && !isGrammarUnderExpertReviewWorld(WORLD_KEY)) {
+    prioritizedMapKeys.push("grammar");
+  }
   const warmRoutes = prioritizedMapKeys
     .map((mapKey) => resolveWorldMapDocumentHref(mapKey))
     .filter(Boolean);
-  const uniqueWarmRoutes = [...new Set(warmRoutes)].slice(0, hasPremiumAccess ? 4 : 3);
+  const uniqueWarmRoutes = [...new Set(warmRoutes)].slice(0, prioritizedMapKeys.length);
   if (!uniqueWarmRoutes.length) {
     return;
   }
@@ -10342,6 +10356,36 @@ const applyMapComingSoonRules = () => {
   if (!grammarCard) {
     return;
   }
+  if (isGrammarUnderExpertReviewWorld(WORLD_KEY)) {
+    const currentHref = grammarCard.getAttribute("href");
+    if (currentHref) {
+      grammarCard.dataset.originalHref = currentHref;
+    }
+    grammarCard.classList.add("coming-soon");
+    grammarCard.classList.remove("premium-locked");
+    grammarCard.classList.remove("map-link");
+    grammarCard.dataset.comingSoon = "false";
+    grammarCard.dataset.premiumLocked = "false";
+    grammarCard.dataset.expertReview = "true";
+    grammarCard.setAttribute("aria-disabled", "true");
+    grammarCard.setAttribute("title", "Under expert review");
+    grammarCard.removeAttribute("href");
+
+    const existingMarker = grammarCard.querySelector(
+      ".coming-soon-badge, .premium-map-upgrade-button"
+    );
+    if (!(existingMarker instanceof HTMLElement) || existingMarker.tagName !== "SPAN") {
+      existingMarker?.remove();
+      const badge = document.createElement("span");
+      badge.className = "coming-soon-badge";
+      badge.textContent = "Under Expert Review";
+      grammarCard.appendChild(badge);
+    } else {
+      existingMarker.className = "coming-soon-badge";
+      existingMarker.textContent = "Under Expert Review";
+    }
+    return;
+  }
   const snapshot =
     typeof window.cosmicaGamification?.getState === "function"
       ? window.cosmicaGamification.getState()
@@ -10356,6 +10400,7 @@ const applyMapComingSoonRules = () => {
     grammarCard.classList.add("map-link");
     grammarCard.dataset.comingSoon = "false";
     grammarCard.dataset.premiumLocked = "false";
+    grammarCard.dataset.expertReview = "false";
     grammarCard.removeAttribute("aria-disabled");
     if (lockLookForFree) {
       grammarCard.setAttribute("title", "Preview available");
@@ -10408,6 +10453,7 @@ const applyMapComingSoonRules = () => {
   grammarCard.classList.remove("map-link");
   grammarCard.dataset.comingSoon = forceComingSoon ? "true" : "false";
   grammarCard.dataset.premiumLocked = "false";
+  grammarCard.dataset.expertReview = "false";
   if (forceComingSoon) {
     grammarCard.setAttribute("aria-disabled", "true");
   } else {

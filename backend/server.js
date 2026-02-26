@@ -420,6 +420,15 @@ app.use((req, res, next) => {
 });
 
 const sendMapAssetAlias = (fileName) => (req, res) => {
+  const ext = path.extname(String(fileName || "")).toLowerCase();
+  const versionTag = String(req.query?.v || "").trim();
+  if (versionTag && (FRESH_ASSET_EXTENSIONS.has(ext) || CACHEABLE_MEDIA_EXTENSIONS.has(ext))) {
+    res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+  } else if (FRESH_ASSET_EXTENSIONS.has(ext)) {
+    res.setHeader("Cache-Control", "public, max-age=600, stale-while-revalidate=86400");
+  } else if (CACHEABLE_MEDIA_EXTENSIONS.has(ext)) {
+    res.setHeader("Cache-Control", "public, max-age=86400, stale-while-revalidate=604800");
+  }
   return res.sendFile(path.join(FRONTEND_MAPS_ROOT, fileName));
 };
 

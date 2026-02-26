@@ -34,15 +34,61 @@ const withTimeout = async (url, options = {}) => {
   }
 };
 
+const canonicalOrigin = (() => {
+  try {
+    return new URL(CANONICAL_URL).origin;
+  } catch {
+    return "https://www.cosmicalearn.com";
+  }
+})();
+
+const resolveRedirectTarget = (location, baseUrl) => {
+  try {
+    return new URL(location, baseUrl).toString();
+  } catch {
+    return "";
+  }
+};
+
 const expectRedirectToCanonical = async (url) => {
-  const response = await withTimeout(url, { redirect: "manual" });
-  if (![301, 302, 307, 308].includes(response.status)) {
-    throw new Error(`${url} expected redirect but returned HTTP ${response.status}`);
+  let currentUrl = url;
+  let hops = 0;
+  const maxHops = 4;
+  const seen = new Set();
+
+  while (hops < maxHops) {
+    const response = await withTimeout(currentUrl, { redirect: "manual" });
+    if (![301, 302, 307, 308].includes(response.status)) {
+      break;
+    }
+    const location = response.headers.get("location") || "";
+    if (!location) {
+      throw new Error(`${currentUrl} redirect missing location header`);
+    }
+    const nextUrl = resolveRedirectTarget(location, currentUrl);
+    if (!nextUrl) {
+      throw new Error(`${currentUrl} redirected to invalid location: ${location}`);
+    }
+    if (seen.has(nextUrl)) {
+      throw new Error(`${currentUrl} redirect loop detected at ${nextUrl}`);
+    }
+    seen.add(nextUrl);
+    currentUrl = nextUrl;
+    hops += 1;
   }
 
-  const location = response.headers.get("location") || "";
-  if (!location.startsWith("https://www.cosmicalearn.com")) {
-    throw new Error(`${url} redirected to unexpected location: ${location || "(empty)"}`);
+  if (hops === 0) {
+    throw new Error(`${url} expected redirect but returned a non-redirect response`);
+  }
+  const finalOrigin = (() => {
+    try {
+      return new URL(currentUrl).origin;
+    } catch {
+      return "";
+    }
+  })();
+  if (finalOrigin !== canonicalOrigin) {
+    throw new Error(`${url} redirected to unexpected final origin: ${currentUrl}`);
   }
 };
 

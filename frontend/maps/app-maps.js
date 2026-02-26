@@ -3173,6 +3173,19 @@ const buildMapUnavailableState = (mapType) => {
   return wrapper;
 };
 
+const buildGrammarUnderExpertReviewState = () => {
+  const wrapper = document.createElement("section");
+  wrapper.className = "section map-unavailable";
+  wrapper.innerHTML = `
+    <div class="section-title">
+      <h2>Grammar map is under expert review</h2>
+      <p>This grammar map is temporarily locked while language experts review and refine it.</p>
+      <p>Please continue with Letters, Words, and Phrases in the meantime.</p>
+    </div>
+  `;
+  return wrapper;
+};
+
 const createSectionFilterButton = (title, value, sourceTitle = title) => {
   const button = document.createElement("button");
   button.className = "words-filter";
@@ -3611,11 +3624,25 @@ const getPremiumAccessState = () => {
 const GRAMMAR_PREVIEW_SECTION_LIMIT = 2;
 const GRAMMAR_PREVIEW_CARD_LIMIT = 4;
 const GRAMMAR_FREE_PREVIEW_UNLOCKED_SECTIONS = new Set(["sentence structure", "verbs"]);
+const GRAMMAR_UNDER_EXPERT_REVIEW_WORLDS = new Set([
+  "arabic",
+  "chinese",
+  "japanese",
+  "hindi",
+  "korean",
+]);
 
 const normalizeGrammarSectionKey = (value = "") =>
   String(value || "")
     .trim()
     .toLowerCase();
+
+const isGrammarWorldUnderExpertReview = () =>
+  GRAMMAR_UNDER_EXPERT_REVIEW_WORLDS.has(
+    String(WORLD_KEY || "")
+      .trim()
+      .toLowerCase()
+  );
 
 const isGrammarSectionFreePreviewUnlocked = (sectionName = "") =>
   GRAMMAR_FREE_PREVIEW_UNLOCKED_SECTIONS.has(normalizeGrammarSectionKey(sectionName));
@@ -4424,6 +4451,11 @@ const renderGrammarSections = () => {
   container.innerHTML = "";
   if (controls) {
     controls.innerHTML = "";
+  }
+  if (isGrammarWorldUnderExpertReview()) {
+    document.body.classList.remove("maps-loading");
+    container.appendChild(buildGrammarUnderExpertReviewState());
+    return;
   }
 
   const premiumAccessState = getPremiumAccessState();
@@ -8949,6 +8981,9 @@ const renderGrammarModal = (section, index) => {
 
 
 const openGrammarModal = (section, index) => {
+  if (isGrammarWorldUnderExpertReview()) {
+    return;
+  }
   if (isGrammarSectionLockedForCurrentAccess(section)) {
     openGrammarPremiumUpgrade({
       message: "Upgrade to Premium to open full grammar card explanations.",
