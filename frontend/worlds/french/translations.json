@@ -8030,7 +8030,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Marie une pomme mange.",
+              "wrong": "Marie mangent une pomme.",
               "fix": "Marie mange une pomme."
             }
           ]
@@ -9095,7 +9095,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Je vois le.",
+              "wrong": "Je lui vois.",
               "fix": "Je le vois."
             }
           ]
@@ -9286,7 +9286,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Une rouge maison.",
+              "wrong": "Une maison rouges.",
               "fix": "Une maison rouge."
             }
           ]
@@ -9315,7 +9315,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Des bleues voitures.",
+              "wrong": "Des voitures bleu.",
               "fix": "Des voitures bleues."
             }
           ]
@@ -9349,7 +9349,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Il rapidement court.",
+              "wrong": "Il court rapide.",
               "fix": "Il court rapidement."
             }
           ]
@@ -9388,7 +9388,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Marie est grande plus que Sophie.",
+              "wrong": "Marie est plus grande de Sophie.",
               "fix": "Marie est plus grande que Sophie."
             }
           ]
@@ -9427,7 +9427,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "C'est beau le plus tableau.",
+              "wrong": "C'est plus beau tableau.",
               "fix": "C'est le plus beau tableau."
             }
           ]
@@ -9466,7 +9466,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Il souvent mange des fruits.",
+              "wrong": "Il mange souvent de fruits.",
               "fix": "Il mange souvent des fruits."
             }
           ]
@@ -9500,7 +9500,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Voiture cette est rapide.",
+              "wrong": "Cet voiture est rapide.",
               "fix": "Cette voiture est rapide."
             }
           ]
@@ -9539,7 +9539,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Il a amis plusieurs.",
+              "wrong": "Il a plusieurs ami.",
               "fix": "Il a plusieurs amis."
             }
           ]
@@ -9578,7 +9578,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Il demain partira en voyage.",
+              "wrong": "Demain, il partir en voyage.",
               "fix": "Demain, il partira en voyage."
             }
           ]
@@ -9617,7 +9617,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Livre mon est sur la table.",
+              "wrong": "Ma livre est sur la table.",
               "fix": "Mon livre est sur la table."
             }
           ]
@@ -9658,7 +9658,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Tu viens ce soir est-ce que ?",
+              "wrong": "Est-ce que tu vient ce soir ?",
               "fix": "Est-ce que tu viens ce soir ?"
             }
           ]
@@ -9692,7 +9692,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Vas-tu où ?",
+              "wrong": "O? va-tu ?",
               "fix": "Où vas-tu ?"
             }
           ]
@@ -9721,7 +9721,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Aimes tu le chocolat ?",
+              "wrong": "Aime-tu le chocolat ?",
               "fix": "Aimes-tu le chocolat ?"
             }
           ]
@@ -9789,7 +9789,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Vient qui à la fête ?",
+              "wrong": "Qui viens ? la f?te ?",
               "fix": "Qui vient à la fête ?"
             }
           ]
@@ -9818,7 +9818,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "De neuf quoi ?",
+              "wrong": "Quoi de neufs ?",
               "fix": "Quoi de neuf ?"
             }
           ]
@@ -9852,7 +9852,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Je me demande si viens-tu.",
+              "wrong": "Je me demande si tu vient.",
               "fix": "Je me demande si tu viens."
             }
           ]
@@ -10746,7 +10746,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Venez vous à la fête ?",
+              "wrong": "Venez-vous ? le f?te ?",
               "fix": "Venez-vous à la fête ?"
             }
           ]
@@ -11316,7 +11316,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Salut, aide-moi.",
+              "wrong": "Bonjour, peux-tu m'aider, s'il te pla?t ?",
               "fix": "Bonjour, pourriez-vous m'aider, s'il vous plaît ?"
             }
           ]
