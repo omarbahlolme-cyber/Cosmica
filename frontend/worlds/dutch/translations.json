@@ -9182,7 +9182,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Eet de kat de muis.",
+              "wrong": "De kat eten de muis.",
               "fix": "De kat eet de muis."
             }
           ]
@@ -9221,7 +9221,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Hij naar school gaat vandaag.",
+              "wrong": "Vandaag gaan hij naar school.",
               "fix": "Vandaag gaat hij naar school."
             }
           ]
@@ -9289,7 +9289,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ik blijf thuis als het regent.",
+              "wrong": "Als het regent, blijft ik thuis.",
               "fix": "Als het regent, blijf ik thuis."
             }
           ]
@@ -9323,7 +9323,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Hij komt morgen?",
+              "wrong": "Kom hij morgen?",
               "fix": "Komt hij morgen?"
             }
           ]
@@ -9842,7 +9842,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ik ga morgen naar de markt.",
+              "wrong": "Morgen ging ik naar de markt.",
               "fix": "Morgen ga ik naar de markt."
             }
           ]
@@ -9876,7 +9876,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Hij vaak studeert in de bibliotheek.",
+              "wrong": "Hij studeren vaak in de bibliotheek.",
               "fix": "Hij studeert vaak in de bibliotheek."
             }
           ]
@@ -10128,7 +10128,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "De man lopende is snel.",
+              "wrong": "De lopende man zijn snel.",
               "fix": "De lopende man is snel."
             }
           ]
@@ -10167,7 +10167,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Een hond grote blaft.",
+              "wrong": "Een grote honden blaft.",
               "fix": "Een grote hond blaft."
             }
           ]
@@ -10203,7 +10203,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Hem zie ik in het park.",
+              "wrong": "Ik zie hij in het park.",
               "fix": "Ik zie hem in het park."
             }
           ]
@@ -10237,7 +10237,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Dit is boek mijn.",
+              "wrong": "Dit is mij boek.",
               "fix": "Dit is mijn boek."
             }
           ]
@@ -10271,7 +10271,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Dat de auto is.",
+              "wrong": "Dat zijn de auto.",
               "fix": "Dat is de auto."
             }
           ]
@@ -10305,7 +10305,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Hij zich wast elke ochtend.",
+              "wrong": "Hij wast hem elke ochtend.",
               "fix": "Hij wast zich elke ochtend."
             }
           ]
@@ -10368,7 +10368,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Is hier mijn huis.",
+              "wrong": "Hier zijn mijn huis.",
               "fix": "Hier is mijn huis."
             }
           ]
@@ -10472,7 +10472,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Snel loopt hij.",
+              "wrong": "Hij loopt snelle.",
               "fix": "Hij loopt snel."
             }
           ]
@@ -10506,7 +10506,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Zij groter is dan hij.",
+              "wrong": "Zij is groot dan hij.",
               "fix": "Zij is groter dan hij."
             }
           ]
@@ -10545,7 +10545,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Het is koud heel buiten.",
+              "wrong": "Het is heel koude buiten.",
               "fix": "Het is heel koud buiten."
             }
           ]
@@ -10579,7 +10579,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Hij is slimste de van de klas.",
+              "wrong": "Hij is slimste van de klas.",
               "fix": "Hij is de slimste van de klas."
             }
           ]
@@ -10623,7 +10623,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Zij vaak gaat naar de winkel.",
+              "wrong": "Zij gaat vaak naar het winkel.",
               "fix": "Zij gaat vaak naar de winkel."
             }
           ]
@@ -10662,7 +10662,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "De man oude vertelde een verhaal.",
+              "wrong": "De oud man vertelde een verhaal.",
               "fix": "De oude man vertelde een verhaal."
             }
           ]
@@ -10696,7 +10696,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Daar woont hij.",
+              "wrong": "Hij woon daar.",
               "fix": "Hij woont daar."
             }
           ]
@@ -10735,7 +10735,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Zij is geïnteresseerd meer dan hij.",
+              "wrong": "Zij is meest geinteresseerd dan hij.",
               "fix": "Zij is meer geïnteresseerd dan hij."
             }
           ]
@@ -10774,7 +10774,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Het is belangrijk uiterst.",
+              "wrong": "Het is uiterst belangrijke.",
               "fix": "Het is uiterst belangrijk."
             }
           ]
@@ -10815,7 +10815,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Doe je wat morgen?",
+              "wrong": "Wat doet je morgen?",
               "fix": "Wat doe je morgen?"
             }
           ]
@@ -10883,7 +10883,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "De bibliotheek is waar?",
+              "wrong": "Waar zijn de bibliotheek?",
               "fix": "Waar is de bibliotheek?"
             }
           ]
@@ -11055,7 +11055,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ik niet zie het.",
+              "wrong": "Ik zie het geen.",
               "fix": "Ik zie het niet."
             }
           ]
@@ -11167,7 +11167,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Hij heeft niet gedaan het.",
+              "wrong": "Hij heeft het niet doen.",
               "fix": "Hij heeft het niet gedaan."
             }
           ]
@@ -11206,7 +11206,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ik denk dat niet hij het wil.",
+              "wrong": "Ik denk dat hij het niet wilt.",
               "fix": "Ik denk dat hij het niet wil."
             }
           ]
@@ -11240,7 +11240,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Wil je niet het doen?",
+              "wrong": "Wil je het niet doet?",
               "fix": "Wil je het niet doen?"
             }
           ]
@@ -11276,7 +11276,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Eet ik een appel.",
+              "wrong": "Ik eten een appel.",
               "fix": "Ik eet een appel."
             }
           ]
@@ -11344,7 +11344,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Omdat het regent ik blijf thuis.",
+              "wrong": "Ik blijf thuis omdat het regen.",
               "fix": "Ik blijf thuis omdat het regent."
             }
           ]
@@ -11412,7 +11412,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Hij zegt dat morgen komt hij.",
+              "wrong": "Hij zegt dat hij morgen kom.",
               "fix": "Hij zegt dat hij morgen komt."
             }
           ]
@@ -11446,7 +11446,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Blijf ik binnen als het regent.",
+              "wrong": "Als het regenen, blijf ik binnen.",
               "fix": "Als het regent, blijf ik binnen."
             }
           ]
@@ -11480,7 +11480,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "De man is mijn vader die daar staat.",
+              "wrong": "De man die daar staat, zijn mijn vader.",
               "fix": "De man die daar staat, is mijn vader."
             }
           ]
@@ -11516,7 +11516,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Als ik een paraplu neem, het regent.",
+              "wrong": "Als het regenen, neem ik een paraplu.",
               "fix": "Als het regent, neem ik een paraplu."
             }
           ]
@@ -11672,7 +11672,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ik ga naar buiten ook al het regent.",
+              "wrong": "Ook al regent het, ik gaat naar buiten.",
               "fix": "Ook al regent het, ik ga naar buiten."
             }
           ]
@@ -11747,7 +11747,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Eet de hond de brokken.",
+              "wrong": "De hond eten de brokken.",
               "fix": "De hond eet de brokken."
             }
           ]
@@ -11781,7 +11781,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "De kat is schattig die met de bal speelt.",
+              "wrong": "De kat, die met de bal speelt, zijn schattig.",
               "fix": "De kat, die met de bal speelt, is schattig."
             }
           ]
@@ -11849,7 +11849,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Hij heeft de wedstrijd gisteren gewonnen.",
+              "wrong": "Gisteren heeft hij de wedstrijd gewint.",
               "fix": "Gisteren heeft hij de wedstrijd gewonnen."
             }
           ]
@@ -11883,7 +11883,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Hij bleef thuis omdat het regende.",
+              "wrong": "Omdat het regende, blijf hij thuis.",
               "fix": "Omdat het regende, bleef hij thuis."
             }
           ]
@@ -11919,8 +11919,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "Je moet maken huiswerk.",
-              "fix": "Je moet huiswerk maken."
+              "wrong": "Je moeten je huiswerk maken.",
+              "fix": "Je moet je huiswerk maken."
             }
           ]
         },
@@ -11953,7 +11953,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ik kan komen morgen.",
+              "wrong": "Ik kan morgen komt.",
               "fix": "Ik kan morgen komen."
             }
           ]
@@ -11987,7 +11987,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Zij kan zingen goed.",
+              "wrong": "Zij kan goed zingt.",
               "fix": "Zij kan goed zingen."
             }
           ]
@@ -12021,7 +12021,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Wij winnen zullen.",
+              "wrong": "Wij zal winnen.",
               "fix": "Wij zullen winnen."
             }
           ]
@@ -12060,7 +12060,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Misschien ik ga naar het feest.",
+              "wrong": "Misschien gaat ik naar het feest.",
               "fix": "Misschien ga ik naar het feest."
             }
           ]
@@ -12094,7 +12094,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Mogelijk dat hij komt is het.",
+              "wrong": "Het is mogelijk dat hij kom.",
               "fix": "Het is mogelijk dat hij komt."
             }
           ]
@@ -12133,7 +12133,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Je kiezen moet tussen de opties.",
+              "wrong": "Je moet kiest tussen de opties.",
               "fix": "Je moet kiezen tussen de opties."
             }
           ]
@@ -12172,7 +12172,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Je kiezen kunt wat je wilt.",
+              "wrong": "Je kunt kiezen wat je willen.",
               "fix": "Je kunt kiezen wat je wilt."
             }
           ]
@@ -12264,10 +12264,10 @@
             "Verander de toekomstige tijd naar de verleden tijd.",
             "Pas de tijd aan op basis van de context."
           ],
-          "example": "Zij zegt dat ze morgen komt.",
+          "example": "Zij zei dat ze morgen kwam.",
           "ruleOrder": [
             "onderwerp",
-            "zegt",
+            "zei",
             "dat",
             "kwam"
           ],
@@ -12277,8 +12277,8 @@
               "text": "Zij"
             },
             {
-              "label": "zegt",
-              "text": "zegt"
+              "label": "zei",
+              "text": "zei"
             },
             {
               "label": "dat",
@@ -12286,12 +12286,12 @@
             },
             {
               "label": "kwam",
-              "text": "ze"
+              "text": "ze morgen kwam"
             }
           ],
           "mistakes": [
             {
-              "wrong": "Zij zegt dat ze morgen zal komen.",
+              "wrong": "Zij zei dat ze morgen komt.",
               "fix": "Zij zei dat ze morgen kwam."
             }
           ]
@@ -12459,8 +12459,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "Hoe gaat U?",
-              "fix": "Hoe gaat het?"
+              "wrong": "Hey, hoe gaat u?",
+              "fix": "Hey, hoe gaat het?"
             }
           ]
         },
@@ -12493,8 +12493,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "Hoe gaat het met je?",
-              "fix": "Hoe gaat het met u?"
+              "wrong": "Goedemiddag, hoe gaat het met je?",
+              "fix": "Goedemiddag, hoe gaat het met u?"
             }
           ]
         },
@@ -12527,8 +12527,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "Kun je mij helpen?",
-              "fix": "Zou u mij kunnen helpen?"
+              "wrong": "Kun je mij kunnen helpen, alstublieft?",
+              "fix": "Zou u mij kunnen helpen, alstublieft?"
             }
           ]
         },
@@ -12561,7 +12561,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Tot ziens, U!",
+              "wrong": "Doei, tot de volgend keer!",
               "fix": "Doei, tot de volgende keer!"
             }
           ]
@@ -12590,8 +12590,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "Groetjes, Jan.",
-              "fix": "Met vriendelijke groet, Jan."
+              "wrong": "Groetjes, mevrouw Jansen.",
+              "fix": "Met vriendelijke groet, mevrouw Jansen."
             }
           ]
         },
@@ -12624,8 +12624,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "Dank je voor je hulp.",
-              "fix": "Dank u voor uw hulp."
+              "wrong": "Dank je voor uw tijd en aandacht.",
+              "fix": "Dank u voor uw tijd en aandacht."
             }
           ]
         },
@@ -12658,7 +12658,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Je een mooie jurk hebt aan!",
+              "wrong": "Je heeft een mooie jurk aan!",
               "fix": "Je hebt een mooie jurk aan!"
             }
           ]
@@ -12694,8 +12694,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ik ga naar de winkel omdat melk nodig heb.",
-              "fix": "Ik ga naar de winkel omdat ik melk nodig heb."
+              "wrong": "Ik ga naar de winkel, omdat ik melk nodig hebt.",
+              "fix": "Ik ga naar de winkel, omdat ik melk nodig heb."
             }
           ]
         },
@@ -12728,7 +12728,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Dit boek is interessant maar dat saai is.",
+              "wrong": "Dit boek is interessant, maar dat zijn saai.",
               "fix": "Dit boek is interessant, maar dat is saai."
             }
           ]
@@ -12762,7 +12762,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ik ga later naar het feest.",
+              "wrong": "Later gaat ik naar het feest.",
               "fix": "Later ga ik naar het feest."
             }
           ]
@@ -12796,7 +12796,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Het is ook duur aan de andere kant.",
+              "wrong": "Aan de andere kant zijn het ook duur.",
               "fix": "Aan de andere kant is het ook duur."
             }
           ]
@@ -12825,7 +12825,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ik blijf thuis als het regent.",
+              "wrong": "Als het regent, blijf hij thuis.",
               "fix": "Als het regent, blijf ik thuis."
             }
           ]
@@ -12859,7 +12859,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "We moeten harder werken kortom.",
+              "wrong": "Kortom, we moet harder werken.",
               "fix": "Kortom, we moeten harder werken."
             }
           ]
@@ -12893,7 +12893,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "We hebben meer tijd nodig dat wil zeggen.",
+              "wrong": "Dat wil zeggen, we heeft meer tijd nodig.",
               "fix": "Dat wil zeggen, we hebben meer tijd nodig."
             }
           ]
@@ -12961,7 +12961,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "We moeten nu beslissen dus.",
+              "wrong": "Dus moet we nu beslissen.",
               "fix": "Dus moeten we nu beslissen."
             }
           ]

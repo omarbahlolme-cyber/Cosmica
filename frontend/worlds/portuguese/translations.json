@@ -7994,7 +7994,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Comeu Maria a maçã.",
+              "wrong": "Maria comer a maçã.",
               "fix": "Maria comeu a maçã."
             }
           ]
@@ -8077,7 +8077,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Maria a maçã comeu no parque.",
+              "wrong": "No parque, Maria comeu o maçã.",
               "fix": "No parque, Maria comeu a maçã."
             }
           ]
@@ -8111,7 +8111,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Comi eu a maçã.",
+              "wrong": "Eu comemos a maçã.",
               "fix": "Eu comi a maçã."
             }
           ]
@@ -8145,7 +8145,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Foi ela ao mercado.",
+              "wrong": "Ela foi ao mercados.",
               "fix": "Ela foi ao mercado."
             }
           ]
@@ -8674,8 +8674,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ele lê o livro ontem.",
-              "fix": "Ele leu o livro ontem."
+              "wrong": "Ele lê o livro ontem. / Ele lê o livro todos os dias.",
+              "fix": "Ele leu o livro ontem. / Ele lê o livro todos os dias."
             }
           ]
         },
@@ -8708,8 +8708,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "Eu nunca comi.",
-              "fix": "Eu já comi."
+              "wrong": "Eu já comi. / Eu ainda comi.",
+              "fix": "Eu já comi. / Eu ainda não comi."
             }
           ]
         }
@@ -9310,7 +9310,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "O vermelho carro é rápido.",
+              "wrong": "O carro vermelha é rápido.",
               "fix": "O carro vermelho é rápido."
             }
           ]
@@ -9339,7 +9339,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "A bonita casa é cara.",
+              "wrong": "A casa bonito é cara.",
               "fix": "A casa bonita é cara."
             }
           ]
@@ -9383,7 +9383,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ela é alta mais que eu.",
+              "wrong": "Ela é mais alto que eu.",
               "fix": "Ela é mais alta que eu."
             }
           ]
@@ -9422,7 +9422,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ele é mais inteligente o da turma.",
+              "wrong": "Ele é mais inteligente da turma.",
               "fix": "Ele é o mais inteligente da turma."
             }
           ]
@@ -9461,7 +9461,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ela é bonita muito.",
+              "wrong": "Ela é muitos bonita.",
               "fix": "Ela é muito bonita."
             }
           ]
@@ -9500,7 +9500,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Um vermelho lindo carro.",
+              "wrong": "Um lindo carro vermelhos.",
               "fix": "Um lindo carro vermelho."
             }
           ]
@@ -9544,7 +9544,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ele mesmo comprou o carro que eu.",
+              "wrong": "Ele comprou o mesma carro que eu.",
               "fix": "Ele comprou o mesmo carro que eu."
             }
           ]
@@ -9583,7 +9583,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Eu vou ao mercado hoje.",
+              "wrong": "Hoje eu vou ao mercados.",
               "fix": "Hoje eu vou ao mercado."
             }
           ]
@@ -9617,7 +9617,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Aqui ele está.",
+              "wrong": "Ele estão aqui.",
               "fix": "Ele está aqui."
             }
           ]
@@ -9651,7 +9651,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Rapidamente ela fala.",
+              "wrong": "Ela fala rápidos.",
               "fix": "Ela fala rapidamente."
             }
           ]
@@ -9687,7 +9687,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Gosta você de música?",
+              "wrong": "Você gostas de música?",
               "fix": "Você gosta de música?"
             }
           ]
@@ -9721,7 +9721,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Você é quem?",
+              "wrong": "Quem são você?",
               "fix": "Quem é você?"
             }
           ]
@@ -9755,7 +9755,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Você gosta não de música?",
+              "wrong": "Você não gostam de música?",
               "fix": "Você não gosta de música?"
             }
           ]
@@ -9823,7 +9823,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Você não veio por que?",
+              "wrong": "Por que você não vem ontem?",
               "fix": "Por que você não veio?"
             }
           ]
@@ -9857,7 +9857,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Você prefere qual livro?",
+              "wrong": "Qual livro você prefereu?",
               "fix": "Qual livro você prefere?"
             }
           ]
@@ -9891,7 +9891,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Quem gostaria não de viajar?",
+              "wrong": "Quem não gostariam de viajar?",
               "fix": "Quem não gostaria de viajar?"
             }
           ]
@@ -9932,7 +9932,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Eu gosto não de maçãs.",
+              "wrong": "Eu gosto de maçãs.",
               "fix": "Eu não gosto de maçãs."
             }
           ]
@@ -9971,7 +9971,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Eu vou nunca ao cinema.",
+              "wrong": "Eu sempre vou ao cinema.",
               "fix": "Eu nunca vou ao cinema."
             }
           ]
@@ -10005,7 +10005,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Veio ninguém à festa.",
+              "wrong": "Alguém veio à festa.",
               "fix": "Ninguém veio à festa."
             }
           ]
@@ -10044,7 +10044,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Eu sem fui você.",
+              "wrong": "Eu fui com você.",
               "fix": "Eu fui sem você."
             }
           ]
@@ -10083,7 +10083,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Eu fiz não nada.",
+              "wrong": "Eu fiz nada.",
               "fix": "Eu não fiz nada."
             }
           ]
@@ -10122,7 +10122,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Eu esquecerei jamais você.",
+              "wrong": "Eu esquecerei você.",
               "fix": "Eu jamais esquecerei você."
             }
           ]
@@ -10202,7 +10202,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Eu vou ao parque se chover não.",
+              "wrong": "Eu vou ao parque se não chover e.",
               "fix": "Eu vou ao parque se não chover."
             }
           ]
@@ -10236,7 +10236,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "O livro eu li que é interessante.",
+              "wrong": "O livro que eu li são interessante.",
               "fix": "O livro que eu li é interessante."
             }
           ]
@@ -10353,7 +10353,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Eu gosto de praia, prefiro montanha mas.",
+              "wrong": "Eu gosto de praia, mas prefere montanha.",
               "fix": "Eu gosto de praia, mas prefiro montanha."
             }
           ]
@@ -10392,7 +10392,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Eu estudei muito, passei na prova portanto.",
+              "wrong": "Eu estudei muito; portanto, passei na provas.",
               "fix": "Eu estudei muito; portanto, passei na prova."
             }
           ]
@@ -10658,7 +10658,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Come Maria maçã.",
+              "wrong": "Maria comer maçã.",
               "fix": "Maria come maçã."
             }
           ]
@@ -10692,7 +10692,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Come a maçã Maria.",
+              "wrong": "A maçã comem Maria.",
               "fix": "A maçã come Maria."
             }
           ]
@@ -10736,7 +10736,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Foi comida a maçã por Maria.",
+              "wrong": "A maçã foi comido por Maria.",
               "fix": "A maçã foi comida por Maria."
             }
           ]
@@ -10775,7 +10775,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Rapidamente come Maria maçã.",
+              "wrong": "Maria rapidamente comem maçã.",
               "fix": "Maria rapidamente come maçã."
             }
           ]
@@ -10819,8 +10819,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "Eu também comi a.",
-              "fix": "Eu também a comi."
+              "wrong": "Ela comeu a maçã, e eu também comi.",
+              "fix": "Ela comeu a maçã, e eu também a comi."
             }
           ]
         }
@@ -11059,7 +11059,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "deve Você tentar essa receita.",
+              "wrong": "Você deve tenta essa receita.",
               "fix": "Você deve tentar essa receita."
             }
           ]
@@ -11093,7 +11093,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "deve Você descansar mais.",
+              "wrong": "Você deve descansas mais.",
               "fix": "Você deve descansar mais."
             }
           ]
@@ -11129,8 +11129,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ela disse: 'Eu vou amanhã.'",
-              "fix": "Ela disse que iria amanhã."
+              "wrong": "Ela disse que virá amanhã.",
+              "fix": "Ela disse que viria amanhã."
             }
           ]
         },
@@ -11163,8 +11163,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ele disse que é feliz.",
-              "fix": "Ele disse que era feliz."
+              "wrong": "Ele disse que está feliz.",
+              "fix": "Ele disse que estava feliz."
             }
           ]
         },
@@ -11355,8 +11355,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "Senhor pode me ajudar?",
-              "fix": "O senhor pode me ajudar?"
+              "wrong": "Você pode me ajudar, senhora?",
+              "fix": "Você pode me ajudar, senhor?"
             }
           ]
         },
@@ -11389,8 +11389,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "Me passe o sal.",
-              "fix": "Por favor, me passe o sal."
+              "wrong": "Me passe o sal. Obrigado!",
+              "fix": "Por favor, me passe o sal. Obrigado!"
             }
           ]
         },
@@ -11539,8 +11539,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "Quero que você venha à festa.",
-              "fix": "Gostaria que você venha à festa."
+              "wrong": "Gostaria que você venha à festa.",
+              "fix": "Espero que você venha à festa."
             }
           ]
         }

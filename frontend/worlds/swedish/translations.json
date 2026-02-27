@@ -9164,7 +9164,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Äter jag äpplet.",
+              "wrong": "Jag äta äpplet.",
               "fix": "Jag äter äpplet."
             }
           ]
@@ -9203,7 +9203,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Äter jag äpplet i dag.",
+              "wrong": "I dag äta jag äpplet.",
               "fix": "I dag äter jag äpplet."
             }
           ]
@@ -9242,7 +9242,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Inte äter jag äpplet.",
+              "wrong": "Jag äter inte inte äpplet.",
               "fix": "Jag äter inte äpplet."
             }
           ]
@@ -9276,7 +9276,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Du äter äpplet?",
+              "wrong": "Äta du äpplet?",
               "fix": "Äter du äpplet?"
             }
           ]
@@ -9429,7 +9429,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Barnen spelar i parken fotboll.",
+              "wrong": "I parken spela barnen fotboll.",
               "fix": "I parken spelar barnen fotboll."
             }
           ]
@@ -9468,7 +9468,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Hon stänger TV:n av.",
+              "wrong": "Hon stänga av TV:n.",
               "fix": "Hon stänger av TV:n."
             }
           ]
@@ -9577,8 +9577,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "Jag äta frukost varje morgon.",
-              "fix": "Jag äter frukost varje morgon."
+              "wrong": "Jag äta frukost varje morgon. Igår åt jag frukost klockan åtta.",
+              "fix": "Jag äter frukost varje morgon. Igår åt jag frukost klockan åtta."
             }
           ]
         },
@@ -9616,8 +9616,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "Jag har äta frukost.",
-              "fix": "Jag har ätit frukost."
+              "wrong": "Jag har äta frukost. Jag hade ätit frukost innan jag gick till jobbet.",
+              "fix": "Jag har ätit frukost. Jag hade ätit frukost innan jag gick till jobbet."
             }
           ]
         },
@@ -9655,8 +9655,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "Jag kommer äta frukost imorgon.",
-              "fix": "Jag kommer att äta frukost imorgon."
+              "wrong": "Jag ska äta frukost imorgon. Jag kommer äta frukost klockan åtta.",
+              "fix": "Jag ska äta frukost imorgon. Jag kommer att äta frukost klockan åtta."
             }
           ]
         },
@@ -9699,7 +9699,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Jag just har ätit frukost.",
+              "wrong": "Jag har just äta frukost.",
               "fix": "Jag har just ätit frukost."
             }
           ]
@@ -9738,7 +9738,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Jag alltid äter frukost.",
+              "wrong": "Jag äta alltid frukost.",
               "fix": "Jag äter alltid frukost."
             }
           ]
@@ -9899,7 +9899,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Jag inte äter frukost.",
+              "wrong": "Jag äter inga frukost.",
               "fix": "Jag äter inte frukost."
             }
           ]
@@ -10250,7 +10250,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Henne ser jag.",
+              "wrong": "Jag ser hon.",
               "fix": "Jag ser henne."
             }
           ]
@@ -10449,7 +10449,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Min vän är här.",
+              "wrong": "Här är mitt vän.",
               "fix": "Här är min vän."
             }
           ]
@@ -10534,7 +10534,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Jag såg en röd gammal bil.",
+              "wrong": "Jag såg ett gammal röd bil.",
               "fix": "Jag såg en gammal röd bil."
             }
           ]
@@ -10612,7 +10612,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Det är kallt mycket idag.",
+              "wrong": "Det är mycket kall idag.",
               "fix": "Det är mycket kallt idag."
             }
           ]
@@ -10646,7 +10646,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Han snabbt pratar.",
+              "wrong": "Han prata snabbt.",
               "fix": "Han pratar snabbt."
             }
           ]
@@ -10685,7 +10685,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Jag inte gillar kaffe.",
+              "wrong": "Jag gillar inte inte kaffe.",
               "fix": "Jag gillar inte kaffe."
             }
           ]
@@ -10729,7 +10729,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Boken ligger bordet på det stora.",
+              "wrong": "Boken ligger på den stora bordet.",
               "fix": "Boken ligger på det stora bordet."
             }
           ]
@@ -10768,7 +10768,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Hon är vacker väldigt.",
+              "wrong": "Hon är väldigt vackra.",
               "fix": "Hon är väldigt vacker."
             }
           ]
@@ -10856,7 +10856,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Hon alltid är inte glad.",
+              "wrong": "Hon är inte alltid glada.",
               "fix": "Hon är inte alltid glad."
             }
           ]
@@ -10887,7 +10887,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Du är glad?",
+              "wrong": "Är du glada?",
               "fix": "Är du glad?"
             }
           ]
@@ -10921,7 +10921,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Du gör vad?",
+              "wrong": "Vad göra du?",
               "fix": "Vad gör du?"
             }
           ]
@@ -11033,7 +11033,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Du pratar vem med?",
+              "wrong": "Vem pratar du?",
               "fix": "Vem pratar du med?"
             }
           ]
@@ -11067,7 +11067,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Du är trött inte?",
+              "wrong": "Är du inte trötta?",
               "fix": "Är du inte trött?"
             }
           ]
@@ -11147,7 +11147,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Jag inte äter äpplet.",
+              "wrong": "Jag äter inget äpplet.",
               "fix": "Jag äter inte äpplet."
             }
           ]
@@ -11269,7 +11269,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Aldrig jag äter äpplet.",
+              "wrong": "Jag äter aldrig aldrig äpplet.",
               "fix": "Jag äter aldrig äpplet."
             }
           ]
@@ -11308,7 +11308,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Äter inte du äpplet?",
+              "wrong": "Äter du inte inte äpplet?",
               "fix": "Äter du inte äpplet?"
             }
           ]
@@ -11618,7 +11618,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Om regnar det, stannar vi hemma.",
+              "wrong": "Om det regna, stannar vi hemma.",
               "fix": "Om det regnar, stannar vi hemma."
             }
           ]
@@ -11657,7 +11657,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Om jag hade pengar, jag skulle resa.",
+              "wrong": "Om jag har pengar, skulle jag resa.",
               "fix": "Om jag hade pengar, skulle jag resa."
             }
           ]
@@ -11784,7 +11784,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Om det blir soligt, vi kommer att gå ut.",
+              "wrong": "Om det blir soligt, kommer vi att går ut.",
               "fix": "Om det blir soligt, kommer vi att gå ut."
             }
           ]
@@ -11823,7 +11823,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Om det regnar och hemma jag är, stannar jag inne.",
+              "wrong": "Om det regnar och jag är hemma, stanna jag inne.",
               "fix": "Om det regnar och jag är hemma, stannar jag inne."
             }
           ]
@@ -11859,7 +11859,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Äter jag äpplet.",
+              "wrong": "Jag äta äpplet.",
               "fix": "Jag äter äpplet."
             }
           ]
@@ -11898,7 +11898,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Äter just jag äpplet.",
+              "wrong": "Jag just äta äpplet.",
               "fix": "Jag just äter äpplet."
             }
           ]
@@ -11966,7 +11966,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Jag äter äpplet.",
+              "wrong": "Äpplet äta jag.",
               "fix": "Äpplet äter jag."
             }
           ]
@@ -12005,7 +12005,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Just blev äpplet ätet av mig.",
+              "wrong": "Äpplet blev äta av mig just.",
               "fix": "Äpplet blev ätet av mig just."
             }
           ]
@@ -12041,7 +12041,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Jag måste till skolan gå.",
+              "wrong": "Jag måste går till skolan.",
               "fix": "Jag måste gå till skolan."
             }
           ]
@@ -12245,7 +12245,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Det kan vara sant?",
+              "wrong": "Kan det vara sanna?",
               "fix": "Kan det vara sant?"
             }
           ]
@@ -12516,8 +12516,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "Morgon hej, hur du mår?",
-              "fix": "God morgon, hur mår du?"
+              "wrong": "Hej, hur mår dig?",
+              "fix": "Hej, hur mår du?"
             }
           ]
         },
@@ -12647,7 +12647,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Hjälpa mig kan du?",
+              "wrong": "Kan du hjälper mig?",
               "fix": "Kan du hjälpa mig?"
             }
           ]
@@ -12715,7 +12715,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Jag såg filmen den.",
+              "wrong": "Jag såg det filmen.",
               "fix": "Jag såg den filmen."
             }
           ]
@@ -12751,7 +12751,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Jag gillar att läsa böcker, titta på filmer.",
+              "wrong": "Jag gillar att läsa böcker titta på filmer.",
               "fix": "Jag gillar att läsa böcker och titta på filmer."
             }
           ]
@@ -12785,7 +12785,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Jag gillar kaffe men föredrar te.",
+              "wrong": "Jag gillar kaffe, men jag föredrar teer.",
               "fix": "Jag gillar kaffe, men jag föredrar te."
             }
           ]
@@ -12819,7 +12819,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Jag stannade hemma, eftersom regnade.",
+              "wrong": "Jag stannade hemma eftersom det regna.",
               "fix": "Jag stannade hemma eftersom det regnade."
             }
           ]
@@ -12853,7 +12853,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Jag gick tidigt, därför att jag trött.",
+              "wrong": "Jag gick tidigt därför att jag trött.",
               "fix": "Jag gick tidigt därför att jag var trött."
             }
           ]
@@ -12882,7 +12882,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Trots det regnade, vi gick ut.",
+              "wrong": "Trots att det regnade går vi ut.",
               "fix": "Trots att det regnade gick vi ut."
             }
           ]
@@ -12916,7 +12916,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Även jag är trött, kommer att gå.",
+              "wrong": "Även om jag är trött kommer jag gå.",
               "fix": "Även om jag är trött kommer jag att gå."
             }
           ]
@@ -12945,7 +12945,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Jag studerar för lära mig svenska.",
+              "wrong": "Jag studerar för att lär mig svenska.",
               "fix": "Jag studerar för att lära mig svenska."
             }
           ]
@@ -13013,7 +13013,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Jag undrar, du kommer.",
+              "wrong": "Jag undrar du kommer.",
               "fix": "Jag undrar om du kommer."
             }
           ]
