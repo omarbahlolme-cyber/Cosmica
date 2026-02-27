@@ -509,14 +509,7 @@ $Token = "YOUR_ADMIN_SECURITY_TOKEN".Trim()
 $Email = "user@example.com".Trim().ToLower()
 ```
 
-Grant for 30 days:
-
-```powershell
-$GrantBody = @{ email = $Email; days = 30 } | ConvertTo-Json -Compress
-Invoke-RestMethod -Uri "$BaseUrl/api/admin/security/users/grant-premium" -Method POST -Headers @{ "x-admin-token" = $Token } -ContentType "application/json" -Body $GrantBody | ConvertTo-Json -Depth 8
-```
-
-Grant for 1 month (same as 30 days):
+Grant for 1 month (30 days):
 
 ```powershell
 $GrantBody = @{ email = $Email; days = 30 } | ConvertTo-Json -Compress

@@ -12343,7 +12343,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Heute ich gehe ins Kino.",
+              "wrong": "Ich gehen heute ins Kino.",
               "fix": "Ich gehe heute ins Kino."
             }
           ]
@@ -12666,7 +12666,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ich gut schwimmen kann.",
+              "wrong": "Ich kann gut schwimme.",
               "fix": "Ich kann gut schwimmen."
             }
           ]
@@ -12838,7 +12838,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "werde Ich morgen ins Kino gehen.",
+              "wrong": "Ich werde morgen ins Kino geht.",
               "fix": "Ich werde morgen ins Kino gehen."
             }
           ]
@@ -12940,7 +12940,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "bin Ich gerade am Lernen.",
+              "wrong": "Ich ist gerade am Lernen.",
               "fix": "Ich bin gerade am Lernen."
             }
           ]
@@ -12974,7 +12974,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "gehe Ich immer joggen.",
+              "wrong": "Ich geht immer joggen.",
               "fix": "Ich gehe immer joggen."
             }
           ]
@@ -13008,7 +13008,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "lese Ich noch das Buch.",
+              "wrong": "Ich lese noch den Buch.",
               "fix": "Ich lese noch das Buch."
             }
           ]
@@ -13042,7 +13042,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "gehe Ich bald ins Kino.",
+              "wrong": "Ich gehst bald ins Kino.",
               "fix": "Ich gehe bald ins Kino."
             }
           ]
@@ -13344,7 +13344,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Sehe ich dich.",
+              "wrong": "Mich sehe dich.",
               "fix": "Ich sehe dich."
             }
           ]
@@ -13378,7 +13378,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ich ihn sehe.",
+              "wrong": "Ich sehe er.",
               "fix": "Ich sehe ihn."
             }
           ]
@@ -13412,7 +13412,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ich mich wasche.",
+              "wrong": "Ich wasche mir.",
               "fix": "Ich wasche mich."
             }
           ]
@@ -13446,7 +13446,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Buch dieses ist interessant.",
+              "wrong": "Diese Buch ist interessant.",
               "fix": "Dieses Buch ist interessant."
             }
           ]
@@ -13480,7 +13480,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Jemand angerufen hat.",
+              "wrong": "Jemand haben angerufen.",
               "fix": "Jemand hat angerufen."
             }
           ]
@@ -13519,7 +13519,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Das Auto ist mein.",
+              "wrong": "Das ist meine Auto.",
               "fix": "Das ist mein Auto."
             }
           ]
@@ -13584,8 +13584,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "Der Hund schnell läuft.",
-              "fix": "Der schnelle Hund läuft."
+              "wrong": "Der schnelle Hund lauf schnell.",
+              "fix": "Der schnelle Hund läuft schnell."
             }
           ]
         },
@@ -13657,7 +13657,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Der Hund ist schnell sehr.",
+              "wrong": "Der Hund ist viel schnell.",
               "fix": "Der Hund ist sehr schnell."
             }
           ]
@@ -13691,7 +13691,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Der schnell Hund läuft.",
+              "wrong": "Der Hund läuft schnelle.",
               "fix": "Der Hund läuft schnell."
             }
           ]
@@ -13730,7 +13730,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Der Hund nicht ist schnell.",
+              "wrong": "Der Hund ist kein schnell.",
               "fix": "Der Hund ist nicht schnell."
             }
           ]
@@ -13769,7 +13769,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Im Park läuft schnell der Hund.",
+              "wrong": "Der Hund läuft schnell in der Park.",
               "fix": "Der Hund läuft schnell im Park."
             }
           ]
@@ -13803,7 +13803,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Der Hund braune große läuft schnell.",
+              "wrong": "Der groß, braune Hund läuft schnell.",
               "fix": "Der große, braune Hund läuft schnell."
             }
           ]
@@ -13837,7 +13837,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Läuft der Hund schnell.",
+              "wrong": "Schnell laufen der Hund.",
               "fix": "Schnell läuft der Hund."
             }
           ]
@@ -13876,7 +13876,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Der Hund ist schnell äußerst.",
+              "wrong": "Der Hund ist äußerst schnelle.",
               "fix": "Der Hund ist äußerst schnell."
             }
           ]
@@ -13920,7 +13920,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Der Hund ist schnell wie der Wind so.",
+              "wrong": "Der Hund ist so schnell als der Wind.",
               "fix": "Der Hund ist so schnell wie der Wind."
             }
           ]
@@ -13956,7 +13956,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Du kommst heute zur Party?",
+              "wrong": "Kommen du heute zur Party?",
               "fix": "Kommst du heute zur Party?"
             }
           ]
@@ -13995,7 +13995,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Was du machst morgen?",
+              "wrong": "Was macht du morgen?",
               "fix": "Was machst du morgen?"
             }
           ]
@@ -14034,7 +14034,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Wem gehst du mit ins Kino?",
+              "wrong": "Wem gehst du ins Kino?",
               "fix": "Mit wem gehst du ins Kino?"
             }
           ]
@@ -14063,7 +14063,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ich weiß nicht, ob kommt er.",
+              "wrong": "Ich wei? nicht, ob er kommen.",
               "fix": "Ich weiß nicht, ob er kommt."
             }
           ]
@@ -14126,7 +14126,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Dir geht's gut?",
+              "wrong": "Geht's dich gut?",
               "fix": "Geht's dir gut?"
             }
           ]
@@ -14160,7 +14160,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Kommst du, oder?",
+              "wrong": "Du kommen, oder?",
               "fix": "Du kommst, oder?"
             }
           ]
@@ -14201,7 +14201,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ich nicht gehe zur Schule.",
+              "wrong": "Ich gehe kein zur Schule.",
               "fix": "Ich gehe nicht zur Schule."
             }
           ]
@@ -14284,7 +14284,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ich weiß, dass nicht du kommst.",
+              "wrong": "Ich wei?, dass du kein kommst.",
               "fix": "Ich weiß, dass du nicht kommst."
             }
           ]
@@ -14362,7 +14362,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ich nicht kann schwimmen.",
+              "wrong": "Ich kann kein schwimmen.",
               "fix": "Ich kann nicht schwimmen."
             }
           ]
@@ -14401,7 +14401,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Kommst nicht du zur Party?",
+              "wrong": "Kommst du kein zur Party?",
               "fix": "Kommst du nicht zur Party?"
             }
           ]
@@ -14442,7 +14442,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ich gehe ins Kino und bleibt meine Schwester zu Hause.",
+              "wrong": "Ich gehe ins Kino und meine Schwester bleib zu Hause.",
               "fix": "Ich gehe ins Kino und meine Schwester bleibt zu Hause."
             }
           ]
@@ -14486,7 +14486,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ich bleibe zu Hause weil regnet es.",
+              "wrong": "Ich bleibe zu Hause, weil es regnen.",
               "fix": "Ich bleibe zu Hause, weil es regnet."
             }
           ]
@@ -14613,7 +14613,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ich gehe nach Hause, denn ich müde bin.",
+              "wrong": "Ich gehe nach Hause, denn ich ist müde.",
               "fix": "Ich gehe nach Hause, denn ich bin müde."
             }
           ]
@@ -14657,7 +14657,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ich gehe joggen obwohl regnet es.",
+              "wrong": "Ich gehe joggen, obwohl es regnen.",
               "fix": "Ich gehe joggen, obwohl es regnet."
             }
           ]
@@ -14696,7 +14696,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ich komme, sobald ich bin fertig.",
+              "wrong": "Ich komme, sobald ich fertig bist.",
               "fix": "Ich komme, sobald ich fertig bin."
             }
           ]
@@ -14737,8 +14737,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "Wenn ich gehe, ich kaufe Brot.",
-              "fix": "Wenn ich gehe, kaufe ich Brot."
+              "wrong": "Wenn es regnen, bleibe ich zu Hause.",
+              "fix": "Wenn es regnet, bleibe ich zu Hause."
             }
           ]
         },
@@ -14893,7 +14893,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Wenn es morgen regnet oder schneit, ich bleibe zu Hause.",
+              "wrong": "Wenn es morgen regnet oder schneit, bleibe ich nach Hause.",
               "fix": "Wenn es morgen regnet oder schneit, bleibe ich zu Hause."
             }
           ]
@@ -14932,8 +14932,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "Wenn ich wusste, bin ich gekommen.",
-              "fix": "Wenn ich gewusst hätte, wäre ich gekommen."
+              "wrong": "Wenn ich gestern gewusst habe, wäre ich gekommen.",
+              "fix": "Wenn ich gestern gewusst hätte, wäre ich gekommen."
             }
           ]
         }
@@ -14968,7 +14968,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Einen Apfel ich esse.",
+              "wrong": "Ich essen einen Apfel.",
               "fix": "Ich esse einen Apfel."
             }
           ]
@@ -15041,7 +15041,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ich esse einen Apfel.",
+              "wrong": "Einen Apfel isst ich.",
               "fix": "Einen Apfel esse ich."
             }
           ]
@@ -15075,7 +15075,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Gegessen wird der Apfel.",
+              "wrong": "Der Apfel wird gegesst.",
               "fix": "Der Apfel wird gegessen."
             }
           ]
@@ -15109,8 +15109,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "Der Apfel esse ich.",
-              "fix": "Ich esse den Apfel."
+              "wrong": "Ich esse den Apfel. Der Apfel wird von mir gegesst.",
+              "fix": "Ich esse den Apfel. Der Apfel wird von mir gegessen."
             }
           ]
         }
@@ -15223,7 +15223,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Du darfst hier rauchen nicht.",
+              "wrong": "Du darfst hier nicht rauchst.",
               "fix": "Du darfst hier nicht rauchen."
             }
           ]
@@ -15335,8 +15335,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ich mag nicht Schokolade.",
-              "fix": "Ich mag Schokolade nicht."
+              "wrong": "Ich mögen Schokolade.",
+              "fix": "Ich mag Schokolade."
             }
           ]
         },
@@ -15835,7 +15835,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Hilf mir!",
+              "wrong": "Entschuldigung, kannst du mir helfen?",
               "fix": "Entschuldigung, könnten Sie mir helfen?"
             }
           ]
@@ -15939,7 +15939,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Zuerst ich gehe ins Kino dann ich gehe essen.",
+              "wrong": "Zuerst gehe ich ins Kino, zuerst gehe ich essen.",
               "fix": "Zuerst gehe ich ins Kino, dann gehe ich essen."
             }
           ]
@@ -16007,7 +16007,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Es regnet trotzdem ich gehe spazieren.",
+              "wrong": "Es regnet, trotzdem gehe ich spaziere.",
               "fix": "Es regnet, trotzdem gehe ich spazieren."
             }
           ]
@@ -16041,7 +16041,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Letztendlich es ist wichtig zu lernen.",
+              "wrong": "Letztendlich ist es wichtig, lernen.",
               "fix": "Letztendlich ist es wichtig, zu lernen."
             }
           ]
@@ -16109,7 +16109,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Während ich esse, ich schaue fern.",
+              "wrong": "Während ich esse, schaue ich fernsehe.",
               "fix": "Während ich esse, schaue ich fern."
             }
           ]
@@ -16138,7 +16138,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Wenn es regnet ich bleibe zu Hause.",
+              "wrong": "Wenn es regnet, bleibe ich zu Hause gehen.",
               "fix": "Wenn es regnet, bleibe ich zu Hause."
             }
           ]
@@ -16172,7 +16172,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Ich mag Kaffee außerdem ich mag Tee.",
+              "wrong": "Ich mag Kaffee, außerdem magt ich Tee.",
               "fix": "Ich mag Kaffee, außerdem mag ich Tee."
             }
           ]
@@ -16206,8 +16206,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "Er ist größer wie ich.",
-              "fix": "Er ist größer als ich."
+              "wrong": "Er ist so gro? als ich.",
+              "fix": "Er ist so groß wie ich."
             }
           ]
         }
@@ -17815,44 +17815,44 @@
       "Tenses & Aspect": {
         "she works every day.": "Sie arbeitet jeden Tag.",
         "i am waiting outside.": "Ich warte draußen.",
-        "they visited paris.": "Sie haben Paris besucht.",
+        "they visited paris last year.": "",
         "i was cooking when he called.": "Ich kochte, als er anrief.",
         "he has lived here for years.": "Er lebt seit Jahren hier.",
         "she had left before i arrived.": "Sie war gegangen, bevor ich ankam.",
-        "we will meet tomorrow.": "Wir werden uns morgen treffen.",
+        "i will call you tonight. i am going to study later. i am meeting sam tomorrow.": "",
         "i will be working at six.": "Ich werde um sechs arbeiten.",
         "they will have finished by friday.": "Sie werden bis Freitag fertig sein.",
-        "i work every day, i am working now, and i have worked here for years.": "Ich arbeite jeden Tag, ich arbeite jetzt, und ich habe hier seit Jahren gearbeitet."
+        "i work every day. i am working now. i have worked here for years.": ""
       },
       "Nouns & Articles": {
-        "i have a coin.": "Ich habe eine Münze.",
-        "we need some rice.": "Wir brauchen etwas Reis.",
-        "the dog is outside.": "Der Hund ist draußen.",
-        "two children are here.": "Zwei Kinder sind hier.",
+        "i have a coin and two apples.": "",
+        "we need some rice and a piece of bread.": "",
+        "i saw a dog. the dog is outside.": "",
+        "two apples and three children are here.": "",
         "sara's phone is new.": "Saras Telefon ist neu.",
-        "the small kitchen table broke.": "Der kleine Küchentisch ist kaputt.",
-        "there are many options.": "Es gibt viele Optionen."
+        "she bought the red dress.": "",
+        "there are many options, and there is much information.": ""
       },
       "Pronouns & Reference": {
-        "they are ready.": "Sie sind bereit.",
-        "she called me.": "Sie hat mich angerufen.",
-        "this is my bag.": "Das ist meine Tasche.",
-        "he hurt himself.": "Er hat sich verletzt.",
-        "those are my keys.": "Das sind meine Schlüssel.",
-        "the man who called left.": "Der Mann, der angerufen hat, ist gegangen.",
-        "someone is waiting.": "Jemand wartet."
+        "they are ready.": "",
+        "he saw me.": "",
+        "my bag is new. hers is old.": "",
+        "he hurt himself.": "",
+        "these keys are mine.": "",
+        "the man who called me left.": "",
+        "someone is waiting outside.": ""
       },
       "Modifiers": {
-        "the house is quiet.": "Das Haus ist ruhig.",
-        "she bought a small red bag.": "Sie kaufte eine kleine rote Tasche.",
-        "this is faster than that.": "Das ist schneller als das.",
-        "he is the tallest.": "Er ist der Größte.",
-        "she speaks clearly.": "Sie spricht deutlich.",
-        "i usually wake early.": "Ich wache normalerweise früh auf.",
-        "we met there yesterday.": "Wir haben uns dort gestern getroffen.",
-        "the room is very warm.": "Der Raum ist sehr warm.",
-        "the movie was boring.": "Der Film war langweilig.",
-        "she quickly answered the hard question.": "Sie beantwortete die schwierige Frage schnell."
+        "she bought a lovely small red bag.": "",
+        "this is faster than that.": "",
+        "he is the tallest.": "",
+        "she speaks clearly.": "",
+        "she usually wakes early.": "",
+        "we met here yesterday.": "",
+        "the room is very warm.": "",
+        "the movie was boring, and i was bored.": "",
+        "she answered the very difficult question quickly.": "",
+        "the quiet house is empty.": ""
       },
       "Questions": {
         "do you work here?": "Arbeiten Sie hier?",
@@ -18076,38 +18076,37 @@
     },
     "grammarPoints": {
       "Sentence Structure": {
-        "basic word order for statements": "grundlegende Wortstellung für Aussagen",
-        "subject before verb": "Subjekt vor dem Verb",
-        "object after verb": "Objekt nach dem Verb",
-        "core subject slot": "Kern-Subjekt-Platz",
-        "core verb slot": "Kern-Verb-Platz",
-        "object and complement slot": "Objekt- und Ergänzungsplatz",
-        "time at sentence end": "Zeit am Satzende",
-        "place after verb": "Ort nach dem Verb",
-        "extra phrases after objects": "zusätzliche Phrasen nach Objekten",
-        "main clause idea": "Hauptsatz-Idee",
-        "reason clause add-on": "Begründungssatz-Zusatz",
-        "time clause add-on": "Zeitklausel-Zusatz",
-        "short sentences for impact": "kurze Sätze für Wirkung",
-        "long sentences for detail": "lange Sätze für Details",
-        "avoid run-on sentences": "vermeiden Sie Schachtelsätze"
+        "basic word order in simple statements": "grundlegende Wortstellung für Aussagen",
+        "subject usually comes before the verb": "Subjekt vor dem Verb",
+        "if the verb takes an object, put it after the verb": "Objekt nach dem Verb",
+        "a complete clause needs a subject": "",
+        "a complete clause needs a main verb": "",
+        "an object or complement can follow the verb": "",
+        "add a time phrase after the main clause (for example, at noon or yesterday)": "Zeit am Satzende",
+        "add a place phrase after the time phrase (for example, at the station or in the kitchen)": "Ort nach dem Verb",
+        "main clause gives the core message": "Hauptsatz-Idee",
+        "use a connector to link clauses (for example, because or when)": "Begründungssatz-Zusatz",
+        "the linked clause needs its own subject and verb": "Zeitklausel-Zusatz",
+        "use short sentences for key points": "kurze Sätze für Wirkung",
+        "use longer sentences for supporting detail": "lange Sätze für Details",
+        "separate independent clauses with correct punctuation": "vermeiden Sie Schachtelsätze"
       },
       "Verbs": {
-        "action verbs for movement": "Aktionsverben für Bewegung",
-        "action verbs for tasks": "Aktionsverben für Aufgaben",
-        "action verbs for change": "Aktionsverben für Veränderung",
-        "state verbs for feelings": "Zustandsverben für Gefühle",
-        "state verbs for thoughts": "Zustandsverben für Gedanken",
-        "state verbs for possession": "Zustandsverben für Besitz",
-        "be as linking verb": "sein als Bindewort",
-        "feel and seem links": "fühlen und scheinen Verbindungen",
-        "become and remain links": "werden und bleiben Verbindungen",
-        "verb plus object pattern": "Verb plus Objekt Muster",
-        "verb plus adjective pattern": "Verb plus Adjektiv Muster",
-        "verb plus preposition pattern": "Verb plus Präposition Muster",
-        "verb plus infinitive": "Verb plus Infinitiv",
-        "verb plus gerund": "Verb plus Gerundium",
-        "verb plus that clause": "Verb plus dass-Satz",
+        "action verbs show what the subject does": "Aktionsverben für Bewegung",
+        "in simple statements, place the action verb after the subject": "Aktionsverben für Aufgaben",
+        "if there is an object, place it after the action verb": "Aktionsverben für Veränderung",
+        "state verbs describe a condition, thought, feeling, or possession": "Zustandsverben für Gefühle",
+        "in simple statements, place the state verb after the subject": "Zustandsverben für Gedanken",
+        "state verbs are usually not used in continuous forms": "Zustandsverben für Besitz",
+        "linking verbs connect the subject to a complement": "sein als Bindewort",
+        "place the linking verb after the subject in a simple statement": "fühlen und scheinen Verbindungen",
+        "use an adjective or noun as the complement after the linking verb": "werden und bleiben Verbindungen",
+        "some verbs are followed by a preposition phrase": "",
+        "after the verb and object, add the required preposition": "",
+        "complete the preposition with a noun phrase": "",
+        "one common verb combination is verb + to-infinitive": "",
+        "use to + base verb immediately after the main verb": "",
+        "do not omit to in this pattern": "",
         "verb plus particle": "Verb plus Partikel",
         "separable phrasal verbs": "trennbare phrasal Verben",
         "meaning shift with particles": "Bedeutungsverschiebung mit Partikeln"
@@ -18131,9 +18130,9 @@
         "past perfect for earlier past": "Plusquamperfekt für frühere Vergangenheit",
         "past perfect for cause in past": "Plusquamperfekt für Ursachen in der Vergangenheit",
         "past perfect with before": "Plusquamperfekt mit bevor",
-        "will for decisions": "werden für Entscheidungen",
-        "going to for plans": "werden für Pläne",
-        "present continuous for plans": "Präsens kontinuierlich für Pläne",
+        "use will + base verb for one future form": "",
+        "use be going to + base verb for another future form": "",
+        "use present continuous + future time for arranged plans": "",
         "future continuous for progress": "Zukunft kontinuierlich für Fortschritt",
         "future continuous for background": "Zukunft kontinuierlich für Hintergrund",
         "future continuous for polite inquiry": "Zukunft kontinuierlich für höfliche Anfragen",
@@ -18145,90 +18144,102 @@
         "duration focus contrast": "Kontrast mit Fokus auf Dauer"
       },
       "Nouns & Articles": {
-        "countable nouns with numbers": "zählbare Nomen mit Zahlen",
-        "a or an before countables": "ein oder eine vor zählbaren Nomen",
-        "plural for more than one": "Plural für mehr als eins",
-        "uncountable nouns without plural": "nicht zählbare Nomen ohne Plural",
-        "some with uncountables": "einige mit nicht zählbaren Nomen",
-        "a piece of for units": "ein Stück für Einheiten",
-        "a or an for first mention": "ein oder eine für die erste Erwähnung",
-        "the for specific reference": "der/die/das für spezifische Bezugnahme",
-        "no article for general ideas": "kein Artikel für allgemeine Ideen",
-        "regular plural endings": "regelmäßige Pluralendungen",
-        "spelling changes in plurals": "Rechtschreibänderungen im Plural",
-        "irregular plural forms": "unregelmäßige Pluralformen",
-        "apostrophe s ownership": "Apostroph s Besitz",
-        "plural possessive endings": "Pluralbesitzendungen",
-        "things and relationships": "Dinge und Beziehungen",
-        "determiner plus noun": "Bestimmungswort plus Nomen",
-        "adjective plus noun": "Adjektiv plus Nomen",
-        "noun plus noun pairing": "Nomen plus Nomen Kombination",
-        "many and much choice": "viele und viel Auswahl",
-        "few and little choice": "wenige und wenig Auswahl",
-        "a lot of for quantity": "viel für Menge"
+        "countable nouns can be singular or plural": "",
+        "use a or an before singular countable nouns": "",
+        "use a number with plural countable nouns": "",
+        "uncountable nouns usually do not have plural forms": "",
+        "use some with uncountable nouns": "",
+        "use a piece of for countable units": "",
+        "use a or an for first mention of a singular countable noun": "",
+        "use the when the noun is specific or already known": "",
+        "place the article directly before the noun": "",
+        "use a plural noun for more than one": "",
+        "many plurals add -s or -es": "",
+        "some plurals are irregular (child -> children)": "",
+        "add apostrophe + s to a singular noun to show ownership": "",
+        "place the possessive noun before the thing owned": "",
+        "keep the apostrophe in the correct position": "",
+        "a noun phrase can include determiner + noun": "",
+        "an adjective can appear before the noun": "",
+        "keep the order determiner + adjective + noun": "",
+        "use many with plural countable nouns": "",
+        "use much with uncountable nouns": "",
+        "choose the quantifier by noun type": ""
       },
       "Pronouns & Reference": {
-        "i you he she set": "ich du er sie Set",
-        "we and they plural": "wir und sie Plural",
-        "it for things": "es für Dinge",
-        "me him her set": "mich ihn sie Set",
-        "us and them plural": "uns und sie Plural",
-        "object position after verbs": "Objektposition nach Verben",
-        "my your his her set": "mein dein sein ihr Set",
-        "our their with nouns": "unser ihr mit Nomen",
-        "mine yours for standalone": "meins deins für alleinstehend",
-        "myself yourself pattern": "mich selbst dich selbst Muster",
-        "herself himself pattern": "sich selbst Muster",
-        "emphasis with reflexives": "Betonung mit Reflexiven",
-        "this that for single": "dies das für Einzelne",
-        "these those for plural": "diese jene für Plural",
-        "near vs far reference": "nahe vs ferne Referenz",
-        "who for people": "wer für Menschen",
-        "which for things": "welches für Dinge",
-        "that for general use": "das für allgemeinen Gebrauch",
-        "someone anyone set": "jemand niemand Set",
-        "everyone no one set": "jeder niemand Set",
-        "something anything set": "etwas nichts Set"
+        "subject pronouns replace noun subjects (i, you, he, she, it, we, they)": "",
+        "use a subject pronoun before the main verb in statements": "",
+        "choose the pronoun that matches number and person": "",
+        "object pronouns replace noun objects (me, you, him, her, it, us, them)": "",
+        "place object pronouns after the main verb": "",
+        "use object forms, not subject forms, in object position": "",
+        "use possessive adjectives before nouns (my, your, his, her, our, their)": "",
+        "use possessive pronouns without a noun (mine, yours, his, hers, ours, theirs)": "",
+        "do not add apostrophes to possessive pronouns": "",
+        "use reflexive pronouns when subject and object are the same": "",
+        "singular forms: myself, yourself, himself, herself, itself": "",
+        "plural forms: ourselves, yourselves, themselves": "",
+        "use this and these for things near the speaker": "",
+        "use that and those for things farther away": "",
+        "use this or that with singular nouns and these or those with plural nouns": "",
+        "use who for people in relative clauses": "",
+        "use which for things in relative clauses": "",
+        "use that for people or things in defining relative clauses": "",
+        "use someone and something in affirmative statements": "",
+        "use anyone and anything in negative statements and questions": "",
+        "use everyone and everything for complete groups": ""
       },
       "Modifiers": {
-        "adjectives describe nouns": "Adjektive beschreiben Nomen",
-        "adjectives before nouns": "Adjektive vor Nomen",
-        "adjectives after be": "Adjektive nach 'sein'",
-        "opinion before size": "Meinung vor Größe",
-        "age before color": "Alter vor Farbe",
-        "material near noun": "Material nahe dem Nomen",
-        "er or more forms": "er- oder mehr-Formen",
-        "than comparisons": "Vergleiche mit 'als'",
-        "irregular comparative forms": "unregelmäßige Vergleichsformen",
-        "est or most forms": "est- oder meist-Formen",
-        "the with superlative": "der mit Superlativ",
-        "group comparison focus": "Gruppenvergleichsfokus",
-        "adverbs describe verbs": "Adverbien beschreiben Verben",
-        "adverbs after verb": "Adverbien nach dem Verb",
-        "adverbs before adjectives": "Adverbien vor Adjektiven",
-        "always usually often set": "immer, normalerweise, oft gesetzt",
-        "rarely never set": "selten, nie gesetzt",
-        "position with be": "Position mit 'sein'",
-        "time at end position": "Zeit am Ende der Position",
-        "place at the end": "Ort am Ende",
-        "time before place order": "Zeit vor Ort Reihenfolge",
-        "very really set": "sehr, wirklich gesetzt",
-        "too and enough": "zu und genug",
-        "quite and rather": "ziemlich und eher",
-        "ing adjectives for cause": "ing-Adjektive für Ursache",
-        "ed adjectives for feeling": "ed-Adjektive für Gefühl",
-        "avoid confusion": "Verwirrung vermeiden",
-        "multiple adjectives": "mehrere Adjektive",
-        "multiple adverbs": "mehrere Adverbien",
-        "keep focus clear": "Fokus klar halten"
+        "adjectives describe nouns": "",
+        "adjectives can come before nouns": "",
+        "adjectives can come after linking verbs like be": "",
+        "when several adjectives come before a noun, use a common order": "",
+        "opinion usually comes before size": "",
+        "size usually comes before color": "",
+        "use comparatives to compare two things": "",
+        "many short adjectives take -er": "",
+        "many longer adjectives use more": "",
+        "use superlatives to compare one item with a group": "",
+        "many short adjectives take -est and longer adjectives use most": "",
+        "use the before superlative adjectives": "",
+        "adverbs can modify verbs": "",
+        "many adverbs of manner end in -ly": "",
+        "adverbs of manner usually come after the verb or object": "",
+        "common frequency adverbs include always, usually, often, sometimes, and never": "",
+        "place frequency adverbs before main verbs": "",
+        "place frequency adverbs after be": "",
+        "place adverbs answer where and time adverbs answer when": "",
+        "in neutral order, place usually comes before time": "",
+        "both often appear near the end of the clause": "",
+        "degree words modify adjectives or adverbs": "",
+        "use very to strengthen adjectives or adverbs": "",
+        "use enough after adjectives and adverbs": "",
+        "use -ing adjectives for things that cause a feeling": "",
+        "use -ed adjectives for how people feel": "",
+        "do not mix -ing and -ed meanings": "",
+        "when multiple modifiers appear, keep a clear order": "",
+        "put degree words before adjectives": "",
+        "keep manner adverbs in a natural position in the clause": ""
       },
       "Questions": {
-        "aux + subject + base verb": "Hilfsverb + Subjekt + Grundform des Verbs",
-        "wh word + aux + subject + base verb": "W-Fragewort + Hilfsverb + Subjekt + Grundform des Verbs",
-        "be + subject + complement": "sein + Subjekt + Ergänzung",
-        "modal + subject + base verb": "Modalverb + Subjekt + Grundform des Verbs",
-        "statement + tag": "Aussage + Frageanhängsel",
-        "intro + wh clause": "Einleitung + W-Klausel"
+        "use do, does, or did before the subject": "",
+        "use the base verb after the subject": "",
+        "end yes-no questions with a question mark": "",
+        "start with a wh word such as who, what, where, when, why, or how": "",
+        "place the auxiliary before the subject": "",
+        "place be before the subject": "",
+        "do not use do or does with be questions": "",
+        "place the complement after the subject": "",
+        "keep the main verb in base form after do, does, or did": "",
+        "use did for past-time yes-no questions": "",
+        "place the modal before the subject": "",
+        "do not use do or does with modal questions": "",
+        "add a short tag after a statement": "",
+        "use a negative tag after a positive statement": "",
+        "use a positive tag after a negative statement": "",
+        "start with an introductory phrase such as could you tell me": "",
+        "use statement word order inside the embedded question": "",
+        "do not invert subject and verb inside the embedded question": ""
       },
       "Negation": {
         "subject + be + not + complement": "Subjekt + sein + nicht + Ergänzung",
@@ -18347,69 +18358,69 @@
     "grammarMistakeWrong": {
       "Sentence Structure": {
         "reads she a book.": "Liest sie ein Buch.",
-        "is a pilot my brother.": "Ist mein Bruder ein Pilot.",
-        "she met him noon station.": "Sie traf ihn am Bahnhof zur Mittagszeit.",
+        "they named captain her.": "",
+        "she met him at noon the station.": "",
         "i stayed home because.": "Ich blieb zu Hause, weil.",
-        "we finished early so.": "Wir haben früh fertig, also."
+        "we finished early we went home after class because we were tired.": ""
       },
       "Verbs": {
-        "she run every morning.": "Sie läuft jeden Morgen.",
-        "he is knowing the answer.": "Er weiß die Antwort.",
-        "the soup tastes is good.": "Die Suppe schmeckt gut.",
+        "they the boxes carry.": "",
+        "she is feeling tired.": "",
+        "the room feels quietly.": "",
         "he placed the book on.": "Er stellte das Buch ab.",
-        "she enjoys to swim.": "Sie schwimmt gerne.",
+        "we decided stay.": "",
         "he turned the light on off.": "Er hat das Licht ein- und ausgeschaltet."
       },
       "Tenses & Aspect": {
-        "she is work every day.": "Sie arbeitet jeden Tag.",
-        "she works now.": "Sie arbeitet jetzt.",
-        "she go yesterday.": "Sie ging gestern.",
+        "she work every day.": "",
+        "i am wait outside.": "",
+        "they visit paris last year.": "",
         "she was cook when i called.": "Sie kochte, als ich anrief.",
-        "she finished already.": "Sie hat schon fertig.",
-        "he left when i arrive.": "Er ging, als ich ankam.",
-        "she will going to call.": "Sie wird anrufen.",
-        "she will work at 8.": "Sie wird um 8 Uhr arbeiten.",
-        "she will finish by noon.": "Sie wird bis zum Mittag fertig sein.",
-        "i am knowing him.": "Ich kenne ihn."
+        "he has live here for years.": "",
+        "he had leave before i arrived.": "",
+        "she will going to call tomorrow.": "",
+        "she will be work at 8.": "",
+        "she will have finish by noon.": "",
+        "i have work here for years.": ""
       },
       "Nouns & Articles": {
-        "she bought apple.": "Sie kaufte einen Apfel.",
+        "i have coin and two apples.": "",
         "i need two breads.": "Ich brauche zwei Brote.",
         "i saw movie.": "Ich sah einen Film.",
         "three child play.": "Drei Kinder spielen.",
         "the teachers book is new.": "Das Buch des Lehrers ist neu.",
-        "she bought dress red.": "Sie kaufte ein rotes Kleid.",
+        "she bought the dress red.": "",
         "how much apples?": "Wie viele Äpfel?"
       },
       "Pronouns & Reference": {
-        "her is here.": "Sie ist hier.",
-        "he saw i.": "Er sah mich.",
-        "this is her book is.": "Das ist ihr Buch.",
-        "i hurt me.": "Ich habe mich verletzt.",
-        "these book is mine.": "Dieses Buch gehört mir.",
-        "the man which called me.": "Der Mann, der mich angerufen hat.",
-        "anyone is here.": "Jemand ist hier."
+        "her is here.": "",
+        "he saw i.": "",
+        "this book is her's.": "",
+        "i hurt me.": "",
+        "this books are mine.": "",
+        "the man which called me left.": "",
+        "i saw anyone at the station.": ""
       },
       "Modifiers": {
-        "she has hair long.": "Sie hat lange Haare.",
-        "a red small car.": "Ein kleines rotes Auto.",
-        "this is more cheap.": "Das ist billiger.",
-        "he is the most fast.": "Er ist der schnellste.",
-        "she speaks slow.": "Sie spricht langsam.",
-        "she goes always early.": "Sie geht immer früh.",
-        "he arrived yesterday here.": "Er ist gestern hier angekommen.",
-        "it is enough hot.": "Es ist genug heiß.",
-        "the story was boringed.": "Die Geschichte war langweilig.",
-        "she bought a red small new bag.": "Sie kaufte eine kleine neue rote Tasche."
+        "she bought a red small bag.": "",
+        "this is more cheap.": "",
+        "he is the most fast.": "",
+        "she speaks slow.": "",
+        "she goes always early.": "",
+        "he arrived yesterday here.": "",
+        "it is enough hot.": "",
+        "i am boring.": "",
+        "she answered the difficult very question quickly.": "",
+        "the quiet house is noisily.": ""
       },
       "Questions": {
         "you like coffee?": "Magst du Kaffee?",
         "where you live?": "Wo wohnst du?",
-        "you are ready?": "Bist du bereit?",
-        "she likes pizza?": "Mag sie Pizza?",
+        "the store is open?": "",
+        "did you called her?": "",
         "you can help me?": "Kannst du mir helfen?",
-        "she is here, is she?": "Sie ist hier, oder?",
-        "can you tell me where is he?": "Kannst du mir sagen, wo er ist?"
+        "you are ready, are you?": "",
+        "could you tell me where is it?": ""
       },
       "Negation": {
         "he not happy.": "Er ist nicht glücklich.",
@@ -18486,69 +18497,69 @@
     "grammarMistakeFix": {
       "Sentence Structure": {
         "she reads a book.": "Sie liest ein Buch.",
-        "my brother is a pilot.": "Mein Bruder ist Pilot.",
+        "they named her captain.": "",
         "she met him at noon at the station.": "Sie traf ihn um zwölf Uhr am Bahnhof.",
         "i stayed home because it rained.": "Ich blieb zu Hause, weil es regnete.",
-        "we finished early, so we left.": "Wir waren früh fertig, also gingen wir."
+        "we finished early, and we went home after class because we were tired.": ""
       },
       "Verbs": {
-        "she runs every morning.": "Sie läuft jeden Morgen.",
-        "he knows the answer.": "Er weiß die Antwort.",
-        "the soup tastes good.": "Die Suppe schmeckt gut.",
+        "they carry the boxes.": "",
+        "she feels tired.": "",
+        "the room feels quiet.": "",
         "he placed the book on the table.": "Er legte das Buch auf den Tisch.",
-        "she enjoys swimming.": "Sie schwimmt gerne.",
+        "we decided to stay.": "",
         "he turned off the light.": "Er schaltete das Licht aus."
       },
       "Tenses & Aspect": {
         "she works every day.": "Sie arbeitet jeden Tag.",
-        "she is working now.": "Sie arbeitet gerade.",
-        "she went yesterday.": "Sie ist gestern gegangen.",
+        "i am waiting outside.": "",
+        "they visited paris last year.": "",
         "she was cooking when i called.": "Sie kochte, als ich anrief.",
-        "she has finished already.": "Sie hat schon fertiggestellt.",
-        "he had left when i arrived.": "Er war gegangen, als ich ankam.",
-        "she is going to call.": "Sie wird anrufen.",
+        "he has lived here for years.": "",
+        "he had left before i arrived.": "",
+        "she is going to call tomorrow.": "",
         "she will be working at 8.": "Sie wird um 8 Uhr arbeiten.",
         "she will have finished by noon.": "Sie wird bis Mittag fertig sein.",
-        "i know him.": "Ich kenne ihn."
+        "i have worked here for years.": ""
       },
       "Nouns & Articles": {
-        "she bought an apple.": "Sie kaufte einen Apfel.",
-        "i need some bread.": "Ich brauche etwas Brot.",
+        "i have a coin and two apples.": "",
+        "i need two pieces of bread.": "",
         "i saw a movie.": "Ich sah einen Film.",
         "three children play.": "Drei Kinder spielen.",
         "the teacher's book is new.": "Das Buch des Lehrers ist neu.",
-        "she bought a red dress.": "Sie kaufte ein rotes Kleid.",
+        "she bought the red dress.": "",
         "how many apples?": "Wie viele Äpfel?"
       },
       "Pronouns & Reference": {
-        "she is here.": "Sie ist hier.",
-        "he saw me.": "Er hat mich gesehen.",
-        "this book is hers.": "Dieses Buch gehört ihr.",
-        "i hurt myself.": "Ich habe mich verletzt.",
-        "this book is mine.": "Dieses Buch gehört mir.",
-        "the man who called me.": "Der Mann, der mich angerufen hat.",
-        "someone is here.": "Jemand ist hier."
+        "she is here.": "",
+        "he saw me.": "",
+        "this book is hers.": "",
+        "i hurt myself.": "",
+        "these books are mine.": "",
+        "the man who called me left.": "",
+        "i saw someone at the station.": ""
       },
       "Modifiers": {
-        "she has long hair.": "Sie hat lange Haare.",
-        "a small red car.": "Ein kleines rotes Auto.",
-        "this is cheaper.": "Das ist billiger.",
-        "he is the fastest.": "Er ist der schnellste.",
-        "she speaks slowly.": "Sie spricht langsam.",
-        "she always goes early.": "Sie geht immer früh.",
-        "he arrived here yesterday.": "Er ist gestern hier angekommen.",
-        "it is hot enough.": "Es ist heiß genug.",
-        "the story was boring.": "Die Geschichte war langweilig.",
-        "she bought a small new red bag.": "Sie hat eine kleine neue rote Tasche gekauft."
+        "she bought a small red bag.": "",
+        "this is cheaper.": "",
+        "he is the fastest.": "",
+        "she speaks slowly.": "",
+        "she always goes early.": "",
+        "he arrived here yesterday.": "",
+        "it is hot enough.": "",
+        "i am bored.": "",
+        "she answered the very difficult question quickly.": "",
+        "the quiet house is noisy.": ""
       },
       "Questions": {
         "do you like coffee?": "Magst du Kaffee?",
         "where do you live?": "Wo wohnst du?",
-        "are you ready?": "Bist du bereit?",
-        "does she like pizza?": "Mag sie Pizza?",
+        "is the store open?": "",
+        "did you call her?": "",
         "can you help me?": "Kannst du mir helfen?",
-        "she is here, isn't she?": "Sie ist hier, oder?",
-        "can you tell me where he is?": "Kannst du mir sagen, wo er ist?"
+        "you are ready, aren't you?": "",
+        "could you tell me where it is?": ""
       },
       "Negation": {
         "he is not happy.": "Er ist nicht glücklich.",

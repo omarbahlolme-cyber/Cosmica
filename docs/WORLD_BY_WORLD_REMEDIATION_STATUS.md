@@ -1,66 +1,67 @@
 # World-by-World Remediation Status
 
-## Current Override (2026-02-26)
+## Global Override (2026-02-27)
 
-This section overrides earlier "completed" statements until native-linguist review is finished.
+This override replaces all prior implied or explicit "PASS/completed" claims for grammar remediation.
 
-### Current reality
+### Mandatory global decision
 
-1. Technical structure checks are still passing:
-- `npm run check:worlds:deep`
-- `npm run quality`
+1. Effective immediately, grammar PASS is revoked for all supported languages until strict re-validation is completed.
+2. No section may be marked PASS unless it clears the stricter pedagogical gate below.
+3. Technical checks passing does not imply pedagogical PASS.
 
-2. Pedagogical quality is not stable across all worlds yet.
-- Main issue pattern: grammar card topic mismatch (title/rule/example/mistake not tightly aligned).
-- Main UI symptom: middle "rule/highlight boxes" can be linguistically weak or segmented unnaturally for some cards.
+### Scope (all worlds)
 
-### Deep audit status (latest)
-
-1. High risk worlds (temporary grammar lock active):
-- Arabic
-- Chinese
-- Hindi
-- Japanese
-- Korean
-
-2. Medium risk worlds (fix queue after high-risk batch):
-- Dutch
-- Portuguese
-
-3. Low to medium risk worlds (keep open, review later):
+- English
 - French
 - German
 - Spanish
+- Portuguese
+- Dutch
 - Swedish
+- Arabic
+- Chinese
+- Japanese
+- Korean
+- Hindi
 
-### Evidence snapshots (examples)
+### Stricter gate required before PASS
 
-1. Arabic question/modality slot-label quality:
-- `frontend/worlds/arabic/translations.json:9408`
-- `frontend/worlds/arabic/translations.json:10410`
+1. Card-level alignment must be exact:
+- title, rules, example, and common mistake must match the same concept.
+2. Wrong/fix pair quality:
+- exactly one wrong/fix pair per card.
+- wrong must be wrong for the card topic itself (not a random or weak error).
+- wrong must fail for one clear reason only.
+- fix must minimally and fully correct that same reason.
+3. Language-specific correctness:
+- no cross-language transfer logic.
+- grammar must be teacher-acceptable for the target language.
+4. Highlight consistency:
+- same grammatical function must keep the same color role within the card.
+- no uncolored/mismatched highlighted element.
+5. No stale leftovers:
+- no duplicate or outdated wrong/fix variants remaining in source data.
+6. Double recheck required:
+- first pass: fix.
+- second pass: verify no residual issues before PASS.
 
-2. Japanese question highlight segmentation issue:
-- `frontend/worlds/japanese/translations.json:9802`
-- `frontend/worlds/japanese/translations.json:9821`
-- `frontend/worlds/japanese/translations.json:9825`
+### Execution policy
 
-3. Chinese connections wrong-example truncation:
-- `frontend/worlds/chinese/translations.json:10269`
-- `frontend/worlds/chinese/translations.json:10313`
-- `frontend/worlds/chinese/translations.json:10352`
+1. Recheck is done card-by-card within each section.
+2. Section can be marked PASS only after all cards in that section pass the stricter gate and post-fix recheck.
+3. World can be marked PASS only after all sections in that world pass.
 
-4. Hindi repeated sentence overuse across sections:
-- `frontend/worlds/hindi/translations.json:7977`
-- `frontend/worlds/hindi/translations.json:10036`
-- `frontend/worlds/hindi/translations.json:10477`
-- `frontend/worlds/hindi/translations.json:11364`
+### Validation commands (supporting checks)
 
-### Operating decision (until remediation is complete)
+- `npm run check:worlds:deep`
+- `npm run quality`
+- `node scripts/check-grammar-zero-tolerance.js`
+- `node scripts/check-grammar-peer-review.js`
 
-1. Keep grammar map locked for high-risk worlds listed above.
-2. Keep letters/words/phrases open.
-3. Apply fixes in small native-review batches (5-10 cards), world by world.
-4. After each batch:
-- run `npm run check:worlds:deep`
-- run `npm run quality`
-- do manual UI review in map modal.
+Note: passing the commands above is necessary but not sufficient without strict card-by-card pedagogical verification.
+
+### Current status
+
+1. Global grammar PASS state: `REVOKED` (all worlds).
+2. Re-validation mode: `STRICT CARD-BY-CARD`.

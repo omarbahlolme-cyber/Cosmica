@@ -180,13 +180,7 @@ const WORLD_NAME = isWorldLandingPage
   ? document.body.dataset.world || "English"
   : urlParams.get("world") || document.body.dataset.world || "English";
 const WORLD_KEY = WORLD_NAME.toLowerCase();
-const GRAMMAR_UNDER_EXPERT_REVIEW_WORLDS = new Set([
-  "arabic",
-  "chinese",
-  "japanese",
-  "hindi",
-  "korean",
-]);
+const GRAMMAR_UNDER_EXPERT_REVIEW_WORLDS = new Set([]);
 const isGrammarUnderExpertReviewWorld = (worldKey = WORLD_KEY) =>
   GRAMMAR_UNDER_EXPERT_REVIEW_WORLDS.has(
     String(worldKey || "")
@@ -2706,7 +2700,8 @@ const setupAccountHub = () => {
     }
     const authErrorTextMap = {
       google_no_account: {
-        message: "We couldn’t complete Google sign-in for this email right now. If this account already exists, please try Log in with Google account again.",
+        message:
+          "No account was found for this Google email yet. Open Sign up and continue with Google, or use email and password, to create an account.",
         tone: "error",
         panel: "signup",
       },

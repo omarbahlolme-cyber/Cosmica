@@ -8030,7 +8030,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Mange une pomme Marie.",
+              "wrong": "Marie une pomme mange.",
               "fix": "Marie mange une pomme."
             }
           ]
@@ -8418,8 +8418,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "Je mange le pomme.",
-              "fix": "Je mange la pomme."
+              "wrong": "Je mangeais une pomme.",
+              "fix": "Je mange une pomme."
             }
           ]
         },
@@ -8452,8 +8452,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "J'ai mangé le pomme.",
-              "fix": "J'ai mangé la pomme."
+              "wrong": "Je mange une pomme.",
+              "fix": "J'ai mangé une pomme."
             }
           ]
         },
@@ -8486,8 +8486,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "Je mangeais le pomme.",
-              "fix": "Je mangeais la pomme."
+              "wrong": "J'ai mangé une pomme.",
+              "fix": "Je mangeais une pomme."
             }
           ]
         },
@@ -8554,8 +8554,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "Je mangerai le pomme.",
-              "fix": "Je mangerai la pomme."
+              "wrong": "Je mange une pomme demain.",
+              "fix": "Je mangerai une pomme."
             }
           ]
         },
@@ -8588,8 +8588,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "Je mangerais le pomme.",
-              "fix": "Je mangerais la pomme."
+              "wrong": "Je mangerai une pomme.",
+              "fix": "Je mangerais une pomme."
             }
           ]
         },
@@ -8622,8 +8622,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "J'avais mangé le pomme.",
-              "fix": "J'avais mangé la pomme."
+              "wrong": "J'ai mangé une pomme.",
+              "fix": "J'avais mangé une pomme."
             }
           ]
         },
@@ -8656,8 +8656,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "J'aurai mangé le pomme.",
-              "fix": "J'aurai mangé la pomme."
+              "wrong": "Je mangerai une pomme.",
+              "fix": "J'aurai mangé une pomme."
             }
           ]
         },
@@ -8668,7 +8668,7 @@
             "Formé par des terminaisons spécifiques.",
             "Souvent introduit par 'que'."
           ],
-          "example": "Il faut que je mange une pomme.",
+          "example": "Il faut que je fasse mes devoirs.",
           "ruleOrder": [
             "sujet",
             "verbe",
@@ -8681,17 +8681,17 @@
             },
             {
               "label": "verbe",
-              "text": "mange"
+              "text": "fasse"
             },
             {
               "label": "objet",
-              "text": "une pomme"
+              "text": "mes devoirs"
             }
           ],
           "mistakes": [
             {
-              "wrong": "Il faut que mange je une pomme.",
-              "fix": "Il faut que je mange une pomme."
+              "wrong": "Il faut que je fais mes devoirs.",
+              "fix": "Il faut que je fasse mes devoirs."
             }
           ]
         },
@@ -9721,7 +9721,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Tu aimes le chocolat ?",
+              "wrong": "Aimes tu le chocolat ?",
               "fix": "Aimes-tu le chocolat ?"
             }
           ]
@@ -10600,7 +10600,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Mange Marie une pomme.",
+              "wrong": "Marie mangent une pomme.",
               "fix": "Marie mange une pomme."
             }
           ]
@@ -10634,8 +10634,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "L'enfant jouent dans le parc.",
-              "fix": "L'enfant joue dans le parc."
+              "wrong": "Les enfants joue dans le parc.",
+              "fix": "Les enfants jouent dans le parc."
             }
           ]
         },
@@ -10673,7 +10673,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Je n'ai jamais vu un tel spectacle.",
+              "wrong": "Jamais je ai vu un tel spectacle.",
               "fix": "Jamais je n'ai vu un tel spectacle."
             }
           ]
@@ -10746,7 +10746,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Vous venez à la fête ?",
+              "wrong": "Venez vous à la fête ?",
               "fix": "Venez-vous à la fête ?"
             }
           ]
@@ -11283,7 +11283,7 @@
           "mistakes": [
             {
               "wrong": "Vous viens ce soir ?",
-              "fix": "Vous venez ce soir ?"
+              "fix": "Tu viens ce soir ?"
             }
           ]
         },
@@ -11316,7 +11316,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "Bonjour, pourriez-m'aider vous, s'il vous plaît ?",
+              "wrong": "Salut, aide-moi.",
               "fix": "Bonjour, pourriez-vous m'aider, s'il vous plaît ?"
             }
           ]
@@ -11346,7 +11346,7 @@
           "mistakes": [
             {
               "wrong": "Salut, je peux te poser une question ?",
-              "fix": "Bonjour, puis-je vous poser une question ?"
+              "fix": "Madame, puis-je vous poser une question ?"
             }
           ]
         },
@@ -11375,7 +11375,7 @@
           "mistakes": [
             {
               "wrong": "Je veux un rendez-vous.",
-              "fix": "Je souhaiterais un rendez-vous."
+              "fix": "Je souhaiterais demander un rendez-vous."
             }
           ]
         },
@@ -11404,7 +11404,7 @@
           "mistakes": [
             {
               "wrong": "Merci pour ta compréhension.",
-              "fix": "Merci pour votre compréhension."
+              "fix": "Je vous remercie pour votre compréhension."
             }
           ]
         },
@@ -11433,7 +11433,7 @@
           "mistakes": [
             {
               "wrong": "Salut, tu as un moment ?",
-              "fix": "Bonjour, avez-vous un moment ?"
+              "fix": "Docteur, avez-vous un moment ?"
             }
           ]
         },
@@ -11462,7 +11462,7 @@
           "mistakes": [
             {
               "wrong": "Merci beaucoup pour ton aide.",
-              "fix": "Merci beaucoup pour votre aide."
+              "fix": "Je vous remercie pour votre aide précieuse."
             }
           ]
         }
@@ -11589,7 +11589,7 @@
           ],
           "mistakes": [
             {
-              "wrong": "suis Je en retard parce que le bus est en panne.",
+              "wrong": "Je suis en retard parce que le bus en panne.",
               "fix": "Je suis en retard parce que le bus est en panne."
             }
           ]
@@ -13392,44 +13392,44 @@
       "Tenses & Aspect": {
         "she works every day.": "Elle travaille tous les jours.",
         "i am waiting outside.": "J'attends dehors.",
-        "they visited paris.": "Ils ont visité Paris.",
+        "they visited paris last year.": "",
         "i was cooking when he called.": "Je cuisinais quand il a appelé.",
         "he has lived here for years.": "Il vit ici depuis des années.",
         "she had left before i arrived.": "Elle était partie avant que j'arrive.",
-        "we will meet tomorrow.": "Nous nous rencontrerons demain.",
+        "i will call you tonight. i am going to study later. i am meeting sam tomorrow.": "",
         "i will be working at six.": "Je travaillerai à six heures.",
         "they will have finished by friday.": "Ils auront fini d'ici vendredi.",
-        "i work every day, i am working now, and i have worked here for years.": "Je travaille tous les jours, je travaille maintenant, et j'ai travaillé ici pendant des années."
+        "i work every day. i am working now. i have worked here for years.": ""
       },
       "Nouns & Articles": {
-        "i have a coin.": "J'ai une pièce.",
-        "we need some rice.": "Nous avons besoin de riz.",
-        "the dog is outside.": "Le chien est dehors.",
-        "two children are here.": "Deux enfants sont ici.",
+        "i have a coin and two apples.": "J'ai une piece et deux pommes.",
+        "we need some rice and a piece of bread.": "Nous avons besoin de riz et d'un morceau de pain.",
+        "i saw a dog. the dog is outside.": "J'ai vu un chien. Le chien est dehors.",
+        "two apples and three children are here.": "Deux pommes et trois enfants sont ici.",
         "sara's phone is new.": "Le téléphone de Sara est nouveau.",
-        "the small kitchen table broke.": "La petite table de cuisine est cassée.",
-        "there are many options.": "Il y a beaucoup d'options."
+        "she bought the red dress.": "",
+        "there are many options, and there is much information.": ""
       },
       "Pronouns & Reference": {
-        "they are ready.": "Ils sont prêts.",
-        "she called me.": "Elle m'a appelé.",
-        "this is my bag.": "C'est mon sac.",
-        "he hurt himself.": "Il s'est fait mal.",
-        "those are my keys.": "Ce sont mes clés.",
-        "the man who called left.": "L'homme qui a appelé est parti.",
-        "someone is waiting.": "Quelqu'un attend."
+        "they are ready.": "",
+        "he saw me.": "",
+        "my bag is new. hers is old.": "Mon sac est neuf. Le sien est vieux.",
+        "he hurt himself.": "",
+        "these keys are mine.": "Ces cles sont a moi.",
+        "the man who called me left.": "L'homme qui m'a appele est parti.",
+        "someone is waiting outside.": "Quelqu'un attend dehors."
       },
       "Modifiers": {
-        "the house is quiet.": "La maison est silencieuse.",
-        "she bought a small red bag.": "Elle a acheté un petit sac rouge.",
+        "she bought a lovely small red bag.": "Elle a achete un joli petit sac rouge.",
         "this is faster than that.": "Ceci est plus rapide que cela.",
         "he is the tallest.": "Il est le plus grand.",
         "she speaks clearly.": "Elle parle clairement.",
-        "i usually wake early.": "Je me réveille généralement tôt.",
-        "we met there yesterday.": "Nous nous sommes rencontrés là-bas hier.",
-        "the room is very warm.": "La chambre est très chaude.",
-        "the movie was boring.": "Le film était ennuyeux.",
-        "she quickly answered the hard question.": "Elle a rapidement répondu à la question difficile."
+        "she usually wakes early.": "Elle se reveille habituellement tot.",
+        "we met here yesterday.": "Nous nous sommes rencontres ici hier.",
+        "the room is very warm.": "La piece est tres chaude.",
+        "the movie was boring, and i was bored.": "Le film etait ennuyeux et j'etais ennuye.",
+        "she answered the very difficult question quickly.": "Elle a repondu rapidement a la question tres difficile.",
+        "the quiet house is empty.": ""
       },
       "Questions": {
         "do you work here?": "Travaillez-vous ici ?",
@@ -13653,38 +13653,37 @@
     },
     "grammarPoints": {
       "Sentence Structure": {
-        "basic word order for statements": "ordre des mots de base pour les déclarations",
-        "subject before verb": "sujet avant le verbe",
-        "object after verb": "objet après le verbe",
-        "core subject slot": "emplacement du sujet principal",
-        "core verb slot": "emplacement du verbe principal",
-        "object and complement slot": "emplacement de l'objet et du complément",
-        "time at sentence end": "temps à la fin de la phrase",
-        "place after verb": "lieu après le verbe",
-        "extra phrases after objects": "phrases supplémentaires après les objets",
-        "main clause idea": "idée de la proposition principale",
-        "reason clause add-on": "ajout de la clause de raison",
-        "time clause add-on": "ajout de la clause de temps",
-        "short sentences for impact": "phrases courtes pour l'impact",
-        "long sentences for detail": "phrases longues pour le détail",
-        "avoid run-on sentences": "éviter les phrases à rallonge"
+        "basic word order in simple statements": "ordre des mots de base pour les déclarations",
+        "subject usually comes before the verb": "sujet avant le verbe",
+        "if the verb takes an object, put it after the verb": "objet après le verbe",
+        "a complete clause needs a subject": "",
+        "a complete clause needs a main verb": "",
+        "an object or complement can follow the verb": "",
+        "add a time phrase after the main clause (for example, at noon or yesterday)": "temps à la fin de la phrase",
+        "add a place phrase after the time phrase (for example, at the station or in the kitchen)": "lieu après le verbe",
+        "main clause gives the core message": "idée de la proposition principale",
+        "use a connector to link clauses (for example, because or when)": "ajout de la clause de raison",
+        "the linked clause needs its own subject and verb": "ajout de la clause de temps",
+        "use short sentences for key points": "phrases courtes pour l'impact",
+        "use longer sentences for supporting detail": "phrases longues pour le détail",
+        "separate independent clauses with correct punctuation": "éviter les phrases à rallonge"
       },
       "Verbs": {
-        "action verbs for movement": "verbes d'action pour le mouvement",
-        "action verbs for tasks": "verbes d'action pour les tâches",
-        "action verbs for change": "verbes d'action pour le changement",
-        "state verbs for feelings": "verbes d'état pour les sentiments",
-        "state verbs for thoughts": "verbes d'état pour les pensées",
-        "state verbs for possession": "verbes d'état pour la possession",
-        "be as linking verb": "être en tant que verbe de liaison",
-        "feel and seem links": "liens de sentir et sembler",
-        "become and remain links": "liens de devenir et rester",
-        "verb plus object pattern": "modèle verbe plus objet",
-        "verb plus adjective pattern": "modèle verbe plus adjectif",
-        "verb plus preposition pattern": "modèle verbe plus préposition",
-        "verb plus infinitive": "verbe plus infinitif",
-        "verb plus gerund": "verbe plus gérondif",
-        "verb plus that clause": "verbe plus proposition que",
+        "action verbs show what the subject does": "verbes d'action pour le mouvement",
+        "in simple statements, place the action verb after the subject": "verbes d'action pour les tâches",
+        "if there is an object, place it after the action verb": "verbes d'action pour le changement",
+        "state verbs describe a condition, thought, feeling, or possession": "verbes d'état pour les sentiments",
+        "in simple statements, place the state verb after the subject": "verbes d'état pour les pensées",
+        "state verbs are usually not used in continuous forms": "verbes d'état pour la possession",
+        "linking verbs connect the subject to a complement": "être en tant que verbe de liaison",
+        "place the linking verb after the subject in a simple statement": "liens de sentir et sembler",
+        "use an adjective or noun as the complement after the linking verb": "liens de devenir et rester",
+        "some verbs are followed by a preposition phrase": "",
+        "after the verb and object, add the required preposition": "",
+        "complete the preposition with a noun phrase": "",
+        "one common verb combination is verb + to-infinitive": "",
+        "use to + base verb immediately after the main verb": "",
+        "do not omit to in this pattern": "",
         "verb plus particle": "verbe plus particule",
         "separable phrasal verbs": "verbes à particule séparables",
         "meaning shift with particles": "changement de sens avec des particules"
@@ -13708,9 +13707,9 @@
         "past perfect for earlier past": "plus-que-parfait pour un passé antérieur",
         "past perfect for cause in past": "plus-que-parfait pour cause dans le passé",
         "past perfect with before": "plus-que-parfait avec avant",
-        "will for decisions": "will pour les décisions",
-        "going to for plans": "aller pour les projets",
-        "present continuous for plans": "présent continu pour les projets",
+        "use will + base verb for one future form": "",
+        "use be going to + base verb for another future form": "",
+        "use present continuous + future time for arranged plans": "",
         "future continuous for progress": "futur continu pour le progrès",
         "future continuous for background": "futur continu pour le contexte",
         "future continuous for polite inquiry": "futur continu pour une demande polie",
@@ -13722,90 +13721,102 @@
         "duration focus contrast": "contraste de focalisation sur la durée"
       },
       "Nouns & Articles": {
-        "countable nouns with numbers": "noms dénombrables avec des nombres",
-        "a or an before countables": "un ou une avant les dénombrables",
-        "plural for more than one": "pluriel pour plus d'un",
-        "uncountable nouns without plural": "noms indénombrables sans pluriel",
-        "some with uncountables": "certains avec des indénombrables",
-        "a piece of for units": "un morceau de pour les unités",
-        "a or an for first mention": "un ou une pour la première mention",
-        "the for specific reference": "le pour référence spécifique",
-        "no article for general ideas": "pas d'article pour des idées générales",
-        "regular plural endings": "terminaisons pluriel régulières",
-        "spelling changes in plurals": "changements d'orthographe dans les pluriels",
-        "irregular plural forms": "formes pluriel irrégulières",
-        "apostrophe s ownership": "possession avec apostrophe s",
-        "plural possessive endings": "terminaisons possessives pluriel",
-        "things and relationships": "choses et relations",
-        "determiner plus noun": "déterminant plus nom",
-        "adjective plus noun": "adjectif plus nom",
-        "noun plus noun pairing": "association nom plus nom",
-        "many and much choice": "beaucoup de choix",
-        "few and little choice": "peu de choix",
-        "a lot of for quantity": "beaucoup de pour la quantité"
+        "countable nouns can be singular or plural": "",
+        "use a or an before singular countable nouns": "",
+        "use a number with plural countable nouns": "",
+        "uncountable nouns usually do not have plural forms": "",
+        "use some with uncountable nouns": "",
+        "use a piece of for countable units": "",
+        "use a or an for first mention of a singular countable noun": "",
+        "use the when the noun is specific or already known": "",
+        "place the article directly before the noun": "",
+        "use a plural noun for more than one": "",
+        "many plurals add -s or -es": "",
+        "some plurals are irregular (child -> children)": "",
+        "add apostrophe + s to a singular noun to show ownership": "",
+        "place the possessive noun before the thing owned": "",
+        "keep the apostrophe in the correct position": "",
+        "a noun phrase can include determiner + noun": "",
+        "an adjective can appear before the noun": "",
+        "keep the order determiner + adjective + noun": "",
+        "use many with plural countable nouns": "",
+        "use much with uncountable nouns": "",
+        "choose the quantifier by noun type": ""
       },
       "Pronouns & Reference": {
-        "i you he she set": "je tu il elle ensemble",
-        "we and they plural": "nous et ils pluriel",
-        "it for things": "cela pour les choses",
-        "me him her set": "moi lui elle ensemble",
-        "us and them plural": "nous et eux pluriel",
-        "object position after verbs": "position de l'objet après les verbes",
-        "my your his her set": "mon ton son sa ensemble",
-        "our their with nouns": "notre leur avec des noms",
-        "mine yours for standalone": "le mien le tien pour autonome",
-        "myself yourself pattern": "moi-même toi-même modèle",
-        "herself himself pattern": "elle-même lui-même modèle",
-        "emphasis with reflexives": "accent avec des réflexifs",
-        "this that for single": "ce cela pour singulier",
-        "these those for plural": "ces ceux pour pluriel",
-        "near vs far reference": "référence proche vs éloignée",
-        "who for people": "qui pour les personnes",
-        "which for things": "lequel pour les choses",
-        "that for general use": "cela pour usage général",
-        "someone anyone set": "quelqu'un n'importe qui ensemble",
-        "everyone no one set": "tout le monde personne ensemble",
-        "something anything set": "quelque chose n'importe quoi ensemble"
+        "subject pronouns replace noun subjects (i, you, he, she, it, we, they)": "",
+        "use a subject pronoun before the main verb in statements": "",
+        "choose the pronoun that matches number and person": "",
+        "object pronouns replace noun objects (me, you, him, her, it, us, them)": "",
+        "place object pronouns after the main verb": "",
+        "use object forms, not subject forms, in object position": "",
+        "use possessive adjectives before nouns (my, your, his, her, our, their)": "",
+        "use possessive pronouns without a noun (mine, yours, his, hers, ours, theirs)": "",
+        "do not add apostrophes to possessive pronouns": "",
+        "use reflexive pronouns when subject and object are the same": "",
+        "singular forms: myself, yourself, himself, herself, itself": "",
+        "plural forms: ourselves, yourselves, themselves": "",
+        "use this and these for things near the speaker": "",
+        "use that and those for things farther away": "",
+        "use this or that with singular nouns and these or those with plural nouns": "",
+        "use who for people in relative clauses": "",
+        "use which for things in relative clauses": "",
+        "use that for people or things in defining relative clauses": "",
+        "use someone and something in affirmative statements": "",
+        "use anyone and anything in negative statements and questions": "",
+        "use everyone and everything for complete groups": ""
       },
       "Modifiers": {
-        "adjectives describe nouns": "les adjectifs décrivent les noms",
-        "adjectives before nouns": "les adjectifs avant les noms",
-        "adjectives after be": "les adjectifs après être",
-        "opinion before size": "opinion avant taille",
-        "age before color": "âge avant couleur",
-        "material near noun": "matériau près du nom",
-        "er or more forms": "formes en er ou plus",
-        "than comparisons": "comparaisons avec que",
-        "irregular comparative forms": "formes comparatives irrégulières",
-        "est or most forms": "formes en est ou le plus",
-        "the with superlative": "le avec le superlatif",
-        "group comparison focus": "focus sur la comparaison de groupe",
-        "adverbs describe verbs": "les adverbes décrivent les verbes",
-        "adverbs after verb": "les adverbes après le verbe",
-        "adverbs before adjectives": "les adverbes avant les adjectifs",
-        "always usually often set": "toujours généralement souvent",
-        "rarely never set": "rarement jamais",
-        "position with be": "position avec être",
-        "time at end position": "temps à la fin de la position",
-        "place at the end": "lieu à la fin",
-        "time before place order": "temps avant ordre de lieu",
-        "very really set": "très vraiment",
-        "too and enough": "trop et assez",
-        "quite and rather": "assez et plutôt",
-        "ing adjectives for cause": "adjectifs en ing pour la cause",
-        "ed adjectives for feeling": "adjectifs en ed pour le sentiment",
-        "avoid confusion": "éviter la confusion",
-        "multiple adjectives": "plusieurs adjectifs",
-        "multiple adverbs": "plusieurs adverbes",
-        "keep focus clear": "garder le focus clair"
+        "adjectives describe nouns": "",
+        "adjectives can come before nouns": "",
+        "adjectives can come after linking verbs like be": "",
+        "when several adjectives come before a noun, use a common order": "",
+        "opinion usually comes before size": "",
+        "size usually comes before color": "",
+        "use comparatives to compare two things": "",
+        "many short adjectives take -er": "",
+        "many longer adjectives use more": "",
+        "use superlatives to compare one item with a group": "",
+        "many short adjectives take -est and longer adjectives use most": "",
+        "use the before superlative adjectives": "",
+        "adverbs can modify verbs": "",
+        "many adverbs of manner end in -ly": "",
+        "adverbs of manner usually come after the verb or object": "",
+        "common frequency adverbs include always, usually, often, sometimes, and never": "",
+        "place frequency adverbs before main verbs": "",
+        "place frequency adverbs after be": "",
+        "place adverbs answer where and time adverbs answer when": "",
+        "in neutral order, place usually comes before time": "",
+        "both often appear near the end of the clause": "",
+        "degree words modify adjectives or adverbs": "",
+        "use very to strengthen adjectives or adverbs": "",
+        "use enough after adjectives and adverbs": "",
+        "use -ing adjectives for things that cause a feeling": "",
+        "use -ed adjectives for how people feel": "",
+        "do not mix -ing and -ed meanings": "",
+        "when multiple modifiers appear, keep a clear order": "",
+        "put degree words before adjectives": "",
+        "keep manner adverbs in a natural position in the clause": ""
       },
       "Questions": {
-        "aux + subject + base verb": "aux + sujet + verbe de base",
-        "wh word + aux + subject + base verb": "mot interrogatif + aux + sujet + verbe de base",
-        "be + subject + complement": "être + sujet + complément",
-        "modal + subject + base verb": "modal + sujet + verbe de base",
-        "statement + tag": "déclaration + étiquette",
-        "intro + wh clause": "intro + clause interrogative"
+        "use do, does, or did before the subject": "",
+        "use the base verb after the subject": "",
+        "end yes-no questions with a question mark": "",
+        "start with a wh word such as who, what, where, when, why, or how": "",
+        "place the auxiliary before the subject": "",
+        "place be before the subject": "",
+        "do not use do or does with be questions": "",
+        "place the complement after the subject": "",
+        "keep the main verb in base form after do, does, or did": "",
+        "use did for past-time yes-no questions": "",
+        "place the modal before the subject": "",
+        "do not use do or does with modal questions": "",
+        "add a short tag after a statement": "",
+        "use a negative tag after a positive statement": "",
+        "use a positive tag after a negative statement": "",
+        "start with an introductory phrase such as could you tell me": "",
+        "use statement word order inside the embedded question": "",
+        "do not invert subject and verb inside the embedded question": ""
       },
       "Negation": {
         "subject + be + not + complement": "sujet + être + ne + complément",
@@ -13924,69 +13935,69 @@
     "grammarMistakeWrong": {
       "Sentence Structure": {
         "reads she a book.": "Lit-elle un livre.",
-        "is a pilot my brother.": "Est pilote mon frère.",
-        "she met him noon station.": "Elle l'a rencontré à la station de midi.",
+        "they named captain her.": "",
+        "she met him at noon the station.": "",
         "i stayed home because.": "Je suis resté à la maison parce que.",
-        "we finished early so.": "Nous avons fini tôt donc."
+        "we finished early we went home after class because we were tired.": ""
       },
       "Verbs": {
-        "she run every morning.": "Elle court tous les matins.",
-        "he is knowing the answer.": "Il sait la réponse.",
-        "the soup tastes is good.": "La soupe est bonne.",
+        "they the boxes carry.": "",
+        "she is feeling tired.": "",
+        "the room feels quietly.": "",
         "he placed the book on.": "Il a posé le livre.",
-        "she enjoys to swim.": "Elle aime nager.",
+        "we decided stay.": "",
         "he turned the light on off.": "Il a allumé et éteint la lumière."
       },
       "Tenses & Aspect": {
-        "she is work every day.": "Elle travaille tous les jours.",
-        "she works now.": "Elle travaille maintenant.",
-        "she go yesterday.": "Elle est allée hier.",
+        "she work every day.": "",
+        "i am wait outside.": "",
+        "they visit paris last year.": "",
         "she was cook when i called.": "Elle cuisinait quand j'ai appelé.",
-        "she finished already.": "Elle a déjà fini.",
-        "he left when i arrive.": "Il est parti quand je suis arrivé.",
-        "she will going to call.": "Elle va appeler.",
-        "she will work at 8.": "Elle travaillera à 8 heures.",
-        "she will finish by noon.": "Elle finira avant midi.",
-        "i am knowing him.": "Je le connais."
+        "he has live here for years.": "",
+        "he had leave before i arrived.": "",
+        "she will going to call tomorrow.": "",
+        "she will be work at 8.": "",
+        "she will have finish by noon.": "",
+        "i have work here for years.": ""
       },
       "Nouns & Articles": {
-        "she bought apple.": "Elle a acheté une pomme.",
+        "i have coin and two apples.": "",
         "i need two breads.": "J'ai besoin de deux pains.",
         "i saw movie.": "J'ai vu un film.",
         "three child play.": "Trois enfants jouent.",
         "the teachers book is new.": "Le livre du professeur est nouveau.",
-        "she bought dress red.": "Elle a acheté une robe rouge.",
+        "she bought the dress red.": "Elle a acheté une robe rouge.",
         "how much apples?": "Combien de pommes ?"
       },
       "Pronouns & Reference": {
-        "her is here.": "Elle est ici.",
-        "he saw i.": "Il m'a vu.",
-        "this is her book is.": "C'est son livre.",
-        "i hurt me.": "Je me fais mal.",
-        "these book is mine.": "Ces livres sont à moi.",
-        "the man which called me.": "L'homme qui m'a appelé.",
-        "anyone is here.": "Quelqu'un est ici."
+        "her is here.": "",
+        "he saw i.": "",
+        "this book is her's.": "Ce livre est a elle.",
+        "i hurt me.": "",
+        "this books are mine.": "Ce livres sont a moi.",
+        "the man which called me left.": "L'homme lequel m'a appele est parti.",
+        "i saw anyone at the station.": "J'ai vu n'importe qui a la gare."
       },
       "Modifiers": {
-        "she has hair long.": "Elle a les cheveux longs.",
-        "a red small car.": "Une petite voiture rouge.",
-        "this is more cheap.": "C'est moins cher.",
+        "she bought a red small bag.": "Elle a achete un rouge petit sac.",
+        "this is more cheap.": "Ceci est plus pas cher.",
         "he is the most fast.": "Il est le plus rapide.",
-        "she speaks slow.": "Elle parle lentement.",
-        "she goes always early.": "Elle va toujours tôt.",
-        "he arrived yesterday here.": "Il est arrivé ici hier.",
-        "it is enough hot.": "Il fait assez chaud.",
-        "the story was boringed.": "L'histoire était ennuyeuse.",
-        "she bought a red small new bag.": "Elle a acheté un nouveau petit sac rouge."
+        "she speaks slow.": "Elle parle lent.",
+        "she goes always early.": "Elle va toujours tot.",
+        "he arrived yesterday here.": "Il est arrive hier ici.",
+        "it is enough hot.": "Il est assez chaud.",
+        "i am boring.": "Je suis ennuyeux.",
+        "she answered the difficult very question quickly.": "Elle a repondu a la question difficile tres rapidement.",
+        "the quiet house is noisily.": "La maison calme est bruyamment."
       },
       "Questions": {
         "you like coffee?": "Tu aimes le café ?",
         "where you live?": "Où tu vis ?",
-        "you are ready?": "Tu es prêt ?",
-        "she likes pizza?": "Elle aime la pizza ?",
+        "the store is open?": "",
+        "did you called her?": "",
         "you can help me?": "Tu peux m'aider ?",
-        "she is here, is she?": "Elle est ici, n'est-ce pas ?",
-        "can you tell me where is he?": "Peux-tu me dire où il est ?"
+        "you are ready, are you?": "",
+        "could you tell me where is it?": ""
       },
       "Negation": {
         "he not happy.": "Il n'est pas heureux.",
@@ -14063,69 +14074,69 @@
     "grammarMistakeFix": {
       "Sentence Structure": {
         "she reads a book.": "Elle lit un livre.",
-        "my brother is a pilot.": "Mon frère est pilote.",
+        "they named her captain.": "",
         "she met him at noon at the station.": "Elle l'a rencontré à midi à la gare.",
         "i stayed home because it rained.": "Je suis resté à la maison parce qu'il a plu.",
-        "we finished early, so we left.": "Nous avons fini tôt, donc nous sommes partis."
+        "we finished early, and we went home after class because we were tired.": "Nous avons fini tot et nous sommes rentres chez nous apres le cours parce que nous etions fatigues."
       },
       "Verbs": {
-        "she runs every morning.": "Elle court tous les matins.",
-        "he knows the answer.": "Il connaît la réponse.",
-        "the soup tastes good.": "La soupe a bon goût.",
+        "they carry the boxes.": "",
+        "she feels tired.": "",
+        "the room feels quiet.": "",
         "he placed the book on the table.": "Il a placé le livre sur la table.",
-        "she enjoys swimming.": "Elle aime nager.",
+        "we decided to stay.": "",
         "he turned off the light.": "Il a éteint la lumière."
       },
       "Tenses & Aspect": {
         "she works every day.": "Elle travaille tous les jours.",
-        "she is working now.": "Elle travaille maintenant.",
-        "she went yesterday.": "Elle est allée hier.",
+        "i am waiting outside.": "",
+        "they visited paris last year.": "",
         "she was cooking when i called.": "Elle cuisinait quand j'ai appelé.",
-        "she has finished already.": "Elle a déjà fini.",
-        "he had left when i arrived.": "Il était parti quand je suis arrivé.",
-        "she is going to call.": "Elle va appeler.",
+        "he has lived here for years.": "",
+        "he had left before i arrived.": "",
+        "she is going to call tomorrow.": "",
         "she will be working at 8.": "Elle travaillera à 8 heures.",
         "she will have finished by noon.": "Elle aura fini d'ici midi.",
-        "i know him.": "Je le connais."
+        "i have worked here for years.": ""
       },
       "Nouns & Articles": {
-        "she bought an apple.": "Elle a acheté une pomme.",
-        "i need some bread.": "J'ai besoin de pain.",
+        "i have a coin and two apples.": "",
+        "i need two pieces of bread.": "J'ai besoin de deux morceaux de pain.",
         "i saw a movie.": "J'ai vu un film.",
         "three children play.": "Trois enfants jouent.",
         "the teacher's book is new.": "Le livre du professeur est nouveau.",
-        "she bought a red dress.": "Elle a acheté une robe rouge.",
+        "she bought the red dress.": "Elle a achet? la robe rouge.",
         "how many apples?": "Combien de pommes ?"
       },
       "Pronouns & Reference": {
-        "she is here.": "Elle est ici.",
-        "he saw me.": "Il m'a vu.",
-        "this book is hers.": "Ce livre est à elle.",
-        "i hurt myself.": "Je me suis fait mal.",
-        "this book is mine.": "Ce livre est à moi.",
-        "the man who called me.": "L'homme qui m'a appelé.",
-        "someone is here.": "Quelqu'un est ici."
+        "she is here.": "",
+        "he saw me.": "",
+        "this book is hers.": "Ce livre est a elle.",
+        "i hurt myself.": "",
+        "these books are mine.": "Ces livres sont a moi.",
+        "the man who called me left.": "L'homme qui m'a appele est parti.",
+        "i saw someone at the station.": "J'ai vu quelqu'un a la gare."
       },
       "Modifiers": {
-        "she has long hair.": "Elle a les cheveux longs.",
-        "a small red car.": "Une petite voiture rouge.",
-        "this is cheaper.": "C'est moins cher.",
+        "she bought a small red bag.": "Elle a achete un petit sac rouge.",
+        "this is cheaper.": "Ceci est moins cher.",
         "he is the fastest.": "Il est le plus rapide.",
         "she speaks slowly.": "Elle parle lentement.",
-        "she always goes early.": "Elle va toujours tôt.",
-        "he arrived here yesterday.": "Il est arrivé ici hier.",
+        "she always goes early.": "Elle va toujours tot.",
+        "he arrived here yesterday.": "Il est arrive ici hier.",
         "it is hot enough.": "Il fait assez chaud.",
-        "the story was boring.": "L'histoire était ennuyeuse.",
-        "she bought a small new red bag.": "Elle a acheté un petit nouveau sac rouge."
+        "i am bored.": "Je suis ennuye.",
+        "she answered the very difficult question quickly.": "Elle a repondu rapidement a la question tres difficile.",
+        "the quiet house is noisy.": "La maison calme est bruyante."
       },
       "Questions": {
         "do you like coffee?": "Aimes-tu le café ?",
         "where do you live?": "Où vis-tu ?",
-        "are you ready?": "Es-tu prêt ?",
-        "does she like pizza?": "Aime-t-elle la pizza ?",
+        "is the store open?": "",
+        "did you call her?": "",
         "can you help me?": "Peux-tu m'aider ?",
-        "she is here, isn't she?": "Elle est ici, n'est-ce pas ?",
-        "can you tell me where he is?": "Peux-tu me dire où il est ?"
+        "you are ready, aren't you?": "",
+        "could you tell me where it is?": ""
       },
       "Negation": {
         "he is not happy.": "Il n'est pas heureux.",

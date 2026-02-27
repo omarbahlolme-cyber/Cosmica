@@ -1,4 +1,4 @@
-﻿/* ==========================================================================
+/* ==========================================================================
    MAPS BUNDLE
    Loaded only on words/phrases/grammar pages. Contains heavy datasets,
    translation hydration, map rendering, and grammar modal behavior.
@@ -1554,45 +1554,44 @@ const GRAMMAR_SECTION_LISTS = {
     {
       title: "basic word order",
       points: [
-        "basic word order for statements",
-        "subject before verb",
-        "object after verb",
+        "basic word order in simple statements",
+        "subject usually comes before the verb",
+        "if the verb takes an object, put it after the verb",
       ],
       example: "She reads a book.",
     },
     {
       title: "sentence parts",
       points: [
-        "core subject slot",
-        "core verb slot",
-        "object and complement slot",
+        "a complete clause needs a subject",
+        "a complete clause needs a main verb",
+        "an object or complement can follow the verb",
       ],
       example: "They named her captain.",
     },
     {
       title: "adding details",
       points: [
-        "time at sentence end",
-        "place after verb",
-        "extra phrases after objects",
+        "add a time phrase after the main clause (for example, at noon or yesterday)",
+        "add a place phrase after the time phrase (for example, at the station or in the kitchen)",
       ],
       example: "She met him at noon at the station.",
     },
     {
       title: "linking clauses",
       points: [
-        "main clause idea",
-        "reason clause add-on",
-        "time clause add-on",
+        "main clause gives the core message",
+        "use a connector to link clauses (for example, because or when)",
+        "the linked clause needs its own subject and verb",
       ],
       example: "I stayed home because it rained.",
     },
     {
       title: "sentence variety",
       points: [
-        "short sentences for impact",
-        "long sentences for detail",
-        "avoid run-on sentences",
+        "use short sentences for key points",
+        "use longer sentences for supporting detail",
+        "separate independent clauses with correct punctuation",
       ],
       example: "We finished early. We went home after class because we were tired.",
     },
@@ -1601,45 +1600,45 @@ const GRAMMAR_SECTION_LISTS = {
     {
       title: "action verbs",
       points: [
-        "action verbs for movement",
-        "action verbs for tasks",
-        "action verbs for change",
+        "action verbs show what the subject does",
+        "in simple statements, place the action verb after the subject",
+        "if there is an object, place it after the action verb",
       ],
       example: "They carry the boxes.",
     },
     {
       title: "state verbs",
       points: [
-        "state verbs for feelings",
-        "state verbs for thoughts",
-        "state verbs for possession",
+        "state verbs describe a condition, thought, feeling, or possession",
+        "in simple statements, place the state verb after the subject",
+        "state verbs are usually not used in continuous forms",
       ],
       example: "She feels tired.",
     },
     {
       title: "linking verbs",
       points: [
-        "be as linking verb",
-        "feel and seem links",
-        "become and remain links",
+        "linking verbs connect the subject to a complement",
+        "place the linking verb after the subject in a simple statement",
+        "use an adjective or noun as the complement after the linking verb",
       ],
       example: "The room feels quiet.",
     },
     {
       title: "verb patterns",
       points: [
-        "verb plus object pattern",
-        "verb plus adjective pattern",
-        "verb plus preposition pattern",
+        "some verbs are followed by a preposition phrase",
+        "after the verb and object, add the required preposition",
+        "complete the preposition with a noun phrase",
       ],
       example: "He placed the book on the table.",
     },
     {
       title: "verb combinations",
       points: [
-        "verb plus infinitive",
-        "verb plus gerund",
-        "verb plus that clause",
+        "one common verb combination is verb + to-infinitive",
+        "use to + base verb immediately after the main verb",
+        "do not omit to in this pattern",
       ],
       example: "We decided to stay.",
     },
@@ -1679,7 +1678,7 @@ const GRAMMAR_SECTION_LISTS = {
         "past simple for past time words",
         "past simple for sequences",
       ],
-      example: "They visited Paris.",
+      example: "They visited Paris last year.",
     },
     {
       title: "past continuous",
@@ -1711,11 +1710,11 @@ const GRAMMAR_SECTION_LISTS = {
     {
       title: "future forms",
       points: [
-        "will for decisions",
-        "going to for plans",
-        "present continuous for plans",
+        "use will + base verb for one future form",
+        "use be going to + base verb for another future form",
+        "use present continuous + future time for arranged plans",
       ],
-      example: "We will meet tomorrow.",
+      example: "I will call you tonight. I am going to study later. I am meeting Sam tomorrow.",
     },
     {
       title: "future continuous",
@@ -1742,137 +1741,137 @@ const GRAMMAR_SECTION_LISTS = {
         "perfect vs simple contrast",
         "duration focus contrast",
       ],
-      example: "I work every day, I am working now, and I have worked here for years.",
+      example: "I work every day. I am working now. I have worked here for years.",
     },
   ],
   "Nouns & Articles": [
     {
       title: "countable nouns",
       points: [
-        "countable nouns with numbers",
-        "a or an before countables",
-        "plural for more than one",
+        "countable nouns can be singular or plural",
+        "use a or an before singular countable nouns",
+        "use a number with plural countable nouns",
       ],
-      example: "I have a coin.",
+      example: "I have a coin and two apples.",
     },
     {
       title: "uncountable nouns",
       points: [
-        "uncountable nouns without plural",
-        "some with uncountables",
-        "a piece of for units",
+        "uncountable nouns usually do not have plural forms",
+        "use some with uncountable nouns",
+        "use a piece of for countable units",
       ],
-      example: "We need some rice.",
+      example: "We need some rice and a piece of bread.",
     },
     {
       title: "articles",
       points: [
-        "a or an for first mention",
-        "the for specific reference",
-        "no article for general ideas",
+        "use a or an for first mention of a singular countable noun",
+        "use the when the noun is specific or already known",
+        "place the article directly before the noun",
       ],
-      example: "The dog is outside.",
+      example: "I saw a dog. The dog is outside.",
     },
     {
       title: "plural forms",
       points: [
-        "regular plural endings",
-        "spelling changes in plurals",
-        "irregular plural forms",
+        "use a plural noun for more than one",
+        "many plurals add -s or -es",
+        "some plurals are irregular (child -> children)",
       ],
-      example: "Two children are here.",
+      example: "Two apples and three children are here.",
     },
     {
       title: "possessive nouns",
       points: [
-        "apostrophe s ownership",
-        "plural possessive endings",
-        "things and relationships",
+        "add apostrophe + s to a singular noun to show ownership",
+        "place the possessive noun before the thing owned",
+        "keep the apostrophe in the correct position",
       ],
       example: "Sara's phone is new.",
     },
     {
       title: "noun phrases",
       points: [
-        "determiner plus noun",
-        "adjective plus noun",
-        "noun plus noun pairing",
+        "a noun phrase can include determiner + noun",
+        "an adjective can appear before the noun",
+        "keep the order determiner + adjective + noun",
       ],
-      example: "The small kitchen table broke.",
+      example: "She bought the red dress.",
     },
     {
       title: "quantifiers",
       points: [
-        "many and much choice",
-        "few and little choice",
-        "a lot of for quantity",
+        "use many with plural countable nouns",
+        "use much with uncountable nouns",
+        "choose the quantifier by noun type",
       ],
-      example: "There are many options.",
+      example: "There are many options, and there is much information.",
     },
   ],
   "Pronouns & Reference": [
     {
       title: "subject pronouns",
       points: [
-        "i you he she set",
-        "we and they plural",
-        "it for things",
+        "subject pronouns replace noun subjects (i, you, he, she, it, we, they)",
+        "use a subject pronoun before the main verb in statements",
+        "choose the pronoun that matches number and person",
       ],
       example: "They are ready.",
     },
     {
       title: "object pronouns",
       points: [
-        "me him her set",
-        "us and them plural",
-        "object position after verbs",
+        "object pronouns replace noun objects (me, you, him, her, it, us, them)",
+        "place object pronouns after the main verb",
+        "use object forms, not subject forms, in object position",
       ],
-      example: "She called me.",
+      example: "He saw me.",
     },
     {
       title: "possessive forms",
       points: [
-        "my your his her set",
-        "our their with nouns",
-        "mine yours for standalone",
+        "use possessive adjectives before nouns (my, your, his, her, our, their)",
+        "use possessive pronouns without a noun (mine, yours, his, hers, ours, theirs)",
+        "do not add apostrophes to possessive pronouns",
       ],
-      example: "This is my bag.",
+      example: "My bag is new. Hers is old.",
     },
     {
       title: "reflexive pronouns",
       points: [
-        "myself yourself pattern",
-        "herself himself pattern",
-        "emphasis with reflexives",
+        "use reflexive pronouns when subject and object are the same",
+        "singular forms: myself, yourself, himself, herself, itself",
+        "plural forms: ourselves, yourselves, themselves",
       ],
       example: "He hurt himself.",
     },
     {
       title: "demonstratives",
       points: [
-        "this that for single",
-        "these those for plural",
-        "near vs far reference",
+        "use this and these for things near the speaker",
+        "use that and those for things farther away",
+        "use this or that with singular nouns and these or those with plural nouns",
       ],
-      example: "Those are my keys.",
+      example: "These keys are mine.",
     },
     {
       title: "relative reference",
       points: [
-        "who for people",
-        "which for things",
-        "that for general use",
+        "use who for people in relative clauses",
+        "use which for things in relative clauses",
+        "use that for people or things in defining relative clauses",
       ],
-      example: "The man who called left.",
+      example: "The man who called me left.",
     },
     {
       title: "indefinite reference",
       points: [
-        "someone anyone set",
-        "everyone no one set",
-        "something anything set",
+        "use someone and something in affirmative statements",
+        "use anyone and anything in negative statements and questions",
+        "use everyone and everything for complete groups",
       ],
-      example: "Someone is waiting.",
+      example: "Someone is waiting outside.",
     },
   ],
   Modifiers: [
@@ -1880,297 +1879,453 @@ const GRAMMAR_SECTION_LISTS = {
       title: "adjectives basics",
       points: [
         "adjectives describe nouns",
-        "adjectives before nouns",
-        "adjectives after be",
+        "adjectives can come before nouns",
+        "adjectives can come after linking verbs like be",
       ],
-      example: "The house is quiet.",
+      example: "The quiet house is empty.",
     },
     {
       title: "adjective order",
       points: [
-        "opinion before size",
-        "age before color",
-        "material near noun",
+        "when several adjectives come before a noun, use a common order",
+        "opinion usually comes before size",
+        "size usually comes before color",
       ],
-      example: "She bought a small red bag.",
+      example: "She bought a lovely small red bag.",
     },
     {
       title: "comparatives",
       points: [
-        "er or more forms",
-        "than comparisons",
-        "irregular comparative forms",
+        "use comparatives to compare two things",
+        "many short adjectives take -er",
+        "many longer adjectives use more",
       ],
       example: "This is faster than that.",
     },
     {
       title: "superlatives",
       points: [
-        "est or most forms",
-        "the with superlative",
-        "group comparison focus",
+        "use superlatives to compare one item with a group",
+        "many short adjectives take -est and longer adjectives use most",
+        "use the before superlative adjectives",
       ],
       example: "He is the tallest.",
     },
     {
       title: "adverbs basics",
       points: [
-        "adverbs describe verbs",
-        "adverbs after verb",
-        "adverbs before adjectives",
+        "adverbs can modify verbs",
+        "many adverbs of manner end in -ly",
+        "adverbs of manner usually come after the verb or object",
       ],
       example: "She speaks clearly.",
     },
     {
       title: "frequency adverbs",
       points: [
-        "always usually often set",
-        "rarely never set",
-        "position with be",
+        "common frequency adverbs include always, usually, often, sometimes, and never",
+        "place frequency adverbs before main verbs",
+        "place frequency adverbs after be",
       ],
-      example: "I usually wake early.",
+      example: "She usually wakes early.",
     },
     {
       title: "time and place adverbs",
       points: [
-        "time at end position",
-        "place at the end",
-        "time before place order",
+        "place adverbs answer where and time adverbs answer when",
+        "in neutral order, place usually comes before time",
+        "both often appear near the end of the clause",
       ],
-      example: "We met there yesterday.",
+      example: "We met here yesterday.",
     },
     {
       title: "degree words",
       points: [
-        "very really set",
-        "too and enough",
-        "quite and rather",
+        "degree words modify adjectives or adverbs",
+        "use very to strengthen adjectives or adverbs",
+        "use enough after adjectives and adverbs",
       ],
       example: "The room is very warm.",
     },
     {
       title: "participles",
       points: [
-        "ing adjectives for cause",
-        "ed adjectives for feeling",
-        "avoid confusion",
+        "use -ing adjectives for things that cause a feeling",
+        "use -ed adjectives for how people feel",
+        "do not mix -ing and -ed meanings",
       ],
-      example: "The movie was boring.",
+      example: "The movie was boring, and I was bored.",
     },
     {
       title: "modifier stacking",
       points: [
-        "multiple adjectives",
-        "multiple adverbs",
-        "keep focus clear",
+        "when multiple modifiers appear, keep a clear order",
+        "put degree words before adjectives",
+        "keep manner adverbs in a natural position in the clause",
       ],
-      example: "She quickly answered the hard question.",
+      example: "She answered the very difficult question quickly.",
     },
   ],
   Questions: [
     {
       title: "yes no questions",
-      points: ["aux + subject + base verb"],
+      points: [
+        "use do, does, or did before the subject",
+        "use the base verb after the subject",
+        "end yes-no questions with a question mark",
+      ],
       example: "Do you work here?",
     },
     {
       title: "wh questions",
-      points: ["wh word + aux + subject + base verb"],
+      points: [
+        "start with a wh word such as who, what, where, when, why, or how",
+        "place the auxiliary before the subject",
+        "use the base verb after the subject",
+      ],
       example: "Where does he live?",
     },
     {
       title: "questions with be",
-      points: ["be + subject + complement"],
+      points: [
+        "place be before the subject",
+        "do not use do or does with be questions",
+        "place the complement after the subject",
+      ],
       example: "Is the store open?",
     },
     {
       title: "questions with do",
-      points: ["aux + subject + base verb"],
+      points: [
+        "use do, does, or did before the subject",
+        "keep the main verb in base form after do, does, or did",
+        "use did for past-time yes-no questions",
+      ],
       example: "Did you call her?",
     },
     {
       title: "questions with modals",
-      points: ["modal + subject + base verb"],
+      points: [
+        "place the modal before the subject",
+        "use the base verb after the subject",
+        "do not use do or does with modal questions",
+      ],
       example: "Could you help me?",
     },
     {
       title: "tag questions",
-      points: ["statement + tag"],
+      points: [
+        "add a short tag after a statement",
+        "use a negative tag after a positive statement",
+        "use a positive tag after a negative statement",
+      ],
       example: "You are ready, aren't you?",
     },
     {
       title: "indirect questions",
-      points: ["intro + wh clause"],
+      points: [
+        "start with an introductory phrase such as could you tell me",
+        "use statement word order inside the embedded question",
+        "do not invert subject and verb inside the embedded question",
+      ],
       example: "Could you tell me where it is?",
     },
   ],
   Negation: [
     {
       title: "not with be",
-      points: ["subject + be + not + complement"],
+      points: [
+        "use be + not to form negatives with be",
+        "place not after am, is, are, was, or were",
+        "keep the complement after the negative be form",
+      ],
       example: "She is not tired.",
     },
     {
       title: "not with do",
-      points: ["subject + aux + not + base verb"],
+      points: [
+        "use do, does, or did + not to form negatives with main verbs",
+        "use does with he, she, and it in present simple",
+        "keep the main verb in base form after do, does, or did + not",
+      ],
       example: "They do not agree.",
     },
     {
       title: "negative short forms",
-      points: ["subject + aux + not + base verb"],
+      points: [
+        "use short negative forms such as don't, doesn't, isn't, and aren't",
+        "keep the same word order as the full negative form",
+        "match the short form to the subject and auxiliary",
+      ],
       example: "I don't know.",
     },
     {
       title: "negative words",
-      points: ["negative word + noun"],
+      points: [
+        "common negative words include no, none, never, and nothing",
+        "use one negative form per clause in standard english",
+        "use any forms after not when needed (anyone, anything, anywhere)",
+      ],
       example: "There is no milk.",
     },
     {
       title: "negative questions",
-      points: ["aux + not + subject + base verb + object"],
+      points: [
+        "form negative questions with auxiliary + n't + subject + base verb",
+        "use negative questions to check or confirm expectations",
+        "keep the main verb in base form after the auxiliary",
+      ],
       example: "Don't you want coffee?",
     },
     {
       title: "limited negatives",
-      points: ["subject + negative adverb + verb"],
+      points: [
+        "limited negatives include hardly, barely, and rarely",
+        "in neutral statements, place them before the main verb",
+        "avoid adding a second negative in the same clause",
+      ],
       example: "He rarely eats out.",
     },
   ],
   Connections: [
     {
       title: "basic connectors",
-      points: ["clause 1 + connector + clause 2"],
+      points: [
+        "use and to add similar ideas",
+        "use but to show contrast",
+        "use or to show alternatives",
+      ],
       example: "I called but no one answered.",
     },
     {
       title: "reason and result",
-      points: ["reason clause + connector + result clause"],
+      points: [
+        "use because + clause to give a reason",
+        "use so + clause to show a result",
+        "keep both clauses complete",
+      ],
       example: "It rained, so we stayed.",
     },
     {
       title: "contrast and choice",
-      points: ["clause 1 + contrast connector + clause 2"],
+      points: [
+        "use but or although to show contrast",
+        "use either ... or ... to show a choice",
+        "use one connector pattern at a time",
+      ],
       example: "She went, although she was tired.",
     },
     {
       title: "time connectors",
-      points: ["main clause + time connector + clause"],
+      points: [
+        "use when for events at the same time",
+        "use before and after to order events",
+        "keep tense forms natural in time clauses",
+      ],
       example: "Call me when you arrive.",
     },
     {
       title: "comparison links",
-      points: ["subject + verb + comparison + object"],
+      points: [
+        "use like before a noun phrase",
+        "use as for role or function",
+        "use than after comparative forms",
+      ],
       example: "This feels like home.",
     },
     {
       title: "adding ideas",
-      points: ["addition marker + clause"],
+      points: [
+        "use also to add one more idea",
+        "use in addition for a more formal add-on",
+        "place the addition marker in a clear position",
+      ],
       example: "We also need chairs.",
     },
     {
       title: "ordering ideas",
-      points: ["sequence + clause"],
+      points: [
+        "use first, then, and finally to show sequence",
+        "keep events in chronological order",
+        "use one clear sequence marker per step",
+      ],
       example: "First we plan, then we act.",
     },
   ],
   Conditions: [
     {
       title: "real conditions",
-      points: ["if clause + result clause"],
+      points: [
+        "use if + present simple for real and possible conditions",
+        "use present simple in the result clause for general results",
+        "do not use will in the if clause in this pattern",
+      ],
       example: "If you press this, it starts.",
     },
     {
       title: "future conditions",
-      points: ["if clause + result clause"],
+      points: [
+        "use if + present simple for future conditions",
+        "use will + base verb in the result clause",
+        "do not use will in the if clause",
+      ],
       example: "If it is sunny, we will go.",
     },
     {
       title: "unreal present",
-      points: ["if clause + would clause"],
+      points: [
+        "use if + past simple for unreal present situations",
+        "use would + base verb in the result clause",
+        "this pattern expresses imaginary present or future results",
+      ],
       example: "If I had time, I would help.",
     },
     {
       title: "unreal past",
-      points: ["if clause + would have clause"],
+      points: [
+        "use if + past perfect for unreal past situations",
+        "use would have + past participle in the result clause",
+        "this pattern expresses regret or an alternative past result",
+      ],
       example: "If we had left earlier, we would have arrived.",
     },
     {
       title: "mixed conditions",
-      points: ["if clause (past perfect) + present result (would + base verb)"],
+      points: [
+        "use if + past perfect for a past condition",
+        "use would + base verb for a present result",
+        "mixed conditionals connect past causes to present consequences",
+      ],
       example: "If she had studied, she would be calm now.",
     },
     {
       title: "unless and otherwise",
-      points: ["result clause + unless clause"],
+      points: [
+        "use unless to mean if ... not",
+        "use present simple after unless for future meaning",
+        "keep result and condition clauses clear and complete",
+      ],
       example: "We will go unless it rains.",
     },
   ],
   "Voice & Focus": [
     {
       title: "active voice",
-      points: ["doer + action verb + object"],
+      points: [
+        "in active voice, the doer is the subject",
+        "use subject + action verb + object order",
+        "active voice usually sounds more direct and clear",
+      ],
       example: "The chef cooked dinner.",
     },
     {
       title: "passive voice",
-      points: ["object + be verb + past participle"],
+      points: [
+        "in passive voice, the receiver becomes the subject",
+        "use be + past participle in the verb phrase",
+        "add by + doer only when the doer is important",
+      ],
       example: "The meal was cooked.",
     },
     {
       title: "focus shifts",
-      points: ["focus phrase + subject + verb"],
+      points: [
+        "move a phrase to the front to emphasize it",
+        "separate the fronted phrase with a comma",
+        "keep the rest of the clause in normal order",
+      ],
       example: "That book, I finished yesterday.",
     },
     {
       title: "cleft sentences",
-      points: ["it subject + focus phrase + clause"],
+      points: [
+        "use it + be to highlight one part of the sentence",
+        "follow the focus with who or that + clause",
+        "use who for people and that for things",
+      ],
       example: "It is John who called.",
     },
     {
       title: "there and it subjects",
-      points: ["there subject + be verb + noun"],
+      points: [
+        "use there + be to introduce new information",
+        "use it + be for weather, time, and distance",
+        "match the be verb with the real noun phrase",
+      ],
       example: "There is a problem.",
     },
   ],
   Modality: [
     {
       title: "ability",
-      points: ["subject + modal + base verb"],
+      points: [
+        "use can and could to express ability",
+        "place the modal before the base verb",
+        "do not add to after can or could",
+      ],
       example: "She can swim.",
     },
     {
       title: "permission",
-      points: ["modal + subject + base verb"],
+      points: [
+        "use can, may, or could to ask for permission",
+        "in questions, place the modal before the subject",
+        "use the base verb after the modal without to",
+      ],
       example: "May I sit here?",
     },
     {
       title: "obligation",
-      points: ["subject + modal + base verb"],
+      points: [
+        "use must for strong obligation",
+        "use have to for external obligation",
+        "after must, use the base verb without to",
+      ],
       example: "You must wear a seatbelt.",
     },
     {
       title: "advice",
-      points: ["subject + modal + base verb"],
+      points: [
+        "use should or ought to to give advice",
+        "use should + base verb",
+        "use ought to + base verb",
+      ],
       example: "You should rest.",
     },
     {
       title: "possibility",
-      points: ["modal + base verb"],
+      points: [
+        "use may or might to express possibility",
+        "place the modal before the base verb",
+        "do not add to after may or might",
+      ],
       example: "It might rain today.",
     },
     {
       title: "probability",
-      points: ["subject + modal + probability word + base verb"],
+      points: [
+        "use will + probably + base verb for likely future events",
+        "place probably after will in this pattern",
+        "keep the main verb in base form after the probability marker",
+      ],
       example: "He will probably come.",
     },
     {
       title: "polite requests",
-      points: ["modal + subject + base verb + object"],
+      points: [
+        "use could or would for polite requests",
+        "use modal + subject + base verb + object order",
+        "you can add please for extra politeness",
+      ],
       example: "Could you open the window?",
     },
     {
       title: "offers and invitations",
-      points: ["modal phrase + object"],
+      points: [
+        "use would you like + noun for offers",
+        "use would you like to + base verb for invitations",
+        "do not use do you like for formal offers or invitations",
+      ],
       example: "Would you like some tea?",
     },
   ],
@@ -2178,54 +2333,54 @@ const GRAMMAR_SECTION_LISTS = {
     {
       title: "reporting statements",
       points: [
-        "say with (that) clause",
-        "that often omitted",
-        "reporting verb + clause",
+        "report statements with said (that) + clause",
+        "that is optional in many neutral sentences",
+        "adjust pronouns and time words as needed",
       ],
       example: "She said she was ready.",
     },
     {
       title: "reporting questions",
       points: [
-        "ask with if",
-        "ask with question word",
-        "no inversion",
+        "use asked if or whether for yes-no questions",
+        "use asked + wh-word for information questions",
+        "use statement word order in the reported clause",
       ],
       example: "He asked if I was okay.",
     },
     {
       title: "reporting requests",
       points: [
-        "ask to do",
-        "tell to do requests",
-        "polite reporting",
+        "report requests with asked + object + to + base verb",
+        "keep the infinitive form after to",
+        "keep the request meaning without direct question form",
       ],
       example: "She asked me to wait.",
     },
     {
       title: "reporting commands",
       points: [
-        "tell to do commands",
-        "order to do",
-        "instruction shift",
+        "report commands with told or ordered + object + to + base verb",
+        "keep the base verb after to",
+        "preserve command meaning in indirect form",
       ],
       example: "He told us to leave.",
     },
     {
       title: "backshift basics",
       points: [
-        "present to past shift",
-        "will to would shift",
-        "can to could shift",
+        "backshift present to past in many past reporting contexts",
+        "backshift will to would",
+        "backshift can to could when needed",
       ],
       example: "They said they had time.",
     },
     {
       title: "time place changes",
       points: [
-        "now to then",
-        "here to there",
-        "today to that day",
+        "change now to then when context requires",
+        "change here to there when reference point shifts",
+        "change today to that day in past reporting contexts",
       ],
       example: "He said he was there.",
     },
@@ -2234,63 +2389,63 @@ const GRAMMAR_SECTION_LISTS = {
     {
       title: "formal vs informal",
       points: [
-        "formal word choice",
-        "informal word choice",
-        "match audience tone",
+        "use formal wording in professional or unfamiliar contexts",
+        "use informal wording with friends and familiar contexts",
+        "keep register consistent within the same sentence",
       ],
       example: "Could you assist me?",
     },
     {
       title: "contractions",
       points: [
-        "short forms in speech",
-        "avoid in formal writing",
-        "clarity choices",
+        "contractions are common in casual speech and writing",
+        "use apostrophes correctly in contractions",
+        "choose full forms in very formal writing when needed",
       ],
       example: "I can't stay long.",
     },
     {
       title: "polite softening",
       points: [
-        "please for politeness",
-        "soft request forms",
-        "indirect language",
+        "use could or would to soften requests",
+        "add please when extra politeness is needed",
+        "avoid bare imperatives in formal requests",
       ],
       example: "Could you close the door?",
     },
     {
       title: "spoken vs written",
       points: [
-        "spoken simplicity",
-        "written clarity",
-        "sentence length control",
+        "spoken language allows informal markers and shortcuts",
+        "written language prefers clear complete sentences",
+        "avoid slang in formal written contexts",
       ],
       example: "Please see the details below.",
     },
     {
       title: "professional style",
       points: [
-        "clear purpose first",
-        "neutral tone",
-        "polite closing",
+        "state your purpose clearly and politely",
+        "keep a neutral and respectful tone",
+        "use a polite closing when appropriate",
       ],
       example: "Thank you for your time.",
     },
     {
       title: "casual style",
       points: [
-        "friendly tone",
-        "short phrases",
-        "informal openings",
+        "casual style uses friendly greetings",
+        "short and simple wording is common",
+        "avoid overly formal openings in casual contexts",
       ],
       example: "Hey, how is it going?",
     },
     {
       title: "clarity and brevity",
       points: [
-        "short sentences",
-        "avoid extra words",
-        "main point first",
+        "use short direct sentences",
+        "remove unnecessary filler words",
+        "put the main point early",
       ],
       example: "We need a quick answer.",
     },
@@ -2299,92 +2454,92 @@ const GRAMMAR_SECTION_LISTS = {
     {
       title: "opening and closing",
       points: [
-        "start a talk",
-        "end a talk",
-        "closing signal words",
+        "open with a greeting at the start",
+        "end with a clear closing signal",
+        "keep opening and closing matched to the context",
       ],
-      example: "Hi everyone, anyway, that is all for today.",
+      example: "Hi everyone, that is all for today.",
     },
     {
       title: "topic shifts",
       points: [
-        "change topic smoothly",
-        "return to topic",
-        "signal the shift",
+        "use a shift marker like by the way to change topic",
+        "add a complete clause after the shift marker",
+        "avoid abrupt topic jumps without a marker",
       ],
       example: "By the way, I have news.",
     },
     {
       title: "cohesion tools",
       points: [
-        "reference words",
-        "linking phrases",
-        "topic tracking",
+        "use reference words like it or this to connect ideas",
+        "use a linker to show the relation between clauses",
+        "make each reference clear and easy to track",
       ],
-      example: "This idea connects to the last point.",
+      example: "I bought a book, and it is useful.",
     },
     {
       title: "sequencing ideas",
       points: [
-        "first next last",
-        "sequence signal words",
-        "clear sequence",
+        "use sequence markers like first and then",
+        "keep event order clear for the listener or reader",
+        "do not repeat the same sequence marker",
       ],
       example: "First we pack, then we leave.",
     },
     {
       title: "clarification moves",
       points: [
-        "rephrase key point",
-        "ask for clarity",
-        "confirm meaning",
+        "use a clarification phrase to check meaning",
+        "ask a direct clarification question when needed",
+        "name the exact item you want to clarify",
       ],
-      example: "Let me put it another way.",
+      example: "Do you mean the morning meeting?",
     },
     {
       title: "summaries",
       points: [
-        "in short",
-        "to sum up",
-        "main point recap",
+        "use a summary marker like in short or to sum up",
+        "state only the main point in the summary line",
+        "keep summary sentences short and direct",
       ],
       example: "In short, we are ready.",
     },
     {
       title: "emphasis and repetition",
       points: [
-        "stress key idea",
-        "repeat for focus",
-        "signal emphasis",
+        "use do or really to add emphasis when needed",
+        "place emphasis words in natural positions",
+        "avoid unnecessary repeated words",
       ],
-      example: "It is really important.",
+      example: "I do need your answer today.",
     },
     {
       title: "conversation flow",
       points: [
-        "turn taking",
-        "listening signals",
-        "smooth exchange",
+        "use listening signals to show attention",
+        "use turn-taking signals to guide the next speaker",
+        "keep transitions polite and clear",
       ],
       example: "I see, please continue.",
     },
     {
       title: "giving examples",
       points: [
-        "for example",
-        "for instance",
-        "such as",
+        "use markers like for example or for instance",
+        "follow the marker with a complete example clause",
+        "keep the example directly related to your point",
       ],
       example: "For example, call the help desk.",
     },
     {
       title: "repair and correction",
       points: [
-        "self correction",
-        "clarify quickly",
-        "restart phrasing",
+        "use repair markers like sorry or I mean",
+        "state the correction immediately after the marker",
+        "replace only the incorrect part",
       ],
-      example: "Sorry, let me try again.",
+      example: "Sorry, I mean Tuesday, not Monday.",
     },
   ],
 };
@@ -3624,13 +3779,7 @@ const getPremiumAccessState = () => {
 const GRAMMAR_PREVIEW_SECTION_LIMIT = 2;
 const GRAMMAR_PREVIEW_CARD_LIMIT = 4;
 const GRAMMAR_FREE_PREVIEW_UNLOCKED_SECTIONS = new Set(["sentence structure", "verbs"]);
-const MAPS_GRAMMAR_UNDER_EXPERT_REVIEW_WORLDS = new Set([
-  "arabic",
-  "chinese",
-  "japanese",
-  "hindi",
-  "korean",
-]);
+const MAPS_GRAMMAR_UNDER_EXPERT_REVIEW_WORLDS = new Set([]);
 
 const normalizeGrammarSectionKey = (value = "") =>
   String(value || "")
@@ -5224,18 +5373,18 @@ const prewarmGrammarExplanationTranslations = () => {
 };
 
 const GRAMMAR_TEMPLATES = {
-  "basic word order": "subject + verb + object",
-  "sentence parts": "subject + verb + object + complement",
-  "adding details": "subject + verb + object + (time) + (place) + (reason)",
+  "basic word order": "subject + verb (+ object)",
+  "sentence parts": "subject + verb (+ object) (+ complement)",
+  "adding details": "subject + verb + object + (time) + (place)",
   "linking clauses": "main clause + connector + clause",
-  "sentence variety": "short sentence + longer sentence",
-  "action verbs": "subject + action verb + object",
+  "sentence variety": "short sentence + longer sentence + correct punctuation",
+  "action verbs": "subject + action verb (+ object)",
   "state verbs": "subject + state verb + complement",
   "linking verbs": "subject + linking verb + adjective/noun",
-  "verb patterns": "verb + object | verb + adjective | verb + preposition",
-  "verb combinations": "verb + to-infinitive | verb + -ing",
+  "verb patterns": "verb + object + preposition + noun phrase",
+  "verb combinations": "verb + to-infinitive",
   "phrasal verbs": "verb + particle + object",
-  "present simple": "subject + base verb",
+  "present simple": "subject + base verb (I/you/we/they) | subject + verb-s/-es (he/she/it)",
   "present continuous": "subject + be + verb-ing",
   "past simple": "subject + past verb",
   "past continuous": "subject + was/were + verb-ing",
@@ -5245,13 +5394,13 @@ const GRAMMAR_TEMPLATES = {
   "future continuous": "will be + verb-ing",
   "future perfect": "will have + past participle",
   "aspect contrasts": "simple = whole; continuous = in progress; perfect = result",
-  "countable nouns": "a/an + noun | two + nouns",
-  "uncountable nouns": "some + noun | much + noun",
-  "articles": "a/an + noun | the + noun | no article",
-  "plural forms": "noun + -s/-es",
+  "countable nouns": "a/an + singular noun | number + plural noun",
+  "uncountable nouns": "some + uncountable noun | a piece of + uncountable noun",
+  "articles": "a/an + singular noun | the + specific noun",
+  "plural forms": "number + regular plural noun | number + irregular plural noun",
   "possessive nouns": "noun + 's",
   "noun phrases": "determiner + adjective + noun",
-  "quantifiers": "some/any/many/much + noun",
+  "quantifiers": "many + plural countable noun | much + uncountable noun",
   "subject pronouns": "subject pronoun + verb",
   "object pronouns": "verb + object pronoun",
   "possessive forms": "my/your + noun | mine/yours",
@@ -5259,87 +5408,104 @@ const GRAMMAR_TEMPLATES = {
   "demonstratives": "this/that/these/those + noun",
   "relative reference": "noun + who/which/that + clause",
   "indefinite reference": "someone/anyone/anything",
-  "adjectives basics": "adjective + noun",
-  "adjective order": "opinion + size + age + color + noun",
-  "comparatives": "adj-er/more + than",
-  "superlatives": "the + adj-est/most + noun",
-  "adverbs basics": "verb + adverb",
-  "frequency adverbs": "always/often + verb",
-  "time and place adverbs": "verb + time/place adverb",
-  "degree words": "very/too/enough + adjective",
-  "participles": "boring/ bored + noun/person",
-  "modifier stacking": "multiple modifiers before noun",
-  "yes no questions": "do/does + subject + verb",
-  "wh questions": "wh-word + do/does + subject + verb",
+  "adjectives basics": "adjective + noun | linking verb + adjective",
+  "adjective order": "opinion + size + color + noun",
+  "comparatives": "comparative adjective + than + noun/pronoun",
+  "superlatives": "the + superlative adjective (+ noun)",
+  "adverbs basics": "verb + adverb of manner",
+  "frequency adverbs": "subject + frequency adverb + main verb | subject + be + frequency adverb",
+  "time and place adverbs": "subject + verb + place + time",
+  "degree words": "very/too + adjective/adverb | adjective/adverb + enough",
+  "participles": "-ing adjective (cause) | -ed adjective (feeling)",
+  "modifier stacking": "subject + verb + degree word + adjective + noun + adverb",
+  "yes no questions": "do/does/did + subject + base verb",
+  "wh questions": "wh-word + do/does/did + subject + base verb",
   "questions with be": "be + subject + complement",
-  "questions with do": "do/does + subject + verb",
+  "questions with do": "do/does/did + subject + base verb",
   "questions with modals": "modal + subject + base verb",
   "tag questions": "statement, auxiliary + pronoun?",
   "indirect questions": "intro + wh-word + subject + verb",
-  "not with be": "subject + be + not + complement",
-  "not with do": "subject + do/does + not + verb",
-  "negative short forms": "don't/doesn't/isn't",
-  "negative words": "no/none/never/nothing",
-  "negative questions": "don't/doesn't + subject + verb?",
+  "not with be": "subject + be (am/is/are/was/were) + not + complement",
+  "not with do": "subject + do/does/did + not + base verb",
+  "negative short forms": "subject + don't/doesn't/isn't/aren't + complement/base verb",
+  "negative words": "no/none/never/nothing + clause element",
+  "negative questions": "don't/doesn't/didn't + subject + base verb?",
   "limited negatives": "hardly/barely/rarely + verb",
-  "basic connectors": "and/but/or + clause",
-  "reason and result": "because/so + clause",
-  "contrast and choice": "but/although/either/or",
-  "time connectors": "before/after/when + clause",
-  "comparison links": "like/as/than + clause",
-  "adding ideas": "also/in addition + clause",
-  "ordering ideas": "first/then/finally + clause",
-  "real conditions": "if + present, present",
-  "future conditions": "if + present, will + verb",
-  "unreal present": "if + past, would + verb",
-  "unreal past": "if + had, would have + past participle",
-  "mixed conditions": "if + past perfect, would + base verb",
-  "unless and otherwise": "result + unless + clause | otherwise + result",
-  "active voice": "subject + verb + object",
-  "passive voice": "object + be + past participle",
-  "focus shifts": "fronted phrase + sentence",
-  "cleft sentences": "it is/was + focus + that + clause",
-  "there and it subjects": "there is/are | it is/was",
-  "ability": "can/could + base verb",
-  "permission": "can/may + base verb",
-  "obligation": "must/have to + base verb",
-  "advice": "should/ought to + base verb",
-  "possibility": "may/might + base verb",
-  "probability": "will/probably + verb",
-  "polite requests": "could you + base verb",
+  "basic connectors": "clause + and/but/or + clause",
+  "reason and result": "clause + because + clause | clause + so + clause",
+  "contrast and choice": "clause + but/although + clause | either + option + or + option",
+  "time connectors": "main clause + before/after/when + clause",
+  "comparison links": "subject + verb + like/as + noun phrase | comparative + than + noun/pronoun",
+  "adding ideas": "subject + also + clause | in addition, clause",
+  "ordering ideas": "first + clause, then + clause (+ finally + clause)",
+  "real conditions": "if + present simple, present simple",
+  "future conditions": "if + present simple, will + base verb",
+  "unreal present": "if + past simple, would + base verb",
+  "unreal past": "if + past perfect, would have + past participle",
+  "mixed conditions": "if + past perfect, would + base verb (present result)",
+  "unless and otherwise": "result clause + unless + present clause",
+  "active voice": "doer (subject) + action verb + object",
+  "passive voice": "receiver/object + be + past participle (+ by + doer)",
+  "focus shifts": "fronted focus phrase, + subject + verb + rest of clause",
+  "cleft sentences": "it + be + focus + who/that + clause",
+  "there and it subjects": "there + be + noun phrase | it + be + adjective/noun phrase",
+  "ability": "subject + can/could + base verb",
+  "permission": "can/may/could + subject + base verb",
+  "obligation": "subject + must/have to + base verb",
+  "advice": "subject + should/ought to + base verb",
+  "possibility": "subject + may/might + base verb",
+  "probability": "subject + will + probably + base verb",
+  "polite requests": "could/would + subject + base verb + object",
   "offers and invitations": "would you like + noun | would you like to + verb",
-  "reporting statements": "said (that) + clause",
-  "reporting questions": "asked + if/wh-word + clause",
-  "reporting requests": "asked + to + verb",
-  "reporting commands": "told + to + verb",
-  "backshift basics": "present -> past, will -> would",
-  "time place changes": "today -> that day, here -> there",
-  "formal vs informal": "formal forms vs casual forms",
-  "contractions": "I'm/you're vs I am/you are",
-  "polite softening": "could/would + verb",
-  "spoken vs written": "short spoken vs structured written",
-  "professional style": "clear, neutral tone",
-  "casual style": "simple, relaxed tone",
-  "clarity and brevity": "short, direct sentences",
-  "opening and closing": "greet + close",
-  "topic shifts": "new topic + link",
-  "cohesion tools": "this/that/these + noun",
-  "sequencing ideas": "first/next/then",
-  "clarification moves": "do you mean + ...",
-  "summaries": "in short/in summary",
-  "emphasis and repetition": "really + verb | do + verb",
-  "conversation flow": "turn-taking signals",
-  "giving examples": "for example + clause",
-  "repair and correction": "sorry, I mean + ...",
+  "reporting statements": "said + (that) + clause",
+  "reporting questions": "asked + if/whether + clause | asked + wh-word + clause",
+  "reporting requests": "asked + object + to + base verb",
+  "reporting commands": "told/ordered + object + to + base verb",
+  "backshift basics": "reported clause: present -> past | will -> would | can -> could",
+  "time place changes": "now -> then | here -> there | today -> that day",
+  "formal vs informal": "formal request form | informal request form",
+  "contractions": "subject + contraction + verb",
+  "polite softening": "could/would + subject + base verb (+ please)",
+  "spoken vs written": "written standard sentence (no slang)",
+  "professional style": "polite greeting/closing + clear request",
+  "casual style": "casual greeting + simple clause",
+  "clarity and brevity": "short direct clause",
+  "opening and closing": "greeting + main message + closing signal",
+  "topic shifts": "shift marker + complete clause",
+  "cohesion tools": "clause + linker + reference word",
+  "sequencing ideas": "first + clause, then + clause",
+  "clarification moves": "do you mean + noun phrase",
+  "summaries": "in short/to sum up + main point",
+  "emphasis and repetition": "subject + do/really + base verb + key phrase",
+  "conversation flow": "listening signal + turn-taking signal",
+  "giving examples": "for example/for instance + clause",
+  "repair and correction": "sorry/i mean + correction",
 };
 
 const expandGrammarPoint = (point) => {
-  const lower = point.toLowerCase();
-  if (lower.includes("time")) {
-    return `${point} (yesterday, at noon)`;
+  // Rules that already include examples in parentheses should not be expanded again.
+  if (String(point || "").includes("(")) {
+    return point;
   }
-  if (lower.includes("place")) {
+  const lower = point.toLowerCase();
+  const hasWord = (word) => new RegExp(`\\b${word}\\b`, "i").test(lower);
+  const hasAnyWord = (...words) => words.some((word) => hasWord(word));
+  const hasPlaceLabel =
+    lower.includes("place phrase") ||
+    lower.includes("place clause") ||
+    lower.includes("place after verb") ||
+    lower.includes("add a place phrase");
+  if (hasPlaceLabel) {
     return `${point} (at the station, in the kitchen)`;
+  }
+  const hasTimeLabel =
+    lower.includes("time phrase") ||
+    lower.includes("time clause") ||
+    lower.includes("time connector") ||
+    lower.includes("time at sentence end") ||
+    lower.includes("add a time phrase");
+  if (hasTimeLabel) {
+    return `${point} (yesterday, at noon)`;
   }
   if (lower.includes("reason")) {
     return `${point} (because it rained)`;
@@ -5350,7 +5516,10 @@ const expandGrammarPoint = (point) => {
   if (lower.includes("question")) {
     return `${point} (who, what, where, why)`;
   }
-  if (lower.includes("article")) {
+  if (hasAnyWord("particle", "particles")) {
+    return `${point} (up, out, off)`;
+  }
+  if (hasAnyWord("article", "articles")) {
     return `${point} (a, an, the)`;
   }
   if (lower.includes("pronoun")) {
@@ -5370,19 +5539,9 @@ const buildStructureExamples = (card) => {
   if (title.includes("basic word order")) {
     return [
       {
-        labels: ["Subject: she", "Verb: reads", "Object: a book"],
+        labels: ["Subject: She", "Verb: reads", "Object: a book"],
         base: "She reads.",
         expanded: "She reads a book.",
-      },
-      {
-        labels: ["Subject: The dog", "Verb: runs", "Place: in the park"],
-        base: "The dog runs.",
-        expanded: "The dog runs in the park.",
-      },
-      {
-        labels: ["Subject: We", "Verb: made", "Object: dinner", "Place: at home"],
-        base: "We made it.",
-        expanded: "We made dinner at home.",
       },
     ];
   }
@@ -5396,27 +5555,7 @@ const buildStructureExamples = (card) => {
           "Complement: captain",
         ],
         base: "They named her captain.",
-        expanded: "They named her captain today.",
-      },
-      {
-        labels: [
-          "Subject: My sister",
-          "Verb: is",
-          "Complement: a pilot",
-          "Place: at the airport",
-        ],
-        base: "My sister is a pilot.",
-        expanded: "My sister is a pilot at the airport.",
-      },
-      {
-        labels: [
-          "Subject: The room",
-          "Verb: feels",
-          "Complement: cold",
-          "Time: after sunset",
-        ],
-        base: "The room feels cold.",
-        expanded: "The room feels cold after sunset.",
+        expanded: "They named her captain.",
       },
     ];
   }
@@ -5433,27 +5572,6 @@ const buildStructureExamples = (card) => {
         base: "She met him.",
         expanded: "She met him at noon at the station.",
       },
-      {
-        labels: [
-          "Subject: We",
-          "Verb: talked",
-          "Place: in the kitchen",
-          "Time: after dinner",
-        ],
-        base: "We talked.",
-        expanded: "We talked in the kitchen after dinner.",
-      },
-      {
-        labels: [
-          "Subject: I",
-          "Verb: stayed",
-          "Place: in the kitchen",
-          "Time: after dinner",
-          "Reason: because it was late",
-        ],
-        base: "I stayed.",
-        expanded: "I stayed in the kitchen after dinner because it was late.",
-      },
     ];
   }
   if (title.includes("linking clauses")) {
@@ -5467,24 +5585,6 @@ const buildStructureExamples = (card) => {
         base: "I stayed home.",
         expanded: "I stayed home because it rained.",
       },
-      {
-        labels: [
-          "Main clause: She left early",
-          "Connector: so",
-          "Clause: she could rest",
-        ],
-        base: "She left early.",
-        expanded: "She left early so she could rest.",
-      },
-      {
-        labels: [
-          "Main clause: We waited",
-          "Connector: until",
-          "Clause: the bus arrived",
-        ],
-        base: "We waited.",
-        expanded: "We waited until the bus arrived.",
-      },
     ];
   }
   if (title.includes("sentence variety")) {
@@ -5496,22 +5596,6 @@ const buildStructureExamples = (card) => {
         ],
         base: "We finished early.",
         expanded: "We finished early. We went home after class because we were tired.",
-      },
-      {
-        labels: [
-          "Short sentence: He called me",
-          "Long sentence: I missed it because I was busy",
-        ],
-        base: "He called me.",
-        expanded: "He called me. I missed it because I was busy.",
-      },
-      {
-        labels: [
-          "Short sentence: We met",
-          "Long sentence: We talked for a while after class",
-        ],
-        base: "We met.",
-        expanded: "We met. We talked for a while after class.",
       },
     ];
   }
@@ -5550,8 +5634,8 @@ const buildVerbExamples = (card) => {
   if (title.includes("verb patterns")) {
     return [
       {
-        labels: ["Verb: placed", "Preposition: on", "Object: the table"],
-        base: "placed on the table",
+        labels: ["Verb: placed", "Object: the book", "Preposition: on the table"],
+        base: "He placed the book.",
         expanded: "He placed the book on the table.",
       },
     ];
@@ -5559,14 +5643,9 @@ const buildVerbExamples = (card) => {
   if (title.includes("verb combinations")) {
     return [
       {
-        labels: [
-          "Verb: decided",
-          "Infinitive: to stay",
-          "Gerund: learning",
-          "That clause: that it helps",
-        ],
-        base: "decided to stay, learning, that it helps",
-        expanded: "We decided to stay, enjoy learning, and believe that it helps.",
+        labels: ["Verb: decided", "Infinitive: to stay"],
+        base: "We decided.",
+        expanded: "We decided to stay.",
       },
     ];
   }
@@ -5574,7 +5653,7 @@ const buildVerbExamples = (card) => {
     return [
       {
         labels: ["Verb: turned", "Particle: off", "Object: the light"],
-        base: "turned off the light",
+        base: "She turned off the light.",
         expanded: "She turned off the light.",
       },
     ];
@@ -5596,9 +5675,9 @@ const buildTenseExamples = (card) => {
   if (title.includes("present continuous")) {
     return [
       {
-        labels: ["Subject: She", "Be verb: is", "Verb-ing: working"],
-        base: "She is working now.",
-        expanded: "She is working now.",
+        labels: ["Subject: I", "Be verb: am", "Verb-ing: waiting"],
+        base: "I am waiting outside.",
+        expanded: "I am waiting outside.",
       },
     ];
   }
@@ -5606,8 +5685,8 @@ const buildTenseExamples = (card) => {
     return [
       {
         labels: ["Subject: They", "Past verb: visited"],
-        base: "They visited Paris.",
-        expanded: "They visited Paris.",
+        base: "They visited Paris last year.",
+        expanded: "They visited Paris last year.",
       },
     ];
   }
@@ -5616,7 +5695,7 @@ const buildTenseExamples = (card) => {
       {
         labels: ["Subject: I", "Be verb: was", "Verb-ing: cooking"],
         base: "I was cooking.",
-        expanded: "I was cooking.",
+        expanded: "I was cooking when he called.",
       },
     ];
   }
@@ -5633,17 +5712,23 @@ const buildTenseExamples = (card) => {
     return [
       {
         labels: ["Subject: She", "Auxiliary: had", "Past participle: left"],
-        base: "She had left earlier.",
-        expanded: "She had left earlier.",
+        base: "She had left.",
+        expanded: "She had left before I arrived.",
       },
     ];
   }
   if (title.includes("future forms")) {
     return [
       {
-        labels: ["Subject: We", "Future marker: will", "Base verb: meet"],
-        base: "We will meet tomorrow.",
-        expanded: "We will meet tomorrow.",
+        labels: [
+          "Future marker: will",
+          "Base verb: call",
+          "Future marker: going to",
+          "Base verb: study",
+          "Verb-ing: meeting",
+        ],
+        base: "I will call you tonight.",
+        expanded: "I will call you tonight. I am going to study later. I am meeting Sam tomorrow.",
       },
     ];
   }
@@ -5684,7 +5769,7 @@ const buildTenseExamples = (card) => {
           "Past participle: worked",
         ],
         base: "I work every day. I am working now.",
-        expanded: "I work every day, I am working now, and I have worked here for years.",
+        expanded: "I work every day. I am working now. I have worked here for years.",
       },
     ];
   }
@@ -5696,43 +5781,36 @@ const buildNounExamples = (card) => {
   if (title.includes("countable nouns")) {
     return [
       {
-        labels: ["Number: Two", "Noun: apples"],
-        base: "Two apples are on the table.",
-        expanded: "Two apples are on the table.",
+        labels: ["Article: a", "Noun: coin", "Number: two", "Plural noun: apples"],
+        base: "I have a coin and two apples.",
+        expanded: "I have a coin and two apples.",
       },
     ];
   }
   if (title.includes("uncountable nouns")) {
     return [
       {
-        labels: ["Quantifier: Some", "Noun: rice"],
-        base: "We need some rice.",
-        expanded: "We need some rice.",
+        labels: ["Quantifier: some", "Noun: rice", "Unit phrase: a piece of bread"],
+        base: "We need some rice and a piece of bread.",
+        expanded: "We need some rice and a piece of bread.",
       },
     ];
   }
   if (title.includes("articles")) {
     return [
       {
-        labels: ["Article: A", "Noun: dog"],
-        base: "A dog is outside.",
-        expanded: "A dog is outside.",
+        labels: ["Article: a", "Article: The", "Noun: dog"],
+        base: "I saw a dog.",
+        expanded: "I saw a dog. The dog is outside.",
       },
     ];
   }
   if (title.includes("plural forms")) {
     return [
       {
-        variantLabel: "Singular",
-        labels: ["Singular noun: child", "Verb: is"],
-        base: "The child is here.",
-        expanded: "The child is here.",
-      },
-      {
-        variantLabel: "Plural",
-        labels: ["Plural noun: children", "Verb: are"],
-        base: "The children are here.",
-        expanded: "The children are here.",
+        labels: ["Regular plural noun: apples", "Irregular plural noun: children"],
+        base: "Two apples and three children are here.",
+        expanded: "Two apples and three children are here.",
       },
     ];
   }
@@ -5748,18 +5826,23 @@ const buildNounExamples = (card) => {
   if (title.includes("noun phrases")) {
     return [
       {
-        labels: ["Determiner: The", "Adjective: small", "Noun: table"],
-        base: "The small table broke.",
-        expanded: "The small table broke.",
+        labels: ["Determiner: the", "Adjective: red", "Noun: dress"],
+        base: "She bought the red dress.",
+        expanded: "She bought the red dress.",
       },
     ];
   }
   if (title.includes("quantifiers")) {
     return [
       {
-        labels: ["Quantifier: many", "Noun: options"],
-        base: "There are many options.",
-        expanded: "There are many options.",
+        labels: [
+          "Quantifier: many",
+          "Noun: options",
+          "Quantifier: much",
+          "Noun: information",
+        ],
+        base: "There are many options, and there is much information.",
+        expanded: "There are many options, and there is much information.",
       },
     ];
   }
@@ -5771,27 +5854,27 @@ const buildPronounExamples = (card) => {
   if (title.includes("subject pronouns")) {
     return [
       {
-        labels: ["Subject pronoun: She", "Verb: is"],
-        base: "She is.",
-        expanded: "She is.",
+        labels: ["Subject pronoun: They", "Verb: are", "Complement: ready"],
+        base: "They are ready.",
+        expanded: "They are ready.",
       },
     ];
   }
   if (title.includes("object pronouns")) {
     return [
       {
-        labels: ["Verb: saw", "Object pronoun: him"],
-        base: "Saw him.",
-        expanded: "Saw him.",
+        labels: ["Subject: He", "Verb: saw", "Object pronoun: me"],
+        base: "He saw me.",
+        expanded: "He saw me.",
       },
     ];
   }
   if (title.includes("possessive forms")) {
     return [
       {
-        labels: ["Possessive: her", "Noun: bag"],
-        base: "her bag",
-        expanded: "her bag",
+        labels: ["Possessive adjective: My", "Noun: bag", "Possessive pronoun: Hers"],
+        base: "My bag is new. Hers is old.",
+        expanded: "My bag is new. Hers is old.",
       },
     ];
   }
@@ -5807,27 +5890,27 @@ const buildPronounExamples = (card) => {
   if (title.includes("demonstratives")) {
     return [
       {
-        labels: ["Demonstrative: those", "Noun: keys"],
-        base: "those keys",
-        expanded: "those keys",
+        labels: ["Demonstrative: These", "Noun: keys", "Verb: are"],
+        base: "These keys are mine.",
+        expanded: "These keys are mine.",
       },
     ];
   }
   if (title.includes("relative reference")) {
     return [
       {
-        labels: ["Noun: man", "Relative: who", "Clause: called"],
-        base: "the man who called",
-        expanded: "the man who called",
+        labels: ["Noun: man", "Relative pronoun: who", "Clause: called me"],
+        base: "The man who called me left.",
+        expanded: "The man who called me left.",
       },
     ];
   }
   if (title.includes("indefinite reference")) {
     return [
       {
-        labels: ["Indefinite: someone", "Verb: is"],
-        base: "Someone is.",
-        expanded: "Someone is.",
+        labels: ["Indefinite pronoun: Someone", "Verb phrase: is waiting"],
+        base: "Someone is waiting outside.",
+        expanded: "Someone is waiting outside.",
       },
     ];
   }
@@ -5839,7 +5922,7 @@ const buildModifierExamples = (card) => {
   if (title.includes("adjectives basics")) {
     return [
       {
-        labels: ["Adjective: quiet", "Noun: house"],
+        labels: ["Adjective: quiet", "Noun: house", "Linking verb: is", "Adjective: empty"],
         base: "The quiet house is empty.",
         expanded: "The quiet house is empty.",
       },
@@ -5851,12 +5934,11 @@ const buildModifierExamples = (card) => {
         labels: [
           "Opinion: lovely",
           "Size: small",
-          "Age: old",
           "Color: red",
           "Noun: bag",
         ],
-        base: "a lovely small old red bag",
-        expanded: "She bought a lovely small old red bag.",
+        base: "She bought a lovely small red bag.",
+        expanded: "She bought a lovely small red bag.",
       },
     ];
   }
@@ -5864,7 +5946,7 @@ const buildModifierExamples = (card) => {
     return [
       {
         labels: ["Comparative: faster", "Than: than"],
-        base: "faster than",
+        base: "This is faster than that.",
         expanded: "This is faster than that.",
       },
     ];
@@ -5873,7 +5955,7 @@ const buildModifierExamples = (card) => {
     return [
       {
         labels: ["Article: the", "Superlative: tallest"],
-        base: "the tallest",
+        base: "He is the tallest.",
         expanded: "He is the tallest.",
       },
     ];
@@ -5882,7 +5964,7 @@ const buildModifierExamples = (card) => {
     return [
       {
         labels: ["Verb: speaks", "Adverb: clearly"],
-        base: "speaks clearly",
+        base: "She speaks clearly.",
         expanded: "She speaks clearly.",
       },
     ];
@@ -5891,7 +5973,7 @@ const buildModifierExamples = (card) => {
     return [
       {
         labels: ["Frequency adverb: usually", "Verb: wakes"],
-        base: "usually wakes",
+        base: "She usually wakes early.",
         expanded: "She usually wakes early.",
       },
     ];
@@ -5900,7 +5982,7 @@ const buildModifierExamples = (card) => {
     return [
       {
         labels: ["Place adverb: here", "Time adverb: yesterday"],
-        base: "here yesterday",
+        base: "We met here yesterday.",
         expanded: "We met here yesterday.",
       },
     ];
@@ -5909,7 +5991,7 @@ const buildModifierExamples = (card) => {
     return [
       {
         labels: ["Degree word: very", "Adjective: warm"],
-        base: "very warm",
+        base: "The room is very warm.",
         expanded: "The room is very warm.",
       },
     ];
@@ -5917,18 +5999,18 @@ const buildModifierExamples = (card) => {
   if (title.includes("participles")) {
     return [
       {
-        labels: ["Participle: boring", "Noun: movie"],
-        base: "boring movie",
-        expanded: "The boring movie ended early.",
+        labels: ["-ing adjective: boring", "-ed adjective: bored"],
+        base: "The movie was boring, and I was bored.",
+        expanded: "The movie was boring, and I was bored.",
       },
     ];
   }
   if (title.includes("modifier stacking")) {
     return [
       {
-        labels: ["Adverb: quickly", "Adjective: hard", "Noun: question"],
-        base: "quickly hard question",
-        expanded: "She quickly answered the hard question.",
+        labels: ["Degree word: very", "Adjective: difficult", "Noun: question", "Adverb: quickly"],
+        base: "She answered the very difficult question quickly.",
+        expanded: "She answered the very difficult question quickly.",
       },
     ];
   }
@@ -6145,14 +6227,240 @@ const buildModalityExamples = (card) => {
   return null;
 };
 
+const buildReportedSpeechExamples = (card) => {
+  const title = card.title.toLowerCase();
+  if (title.includes("reporting statements")) {
+    return [
+      {
+        labels: ["Reporting verb: said", "Clause: she was ready"],
+        base: "she said she was ready",
+        expanded: "She said she was ready.",
+      },
+    ];
+  }
+  if (title.includes("reporting questions")) {
+    return [
+      {
+        labels: ["Reporting verb: asked", "If clause: if I was okay"],
+        base: "he asked if i was okay",
+        expanded: "He asked if I was okay.",
+      },
+    ];
+  }
+  if (title.includes("reporting requests")) {
+    return [
+      {
+        labels: ["Reporting verb: asked", "Object: me", "To-infinitive: to wait"],
+        base: "she asked me to wait",
+        expanded: "She asked me to wait.",
+      },
+    ];
+  }
+  if (title.includes("reporting commands")) {
+    return [
+      {
+        labels: ["Reporting verb: told", "Object: us", "To-infinitive: to leave"],
+        base: "he told us to leave",
+        expanded: "He told us to leave.",
+      },
+    ];
+  }
+  if (title.includes("backshift basics")) {
+    return [
+      {
+        labels: ["Reporting verb: said", "Backshifted clause: they had time"],
+        base: "they said they had time",
+        expanded: "They said they had time.",
+      },
+    ];
+  }
+  if (title.includes("time place changes")) {
+    return [
+      {
+        labels: ["Reporting verb: said", "Shifted phrase: he was there"],
+        base: "he said he was there",
+        expanded: "He said he was there.",
+      },
+    ];
+  }
+  return null;
+};
+
+const buildFormalityExamples = (card) => {
+  const title = card.title.toLowerCase();
+  if (title.includes("formal vs informal")) {
+    return [
+      {
+        labels: ["Formal request: could you assist me", "Addressee: you"],
+        base: "could you assist me",
+        expanded: "Could you assist me?",
+      },
+    ];
+  }
+  if (title.includes("contractions")) {
+    return [
+      {
+        labels: ["Subject: I", "Contraction: can't", "Base verb: stay"],
+        base: "i can't stay",
+        expanded: "I can't stay long.",
+      },
+    ];
+  }
+  if (title.includes("polite softening")) {
+    return [
+      {
+        labels: ["Softener: could", "Subject: you", "Base verb: close", "Object: the door"],
+        base: "could you close the door",
+        expanded: "Could you close the door?",
+      },
+    ];
+  }
+  if (title.includes("spoken vs written")) {
+    return [
+      {
+        labels: ["Polite marker: please", "Written clause: see the details below"],
+        base: "please see the details below",
+        expanded: "Please see the details below.",
+      },
+    ];
+  }
+  if (title.includes("professional style")) {
+    return [
+      {
+        labels: ["Polite closing: thank you", "Noun phrase: your time"],
+        base: "thank you for your time",
+        expanded: "Thank you for your time.",
+      },
+    ];
+  }
+  if (title.includes("casual style")) {
+    return [
+      {
+        labels: ["Casual greeting: hey", "Clause: how is it going"],
+        base: "hey, how is it going",
+        expanded: "Hey, how is it going?",
+      },
+    ];
+  }
+  if (title.includes("clarity and brevity")) {
+    return [
+      {
+        labels: ["Subject: we", "Direct clause: need a quick answer"],
+        base: "we need a quick answer",
+        expanded: "We need a quick answer.",
+      },
+    ];
+  }
+  return null;
+};
+
+const buildDiscourseExamples = (card) => {
+  const title = card.title.toLowerCase();
+  if (title.includes("opening and closing")) {
+    return [
+      {
+        labels: ["Opening: hi everyone", "Closing: that is all for today"],
+        base: "hi everyone, that is all for today",
+        expanded: "Hi everyone, that is all for today.",
+      },
+    ];
+  }
+  if (title.includes("topic shifts")) {
+    return [
+      {
+        labels: ["Shift marker: by the way", "New-topic clause: i have news"],
+        base: "by the way, i have news",
+        expanded: "By the way, I have news.",
+      },
+    ];
+  }
+  if (title.includes("cohesion tools")) {
+    return [
+      {
+        labels: ["Clause 1: i bought a book", "Linker: and", "Reference: it"],
+        base: "i bought a book, and it is useful",
+        expanded: "I bought a book, and it is useful.",
+      },
+    ];
+  }
+  if (title.includes("sequencing ideas")) {
+    return [
+      {
+        labels: ["Sequence: first", "Clause 1: we pack", "Sequence: then", "Clause 2: we leave"],
+        base: "first we pack, then we leave",
+        expanded: "First we pack, then we leave.",
+      },
+    ];
+  }
+  if (title.includes("clarification moves")) {
+    return [
+      {
+        labels: ["Clarification marker: do you mean", "Focus phrase: the morning meeting"],
+        base: "do you mean the morning meeting",
+        expanded: "Do you mean the morning meeting?",
+      },
+    ];
+  }
+  if (title.includes("summaries")) {
+    return [
+      {
+        labels: ["Summary marker: in short", "Main point: we are ready"],
+        base: "in short, we are ready",
+        expanded: "In short, we are ready.",
+      },
+    ];
+  }
+  if (title.includes("emphasis and repetition")) {
+    return [
+      {
+        labels: ["Emphasis marker: do", "Main clause: need your answer today"],
+        base: "i do need your answer today",
+        expanded: "I do need your answer today.",
+      },
+    ];
+  }
+  if (title.includes("conversation flow")) {
+    return [
+      {
+        labels: ["Listening signal: i see", "Turn signal: please continue"],
+        base: "i see, please continue",
+        expanded: "I see, please continue.",
+      },
+    ];
+  }
+  if (title.includes("giving examples")) {
+    return [
+      {
+        labels: ["Example marker: for example", "Example clause: call the help desk"],
+        base: "for example, call the help desk",
+        expanded: "For example, call the help desk.",
+      },
+    ];
+  }
+  if (title.includes("repair and correction")) {
+    return [
+      {
+        labels: [
+          "Repair marker: sorry",
+          "Correction marker: i mean",
+          "Corrected phrase: tuesday, not monday",
+        ],
+        base: "sorry, i mean tuesday, not monday",
+        expanded: "Sorry, I mean Tuesday, not Monday.",
+      },
+    ];
+  }
+  return null;
+};
+
 const buildQuestionExamples = (card) => {
   const title = card.title.toLowerCase();
   if (title.includes("yes no questions")) {
     return [
       {
         labels: ["Aux: do", "Subject: you", "Base verb: work"],
-        base: "do you work",
-        expanded: "Do you work?",
+        base: "Do you work here?",
+        expanded: "Do you work here?",
       },
     ];
   }
@@ -6161,12 +6469,12 @@ const buildQuestionExamples = (card) => {
       {
         labels: [
           "Wh word: where",
-          "Aux: do",
-          "Subject: you",
+          "Aux: does",
+          "Subject: he",
           "Base verb: live",
         ],
-        base: "where do you live",
-        expanded: "Where do you live?",
+        base: "Where does he live?",
+        expanded: "Where does he live?",
       },
     ];
   }
@@ -6174,7 +6482,7 @@ const buildQuestionExamples = (card) => {
     return [
       {
         labels: ["Be verb: is", "Subject: the store", "Complement: open"],
-        base: "is the store open",
+        base: "Is the store open?",
         expanded: "Is the store open?",
       },
     ];
@@ -6182,9 +6490,9 @@ const buildQuestionExamples = (card) => {
   if (title.includes("questions with do")) {
     return [
       {
-        labels: ["Aux: did", "Subject: she", "Base verb: call"],
-        base: "did she call",
-        expanded: "Did she call?",
+        labels: ["Aux: did", "Subject: you", "Base verb: call"],
+        base: "Did you call her?",
+        expanded: "Did you call her?",
       },
     ];
   }
@@ -6192,8 +6500,8 @@ const buildQuestionExamples = (card) => {
     return [
       {
         labels: ["Modal: could", "Subject: you", "Base verb: help"],
-        base: "could you help",
-        expanded: "Could you help?",
+        base: "Could you help me?",
+        expanded: "Could you help me?",
       },
     ];
   }
@@ -6201,7 +6509,7 @@ const buildQuestionExamples = (card) => {
     return [
       {
         labels: ["Statement: you are ready", "Tag: aren't you"],
-        base: "you are ready, aren't you",
+        base: "You are ready, aren't you?",
         expanded: "You are ready, aren't you?",
       },
     ];
@@ -6210,7 +6518,7 @@ const buildQuestionExamples = (card) => {
     return [
       {
         labels: ["Intro: could you tell me", "Wh clause: where it is"],
-        base: "could you tell me where it is",
+        base: "Could you tell me where it is?",
         expanded: "Could you tell me where it is?",
       },
     ];
@@ -6227,10 +6535,10 @@ const buildNegationExamples = (card) => {
           "Subject: she",
           "Be verb: is",
           "Not: not",
-          "Complement: ready",
+          "Complement: tired",
         ],
-        base: "she is not ready",
-        expanded: "She is not ready.",
+        base: "she is not tired",
+        expanded: "She is not tired.",
       },
     ];
   }
@@ -7936,6 +8244,9 @@ const buildAdditionalExampleFromItem = (primaryItem, seed = 0) => {
   return null;
 };
 
+// Strict pedagogy mode: keep one canonical example per card.
+const PEDAGOGY_STRICT_SINGLE_EXAMPLE = true;
+
 const ensureTwoGrammarExamples = (examples, cardData, sectionName, index) => {
   const source = Array.isArray(examples) ? examples.filter(Boolean) : [];
   const unique = [];
@@ -7948,6 +8259,36 @@ const ensureTwoGrammarExamples = (examples, cardData, sectionName, index) => {
     seen.add(key);
     unique.push(item);
   });
+  if (PEDAGOGY_STRICT_SINGLE_EXAMPLE) {
+    if (unique.length > 0) {
+      return unique.slice(0, 1);
+    }
+    const fallbackExpanded = String(
+      cardData?.example || buildAltGrammarExample(cardData, Number(index || 0) + 71)
+    ).trim();
+    if (!fallbackExpanded) {
+      return [];
+    }
+    const labels = buildLabelsForCard(
+      {
+        ...cardData,
+        section: sectionName || cardData?.section || "",
+      },
+      fallbackExpanded
+    );
+    let base = stripLabelPhrases(fallbackExpanded, labels);
+    if (!base || base.trim().length < 2) {
+      base = fallbackExpanded;
+    }
+    return [
+      {
+        base,
+        expanded: fallbackExpanded,
+        labels,
+        colorByOrder: !!cardData?.ruleOrder?.length && WORLD_KEY !== "english",
+      },
+    ];
+  }
   if (unique.length >= 2) {
     return unique.slice(0, 2);
   }
@@ -8109,8 +8450,8 @@ const buildGrammarHowItWorks = (card) => {
     return {
       order: "(time) + (place)",
       bullets: [
-        "add time phrases like at noon or yesterday",
-        "add place phrases like at the station or in the kitchen",
+        "add a time phrase after the main clause (for example, at noon or yesterday)",
+        "add a place phrase after the time phrase (for example, at the station or in the kitchen)",
       ],
       template: "subject + verb + object + (time) + (place)",
     };
@@ -8131,15 +8472,15 @@ const buildGrammarHowItWorks = (card) => {
 
 const GRAMMAR_MISTAKES = {
   "basic word order": {
-    wrong: "Reads she a book.",
+    wrong: "She reads book.",
     fix: "She reads a book.",
   },
   "sentence parts": {
-    wrong: "Is a pilot my brother.",
-    fix: "My brother is a pilot.",
+    wrong: "They named captain.",
+    fix: "They named her captain.",
   },
   "adding details": {
-    wrong: "She met him noon station.",
+    wrong: "She met him at noon the station.",
     fix: "She met him at noon at the station.",
   },
   "linking clauses": {
@@ -8147,80 +8488,80 @@ const GRAMMAR_MISTAKES = {
     fix: "I stayed home because it rained.",
   },
   "sentence variety": {
-    wrong: "We finished early so.",
-    fix: "We finished early, so we left.",
+    wrong: "We finished early we went home after class because we were tired.",
+    fix: "We finished early, and we went home after class because we were tired.",
   },
   "action verbs": {
-    wrong: "She run every morning.",
-    fix: "She runs every morning.",
+    wrong: "They carries the boxes.",
+    fix: "They carry the boxes.",
   },
   "state verbs": {
-    wrong: "He is knowing the answer.",
-    fix: "He knows the answer.",
+    wrong: "She is feeling tired.",
+    fix: "She feels tired.",
   },
   "linking verbs": {
-    wrong: "The soup tastes is good.",
-    fix: "The soup tastes good.",
+    wrong: "The room feels quietly.",
+    fix: "The room feels quiet.",
   },
   "verb patterns": {
     wrong: "He placed the book on.",
     fix: "He placed the book on the table.",
   },
   "verb combinations": {
-    wrong: "She enjoys to swim.",
-    fix: "She enjoys swimming.",
+    wrong: "We decided stay.",
+    fix: "We decided to stay.",
   },
   "phrasal verbs": {
     wrong: "He turned the light on off.",
     fix: "He turned off the light.",
   },
   "present simple": {
-    wrong: "She is work every day.",
+    wrong: "She work every day.",
     fix: "She works every day.",
   },
   "present continuous": {
-    wrong: "She works now.",
-    fix: "She is working now.",
+    wrong: "I am wait outside.",
+    fix: "I am waiting outside.",
   },
   "past simple": {
-    wrong: "She go yesterday.",
-    fix: "She went yesterday.",
+    wrong: "They visit Paris last year.",
+    fix: "They visited Paris last year.",
   },
   "past continuous": {
     wrong: "She was cook when I called.",
     fix: "She was cooking when I called.",
   },
   "present perfect": {
-    wrong: "She finished already.",
-    fix: "She has finished already.",
+    wrong: "He has live here for years.",
+    fix: "He has lived here for years.",
   },
   "past perfect": {
-    wrong: "He left when I arrive.",
-    fix: "He had left when I arrived.",
+    wrong: "He had leave before I arrived.",
+    fix: "He had left before I arrived.",
   },
   "future forms": {
-    wrong: "She will going to call.",
-    fix: "She is going to call.",
+    wrong: "She will going to call tomorrow.",
+    fix: "She is going to call tomorrow.",
   },
   "future continuous": {
-    wrong: "She will work at 8.",
-    fix: "She will be working at 8.",
+    wrong: "I will working at six.",
+    fix: "I will be working at six.",
   },
   "future perfect": {
-    wrong: "She will finish by noon.",
-    fix: "She will have finished by noon.",
+    wrong: "They will have finish by Friday.",
+    fix: "They will have finished by Friday.",
   },
   "aspect contrasts": {
-    wrong: "I am knowing him.",
-    fix: "I know him.",
+    wrong: "I have work here for years.",
+    fix: "I have worked here for years.",
   },
   "countable nouns": {
-    wrong: "She bought apple.",
-    fix: "She bought an apple.",
+    wrong: "I have coin and two apples.",
+    fix: "I have a coin and two apples.",
   },
   "uncountable nouns": {
     wrong: "I need two breads.",
-    fix: "I need some bread.",
+    fix: "I need two pieces of bread.",
   },
   "articles": {
     wrong: "I saw movie.",
@@ -8235,108 +8576,108 @@ const GRAMMAR_MISTAKES = {
     fix: "The teacher's book is new.",
   },
   "noun phrases": {
-    wrong: "She bought dress red.",
-    fix: "She bought a red dress.",
+    wrong: "She bought the red.",
+    fix: "She bought the red dress.",
   },
   "quantifiers": {
     wrong: "How much apples?",
     fix: "How many apples?",
   },
   "subject pronouns": {
-    wrong: "Her is here.",
-    fix: "She is here.",
+    wrong: "Them are ready.",
+    fix: "They are ready.",
   },
   "object pronouns": {
     wrong: "He saw I.",
     fix: "He saw me.",
   },
   "possessive forms": {
-    wrong: "This is her book is.",
-    fix: "This book is hers.",
+    wrong: "This bag is her.",
+    fix: "This bag is hers.",
   },
   "reflexive pronouns": {
     wrong: "I hurt me.",
     fix: "I hurt myself.",
   },
   "demonstratives": {
-    wrong: "These book is mine.",
-    fix: "This book is mine.",
+    wrong: "This books are mine.",
+    fix: "These books are mine.",
   },
   "relative reference": {
-    wrong: "The man which called me.",
-    fix: "The man who called me.",
+    wrong: "The man which called me left.",
+    fix: "The man who called me left.",
   },
   "indefinite reference": {
-    wrong: "Anyone is here.",
-    fix: "Someone is here.",
+    wrong: "I saw anyone at the station.",
+    fix: "I saw someone at the station.",
   },
   "adjectives basics": {
-    wrong: "She has hair long.",
-    fix: "She has long hair.",
+    wrong: "The quiet house is noisily.",
+    fix: "The quiet house is noisy.",
   },
   "adjective order": {
-    wrong: "A red small car.",
-    fix: "A small red car.",
+    wrong: "She bought a small red.",
+    fix: "She bought a small red bag.",
   },
   "comparatives": {
-    wrong: "This is more cheap.",
-    fix: "This is cheaper.",
+    wrong: "This is more faster than that.",
+    fix: "This is faster than that.",
   },
   "superlatives": {
-    wrong: "He is the most fast.",
-    fix: "He is the fastest.",
+    wrong: "He is tallest.",
+    fix: "He is the tallest.",
   },
   "adverbs basics": {
     wrong: "She speaks slow.",
     fix: "She speaks slowly.",
   },
   "frequency adverbs": {
-    wrong: "She goes always early.",
+    wrong: "She always go early.",
     fix: "She always goes early.",
   },
   "time and place adverbs": {
-    wrong: "He arrived yesterday here.",
+    wrong: "He arrive here yesterday.",
     fix: "He arrived here yesterday.",
   },
   "degree words": {
-    wrong: "It is enough hot.",
+    wrong: "It is enoughly hot.",
     fix: "It is hot enough.",
   },
   "participles": {
-    wrong: "The story was boringed.",
-    fix: "The story was boring.",
+    wrong: "I am boring.",
+    fix: "I am bored.",
   },
   "modifier stacking": {
-    wrong: "She bought a red small new bag.",
-    fix: "She bought a small new red bag.",
+    wrong: "She answered the very difficult question quick.",
+    fix: "She answered the very difficult question quickly.",
   },
   "yes no questions": {
-    wrong: "You like coffee?",
-    fix: "Do you like coffee?",
+    wrong: "Do you works here?",
+    fix: "Do you work here?",
   },
   "wh questions": {
-    wrong: "Where you live?",
-    fix: "Where do you live?",
+    wrong: "Where does he lives?",
+    fix: "Where does he live?",
   },
   "questions with be": {
-    wrong: "You are ready?",
-    fix: "Are you ready?",
+    wrong: "Does the store open?",
+    fix: "Is the store open?",
   },
   "questions with do": {
-    wrong: "She likes pizza?",
-    fix: "Does she like pizza?",
+    wrong: "Did you did call her?",
+    fix: "Did you call her?",
   },
   "questions with modals": {
-    wrong: "You can help me?",
-    fix: "Can you help me?",
+    wrong: "Do could you help me?",
+    fix: "Could you help me?",
   },
   "tag questions": {
-    wrong: "She is here, is she?",
-    fix: "She is here, isn't she?",
+    wrong: "You are ready, are you?",
+    fix: "You are ready, aren't you?",
   },
   "indirect questions": {
-    wrong: "Can you tell me where is he?",
-    fix: "Can you tell me where he is?",
+    wrong: "Could you tell me where it are?",
+    fix: "Could you tell me where it is?",
   },
   "not with be": {
     wrong: "He not happy.",
@@ -8347,7 +8688,7 @@ const GRAMMAR_MISTAKES = {
     fix: "She does not like tea.",
   },
   "negative short forms": {
-    wrong: "He does notn't know.",
+    wrong: "He don't know.",
     fix: "He doesn't know.",
   },
   "negative words": {
@@ -8355,48 +8696,48 @@ const GRAMMAR_MISTAKES = {
     fix: "I don't have anything.",
   },
   "negative questions": {
-    wrong: "You don't like it?",
-    fix: "Don't you like it?",
+    wrong: "Don't you likes coffee?",
+    fix: "Don't you like coffee?",
   },
   "limited negatives": {
     wrong: "She hardly doesn't sleep.",
     fix: "She hardly sleeps.",
   },
   "basic connectors": {
-    wrong: "I went and but stayed.",
-    fix: "I went and stayed.",
+    wrong: "I called but and no one answered.",
+    fix: "I called, but no one answered.",
   },
   "reason and result": {
     wrong: "I was late because the bus.",
     fix: "I was late because the bus was late.",
   },
   "contrast and choice": {
-    wrong: "I like tea but also or coffee.",
-    fix: "I like tea, but I also like coffee.",
+    wrong: "I like either tea but coffee.",
+    fix: "I like either tea or coffee.",
   },
   "time connectors": {
     wrong: "I left before I will eat.",
     fix: "I left before I ate.",
   },
   "comparison links": {
-    wrong: "She is like taller me.",
+    wrong: "She is taller like me.",
     fix: "She is taller than me.",
   },
   "adding ideas": {
-    wrong: "He also went but too.",
-    fix: "He also went.",
+    wrong: "We need chairs in addition also.",
+    fix: "We also need chairs.",
   },
   "ordering ideas": {
-    wrong: "Finally, first we meet.",
-    fix: "First we met, finally we left.",
+    wrong: "First we met, first we left.",
+    fix: "First we met, then we left.",
   },
   "real conditions": {
-    wrong: "If you will come, we meet.",
-    fix: "If you come, we meet.",
+    wrong: "If you will press this, it starts.",
+    fix: "If you press this, it starts.",
   },
   "future conditions": {
-    wrong: "If it will rain, we will stay.",
-    fix: "If it rains, we will stay.",
+    wrong: "If it will be sunny, we will go.",
+    fix: "If it is sunny, we will go.",
   },
   "unreal present": {
     wrong: "If I will have time, I would go.",
@@ -8407,31 +8748,31 @@ const GRAMMAR_MISTAKES = {
     fix: "If I had known, I would have told.",
   },
   "mixed conditions": {
-    wrong: "If I studied, I would have the job now.",
-    fix: "If I had studied, I would have the job now.",
+    wrong: "If I studied harder, I would have the job now.",
+    fix: "If I had studied harder, I would have the job now.",
   },
   "unless and otherwise": {
     wrong: "We will go unless it will rain.",
     fix: "We will go unless it rains.",
   },
   "active voice": {
-    wrong: "The cake baked my mom.",
-    fix: "My mom baked the cake.",
+    wrong: "Dinner was cooked by the chef.",
+    fix: "The chef cooked dinner.",
   },
   "passive voice": {
-    wrong: "The report finished yesterday.",
-    fix: "The report was finished yesterday.",
+    wrong: "The meal cooked by the chef.",
+    fix: "The meal was cooked by the chef.",
   },
   "focus shifts": {
-    wrong: "This book I bought yesterday it.",
-    fix: "This book, I bought yesterday.",
+    wrong: "That book, I finished it yesterday.",
+    fix: "That book, I finished yesterday.",
   },
   "cleft sentences": {
-    wrong: "Was it she called.",
+    wrong: "It was she called.",
     fix: "It was she who called.",
   },
   "there and it subjects": {
-    wrong: "Is a problem in the room.",
+    wrong: "There are a problem in the room.",
     fix: "There is a problem in the room.",
   },
   "ability": {
@@ -8455,19 +8796,19 @@ const GRAMMAR_MISTAKES = {
     fix: "It might rain.",
   },
   "probability": {
-    wrong: "He probably to arrive late.",
+    wrong: "He will probably arrives late.",
     fix: "He will probably arrive late.",
   },
   "polite requests": {
-    wrong: "Could you opens the door?",
-    fix: "Could you open the door, please?",
+    wrong: "Could you opens the window?",
+    fix: "Could you open the window?",
   },
   "offers and invitations": {
     wrong: "Do you like to come?",
     fix: "Would you like to come?",
   },
   "reporting statements": {
-    wrong: "She said me she is tired.",
+    wrong: "She said me she was tired.",
     fix: "She said she was tired.",
   },
   "reporting questions": {
@@ -8475,7 +8816,7 @@ const GRAMMAR_MISTAKES = {
     fix: "He asked where the station was.",
   },
   "reporting requests": {
-    wrong: "She asked me can I help.",
+    wrong: "She asked me help.",
     fix: "She asked me to help.",
   },
   "reporting commands": {
@@ -8483,80 +8824,80 @@ const GRAMMAR_MISTAKES = {
     fix: "He told me to go.",
   },
   "backshift basics": {
-    wrong: "She said she is ready.",
-    fix: "She said she was ready.",
+    wrong: "She said she will come.",
+    fix: "She said she would come.",
   },
   "time place changes": {
-    wrong: "He said he will come here today.",
+    wrong: "He said he would come here today.",
     fix: "He said he would come there that day.",
   },
   "formal vs informal": {
-    wrong: "Hey, give me the report.",
-    fix: "Hello, could you send the report?",
+    wrong: "In a formal email, Hey, could you assist me?",
+    fix: "In a formal email, Could you assist me?",
   },
   "contractions": {
-    wrong: "I am late, do not wait.",
-    fix: "I'm late, don't wait.",
+    wrong: "I cant stay long.",
+    fix: "I can't stay long.",
   },
   "polite softening": {
-    wrong: "Send me the file now.",
-    fix: "Could you send me the file?",
+    wrong: "Close the door.",
+    fix: "Could you close the door?",
   },
   "spoken vs written": {
-    wrong: "In formal writing: I arrived lol.",
-    fix: "In formal writing: I have arrived.",
+    wrong: "In formal writing, I arrived lol.",
+    fix: "In formal writing, I arrived.",
   },
   "professional style": {
-    wrong: "Hey, I need this ASAP.",
-    fix: "Hello, I need this soon.",
+    wrong: "Thanks for your time.",
+    fix: "Thank you for your time.",
   },
   "casual style": {
-    wrong: "Dear Sir or Madam, what's up?",
-    fix: "Hey, what's up?",
+    wrong: "Dear Sam, how is it going?",
+    fix: "Hey, how is it going?",
   },
   "clarity and brevity": {
-    wrong: "Due to the fact that it is raining, we will not go.",
-    fix: "It is raining, so we will not go.",
+    wrong: "We need a quick answer at this point in time.",
+    fix: "We need a quick answer.",
   },
   "opening and closing": {
-    wrong: "I want to talk. Goodbye.",
-    fix: "Hi, I wanted to talk. Thanks, goodbye.",
+    wrong: "Anyway, that is all for today.",
+    fix: "Hi everyone, that is all for today.",
   },
   "topic shifts": {
-    wrong: "By the way because schedule.",
+    wrong: "By the way, about the schedule.",
     fix: "By the way, can we talk about the schedule?",
   },
   "cohesion tools": {
-    wrong: "I bought a book. Book is new.",
-    fix: "I bought a book. It is new.",
+    wrong: "I bought a book, and book is useful.",
+    fix: "I bought a book, and it is useful.",
   },
   "sequencing ideas": {
-    wrong: "First I left, then I woke up.",
-    fix: "First I woke up, then I left.",
+    wrong: "First we pack, first we leave.",
+    fix: "First we pack, then we leave.",
   },
   "clarification moves": {
-    wrong: "What you said?",
-    fix: "What do you mean?",
+    wrong: "Do you mean?",
+    fix: "Do you mean the morning meeting?",
   },
   "summaries": {
-    wrong: "In short, many things.",
+    wrong: "In short, need more time.",
     fix: "In short, we need more time.",
   },
   "emphasis and repetition": {
-    wrong: "I do want to go not.",
-    fix: "I do want to go.",
+    wrong: "I really needs your answer today.",
+    fix: "I really need your answer today.",
   },
   "conversation flow": {
-    wrong: "Me too. And you is?",
-    fix: "Me too. And you?",
+    wrong: "I see continue.",
+    fix: "I see, please continue.",
   },
   "giving examples": {
-    wrong: "For example, it is.",
-    fix: "For example, it is useful for travel.",
+    wrong: "For example, call help desk.",
+    fix: "For example, call the help desk.",
   },
   "repair and correction": {
-    wrong: "I mean, I am go.",
-    fix: "Sorry, I mean I am going.",
+    wrong: "I mean Tuesday, not Tuesday.",
+    fix: "I mean Tuesday, not Monday.",
   },
 };
 
@@ -8629,10 +8970,104 @@ const buildGrammarMistakeContext = (card, examples = []) => {
   };
 };
 
-const isTopicAlignedMistake = (entry, card, examples = []) => {
+// Keep mistake reasons anchored to the card concept, not side-topic errors.
+const GRAMMAR_MISTAKE_TOPIC_CUES = {
+  "basic word order": ["subject", "verb", "object", "reads", "book"],
+  "sentence parts": ["subject", "verb", "object", "complement", "named", "captain"],
+  "adding details": ["at noon", "at the station", "time", "place"],
+  "linking clauses": ["because", "clause", "rained"],
+  "sentence variety": ["punctuation", ".", ","],
+  "action verbs": ["action", "carry", "boxes"],
+  "state verbs": ["state", "knowing", "knows", "answer"],
+  "linking verbs": ["linking", "feels", "quiet", "quietly"],
+  "verb patterns": ["preposition", "on", "table", "placed"],
+  "verb combinations": ["to", "infinitive", "decided", "stay"],
+  "phrasal verbs": ["particle", "off", "turned", "light"],
+  "present simple": ["every day", "works", "work"],
+  "present continuous": ["am", "is", "are", "waiting", "verb-ing", "now"],
+  "past simple": ["yesterday", "last", "ago", "went", "visited"],
+  "past continuous": ["was", "were", "when", "cooking"],
+  "present perfect": ["has", "have", "past participle", "finished", "already"],
+  "past perfect": ["had", "past participle", "left", "before"],
+  "future forms": ["will", "going to", "meeting", "future"],
+  "future continuous": ["will be", "working", "verb-ing"],
+  "future perfect": ["will have", "finished", "past participle", "by"],
+  "aspect contrasts": ["simple", "continuous", "perfect", "worked", "work"],
+  "countable nouns": ["countable", "a", "an", "number", "plural", "apple", "coin"],
+  "uncountable nouns": ["uncountable", "some", "much", "little", "piece", "bread", "rice"],
+  "articles": ["article", "a", "an", "the", "dog", "movie"],
+  "plural forms": ["plural", "children", "child", "number", "three"],
+  "possessive nouns": ["possessive", "apostrophe", "ownership", "teacher's", "teachers"],
+  "noun phrases": ["noun phrase", "determiner", "adjective", "noun", "dress", "red"],
+  "quantifiers": ["quantifier", "many", "much", "few", "little", "apples", "options"],
+  "subject pronouns": ["subject pronoun", "i", "you", "he", "she", "it", "we", "they"],
+  "object pronouns": ["object pronoun", "me", "him", "her", "it", "us", "them"],
+  "possessive forms": ["possessive", "my", "your", "her", "his", "our", "their", "mine", "hers"],
+  "reflexive pronouns": ["reflexive", "myself", "yourself", "himself", "herself", "ourselves", "themselves"],
+  "demonstratives": ["demonstrative", "this", "that", "these", "those", "books", "keys"],
+  "relative reference": ["relative", "who", "which", "that", "man", "called"],
+  "indefinite reference": ["indefinite", "someone", "anyone", "something", "anything", "everyone"],
+  "adjectives basics": ["adjective", "quiet", "house", "linking verb", "be"],
+  "adjective order": ["adjective order", "opinion", "size", "color", "small", "red", "bag"],
+  "comparatives": ["comparative", "faster", "more", "than", "compare"],
+  "superlatives": ["superlative", "tallest", "most", "the", "group"],
+  "adverbs basics": ["adverb", "clearly", "slowly", "-ly", "verb"],
+  "frequency adverbs": ["frequency adverb", "always", "usually", "often", "sometimes", "never"],
+  "time and place adverbs": ["time adverb", "place adverb", "here", "yesterday", "where", "when"],
+  "degree words": ["degree", "very", "too", "enough", "warm", "hot"],
+  "participles": ["participle", "-ing", "-ed", "boring", "bored", "feeling"],
+  "modifier stacking": ["modifier", "very", "difficult", "question", "quickly", "order"],
+  "yes no questions": ["question", "do", "does", "did", "subject", "base verb"],
+  "wh questions": ["wh", "where", "what", "when", "why", "how", "auxiliary"],
+  "questions with be": ["be question", "is", "are", "subject", "store", "open"],
+  "questions with do": ["do question", "did", "does", "base verb", "call"],
+  "questions with modals": ["modal question", "can", "could", "subject", "base verb"],
+  "tag questions": ["tag question", "statement", "tag", "isn't", "aren't"],
+  "indirect questions": ["indirect question", "could you tell me", "where it is", "word order"],
+  "formal vs informal": ["formal", "informal", "register", "email", "assist", "hey"],
+  "contractions": ["contraction", "apostrophe", "can't", "cant", "full form"],
+  "polite softening": ["could", "would", "please", "request", "send"],
+  "spoken vs written": ["formal writing", "written", "slang", "lol"],
+  "professional style": ["professional", "hello", "polite", "could you", "request"],
+  "casual style": ["casual", "friendly", "hey", "sam"],
+  "clarity and brevity": ["clarity", "brevity", "short", "direct", "quick answer", "filler"],
+  "opening and closing": ["opening", "closing", "hi", "everyone", "that is all for today"],
+  "topic shifts": ["by the way", "topic", "schedule", "talk"],
+  "cohesion tools": ["cohesion", "reference", "it", "this", "linker", "connect"],
+  "sequencing ideas": ["sequence", "first", "then", "order"],
+  "clarification moves": ["clarification", "do you mean", "mean", "meeting"],
+  "summaries": ["summary", "in short", "to sum up", "main point"],
+  "emphasis and repetition": ["emphasis", "repetition", "really", "do", "stress"],
+  "conversation flow": ["conversation", "flow", "i see", "please continue", "turn"],
+  "giving examples": ["for example", "for instance", "such as", "example"],
+  "repair and correction": ["repair", "correction", "sorry", "i mean", "not monday"],
+};
+
+const isMistakeFocusedOnCardTopic = (entry, card) => {
+  const title = String(card?.sourceTitle || card?.title || "").trim().toLowerCase();
+  const cues = GRAMMAR_MISTAKE_TOPIC_CUES[title];
+  if (!Array.isArray(cues) || cues.length === 0) {
+    return true;
+  }
   const wrong = normalizeGrammarTextKey(entry?.wrong || "");
   const fix = normalizeGrammarTextKey(entry?.fix || "");
   if (!wrong || !fix) {
+    return false;
+  }
+  const combined = `${wrong} ${fix}`;
+  return cues.some((cue) => combined.includes(normalizeGrammarTextKey(cue)));
+};
+
+const isTopicAlignedMistake = (entry, card, examples = []) => {
+  const wrong = normalizeGrammarTextKey(entry?.wrong || "");
+  const fix = normalizeGrammarTextKey(entry?.fix || "");
+  const title = String(card?.sourceTitle || card?.title || "").trim().toLowerCase();
+  const hasTopicCues = Array.isArray(GRAMMAR_MISTAKE_TOPIC_CUES[title]) &&
+    GRAMMAR_MISTAKE_TOPIC_CUES[title].length > 0;
+  if (!wrong || !fix) {
+    return false;
+  }
+  if (!isMistakeFocusedOnCardTopic(entry, card)) {
     return false;
   }
 
@@ -8654,12 +9089,15 @@ const isTopicAlignedMistake = (entry, card, examples = []) => {
       }
     }
   }
-  return false;
+  return hasTopicCues;
 };
 
 const buildGrammarMistakes = (card, examples = []) => {
   const unique = [];
   const seen = new Set();
+  const sourceTitle = String(card?.sourceTitle || card?.title || "");
+  const title = sourceTitle.toLowerCase();
+  const curatedPair = GRAMMAR_MISTAKES[title];
   const pushMistake = (entry) => {
     const wrong = String(entry?.wrong || "").trim();
     const fix = String(entry?.fix || "").trim();
@@ -8674,6 +9112,17 @@ const buildGrammarMistakes = (card, examples = []) => {
     unique.push({ wrong, fix });
   };
 
+  if (Array.isArray(card.mistakes) && card.mistakes.length) {
+    const firstCardMistake = card.mistakes[0];
+    if (isTopicAlignedMistake(firstCardMistake, card, examples)) {
+      pushMistake(firstCardMistake);
+    }
+  }
+
+  if (curatedPair && isTopicAlignedMistake(curatedPair, card, examples)) {
+    pushMistake(curatedPair);
+  }
+
   const generatedMistakes = (Array.isArray(examples) ? examples : [])
     .map((item) => buildMistakeFromExample(item))
     .filter(Boolean);
@@ -8682,18 +9131,8 @@ const buildGrammarMistakes = (card, examples = []) => {
     pushMistake(generated);
   });
 
-  if (Array.isArray(card.mistakes) && card.mistakes.length) {
-    const firstCardMistake = card.mistakes[0];
-    if (isTopicAlignedMistake(firstCardMistake, card, examples)) {
-      pushMistake(firstCardMistake);
-    }
-  }
-
-  const sourceTitle = String(card.sourceTitle || card.title || "");
-  const title = sourceTitle.toLowerCase();
-  const pair = GRAMMAR_MISTAKES[title];
-  if (unique.length === 0 && pair && isTopicAlignedMistake(pair, card, examples)) {
-    pushMistake(pair);
+  if (unique.length === 0 && curatedPair && isTopicAlignedMistake(curatedPair, card, examples)) {
+    pushMistake(curatedPair);
   }
 
   if (unique.length === 0) {
@@ -8715,7 +9154,7 @@ const getGrammarUiLabels = () => ({
   commonMistakes: "Common mistakes",
   wrong: "Wrong:",
   fix: "Fix:",
-  phrase: "Phrase:",
+  phrase: "Sentence:",
   order: "Order:",
 });
 
@@ -8775,6 +9214,9 @@ const renderGrammarModal = (section, index) => {
     document.body.classList.remove("modal-open");
     return;
   }
+
+  const isRtlWorld = WORLD_KEY === "arabic";
+  const rtlAttr = isRtlWorld ? ' dir="rtl"' : "";
 
   const grammarTranslationLanguage = readMapsBaseLanguagePreference();
   const shouldTranslateExplanation =
@@ -8836,6 +9278,18 @@ const renderGrammarModal = (section, index) => {
     shouldUseTemplateExamples && section === "Modality"
       ? buildModalityExamples(cardData)
       : null;
+  const reportedSpeechExamples =
+    shouldUseTemplateExamples && section === "Reported Speech"
+      ? buildReportedSpeechExamples(cardData)
+      : null;
+  const formalityExamples =
+    shouldUseTemplateExamples && section === "Formality & Style"
+      ? buildFormalityExamples(cardData)
+      : null;
+  const discourseExamples =
+    shouldUseTemplateExamples && section === "Discourse & Flow"
+      ? buildDiscourseExamples(cardData)
+      : null;
   const activeExamples =
     structureExamples ||
     verbExamples ||
@@ -8848,7 +9302,10 @@ const renderGrammarModal = (section, index) => {
     connectionExamples ||
     conditionExamples ||
     voiceExamples ||
-    modalityExamples;
+    modalityExamples ||
+    reportedSpeechExamples ||
+    formalityExamples ||
+    discourseExamples;
   const rawExamples = activeExamples || buildGenericExamplePairs(cardData, index, section);
   const exampleItems = ensureTwoGrammarExamples(rawExamples, cardData, section, index);
   const limitedExamples = exampleItems.slice(0, 1);
@@ -8901,24 +9358,24 @@ const renderGrammarModal = (section, index) => {
     .join("");
 
   modalBody.innerHTML = `
-    <div class="grammar-modal-header">
+    <div class="grammar-modal-header"${rtlAttr}>
       <h3>${cardData.title}</h3>
       <p class="grammar-explanation-text">${explanation}</p>
       ${shouldTranslateExplanation && explanationTranslation ? `<p class="grammar-translation grammar-explanation-translation">${explanationTranslation}</p>` : ""}
     </div>
     <div class="grammar-modal-grid">
-      <div class="grammar-block">
+      <div class="grammar-block"${rtlAttr}>
         <h4>${grammarUi.rules}</h4>
         <ul>
           ${(howItWorks.bullets || []).map((item) => `<li>${item}</li>`).join("")}
         </ul>
-        ${howItWorks.template ? `<div class="grammar-template">${howItWorks.template}</div>` : ""}
+        ${howItWorks.template ? `<div class="grammar-template"${rtlAttr}>${howItWorks.template}</div>` : ""}
       </div>
-      <div class="grammar-block">
+      <div class="grammar-block"${rtlAttr}>
         <h4>${grammarUi.examples}</h4>
         ${renderedExamples}
       </div>
-      <div class="grammar-block">
+      <div class="grammar-block"${rtlAttr}>
         <h4>${grammarUi.commonMistakes}</h4>
         <ul>
           ${limitedMistakes

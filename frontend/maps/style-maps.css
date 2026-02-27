@@ -938,6 +938,8 @@ body.modal-open {
   background: rgba(104, 225, 255, 0.12);
   border-radius: 6px;
   padding: 0 5px;
+  display: inline-block;
+  white-space: nowrap;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
 }
