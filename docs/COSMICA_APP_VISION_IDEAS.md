@@ -47,6 +47,51 @@ Cosmica should feel less like a standard language app and more like a universe t
 - Good for discovery, SEO, and first-time users.
 - Best place to keep a free entry experience.
 
+### Browser-installable app path
+
+Cosmica can become a downloadable app from the browser without a full native rebuild. The first step is to ship it as a Progressive Web App so users can install it from Chrome on Android and from Safari home screen on iPhone and iPad.
+
+What this requires:
+
+- A web app manifest with app name, colors, start URL, scope, and install behavior.
+- App icons for Android and Apple home screen use.
+- A service worker for core asset caching and basic offline handling.
+- Installability wiring so the browser can offer an app-like install flow.
+- Standalone-mode polish so Cosmica feels clean when launched like an app.
+- Cross-device testing for Android Chrome and Safari on Apple devices.
+
+What this should not try to do in phase one:
+
+- Full native iOS and Android codebases.
+- Deep offline sync for every feature.
+- App Store and Google Play packaging on day one.
+- Native-only features such as push-heavy flows or advanced background behavior before the installable web app is stable.
+
+Expected scope:
+
+- A basic installable version should be a low-to-medium effort upgrade.
+- A polished PWA with better offline behavior and stronger standalone UX is still manageable without changing the core product model.
+- This path keeps the web product as the main foundation while giving mobile users an app-like entry point.
+
+Implementation steps for phase one:
+
+1. Add a web app manifest.
+   Create a `manifest.webmanifest` file with the app name, short name, `start_url`, `scope`, theme color, background color, display mode, and install icons. Link it from the main HTML entry points.
+2. Add app icons.
+   Create at least `192x192` and `512x512` PNG icons, plus a maskable Android icon and an Apple touch icon for iPhone and iPad home screen installs.
+3. Add a service worker.
+   Cache the core static shell, such as HTML, CSS, JavaScript, key world pages, and important static JSON. Do not cache dynamic auth, billing, chat, or premium API responses as if they were static content.
+4. Register the service worker.
+   Add service worker registration in the shared frontend JavaScript so installability and caching can work in secure contexts.
+5. Add Apple install metadata.
+   Include the Apple touch icon and mobile web app meta tags so Cosmica behaves more like an app when launched from the home screen on Apple devices.
+6. Polish standalone app mode.
+   Verify that navigation, headers, safe areas, notches, and full-screen spacing feel correct when Cosmica launches outside the normal browser tab UI.
+7. Add offline and weak-network behavior.
+   At minimum, provide a graceful offline fallback. Better phase-one behavior would keep the home page and recently used learning pages available while clearly marking chat and account actions as online-only when needed.
+8. Test the installed experience.
+   Test Chrome install flow on Android and Safari home screen install flow on Apple devices. Verify the icon, launch behavior, standalone layout, sign-in flow, and update behavior.
+
 ### Mobile app version
 
 - Offline learning and downloadable lesson packs.
