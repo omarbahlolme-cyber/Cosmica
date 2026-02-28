@@ -31,17 +31,8 @@ Additional controls that are required outside source code are documented in:
 
 - `OPERATIONS_HARDENING.md`
 
-## Temporary Accepted Dependency Risk
+## Dependency Audit Policy
 
-As of 2026-02-19, `npm audit` reports a high-severity advisory on transitive `minimatch` (`GHSA-3ppc-4f35-3m26`) through:
-
-- `@google-cloud/text-to-speech` -> `google-gax` -> `gaxios` / `rimraf` -> `glob` -> `minimatch`
-
-Current project dependency versions are already at latest available for this chain, and `npm audit fix` / `npm audit fix --force` do not apply a remediation.
-
-Risk posture for production stability: accepted temporarily with no forced overrides, no manual transitive pinning, and no runtime behavior changes.
-
-Re-evaluation trigger:
-
-- Re-run `npm audit` after any dependency update and at least weekly.
-- Apply upstream-supported remediation as soon as a compatible fix is published.
+- `npm run security:audit` fails on any `npm audit` finding with severity `moderate` or higher.
+- Re-run the audit after dependency changes and at least weekly.
+- Remediate by updating supported packages or transitive overrides as soon as compatible fixes are available.

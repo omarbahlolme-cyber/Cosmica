@@ -212,26 +212,18 @@ Use this to control where account/session state is stored.
    - Server auto-bootstraps Postgres store from current in-memory/file state if DB row is empty.
    - Run `npm run auth:check:readiness` and verify no `FAIL`.
 
-### 4.4 Security audit allowlist (temporary upstream exception)
+### 4.4 Security audit policy
 
 The quality gate now runs `npm run security:audit` via `scripts/security-audit-check.js`.
 
 Current behavior:
 1. Fails on any new/unexpected vulnerability with severity `moderate` or higher.
-2. Temporarily allows only the known upstream transitive chain tied to:
-   - `google-gax`
-   - `rimraf`
-   - `glob`
-   - `minimatch`
-   - Advisory: `GHSA-3ppc-4f35-3m26`
+2. No transitive allowlist exceptions are currently documented.
 
-Why this exists:
-- The vulnerability is currently inherited via upstream package constraints and cannot be fully removed without upstream releases.
-
-Removal rule:
-1. Periodically run `npm audit --json` and check whether the advisory is still present.
-2. When upstream updates remove this chain, delete the allowlist entries in `scripts/security-audit-check.js`.
-3. Keep the strict fail-on-moderate-or-higher rule for everything else.
+Maintenance rule:
+1. Periodically run `npm audit --json` and check whether new advisories are present.
+2. Update direct dependencies or supported overrides when compatible fixes are published.
+3. Keep the strict fail-on-moderate-or-higher rule in place.
 
 ### 4.1 Auth readiness checks
 

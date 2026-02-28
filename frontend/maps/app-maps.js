@@ -4360,6 +4360,7 @@ const renderWordsSections = () => {
         return;
       }
       initializeWordsControls();
+      refreshWordsMapTranslations();
     },
     shouldContinue: isActiveRender,
   });
@@ -4584,6 +4585,7 @@ const renderPhrasesSections = () => {
         return;
       }
       initializePhrasesControls();
+      refreshPhrasesMapTranslations();
     },
     shouldContinue: isActiveRender,
   });
@@ -4877,6 +4879,7 @@ const renderGrammarSections = () => {
           })
         );
       }
+      refreshGrammarMapTranslations();
     },
     shouldContinue: isActiveRender,
   });
@@ -10226,14 +10229,18 @@ const applySectionFilterButtonTranslations = (mapType) => {
 
   controls.querySelectorAll(".words-filter").forEach((button) => {
     ensureFilterButtonMainText(button, "");
-    if (button.dataset.filter === "all") {
-      ensureFilterButtonMainText(button, "All");
-      setFilterButtonTranslationText(button, "");
-      return;
-    }
     const mainText = String(
       button.querySelector(".words-filter-main")?.textContent || ""
     ).trim();
+    if (button.dataset.filter === "all") {
+      ensureFilterButtonMainText(
+        button,
+        mainText ||
+          (button.dataset.registerFilter === "all" ? "All Registers" : "All")
+      );
+      setFilterButtonTranslationText(button, "");
+      return;
+    }
     const sourceTitle = String(
       button.dataset.baseTitle || button.dataset.sourceTitle || mainText
     ).trim();
@@ -10303,12 +10310,6 @@ const applySectionTitleTranslations = (mapType) => {
       translationNode.setAttribute("dir", "auto");
       heading.appendChild(document.createTextNode(" "));
       heading.appendChild(translationNode);
-    }
-
-    if (isNonEnglishWorld && mapKey === "grammar") {
-      translationNode.textContent = "";
-      translationNode.hidden = true;
-      return;
     }
 
     if (!baseLanguage || isWorldNativeBaseLanguage(baseLanguage)) {
@@ -10425,6 +10426,36 @@ const applyWorldSectionTitleLabels = (mapType) => {
     });
   });
 };
+
+function refreshWordsMapTranslations() {
+  if (!isWordsPage) {
+    return;
+  }
+  applyWorldSectionTitleLabels("words");
+  applyWordTranslations();
+  applySectionTitleTranslations("words");
+  applySectionFilterButtonTranslations("words");
+}
+
+function refreshPhrasesMapTranslations() {
+  if (!isPhrasesPage) {
+    return;
+  }
+  applyWorldSectionTitleLabels("phrases");
+  applyPhraseTranslations();
+  applySectionTitleTranslations("phrases");
+  applySectionFilterButtonTranslations("phrases");
+}
+
+function refreshGrammarMapTranslations() {
+  if (!isGrammarPage) {
+    return;
+  }
+  applyWorldSectionTitleLabels("grammar");
+  applySectionTitleTranslations("grammar");
+  applySectionFilterButtonTranslations("grammar");
+  applyGrammarCardTitleTranslations();
+}
 
 const applyGrammarCardTitleTranslations = () => {
   if (!isGrammarPage) {
@@ -10825,31 +10856,10 @@ refreshMapsForBaseLanguage = () => {
     !!selectedBaseLanguage && (isNonEnglishWorld || selectedBaseLanguage !== "english");
 
   const refreshRenderedMaps = () => {
-    if (isWordsPage) {
-      applyWorldSectionTitleLabels("words");
-    }
-    if (document.querySelector(".word-card")) {
-      applyWordTranslations();
-    }
-    if (isWordsPage) {
-      applySectionTitleTranslations("words");
-      applySectionFilterButtonTranslations("words");
-    }
-    if (isPhrasesPage) {
-      applyWorldSectionTitleLabels("phrases");
-    }
-    if (document.querySelector(".phrase-card")) {
-      applyPhraseTranslations();
-    }
-    if (isPhrasesPage) {
-      applySectionTitleTranslations("phrases");
-      applySectionFilterButtonTranslations("phrases");
-    }
+    refreshWordsMapTranslations();
+    refreshPhrasesMapTranslations();
     if (isGrammarPage) {
-      applyWorldSectionTitleLabels("grammar");
-      applySectionTitleTranslations("grammar");
-      applySectionFilterButtonTranslations("grammar");
-      applyGrammarCardTitleTranslations();
+      refreshGrammarMapTranslations();
       prewarmGrammarExplanationTranslations();
     }
     const overlay = ensureGrammarOverlay();
@@ -10932,26 +10942,13 @@ if (typeof initializeCommonShell === "function") {
   initializeCommonShell();
 }
 if (!shouldRenderLoadingSkeleton && isWordsPage && document.querySelector(".word-card")) {
-  applyWordTranslations();
-}
-if (!shouldRenderLoadingSkeleton && isWordsPage) {
-  applyWorldSectionTitleLabels("words");
-  applySectionTitleTranslations("words");
-  applySectionFilterButtonTranslations("words");
+  refreshWordsMapTranslations();
 }
 if (!shouldRenderLoadingSkeleton && isPhrasesPage && document.querySelector(".phrase-card")) {
-  applyPhraseTranslations();
-}
-if (!shouldRenderLoadingSkeleton && isPhrasesPage) {
-  applyWorldSectionTitleLabels("phrases");
-  applySectionTitleTranslations("phrases");
-  applySectionFilterButtonTranslations("phrases");
+  refreshPhrasesMapTranslations();
 }
 if (!shouldRenderLoadingSkeleton && isGrammarPage) {
-  applyWorldSectionTitleLabels("grammar");
-  applySectionTitleTranslations("grammar");
-  applySectionFilterButtonTranslations("grammar");
-  applyGrammarCardTitleTranslations();
+  refreshGrammarMapTranslations();
 }
 if (isWordsPage) {
   updateWordsTopState();
@@ -11030,27 +11027,10 @@ if (needsMapTranslations) {
             setupSpeechCards();
           }
         }
-        if (isWordsPage && document.querySelector(".word-card")) {
-          applyWordTranslations();
-        }
-        if (isWordsPage) {
-          applyWorldSectionTitleLabels("words");
-          applySectionTitleTranslations("words");
-          applySectionFilterButtonTranslations("words");
-        }
-        if (isPhrasesPage && document.querySelector(".phrase-card")) {
-          applyPhraseTranslations();
-        }
-        if (isPhrasesPage) {
-          applyWorldSectionTitleLabels("phrases");
-          applySectionTitleTranslations("phrases");
-          applySectionFilterButtonTranslations("phrases");
-        }
+        refreshWordsMapTranslations();
+        refreshPhrasesMapTranslations();
         if (isGrammarPage) {
-          applyWorldSectionTitleLabels("grammar");
-          applySectionTitleTranslations("grammar");
-          applySectionFilterButtonTranslations("grammar");
-          applyGrammarCardTitleTranslations();
+          refreshGrammarMapTranslations();
           prewarmGrammarExplanationTranslations();
           const overlay = ensureGrammarOverlay();
           if (overlay && typeof overlay.__refresh === "function") {
