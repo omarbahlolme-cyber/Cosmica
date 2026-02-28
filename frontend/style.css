@@ -4957,7 +4957,7 @@ body:not(.world-page) .world-card:not(.coming-soon) > * {
   filter: saturate(0.72);
 }
 
-.map-card.map-grammar.premium-locked {
+.map-card.map-grammar:not(.coming-soon) {
   --map-accent: 255, 201, 118;
   --map-bg-top: 58, 38, 94;
   --map-bg-bottom: 30, 18, 52;
@@ -4974,11 +4974,28 @@ body:not(.world-page) .world-card:not(.coming-soon) > * {
     inset 0 1px 0 rgba(247, 236, 213, 0.3),
     inset 0 -1px 0 rgba(255, 201, 118, 0.26);
   filter: saturate(1.1) contrast(1.04);
-  animation: accountPremiumNebulaShift 9.8s ease-in-out infinite;
+  animation:
+    accountPremiumNebulaShift 9.8s ease-in-out infinite,
+    premiumGrammarRadiancePulse 4.9s ease-in-out infinite;
 }
 
-.map-card.map-grammar.premium-locked::before {
+.map-card.map-grammar:not(.coming-soon)::before {
   background:
+    radial-gradient(circle at 8% 12%, rgba(255, 247, 224, 1) 0 1.6px, transparent 3.2px),
+    radial-gradient(circle at 14% 20%, rgba(255, 245, 214, 0.94) 0 1.4px, transparent 3px),
+    radial-gradient(circle at 18% 68%, rgba(206, 235, 255, 0.84) 0 1.4px, transparent 3px),
+    radial-gradient(circle at 24% 40%, rgba(255, 232, 194, 0.88) 0 1.3px, transparent 2.8px),
+    radial-gradient(circle at 28% 72%, rgba(208, 234, 255, 0.9) 0 1.6px, transparent 3.2px),
+    radial-gradient(circle at 36% 18%, rgba(241, 231, 255, 0.82) 0 1.2px, transparent 2.7px),
+    radial-gradient(circle at 42% 82%, rgba(255, 243, 212, 0.9) 0 1.4px, transparent 3px),
+    radial-gradient(circle at 54% 26%, rgba(255, 222, 176, 0.94) 0 1.6px, transparent 3.2px),
+    radial-gradient(circle at 58% 58%, rgba(212, 238, 255, 0.84) 0 1.2px, transparent 2.7px),
+    radial-gradient(circle at 64% 12%, rgba(255, 240, 205, 0.88) 0 1.2px, transparent 2.7px),
+    radial-gradient(circle at 72% 64%, rgba(241, 231, 255, 0.8) 0 1.5px, transparent 3px),
+    radial-gradient(circle at 78% 34%, rgba(255, 233, 194, 0.9) 0 1.4px, transparent 2.9px),
+    radial-gradient(circle at 84% 78%, rgba(205, 235, 255, 0.84) 0 1.2px, transparent 2.7px),
+    radial-gradient(circle at 88% 16%, rgba(255, 243, 212, 0.92) 0 1.6px, transparent 3.2px),
+    radial-gradient(circle at 92% 52%, rgba(255, 228, 182, 0.86) 0 1.4px, transparent 2.9px),
     radial-gradient(circle at 16% 14%, rgba(214, 238, 255, 0.3), transparent 34%),
     radial-gradient(circle at 88% 20%, rgba(255, 207, 136, 0.34), transparent 38%),
     radial-gradient(circle at 22% 84%, rgba(196, 168, 255, 0.2), transparent 34%),
@@ -4992,38 +5009,44 @@ body:not(.world-page) .world-card:not(.coming-soon) > * {
     );
   opacity: 0.98;
   mix-blend-mode: screen;
+  filter:
+    brightness(1.16)
+    drop-shadow(0 0 6px rgba(255, 229, 170, 0.18))
+    drop-shadow(0 0 10px rgba(196, 232, 255, 0.1));
   animation:
     map-aurora-drift 7.2s ease-in-out infinite alternate,
-    premiumGrammarCrystalShift 8.6s ease-in-out infinite alternate;
+    premiumGrammarCrystalShift 8.6s ease-in-out infinite alternate,
+    premiumGrammarSparklePulse 5.4s ease-in-out infinite alternate;
 }
 
-.map-card.map-grammar.premium-locked::after {
+.map-card.map-grammar:not(.coming-soon)::after {
   opacity: 0.74;
   filter: blur(0.06px);
   animation: map-shine-sweep 3.8s cubic-bezier(0.42, 0, 0.2, 1) infinite;
 }
 
-.map-card.map-grammar.premium-locked .map-icon {
+.map-card.map-grammar:not(.coming-soon) .map-icon {
   border-color: rgba(255, 222, 166, 0.72);
   box-shadow:
     0 12px 24px rgba(0, 0, 0, 0.34),
     0 0 20px rgba(255, 201, 118, 0.38),
     inset 0 1px 0 rgba(250, 241, 221, 0.3);
+  animation: premiumGrammarIconSparkle 4.8s ease-in-out infinite;
 }
 
-.map-card.map-grammar.premium-locked .map-stamp {
+.map-card.map-grammar:not(.coming-soon) .map-stamp {
   background: rgba(232, 146, 242, 0.82);
   box-shadow: 0 0 22px rgba(232, 146, 242, 0.62);
 }
 
-.map-card.map-grammar.premium-locked h3 {
+.map-card.map-grammar:not(.coming-soon) h3 {
   color: rgba(255, 238, 247, 0.98);
   text-shadow:
     0 8px 22px rgba(0, 0, 0, 0.52),
     0 0 18px rgba(255, 204, 132, 0.34);
 }
 
-.map-card.map-grammar.premium-locked h3 .map-title-translation {
+.map-card.map-grammar:not(.coming-soon) h3 .map-title-translation {
   color: rgba(247, 231, 202, 0.95);
   text-shadow: 0 0 14px rgba(255, 204, 132, 0.32);
 }
@@ -5036,8 +5059,8 @@ body:not(.world-page) .world-card:not(.coming-soon) > * {
   transform: translateY(-1px) scale(1.01);
 }
 
-.map-card.map-grammar.premium-locked:hover,
-.map-card.map-grammar.premium-locked:focus-visible {
+.map-card.map-grammar:not(.coming-soon):hover,
+.map-card.map-grammar:not(.coming-soon):focus-visible {
   border-color: rgba(255, 229, 177, 0.92);
   box-shadow:
     0 22px 42px rgba(23, 15, 47, 0.62),
@@ -5046,8 +5069,8 @@ body:not(.world-page) .world-card:not(.coming-soon) > * {
     inset 0 1px 0 rgba(252, 241, 221, 0.32);
 }
 
-.map-card.map-grammar.premium-locked:hover::after,
-.map-card.map-grammar.premium-locked:focus-visible::after {
+.map-card.map-grammar:not(.coming-soon):hover::after,
+.map-card.map-grammar:not(.coming-soon):focus-visible::after {
   opacity: 0.88;
 }
 
@@ -5056,8 +5079,11 @@ body:not(.world-page) .world-card:not(.coming-soon) > * {
   .map-card::before,
   .map-card::after,
   .map-card .map-icon,
+  .map-card .map-icon::before,
+  .map-card .map-icon::after,
   .map-card .map-icon svg,
-  .map-card .map-stamp {
+  .map-card .map-stamp,
+  .map-card .map-stamp::after {
     animation: none !important;
     transition: none !important;
   }
@@ -5101,9 +5127,12 @@ body:not(.world-page) .world-card:not(.coming-soon) > * {
       inset 0 1px 0 rgba(255, 255, 255, 0.14);
   }
 
-  .map-card.map-grammar.premium-locked,
-  .map-card.map-grammar.premium-locked::before,
-  .map-card.map-grammar.premium-locked::after {
+  .map-card.map-grammar:not(.coming-soon),
+  .map-card.map-grammar:not(.coming-soon)::before,
+  .map-card.map-grammar:not(.coming-soon)::after,
+  .map-card.map-grammar:not(.coming-soon) .map-icon::before,
+  .map-card.map-grammar:not(.coming-soon) .map-icon::after,
+  .map-card.map-grammar:not(.coming-soon) .map-stamp::after {
     animation: none;
   }
 }
@@ -5155,6 +5184,57 @@ body:not(.world-page) .world-card:not(.coming-soon) > * {
     transform: translate3d(1.4%, 1.6%, 0) scale(1.02);
   }
 }
+
+@keyframes premiumGrammarSparklePulse {
+  0% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.92;
+  }
+}
+
+@keyframes premiumGrammarRadiancePulse {
+  0%,
+  100% {
+    box-shadow:
+      0 18px 34px rgba(23, 15, 47, 0.56),
+      0 0 30px rgba(255, 201, 118, 0.34),
+      0 0 0 1px rgba(255, 219, 160, 0.24),
+      inset 0 1px 0 rgba(247, 236, 213, 0.3),
+      inset 0 -1px 0 rgba(255, 201, 118, 0.26);
+  }
+  50% {
+    box-shadow:
+      0 22px 42px rgba(23, 15, 47, 0.62),
+      0 0 44px rgba(255, 214, 146, 0.58),
+      0 0 20px rgba(198, 230, 255, 0.24),
+      0 0 0 1px rgba(255, 231, 190, 0.28),
+      inset 0 1px 0 rgba(250, 240, 219, 0.34),
+      inset 0 -1px 0 rgba(255, 214, 146, 0.3);
+  }
+}
+
+@keyframes premiumGrammarIconSparkle {
+  0%,
+  100% {
+    box-shadow:
+      0 12px 24px rgba(0, 0, 0, 0.34),
+      0 0 20px rgba(255, 201, 118, 0.38),
+      inset 0 1px 0 rgba(250, 241, 221, 0.3);
+  }
+  50% {
+    box-shadow:
+      0 14px 28px rgba(0, 0, 0, 0.36),
+      0 0 28px rgba(255, 216, 148, 0.56),
+      0 0 12px rgba(199, 232, 255, 0.28),
+      inset 0 1px 0 rgba(252, 246, 229, 0.34);
+  }
+}
+
 
 @keyframes map-card-pulse {
   0% {
