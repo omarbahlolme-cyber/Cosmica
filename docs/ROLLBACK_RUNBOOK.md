@@ -118,6 +118,84 @@ git stash list
 git stash pop
 ```
 
+## Local reset to latest commit (destructive, copy/paste)
+
+Use this when your local repo has become messy and you want to go back to the latest committed state exactly as it is in git.
+
+Important:
+1. `git reset --hard HEAD` deletes all uncommitted changes in tracked files.
+2. `git clean -fd` deletes untracked files and folders.
+3. If you may want the current local state later, stash it first.
+
+### 1) Check what will be affected first
+
+```bash
+git status
+git log -1 --oneline
+```
+
+### 2) Safer option: save current local state first
+
+```bash
+git stash push -u -m "temp backup before full local reset"
+git stash list
+```
+
+If you later want that local state back:
+
+```bash
+git stash pop
+```
+
+### 3) Full local reset to latest commit
+
+```bash
+git reset --hard HEAD
+git clean -fd
+```
+
+### 4) Verify you are fully back to the latest commit
+
+```bash
+git status --short
+git rev-parse --short HEAD
+git log -1 --oneline
+```
+
+Expected result:
+1. `git status --short` prints nothing (clean working tree).
+2. `git rev-parse --short HEAD` shows the current commit SHA.
+3. `git log -1 --oneline` shows the latest commit message.
+
+### 5) If you reset too far or want to inspect previous local HEAD positions
+
+```bash
+git reflog -10
+```
+
+This helps you see:
+1. previous commits you were on
+2. recent resets
+3. whether your local state returned to the intended commit
+
+### 6) Compare current state against the previous commit
+
+```bash
+git diff --stat HEAD~1 HEAD
+```
+
+Use this when:
+1. the repo is clean
+2. but you suspect your latest commit already contained an unwanted revert or extra deletion
+
+### 7) Recover local dangling objects only if needed
+
+```bash
+git fsck --lost-found
+```
+
+Use this only as a last resort when uncommitted work was lost and you want to see whether git can still recover loose objects.
+
 ## Backup/restore references
 
 Create and verify backup snapshot:
