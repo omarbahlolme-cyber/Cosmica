@@ -11850,6 +11850,146 @@ const setupWorldMissionPath = () => {
 
 setupWorldMissionPath();
 
+const SPACED_REVIEW_STORAGE_KEY = "cosmicaSpacedReview:v1";
+const SPACED_REVIEW_UPDATED_EVENT = "cosmica:spaced-review-updated";
+const SPACED_REVIEW_STEP_DELAYS_MS = [
+  24 * 60 * 60 * 1000,
+  3 * 24 * 60 * 60 * 1000,
+  7 * 24 * 60 * 60 * 1000,
+  14 * 24 * 60 * 60 * 1000,
+  30 * 24 * 60 * 60 * 1000,
+];
+
+const readSpacedReviewStore = () => {
+  try {
+    const raw = localStorage.getItem(SPACED_REVIEW_STORAGE_KEY);
+    if (!raw) {
+      return {};
+    }
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === "object" ? parsed : {};
+  } catch {
+    return {};
+  }
+};
+
+const writeSpacedReviewStore = (store) => {
+  try {
+    localStorage.setItem(SPACED_REVIEW_STORAGE_KEY, JSON.stringify(store || {}));
+  } catch {}
+};
+
+const buildSpacedReviewStorageId = ({ worldKey = WORLD_KEY, mapKey = "", cardKey = "" } = {}) =>
+  `${String(worldKey || "").trim().toLowerCase()}::${String(mapKey || "")
+    .trim()
+    .toLowerCase()}::${String(cardKey || "").trim()}`;
+
+const getSpacedReviewEntry = ({ worldKey = WORLD_KEY, mapKey = "", cardKey = "" } = {}) => {
+  const storageId = buildSpacedReviewStorageId({ worldKey, mapKey, cardKey });
+  if (!storageId || storageId.endsWith("::")) {
+    return null;
+  }
+  const store = readSpacedReviewStore();
+  const entry = store[storageId];
+  return entry && typeof entry === "object" ? entry : null;
+};
+
+const isSpacedReviewDue = ({ worldKey = WORLD_KEY, mapKey = "", cardKey = "", now = Date.now() } = {}) => {
+  const entry = getSpacedReviewEntry({ worldKey, mapKey, cardKey });
+  if (!entry) {
+    return true;
+  }
+  return Number(entry.dueAt || 0) <= now;
+};
+
+const dispatchSpacedReviewUpdate = (detail = {}) => {
+  window.dispatchEvent(new CustomEvent(SPACED_REVIEW_UPDATED_EVENT, { detail }));
+};
+
+const isSpacedReviewModeActive = (mapKey = "") =>
+  document.body.dataset.spacedReviewActive === "true" &&
+  (!mapKey || document.body.dataset.spacedReviewMap === String(mapKey || "").trim().toLowerCase());
+
+const setSpacedReviewMode = (mapKey, active) => {
+  const normalizedMapKey = String(mapKey || "").trim().toLowerCase();
+  if (!normalizedMapKey) {
+    return;
+  }
+  if (active) {
+    document.body.dataset.spacedReviewActive = "true";
+    document.body.dataset.spacedReviewMap = normalizedMapKey;
+  } else if (document.body.dataset.spacedReviewMap === normalizedMapKey) {
+    delete document.body.dataset.spacedReviewActive;
+    delete document.body.dataset.spacedReviewMap;
+  }
+  dispatchSpacedReviewUpdate({ mapKey: normalizedMapKey, modeActive: isSpacedReviewModeActive(normalizedMapKey) });
+};
+
+const recordSpacedReviewSuccess = ({ worldKey = WORLD_KEY, mapKey = "", cardKey = "" } = {}) => {
+  const normalizedMapKey = String(mapKey || "").trim().toLowerCase();
+  const normalizedCardKey = String(cardKey || "").trim();
+  if (!normalizedMapKey || !normalizedCardKey) {
+    return null;
+  }
+  const store = readSpacedReviewStore();
+  const storageId = buildSpacedReviewStorageId({
+    worldKey,
+    mapKey: normalizedMapKey,
+    cardKey: normalizedCardKey,
+  });
+  const current = store[storageId] && typeof store[storageId] === "object" ? store[storageId] : {};
+  const previousStep = Math.max(-1, Number(current.step || -1));
+  const nextStep = Math.min(previousStep + 1, SPACED_REVIEW_STEP_DELAYS_MS.length - 1);
+  const now = Date.now();
+  store[storageId] = {
+    worldKey: String(worldKey || "").trim().toLowerCase(),
+    mapKey: normalizedMapKey,
+    cardKey: normalizedCardKey,
+    step: nextStep,
+    reviewCount: Math.max(0, Number(current.reviewCount || 0)) + 1,
+    lastReviewedAt: now,
+    dueAt: now + SPACED_REVIEW_STEP_DELAYS_MS[nextStep],
+  };
+  writeSpacedReviewStore(store);
+  dispatchSpacedReviewUpdate({
+    mapKey: normalizedMapKey,
+    cardKey: normalizedCardKey,
+    modeActive: isSpacedReviewModeActive(normalizedMapKey),
+  });
+  return store[storageId];
+};
+
+const markSpacedReviewInteraction = (element) => {
+  if (!isSpacedReviewModeActive()) {
+    return;
+  }
+  const card = element?.closest?.(".letter-card, .word-card, .phrase-card") || null;
+  const target = card || element;
+  if (!(target instanceof HTMLElement)) {
+    return;
+  }
+  const mapKey = String(target.dataset.srMapKey || card?.dataset.srMapKey || "").trim().toLowerCase();
+  const cardKey = String(target.dataset.srCardKey || card?.dataset.srCardKey || "").trim();
+  if (!mapKey || !cardKey || !isSpacedReviewModeActive(mapKey)) {
+    return;
+  }
+  recordSpacedReviewSuccess({ mapKey, cardKey });
+  if (card instanceof HTMLElement) {
+    card.classList.add("is-sr-reviewed");
+    window.setTimeout(() => {
+      card.classList.remove("is-sr-reviewed");
+    }, 520);
+  }
+};
+
+window.cosmicaSpacedReview = Object.assign(window.cosmicaSpacedReview || {}, {
+  eventName: SPACED_REVIEW_UPDATED_EVENT,
+  isDue: ({ mapKey = "", cardKey = "", worldKey = WORLD_KEY } = {}) =>
+    isSpacedReviewDue({ worldKey, mapKey, cardKey }),
+  isModeActive: (mapKey = "") => isSpacedReviewModeActive(mapKey),
+  setMode: (mapKey, active) => setSpacedReviewMode(mapKey, active),
+});
+
 /* ==========================================================================
    CARD AUDIO (LETTER / WORD / PHRASE)
    Unifies click, keyboard, and touch behavior for pronunciation playback.
@@ -12406,6 +12546,7 @@ const setupSpeechCards = () => {
         markSpeechActivation(card);
         playSpeech(card.dataset[datasetKey], { rate, pitch });
         trackPracticeFromElement(card);
+        markSpacedReviewInteraction(card);
       });
       card.addEventListener("click", (event) => {
         if (event.target?.closest?.(".letter-audio, .word-audio")) {
@@ -12420,6 +12561,7 @@ const setupSpeechCards = () => {
         markSpeechActivation(card);
         playSpeech(card.dataset[datasetKey], { rate, pitch });
         trackPracticeFromElement(card);
+        markSpacedReviewInteraction(card);
       });
       card.addEventListener("keydown", (event) => {
         if (event.key === "Enter" || event.key === " ") {
@@ -12430,6 +12572,7 @@ const setupSpeechCards = () => {
           markSpeechActivation(card);
           playSpeech(card.dataset[datasetKey], { rate, pitch });
           trackPracticeFromElement(card);
+          markSpacedReviewInteraction(card);
         }
       });
     });
@@ -12458,6 +12601,7 @@ const setupSpeechCards = () => {
           markSpeechActivation(button);
           playSpeech(value, { rate, pitch });
           trackPracticeFromElement(button);
+          markSpacedReviewInteraction(button);
         }
       };
       button.addEventListener("pointerup", (event) => {
