@@ -13929,6 +13929,7 @@ const initializeCommonShell = () => {
     setupHomeAltInteractivity();
     void setupLettersTitleTranslation();
     void setupLettersHelperTranslation();
+    setupLettersSpacedReviewControls();
     setupLetterRomanization();
     setupSpeechCards();
     setupBackToTopButton();
