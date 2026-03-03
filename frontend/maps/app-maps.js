@@ -4149,6 +4149,98 @@ let grammarSectionsRenderRunId = 0;
 let refreshWordsLessonShell = () => {};
 let refreshPhrasesLessonShell = () => {};
 
+const buildSpacedReviewCardKey = (sectionName, value) =>
+  `${normalizeWordLookupKey(sectionName).slice(0, 80)}::${normalizeWordLookupKey(value).slice(0, 120)}`;
+
+const attachSpacedReviewMetadata = (card, mapKey, sectionName, value) => {
+  if (!(card instanceof HTMLElement)) {
+    return;
+  }
+  const cardKey = buildSpacedReviewCardKey(sectionName, value);
+  card.dataset.srMapKey = mapKey;
+  card.dataset.srCardKey = cardKey;
+  const audioButton = card.querySelector(".word-audio");
+  if (audioButton instanceof HTMLElement) {
+    audioButton.dataset.srMapKey = mapKey;
+    audioButton.dataset.srCardKey = cardKey;
+  }
+};
+
+const setupMapSpacedReviewControls = ({ mapKey, controls, sections, cardSelector, idleCopy }) => {
+  if (!(controls instanceof HTMLElement) || !Array.isArray(sections) || !window.cosmicaSpacedReview) {
+    return;
+  }
+
+  let host = controls.querySelector(".spaced-review-controls");
+  if (!(host instanceof HTMLElement)) {
+    host = document.createElement("div");
+    host.className = "spaced-review-controls";
+    host.innerHTML = `
+      <div class="spaced-review-copy">
+        <span class="spaced-review-label">Spaced Review</span>
+        <p class="spaced-review-status" data-sr-status></p>
+      </div>
+      <button type="button" class="spaced-review-toggle" data-sr-toggle>Activate Review</button>
+    `;
+    controls.appendChild(host);
+  }
+
+  const toggleButton = host.querySelector("[data-sr-toggle]");
+  const statusNode = host.querySelector("[data-sr-status]");
+
+  const applyState = () => {
+    const cards = Array.from(document.querySelectorAll(cardSelector));
+    const active = Boolean(window.cosmicaSpacedReview?.isModeActive(mapKey));
+    const dueCards = cards.filter((card) =>
+      window.cosmicaSpacedReview?.isDue({
+        mapKey,
+        cardKey: card.dataset.srCardKey,
+      })
+    );
+    const firstDue = dueCards[0] || null;
+    const shouldFilter = active && dueCards.length > 0;
+
+    cards.forEach((card) => {
+      const isDue = dueCards.includes(card);
+      card.classList.toggle("is-sr-due", isDue);
+      card.classList.toggle("is-sr-next", card === firstDue);
+      card.classList.toggle("is-sr-hidden", shouldFilter && !isDue);
+    });
+
+    sections.forEach((section) => {
+      const hasDueCards = Array.from(section.querySelectorAll(cardSelector)).some((card) =>
+        dueCards.includes(card)
+      );
+      section.classList.toggle("is-sr-hidden", shouldFilter && !hasDueCards);
+    });
+
+    controls.classList.toggle("is-sr-active", active);
+    if (toggleButton instanceof HTMLButtonElement) {
+      toggleButton.textContent = active ? "Exit Review" : "Activate Review";
+      toggleButton.setAttribute("aria-pressed", active ? "true" : "false");
+    }
+    if (statusNode instanceof HTMLElement) {
+      statusNode.textContent = active
+        ? dueCards.length
+          ? `${dueCards.length} card${dueCards.length === 1 ? "" : "s"} due now.`
+          : "Nothing is due right now."
+        : idleCopy;
+    }
+  };
+
+  if (host.dataset.bound !== "1") {
+    host.dataset.bound = "1";
+    toggleButton?.addEventListener("click", () => {
+      const nextActive = !Boolean(window.cosmicaSpacedReview?.isModeActive(mapKey));
+      window.cosmicaSpacedReview?.setMode(mapKey, nextActive);
+      applyState();
+    });
+    window.addEventListener(window.cosmicaSpacedReview.eventName, applyState);
+  }
+
+  applyState();
+};
+
 const renderWordsSections = () => {
   const renderRunId = ++wordsSectionsRenderRunId;
   const isActiveRender = () => renderRunId === wordsSectionsRenderRunId;
@@ -4214,6 +4306,7 @@ const renderWordsSections = () => {
       `;
       const worldEntry = WORLD_TRANSLATIONS?.words?.[sectionName]?.[word] || null;
       applyCardRegisterBadge(card, worldEntry?.register);
+      attachSpacedReviewMetadata(card, "words", sectionName, word);
       grid.appendChild(card);
     });
     section.appendChild(title);
@@ -4377,6 +4470,13 @@ const renderWordsSections = () => {
         return;
       }
       initializeWordsControls();
+      setupMapSpacedReviewControls({
+        mapKey: "words",
+        controls,
+        sections,
+        cardSelector: ".word-card",
+        idleCopy: "Review due words only.",
+      });
       refreshWordsMapTranslations();
     },
     shouldContinue: isActiveRender,
@@ -4447,6 +4547,7 @@ const renderPhrasesSections = () => {
         </button>
       `;
       applyCardRegisterBadge(card, resolvePhraseRegister(sectionName, phrase));
+      attachSpacedReviewMetadata(card, "phrases", sectionName, phrase);
       grid.appendChild(card);
     });
     section.appendChild(title);
@@ -4609,6 +4710,13 @@ const renderPhrasesSections = () => {
         return;
       }
       initializePhrasesControls();
+      setupMapSpacedReviewControls({
+        mapKey: "phrases",
+        controls,
+        sections,
+        cardSelector: ".phrase-card",
+        idleCopy: "Review due phrases only.",
+      });
       refreshPhrasesMapTranslations();
     },
     shouldContinue: isActiveRender,
