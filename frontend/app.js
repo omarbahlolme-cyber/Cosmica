@@ -7274,6 +7274,10 @@ const setupLettersCardPracticeButtons = () => {
       "letters-core",
       `${symbol || "letter"}-${index}`
     );
+    card.dataset.srMapKey = "letters";
+    card.dataset.srCardKey = practiceSectionKey;
+    card.querySelector(".letter-audio")?.setAttribute("data-sr-map-key", "letters");
+    card.querySelector(".letter-audio")?.setAttribute("data-sr-card-key", practiceSectionKey);
 
     let button = card.querySelector('.map-card-practice-btn[data-map-key="letters"]');
     if (!button) {
@@ -7377,6 +7381,95 @@ const setupLettersCardPracticeButtons = () => {
     syncButtonState();
   });
   refreshLettersLessonShell();
+};
+
+const setupLettersSpacedReviewControls = () => {
+  if (!document.body.classList.contains("letters-page")) {
+    return;
+  }
+  const section = document.querySelector(".letters-grid-section");
+  const title = section?.querySelector(".section-title");
+  const cards = Array.from(section?.querySelectorAll(".letter-card") || []);
+  if (!(section instanceof HTMLElement) || !(title instanceof HTMLElement) || !cards.length) {
+    return;
+  }
+
+  cards.forEach((card, index) => {
+    if (!card.dataset.srMapKey) {
+      const symbol = String(card.dataset.letter || card.querySelector(".letter")?.textContent || "").trim();
+      const cardKey = buildLettersCardPracticeSectionKey("letters-core", `${symbol || "letter"}-${index}`);
+      card.dataset.srMapKey = "letters";
+      card.dataset.srCardKey = cardKey;
+      const audioButton = card.querySelector(".letter-audio");
+      if (audioButton instanceof HTMLElement) {
+        audioButton.dataset.srMapKey = "letters";
+        audioButton.dataset.srCardKey = cardKey;
+      }
+    }
+  });
+
+  let host = section.querySelector(".spaced-review-controls");
+  if (!(host instanceof HTMLElement)) {
+    host = document.createElement("div");
+    host.className = "spaced-review-controls";
+    host.innerHTML = `
+      <div class="spaced-review-copy">
+        <span class="spaced-review-label">Spaced Review</span>
+        <p class="spaced-review-status" data-sr-status>Review due letters only.</p>
+      </div>
+      <button type="button" class="spaced-review-toggle" data-sr-toggle>Activate Review</button>
+    `;
+    title.insertAdjacentElement("afterend", host);
+  }
+
+  const toggleButton = host.querySelector("[data-sr-toggle]");
+  const statusNode = host.querySelector("[data-sr-status]");
+
+  const applyState = () => {
+    const active = Boolean(window.cosmicaSpacedReview?.isModeActive("letters"));
+    const dueCards = cards.filter((card) =>
+      window.cosmicaSpacedReview?.isDue({
+        mapKey: "letters",
+        cardKey: card.dataset.srCardKey,
+      })
+    );
+    const firstDue = dueCards[0] || null;
+    const shouldFilter = active && dueCards.length > 0;
+
+    cards.forEach((card) => {
+      const isDue = dueCards.includes(card);
+      card.classList.toggle("is-sr-due", isDue);
+      card.classList.toggle("is-sr-next", card === firstDue);
+      card.classList.toggle("is-sr-hidden", shouldFilter && !isDue);
+    });
+
+    section.classList.toggle("is-sr-active", active);
+    if (toggleButton instanceof HTMLButtonElement) {
+      toggleButton.textContent = active ? "Exit Review" : "Activate Review";
+      toggleButton.setAttribute("aria-pressed", active ? "true" : "false");
+    }
+    if (statusNode instanceof HTMLElement) {
+      statusNode.textContent = active
+        ? dueCards.length
+          ? `${dueCards.length} letter${dueCards.length === 1 ? "" : "s"} due now.`
+          : "No letters are due right now."
+        : "Review due letters only.";
+    }
+  };
+
+  if (host.dataset.bound !== "1") {
+    host.dataset.bound = "1";
+    toggleButton?.addEventListener("click", () => {
+      const nextActive = !Boolean(window.cosmicaSpacedReview?.isModeActive("letters"));
+      window.cosmicaSpacedReview?.setMode("letters", nextActive);
+      applyState();
+    });
+    window.addEventListener(window.cosmicaSpacedReview?.eventName || SPACED_REVIEW_UPDATED_EVENT, () => {
+      applyState();
+    });
+  }
+
+  applyState();
 };
 
 const setupLettersLessonShell = () => {
