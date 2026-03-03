@@ -4004,6 +4004,12 @@ const createSectionCompleteButton = (mapKey, sectionKey, options = {}) => {
       button.disabled = false;
       delete button.dataset.busy;
       applySectionCompleteButtonState(button, targetMapKey, targetSectionKey, targetMode);
+      if (targetMapKey === "words") {
+        refreshWordsLessonShell();
+      }
+      if (targetMapKey === "phrases") {
+        refreshPhrasesLessonShell();
+      }
     }
   });
   return button;
@@ -4019,6 +4025,8 @@ const refreshAllSectionCompleteButtons = () => {
     }
     applySectionCompleteButtonState(button, mapKey, sectionKey, mode);
   });
+  refreshWordsLessonShell();
+  refreshPhrasesLessonShell();
 };
 
 let refreshAllSectionCompleteButtonsRafId = 0;
@@ -4138,6 +4146,8 @@ const renderSectionsProgressively = ({
 let wordsSectionsRenderRunId = 0;
 let phrasesSectionsRenderRunId = 0;
 let grammarSectionsRenderRunId = 0;
+let refreshWordsLessonShell = () => {};
+let refreshPhrasesLessonShell = () => {};
 
 const renderWordsSections = () => {
   const renderRunId = ++wordsSectionsRenderRunId;
@@ -4186,7 +4196,6 @@ const renderWordsSections = () => {
     titleMain.textContent = displaySectionName;
     titleHeading.appendChild(titleMain);
     title.appendChild(titleHeading);
-    section.appendChild(createSectionCompleteButton("words", sectionName));
     const grid = document.createElement("div");
     grid.className = "words-grid";
     words.forEach((word) => {
@@ -4205,7 +4214,6 @@ const renderWordsSections = () => {
       `;
       const worldEntry = WORLD_TRANSLATIONS?.words?.[sectionName]?.[word] || null;
       applyCardRegisterBadge(card, worldEntry?.register);
-      card.appendChild(createCardPracticeButton("words", sectionName, word));
       grid.appendChild(card);
     });
     section.appendChild(title);
@@ -4257,20 +4265,20 @@ const renderWordsSections = () => {
       );
     };
 
-    list.addEventListener("click", (event) => {
-      const button = event.target.closest(".words-filter");
-      if (!button) {
+    const activateFilter = (filter = "all", { scroll = true, track = false } = {}) => {
+      const nextFilter = String(filter || "all").trim() || "all";
+      activeFilter = nextFilter;
+      list.querySelectorAll(".words-filter").forEach((btn) => {
+        btn.classList.toggle("is-active", (btn.dataset.filter || "all") === nextFilter);
+      });
+      applyFilter();
+      if (track && nextFilter !== "all") {
+        trackMapSectionEvent("words", nextFilter, "started");
+      }
+      if (!scroll) {
         return;
       }
-      list.querySelectorAll(".words-filter").forEach((btn) => btn.classList.remove("is-active"));
-      button.classList.add("is-active");
-      const filter = button.dataset.filter || "all";
-      activeFilter = filter;
-      applyFilter();
-      if (filter !== "all") {
-        trackMapSectionEvent("words", filter, "started");
-      }
-      if (filter === "all") {
+      if (nextFilter === "all") {
         const first = sections[0];
         if (first) {
           const nav = document.querySelector(".nav");
@@ -4285,16 +4293,25 @@ const renderWordsSections = () => {
           const y = container.getBoundingClientRect().top + window.pageYOffset - offset;
           window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
         }
-      } else {
-        const target = sections.find((section) => section.dataset.section === filter);
-        if (target) {
-          const nav = document.querySelector(".nav");
-          const navHeight = nav ? nav.offsetHeight : 0;
-          const offset = Math.max(0, navHeight - 60);
-          const y = target.getBoundingClientRect().top + window.pageYOffset - offset;
-          window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
-        }
+        return;
       }
+      const target = sections.find((section) => section.dataset.section === nextFilter);
+      if (target) {
+        const nav = document.querySelector(".nav");
+        const navHeight = nav ? nav.offsetHeight : 0;
+        const offset = Math.max(0, navHeight - 60);
+        const y = target.getBoundingClientRect().top + window.pageYOffset - offset;
+        window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
+      }
+    };
+
+    list.addEventListener("click", (event) => {
+      const button = event.target.closest(".words-filter");
+      if (!button) {
+        return;
+      }
+      const filter = button.dataset.filter || "all";
+      activateFilter(filter, { scroll: true, track: filter !== "all" });
     });
 
     const registerOptions = getRegisterFilterOptionsForSections(sections, ".word-card");
@@ -4413,7 +4430,6 @@ const renderPhrasesSections = () => {
     titleMain.textContent = displaySectionName;
     titleHeading.appendChild(titleMain);
     title.appendChild(titleHeading);
-    section.appendChild(createSectionCompleteButton("phrases", sectionName));
     const grid = document.createElement("div");
     grid.className = "words-grid";
     phrases.forEach((phrase) => {
@@ -4431,7 +4447,6 @@ const renderPhrasesSections = () => {
         </button>
       `;
       applyCardRegisterBadge(card, resolvePhraseRegister(sectionName, phrase));
-      card.appendChild(createCardPracticeButton("phrases", sectionName, phrase));
       grid.appendChild(card);
     });
     section.appendChild(title);
@@ -4482,20 +4497,20 @@ const renderPhrasesSections = () => {
       );
     };
 
-    list.addEventListener("click", (event) => {
-      const button = event.target.closest(".words-filter");
-      if (!button) {
+    const activateFilter = (filter = "all", { scroll = true, track = false } = {}) => {
+      const nextFilter = String(filter || "all").trim() || "all";
+      activeFilter = nextFilter;
+      list.querySelectorAll(".words-filter").forEach((btn) => {
+        btn.classList.toggle("is-active", (btn.dataset.filter || "all") === nextFilter);
+      });
+      applyFilter();
+      if (track && nextFilter !== "all") {
+        trackMapSectionEvent("phrases", nextFilter, "started");
+      }
+      if (!scroll) {
         return;
       }
-      list.querySelectorAll(".words-filter").forEach((btn) => btn.classList.remove("is-active"));
-      button.classList.add("is-active");
-      const filter = button.dataset.filter || "all";
-      activeFilter = filter;
-      applyFilter();
-      if (filter !== "all") {
-        trackMapSectionEvent("phrases", filter, "started");
-      }
-      if (filter === "all") {
+      if (nextFilter === "all") {
         const first = sections[0];
         if (first) {
           const nav = document.querySelector(".nav");
@@ -4510,16 +4525,25 @@ const renderPhrasesSections = () => {
           const y = container.getBoundingClientRect().top + window.pageYOffset - offset;
           window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
         }
-      } else {
-        const target = sections.find((section) => section.dataset.section === filter);
-        if (target) {
-          const nav = document.querySelector(".nav");
-          const navHeight = nav ? nav.offsetHeight : 0;
-          const offset = Math.max(0, navHeight - 60);
-          const y = target.getBoundingClientRect().top + window.pageYOffset - offset;
-          window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
-        }
+        return;
       }
+      const target = sections.find((section) => section.dataset.section === nextFilter);
+      if (target) {
+        const nav = document.querySelector(".nav");
+        const navHeight = nav ? nav.offsetHeight : 0;
+        const offset = Math.max(0, navHeight - 60);
+        const y = target.getBoundingClientRect().top + window.pageYOffset - offset;
+        window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
+      }
+    };
+
+    list.addEventListener("click", (event) => {
+      const button = event.target.closest(".words-filter");
+      if (!button) {
+        return;
+      }
+      const filter = button.dataset.filter || "all";
+      activateFilter(filter, { scroll: true, track: filter !== "all" });
     });
 
     const registerOptions = getRegisterFilterOptionsForSections(sections, ".phrase-card");
@@ -4673,7 +4697,6 @@ const renderGrammarSections = () => {
     titleMain.textContent = displaySectionName;
     titleHeading.appendChild(titleMain);
     title.appendChild(titleHeading);
-    section.appendChild(createSectionCompleteButton("grammar", sectionName));
     const grid = document.createElement("div");
     grid.className = "words-grid";
     concepts.forEach((concept, conceptIndex) => {
@@ -4720,15 +4743,6 @@ const renderGrammarSections = () => {
         lockBadge.className = "grammar-preview-lock";
         lockBadge.textContent = "Premium";
         card.appendChild(lockBadge);
-      }
-      if (!isPreviewMode || !lockThisCardForPreview) {
-        card.appendChild(
-          createCardPracticeButton(
-            "grammar",
-            sectionName,
-            `${sourceTitle || displayTitle || concept.title || "concept"}-${conceptIndex}`
-          )
-        );
       }
       grid.appendChild(card);
     });

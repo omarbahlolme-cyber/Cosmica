@@ -1,0 +1,10 @@
+{
+  "appId": "com.cosmicalearn.app",
+  "appName": "Cosmica",
+  "webDir": "frontend",
+  "bundledWebRuntime": false,
+  "server": {
+    "url": "https://www.cosmicalearn.com",
+    "cleartext": false
+  }
+}

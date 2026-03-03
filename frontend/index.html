@@ -7,15 +7,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="shortcut icon" href="/favicon.svg" />
-    <title>Cosmica | Free Language Learning Worlds</title>
+    <title>Learn Languages Online | English, French, Spanish and More | Cosmica</title>
     <meta
       name="description"
-      content="Learn languages in immersive worlds with maps, AI guide, and daily practice."
+      content="Learn English, French, Spanish, Arabic, Chinese, Japanese, and more with structured lessons for letters, vocabulary, phrases, and grammar."
     />
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#0a0f24" />
     <meta name="application-name" content="Cosmica" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Cosmica" />
+    <link rel="manifest" href="/app.webmanifest" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/pwa/apple-touch-icon.png" />
     <link rel="canonical" href="https://www.cosmicalearn.com/" />
     <!-- Multilingual SEO: hreflang cluster -->
     <link rel="alternate" hreflang="en" href="https://www.cosmicalearn.com/" />
@@ -23,17 +28,23 @@
     <!-- /Multilingual SEO: hreflang cluster -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Cosmica" />
-    <meta property="og:title" content="Cosmica" />
+    <meta
+      property="og:title"
+      content="Learn Languages Online | English, French, Spanish and More | Cosmica"
+    />
     <meta
       property="og:description"
-      content="Learn languages in immersive worlds with maps, AI guide, and daily practice."
+      content="Structured language lessons with audio, vocabulary, phrases, grammar, and guided practice across 12 language worlds."
     />
     <meta property="og:url" content="https://www.cosmicalearn.com/" />
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Cosmica" />
+    <meta
+      name="twitter:title"
+      content="Learn Languages Online | English, French, Spanish and More | Cosmica"
+    />
     <meta
       name="twitter:description"
-      content="Learn languages in immersive worlds with maps, AI guide, and daily practice."
+      content="Structured language lessons with audio, vocabulary, phrases, grammar, and guided practice across 12 language worlds."
     />
     <link rel="preload" as="style" href="style.css?v=20260331" />
     <link rel="stylesheet" href="style.css?v=20260331" />
@@ -53,6 +64,7 @@
             "@id": "https://www.cosmicalearn.com/#website",
             "name": "Cosmica",
             "alternateName": "Cosmica Learn",
+            "description": "Learn languages online with structured lessons for letters, vocabulary, phrases, and grammar.",
             "url": "https://www.cosmicalearn.com/",
             "inLanguage": "en",
             "publisher": { "@id": "https://www.cosmicalearn.com/#organization" }
@@ -61,14 +73,66 @@
             "@type": "Organization",
             "@id": "https://www.cosmicalearn.com/#organization",
             "name": "Cosmica",
+            "description": "Online language learning platform with structured lessons, audio practice, and guided study paths.",
             "url": "https://www.cosmicalearn.com/",
             "logo": { "@type": "ImageObject", "url": "https://www.cosmicalearn.com/favicon.svg" }
+          },
+          {
+            "@type": "ItemList",
+            "@id": "https://www.cosmicalearn.com/#languages",
+            "name": "Cosmica language courses",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "English", "url": "https://www.cosmicalearn.com/english-world.html" },
+              { "@type": "ListItem", "position": 2, "name": "French", "url": "https://www.cosmicalearn.com/world-french.html" },
+              { "@type": "ListItem", "position": 3, "name": "Spanish", "url": "https://www.cosmicalearn.com/world-spanish.html" },
+              { "@type": "ListItem", "position": 4, "name": "Arabic", "url": "https://www.cosmicalearn.com/world-arabic.html" },
+              { "@type": "ListItem", "position": 5, "name": "Chinese", "url": "https://www.cosmicalearn.com/world-chinese.html" },
+              { "@type": "ListItem", "position": 6, "name": "Japanese", "url": "https://www.cosmicalearn.com/world-japanese.html" },
+              { "@type": "ListItem", "position": 7, "name": "Korean", "url": "https://www.cosmicalearn.com/world-korean.html" },
+              { "@type": "ListItem", "position": 8, "name": "Hindi", "url": "https://www.cosmicalearn.com/world-hindi.html" },
+              { "@type": "ListItem", "position": 9, "name": "German", "url": "https://www.cosmicalearn.com/world-german.html" },
+              { "@type": "ListItem", "position": 10, "name": "Portuguese", "url": "https://www.cosmicalearn.com/world-portuguese.html" },
+              { "@type": "ListItem", "position": 11, "name": "Dutch", "url": "https://www.cosmicalearn.com/world-dutch.html" },
+              { "@type": "ListItem", "position": 12, "name": "Swedish", "url": "https://www.cosmicalearn.com/world-swedish.html" }
+            ]
           }
         ]
       }
     </script>
-      <meta property="og:image" content="https://www.cosmicalearn.com/og-image.svg" />
-      <meta name="twitter:image" content="https://www.cosmicalearn.com/og-image.svg" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is Cosmica for beginners or advanced learners?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Cosmica supports both. You can start with letters and core vocabulary, then move into phrases, pronunciation, and advanced grammar review."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which languages can I learn on Cosmica?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Cosmica includes English, French, Spanish, Arabic, Chinese, Japanese, Korean, Hindi, German, Portuguese, Dutch, and Swedish."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does Cosmica include audio and structured lesson paths?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Cosmica uses structured lesson maps with audio, vocabulary, phrases, grammar, and guided practice to build speaking confidence."
+            }
+          }
+        ]
+      }
+    </script>
+    <meta property="og:image" content="https://www.cosmicalearn.com/og-image.svg" />
+    <meta name="twitter:image" content="https://www.cosmicalearn.com/og-image.svg" />
   </head>
   <body class="home-alt-luxe">
     <!-- Decorative background layers (aurora + starfield) -->
@@ -87,7 +151,7 @@
       </div>
       <nav class="nav-links" aria-label="Primary navigation">
         <a href="#how">How it works</a> <a href="#worlds">Worlds</a>
-        <a href="#guide">Alien guide</a> <a href="#join">Feedback</a>
+        <a href="#guide">AI guide</a> <a href="#join">Feedback</a>
         <a href="#support">Support us</a> <a href="#policies">Policies</a>
       </nav>
       <div class="nav-controls">
@@ -101,7 +165,7 @@
               <span class="account-trigger-label">Guest</span>
               <span class="account-trigger-meta">Sign in</span>
             </span>
-            <span class="account-trigger-caret" aria-hidden="true">?</span>
+            <span class="account-trigger-caret" aria-hidden="true">▾</span>
           </button>
         </div>
       </div>
@@ -111,31 +175,30 @@
       <!-- Content section -->
       <section class="hero" id="home">
         <div class="hero-left">
-          <div class="eyebrow">A Universe of Language Adventurers</div>
+          <div class="eyebrow">Learn 12 languages online with step-by-step lessons, audio, and practice</div>
           <h1>
-            Cosmica: Premium language exploration.
-            <span class="hero-title-break">Engineered for real fluency.</span>
+            Learn languages online.
+            <span class="hero-title-break">Build real speaking confidence.</span>
           </h1>
           <p class="lede">
-            Cosmica is an interactive, high-performance language-learning platform. Pick your world, follow
-            your map, and train with Mimi, your AI guide.
+            Build speaking confidence with vocabulary, phrases, grammar, and pronunciation.
           </p>
           <div class="hero-actions">
-            <button class="primary" id="startVoyageButton" type="button">Start Your Voyage</button>
+            <button class="primary" id="startVoyageButton" type="button">Start Learning</button>
             <button class="ghost" id="talkButton" type="button">Chat With Mimi</button>
           </div>
           <div class="hero-meta">
             <div>
               <div class="meta-number">12</div>
-              <div class="meta-label">Language worlds availabe</div>
+              <div class="meta-label">Language worlds available</div>
             </div>
             <div>
-              <div class="meta-number">Premium</div>
-              <div class="meta-label">Fully Immersive Experience</div>
+              <div class="meta-number">Audio + AI</div>
+              <div class="meta-label">Pronunciation and guided support</div>
             </div>
             <div>
               <div class="meta-number">Flexible access</div>
-              <div class="meta-label">Free & Premium Plans</div>
+              <div class="meta-label">Free and premium plans</div>
             </div>
           </div>
         </div>
@@ -188,37 +251,34 @@
       <!-- Content section -->
       <section class="section reveal" id="how">
         <div class="section-title">
-          <h2>A clear system for real fluency</h2>
-          <p>
-            Follow four focused maps: Letters, Words, Phrases, and Grammar. Built to move you from
-            basics to confident speech.
-          </p>
+          <h2>A clear path to real conversation</h2>
+          <p>Follow four lesson maps: Letters, Words, Phrases, and Grammar.</p>
         </div>
         <div class="steps">
           <div class="card">
             <div class="card-number">01</div>
-            <h3>Choose a world</h3>
-            <p>Start with the right sequence, from letters to advanced grammar.</p>
+            <h3>Choose your language</h3>
+            <p>Start with letters, words, phrases, and grammar in the right order.</p>
           </div>
           <div class="card">
             <div class="card-number">02</div>
-            <h3>Practice as you listen</h3>
-            <p>Sharpen pronunciation with native audio and clean repetition.</p>
+            <h3>Practice with audio</h3>
+            <p>Improve pronunciation, listening, and recall as you study.</p>
           </div>
           <div class="card">
             <div class="card-number">03</div>
-            <h3>Build real fluency</h3>
-            <p>Move into real conversations with natural, accurate language.</p>
+            <h3>Speak with confidence</h3>
+            <p>Build clearer, more natural conversation step by step.</p>
           </div>
         </div>
       </section>
       <!-- Content section -->
       <section class="section worlds reveal" id="worlds">
         <div class="section-title">
-          <h2>Choose your world</h2>
+          <h2>Choose a language course</h2>
           <p>
-            Each world is built with its own culture, sound, and strategy. More worlds are on the
-            way.
+            Learn with structured lessons in pronunciation, vocabulary, phrases, and grammar across
+            12 language courses.
           </p>
         </div>
         <div class="world-grid">
@@ -233,7 +293,6 @@
             </div>
             <div class="world-info">
               <h3>English</h3>
-              <p>Global signal capitals, story arcs, and dialect constellations.</p>
             </div>
           </article>
           <article class="world-card" data-world="French" role="button" tabindex="0">
@@ -242,7 +301,6 @@
             </div>
             <div class="world-info">
               <h3>French</h3>
-              <p>Lyric salons, cinema nebulae, and artful sound gardens.</p>
             </div>
           </article>
           <article class="world-card" data-world="German" role="button" tabindex="0">
@@ -251,7 +309,6 @@
             </div>
             <div class="world-info">
               <h3>German</h3>
-              <p>Precision starports, forest moons, and engineered dialogue routes.</p>
             </div>
           </article>
           <article class="world-card" data-world="Spanish" role="button" tabindex="0">
@@ -260,7 +317,6 @@
             </div>
             <div class="world-info">
               <h3>Spanish</h3>
-              <p>Sunlit plazas, rhythm trails, and story markets in orbit.</p>
             </div>
           </article>
           <article class="world-card" data-world="Portuguese" role="button" tabindex="0">
@@ -269,7 +325,6 @@
             </div>
             <div class="world-info">
               <h3>Portuguese</h3>
-              <p>Oceanic star harbors, saudade tides, and melody routes.</p>
             </div>
           </article>
           <article class="world-card" data-world="Dutch" role="button" tabindex="0">
@@ -278,7 +333,6 @@
             </div>
             <div class="world-info">
               <h3>Dutch</h3>
-              <p>Tide-ringed stations, trade routes, and crisp everyday speech.</p>
             </div>
           </article>
           <article class="world-card" data-world="Swedish" role="button" tabindex="0">
@@ -287,7 +341,6 @@
             </div>
             <div class="world-info">
               <h3>Swedish</h3>
-              <p>Aurora forests, quiet light, and slow-breath fluency loops.</p>
             </div>
           </article>
           <article class="world-card" data-world="Arabic" role="button" tabindex="0">
@@ -301,7 +354,6 @@
             </div>
             <div class="world-info">
               <h3>Arabic</h3>
-              <p>Calligraphy constellations, desert star caravans, poetic echoes.</p>
             </div>
           </article>
           <article class="world-card" data-world="Chinese" role="button" tabindex="0">
@@ -310,7 +362,6 @@
             </div>
             <div class="world-info">
               <h3>Chinese</h3>
-              <p>Silk-road skies, festival arcs, and calligraphy rivers of light.</p>
             </div>
           </article>
           <article class="world-card" data-world="Japanese" role="button" tabindex="0">
@@ -319,7 +370,6 @@
             </div>
             <div class="world-info">
               <h3>Japanese</h3>
-              <p>Paper-moon gardens, lantern bays, and mindful honor routes.</p>
             </div>
           </article>
           <article class="world-card" data-world="Korean" role="button" tabindex="0">
@@ -328,7 +378,6 @@
             </div>
             <div class="world-info">
               <h3>Korean</h3>
-              <p>Hangeul stargrid, neon rhythms, and pop-culture routes.</p>
             </div>
           </article>
           <article class="world-card" data-world="Hindi" role="button" tabindex="0">
@@ -337,7 +386,6 @@
             </div>
             <div class="world-info">
               <h3>Hindi</h3>
-              <p>Festival supernovas, sacred geometry, and lyrical cadence paths.</p>
             </div>
           </article>
         </div>
@@ -345,10 +393,10 @@
       <!-- Content section -->
       <section class="section guide reveal" id="guide">
         <div class="guide-left">
-          <h2>Meet Mimi, your adorable alien guide</h2>
+          <h2>Meet Mimi, your AI language guide</h2>
           <p>
-            Mimi is your cheerful language buddy. She adapts to your progress, guides your next
-            step, and keeps your learning spark glowing.
+            Mimi helps you practice, stay consistent, and choose the next useful lesson. Ask for a
+            phrase, a challenge, or guidance on what to study next.
           </p>
           <div class="speech" id="speechBubble" aria-live="polite">
             <span class="speech-text" id="speechText">
@@ -420,6 +468,44 @@
         </div>
       </section>
       <!-- Content section -->
+      <section class="section reveal" id="faq">
+        <div class="section-title">
+          <h2>Language learning FAQs</h2>
+          <p>Quick answers for learners comparing levels, languages, and course structure.</p>
+        </div>
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary class="faq-question">Is Cosmica for beginners or advanced learners?</summary>
+            <div class="faq-answer">
+              <p>
+                Both. Start with letters, vocabulary, and phrases, then build toward stronger
+                pronunciation, comprehension, and advanced grammar.
+              </p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">Which languages can I learn on Cosmica?</summary>
+            <div class="faq-answer">
+              <p>
+                English, French, Spanish, Arabic, Chinese, Japanese, Korean, Hindi, German,
+                Portuguese, Dutch, and Swedish.
+              </p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">
+              Does Cosmica include audio and structured lesson paths?
+            </summary>
+            <div class="faq-answer">
+              <p>
+                Yes. Each course is organized into letters, words, phrases, and grammar with audio
+                support and guided progression.
+              </p>
+            </div>
+          </details>
+        </div>
+      </section>
+      <!-- Content section -->
       <section class="section join reveal" id="join">
         <div class="join-panel">
           <h2>Help build the future of Cosmica</h2>
@@ -480,6 +566,8 @@
           <span class="footer-divider" aria-hidden="true">|</span> <a href="terms.html">Terms</a>
           <span class="footer-divider" aria-hidden="true">|</span>
           <a href="license.html">License</a>
+          <span class="footer-divider" aria-hidden="true">|</span>
+          <a href="#faq">FAQs</a>
         </span>
       </span>
     </footer>
@@ -516,4 +604,3 @@
     <script src="app.js?v=20260410" defer></script>
   </body>
 </html>
-

@@ -167,7 +167,12 @@
         <div class="row">
           <label>
             Admin token
-            <input id="adminToken" type="password" autocomplete="off" placeholder="Paste ADMIN_SECURITY_TOKEN" />
+            <input
+              id="adminToken"
+              type="password"
+              autocomplete="off"
+              placeholder="Paste ADMIN_SECURITY_TOKEN"
+            />
           </label>
           <label>
             Event limit
@@ -206,7 +211,9 @@
         </div>
         <div class="actions">
           <button id="billingHealthBtn" class="secondary" type="button">Load Stripe health</button>
-          <button id="billingResyncDryRunBtn" class="secondary" type="button">Dry-run resync user</button>
+          <button id="billingResyncDryRunBtn" class="secondary" type="button">
+            Dry-run resync user
+          </button>
           <button id="billingResyncApplyBtn" type="button">Apply resync user</button>
         </div>
       </section>
@@ -231,7 +238,9 @@
       <section class="card">
         <h2 style="margin: 0 0 8px; font-size: 1rem">Unblock user</h2>
         <div class="row-3">
-          <label>Email <input id="unblockEmail" type="text" placeholder="user@example.com" /></label>
+          <label
+            >Email <input id="unblockEmail" type="text" placeholder="user@example.com"
+          /></label>
           <label>User ID <input id="unblockUserId" type="text" placeholder="uuid" /></label>
           <label>IP (optional) <input id="unblockIp" type="text" placeholder="1.2.3.4" /></label>
         </div>
@@ -323,10 +332,16 @@
       };
 
       const renderBillingHealthChips = (payload) => {
-        const configured = payload && payload.configured && typeof payload.configured === "object" ? payload.configured : {};
+        const configured =
+          payload && payload.configured && typeof payload.configured === "object"
+            ? payload.configured
+            : {};
         const webhookHealth =
-          payload && payload.webhookHealth && typeof payload.webhookHealth === "object" ? payload.webhookHealth : {};
-        const allConfigured = Object.values(configured).length > 0 && Object.values(configured).every(Boolean);
+          payload && payload.webhookHealth && typeof payload.webhookHealth === "object"
+            ? payload.webhookHealth
+            : {};
+        const allConfigured =
+          Object.values(configured).length > 0 && Object.values(configured).every(Boolean);
         const hasWarnings =
           !allConfigured ||
           Number(webhookHealth.recentFailureCount || 0) > 0 ||
@@ -350,7 +365,9 @@
           `Warnings: ${hasWarnings ? "yes" : "none"}`,
           hasWarnings ? "warn" : "ok"
         );
-        markBillingRefresh(payload?.now || webhookHealth.lastProcessedAt || webhookHealth.lastReceivedAt);
+        markBillingRefresh(
+          payload?.now || webhookHealth.lastProcessedAt || webhookHealth.lastReceivedAt
+        );
       };
 
       $("loadBlockedBtn").addEventListener("click", async () => {
@@ -368,7 +385,9 @@
         setStatus("Loading events...");
         try {
           const limit = Math.max(1, Math.min(5000, Number($("eventsLimit").value) || 200));
-          const payload = await requestAdmin(`/api/admin/security/events?limit=${encodeURIComponent(limit)}`);
+          const payload = await requestAdmin(
+            `/api/admin/security/events?limit=${encodeURIComponent(limit)}`
+          );
           showPayload(payload);
           setStatus("Events loaded.", "ok");
         } catch (error) {
@@ -449,7 +468,11 @@
             body: buildBillingResyncPayload({ dryRun: true }),
           });
           showPayload(payload);
-          markBillingRefresh(payload?.result?.stripe?.currentPeriodEnd || payload?.stripe?.currentPeriodEnd || payload?.user?.updatedAt);
+          markBillingRefresh(
+            payload?.result?.stripe?.currentPeriodEnd ||
+              payload?.stripe?.currentPeriodEnd ||
+              payload?.user?.updatedAt
+          );
           setStatus("Billing resync dry-run complete.", "ok");
         } catch (error) {
           setStatus(error.message, "err");
@@ -478,5 +501,3 @@
     </script>
   </body>
 </html>
-
-

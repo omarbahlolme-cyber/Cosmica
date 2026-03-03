@@ -15,6 +15,7 @@ const shouldSkipHtmlFile = (name) => {
   const lower = String(name || "").toLowerCase();
   return (
     lower === "admin-security.html" ||
+    lower === "offline.html" ||
     lower.startsWith("live_") ||
     /^naver[a-z0-9]+\.html$/i.test(lower) ||
     /^google[a-z0-9]+\.html$/i.test(lower) ||
@@ -32,16 +33,24 @@ const htmlFiles = fs
   .sort();
 
 const urls = [
-  `${SITE_ORIGIN}/`,
+  {
+    url: `${SITE_ORIGIN}/`,
+    filePath: path.join(FRONTEND_ROOT, "index.html"),
+  },
   ...htmlFiles
     .filter((fileName) => fileName !== "index.html")
-    .map((fileName) => `${SITE_ORIGIN}/${fileName}`),
+    .map((fileName) => ({
+      url: `${SITE_ORIGIN}/${fileName}`,
+      filePath: path.join(FRONTEND_ROOT, fileName),
+    })),
 ];
 
 const lines = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'];
-for (const url of urls) {
+for (const entry of urls) {
+  const lastmod = fs.statSync(entry.filePath).mtime.toISOString();
   lines.push("  <url>");
-  lines.push(`    <loc>${url}</loc>`);
+  lines.push(`    <loc>${entry.url}</loc>`);
+  lines.push(`    <lastmod>${lastmod}</lastmod>`);
   lines.push("  </url>");
 }
 lines.push("</urlset>", "");

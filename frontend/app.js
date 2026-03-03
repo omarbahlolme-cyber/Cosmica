@@ -151,20 +151,14 @@ if (urlParams.has("skipIntro")) {
   const cleanUrl = new URL(window.location.href);
   cleanUrl.searchParams.delete("skipIntro");
   const nextQuery = cleanUrl.searchParams.toString();
-  const normalizedUrl =
-    cleanUrl.pathname +
-    (nextQuery ? `?${nextQuery}` : "") +
-    cleanUrl.hash;
+  const normalizedUrl = cleanUrl.pathname + (nextQuery ? `?${nextQuery}` : "") + cleanUrl.hash;
   window.history.replaceState({}, "", normalizedUrl);
 }
 if (isWorldLandingPage && urlParams.has("world")) {
   const cleanUrl = new URL(window.location.href);
   cleanUrl.searchParams.delete("world");
   const nextQuery = cleanUrl.searchParams.toString();
-  const normalizedUrl =
-    cleanUrl.pathname +
-    (nextQuery ? `?${nextQuery}` : "") +
-    cleanUrl.hash;
+  const normalizedUrl = cleanUrl.pathname + (nextQuery ? `?${nextQuery}` : "") + cleanUrl.hash;
   window.history.replaceState({}, "", normalizedUrl);
 }
 
@@ -331,12 +325,18 @@ const persistWorldMapTitleRuntimeCache = () => {
   } catch {}
 };
 const buildWorldMapTitleRuntimeCacheKey = (worldKey, languageKey, mapType) =>
-  `${String(worldKey || "").trim().toLowerCase()}::${String(languageKey || "")
+  `${String(worldKey || "")
     .trim()
-    .toLowerCase()}::${String(mapType || "").trim().toLowerCase()}`;
+    .toLowerCase()}::${String(languageKey || "")
+    .trim()
+    .toLowerCase()}::${String(mapType || "")
+    .trim()
+    .toLowerCase()}`;
 const requestWorldMapTitleTranslation = async (sourceTitle, targetLanguage) => {
   const title = String(sourceTitle || "").trim();
-  const lang = String(targetLanguage || "").trim().toLowerCase();
+  const lang = String(targetLanguage || "")
+    .trim()
+    .toLowerCase();
   if (!title || !lang || lang === WORLD_KEY) {
     return "";
   }
@@ -503,7 +503,10 @@ const applyWorldMapBilingualTitles = () => {
 
     const requestKey = `${selectedBaseLanguage}::${mapType}`;
     translationNode.dataset.requestKey = requestKey;
-    requestWorldMapTitleTranslation(worldTitle || MAP_TITLE_ENGLISH[mapType], selectedBaseLanguage).then((translated) => {
+    requestWorldMapTitleTranslation(
+      worldTitle || MAP_TITLE_ENGLISH[mapType],
+      selectedBaseLanguage
+    ).then((translated) => {
       const resolved = String(translated || "").trim();
       if (!resolved) {
         return;
@@ -531,15 +534,16 @@ const applyWorldMapBilingualTitles = () => {
 };
 
 applyWorldMapBilingualTitles();
-const WORLD_TRANSLATION_FILE =
-  WORLD_TRANSLATION_FILES[WORLD_KEY] || BASE_MAP_TRANSLATION_FILE;
+const WORLD_TRANSLATION_FILE = WORLD_TRANSLATION_FILES[WORLD_KEY] || BASE_MAP_TRANSLATION_FILE;
 const WORLD_TTS_LANGUAGE_CODE =
   WORLD_TTS_CONFIG[WORLD_KEY]?.languageCode || WORLD_TTS_CONFIG.english.languageCode;
 const WORLD_TTS_VOICE = WORLD_TTS_CONFIG[WORLD_KEY]?.voice || WORLD_TTS_CONFIG.english.voice;
 const MAP_TRANSLATIONS_CACHE_KEY = "cosmicaMapTranslationsCache:v3";
 const WORLD_TRANSLATIONS_CACHE_KEY_PREFIX = "cosmicaWorldTranslationsCache:v1";
 const buildWorldTranslationsCacheKey = (worldKey = WORLD_KEY) =>
-  `${WORLD_TRANSLATIONS_CACHE_KEY_PREFIX}:${String(worldKey || "").trim().toLowerCase()}`;
+  `${WORLD_TRANSLATIONS_CACHE_KEY_PREFIX}:${String(worldKey || "")
+    .trim()
+    .toLowerCase()}`;
 const readAssetVersionParam = (rawUrl) => {
   if (!rawUrl) {
     return "";
@@ -572,6 +576,13 @@ const resolveAssetVersion = () => {
 const ASSET_VERSION = resolveAssetVersion();
 const withAssetVersion = (assetPath) =>
   ASSET_VERSION ? `${assetPath}?v=${encodeURIComponent(ASSET_VERSION)}` : assetPath;
+const LEGACY_PWA_INSTALL_DISMISSED_KEY = "cosmicaPwaInstallPromptDismissed:v1";
+const COSMICA_APP_STORE_URL = "";
+const COSMICA_PLAY_STORE_URL = "";
+let deferredInstallPrompt = null;
+let installEntryButton = null;
+let installModal = null;
+let installEntryButtonFooterGuardInitialized = false;
 let WORLD_TRANSLATIONS = null;
 let WORLD_GRAMMAR_TITLE_MAP = null;
 let WORLD_GRAMMAR_EXAMPLE_MAP = null;
@@ -756,9 +767,7 @@ const scheduleScrollbarWidthRefresh = () => {
 setScrollbarWidth();
 window.addEventListener("resize", scheduleScrollbarWidthRefresh, { passive: true });
 
-const prefersReducedMotion = window.matchMedia(
-  "(prefers-reduced-motion: reduce)"
-).matches;
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const connectionInfo =
   navigator.connection || navigator.mozConnection || navigator.webkitConnection || null;
 const prefersReducedData =
@@ -767,13 +776,11 @@ const prefersReducedData =
 const effectiveNetworkType = String(
   (connectionInfo && connectionInfo.effectiveType) || ""
 ).toLowerCase();
-const isSlowNetwork =
-  effectiveNetworkType === "slow-2g" || effectiveNetworkType === "2g";
+const isSlowNetwork = effectiveNetworkType === "slow-2g" || effectiveNetworkType === "2g";
 const deviceMemoryGb = Number(navigator.deviceMemory || 0);
 const cpuThreadCount = Number(navigator.hardwareConcurrency || 0);
 const isLowPowerDevice =
-  (deviceMemoryGb > 0 && deviceMemoryGb <= 4) ||
-  (cpuThreadCount > 0 && cpuThreadCount <= 4);
+  (deviceMemoryGb > 0 && deviceMemoryGb <= 4) || (cpuThreadCount > 0 && cpuThreadCount <= 4);
 const shouldUseConservativeAnimationBudget =
   isLowPowerDevice || prefersReducedData || isSlowNetwork;
 const conservativeAnimationFrameMinMs = shouldUseConservativeAnimationBudget ? 34 : 16;
@@ -982,7 +989,15 @@ const createCosmicaAuthClient = () => {
       }
       return payload || {};
     },
-    trackProgress: ({ worldKey, mapKey, sectionKey, status, score, xpDelta, questToggleMode } = {}) =>
+    trackProgress: ({
+      worldKey,
+      mapKey,
+      sectionKey,
+      status,
+      score,
+      xpDelta,
+      questToggleMode,
+    } = {}) =>
       request("/api/progress/track", {
         method: "POST",
         body: { worldKey, mapKey, sectionKey, status, score, xpDelta, questToggleMode },
@@ -993,7 +1008,9 @@ const createCosmicaAuthClient = () => {
         return null;
       }
       const currentData =
-        accountDataResponse && accountDataResponse.data && typeof accountDataResponse.data === "object"
+        accountDataResponse &&
+        accountDataResponse.data &&
+        typeof accountDataResponse.data === "object"
           ? accountDataResponse.data
           : {};
       const nextData = {
@@ -1223,15 +1240,24 @@ const createCosmicaGamificationClient = () => {
     const stats = toSafeObject(gamification.stats);
 
     fallback.totals.xp = Math.max(0, Math.round(Number(totals.xp) || 0));
-    fallback.totals.completedSections = Math.max(0, Math.round(Number(totals.completedSections) || 0));
+    fallback.totals.completedSections = Math.max(
+      0,
+      Math.round(Number(totals.completedSections) || 0)
+    );
     fallback.totals.lastActivityAt = String(totals.lastActivityAt || "") || null;
     fallback.worlds = toSafeObject(candidate.worlds);
     fallback.recentEvents = Array.isArray(candidate.recentEvents)
       ? candidate.recentEvents.slice(-120)
       : [];
     const levelMeta = deriveLevelMeta(fallback.totals.xp);
-    fallback.gamification.level = Math.max(levelMeta.level, Math.round(Number(gamification.level) || 1));
-    fallback.gamification.currentStreak = Math.max(0, Math.round(Number(gamification.currentStreak) || 0));
+    fallback.gamification.level = Math.max(
+      levelMeta.level,
+      Math.round(Number(gamification.level) || 1)
+    );
+    fallback.gamification.currentStreak = Math.max(
+      0,
+      Math.round(Number(gamification.currentStreak) || 0)
+    );
     fallback.gamification.bestStreak = Math.max(
       fallback.gamification.currentStreak,
       Math.round(Number(gamification.bestStreak) || 0)
@@ -1242,16 +1268,31 @@ const createCosmicaGamificationClient = () => {
     ["practice", "discover", "complete"].forEach((key) => {
       const baseTask = fallback.gamification.quests.tasks[key];
       const incoming = toSafeObject(tasks[key]);
-      baseTask.progress = Math.max(0, Math.min(baseTask.target, Math.round(Number(incoming.progress) || 0)));
+      baseTask.progress = Math.max(
+        0,
+        Math.min(baseTask.target, Math.round(Number(incoming.progress) || 0))
+      );
       baseTask.completed = Boolean(incoming.completed) || baseTask.progress >= baseTask.target;
       if (incoming.label) {
         baseTask.label = String(incoming.label);
       }
     });
-    fallback.gamification.stats.sectionsVisited = Math.max(0, Math.round(Number(stats.sectionsVisited) || 0));
-    fallback.gamification.stats.sectionsCompleted = Math.max(0, Math.round(Number(stats.sectionsCompleted) || 0));
-    fallback.gamification.stats.cardsPracticed = Math.max(0, Math.round(Number(stats.cardsPracticed) || 0));
-    fallback.gamification.stats.grammarReviews = Math.max(0, Math.round(Number(stats.grammarReviews) || 0));
+    fallback.gamification.stats.sectionsVisited = Math.max(
+      0,
+      Math.round(Number(stats.sectionsVisited) || 0)
+    );
+    fallback.gamification.stats.sectionsCompleted = Math.max(
+      0,
+      Math.round(Number(stats.sectionsCompleted) || 0)
+    );
+    fallback.gamification.stats.cardsPracticed = Math.max(
+      0,
+      Math.round(Number(stats.cardsPracticed) || 0)
+    );
+    fallback.gamification.stats.grammarReviews = Math.max(
+      0,
+      Math.round(Number(stats.grammarReviews) || 0)
+    );
     fallback.gamification.stats.questDaysCompleted = Math.max(
       0,
       Math.round(Number(stats.questDaysCompleted) || 0)
@@ -1263,7 +1304,9 @@ const createCosmicaGamificationClient = () => {
   };
 
   const snapshot = () => {
-    const progress = state.progress ? normalizeProgressPayload(state.progress) : buildDefaultProgress();
+    const progress = state.progress
+      ? normalizeProgressPayload(state.progress)
+      : buildDefaultProgress();
     const levelMeta = deriveLevelMeta(progress.totals.xp);
     return {
       ready: state.ready,
@@ -1300,7 +1343,9 @@ const createCosmicaGamificationClient = () => {
     }
     const payloadData = toSafeObject(payload?.data);
     const payloadProfile = toSafeObject(payloadData.profile);
-    const authProvider = String(payload?.data?.profile?.authProvider || user?.authProvider || "email")
+    const authProvider = String(
+      payload?.data?.profile?.authProvider || user?.authProvider || "email"
+    )
       .trim()
       .toLowerCase();
     const premiumTier = String(
@@ -1529,7 +1574,9 @@ const createCosmicaGamificationClient = () => {
         state.ready = true;
         return {
           ...snapshot(),
-          restoreStatus: String(payload?.status || "").trim().toLowerCase(),
+          restoreStatus: String(payload?.status || "")
+            .trim()
+            .toLowerCase(),
           restoreMessage: String(payload?.message || payload?.error || "").trim(),
         };
       }),
@@ -1544,20 +1591,36 @@ const createCosmicaGamificationClient = () => {
         }
         return snapshot();
       }),
-    trackProgress: async ({ worldKey, mapKey, sectionKey, status = "practiced", score = null, questToggleMode = "" } = {}) => {
+    trackProgress: async ({
+      worldKey,
+      mapKey,
+      sectionKey,
+      status = "practiced",
+      score = null,
+      questToggleMode = "",
+    } = {}) => {
       if (!state.isAuthenticated) {
         return null;
       }
-      const normalizedWorld = String(worldKey || "").trim().toLowerCase();
-      const normalizedMap = String(mapKey || "").trim().toLowerCase();
+      const normalizedWorld = String(worldKey || "")
+        .trim()
+        .toLowerCase();
+      const normalizedMap = String(mapKey || "")
+        .trim()
+        .toLowerCase();
       const normalizedSection = String(sectionKey || "").trim();
-      const normalizedStatus = String(status || "").trim().toLowerCase();
+      const normalizedStatus = String(status || "")
+        .trim()
+        .toLowerCase();
       if (!normalizedWorld || !normalizedMap || !normalizedSection || !normalizedStatus) {
         return null;
       }
-      const normalizedQuestToggleMode = String(questToggleMode || "").trim().toLowerCase();
+      const normalizedQuestToggleMode = String(questToggleMode || "")
+        .trim()
+        .toLowerCase();
       const eventKey = `${normalizedWorld}|${normalizedMap}|${normalizedSection}|${normalizedStatus}|${normalizedQuestToggleMode}`;
-      const cooldownMs = normalizedStatus === "completed" || normalizedStatus === "uncompleted" ? 800 : 2600;
+      const cooldownMs =
+        normalizedStatus === "completed" || normalizedStatus === "uncompleted" ? 800 : 2600;
       if (dedupeEvent(eventKey, cooldownMs)) {
         return null;
       }
@@ -1621,10 +1684,15 @@ const trackLearningProgressEvent = ({
   score = null,
   questToggleMode = "",
 } = {}) => {
-  if (!window.cosmicaGamification || typeof window.cosmicaGamification.trackProgress !== "function") {
+  if (
+    !window.cosmicaGamification ||
+    typeof window.cosmicaGamification.trackProgress !== "function"
+  ) {
     return;
   }
-  const resolvedMapKey = String(mapKey || detectMapKeyFromBody() || "").trim().toLowerCase();
+  const resolvedMapKey = String(mapKey || detectMapKeyFromBody() || "")
+    .trim()
+    .toLowerCase();
   if (!resolvedMapKey) {
     return;
   }
@@ -1644,8 +1712,12 @@ window.cosmicaTrackLearningProgress = trackLearningProgressEvent;
 const SECTION_COMPLETION_OVERRIDE_STORAGE_KEY = "cosmicaSectionCompletionOverrides:v1";
 
 const buildSectionCompletionOverrideKey = (worldKey = "", mapKey = "", sectionKey = "") => {
-  const world = String(worldKey || "").trim().toLowerCase();
-  const map = String(mapKey || "").trim().toLowerCase();
+  const world = String(worldKey || "")
+    .trim()
+    .toLowerCase();
+  const map = String(mapKey || "")
+    .trim()
+    .toLowerCase();
   const section = String(sectionKey || "").trim();
   if (!world || !map || !section) {
     return "";
@@ -1700,7 +1772,12 @@ const getSectionCompletionOverride = ({ worldKey = "", mapKey = "", sectionKey =
   return overrides[key] === true;
 };
 
-const setSectionCompletionOverride = ({ worldKey = "", mapKey = "", sectionKey = "", isComplete } = {}) => {
+const setSectionCompletionOverride = ({
+  worldKey = "",
+  mapKey = "",
+  sectionKey = "",
+  isComplete,
+} = {}) => {
   if (!hasAuthenticatedGamificationSession()) {
     return;
   }
@@ -2216,10 +2293,18 @@ const setupAccountHub = () => {
   const premiumSetupSecondaryBtn = premiumSetupOverlay.querySelector(".premium-setup-secondary");
   const premiumCheckoutCard = premiumCheckoutOverlay.querySelector(".premium-checkout-card");
   const premiumCheckoutCloseBtn = premiumCheckoutOverlay.querySelector(".premium-checkout-close");
-  const premiumCheckoutOptionsNode = premiumCheckoutOverlay.querySelector(".premium-checkout-options");
-  const premiumCheckoutFeedback = premiumCheckoutOverlay.querySelector(".premium-checkout-feedback");
-  const premiumCheckoutPrimaryBtn = premiumCheckoutOverlay.querySelector(".premium-checkout-primary");
-  const premiumCheckoutSecondaryBtn = premiumCheckoutOverlay.querySelector(".premium-checkout-secondary");
+  const premiumCheckoutOptionsNode = premiumCheckoutOverlay.querySelector(
+    ".premium-checkout-options"
+  );
+  const premiumCheckoutFeedback = premiumCheckoutOverlay.querySelector(
+    ".premium-checkout-feedback"
+  );
+  const premiumCheckoutPrimaryBtn = premiumCheckoutOverlay.querySelector(
+    ".premium-checkout-primary"
+  );
+  const premiumCheckoutSecondaryBtn = premiumCheckoutOverlay.querySelector(
+    ".premium-checkout-secondary"
+  );
   const premiumSuccessCard = premiumSuccessOverlay.querySelector(".premium-success-card");
   const premiumSuccessCloseBtn = premiumSuccessOverlay.querySelector(".premium-success-close");
   const premiumSuccessCtaBtn = premiumSuccessOverlay.querySelector(".premium-success-cta");
@@ -2243,7 +2328,8 @@ const setupAccountHub = () => {
   triggerNoticeBubble.setAttribute("aria-live", "polite");
   document.body.appendChild(triggerNoticeBubble);
 
-  const formatNumber = (value) => Intl.NumberFormat().format(Math.max(0, Math.round(Number(value) || 0)));
+  const formatNumber = (value) =>
+    Intl.NumberFormat().format(Math.max(0, Math.round(Number(value) || 0)));
   const guestAvatarIconMarkup =
     '<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true"><path d="M12 12.2a4.6 4.6 0 1 0 0-9.2 4.6 4.6 0 0 0 0 9.2zm0 2.2c-4.7 0-8.5 2.8-8.5 6.3 0 .7.5 1.3 1.2 1.3h14.6c.7 0 1.2-.6 1.2-1.3 0-3.5-3.8-6.3-8.5-6.3z"></path></svg>';
 
@@ -2315,7 +2401,11 @@ const setupAccountHub = () => {
     return `Are you sure you want to permanently delete your account? This action cannot be undone. ${accessLine} You can restore Premium later by pressing the "Restore Premium" button.`;
   };
   const toAvatarTwoLetters = (value, fallback = "GU") => {
-    const chars = Array.from(String(value || "").replace(/\s+/g, "").trim());
+    const chars = Array.from(
+      String(value || "")
+        .replace(/\s+/g, "")
+        .trim()
+    );
     if (!chars.length) {
       return fallback;
     }
@@ -2374,17 +2464,24 @@ const setupAccountHub = () => {
       window.clearTimeout(noActivePlanFeedbackTimerId);
       noActivePlanFeedbackTimerId = 0;
     }
-    noActivePlanFeedbackTimerId = window.setTimeout(() => {
-      noActivePlanFeedbackTimerId = 0;
-      if (!feedbackNode) {
-        return;
-      }
-      const currentMessage = String(feedbackNode.textContent || "").trim().toLowerCase();
-      const currentTone = String(feedbackNode.dataset?.tone || "").trim().toLowerCase();
-      if (currentMessage === "no active premium plan found." && currentTone === "error") {
-        setFeedback("");
-      }
-    }, Math.max(2000, Number(durationMs) || 2500));
+    noActivePlanFeedbackTimerId = window.setTimeout(
+      () => {
+        noActivePlanFeedbackTimerId = 0;
+        if (!feedbackNode) {
+          return;
+        }
+        const currentMessage = String(feedbackNode.textContent || "")
+          .trim()
+          .toLowerCase();
+        const currentTone = String(feedbackNode.dataset?.tone || "")
+          .trim()
+          .toLowerCase();
+        if (currentMessage === "no active premium plan found." && currentTone === "error") {
+          setFeedback("");
+        }
+      },
+      Math.max(2000, Number(durationMs) || 2500)
+    );
   };
 
   const setAuthRedirectFeedbackLock = (durationMs = 9000) => {
@@ -2393,10 +2490,13 @@ const setupAccountHub = () => {
       window.clearTimeout(authRedirectFeedbackLockTimerId);
       authRedirectFeedbackLockTimerId = 0;
     }
-    authRedirectFeedbackLockTimerId = window.setTimeout(() => {
-      authRedirectFeedbackLock = false;
-      authRedirectFeedbackLockTimerId = 0;
-    }, Math.max(1200, Number(durationMs) || 9000));
+    authRedirectFeedbackLockTimerId = window.setTimeout(
+      () => {
+        authRedirectFeedbackLock = false;
+        authRedirectFeedbackLockTimerId = 0;
+      },
+      Math.max(1200, Number(durationMs) || 9000)
+    );
   };
 
   const positionTriggerNoticeBubble = () => {
@@ -2406,7 +2506,10 @@ const setupAccountHub = () => {
     const triggerRect = trigger.getBoundingClientRect();
     const bubbleRect = triggerNoticeBubble.getBoundingClientRect();
     const bubbleWidth = bubbleRect.width || 260;
-    const left = Math.max(8, Math.min(window.innerWidth - bubbleWidth - 8, triggerRect.right - bubbleWidth));
+    const left = Math.max(
+      8,
+      Math.min(window.innerWidth - bubbleWidth - 8, triggerRect.right - bubbleWidth)
+    );
     const top = Math.max(8, triggerRect.bottom + 12);
     triggerNoticeBubble.style.left = `${left}px`;
     triggerNoticeBubble.style.top = `${top}px`;
@@ -2450,9 +2553,12 @@ const setupAccountHub = () => {
     triggerNoticeBubble.hidden = false;
     positionTriggerNoticeBubble();
     window.requestAnimationFrame(positionTriggerNoticeBubble);
-    triggerNoticeTimerId = window.setTimeout(() => {
-      hideTriggerNoticeBubble();
-    }, Math.max(1200, Number(durationMs) || 9000));
+    triggerNoticeTimerId = window.setTimeout(
+      () => {
+        hideTriggerNoticeBubble();
+      },
+      Math.max(1200, Number(durationMs) || 9000)
+    );
   };
 
   const maybeShowEntryMenuPrompt = (snapshot) => {
@@ -2481,7 +2587,8 @@ const setupAccountHub = () => {
       const panelRect = panelNode.getBoundingClientRect();
       const currentTop = scrollSurface.scrollTop;
       const relativeTop = panelRect.top - surfaceRect.top;
-      const nextTop = currentTop + relativeTop - (scrollSurface.clientHeight - panelRect.height) / 2;
+      const nextTop =
+        currentTop + relativeTop - (scrollSurface.clientHeight - panelRect.height) / 2;
       scrollSurface.scrollTo({
         top: Math.max(0, Math.round(nextTop)),
         behavior: "smooth",
@@ -2517,14 +2624,20 @@ const setupAccountHub = () => {
   };
 
   const resolveSubscriptionStatusDisplay = ({ status = "", cancelAtPeriodEnd = false } = {}) => {
-    const normalizedStatus = String(status || "").trim().toLowerCase();
+    const normalizedStatus = String(status || "")
+      .trim()
+      .toLowerCase();
     if (cancelAtPeriodEnd || normalizedStatus === "canceling") {
       return {
         key: "canceling",
         label: "Cancels at period end",
       };
     }
-    if (normalizedStatus === "active" || normalizedStatus === "trialing" || normalizedStatus === "past_due") {
+    if (
+      normalizedStatus === "active" ||
+      normalizedStatus === "trialing" ||
+      normalizedStatus === "past_due"
+    ) {
       return {
         key: "active",
         label: "Active",
@@ -2667,11 +2780,19 @@ const setupAccountHub = () => {
 
   const consumeAuthErrorFromUrl = () => {
     const params = new URLSearchParams(window.location.search);
-    const rawCode = String(params.get("authError") || "").trim().toLowerCase();
+    const rawCode = String(params.get("authError") || "")
+      .trim()
+      .toLowerCase();
     const rawPasswordResetToken = String(params.get("passwordResetToken") || "").trim();
-    const rawAuthEmail = String(params.get("authEmail") || "").trim().toLowerCase();
-    const rawOpenAuth = String(params.get("openAuth") || "").trim().toLowerCase();
-    const rawAuthPanel = String(params.get("authPanel") || "").trim().toLowerCase();
+    const rawAuthEmail = String(params.get("authEmail") || "")
+      .trim()
+      .toLowerCase();
+    const rawOpenAuth = String(params.get("openAuth") || "")
+      .trim()
+      .toLowerCase();
+    const rawAuthPanel = String(params.get("authPanel") || "")
+      .trim()
+      .toLowerCase();
     if (rawPasswordResetToken) {
       pendingPasswordResetToken = rawPasswordResetToken;
     }
@@ -2679,8 +2800,12 @@ const setupAccountHub = () => {
       pendingAuthEmailPrefill = rawAuthEmail;
     }
     const forceOpenAuth =
-      rawOpenAuth === "1" || rawOpenAuth === "true" || rawOpenAuth === "yes" || rawOpenAuth === "open";
-    const forcedPanel = rawAuthPanel === "signup" ? "signup" : rawAuthPanel === "reset" ? "reset" : "login";
+      rawOpenAuth === "1" ||
+      rawOpenAuth === "true" ||
+      rawOpenAuth === "yes" ||
+      rawOpenAuth === "open";
+    const forcedPanel =
+      rawAuthPanel === "signup" ? "signup" : rawAuthPanel === "reset" ? "reset" : "login";
     if (!rawCode) {
       if (forceOpenAuth) {
         shouldAutoOpenAuthDropdown = true;
@@ -2788,7 +2913,8 @@ const setupAccountHub = () => {
     }
     if (resolvedNotice.panel) {
       const panelValue = String(resolvedNotice.panel).trim().toLowerCase();
-      activeAuthPanel = panelValue === "signup" ? "signup" : panelValue === "reset" ? "reset" : "login";
+      activeAuthPanel =
+        panelValue === "signup" ? "signup" : panelValue === "reset" ? "reset" : "login";
     }
     params.delete("authError");
     params.delete("passwordResetToken");
@@ -2803,7 +2929,9 @@ const setupAccountHub = () => {
 
   const consumeAccountDeletedNoticeFromUrl = () => {
     const params = new URLSearchParams(window.location.search);
-    const accountDeletedRaw = String(params.get("accountDeleted") || "").trim().toLowerCase();
+    const accountDeletedRaw = String(params.get("accountDeleted") || "")
+      .trim()
+      .toLowerCase();
     const deleteNoticeRaw = String(params.get("deleteNotice") || "").trim();
     const shouldShowNotice =
       accountDeletedRaw === "1" ||
@@ -2816,8 +2944,7 @@ const setupAccountHub = () => {
     }
 
     const resolvedMessage =
-      deleteNoticeRaw ||
-      "Your account and associated learning data have been permanently deleted.";
+      deleteNoticeRaw || "Your account and associated learning data have been permanently deleted.";
     showTriggerNoticeBubble(resolvedMessage, "success", 10000);
 
     params.delete("accountDeleted");
@@ -2859,7 +2986,10 @@ const setupAccountHub = () => {
     window.history.replaceState({}, "", nextUrl);
   };
 
-  const sanitizeGiftToken = (value) => String(value || "").trim().slice(0, 240);
+  const sanitizeGiftToken = (value) =>
+    String(value || "")
+      .trim()
+      .slice(0, 240);
 
   const persistPendingGiftRedeemToken = (token) => {
     const normalized = sanitizeGiftToken(token);
@@ -2992,7 +3122,9 @@ const setupAccountHub = () => {
   });
 
   const setAuthPanel = (panelKey, shouldFocus = false) => {
-    const requested = String(panelKey || "").trim().toLowerCase();
+    const requested = String(panelKey || "")
+      .trim()
+      .toLowerCase();
     const normalized =
       requested === "signup" ? "signup" : requested === "reset" ? "reset" : "login";
     activeAuthPanel = normalized;
@@ -3003,12 +3135,17 @@ const setupAccountHub = () => {
       setSignupResendButtonVisible(false);
     }
     authSwitchButtons.forEach((button) => {
-      const isActive = String(button.dataset.authPanel || "").trim().toLowerCase() === normalized;
+      const isActive =
+        String(button.dataset.authPanel || "")
+          .trim()
+          .toLowerCase() === normalized;
       button.classList.toggle("is-active", isActive);
       button.setAttribute("aria-selected", isActive ? "true" : "false");
     });
     authPanelNodes.forEach((panel) => {
-      const panelKeyValue = String(panel.dataset.authPanelContent || "").trim().toLowerCase();
+      const panelKeyValue = String(panel.dataset.authPanelContent || "")
+        .trim()
+        .toLowerCase();
       panel.hidden = panelKeyValue !== normalized;
     });
     if (normalized === "login" && pendingAuthEmailPrefill) {
@@ -3020,13 +3157,9 @@ const setupAccountHub = () => {
       pendingAuthEmailPrefill = "";
     }
     if (shouldFocus) {
-      const activeField =
-        (normalized === "signup"
-          ? signupForm
-          : normalized === "reset"
-            ? resetForm
-            : loginForm
-        )?.querySelector('input[name="email"], input[name="newPassword"]');
+      const activeField = (
+        normalized === "signup" ? signupForm : normalized === "reset" ? resetForm : loginForm
+      )?.querySelector('input[name="email"], input[name="newPassword"]');
       activeField?.focus?.();
     }
   };
@@ -3044,7 +3177,12 @@ const setupAccountHub = () => {
   };
 
   const startGoogleAuth = async (mode = "login") => {
-    const normalizedMode = String(mode || "").trim().toLowerCase() === "signup" ? "signup" : "login";
+    const normalizedMode =
+      String(mode || "")
+        .trim()
+        .toLowerCase() === "signup"
+        ? "signup"
+        : "login";
     setFeedback("");
     const returnTo = `${window.location.pathname}${window.location.search}${window.location.hash}`;
     const endpoint = `/api/auth/google/start/${normalizedMode}?returnTo=${encodeURIComponent(returnTo)}`;
@@ -3077,7 +3215,7 @@ const setupAccountHub = () => {
           } catch {}
         } else {
           try {
-            rawText = String(await response.text() || "");
+            rawText = String((await response.text()) || "");
             if (rawText.trim().startsWith("{")) {
               payload = JSON.parse(rawText);
             }
@@ -3131,7 +3269,10 @@ const setupAccountHub = () => {
       return 0;
     }
     const innerHeight = Math.max(0, Number(window.innerHeight) || 0);
-    const visualBottom = Math.max(0, (Number(viewport.offsetTop) || 0) + (Number(viewport.height) || 0));
+    const visualBottom = Math.max(
+      0,
+      (Number(viewport.offsetTop) || 0) + (Number(viewport.height) || 0)
+    );
     return Math.max(0, Math.round(innerHeight - visualBottom));
   };
 
@@ -3150,8 +3291,14 @@ const setupAccountHub = () => {
       };
     }
     return {
-      width: Math.max(1, Math.round(window.innerWidth || document.documentElement.clientWidth || 0)),
-      height: Math.max(1, Math.round(window.innerHeight || document.documentElement.clientHeight || 0)),
+      width: Math.max(
+        1,
+        Math.round(window.innerWidth || document.documentElement.clientWidth || 0)
+      ),
+      height: Math.max(
+        1,
+        Math.round(window.innerHeight || document.documentElement.clientHeight || 0)
+      ),
       left: 0,
       top: 0,
     };
@@ -3196,7 +3343,10 @@ const setupAccountHub = () => {
     if (!(targetNode instanceof HTMLElement) || dropdown.hidden) {
       return;
     }
-    if (!(accountDropdownCard instanceof HTMLElement) || !accountDropdownCard.contains(targetNode)) {
+    if (
+      !(accountDropdownCard instanceof HTMLElement) ||
+      !accountDropdownCard.contains(targetNode)
+    ) {
       return;
     }
     const surfaceRect = accountDropdownCard.getBoundingClientRect();
@@ -3384,7 +3534,9 @@ const setupAccountHub = () => {
 
     const eventTarget = event.target;
     const insideSetupCard =
-      premiumSetupCard instanceof HTMLElement && eventTarget instanceof Node && premiumSetupCard.contains(eventTarget);
+      premiumSetupCard instanceof HTMLElement &&
+      eventTarget instanceof Node &&
+      premiumSetupCard.contains(eventTarget);
     const insideCheckoutCard =
       premiumCheckoutCard instanceof HTMLElement &&
       eventTarget instanceof Node &&
@@ -3455,7 +3607,9 @@ const setupAccountHub = () => {
       if (parsed.protocol !== "https:") {
         return "";
       }
-      const host = String(parsed.hostname || "").trim().toLowerCase();
+      const host = String(parsed.hostname || "")
+        .trim()
+        .toLowerCase();
       if (host !== "ko-fi.com" && host !== "www.ko-fi.com") {
         return "";
       }
@@ -3495,7 +3649,8 @@ const setupAccountHub = () => {
     if (!(premiumCheckoutOptionsNode instanceof HTMLElement)) {
       return;
     }
-    const source = Array.isArray(options) && options.length ? options : buildFallbackPremiumBillingOptions();
+    const source =
+      Array.isArray(options) && options.length ? options : buildFallbackPremiumBillingOptions();
     const safeItems = source
       .map((item, index) => {
         const candidate = item && typeof item === "object" ? item : {};
@@ -3605,16 +3760,25 @@ const setupAccountHub = () => {
     const loadResult = await loadPremiumBillingOptions();
     if (!premiumCheckoutOptionsReady) {
       if (loadResult?.reason === "unauthorized") {
-        setPremiumCheckoutFeedback("Your session on this device expired. Please log in again to continue.", "error");
+        setPremiumCheckoutFeedback(
+          "Your session on this device expired. Please log in again to continue.",
+          "error"
+        );
         setAuthPanel("login", true);
         openDropdown();
         return;
       }
       if (loadResult?.reason === "not_configured") {
-        setPremiumCheckoutFeedback("Premium checkout is not configured on the server yet. Please contact support.", "error");
+        setPremiumCheckoutFeedback(
+          "Premium checkout is not configured on the server yet. Please contact support.",
+          "error"
+        );
         return;
       }
-      setPremiumCheckoutFeedback("Secure checkout is currently unavailable. Please try again.", "error");
+      setPremiumCheckoutFeedback(
+        "Secure checkout is currently unavailable. Please try again.",
+        "error"
+      );
     } else {
       setPremiumCheckoutFeedback("");
     }
@@ -3737,7 +3901,9 @@ const setupAccountHub = () => {
       return;
     }
     premiumGiftFeedback.textContent = String(message || "");
-    premiumGiftFeedback.dataset.tone = String(tone || "").trim().toLowerCase();
+    premiumGiftFeedback.dataset.tone = String(tone || "")
+      .trim()
+      .toLowerCase();
   };
 
   const syncGiftPromptFromServerGift = (gift = {}) => {
@@ -3883,7 +4049,11 @@ const setupAccountHub = () => {
         }
       } else {
         if (auto) {
-          showTriggerNoticeBubble("Could not claim gift right now. Please try again.", "error", 9000);
+          showTriggerNoticeBubble(
+            "Could not claim gift right now. Please try again.",
+            "error",
+            9000
+          );
           if (pendingPremiumGiftPrompt) {
             hasShownPremiumGiftPrompt = false;
             openPremiumGiftModal();
@@ -4001,7 +4171,9 @@ const setupAccountHub = () => {
     }
   };
 
-  const openPremiumSetupModal = ({ message = "Upgrade to Premium to unlock this content." } = {}) => {
+  const openPremiumSetupModal = ({
+    message = "Upgrade to Premium to unlock this content.",
+  } = {}) => {
     const snapshot =
       typeof window.cosmicaGamification?.getState === "function"
         ? window.cosmicaGamification.getState()
@@ -4010,7 +4182,9 @@ const setupAccountHub = () => {
       return;
     }
     if (premiumSetupMessage) {
-      premiumSetupMessage.textContent = String(message || "Upgrade to Premium to unlock this content.");
+      premiumSetupMessage.textContent = String(
+        message || "Upgrade to Premium to unlock this content."
+      );
     }
     lastPremiumFocusNode = document.activeElement;
     premiumSetupOverlay.hidden = false;
@@ -4024,9 +4198,7 @@ const setupAccountHub = () => {
     }, 20);
   };
 
-  const openPremiumFlow = ({
-    message = "Upgrade to Premium to unlock this content.",
-  } = {}) => {
+  const openPremiumFlow = ({ message = "Upgrade to Premium to unlock this content." } = {}) => {
     const snapshot =
       typeof window.cosmicaGamification?.getState === "function"
         ? window.cosmicaGamification.getState()
@@ -4068,7 +4240,9 @@ const setupAccountHub = () => {
       openAuthDropdown();
       window.setTimeout(() => {
         const dropdownNode = document.querySelector(".account-dropdown");
-        const isOpen = Boolean(dropdownNode instanceof HTMLElement && dropdownNode.hidden === false);
+        const isOpen = Boolean(
+          dropdownNode instanceof HTMLElement && dropdownNode.hidden === false
+        );
         if (!isOpen) {
           openAuthDropdown();
         }
@@ -4104,7 +4278,10 @@ const setupAccountHub = () => {
         return;
       }
       setPremiumCheckoutPrimaryState(false);
-      setPremiumCheckoutFeedback("Secure checkout is currently unavailable. Please try again.", "error");
+      setPremiumCheckoutFeedback(
+        "Secure checkout is currently unavailable. Please try again.",
+        "error"
+      );
       return;
     }
     redirectToExternalPremiumCheckout({
@@ -4247,7 +4424,10 @@ const setupAccountHub = () => {
       setAuthPanel(panel, true);
       if (message) {
         pendingAuthNoticeMessage = String(message);
-        pendingAuthNoticeTone = String(tone || "info").trim().toLowerCase() || "info";
+        pendingAuthNoticeTone =
+          String(tone || "info")
+            .trim()
+            .toLowerCase() || "info";
       }
       openDropdown();
     },
@@ -4302,7 +4482,9 @@ const setupAccountHub = () => {
         user.expiresAt ||
         ""
     ).trim();
-    const provider = String(user.premiumProvider || "").trim().toLowerCase();
+    const provider = String(user.premiumProvider || "")
+      .trim()
+      .toLowerCase();
     const cancelAtPeriodEnd = user.premiumCancelAtPeriodEnd === true;
     const isPremium = snapshotHasPremiumAccess(snapshot);
     return {
@@ -4312,9 +4494,7 @@ const setupAccountHub = () => {
       provider,
       isPremium,
       canCancel: isPremium && !cancelAtPeriodEnd,
-      message: cancelAtPeriodEnd
-        ? "Your subscription is scheduled to cancel at period end."
-        : "",
+      message: cancelAtPeriodEnd ? "Your subscription is scheduled to cancel at period end." : "",
     };
   };
 
@@ -4327,8 +4507,12 @@ const setupAccountHub = () => {
     const gamification = progress.gamification || {};
     const levelMeta = snapshot?.levelMeta || { level: 1, xp: 0, ratio: 0, toNextXp: 0 };
     const displayName = String(snapshot?.user?.displayName || "Guest");
-    currentAuthProvider = String(snapshot?.user?.authProvider || "").trim().toLowerCase();
-    currentUserEmail = String(snapshot?.user?.email || "").trim().toLowerCase();
+    currentAuthProvider = String(snapshot?.user?.authProvider || "")
+      .trim()
+      .toLowerCase();
+    currentUserEmail = String(snapshot?.user?.email || "")
+      .trim()
+      .toLowerCase();
     const avatarLetters = toAvatarTwoLetters(displayName, isAuthenticated ? "US" : "GU");
     const achievementCount = hasPremiumAccess
       ? Math.max(0, Math.round(Number(gamification?.stats?.questDaysCompleted) || 0))
@@ -4352,7 +4536,11 @@ const setupAccountHub = () => {
         openPremiumSuccessModal({ testMode: false });
       }
     }
-    if (pendingGiftRedeemToken && !pendingGiftTokenPreviewResolved && !pendingGiftTokenPreviewInFlight) {
+    if (
+      pendingGiftRedeemToken &&
+      !pendingGiftTokenPreviewResolved &&
+      !pendingGiftTokenPreviewInFlight
+    ) {
       void loadPendingGiftTokenPreview();
     }
     // For gift links opened by guests: auto-open auth panel first, then continue
@@ -4402,10 +4590,10 @@ const setupAccountHub = () => {
       triggerMeta.textContent = shouldSuppressGuestFlash
         ? "Loading..."
         : isAuthenticated
-        ? hasPremiumAccess
-          ? `Level ${levelMeta.level}`
-          : `Streak ${streakDays}d`
-        : "Sign in";
+          ? hasPremiumAccess
+            ? `Level ${levelMeta.level}`
+            : `Streak ${streakDays}d`
+          : "Sign in";
     }
     if (trigger) {
       trigger.classList.toggle("is-authenticated", isAuthenticated);
@@ -4468,7 +4656,8 @@ const setupAccountHub = () => {
       }
     }
     if (showSubscriptionManagement) {
-      const baselineSubscriptionState = latestSubscriptionManageState || resolveSubscriptionStateFromSnapshot(snapshot);
+      const baselineSubscriptionState =
+        latestSubscriptionManageState || resolveSubscriptionStateFromSnapshot(snapshot);
       applySubscriptionManagementState(baselineSubscriptionState, {
         loading: subscriptionManageInFlight,
       });
@@ -4527,7 +4716,9 @@ const setupAccountHub = () => {
     if (menuXpFill) {
       const ratio = Math.max(0, Math.min(1, Number(levelMeta.ratio) || 0));
       menuXpFill.style.width = `${(ratio * 100).toFixed(2)}%`;
-      const isXpBarFull = ratio >= 0.999 || (Number(levelMeta.nextXp) > 0 && Number(levelMeta.xp) >= Number(levelMeta.nextXp));
+      const isXpBarFull =
+        ratio >= 0.999 ||
+        (Number(levelMeta.nextXp) > 0 && Number(levelMeta.xp) >= Number(levelMeta.nextXp));
       if (menuXpBar) {
         menuXpBar.classList.toggle("is-full", isXpBarFull);
         menuXpBar.hidden = !showPremiumStatus;
@@ -4564,7 +4755,10 @@ const setupAccountHub = () => {
         ratio: target > 0 ? progress / target : 0,
       };
     });
-    const completedCount = questSummaries.reduce((total, item) => total + (item.completed ? 1 : 0), 0);
+    const completedCount = questSummaries.reduce(
+      (total, item) => total + (item.completed ? 1 : 0),
+      0
+    );
     const allCompleted = Boolean(quests.allCompleted) || completedCount === questSummaries.length;
     const lockQuestsForFree = !hasPremiumAccess;
 
@@ -4621,7 +4815,10 @@ const setupAccountHub = () => {
       target.scrollIntoView({ behavior: "smooth", block: "start" });
       return;
     }
-    if (window.location.pathname.toLowerCase().endsWith("/index.html") || window.location.pathname === "/") {
+    if (
+      window.location.pathname.toLowerCase().endsWith("/index.html") ||
+      window.location.pathname === "/"
+    ) {
       return;
     }
     window.location.href = `/${safeHash}`;
@@ -4670,7 +4867,8 @@ const setupAccountHub = () => {
     window.visualViewport.addEventListener(
       "resize",
       () => {
-        const activeNode = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+        const activeNode =
+          document.activeElement instanceof HTMLElement ? document.activeElement : null;
         scheduleDropdownReposition(activeNode);
         if (isFocusableAuthControl(activeNode)) {
           scheduleFocusedAuthControlReveal(activeNode);
@@ -4681,7 +4879,9 @@ const setupAccountHub = () => {
     window.visualViewport.addEventListener(
       "scroll",
       () => {
-        scheduleDropdownReposition(document.activeElement instanceof HTMLElement ? document.activeElement : null);
+        scheduleDropdownReposition(
+          document.activeElement instanceof HTMLElement ? document.activeElement : null
+        );
       },
       { passive: true }
     );
@@ -4706,13 +4906,17 @@ const setupAccountHub = () => {
   });
   authSwitchButtons.forEach((button) => {
     button.addEventListener("click", () => {
-      const panelKey = String(button.dataset.authPanel || "").trim().toLowerCase();
+      const panelKey = String(button.dataset.authPanel || "")
+        .trim()
+        .toLowerCase();
       setAuthPanel(panelKey, true);
     });
   });
   googleButtons.forEach((button) => {
     button.addEventListener("click", () => {
-      const mode = String(button.dataset.googleMode || "").trim().toLowerCase();
+      const mode = String(button.dataset.googleMode || "")
+        .trim()
+        .toLowerCase();
       void startGoogleAuth(mode);
     });
   });
@@ -4746,7 +4950,10 @@ const setupAccountHub = () => {
         /verify your email/i.test(String(error?.message || ""));
       if (needsVerification) {
         setResendButtonVisible(true);
-        setFeedback("Please verify your email first, or resend the verification link below.", "error");
+        setFeedback(
+          "Please verify your email first, or resend the verification link below.",
+          "error"
+        );
         return;
       }
       setFeedback(error?.message || "Could not log in. Please try again.", "error");
@@ -4775,7 +4982,10 @@ const setupAccountHub = () => {
     try {
       const payload = await window.cosmicaAuth.resendVerificationEmail({ email, returnTo });
       setFeedback(
-        String(payload?.message || "If an account exists for this email, a verification link has been sent."),
+        String(
+          payload?.message ||
+            "If an account exists for this email, a verification link has been sent."
+        ),
         "success"
       );
     } catch (error) {
@@ -4807,7 +5017,10 @@ const setupAccountHub = () => {
     try {
       const payload = await window.cosmicaAuth.resendVerificationEmail({ email, returnTo });
       setFeedback(
-        String(payload?.message || "If an account exists for this email, a verification link has been sent."),
+        String(
+          payload?.message ||
+            "If an account exists for this email, a verification link has been sent."
+        ),
         "success"
       );
     } catch (error) {
@@ -4835,7 +5048,8 @@ const setupAccountHub = () => {
       });
       setFeedback(
         String(
-          payload?.message || "If an email-password account exists for this email, a reset link will been sent."
+          payload?.message ||
+            "If an email-password account exists for this email, a reset link will been sent."
         ),
         "success"
       );
@@ -4935,7 +5149,8 @@ const setupAccountHub = () => {
     if (showLoading) {
       subscriptionManageInFlight = true;
       applySubscriptionManagementState(
-        latestSubscriptionManageState || resolveSubscriptionStateFromSnapshot(window.cosmicaGamification.getState()),
+        latestSubscriptionManageState ||
+          resolveSubscriptionStateFromSnapshot(window.cosmicaGamification.getState()),
         {
           loading: true,
         }
@@ -4944,10 +5159,14 @@ const setupAccountHub = () => {
     try {
       const payload = await window.cosmicaAuth.getPremiumSubscriptionManagement();
       latestSubscriptionManageState = {
-        status: String(payload?.status || "").trim().toLowerCase(),
+        status: String(payload?.status || "")
+          .trim()
+          .toLowerCase(),
         currentPeriodEnd: String(payload?.currentPeriodEnd || "").trim(),
         cancelAtPeriodEnd: payload?.cancelAtPeriodEnd === true,
-        provider: String(payload?.provider || "").trim().toLowerCase(),
+        provider: String(payload?.provider || "")
+          .trim()
+          .toLowerCase(),
         isPremium: payload?.isPremium === true,
         canCancel: payload?.canCancel === true,
         message: String(payload?.message || "").trim(),
@@ -5021,7 +5240,9 @@ const setupAccountHub = () => {
       window.location.assign(redirectUrl);
     } catch (error) {
       applySubscriptionManagementState(latestSubscriptionManageState || {}, { loading: false });
-      const message = String(error?.message || "Could not open subscription management right now.").trim();
+      const message = String(
+        error?.message || "Could not open subscription management right now."
+      ).trim();
       setFeedback(message, "error");
       showTriggerNoticeBubble(message, "error", 10000);
     } finally {
@@ -5058,7 +5279,9 @@ const setupAccountHub = () => {
     setFeedback("Restoring premium subscription...", "info");
     try {
       const result = await window.cosmicaGamification.restorePremiumSubscription();
-      const status = String(result?.restoreStatus || "").trim().toLowerCase();
+      const status = String(result?.restoreStatus || "")
+        .trim()
+        .toLowerCase();
       const restoredFromActivePlan = status === "restored" || status === "already_active";
       const noActivePlanResult = !restoredFromActivePlan;
       const requiredLoadingMs = restoredFromActivePlan
@@ -5071,27 +5294,21 @@ const setupAccountHub = () => {
         await new Promise((resolve) => window.setTimeout(resolve, waitMs));
       }
       if (status === "restored") {
-        setFeedback(
-          String(result?.restoreMessage || "Premium restored successfully."),
-          "success"
-        );
+        setFeedback(String(result?.restoreMessage || "Premium restored successfully."), "success");
       } else if (status === "already_active") {
-        setFeedback(
-          String(result?.restoreMessage || "Premium is already active."),
-          "info"
-        );
+        setFeedback(String(result?.restoreMessage || "Premium is already active."), "info");
       } else {
         setFeedback("No active premium plan found.", "error");
         scheduleNoActivePlanFeedbackAutoClear(2500);
       }
       renderFromState(window.cosmicaGamification.getState());
     } catch (error) {
-      const code = String(error?.payload?.code || "").trim().toLowerCase();
+      const code = String(error?.payload?.code || "")
+        .trim()
+        .toLowerCase();
       const isNoActivePlanError =
         code === "no_active_premium_plan_found" || Number(error?.status || 0) === 409;
-      const requiredLoadingMs = isNoActivePlanError
-        ? minLoadingMsForNoActivePlan
-        : minLoadingMs;
+      const requiredLoadingMs = isNoActivePlanError ? minLoadingMsForNoActivePlan : minLoadingMs;
       const waitMs = Math.max(0, requiredLoadingMs - (Date.now() - restoreStartedAtMs));
       if (waitMs > 0) {
         await new Promise((resolve) => window.setTimeout(resolve, waitMs));
@@ -5165,7 +5382,10 @@ const setupAccountHub = () => {
         setInputInvalidState(loginEmailInput, false);
       }
       setAuthPanel("login", true);
-      setFeedback(String(payload?.message || "Password reset complete. You can log in now."), "success");
+      setFeedback(
+        String(payload?.message || "Password reset complete. You can log in now."),
+        "success"
+      );
     } catch (error) {
       setFeedback(error?.message || "Could not reset password.", "error");
     }
@@ -5219,7 +5439,9 @@ const setupAccountHub = () => {
       setAuthPanel("login", true);
       if (payload?.verificationRequired) {
         setFeedback(
-          String(payload?.message || "Account created. Check your email and verify before logging in."),
+          String(
+            payload?.message || "Account created. Check your email and verify before logging in."
+          ),
           "success"
         );
         setResendButtonVisible(true);
@@ -5238,7 +5460,9 @@ const setupAccountHub = () => {
         return;
       }
       const status = Number(error?.status || 0);
-      const providerFromPayload = String(error?.payload?.authProvider || "").trim().toLowerCase();
+      const providerFromPayload = String(error?.payload?.authProvider || "")
+        .trim()
+        .toLowerCase();
       const providerFromMessage = /google/i.test(String(error?.message || "")) ? "google" : "";
       const conflictProvider = providerFromPayload || providerFromMessage;
       const isExistingAccountConflict =
@@ -5248,10 +5472,16 @@ const setupAccountHub = () => {
         setSignupResendButtonVisible(false);
         setAuthPanel("signup", true);
         if (conflictProvider === "google") {
-          setFeedback("Account already exists. Open the Log in tab and use Google sign-in.", "error");
+          setFeedback(
+            "Account already exists. Open the Log in tab and use Google sign-in.",
+            "error"
+          );
           return;
         }
-        setFeedback("Account already exists. Open the Log in tab and sign in with your password.", "error");
+        setFeedback(
+          "Account already exists. Open the Log in tab and sign in with your password.",
+          "error"
+        );
         return;
       }
       setSignupResendButtonVisible(false);
@@ -5261,7 +5491,9 @@ const setupAccountHub = () => {
 
   menuButtons.forEach((button) => {
     button.addEventListener("click", () => {
-      const action = String(button.dataset.menu || "").trim().toLowerCase();
+      const action = String(button.dataset.menu || "")
+        .trim()
+        .toLowerCase();
       if (!action) {
         return;
       }
@@ -5320,7 +5552,10 @@ const setupAccountHub = () => {
   passwordChangeForm?.addEventListener("submit", async (event) => {
     event.preventDefault();
     if (currentAuthProvider === "google") {
-      setFeedback("Google accounts must use Google sign-in and do not change password here.", "error");
+      setFeedback(
+        "Google accounts must use Google sign-in and do not change password here.",
+        "error"
+      );
       return;
     }
     const currentPasswordInput = passwordChangeForm.querySelector('input[name="currentPassword"]');
@@ -5510,8 +5745,7 @@ const worldPages = {
    Warms likely next pages on capable networks/devices for smoother transitions.
    ========================================================================== */
 const ENABLE_NAVIGATION_PREFETCH = false;
-const CAN_PREFETCH_NAVIGATION =
-  ENABLE_NAVIGATION_PREFETCH && !prefersReducedData && !isSlowNetwork;
+const CAN_PREFETCH_NAVIGATION = ENABLE_NAVIGATION_PREFETCH && !prefersReducedData && !isSlowNetwork;
 const ENABLE_BACKGROUND_ROUTE_PREFETCH = false;
 const prefetchedDocuments = new Set();
 const currentDocumentKey = `${window.location.origin}${window.location.pathname}${window.location.search}`;
@@ -5541,7 +5775,11 @@ const prefetchDocument = (href) => {
     return;
   }
   const normalizedUrl = normalizeInternalDocumentUrl(href);
-  if (!normalizedUrl || normalizedUrl === currentDocumentKey || prefetchedDocuments.has(normalizedUrl)) {
+  if (
+    !normalizedUrl ||
+    normalizedUrl === currentDocumentKey ||
+    prefetchedDocuments.has(normalizedUrl)
+  ) {
     return;
   }
   prefetchedDocuments.add(normalizedUrl);
@@ -5557,7 +5795,11 @@ const prefetchDocument = (href) => {
 
 const prefetchDocumentForWorldWarm = (href) => {
   const normalizedUrl = normalizeInternalDocumentUrl(href);
-  if (!normalizedUrl || normalizedUrl === currentDocumentKey || prefetchedDocuments.has(normalizedUrl)) {
+  if (
+    !normalizedUrl ||
+    normalizedUrl === currentDocumentKey ||
+    prefetchedDocuments.has(normalizedUrl)
+  ) {
     return;
   }
   prefetchedDocuments.add(normalizedUrl);
@@ -5582,10 +5824,7 @@ const resolveWorldMapDocumentHref = (mapKey = "") => {
   }
   const mapCard = document.querySelector(`.map-card.map-${normalizedMapKey}`);
   const cardHref =
-    mapCard?.getAttribute("href") ||
-    mapCard?.dataset?.originalHref ||
-    mapCard?.dataset?.href ||
-    "";
+    mapCard?.getAttribute("href") || mapCard?.dataset?.originalHref || mapCard?.dataset?.href || "";
   if (cardHref) {
     return cardHref;
   }
@@ -6021,7 +6260,9 @@ let defaultMimiPrompt = "";
 let activeMimiChatHistoryScope = MIMI_CHAT_HISTORY_SCOPE_GUEST;
 
 const normalizeMimiChatHistoryScope = (scope) => {
-  const raw = String(scope || "").trim().toLowerCase();
+  const raw = String(scope || "")
+    .trim()
+    .toLowerCase();
   if (!raw) {
     return MIMI_CHAT_HISTORY_SCOPE_GUEST;
   }
@@ -6062,9 +6303,7 @@ const loadChatHistoryFromStorage = () => {
   try {
     const storageKey = getMimiChatHistoryStorageKey();
     let loadedFromLegacyGuestKey = false;
-    let raw =
-      sessionStorage.getItem(storageKey) ||
-      localStorage.getItem(storageKey);
+    let raw = sessionStorage.getItem(storageKey) || localStorage.getItem(storageKey);
     if (!raw && activeMimiChatHistoryScope === MIMI_CHAT_HISTORY_SCOPE_GUEST) {
       raw =
         sessionStorage.getItem(MIMI_CHAT_HISTORY_LEGACY_KEY) ||
@@ -6127,7 +6366,10 @@ const ensureMimiChatStorageSchema = () => {
       if (!key) {
         continue;
       }
-      if (key.startsWith(`${MIMI_CHAT_HISTORY_KEY_PREFIX}:`) || key === MIMI_CHAT_HISTORY_LEGACY_KEY) {
+      if (
+        key.startsWith(`${MIMI_CHAT_HISTORY_KEY_PREFIX}:`) ||
+        key === MIMI_CHAT_HISTORY_LEGACY_KEY
+      ) {
         keysToRemove.add(key);
       }
     }
@@ -6136,22 +6378,24 @@ const ensureMimiChatStorageSchema = () => {
       if (!key) {
         continue;
       }
-      if (key.startsWith(`${MIMI_CHAT_HISTORY_KEY_PREFIX}:`) || key === MIMI_CHAT_HISTORY_LEGACY_KEY) {
+      if (
+        key.startsWith(`${MIMI_CHAT_HISTORY_KEY_PREFIX}:`) ||
+        key === MIMI_CHAT_HISTORY_LEGACY_KEY
+      ) {
         keysToRemove.add(key);
       }
     }
     keysToRemove.forEach((key) => localStorage.removeItem(key));
     keysToRemove.forEach((key) => sessionStorage.removeItem(key));
-    localStorage.setItem(
-      MIMI_CHAT_STORAGE_SCHEMA_KEY,
-      MIMI_CHAT_STORAGE_SCHEMA_VERSION
-    );
+    localStorage.setItem(MIMI_CHAT_STORAGE_SCHEMA_KEY, MIMI_CHAT_STORAGE_SCHEMA_VERSION);
   } catch {}
 };
 
 ensureMimiChatStorageSchema();
 activeMimiChatHistoryScope = resolveMimiChatHistoryScopeFromSnapshot(
-  typeof window.cosmicaGamification?.getState === "function" ? window.cosmicaGamification.getState() : null
+  typeof window.cosmicaGamification?.getState === "function"
+    ? window.cosmicaGamification.getState()
+    : null
 );
 loadChatHistoryFromStorage();
 
@@ -6330,7 +6574,9 @@ const isEditableTypingTarget = (target) => {
 };
 
 const isMimiBubbleFollowActive = () =>
-  Boolean(speechBubble) && Date.now() < mimiBubbleFollowSessionEndsAt && !mimiBubbleFollowUserOverride;
+  Boolean(speechBubble) &&
+  Date.now() < mimiBubbleFollowSessionEndsAt &&
+  !mimiBubbleFollowUserOverride;
 
 const stopMimiBubbleFollowSession = () => {
   mimiBubbleFollowSessionEndsAt = 0;
@@ -6596,7 +6842,11 @@ if (window.cosmicaGamification && typeof window.cosmicaGamification.subscribe ==
       .trim()
       .toLowerCase();
     const premiumTier = String(
-      snapshotUser?.planTier || snapshotUser?.tier || snapshotUser?.plan || snapshotUser?.membership || ""
+      snapshotUser?.planTier ||
+        snapshotUser?.tier ||
+        snapshotUser?.plan ||
+        snapshotUser?.membership ||
+        ""
     )
       .trim()
       .toLowerCase();
@@ -6756,9 +7006,7 @@ const buildLettersTranslateEndpointCandidates = () => {
   addCandidate("/api/translate");
   if (typeof getApiEndpointCandidates === "function") {
     getApiEndpointCandidates().forEach((candidate) => {
-      addCandidate(
-        String(candidate || "").replace(/\/api\/chat(?=$|[?#])/i, "/api/translate")
-      );
+      addCandidate(String(candidate || "").replace(/\/api\/chat(?=$|[?#])/i, "/api/translate"));
     });
   }
   return candidates;
@@ -6766,7 +7014,9 @@ const buildLettersTranslateEndpointCandidates = () => {
 
 const requestLettersTitleTranslation = async (titleText, targetLanguage) => {
   const title = String(titleText || "").trim();
-  const lang = String(targetLanguage || "").trim().toLowerCase();
+  const lang = String(targetLanguage || "")
+    .trim()
+    .toLowerCase();
   const shouldSkipForWorldNativeLanguage = lang === WORLD_KEY;
   if (!title || !lang || shouldSkipForWorldNativeLanguage) {
     return "";
@@ -6775,9 +7025,7 @@ const requestLettersTitleTranslation = async (titleText, targetLanguage) => {
   const endpointCandidates = buildLettersTranslateEndpointCandidates();
   const translateOnce = async (endpoint) => {
     const controller = createAbortController();
-    const timeout = controller
-      ? window.setTimeout(() => controller.abort(), 9000)
-      : null;
+    const timeout = controller ? window.setTimeout(() => controller.abort(), 9000) : null;
     try {
       const response = await fetch(endpoint, {
         method: "POST",
@@ -6834,7 +7082,9 @@ const setupLettersTitleTranslation = async () => {
     }
     return;
   }
-  const baseTitle = String(lettersHeading.textContent || "").replace(/\s+/g, " ").trim();
+  const baseTitle = String(lettersHeading.textContent || "")
+    .replace(/\s+/g, " ")
+    .trim();
   if (!baseTitle) {
     return;
   }
@@ -6893,7 +7143,9 @@ const setupLettersSectionCompleteButton = () => {
   }
 
   const syncButtonState = () => {
-    const mapKey = String(button.dataset.mapKey || "letters").trim().toLowerCase();
+    const mapKey = String(button.dataset.mapKey || "letters")
+      .trim()
+      .toLowerCase();
     const sectionKey = String(button.dataset.sectionKey || "letters-core").trim();
     const overrideValue =
       typeof window.cosmicaGetSectionCompletionOverride === "function"
@@ -6904,7 +7156,8 @@ const setupLettersSectionCompleteButton = () => {
           })
         : null;
     const progress =
-      window.cosmicaGamification && typeof window.cosmicaGamification.getSectionProgress === "function"
+      window.cosmicaGamification &&
+      typeof window.cosmicaGamification.getSectionProgress === "function"
         ? window.cosmicaGamification.getSectionProgress({
             worldKey: WORLD_KEY,
             mapKey,
@@ -6914,13 +7167,17 @@ const setupLettersSectionCompleteButton = () => {
     const isComplete =
       typeof overrideValue === "boolean"
         ? overrideValue
-        : String(progress?.status || "").trim().toLowerCase() === "completed" ||
-          Boolean(progress?.firstCompletedAt);
+        : String(progress?.status || "")
+            .trim()
+            .toLowerCase() === "completed" || Boolean(progress?.firstCompletedAt);
     const statusLabel = isComplete ? "Completed" : "";
     button.classList.toggle("is-complete", isComplete);
     button.setAttribute("aria-pressed", isComplete ? "true" : "false");
     const incompleteLabel = "";
-    button.setAttribute("aria-label", isComplete ? "Mark section incomplete" : "Mark section complete");
+    button.setAttribute(
+      "aria-label",
+      isComplete ? "Mark section incomplete" : "Mark section complete"
+    );
     button.title = "";
     button.setAttribute("data-status-label", statusLabel);
   };
@@ -6933,8 +7190,7 @@ const setupLettersSectionCompleteButton = () => {
       const shouldUncheck = button.classList.contains("is-complete");
       const statusToSend = shouldUncheck ? "uncompleted" : "completed";
       const gamificationState =
-        window.cosmicaGamification &&
-        typeof window.cosmicaGamification.getState === "function"
+        window.cosmicaGamification && typeof window.cosmicaGamification.getState === "function"
           ? window.cosmicaGamification.getState()
           : null;
       const isAuthenticated = Boolean(gamificationState?.isAuthenticated);
@@ -6976,11 +7232,13 @@ const setupLettersSectionCompleteButton = () => {
         button.disabled = false;
         delete button.dataset.busy;
         syncButtonState();
+        refreshLettersLessonShell();
       }
     });
   }
 
   syncButtonState();
+  refreshLettersLessonShell();
 };
 
 const slugifyLettersCardPracticeValue = (value) =>
@@ -7009,8 +7267,13 @@ const setupLettersCardPracticeButtons = () => {
   }
 
   letterCards.forEach((card, index) => {
-    const symbol = String(card.dataset.letter || card.querySelector(".letter")?.textContent || "").trim();
-    const practiceSectionKey = buildLettersCardPracticeSectionKey("letters-core", `${symbol || "letter"}-${index}`);
+    const symbol = String(
+      card.dataset.letter || card.querySelector(".letter")?.textContent || ""
+    ).trim();
+    const practiceSectionKey = buildLettersCardPracticeSectionKey(
+      "letters-core",
+      `${symbol || "letter"}-${index}`
+    );
 
     let button = card.querySelector('.map-card-practice-btn[data-map-key="letters"]');
     if (!button) {
@@ -7033,17 +7296,24 @@ const setupLettersCardPracticeButtons = () => {
             })
           : null;
       const progress =
-        window.cosmicaGamification && typeof window.cosmicaGamification.getSectionProgress === "function"
+        window.cosmicaGamification &&
+        typeof window.cosmicaGamification.getSectionProgress === "function"
           ? window.cosmicaGamification.getSectionProgress({
               worldKey: WORLD_KEY,
               mapKey: "letters",
               sectionKey: practiceSectionKey,
             })
           : null;
-      const isComplete = typeof overrideValue === "boolean" ? overrideValue : Boolean(progress?.practiceQuestCheckedAt);
+      const isComplete =
+        typeof overrideValue === "boolean"
+          ? overrideValue
+          : Boolean(progress?.practiceQuestCheckedAt);
       button.classList.toggle("is-complete", isComplete);
       button.setAttribute("aria-pressed", isComplete ? "true" : "false");
-      button.setAttribute("aria-label", isComplete ? "Unmark card as practiced" : "Mark card as practiced");
+      button.setAttribute(
+        "aria-label",
+        isComplete ? "Unmark card as practiced" : "Mark card as practiced"
+      );
       button.title = isComplete ? "Unmark card as practiced" : "Mark card as practiced";
     };
 
@@ -7058,8 +7328,7 @@ const setupLettersCardPracticeButtons = () => {
         const shouldUncheck = button.classList.contains("is-complete");
         const statusToSend = shouldUncheck ? "uncompleted" : "completed";
         const gamificationState =
-          window.cosmicaGamification &&
-          typeof window.cosmicaGamification.getState === "function"
+          window.cosmicaGamification && typeof window.cosmicaGamification.getState === "function"
             ? window.cosmicaGamification.getState()
             : null;
         const isAuthenticated = Boolean(gamificationState?.isAuthenticated);
@@ -7100,12 +7369,157 @@ const setupLettersCardPracticeButtons = () => {
           button.disabled = false;
           delete button.dataset.busy;
           syncButtonState();
+          refreshLettersLessonShell();
         }
       });
     }
 
     syncButtonState();
   });
+  refreshLettersLessonShell();
+};
+
+const setupLettersLessonShell = () => {
+  if (!document.body.classList.contains("letters-page")) {
+    return;
+  }
+  const host = document.getElementById("lettersLessonShell");
+  const lettersSection = document.querySelector(".letters-grid-section");
+  if (!(host instanceof HTMLElement) || !(lettersSection instanceof HTMLElement)) {
+    return;
+  }
+
+  if (!host.dataset.bound) {
+    host.dataset.bound = "1";
+    host.innerHTML = `
+      <section class="map-lesson-shell map-lesson-shell-letters" aria-label="Letters lesson mission">
+        <div class="map-lesson-shell-copy">
+          <span class="map-lesson-shell-tag">Run</span>
+          <h3>Sound Dock</h3>
+          <p class="map-lesson-shell-copyline" data-letters-lesson-copy></p>
+          <div class="map-lesson-chip-row">
+            <span class="map-lesson-chip" data-letters-lesson-language></span>
+            <span class="map-lesson-chip" data-letters-lesson-practice></span>
+            <span class="map-lesson-chip" data-letters-lesson-checkpoint></span>
+          </div>
+        </div>
+        <div class="map-lesson-shell-meter">
+          <div class="map-lesson-orbit" aria-hidden="true">
+            <span data-letters-lesson-progress>0%</span>
+          </div>
+          <div class="map-lesson-bar" aria-hidden="true"><span data-letters-lesson-bar></span></div>
+          <p class="map-lesson-next">Next: <strong data-letters-lesson-next>Start with A</strong></p>
+          <div class="map-lesson-actions">
+            <button type="button" class="map-lesson-action map-lesson-action-primary" data-letters-start>
+              Start
+            </button>
+            <button type="button" class="map-lesson-action" data-letters-checkpoint>
+              Checkpoint
+            </button>
+          </div>
+        </div>
+      </section>
+    `;
+
+    const startButton = host.querySelector("[data-letters-start]");
+    const checkpointButton = host.querySelector("[data-letters-checkpoint]");
+    startButton?.addEventListener("click", () => {
+      const nextCard =
+        Array.from(document.querySelectorAll(".letter-card")).find(
+          (card) => !card.querySelector(".map-card-practice-btn")?.classList.contains("is-complete")
+        ) || document.querySelector(".letter-card");
+      if (!(nextCard instanceof HTMLElement)) {
+        return;
+      }
+      nextCard.scrollIntoView({ behavior: "smooth", block: "center" });
+      nextCard.classList.add("is-card-engaged");
+      window.setTimeout(() => {
+        nextCard.classList.remove("is-card-engaged");
+        nextCard.focus({ preventScroll: true });
+      }, 420);
+    });
+    checkpointButton?.addEventListener("click", () => {
+      const completeButton = lettersSection.querySelector(
+        '.map-section-complete-btn[data-map-key="letters"][data-section-key="letters-core"]'
+      );
+      if (!(completeButton instanceof HTMLElement)) {
+        return;
+      }
+      completeButton.scrollIntoView({ behavior: "smooth", block: "center" });
+      completeButton.focus({ preventScroll: true });
+    });
+  }
+
+  const sync = () => {
+    const practiceButtons = Array.from(
+      lettersSection.querySelectorAll(".letter-card .map-card-practice-btn")
+    );
+    const totalLetters = practiceButtons.length;
+    const practicedLetters = practiceButtons.filter((button) =>
+      button.classList.contains("is-complete")
+    ).length;
+    const completionButton = lettersSection.querySelector(
+      '.map-section-complete-btn[data-map-key="letters"][data-section-key="letters-core"]'
+    );
+    const checkpointCleared = completionButton?.classList.contains("is-complete");
+    const progressPercent = totalLetters ? Math.round((practicedLetters / totalLetters) * 100) : 0;
+    const selectedBaseLanguage = readStoredBaseLanguagePreference();
+    const nextIncompleteCard = Array.from(document.querySelectorAll(".letter-card")).find(
+      (card) => !card.querySelector(".map-card-practice-btn")?.classList.contains("is-complete")
+    );
+    const nextLetter = String(
+      nextIncompleteCard?.dataset.letter || nextIncompleteCard?.querySelector(".letter")?.textContent || "A"
+    ).trim();
+
+    host.style.setProperty("--map-lesson-progress", `${(progressPercent * 3.6).toFixed(2)}`);
+    const progressNode = host.querySelector("[data-letters-lesson-progress]");
+    const barNode = host.querySelector("[data-letters-lesson-bar]");
+    const languageNode = host.querySelector("[data-letters-lesson-language]");
+    const practiceNode = host.querySelector("[data-letters-lesson-practice]");
+    const checkpointNode = host.querySelector("[data-letters-lesson-checkpoint]");
+    const copyNode = host.querySelector("[data-letters-lesson-copy]");
+    const nextNode = host.querySelector("[data-letters-lesson-next]");
+
+    if (progressNode) {
+      progressNode.textContent = `${progressPercent}%`;
+    }
+    if (barNode instanceof HTMLElement) {
+      barNode.style.width = `${progressPercent}%`;
+    }
+    if (languageNode) {
+      languageNode.textContent = selectedBaseLanguage
+        ? `Support: ${selectedBaseLanguage.charAt(0).toUpperCase()}${selectedBaseLanguage.slice(1)}`
+        : "Support: Off";
+    }
+    if (practiceNode) {
+      practiceNode.textContent = `${practicedLetters}/${totalLetters || 0} letters`;
+    }
+    if (checkpointNode) {
+      checkpointNode.textContent = checkpointCleared ? "Gate: Clear" : "Gate: Locked";
+    }
+    if (nextNode) {
+      nextNode.textContent = checkpointCleared ? "Replay" : nextLetter;
+    }
+    if (copyNode) {
+      copyNode.textContent = checkpointCleared
+        ? "Gate cleared."
+        : practicedLetters >= Math.max(6, Math.min(12, totalLetters))
+          ? "Boss ready."
+          : "Tap tiles.";
+    }
+  };
+
+  refreshLettersLessonShell = sync;
+  sync();
+  if (
+    typeof window.cosmicaGamification?.subscribe === "function" &&
+    host.dataset.progressSubscribed !== "true"
+  ) {
+    host.dataset.progressSubscribed = "true";
+    window.cosmicaGamification.subscribe(() => {
+      sync();
+    });
+  }
 };
 
 const LETTERS_HELPER_NATIVE_TEXT = Object.freeze({
@@ -7158,7 +7572,9 @@ const setupLettersHelperTranslation = async () => {
   let mainNode = helperParagraph.querySelector(".letters-helper-main");
   let translationNode = helperParagraph.querySelector(".letters-helper-translation");
   if (!mainNode) {
-    const existing = String(helperParagraph.textContent || "").replace(/\s+/g, " ").trim();
+    const existing = String(helperParagraph.textContent || "")
+      .replace(/\s+/g, " ")
+      .trim();
     helperParagraph.textContent = "";
     mainNode = document.createElement("span");
     mainNode.className = "letters-helper-main";
@@ -7175,7 +7591,9 @@ const setupLettersHelperTranslation = async () => {
 
   const nativeText =
     LETTERS_HELPER_NATIVE_TEXT[WORLD_KEY] ||
-    String(mainNode.textContent || "").replace(/\s+/g, " ").trim();
+    String(mainNode.textContent || "")
+      .replace(/\s+/g, " ")
+      .trim();
   if (nativeText) {
     mainNode.textContent = nativeText;
   }
@@ -7259,13 +7677,13 @@ const HINDI_ROMANIZATION_VARIANTS = Object.freeze({
     ष: "sha",
     स: "sa",
     ह: "ha",
-    "क़": "qa",
-    "ख़": "kha",
-    "ग़": "ga",
-    "ज़": "za",
-    "ड़": "ṛa",
-    "ढ़": "ṛha",
-    "फ़": "fa",
+    क़: "qa",
+    ख़: "kha",
+    ग़: "ga",
+    ज़: "za",
+    ड़: "ṛa",
+    ढ़: "ṛha",
+    फ़: "fa",
     "ा": "aa-matra",
     "ि": "i-matra",
     "ी": "ii-matra",
@@ -7331,13 +7749,13 @@ const HINDI_ROMANIZATION_VARIANTS = Object.freeze({
     ष: "ṣa",
     स: "sa",
     ह: "ha",
-    "क़": "qa",
-    "ख़": "ḵha",
-    "ग़": "ġa",
-    "ज़": "za",
-    "ड़": "ṛa",
-    "ढ़": "ṛha",
-    "फ़": "fa",
+    क़: "qa",
+    ख़: "ḵha",
+    ग़: "ġa",
+    ज़: "za",
+    ड़: "ṛa",
+    ढ़: "ṛha",
+    फ़: "fa",
     "ा": "ā-mātrā",
     "ि": "i-mātrā",
     "ी": "ī-mātrā",
@@ -7604,9 +8022,7 @@ const getHindiRomanizationVariant = () => {
     return HINDI_ROMANIZATION_DEFAULT_VARIANT;
   }
   try {
-    const stored = String(
-      localStorage.getItem(HINDI_ROMANIZATION_VARIANT_STORAGE_KEY) || ""
-    )
+    const stored = String(localStorage.getItem(HINDI_ROMANIZATION_VARIANT_STORAGE_KEY) || "")
       .trim()
       .toLowerCase();
     if (stored && HINDI_ROMANIZATION_VARIANTS[stored]) {
@@ -7676,12 +8092,11 @@ const setupHindiRomanizationToggle = () => {
 };
 
 const isRomanizationDiagnosticsEnabled = () => {
-  const host = String(window.location.hostname || "").trim().toLowerCase();
+  const host = String(window.location.hostname || "")
+    .trim()
+    .toLowerCase();
   const isLocalHost =
-    host === "localhost" ||
-    host === "127.0.0.1" ||
-    host === "::1" ||
-    host.endsWith(".local");
+    host === "localhost" || host === "127.0.0.1" || host === "::1" || host.endsWith(".local");
   if (!isLocalHost) {
     return false;
   }
@@ -7989,7 +8404,7 @@ const sendChatMessage = async (message) => {
 
 function showMimiPremiumBubble() {
   // Remove any previous premium upsell bubble
-  const prev = chatLog && chatLog.querySelector('.chat-message.mimi.premium-upsell');
+  const prev = chatLog && chatLog.querySelector(".chat-message.mimi.premium-upsell");
   if (prev) prev.remove();
   // Create bubble
   const message = document.createElement("div");
@@ -8004,7 +8419,7 @@ function showMimiPremiumBubble() {
   btn.type = "button";
   btn.className = "premium-setup-primary";
   btn.textContent = "Upgrade to Premium";
-  btn.onclick = function() {
+  btn.onclick = function () {
     if (typeof window.cosmicaAccountHub?.openPremium === "function") {
       window.cosmicaAccountHub.openPremium({
         message: "Unlock Mimi chat and more with Premium!",
@@ -8029,7 +8444,7 @@ function showMimiPremiumBubble() {
 }
 
 function removeMimiPremiumBubble() {
-  const bubble = chatLog && chatLog.querySelector('.chat-message.mimi.premium-upsell');
+  const bubble = chatLog && chatLog.querySelector(".chat-message.mimi.premium-upsell");
   if (bubble) {
     bubble.remove();
     syncChatLogMessageState && syncChatLogMessageState();
@@ -8086,8 +8501,12 @@ const userHasPremiumAccess = (user) => {
     premiumTier === "pro" ||
     premiumTier === "plus" ||
     premiumTier === "paid" ||
-    String(user.plan ?? "").trim().toLowerCase() === "premium" ||
-    String(user.membership ?? "").trim().toLowerCase() === "premium" ||
+    String(user.plan ?? "")
+      .trim()
+      .toLowerCase() === "premium" ||
+    String(user.membership ?? "")
+      .trim()
+      .toLowerCase() === "premium" ||
     statusIndicatesPremium ||
     hasFuturePremiumEnd
   );
@@ -8231,9 +8650,7 @@ const viewportDensityMultiplier = isSmallViewport ? (isWorldPage ? 0.48 : 0.58) 
 const performanceDensityMultiplier = isLowPowerDevice || prefersReducedData ? 0.72 : 1;
 const reducedMotionDensityMultiplier = prefersReducedMotion ? 0.85 : 1;
 const starDensityMultiplier =
-  viewportDensityMultiplier *
-  performanceDensityMultiplier *
-  reducedMotionDensityMultiplier;
+  viewportDensityMultiplier * performanceDensityMultiplier * reducedMotionDensityMultiplier;
 const scaledCount = (count) => Math.max(16, Math.round(count * starDensityMultiplier));
 
 starfields.forEach((layer) => {
@@ -8253,8 +8670,7 @@ const observer = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
       const target = entry.target;
-      const currentlyVisible =
-        revealState.get(target) ?? target.classList.contains("is-visible");
+      const currentlyVisible = revealState.get(target) ?? target.classList.contains("is-visible");
       let shouldBeVisible = currentlyVisible;
 
       // Hysteresis prevents rapid toggling around the threshold while keeping fade-in/out behavior.
@@ -8328,8 +8744,7 @@ const createRafThrottled = (callback) => {
 };
 
 document.querySelectorAll(".section").forEach((el) => {
-  const isWorldHeroSection =
-    document.body.classList.contains("world-page") && el.id === "world";
+  const isWorldHeroSection = document.body.classList.contains("world-page") && el.id === "world";
   if (isWorldHeroSection) {
     // Keep the world hero visible at all times, including hard refresh.
     el.classList.remove("reveal");
@@ -8369,7 +8784,11 @@ if (languageSection) {
     window.setTimeout(() => window.scrollTo(0, 0), 0);
   }
   const enforceLanguageHiddenAtTop = () => {
-    if (document.body.classList.contains("world-page") && document.getElementById("world") && mapsSection) {
+    if (
+      document.body.classList.contains("world-page") &&
+      document.getElementById("world") &&
+      mapsSection
+    ) {
       updateMapsTitleVisibility();
       return;
     }
@@ -8419,17 +8838,14 @@ if (languageSection) {
     );
   });
 
-  const startLessonLink = document.querySelector(
-    '.world-hero .primary[href="#language"]'
-  );
+  const startLessonLink = document.querySelector('.world-hero .primary[href="#language"]');
   if (startLessonLink) {
     startLessonLink.addEventListener("click", (event) => {
       const isDesktopStart = window.matchMedia("(min-width: 961px)").matches;
       event.preventDefault();
       languageForceShow = true;
       languageUserActivated = true;
-      startLessonTransitionLockUntil =
-        performance.now() + (isDesktopStart ? 900 : 650);
+      startLessonTransitionLockUntil = performance.now() + (isDesktopStart ? 900 : 650);
       if (document.body.classList.contains("world-page")) {
         document.body.classList.add("hide-maps");
         document.body.classList.add("show-language");
@@ -8440,11 +8856,14 @@ if (languageSection) {
         setActiveWorldSection("language");
       }
       updateMapsTitleVisibility();
-      window.setTimeout(() => {
-        if (performance.now() >= startLessonTransitionLockUntil) {
-          document.body.classList.remove("start-lesson-transition");
-        }
-      }, isDesktopStart ? 980 : 730);
+      window.setTimeout(
+        () => {
+          if (performance.now() >= startLessonTransitionLockUntil) {
+            document.body.classList.remove("start-lesson-transition");
+          }
+        },
+        isDesktopStart ? 980 : 730
+      );
       const baseOffset =
         Number.parseFloat(window.getComputedStyle(languageSection).scrollMarginTop) || 0;
       const startLessonDownShift = isDesktopStart
@@ -8455,7 +8874,11 @@ if (languageSection) {
         window.scrollY -
         baseOffset +
         startLessonDownShift;
-      history.replaceState(null, "", `${window.location.pathname}${window.location.search}#language`);
+      history.replaceState(
+        null,
+        "",
+        `${window.location.pathname}${window.location.search}#language`
+      );
       window.scrollTo({ top: Math.max(0, targetTop), behavior: "smooth" });
     });
   }
@@ -8470,11 +8893,7 @@ if (languageSection) {
     }
     updateMapsTitleVisibility();
   });
-  window.addEventListener(
-    "scroll",
-    scheduleHideMapsCheck,
-    { passive: true }
-  );
+  window.addEventListener("scroll", scheduleHideMapsCheck, { passive: true });
 }
 
 if (document.body.classList.contains("world-page")) {
@@ -8508,8 +8927,10 @@ if (document.body.classList.contains("world-page")) {
     };
     const getWorldSectionWithHysteresis = () => {
       const focusY = window.scrollY + window.innerHeight * 0.4;
-      const worldToLanguageBoundary = (getSectionMidpoint("world") + getSectionMidpoint("language")) / 2;
-      const languageToMapsBoundary = (getSectionMidpoint("language") + getSectionMidpoint("maps")) / 2;
+      const worldToLanguageBoundary =
+        (getSectionMidpoint("world") + getSectionMidpoint("language")) / 2;
+      const languageToMapsBoundary =
+        (getSectionMidpoint("language") + getSectionMidpoint("maps")) / 2;
       const worldToLanguageEnterThreshold =
         worldToLanguageBoundary +
         WORLD_SECTION_SWITCH_HYSTERESIS_PX -
@@ -8577,7 +8998,9 @@ if (document.body.classList.contains("world-page")) {
       }
     };
     const scheduleWorldScroll = createRafThrottled(handleWorldScroll);
-    setActiveWorldSection(location.hash === "#maps" ? "maps" : location.hash === "#language" ? "language" : "world");
+    setActiveWorldSection(
+      location.hash === "#maps" ? "maps" : location.hash === "#language" ? "language" : "world"
+    );
     window.addEventListener("scroll", scheduleWorldScroll, { passive: true });
     window.addEventListener("hashchange", scheduleWorldScroll);
   }
@@ -8599,11 +9022,7 @@ const setupWorldPageInteractiveFx = () => {
     }
     const stars = document.createElement("div");
     stars.className = "world-fx-stars";
-    const starCount = shouldUseConservativeAnimationBudget
-      ? 14
-      : prefersReducedMotion
-        ? 10
-        : 26;
+    const starCount = shouldUseConservativeAnimationBudget ? 14 : prefersReducedMotion ? 10 : 26;
     for (let i = 0; i < starCount; i += 1) {
       const star = document.createElement("span");
       star.className = "world-fx-star";
@@ -8648,14 +9067,19 @@ const setupWorldPageInteractiveFx = () => {
         .sort(() => Math.random() - 0.5)
         .map((slot) => Math.max(8, Math.min(64, slot + (Math.random() * 6 - 3))));
       const isMobileMeteorCadence = window.matchMedia("(max-width: 960px)").matches;
-      const baseDurationSec = isMobileMeteorCadence ? 6.4 + Math.random() * 0.6 : 5.8 + Math.random() * 2.2;
+      const baseDurationSec = isMobileMeteorCadence
+        ? 6.4 + Math.random() * 0.6
+        : 5.8 + Math.random() * 2.2;
       const launchStrideSec = isMobileMeteorCadence
         ? baseDurationSec / Math.max(1, cometCount)
         : Math.max(1.2, baseDurationSec * 0.34);
       for (let i = 0; i < cometCount; i += 1) {
         const comet = document.createElement("span");
         comet.className = "world-fx-comet";
-        comet.style.setProperty("--c-top", `${(topSlots[i] ?? (8 + Math.random() * 56)).toFixed(2)}%`);
+        comet.style.setProperty(
+          "--c-top",
+          `${(topSlots[i] ?? 8 + Math.random() * 56).toFixed(2)}%`
+        );
         comet.style.setProperty("--c-size", `${(78 + Math.random() * 44).toFixed(2)}px`);
         comet.style.setProperty(
           "--c-delay",
@@ -8686,8 +9110,8 @@ const setupWorldPageInteractiveFx = () => {
   const setPointerTargetFromPoint = (clientX, clientY) => {
     const w = Math.max(1, window.innerWidth);
     const h = Math.max(1, window.innerHeight);
-    pointerTargetX = ((clientX / w) - 0.5) * 30;
-    pointerTargetY = ((clientY / h) - 0.5) * 26;
+    pointerTargetX = (clientX / w - 0.5) * 30;
+    pointerTargetY = (clientY / h - 0.5) * 26;
   };
 
   const ambientNebulaA = worldAmbient?.querySelector(".nebula-a") || null;
@@ -8729,8 +9153,7 @@ const setupWorldPageInteractiveFx = () => {
     }
   };
   const canRunAmbientPointerLoop =
-    !shouldUseLiteInteractiveEffects &&
-    window.matchMedia("(pointer: fine)").matches;
+    !shouldUseLiteInteractiveEffects && window.matchMedia("(pointer: fine)").matches;
   if (!shouldUseLiteInteractiveEffects) {
     ambientRafId = window.requestAnimationFrame(animateAmbient);
   }
@@ -8795,7 +9218,9 @@ const setupWorldPageInteractiveFx = () => {
     });
   };
 
-  bindPulseFx(Array.from(document.querySelectorAll(".language-pill, .language-skip, .hero-actions .primary")));
+  bindPulseFx(
+    Array.from(document.querySelectorAll(".language-pill, .language-skip, .hero-actions .primary"))
+  );
 
   const bindMapCosmicFx = () => {
     const mapCards = Array.from(document.querySelectorAll(".world-maps .map-card"));
@@ -8871,7 +9296,6 @@ const setupWorldPageInteractiveFx = () => {
 };
 
 setupWorldPageInteractiveFx();
-
 
 /* ==========================================================================
    AMBIENT AUDIO ENGINE
@@ -9016,27 +9440,35 @@ const createAmbientSound = () => {
   };
 
   const scheduleStrings = (startTime, chord) => {
-    spawnLayer([chord[0] / 2], {
-      type: "sine",
-      filterType: "lowpass",
-      filterFreq: 200,
-      gainNode: celloGain,
-      attack: 0.7,
-      duration: 5.2,
-      release: 6.0,
-      level: 0.09,
-    }, startTime);
+    spawnLayer(
+      [chord[0] / 2],
+      {
+        type: "sine",
+        filterType: "lowpass",
+        filterFreq: 200,
+        gainNode: celloGain,
+        attack: 0.7,
+        duration: 5.2,
+        release: 6.0,
+        level: 0.09,
+      },
+      startTime
+    );
 
-    spawnLayer([chord[1], chord[2]], {
-      type: "triangle",
-      filterType: "lowpass",
-      filterFreq: 2000,
-      gainNode: violinGain,
-      attack: 0.6,
-      duration: 4.0,
-      release: 4.6,
-      level: 0.06,
-    }, startTime + 0.2);
+    spawnLayer(
+      [chord[1], chord[2]],
+      {
+        type: "triangle",
+        filterType: "lowpass",
+        filterFreq: 2000,
+        gainNode: violinGain,
+        attack: 0.6,
+        duration: 4.0,
+        release: 4.6,
+        level: 0.06,
+      },
+      startTime + 0.2
+    );
   };
 
   const playPianoNote = (frequency, startTime, duration, level) => {
@@ -9438,6 +9870,7 @@ const MOBILE_HOME_ANCHOR_DOWN_SHIFT = Object.freeze({
   default: 0,
   "#how": 34,
   "#worlds": 30,
+  "#faq": -28,
   "#guide": 34,
   "#join": 62,
   "#support": -24,
@@ -9448,6 +9881,7 @@ const IPAD_HOME_ANCHOR_DOWN_SHIFT = Object.freeze({
   default: -6,
   "#how": -40,
   "#worlds": -98,
+  "#faq": -120,
   "#guide": -56,
   "#join": -120,
   "#support": -230,
@@ -9456,179 +9890,188 @@ const getIpadHomeAnchorDownShift = (hash) =>
   IPAD_HOME_ANCHOR_DOWN_SHIFT[hash] ?? IPAD_HOME_ANCHOR_DOWN_SHIFT.default;
 const DESKTOP_HOME_ANCHOR_DOWN_SHIFT = Object.freeze({
   default: -30,
+  "#faq": -96,
   "#join": -84,
 });
 const getDesktopHomeAnchorDownShift = (hash) =>
   DESKTOP_HOME_ANCHOR_DOWN_SHIFT[hash] ?? DESKTOP_HOME_ANCHOR_DOWN_SHIFT.default;
 
 const getAnchorScrollTargetTop = (hash) => {
-    const targetId = hash.slice(1);
-    const target = document.getElementById(targetId);
-    if (!target) {
-      return null;
-    }
-    const isHomeIpad = !document.body.classList.contains("world-page")
-      && (document.body.classList.contains("is-ipad")
-        || window.matchMedia("(min-width: 768px) and (max-width: 1024px) and (hover: none) and (pointer: coarse)").matches);
-    const isHomeMobile = !document.body.classList.contains("world-page")
-      && !isHomeIpad
-      && window.matchMedia("(max-width: 960px)").matches;
-    const isHomeDesktop = !document.body.classList.contains("world-page")
-      && !isHomeIpad
-      && window.matchMedia("(min-width: 961px)").matches;
-    const mobileDownShift = isHomeMobile ? getMobileHomeAnchorDownShift(hash) : 0;
-    const ipadDownShift = isHomeIpad ? getIpadHomeAnchorDownShift(hash) : 0;
-    const desktopDownShift = isHomeDesktop ? getDesktopHomeAnchorDownShift(hash) : 0;
-    const baseOffset =
-      Number.parseFloat(window.getComputedStyle(target).scrollMarginTop) || 0;
-    const top = hash === "#home"
+  const targetId = hash.slice(1);
+  const target = document.getElementById(targetId);
+  if (!target) {
+    return null;
+  }
+  const isHomeIpad =
+    !document.body.classList.contains("world-page") &&
+    (document.body.classList.contains("is-ipad") ||
+      window.matchMedia(
+        "(min-width: 768px) and (max-width: 1024px) and (hover: none) and (pointer: coarse)"
+      ).matches);
+  const isHomeMobile =
+    !document.body.classList.contains("world-page") &&
+    !isHomeIpad &&
+    window.matchMedia("(max-width: 960px)").matches;
+  const isHomeDesktop =
+    !document.body.classList.contains("world-page") &&
+    !isHomeIpad &&
+    window.matchMedia("(min-width: 961px)").matches;
+  const mobileDownShift = isHomeMobile ? getMobileHomeAnchorDownShift(hash) : 0;
+  const ipadDownShift = isHomeIpad ? getIpadHomeAnchorDownShift(hash) : 0;
+  const desktopDownShift = isHomeDesktop ? getDesktopHomeAnchorDownShift(hash) : 0;
+  const baseOffset = Number.parseFloat(window.getComputedStyle(target).scrollMarginTop) || 0;
+  const top =
+    hash === "#home"
       ? 0
-      : target.getBoundingClientRect().top
-        + window.scrollY
-        - baseOffset
-        + mobileDownShift
-        + ipadDownShift
-        + desktopDownShift;
-    return Math.max(0, Math.round(top));
+      : target.getBoundingClientRect().top +
+        window.scrollY -
+        baseOffset +
+        mobileDownShift +
+        ipadDownShift +
+        desktopDownShift;
+  return Math.max(0, Math.round(top));
 };
 
 const scrollToAnchor = (hash) => {
-    const top = getAnchorScrollTargetTop(hash);
-    if (!Number.isFinite(top)) {
-      return false;
-    }
-    history.replaceState(null, "", `${baseUrl}${hash}`);
-    window.scrollTo({ top, behavior: "smooth" });
-    return true;
+  const top = getAnchorScrollTargetTop(hash);
+  if (!Number.isFinite(top)) {
+    return false;
+  }
+  history.replaceState(null, "", `${baseUrl}${hash}`);
+  window.scrollTo({ top, behavior: "smooth" });
+  return true;
 };
 
-  if (talkButton) {
-    talkButton.addEventListener("click", () => {
-      if (scrollToAnchor("#guide")) {
-        return;
-      }
-      const guideSection = document.getElementById("guide");
-      if (guideSection) {
-        guideSection.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    });
-  }
-
-  const navLinks = document.querySelectorAll(".nav-links a[href^=\"#\"]");
-  const anchorTargets = new Set([
-    "#home",
-    "#how",
-    "#worlds",
-    "#guide",
-    "#join",
-    "#support",
-    "#policies",
-  ]);
-  const baseUrl = `${window.location.pathname}${window.location.search}`;
-  const getNavigationEntryType = () => {
-    const navEntry = performance.getEntriesByType("navigation")[0];
-    return (
-      navEntry?.type ??
-      (performance.navigation && performance.navigation.type === 2
-        ? "back_forward"
-        : performance.navigation && performance.navigation.type === 1
-          ? "reload"
-          : "navigate")
-    );
-  };
-  const isLikelySamePageReload = () => {
-    const navType = getNavigationEntryType();
-    if (navType === "reload") {
-      return true;
-    }
-    const ref = String(document.referrer || "").trim();
-    if (!ref) {
-      return false;
-    }
-    try {
-      const refUrl = new URL(ref);
-      return (
-        refUrl.origin === window.location.origin &&
-        refUrl.pathname === window.location.pathname &&
-        refUrl.search === window.location.search
-      );
-    } catch (_error) {
-      return false;
-    }
-  };
-  const forceScrollToHomeTop = () => {
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-  };
-  // Keep homepage refresh landing deterministic across browsers/devices.
-  const stabilizeHomeEntryScroll = () => {
-    if (!isHomePagePath) {
+if (talkButton) {
+  talkButton.addEventListener("click", () => {
+    if (scrollToAnchor("#guide")) {
       return;
     }
-    const navType = getNavigationEntryType();
-    if (navType === "back_forward") {
-      return;
+    const guideSection = document.getElementById("guide");
+    if (guideSection) {
+      guideSection.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-    const currentHash = String(window.location.hash || "").trim().toLowerCase();
-    const hasManagedHash = currentHash && anchorTargets.has(currentHash);
-    const hasAuthIntentParams =
-      urlParams.has("openAuth") ||
-      urlParams.has("authPanel") ||
-      urlParams.has("authError") ||
-      urlParams.has("emailVerified") ||
-      urlParams.has("accountDeleted");
-    const samePageReload = isLikelySamePageReload();
-    if (hasManagedHash && samePageReload && !hasAuthIntentParams) {
-      history.replaceState(null, "", baseUrl);
-    } else if (currentHash) {
-      // Preserve explicit deep links on normal navigation.
-      return;
-    }
-    if ("scrollRestoration" in history) {
-      history.scrollRestoration = "manual";
-    }
-    forceScrollToHomeTop();
-    window.requestAnimationFrame(forceScrollToHomeTop);
-    window.setTimeout(forceScrollToHomeTop, 120);
-  };
-  window.addEventListener("load", stabilizeHomeEntryScroll);
-  window.addEventListener("pageshow", (event) => {
-    if (event.persisted) {
-      return;
-    }
-    stabilizeHomeEntryScroll();
   });
-  window.addEventListener(
-    "pagehide",
-    () => {
-      if ("scrollRestoration" in history) {
-        history.scrollRestoration = "auto";
-      }
-    },
-    { passive: true }
+}
+
+const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+const anchorTargets = new Set([
+  "#home",
+  "#how",
+  "#worlds",
+  "#faq",
+  "#guide",
+  "#join",
+  "#support",
+  "#policies",
+]);
+const baseUrl = `${window.location.pathname}${window.location.search}`;
+const getNavigationEntryType = () => {
+  const navEntry = performance.getEntriesByType("navigation")[0];
+  return (
+    navEntry?.type ??
+    (performance.navigation && performance.navigation.type === 2
+      ? "back_forward"
+      : performance.navigation && performance.navigation.type === 1
+        ? "reload"
+        : "navigate")
   );
+};
+const isLikelySamePageReload = () => {
+  const navType = getNavigationEntryType();
+  if (navType === "reload") {
+    return true;
+  }
+  const ref = String(document.referrer || "").trim();
+  if (!ref) {
+    return false;
+  }
+  try {
+    const refUrl = new URL(ref);
+    return (
+      refUrl.origin === window.location.origin &&
+      refUrl.pathname === window.location.pathname &&
+      refUrl.search === window.location.search
+    );
+  } catch (_error) {
+    return false;
+  }
+};
+const forceScrollToHomeTop = () => {
+  window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+};
+// Keep homepage refresh landing deterministic across browsers/devices.
+const stabilizeHomeEntryScroll = () => {
+  if (!isHomePagePath) {
+    return;
+  }
+  const navType = getNavigationEntryType();
+  if (navType === "back_forward") {
+    return;
+  }
+  const currentHash = String(window.location.hash || "")
+    .trim()
+    .toLowerCase();
+  const hasManagedHash = currentHash && anchorTargets.has(currentHash);
+  const hasAuthIntentParams =
+    urlParams.has("openAuth") ||
+    urlParams.has("authPanel") ||
+    urlParams.has("authError") ||
+    urlParams.has("emailVerified") ||
+    urlParams.has("accountDeleted");
+  const samePageReload = isLikelySamePageReload();
+  if (hasManagedHash && samePageReload && !hasAuthIntentParams) {
+    history.replaceState(null, "", baseUrl);
+  } else if (currentHash) {
+    // Preserve explicit deep links on normal navigation.
+    return;
+  }
+  if ("scrollRestoration" in history) {
+    history.scrollRestoration = "manual";
+  }
+  forceScrollToHomeTop();
+  window.requestAnimationFrame(forceScrollToHomeTop);
+  window.setTimeout(forceScrollToHomeTop, 120);
+};
+window.addEventListener("load", stabilizeHomeEntryScroll);
+window.addEventListener("pageshow", (event) => {
+  if (event.persisted) {
+    return;
+  }
+  stabilizeHomeEntryScroll();
+});
+window.addEventListener(
+  "pagehide",
+  () => {
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "auto";
+    }
+  },
+  { passive: true }
+);
 
-  navLinks.forEach((link) => {
-    const hash = link.getAttribute("href");
-    if (!hash || !anchorTargets.has(hash)) {
+navLinks.forEach((link) => {
+  const hash = link.getAttribute("href");
+  if (!hash || !anchorTargets.has(hash)) {
+    return;
+  }
+  link.addEventListener("click", (event) => {
+    event.preventDefault();
+    scrollToAnchor(hash);
+  });
+});
+
+if (startVoyageButton) {
+  startVoyageButton.addEventListener("click", () => {
+    if (scrollToAnchor("#worlds")) {
       return;
     }
-    link.addEventListener("click", (event) => {
-      event.preventDefault();
-      scrollToAnchor(hash);
-    });
+    const fallback = document.getElementById("worlds");
+    if (fallback) {
+      fallback.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   });
-
-  if (startVoyageButton) {
-    startVoyageButton.addEventListener("click", () => {
-      if (scrollToAnchor("#worlds")) {
-        return;
-      }
-      const fallback = document.getElementById("worlds");
-      if (fallback) {
-        fallback.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    });
-  }
+}
 
 if (alien) {
   alien.addEventListener("click", () => {
@@ -9695,12 +10138,7 @@ if (joinForm) {
     addEndpoint("/api/feedback");
     if (typeof getApiEndpointCandidates === "function") {
       getApiEndpointCandidates().forEach((candidate) => {
-        addEndpoint(
-          String(candidate || "").replace(
-            /\/api\/chat(?=$|[?#])/i,
-            "/api/feedback"
-          )
-        );
+        addEndpoint(String(candidate || "").replace(/\/api\/chat(?=$|[?#])/i, "/api/feedback"));
       });
     }
     return endpoints;
@@ -9752,7 +10190,7 @@ if (joinForm) {
     joinName.classList.remove("field-error");
     joinEmail.classList.remove("field-error");
     joinFeedback.classList.remove("field-error");
-    const submitButton = joinForm.querySelector("button[type=\"submit\"]");
+    const submitButton = joinForm.querySelector('button[type="submit"]');
     if (submitButton) {
       submitButton.disabled = true;
     }
@@ -9995,7 +10433,6 @@ const setPendingHomeReturnWarp = (worldName, source = "home-click") => {
   }
 };
 
-
 const readPendingHomeReturnWarp = () => {
   try {
     const raw = sessionStorage.getItem(HOME_RETURN_WARP_KEY);
@@ -10141,19 +10578,21 @@ const triggerWarp = (worldName, onDone) => {
 
 if (isHomePagePath) {
   window.addEventListener("pageshow", (event) => {
-    const isHistoryTraversal =
-      event.persisted === true || getNavigationType() === "back_forward";
+    const isHistoryTraversal = event.persisted === true || getNavigationType() === "back_forward";
     const pendingReturnWarp = consumePendingHomeReturnWarp();
     const isExplicitHomeButtonReturn =
       Boolean(pendingReturnWarp) &&
-      String(pendingReturnWarp?.source || "").trim().toLowerCase() === "world-home-button";
+      String(pendingReturnWarp?.source || "")
+        .trim()
+        .toLowerCase() === "world-home-button";
     clearWarpOverlayState();
     if (!isHistoryTraversal && !isExplicitHomeButtonReturn) {
       clearPendingHomeReturnWarp();
       return;
     }
     const cameFromWorldEntry =
-      isExplicitHomeButtonReturn || (isHistoryTraversal && (Boolean(pendingReturnWarp) || isWorldPageReferrer()));
+      isExplicitHomeButtonReturn ||
+      (isHistoryTraversal && (Boolean(pendingReturnWarp) || isWorldPageReferrer()));
     if (cameFromWorldEntry) {
       triggerReturnToHomepageWarp();
     }
@@ -10195,7 +10634,9 @@ if (document.body.classList.contains("world-page")) {
 
   const markWorldExitForReturnWarp = () => {
     const existing = readPendingHomeReturnWarp();
-    const existingSource = String(existing?.source || "").trim().toLowerCase();
+    const existingSource = String(existing?.source || "")
+      .trim()
+      .toLowerCase();
     if (existingSource === "world-home-button") {
       return;
     }
@@ -10294,7 +10735,9 @@ const openGuestSignupPanelUpwards = (message = "Sign up to save your progress.")
     if (openAuthFromHub()) {
       window.setTimeout(() => {
         const dropdownNode = document.querySelector(".account-dropdown");
-        const isOpen = Boolean(dropdownNode instanceof HTMLElement && dropdownNode.hidden === false);
+        const isOpen = Boolean(
+          dropdownNode instanceof HTMLElement && dropdownNode.hidden === false
+        );
         if (isOpen) {
           return;
         }
@@ -10385,7 +10828,8 @@ const applyMapComingSoonRules = () => {
     typeof window.cosmicaGamification?.getState === "function"
       ? window.cosmicaGamification.getState()
       : null;
-  const user = snapshot && snapshot.user && typeof snapshot.user === "object" ? snapshot.user : null;
+  const user =
+    snapshot && snapshot.user && typeof snapshot.user === "object" ? snapshot.user : null;
   const hasPremiumAccess = userHasPremiumAccess(user);
   const lockLookForFree = !hasPremiumAccess;
   const forceComingSoon = grammarCard.dataset.forceComingSoon === "true";
@@ -10402,8 +10846,7 @@ const applyMapComingSoonRules = () => {
     } else {
       grammarCard.removeAttribute("title");
     }
-    const originalHref =
-      grammarCard.getAttribute("href") || grammarCard.dataset.originalHref || "";
+    const originalHref = grammarCard.getAttribute("href") || grammarCard.dataset.originalHref || "";
     if (originalHref) {
       grammarCard.setAttribute("href", originalHref);
       grammarCard.dataset.originalHref = originalHref;
@@ -10479,19 +10922,25 @@ applyMapComingSoonRules();
 if (document.body.classList.contains("world-page")) {
   scheduleWorldEntryMapWarm({ source: "entry" });
 }
-if (document.body.classList.contains("world-page") && typeof window.cosmicaGamification?.subscribe === "function") {
+if (
+  document.body.classList.contains("world-page") &&
+  typeof window.cosmicaGamification?.subscribe === "function"
+) {
   window.cosmicaGamification.subscribe(() => {
     applyMapComingSoonRules();
     scheduleWorldEntryMapWarm({ source: "auth" });
   });
 }
 
-const bindPremiumLockedInteraction = (element, {
-  upgradeHash = "#support",
-  guestPanel = "login",
-  guestMessage = "Sign in or create an account to continue. Upgrade to Premium to unlock this feature.",
-  boundFlag = "premiumUpsellBound",
-} = {}) => {
+const bindPremiumLockedInteraction = (
+  element,
+  {
+    upgradeHash = "#support",
+    guestPanel = "login",
+    guestMessage = "Sign in or create an account to continue. Upgrade to Premium to unlock this feature.",
+    boundFlag = "premiumUpsellBound",
+  } = {}
+) => {
   if (!element || element.dataset[boundFlag] === "true") {
     return;
   }
@@ -10540,7 +10989,11 @@ const bindPremiumLockedInteraction = (element, {
         });
         return;
       }
-      const panel = encodeURIComponent(String(guestPanel || "login").trim().toLowerCase() || "login");
+      const panel = encodeURIComponent(
+        String(guestPanel || "login")
+          .trim()
+          .toLowerCase() || "login"
+      );
       window.location.href = `/?openAuth=1&authPanel=${panel}#support`;
       return;
     }
@@ -10584,7 +11037,8 @@ const setupGrammarPremiumUpsell = () => {
     return;
   }
   bindPremiumLockedInteraction(grammarCard, {
-    guestMessage: "Sign in or create an account to continue. Upgrade to Premium to unlock this map.",
+    guestMessage:
+      "Sign in or create an account to continue. Upgrade to Premium to unlock this map.",
   });
 };
 
@@ -10636,11 +11090,10 @@ const navigateToMapLink = (href) => {
   Promise.allSettled([
     Promise.resolve(warmMapTranslationsCache()),
     Promise.resolve(warmWorldTranslationsCache()),
-  ])
-    .finally(() => {
-      window.clearTimeout(deadline);
-      finalize();
-    });
+  ]).finally(() => {
+    window.clearTimeout(deadline);
+    finalize();
+  });
 };
 
 mapLinks.forEach((link) => {
@@ -10675,7 +11128,8 @@ const setupInteractiveMapCards = () => {
       return;
     }
     const rect = card.getBoundingClientRect();
-    const hasPointer = Number.isFinite(clientX) && Number.isFinite(clientY) && rect.width && rect.height;
+    const hasPointer =
+      Number.isFinite(clientX) && Number.isFinite(clientY) && rect.width && rect.height;
     const x = hasPointer ? ((clientX - rect.left) / rect.width) * 100 : 50;
     const y = hasPointer ? ((clientY - rect.top) / rect.height) * 100 : 50;
     card.style.setProperty("--map-pulse-x", `${Math.min(100, Math.max(0, x)).toFixed(1)}%`);
@@ -10788,10 +11242,7 @@ const enhanceLanguagePillLabels = (pills) => {
       pill.appendChild(nativeNode);
     }
 
-    pill.setAttribute(
-      "aria-label",
-      nativeLabel ? `${rawLabel} ${nativeLabel}` : rawLabel
-    );
+    pill.setAttribute("aria-label", nativeLabel ? `${rawLabel} ${nativeLabel}` : rawLabel);
   });
 };
 if (languagePills.length) {
@@ -10870,9 +11321,7 @@ if (languagePills.length) {
     updateMapsTitleVisibility();
     if (mapsSection) {
       const targetTop = mapsSection.getBoundingClientRect().top + window.scrollY;
-      const offset = Number.parseFloat(
-        window.getComputedStyle(mapsSection).scrollMarginTop
-      ) || 0;
+      const offset = Number.parseFloat(window.getComputedStyle(mapsSection).scrollMarginTop) || 0;
       const y = targetTop - offset + WORLD_MAPS_SELECTION_UP_SHIFT;
       window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
     }
@@ -11017,7 +11466,9 @@ if (languageSearch && availableLanguagePills.length) {
     const firstLetter = query[0];
     availableLanguagePills.forEach((pill) => {
       const name = getLanguagePillKey(pill);
-      const native = String(pill.dataset.languageNative || "").trim().toLowerCase();
+      const native = String(pill.dataset.languageNative || "")
+        .trim()
+        .toLowerCase();
       const searchTarget = `${name} ${native}`.trim();
       const matches = isSingleLetter
         ? name.startsWith(firstLetter) || native.startsWith(firstLetter)
@@ -11029,6 +11480,375 @@ if (languageSearch && availableLanguagePills.length) {
   languageSearch.addEventListener("input", applyLanguageFirstLetterFilter);
   applyLanguageFirstLetterFilter();
 }
+
+const setupWorldMissionPath = () => {
+  if (!document.body.classList.contains("world-page")) {
+    return;
+  }
+  const missionRoot = document.querySelector("[data-world-mission-root]");
+  if (!(missionRoot instanceof HTMLElement)) {
+    return;
+  }
+
+  const missionCards = Array.from(missionRoot.querySelectorAll(".mission-lesson"));
+  if (!missionCards.length) {
+    return;
+  }
+
+  const progressValueNode = missionRoot.querySelector("[data-mission-progress-value]");
+  const progressBarNode = missionRoot.querySelector("[data-mission-progress-bar]");
+  const currentCopyNode = missionRoot.querySelector("[data-mission-current-copy]");
+  const progressCopyNode = missionRoot.querySelector("[data-mission-progress-copy]");
+  const nextLabelNode = missionRoot.querySelector("[data-mission-next-label]");
+  const languageChipNode = missionRoot.querySelector("[data-mission-language]");
+  const heroPrimary = document.querySelector(".world-hero .hero-actions .primary");
+  const languageSection = document.getElementById("language");
+  const openLanguagePicker = () => {
+    if (!(languageSection instanceof HTMLElement)) {
+      return;
+    }
+    document.body.classList.add("show-language");
+    languageSection.classList.add("is-visible");
+    if (setActiveWorldSection) {
+      setActiveWorldSection("language");
+    }
+    languageSection.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+  const getLanguageDisplayLabel = (languageKey = "") => {
+    const normalized = normalizeStoredBaseLanguagePreference(languageKey);
+    if (!normalized) {
+      return "Off";
+    }
+    const matchedPill = availableLanguagePills.find((pill) => getLanguagePillKey(pill) === normalized);
+    const rawLabel = normalizeLanguageLabel(
+      matchedPill?.querySelector(".language-pill-label")?.textContent || normalized
+    );
+    return rawLabel
+      .split(" ")
+      .filter(Boolean)
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(" ");
+  };
+  const getMissionCardKey = (card) => ({
+    worldKey: WORLD_KEY,
+    mapKey: String(card.dataset.mapKey || "")
+      .trim()
+      .toLowerCase(),
+    sectionKey: String(card.dataset.sectionKey || "").trim(),
+  });
+  const readMissionCardState = (card) => {
+    const key = getMissionCardKey(card);
+    const localState = getWorldMissionLocalState(key);
+    const overrideValue =
+      typeof window.cosmicaGetSectionCompletionOverride === "function"
+        ? window.cosmicaGetSectionCompletionOverride(key)
+        : null;
+    const serverProgress =
+      window.cosmicaGamification &&
+      typeof window.cosmicaGamification.getSectionProgress === "function"
+        ? window.cosmicaGamification.getSectionProgress(key)
+        : null;
+    const serverStarted =
+      Boolean(serverProgress?.firstStartedAt) ||
+      Math.max(
+        0,
+        Number(serverProgress?.visitCount || 0),
+        Number(serverProgress?.practiceCount || 0),
+        Number(serverProgress?.reviewCount || 0),
+        Number(serverProgress?.completionCount || 0)
+      ) > 0 ||
+      ["started", "completed", "practiced", "reviewed"].includes(
+        String(serverProgress?.status || "")
+          .trim()
+          .toLowerCase()
+      );
+    const serverCompleted =
+      String(serverProgress?.status || "")
+        .trim()
+        .toLowerCase() === "completed" || Boolean(serverProgress?.firstCompletedAt);
+    const isComplete =
+      typeof overrideValue === "boolean"
+        ? overrideValue
+        : Boolean(localState?.completed) || serverCompleted;
+    const isStarted = isComplete || Boolean(localState?.startedAt) || serverStarted;
+    return {
+      isStarted,
+      isComplete,
+    };
+  };
+  const getRequiredMissionIds = (card) =>
+    String(card.dataset.requires || "")
+      .split(",")
+      .map((value) => value.trim())
+      .filter(Boolean);
+  const getAuthSnapshot = () =>
+    window.cosmicaGamification && typeof window.cosmicaGamification.getState === "function"
+      ? window.cosmicaGamification.getState()
+      : null;
+  const openPremiumForMission = (card) => {
+    const lessonName = String(card.dataset.displayName || "this booster").trim();
+    if (typeof window.cosmicaAccountHub?.openPremium === "function") {
+      window.cosmicaAccountHub.openPremium({
+        message: `Unlock Premium to access ${lessonName}.`,
+        tone: "info",
+      });
+      return;
+    }
+    window.location.href = "/#support";
+  };
+  const syncMissionUi = () => {
+    const baseLanguage = readStoredBaseLanguagePreference();
+    const snapshot = getAuthSnapshot();
+    const hasPremiumAccess = userHasPremiumAccess(snapshot?.user || null);
+    const missionStates = missionCards.map((card) => {
+      const state = readMissionCardState(card);
+      return {
+        card,
+        ...state,
+      };
+    });
+    const completionById = Object.fromEntries(
+      missionStates.map((entry) => [String(entry.card.dataset.lessonId || ""), entry.isComplete])
+    );
+    const coreMissionStates = missionStates.filter(
+      (entry) => entry.card.dataset.progressCard === "true"
+    );
+    let nextCoreMissionName = "";
+
+    missionStates.forEach((entry) => {
+      const { card, isStarted, isComplete } = entry;
+      const statusNode = card.querySelector("[data-lesson-status]");
+      const completeButton = card.querySelector(".mission-lesson-complete");
+      const launchButton = card.querySelector(".mission-lesson-launch");
+      const requires = getRequiredMissionIds(card);
+      const prerequisitesMet = requires.every((missionId) => completionById[missionId]);
+      const premiumRequired = card.dataset.premium === "true";
+      const premiumLocked = premiumRequired && !hasPremiumAccess;
+      const blockedByLanguage = !baseLanguage;
+      const isLocked = blockedByLanguage || !prerequisitesMet;
+
+      let statusLabel = "Ready";
+      if (blockedByLanguage) {
+        statusLabel = "Choose language";
+      } else if (!prerequisitesMet) {
+        statusLabel = "Locked";
+      } else if (premiumLocked) {
+        statusLabel = "Premium";
+      } else if (isComplete) {
+        statusLabel = "Completed";
+      } else if (isStarted) {
+        statusLabel = "In progress";
+      }
+
+      card.classList.toggle("is-started", isStarted && !isComplete);
+      card.classList.toggle("is-complete", isComplete);
+      card.classList.toggle("is-locked", isLocked);
+      card.classList.toggle("is-premium", premiumLocked);
+      if (statusNode) {
+        statusNode.textContent = statusLabel;
+      }
+      if (launchButton instanceof HTMLElement) {
+        if (isLocked) {
+          launchButton.setAttribute("aria-disabled", "true");
+          launchButton.tabIndex = -1;
+        } else {
+          launchButton.removeAttribute("aria-disabled");
+          launchButton.tabIndex = 0;
+        }
+      }
+      if (completeButton instanceof HTMLButtonElement) {
+        completeButton.textContent = isComplete ? "Done" : card.classList.contains("mission-lesson-boss") ? "Clear" : "Done";
+        completeButton.disabled = isLocked;
+      }
+
+      if (
+        !nextCoreMissionName &&
+        card.dataset.progressCard === "true" &&
+        !isComplete &&
+        !isLocked &&
+        !premiumLocked
+      ) {
+        nextCoreMissionName = String(card.dataset.displayName || card.querySelector("h3")?.textContent || "")
+          .trim();
+      }
+    });
+
+    const completedCoreCount = coreMissionStates.filter((entry) => entry.isComplete).length;
+    const totalCoreCount = coreMissionStates.length;
+    const progressPercent = totalCoreCount
+      ? Math.round((completedCoreCount / totalCoreCount) * 100)
+      : 0;
+
+    missionRoot.style.setProperty("--mission-progress", `${(progressPercent * 3.6).toFixed(2)}`);
+    if (progressValueNode) {
+      progressValueNode.textContent = `${progressPercent}%`;
+    }
+    if (progressBarNode instanceof HTMLElement) {
+      progressBarNode.style.width = `${progressPercent}%`;
+    }
+    if (progressCopyNode) {
+      progressCopyNode.textContent = `${completedCoreCount}/${totalCoreCount} done`;
+    }
+    if (languageChipNode) {
+      languageChipNode.textContent = `Support: ${getLanguageDisplayLabel(baseLanguage)}`;
+    }
+
+    let currentCopy =
+      "Pick a language to start.";
+    let nextLabel = "Pick a language";
+    let heroLabel = "Start";
+    if (baseLanguage) {
+      if (nextCoreMissionName) {
+        currentCopy = `${nextCoreMissionName} is next.`;
+        nextLabel = nextCoreMissionName;
+        heroLabel = "Open Path";
+      } else {
+        currentCopy = "Core run cleared.";
+        nextLabel = hasPremiumAccess ? "Pattern Scanner" : "Premium next";
+        heroLabel = "Replay";
+      }
+    }
+    if (currentCopyNode) {
+      currentCopyNode.textContent = currentCopy;
+    }
+    if (nextLabelNode) {
+      nextLabelNode.textContent = nextLabel;
+    }
+    if (heroPrimary instanceof HTMLElement) {
+      heroPrimary.textContent = heroLabel;
+    }
+  };
+
+  const persistMissionToggle = async (card, shouldComplete) => {
+    const key = getMissionCardKey(card);
+    const nowIso = new Date().toISOString();
+    setWorldMissionLocalState({
+      ...key,
+      startedAt: nowIso,
+      completed: shouldComplete,
+    });
+    if (typeof window.cosmicaSetSectionCompletionOverride === "function") {
+      window.cosmicaSetSectionCompletionOverride({
+        ...key,
+        isComplete: shouldComplete,
+      });
+    }
+    card.classList.add("is-busy");
+    try {
+      if (
+        window.cosmicaGamification &&
+        typeof window.cosmicaGamification.trackProgress === "function" &&
+        Boolean(getAuthSnapshot()?.isAuthenticated)
+      ) {
+        await window.cosmicaGamification.trackProgress({
+          ...key,
+          status: shouldComplete ? "completed" : "uncompleted",
+        });
+      } else {
+        trackLearningProgressEvent({
+          mapKey: key.mapKey,
+          sectionKey: key.sectionKey,
+          status: shouldComplete ? "completed" : "uncompleted",
+        });
+      }
+    } finally {
+      card.classList.remove("is-busy");
+      syncMissionUi();
+    }
+  };
+
+    missionCards.forEach((card) => {
+      if (card.dataset.missionBound === "true") {
+        return;
+      }
+    card.dataset.missionBound = "true";
+    const launchButton = card.querySelector(".mission-lesson-launch");
+    const completeButton = card.querySelector(".mission-lesson-complete");
+    const route = String(card.dataset.route || launchButton?.getAttribute("href") || "").trim();
+
+    if (launchButton instanceof HTMLAnchorElement) {
+      launchButton.addEventListener("click", (event) => {
+        event.preventDefault();
+        const baseLanguage = readStoredBaseLanguagePreference();
+        const requires = getRequiredMissionIds(card);
+        const completionById = Object.fromEntries(
+          missionCards.map((item) => [
+            String(item.dataset.lessonId || ""),
+            readMissionCardState(item).isComplete,
+          ])
+        );
+        const prerequisitesMet = requires.every((missionId) => completionById[missionId]);
+        if (!baseLanguage) {
+          openLanguagePicker();
+          return;
+        }
+        if (!prerequisitesMet) {
+          return;
+        }
+        if (card.dataset.premium === "true" && !userHasPremiumAccess(getAuthSnapshot()?.user || null)) {
+          openPremiumForMission(card);
+          return;
+        }
+        const key = getMissionCardKey(card);
+        setWorldMissionLocalState({
+          ...key,
+          startedAt: new Date().toISOString(),
+        });
+        trackLearningProgressEvent({
+          mapKey: key.mapKey,
+          sectionKey: key.sectionKey,
+          status: "started",
+        });
+        syncMissionUi();
+        navigateToMapLink(route);
+      });
+    }
+
+    if (completeButton instanceof HTMLButtonElement) {
+      completeButton.addEventListener("click", (event) => {
+        event.preventDefault();
+        const baseLanguage = readStoredBaseLanguagePreference();
+        const requires = getRequiredMissionIds(card);
+        const completionById = Object.fromEntries(
+          missionCards.map((item) => [
+            String(item.dataset.lessonId || ""),
+            readMissionCardState(item).isComplete,
+          ])
+        );
+        const prerequisitesMet = requires.every((missionId) => completionById[missionId]);
+        if (!baseLanguage) {
+          openLanguagePicker();
+          return;
+        }
+        if (!prerequisitesMet || card.classList.contains("is-busy")) {
+          return;
+        }
+        if (card.dataset.premium === "true" && !userHasPremiumAccess(getAuthSnapshot()?.user || null)) {
+          openPremiumForMission(card);
+          return;
+        }
+        const shouldComplete = !readMissionCardState(card).isComplete;
+        void persistMissionToggle(card, shouldComplete);
+      });
+    }
+  });
+
+  refreshWorldMissionPath = syncMissionUi;
+  syncMissionUi();
+
+  if (
+    window.cosmicaGamification &&
+    typeof window.cosmicaGamification.subscribe === "function" &&
+    missionRoot.dataset.missionSubscribed !== "true"
+  ) {
+    missionRoot.dataset.missionSubscribed = "true";
+    window.cosmicaGamification.subscribe(() => {
+      syncMissionUi();
+    });
+  }
+};
+
+setupWorldMissionPath();
 
 /* ==========================================================================
    CARD AUDIO (LETTER / WORD / PHRASE)
@@ -11047,8 +11867,7 @@ const setupSpeechCards = () => {
     letterCards.length ||
     wordCards.length ||
     phraseCards.length;
-  const hasBrowserSpeech =
-    "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
+  const hasBrowserSpeech = "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
 
   if (!hasSpeechCards) {
     return;
@@ -11058,9 +11877,7 @@ const setupSpeechCards = () => {
     if (!element) {
       return mapKey === "letters" ? "letters-core" : "core";
     }
-    const fromContainer = String(
-      element.closest("[data-section]")?.dataset.section || ""
-    ).trim();
+    const fromContainer = String(element.closest("[data-section]")?.dataset.section || "").trim();
     if (fromContainer) {
       return fromContainer;
     }
@@ -11134,7 +11951,13 @@ const setupSpeechCards = () => {
     }),
     spanish: Object.freeze({
       langPrefixes: ["es"],
-      prioritizedHints: ["microsoft helena", "microsoft elvira", "google espanol", "monica", "paulina"],
+      prioritizedHints: [
+        "microsoft helena",
+        "microsoft elvira",
+        "google espanol",
+        "monica",
+        "paulina",
+      ],
     }),
     portuguese: Object.freeze({
       langPrefixes: ["pt"],
@@ -11173,8 +11996,7 @@ const setupSpeechCards = () => {
     /female|woman|girl|samantha|karen|moira|ava|allison|serena|zira|jenny|aria|joanna|emma|lily|lucy|zoe|google uk english female|google us english female|microsoft aria|microsoft jenny/i;
   const MALE_HINT =
     /male|man|david|mark|alex|george|fred|daniel|ryan|tom|google uk english male|microsoft david/i;
-  const LOW_QUALITY_HINT =
-    /espeak|festival|robot|offline|basic|legacy|eloquence|embedded|svox/i;
+  const LOW_QUALITY_HINT = /espeak|festival|robot|offline|basic|legacy|eloquence|embedded|svox/i;
   const HIGH_QUALITY_HINT =
     /neural|natural|premium|enhanced|wavenet|online|studio|siri|google us english|google uk english female|microsoft aria|microsoft jenny|samantha/i;
   const IOS_FEMALE_HINT = /samantha|karen|moira|ava|allison|serena/i;
@@ -11281,11 +12103,9 @@ const setupSpeechCards = () => {
         (voice.name || "").toLowerCase().includes(String(hint || "").toLowerCase())
       )
     );
-    const femaleWorldVoices = worldVoices.filter((voice) =>
-      FEMALE_HINT.test(voice.name || "")
-    );
-    const preferredWorldVoices = worldVoices.filter((voice) =>
-      FEMALE_HINT.test(voice.name || "") || HIGH_QUALITY_HINT.test(voice.name || "")
+    const femaleWorldVoices = worldVoices.filter((voice) => FEMALE_HINT.test(voice.name || ""));
+    const preferredWorldVoices = worldVoices.filter(
+      (voice) => FEMALE_HINT.test(voice.name || "") || HIGH_QUALITY_HINT.test(voice.name || "")
     );
     const englishVoices = availableVoices.filter((voice) =>
       (voice.lang || "").toLowerCase().startsWith("en")
@@ -11294,13 +12114,11 @@ const setupSpeechCards = () => {
       ? ["samantha", "ava", "allison", "serena", "karen", "moira"]
       : ["google us english", "google uk english female", "microsoft aria", "microsoft jenny"];
     const prioritizedEnglishVoices = englishVoices.filter((voice) =>
-      prioritizedEnglishHints.some((hint) =>
-        (voice.name || "").toLowerCase().includes(hint)
-      )
+      prioritizedEnglishHints.some((hint) => (voice.name || "").toLowerCase().includes(hint))
     );
     const femaleEnglishVoices = englishVoices.filter((voice) => FEMALE_HINT.test(voice.name || ""));
-    const preferredEnglishVoices = englishVoices.filter((voice) =>
-      FEMALE_HINT.test(voice.name || "") || HIGH_QUALITY_HINT.test(voice.name || "")
+    const preferredEnglishVoices = englishVoices.filter(
+      (voice) => FEMALE_HINT.test(voice.name || "") || HIGH_QUALITY_HINT.test(voice.name || "")
     );
     return (
       pickFrom(prioritizedWorldVoices) ||
@@ -11330,8 +12148,7 @@ const setupSpeechCards = () => {
   }
 
   const ttsAudioCache = new Map();
-  const SpeechAudioContext =
-    window.AudioContext || window.webkitAudioContext || null;
+  const SpeechAudioContext = window.AudioContext || window.webkitAudioContext || null;
   let speechPlaybackContext = null;
   let activeTtsSource = null;
   let serverTtsState = "unknown"; // unknown | available | unavailable
@@ -11441,12 +12258,7 @@ const setupSpeechCards = () => {
       } catch (error) {
         serverTtsError = error;
         const status = Number(error?.httpStatus || 0);
-        if (
-          !status ||
-          status === 404 ||
-          status === 429 ||
-          (status >= 500 && status <= 599)
-        ) {
+        if (!status || status === 404 || status === 429 || (status >= 500 && status <= 599)) {
           // Google TTS proxy is unavailable right now, allow browser fallback.
           serverTtsState = "unavailable";
         }
@@ -11553,7 +12365,8 @@ const setupSpeechCards = () => {
       return text;
     }
     const rawToken = exactLetterTokens[exactLetterTokens.length - 1];
-    const token = rawToken === "ɪ" ? "ɪ" : rawToken.toLowerCase() === "ß" ? "ß" : rawToken.toUpperCase();
+    const token =
+      rawToken === "ɪ" ? "ɪ" : rawToken.toLowerCase() === "ß" ? "ß" : rawToken.toUpperCase();
     const worldOverrides = WORLD_LETTER_SPEECH_OVERRIDES[WORLD_KEY];
     if (worldOverrides) {
       const worldValue = worldOverrides[token] || worldOverrides[rawToken];
@@ -11564,24 +12377,14 @@ const setupSpeechCards = () => {
     return LETTER_SPEECH_MAP[token] || LETTER_SPEECH_MAP[rawToken] || rawToken;
   };
 
-  const setupCards = (
-    cards,
-    labelSelector,
-    datasetKey,
-    ariaPrefix,
-    rate,
-    pitch,
-    normalizeText
-  ) => {
+  const setupCards = (cards, labelSelector, datasetKey, ariaPrefix, rate, pitch, normalizeText) => {
     cards.forEach((card) => {
       const label = card.querySelector(labelSelector);
       const sourceText = String(
         label?.textContent?.trim() || card.dataset[datasetKey] || ""
       ).trim();
       if (sourceText) {
-        card.dataset[datasetKey] = normalizeText
-          ? normalizeText(sourceText)
-          : sourceText;
+        card.dataset[datasetKey] = normalizeText ? normalizeText(sourceText) : sourceText;
       }
       card.setAttribute("role", "button");
       card.setAttribute("tabindex", "0");
@@ -11632,25 +12435,11 @@ const setupSpeechCards = () => {
     });
   };
 
-  setupCards(
-    letterCards,
-    ".letter",
-    "letter",
-    "Play letter",
-    0.9,
-    1,
-    normalizeLetterSpeechText
-  );
+  setupCards(letterCards, ".letter", "letter", "Play letter", 0.9, 1, normalizeLetterSpeechText);
   setupCards(wordCards, ".word", "word", "Play word", 0.95, 1.01);
   setupCards(phraseCards, ".phrase-text", "phrase", "Play phrase", 0.95, 1);
 
-  const setupAudioButtons = (
-    buttons,
-    datasetKey,
-    rate,
-    pitch,
-    normalizeText
-  ) => {
+  const setupAudioButtons = (buttons, datasetKey, rate, pitch, normalizeText) => {
     buttons.forEach((button) => {
       const datasetValue = String(button.dataset[datasetKey] || "").trim();
       const ariaValue = String(button.getAttribute("aria-label") || "")
@@ -11658,9 +12447,7 @@ const setupSpeechCards = () => {
         .trim();
       const sourceText = datasetValue || ariaValue;
       if (sourceText) {
-        button.dataset[datasetKey] = normalizeText
-          ? normalizeText(sourceText)
-          : sourceText;
+        button.dataset[datasetKey] = normalizeText ? normalizeText(sourceText) : sourceText;
       }
       const speakFromButton = () => {
         const value = String(button.dataset[datasetKey] || "").trim();
@@ -11692,13 +12479,7 @@ const setupSpeechCards = () => {
     });
   };
 
-  setupAudioButtons(
-    letterButtons,
-    "letter",
-    0.9,
-    1,
-    normalizeLetterSpeechText
-  );
+  setupAudioButtons(letterButtons, "letter", 0.9, 1, normalizeLetterSpeechText);
   setupAudioButtons(wordButtons, "word", 0.95, 1.01);
 
   [...letterButtons, ...wordButtons].forEach((button) => {
@@ -12009,8 +12790,7 @@ const setupHomeAltInteractivity = () => {
         const progress = Math.max(0, Math.min(1, elapsedMs / LOGO_SPIN_DURATION_MS));
         // Fast at the start, smooth and slow near the end.
         const eased = 1 - Math.pow(1 - progress, 4);
-        spinAngleDeg =
-          spinStartAngleDeg + (spinTargetAngleDeg - spinStartAngleDeg) * eased;
+        spinAngleDeg = spinStartAngleDeg + (spinTargetAngleDeg - spinStartAngleDeg) * eased;
         updateLogoSpin();
         if (progress >= 1) {
           finishLogoSpinStop();
@@ -12130,14 +12910,16 @@ const setupHomeAltInteractivity = () => {
       .sort(() => Math.random() - 0.5)
       .map((slot) => Math.max(8, Math.min(64, slot + (Math.random() * 6 - 3))));
     const isMobileMeteorCadence = window.matchMedia("(max-width: 960px)").matches;
-    const baseDurationSec = isMobileMeteorCadence ? 6.4 + Math.random() * 0.6 : 5.8 + Math.random() * 2.2;
+    const baseDurationSec = isMobileMeteorCadence
+      ? 6.4 + Math.random() * 0.6
+      : 5.8 + Math.random() * 2.2;
     const launchStrideSec = isMobileMeteorCadence
       ? baseDurationSec / Math.max(1, cometCount)
       : Math.max(1.2, baseDurationSec * 0.34);
     for (let i = 0; i < cometCount; i += 1) {
       const comet = document.createElement("span");
       comet.className = "home-fx-comet";
-      comet.style.setProperty("--c-top", `${(topSlots[i] ?? (8 + Math.random() * 56)).toFixed(2)}%`);
+      comet.style.setProperty("--c-top", `${(topSlots[i] ?? 8 + Math.random() * 56).toFixed(2)}%`);
       comet.style.setProperty("--c-size", `${(78 + Math.random() * 44).toFixed(2)}px`);
       comet.style.setProperty(
         "--c-delay",
@@ -12358,7 +13140,7 @@ const setupHomeAltInteractivity = () => {
     return;
   }
 
-  const sectionHashes = ["#home", "#how", "#worlds", "#guide", "#join", "#support", "#policies"];
+  const sectionHashes = ["#home", "#how", "#worlds", "#faq", "#guide", "#join", "#support", "#policies"];
   const trackedSections = sectionHashes
     .map((hash) => ({ hash, section: document.querySelector(hash) }))
     .filter((entry) => entry.section);
@@ -12393,8 +13175,7 @@ const setupHomeAltInteractivity = () => {
       return "#home";
     }
     const nearPageBottom =
-      window.scrollY + window.innerHeight >=
-      document.documentElement.scrollHeight - 16;
+      window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 16;
     if (nearPageBottom) {
       return trackedSections[trackedSections.length - 1].hash;
     }
@@ -12548,6 +13329,316 @@ const setupEssentialCookieNotice = () => {
   });
 };
 
+/* --------------------------------------------------------------------------
+   PWA INSTALL + SERVICE WORKER
+   Register install/runtime support once for all pages.
+   -------------------------------------------------------------------------- */
+const isStandaloneAppDisplay = () =>
+  window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+
+const syncStandaloneBodyClass = () => {
+  document.body.classList.toggle("is-standalone-app", isStandaloneAppDisplay());
+};
+
+const shouldRegisterServiceWorker = () => {
+  if (!("serviceWorker" in navigator)) {
+    return false;
+  }
+  if (window.location.protocol === "https:") {
+    return true;
+  }
+  return ["localhost", "127.0.0.1"].includes(String(window.location.hostname || "").toLowerCase());
+};
+
+const clearLegacyInstallPromptDismissed = () => {
+  try {
+    localStorage.removeItem(LEGACY_PWA_INSTALL_DISMISSED_KEY);
+  } catch {}
+};
+
+const getInstallEntryFooter = () =>
+  document.querySelector(".footer") || document.querySelector("footer");
+
+const syncInstallEntryButtonFooterOffset = () => {
+  const button = installEntryButton;
+  if (!(button instanceof HTMLElement) || button.hidden) {
+    return;
+  }
+  const footer = getInstallEntryFooter();
+  if (!(footer instanceof HTMLElement)) {
+    button.style.setProperty("--install-app-footer-offset", "0px");
+    return;
+  }
+
+  const computedButtonStyle = window.getComputedStyle(button);
+  const buttonBottom = Number.parseFloat(computedButtonStyle.bottom || "0") || 0;
+  const footerRect = footer.getBoundingClientRect();
+  const footerGap = 30;
+  const overlap = window.innerHeight - buttonBottom + footerGap - footerRect.top;
+  const upwardOffset = overlap > 0 ? -Math.ceil(overlap) : 0;
+  button.style.setProperty("--install-app-footer-offset", `${upwardOffset}px`);
+};
+
+const queueInstallEntryButtonFooterSync = () => {
+  syncInstallEntryButtonFooterOffset();
+};
+
+const setupInstallEntryButtonFooterGuard = () => {
+  if (installEntryButtonFooterGuardInitialized) {
+    return;
+  }
+  installEntryButtonFooterGuardInitialized = true;
+  window.addEventListener("scroll", queueInstallEntryButtonFooterSync, { passive: true });
+  window.addEventListener("resize", queueInstallEntryButtonFooterSync);
+  window.addEventListener("load", queueInstallEntryButtonFooterSync, { once: true });
+};
+
+const isIosInstallCandidate = () => {
+  const ua = String(window.navigator.userAgent || "").toLowerCase();
+  const platform = String(window.navigator.platform || "").toLowerCase();
+  const maxTouchPoints = Number(window.navigator.maxTouchPoints || 0);
+  const isAppleTouchDevice =
+    /iphone|ipad|ipod/.test(ua) || (platform === "macintel" && maxTouchPoints > 1);
+  const isWebKitBrowser = /safari/.test(ua) && !/crios|fxios|edgios|opr\//.test(ua);
+  return isAppleTouchDevice && isWebKitBrowser && !isStandaloneAppDisplay();
+};
+
+const getMobileInstallPlatform = () => {
+  const ua = String(window.navigator.userAgent || "").toLowerCase();
+  const platform = String(window.navigator.platform || "").toLowerCase();
+  const maxTouchPoints = Number(window.navigator.maxTouchPoints || 0);
+  if (/android/.test(ua)) {
+    return "android";
+  }
+  if (/iphone|ipad|ipod/.test(ua) || (platform === "macintel" && maxTouchPoints > 1)) {
+    return "ios";
+  }
+  return "other";
+};
+
+const handleInstallTrigger = async (iosManual = false) => {
+  if (!deferredInstallPrompt) {
+    if (iosManual) {
+      window.alert("Open Safari's Share menu, then tap Add to Home Screen to install Cosmica.");
+    }
+    return;
+  }
+  try {
+    await deferredInstallPrompt.prompt();
+    const promptResult = await deferredInstallPrompt.userChoice;
+    if (promptResult?.outcome === "accepted") {
+      closeInstallModal();
+    }
+  } catch {}
+  deferredInstallPrompt = null;
+  updateInstallEntryButton();
+};
+
+const setInstallModalFeedback = (message = "") => {
+  const feedbackNode = installModal?.querySelector(".install-app-feedback");
+  if (!(feedbackNode instanceof HTMLElement)) {
+    return;
+  }
+  feedbackNode.textContent = String(message || "").trim();
+};
+
+const closeInstallModal = () => {
+  if (!(installModal instanceof HTMLElement)) {
+    return;
+  }
+  installModal.hidden = true;
+  installModal.classList.remove("is-visible");
+  document.body.classList.remove("install-app-modal-open");
+  setInstallModalFeedback("");
+};
+
+const handleMobileStoreInstall = () => {
+  const platform = getMobileInstallPlatform();
+  if (platform === "ios") {
+    if (COSMICA_APP_STORE_URL) {
+      window.location.href = COSMICA_APP_STORE_URL;
+      return;
+    }
+    setInstallModalFeedback(
+      "App Store download will appear here after the iPhone and iPad app is published."
+    );
+    return;
+  }
+  if (platform === "android") {
+    if (COSMICA_PLAY_STORE_URL) {
+      window.location.href = COSMICA_PLAY_STORE_URL;
+      return;
+    }
+    setInstallModalFeedback(
+      "Google Play download will appear here after the Android app is published."
+    );
+    return;
+  }
+  setInstallModalFeedback(
+    "Open this option on your phone or tablet to continue with App Store or Google Play download."
+  );
+};
+
+const handleDesktopPwaInstall = async () => {
+  if (deferredInstallPrompt) {
+    await handleInstallTrigger(false);
+    return;
+  }
+  if (isIosInstallCandidate()) {
+    setInstallModalFeedback(
+      "On iPhone or iPad, open Safari's Share menu and choose Add to Home Screen."
+    );
+    return;
+  }
+  setInstallModalFeedback(
+    "Desktop app install is available in supported Chromium browsers like Chrome or Edge over HTTPS."
+  );
+};
+
+const ensureInstallModal = () => {
+  if (installModal?.isConnected) {
+    return installModal;
+  }
+  if (!(document.body instanceof HTMLElement)) {
+    return null;
+  }
+
+  const overlay = document.createElement("div");
+  overlay.className = "install-app-overlay";
+  overlay.hidden = true;
+  overlay.innerHTML = `
+    <section class="install-app-card" role="dialog" aria-modal="true" aria-labelledby="installAppTitle">
+      <button type="button" class="install-app-close" aria-label="Close install app dialog">X</button>
+      <h3 id="installAppTitle">Install App</h3>
+      <p class="install-app-message">Choose how you want to install Cosmica.</p>
+      <div class="install-app-options">
+        <button type="button" class="install-app-option install-app-option-mobile">
+          <span class="install-app-option-label">Mobile Devices</span>
+          <span class="install-app-option-copy">Download from the App Store or Google Play.</span>
+        </button>
+        <button type="button" class="install-app-option install-app-option-desktop">
+          <span class="install-app-option-label">Desktop PWA</span>
+          <span class="install-app-option-copy">Install Cosmica as a desktop app from your browser.</span>
+        </button>
+      </div>
+      <p class="install-app-feedback" aria-live="polite"></p>
+    </section>
+  `;
+  overlay.addEventListener("click", (event) => {
+    if (event.target === overlay) {
+      closeInstallModal();
+    }
+  });
+  overlay.querySelector(".install-app-close")?.addEventListener("click", closeInstallModal);
+  overlay
+    .querySelector(".install-app-option-mobile")
+    ?.addEventListener("click", handleMobileStoreInstall);
+  overlay
+    .querySelector(".install-app-option-desktop")
+    ?.addEventListener("click", () => void handleDesktopPwaInstall());
+  document.body.appendChild(overlay);
+  installModal = overlay;
+  return overlay;
+};
+
+const openInstallModal = () => {
+  const modal = ensureInstallModal();
+  if (!(modal instanceof HTMLElement) || isStandaloneAppDisplay()) {
+    return;
+  }
+  modal.hidden = false;
+  document.body.classList.add("install-app-modal-open");
+  window.requestAnimationFrame(() => {
+    modal.classList.add("is-visible");
+  });
+  setInstallModalFeedback("");
+};
+
+const ensureInstallEntryButton = () => {
+  if (installEntryButton?.isConnected) {
+    return installEntryButton;
+  }
+  if (!(document.body instanceof HTMLElement)) {
+    return null;
+  }
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "install-app-trigger";
+  button.hidden = true;
+  button.setAttribute("aria-label", "Install Cosmica app");
+  button.addEventListener("click", openInstallModal);
+  document.body.appendChild(button);
+  installEntryButton = button;
+  return button;
+};
+
+function updateInstallEntryButton() {
+  const button = ensureInstallEntryButton();
+  if (!button) {
+    return;
+  }
+  const shouldShow = !isStandaloneAppDisplay();
+  button.hidden = !shouldShow;
+  button.classList.toggle("is-visible", shouldShow);
+  button.textContent = "Install App";
+  if (!shouldShow) {
+    button.style.setProperty("--install-app-footer-offset", "0px");
+    return;
+  }
+  queueInstallEntryButtonFooterSync();
+}
+
+const setupInstallPromptUi = () => {
+  clearLegacyInstallPromptDismissed();
+  syncStandaloneBodyClass();
+  ensureInstallModal();
+  updateInstallEntryButton();
+  setupInstallEntryButtonFooterGuard();
+
+  const standaloneMedia = window.matchMedia("(display-mode: standalone)");
+  if (typeof standaloneMedia.addEventListener === "function") {
+    standaloneMedia.addEventListener("change", () => {
+      syncStandaloneBodyClass();
+      updateInstallEntryButton();
+    });
+  } else if (typeof standaloneMedia.addListener === "function") {
+    standaloneMedia.addListener(() => {
+      syncStandaloneBodyClass();
+      updateInstallEntryButton();
+    });
+  }
+
+  window.addEventListener("appinstalled", () => {
+    deferredInstallPrompt = null;
+    syncStandaloneBodyClass();
+    closeInstallModal();
+    updateInstallEntryButton();
+  });
+
+  window.addEventListener("beforeinstallprompt", (event) => {
+    event.preventDefault();
+    deferredInstallPrompt = event;
+    updateInstallEntryButton();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && installModal && !installModal.hidden) {
+      closeInstallModal();
+    }
+  });
+};
+
+const registerServiceWorker = () => {
+  if (!shouldRegisterServiceWorker()) {
+    return;
+  }
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register(withAssetVersion("service-worker.js"), { scope: "/" })
+      .catch(() => {});
+  });
+};
+
 // Lazy-load maps runtime only on map pages to keep base bundle lightweight.
 const loadMapsBundle = () =>
   new Promise((resolve, reject) => {
@@ -12558,9 +13649,13 @@ const loadMapsBundle = () =>
         return;
       }
       existing.addEventListener("load", () => resolve(), { once: true });
-      existing.addEventListener("error", () => reject(new Error("Failed to load maps/app-maps.js")), {
-        once: true,
-      });
+      existing.addEventListener(
+        "error",
+        () => reject(new Error("Failed to load maps/app-maps.js")),
+        {
+          once: true,
+        }
+      );
       return;
     }
 
@@ -12580,11 +13675,9 @@ const loadMapsBundle = () =>
       },
       { once: true }
     );
-    script.addEventListener(
-      "error",
-      () => reject(new Error("Failed to load maps/app-maps.js")),
-      { once: true }
-    );
+    script.addEventListener("error", () => reject(new Error("Failed to load maps/app-maps.js")), {
+      once: true,
+    });
     document.head.appendChild(script);
   });
 
@@ -12599,14 +13692,15 @@ const initializeCommonShell = () => {
     setupHomeAltInteractivity();
     void setupLettersTitleTranslation();
     void setupLettersHelperTranslation();
-    setupLettersSectionCompleteButton();
-    setupLettersCardPracticeButtons();
     setupLetterRomanization();
     setupSpeechCards();
     setupBackToTopButton();
     setupEssentialCookieNotice();
   });
 };
+
+setupInstallPromptUi();
+registerServiceWorker();
 
 /* ==========================================================================
    APPLICATION BOOTSTRAP (BASE)

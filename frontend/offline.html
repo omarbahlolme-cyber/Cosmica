@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Cosmica | Offline</title>
+    <meta
+      name="description"
+      content="Offline fallback page for Cosmica when a network connection is unavailable."
+    />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#0a0f24" />
+    <meta name="application-name" content="Cosmica" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Cosmica" />
+    <link rel="manifest" href="/app.webmanifest" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/pwa/apple-touch-icon.png" />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #05050b;
+        --panel: rgba(10, 15, 35, 0.92);
+        --text: #edf3ff;
+        --muted: #b3bdd7;
+        --accent: #68e1ff;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        font-family: "Segoe UI", system-ui, sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top, rgba(30, 56, 120, 0.35), transparent 42%),
+          radial-gradient(circle at 82% 18%, rgba(255, 111, 177, 0.22), transparent 28%),
+          linear-gradient(180deg, #090d1f, var(--bg));
+      }
+
+      main {
+        width: min(560px, 100%);
+        padding: 28px;
+        border-radius: 28px;
+        border: 1px solid rgba(104, 225, 255, 0.18);
+        background: var(--panel);
+        box-shadow:
+          0 30px 60px rgba(2, 5, 16, 0.45),
+          inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      }
+
+      h1 {
+        margin: 0 0 12px;
+        font-size: clamp(2rem, 6vw, 3rem);
+        letter-spacing: -0.03em;
+      }
+
+      p {
+        margin: 0 0 14px;
+        color: var(--muted);
+        line-height: 1.65;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 22px;
+      }
+
+      a,
+      button {
+        min-height: 48px;
+        padding: 12px 20px;
+        border-radius: 999px;
+        border: none;
+        font: inherit;
+        cursor: pointer;
+        text-decoration: none;
+      }
+
+      a {
+        color: #04111b;
+        background: linear-gradient(120deg, #68e1ff, #6ef7c2);
+      }
+
+      button {
+        color: var(--text);
+        background: transparent;
+        border: 1px solid rgba(237, 243, 255, 0.18);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>You are offline</h1>
+      <p>Cosmica could not reach the network for this page.</p>
+      <p>Reconnect and retry, or jump back to the cached home page if it is already available.</p>
+      <div class="actions">
+        <a href="/">Open Cosmica home</a>
+        <button id="retryButton" type="button">Try again</button>
+      </div>
+    </main>
+    <script>
+      document.getElementById("retryButton")?.addEventListener("click", () => {
+        window.location.reload();
+      });
+    </script>
+  </body>
+</html>

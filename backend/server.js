@@ -88,7 +88,8 @@ app.use((req, res, next) => {
   }
   const hostHeader = req.headers.host || "www.cosmicalearn.com";
   const [hostname, portPart] = hostHeader.split(":");
-  const canonicalHost = hostname.toLowerCase() === "cosmicalearn.com" ? "www.cosmicalearn.com" : hostname;
+  const canonicalHost =
+    hostname.toLowerCase() === "cosmicalearn.com" ? "www.cosmicalearn.com" : hostname;
   const normalizedHost = portPart ? `${canonicalHost}:${portPart}` : canonicalHost;
   if (isSecureRequest(req) && normalizedHost === hostHeader) {
     return next();
@@ -296,12 +297,7 @@ const billingWebhookLimiter = createLimiter({
 /* --------------------------------------------------------------------------
    STATIC ASSET HOSTING
    -------------------------------------------------------------------------- */
-const FRESH_ASSET_EXTENSIONS = new Set([
-  ".js",
-  ".css",
-  ".json",
-  ".map",
-]);
+const FRESH_ASSET_EXTENSIONS = new Set([".js", ".css", ".json", ".map", ".webmanifest"]);
 
 const CACHEABLE_MEDIA_EXTENSIONS = new Set([
   ".svg",
@@ -315,8 +311,7 @@ const CACHEABLE_MEDIA_EXTENSIONS = new Set([
   ".woff2",
 ]);
 
-const RETIRED_WORLD_PATHS = new Set([
-]);
+const RETIRED_WORLD_PATHS = new Set([]);
 
 const LEGACY_WORLD_ROUTE_REDIRECTS = new Map([
   ["/index.html", "/"],
@@ -401,7 +396,9 @@ app.use((req, res, next) => {
 
 // Gift redeem links route through homepage runtime where account + modal logic lives.
 app.get("/gift/redeem", (req, res) => {
-  const token = String(req.query?.token || "").trim().slice(0, 240);
+  const token = String(req.query?.token || "")
+    .trim()
+    .slice(0, 240);
   const params = new URLSearchParams();
   if (token) {
     params.set("giftToken", token);
@@ -514,12 +511,17 @@ const createClient = (apiKey) => new OpenAI({ apiKey });
 const getChatClient = () => createClient(process.env.OPENAI_CHAT_KEY || process.env.OPENAI_API_KEY);
 const ERROR_WEBHOOK_URL = process.env.ERROR_WEBHOOK_URL || "";
 const RUM_WEBHOOK_URL = process.env.RUM_WEBHOOK_URL || "";
-const AUTH_ALERT_WEBHOOK_URL = String(process.env.AUTH_ALERT_WEBHOOK_URL || ERROR_WEBHOOK_URL || "").trim();
+const AUTH_ALERT_WEBHOOK_URL = String(
+  process.env.AUTH_ALERT_WEBHOOK_URL || ERROR_WEBHOOK_URL || ""
+).trim();
 const AUTH_LOGIN_SPIKE_WINDOW_MS = Math.max(
   60 * 1000,
   Number(process.env.AUTH_LOGIN_SPIKE_WINDOW_MS || 5 * 60 * 1000)
 );
-const AUTH_LOGIN_SPIKE_THRESHOLD = Math.max(5, Number(process.env.AUTH_LOGIN_SPIKE_THRESHOLD || 20));
+const AUTH_LOGIN_SPIKE_THRESHOLD = Math.max(
+  5,
+  Number(process.env.AUTH_LOGIN_SPIKE_THRESHOLD || 20)
+);
 const AUTH_LOGIN_SPIKE_COOLDOWN_MS = Math.max(
   60 * 1000,
   Number(process.env.AUTH_LOGIN_SPIKE_COOLDOWN_MS || 15 * 60 * 1000)
@@ -529,7 +531,11 @@ const AUTH_EMAIL_FAILURE_ALERT_COOLDOWN_MS = Math.max(
   Number(process.env.AUTH_EMAIL_FAILURE_ALERT_COOLDOWN_MS || 20 * 60 * 1000)
 );
 const isTruthyEnvValue = (value) =>
-  ["1", "true", "yes", "on"].includes(String(value || "").trim().toLowerCase());
+  ["1", "true", "yes", "on"].includes(
+    String(value || "")
+      .trim()
+      .toLowerCase()
+  );
 const GOOGLE_TTS_ENABLED = isTruthyEnvValue(process.env.GOOGLE_TTS_ENABLED);
 const GOOGLE_TTS_DEFAULT_LANGUAGE = process.env.GOOGLE_TTS_LANGUAGE_CODE || "en-GB";
 const GOOGLE_TTS_DEFAULT_VOICE = process.env.GOOGLE_TTS_VOICE || "en-GB-Neural2-F";
@@ -648,7 +654,11 @@ const postAuthAlertWebhook = async (payload) => {
 };
 
 const hashForAlert = (value) =>
-  crypto.createHash("sha256").update(String(value || ""), "utf8").digest("hex").slice(0, 20);
+  crypto
+    .createHash("sha256")
+    .update(String(value || ""), "utf8")
+    .digest("hex")
+    .slice(0, 20);
 
 const pruneAuthAlertCaches = (nowMs = Date.now()) => {
   const staleTrackerMs = Math.max(AUTH_LOGIN_SPIKE_WINDOW_MS * 3, AUTH_LOGIN_SPIKE_COOLDOWN_MS * 2);
@@ -665,7 +675,10 @@ const pruneAuthAlertCaches = (nowMs = Date.now()) => {
       authLoginFailureSpikeTracker.delete(key);
     }
   }
-  const staleAlertMs = Math.max(AUTH_EMAIL_FAILURE_ALERT_COOLDOWN_MS * 4, AUTH_LOGIN_SPIKE_COOLDOWN_MS * 3);
+  const staleAlertMs = Math.max(
+    AUTH_EMAIL_FAILURE_ALERT_COOLDOWN_MS * 4,
+    AUTH_LOGIN_SPIKE_COOLDOWN_MS * 3
+  );
   for (const [key, lastSentAtMs] of authAlertLastSentByKey.entries()) {
     if (!Number.isFinite(lastSentAtMs) || nowMs - lastSentAtMs > staleAlertMs) {
       authAlertLastSentByKey.delete(key);
@@ -673,7 +686,12 @@ const pruneAuthAlertCaches = (nowMs = Date.now()) => {
   }
 };
 
-const maybeAlertAuthLoginFailureSpike = ({ req = null, email = "", userId = "", reason = "" } = {}) => {
+const maybeAlertAuthLoginFailureSpike = ({
+  req = null,
+  email = "",
+  userId = "",
+  reason = "",
+} = {}) => {
   if (!AUTH_ALERT_WEBHOOK_URL || AUTH_LOGIN_SPIKE_THRESHOLD <= 0) {
     return;
   }
@@ -685,7 +703,10 @@ const maybeAlertAuthLoginFailureSpike = ({ req = null, email = "", userId = "", 
     count: 0,
     lastAlertAtMs: 0,
   };
-  if (!Number.isFinite(existingState.windowStartedAtMs) || nowMs - existingState.windowStartedAtMs > AUTH_LOGIN_SPIKE_WINDOW_MS) {
+  if (
+    !Number.isFinite(existingState.windowStartedAtMs) ||
+    nowMs - existingState.windowStartedAtMs > AUTH_LOGIN_SPIKE_WINDOW_MS
+  ) {
     existingState.windowStartedAtMs = nowMs;
     existingState.count = 0;
   }
@@ -731,8 +752,15 @@ const maybeAlertVerificationEmailDeliveryFailure = ({
     return;
   }
   const nowMs = Date.now();
-  const normalizedPhase = String(phase || "signup").trim().toLowerCase() || "signup";
-  const errorSignature = hashForAlert(`${normalizedPhase}:${String(deliveryError || "").trim().toLowerCase()}`);
+  const normalizedPhase =
+    String(phase || "signup")
+      .trim()
+      .toLowerCase() || "signup";
+  const errorSignature = hashForAlert(
+    `${normalizedPhase}:${String(deliveryError || "")
+      .trim()
+      .toLowerCase()}`
+  );
   const alertKey = `verify-email:${errorSignature}`;
   const lastSentAtMs = Number(authAlertLastSentByKey.get(alertKey) || 0);
   if (lastSentAtMs && nowMs - lastSentAtMs < AUTH_EMAIL_FAILURE_ALERT_COOLDOWN_MS) {
@@ -826,9 +854,9 @@ const sendViaResend = async ({ from, to, replyTo, subject, text }) => {
 const hasSmtpDeliveryConfig = () =>
   Boolean(
     String(process.env.SMTP_HOST || "").trim() &&
-      Number(process.env.SMTP_PORT || 0) > 0 &&
-      String(process.env.SMTP_USER || "").trim() &&
-      String(process.env.SMTP_PASS || "").trim()
+    Number(process.env.SMTP_PORT || 0) > 0 &&
+    String(process.env.SMTP_USER || "").trim() &&
+    String(process.env.SMTP_PASS || "").trim()
   );
 
 const hasAnyEmailDeliveryConfig = () =>
@@ -844,13 +872,19 @@ const runAuthRuntimeConfigAudit = () => {
   ).trim();
 
   if (!ADMIN_SECURITY_TOKEN) {
-    issues.push("Missing ADMIN_SECURITY_TOKEN/ADMIN_API_TOKEN (admin security APIs cannot be protected).");
+    issues.push(
+      "Missing ADMIN_SECURITY_TOKEN/ADMIN_API_TOKEN (admin security APIs cannot be protected)."
+    );
   }
   if (!hasAnyEmailDeliveryConfig()) {
-    warnings.push("No email delivery provider configured (email verification sign-up path will be disabled).");
+    warnings.push(
+      "No email delivery provider configured (email verification sign-up path will be disabled)."
+    );
   }
   if (!senderAddress) {
-    warnings.push("Missing AUTH_FROM (or FEEDBACK_FROM/SMTP_USER fallback) for verification emails.");
+    warnings.push(
+      "Missing AUTH_FROM (or FEEDBACK_FROM/SMTP_USER fallback) for verification emails."
+    );
   }
   if (isProduction) {
     if (!publicOrigin) {
@@ -869,7 +903,9 @@ const runAuthRuntimeConfigAudit = () => {
       }
     }
     if (!AUTH_ALERT_WEBHOOK_URL) {
-      warnings.push("AUTH_ALERT_WEBHOOK_URL/ERROR_WEBHOOK_URL not set; auth security alerts will not be forwarded.");
+      warnings.push(
+        "AUTH_ALERT_WEBHOOK_URL/ERROR_WEBHOOK_URL not set; auth security alerts will not be forwarded."
+      );
     }
     if (AUTH_STORE_BACKEND === "file") {
       warnings.push(
@@ -882,7 +918,9 @@ const runAuthRuntimeConfigAudit = () => {
     }
   }
   if (AUTH_STORE_BACKEND === "postgres" && !AUTH_POSTGRES_URL) {
-    warnings.push("AUTH_STORE_BACKEND=postgres requested but AUTH_POSTGRES_URL/DATABASE_URL is empty.");
+    warnings.push(
+      "AUTH_STORE_BACKEND=postgres requested but AUTH_POSTGRES_URL/DATABASE_URL is empty."
+    );
   }
 
   if (!issues.length && !warnings.length) {
@@ -968,12 +1006,18 @@ let AUTH_STORE_BACKEND = String(process.env.AUTH_STORE_BACKEND || AUTH_STORE_BAC
 if (AUTH_STORE_BACKEND !== "file" && AUTH_STORE_BACKEND !== "postgres") {
   AUTH_STORE_BACKEND = AUTH_STORE_BACKEND_DEFAULT;
 }
-const AUTH_POSTGRES_URL = String(process.env.AUTH_POSTGRES_URL || process.env.DATABASE_URL || "").trim();
-const AUTH_POSTGRES_TABLE = String(process.env.AUTH_POSTGRES_TABLE || "auth_store")
-  .trim()
-  .toLowerCase()
-  .replace(/[^a-z0-9_]/g, "") || "auth_store";
-const AUTH_POSTGRES_ROW_KEY = String(process.env.AUTH_POSTGRES_ROW_KEY || "primary").trim().slice(0, 120) || "primary";
+const AUTH_POSTGRES_URL = String(
+  process.env.AUTH_POSTGRES_URL || process.env.DATABASE_URL || ""
+).trim();
+const AUTH_POSTGRES_TABLE =
+  String(process.env.AUTH_POSTGRES_TABLE || "auth_store")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9_]/g, "") || "auth_store";
+const AUTH_POSTGRES_ROW_KEY =
+  String(process.env.AUTH_POSTGRES_ROW_KEY || "primary")
+    .trim()
+    .slice(0, 120) || "primary";
 const DELETED_ACCOUNTS_AUDIT_FILE = path.join(AUTH_DATA_ROOT, "deleted-accounts.json");
 const REGISTERED_ACCOUNTS_AUDIT_FILE = path.join(AUTH_DATA_ROOT, "registered-accounts.json");
 const BLOCKED_USERS_STORE_FILE = path.join(AUTH_DATA_ROOT, "blocked-users.json");
@@ -1193,9 +1237,7 @@ const normalizeGiftTokenRecord = (value, fallbackTokenHash = "") => {
     ? Math.max(1, Math.min(PREMIUM_GIFT_TOKEN_MAX_DAYS, Math.round(rawGrantDays)))
     : PREMIUM_GIFT_TOKEN_DEFAULT_PREMIUM_DAYS;
   const usedAtRaw = String(value.usedAt || "").trim();
-  const usedAt = Number.isFinite(Date.parse(usedAtRaw))
-    ? new Date(usedAtRaw).toISOString()
-    : "";
+  const usedAt = Number.isFinite(Date.parse(usedAtRaw)) ? new Date(usedAtRaw).toISOString() : "";
   const grantedUntilRaw = String(value.grantedUntil || "").trim();
   const grantedUntil = Number.isFinite(Date.parse(grantedUntilRaw))
     ? new Date(grantedUntilRaw).toISOString()
@@ -1205,13 +1247,19 @@ const normalizeGiftTokenRecord = (value, fallbackTokenHash = "") => {
     ? new Date(revokedAtRaw).toISOString()
     : "";
   return {
-    id: String(value.id || "").trim().slice(0, 120) || crypto.randomUUID(),
+    id:
+      String(value.id || "")
+        .trim()
+        .slice(0, 120) || crypto.randomUUID(),
     tokenHash,
     status: normalizeGiftTokenStatus(value.status),
     createdAt,
     updatedAt,
     expiresAt,
-    createdBy: String(value.createdBy || "admin").trim().slice(0, 120) || "admin",
+    createdBy:
+      String(value.createdBy || "admin")
+        .trim()
+        .slice(0, 120) || "admin",
     recipientEmail: normalizeEmail(value.recipientEmail),
     grantDays,
     grantUntil,
@@ -1225,7 +1273,9 @@ const normalizeGiftTokenRecord = (value, fallbackTokenHash = "") => {
     laterText: sanitizeGiftTemplateText(value.laterText, 24) || "Maybe later",
     note: sanitizeGiftTemplateText(value.note, 300),
     usedAt,
-    usedByUserId: String(value.usedByUserId || "").trim().slice(0, 120),
+    usedByUserId: String(value.usedByUserId || "")
+      .trim()
+      .slice(0, 120),
     usedByEmail: normalizeEmail(value.usedByEmail),
     grantedUntil,
     revokedAt,
@@ -1266,7 +1316,10 @@ const cloneObjectSafely = (value, fallbackValue, maxSerializedChars) => {
   }
 };
 
-const normalizeEmail = (value) => String(value || "").trim().toLowerCase();
+const normalizeEmail = (value) =>
+  String(value || "")
+    .trim()
+    .toLowerCase();
 const INVALID_BASE_LANGUAGE_SENTINELS = new Set([
   "none",
   "no-base",
@@ -1299,10 +1352,7 @@ const sanitizeDisplayName = (value, email = "") => {
     .slice(0, 30);
   return fallback || "Explorer";
 };
-const normalizeDisplayNameKey = (value) =>
-  sanitizeDisplayName(value, "")
-    .trim()
-    .toLowerCase();
+const normalizeDisplayNameKey = (value) => sanitizeDisplayName(value, "").trim().toLowerCase();
 const findExistingUserByDisplayName = (displayName, { excludeUserId = "" } = {}) => {
   const normalizedDisplayName = normalizeDisplayNameKey(displayName);
   if (!normalizedDisplayName) {
@@ -1334,7 +1384,8 @@ const normalizeEmailVerificationState = (value) => {
   fallback.tokenHash = String(candidate.tokenHash || "").trim();
   fallback.expiresAt =
     typeof candidate.expiresAt === "string" && candidate.expiresAt ? candidate.expiresAt : null;
-  fallback.sentAt = typeof candidate.sentAt === "string" && candidate.sentAt ? candidate.sentAt : null;
+  fallback.sentAt =
+    typeof candidate.sentAt === "string" && candidate.sentAt ? candidate.sentAt : null;
   return fallback;
 };
 
@@ -1350,7 +1401,8 @@ const normalizePasswordResetState = (value) => {
   fallback.tokenHash = String(candidate.tokenHash || "").trim();
   fallback.expiresAt =
     typeof candidate.expiresAt === "string" && candidate.expiresAt ? candidate.expiresAt : null;
-  fallback.sentAt = typeof candidate.sentAt === "string" && candidate.sentAt ? candidate.sentAt : null;
+  fallback.sentAt =
+    typeof candidate.sentAt === "string" && candidate.sentAt ? candidate.sentAt : null;
   return fallback;
 };
 
@@ -1409,15 +1461,22 @@ const addUtcDaysToIso = (isoValue, dayCount) => {
 
 const computeReviewDueAt = (memoryStage, nowIso) => {
   const stage = toBoundedInt(memoryStage, 1, REVIEW_INTERVAL_DAYS.length);
-  const days = REVIEW_INTERVAL_DAYS[Math.max(0, stage - 1)] || REVIEW_INTERVAL_DAYS[REVIEW_INTERVAL_DAYS.length - 1];
+  const days =
+    REVIEW_INTERVAL_DAYS[Math.max(0, stage - 1)] ||
+    REVIEW_INTERVAL_DAYS[REVIEW_INTERVAL_DAYS.length - 1];
   return addUtcDaysToIso(nowIso, days);
 };
 
 const isBossSectionKey = (sectionKey) =>
-  String(sectionKey || "").trim().toLowerCase().startsWith(BOSS_SECTION_KEY_PREFIX);
+  String(sectionKey || "")
+    .trim()
+    .toLowerCase()
+    .startsWith(BOSS_SECTION_KEY_PREFIX);
 
 const parseBossCheckpointFromSectionKey = (sectionKey) => {
-  const raw = String(sectionKey || "").trim().toLowerCase();
+  const raw = String(sectionKey || "")
+    .trim()
+    .toLowerCase();
   if (!raw.startsWith(BOSS_SECTION_KEY_PREFIX)) {
     return 0;
   }
@@ -1476,16 +1535,23 @@ const normalizeWorldBossState = (value) => {
     Math.max(0, fallback.unlockedCheckpoint)
   );
   fallback.completedSections = toBoundedInt(source.completedSections, 0, 5000000);
-  fallback.nextUnlockInSections = toBoundedInt(source.nextUnlockInSections, 0, fallback.checkpointSize);
+  fallback.nextUnlockInSections = toBoundedInt(
+    source.nextUnlockInSections,
+    0,
+    fallback.checkpointSize
+  );
   fallback.readyCheckpoint =
-    fallback.unlockedCheckpoint > fallback.defeatedCheckpoint
-      ? fallback.defeatedCheckpoint + 1
-      : 0;
-  fallback.lastAttemptAt = typeof source.lastAttemptAt === "string" && source.lastAttemptAt ? source.lastAttemptAt : null;
+    fallback.unlockedCheckpoint > fallback.defeatedCheckpoint ? fallback.defeatedCheckpoint + 1 : 0;
+  fallback.lastAttemptAt =
+    typeof source.lastAttemptAt === "string" && source.lastAttemptAt ? source.lastAttemptAt : null;
   fallback.lastCompletedAt =
-    typeof source.lastCompletedAt === "string" && source.lastCompletedAt ? source.lastCompletedAt : null;
+    typeof source.lastCompletedAt === "string" && source.lastCompletedAt
+      ? source.lastCompletedAt
+      : null;
   fallback.lastUnlockedAt =
-    typeof source.lastUnlockedAt === "string" && source.lastUnlockedAt ? source.lastUnlockedAt : null;
+    typeof source.lastUnlockedAt === "string" && source.lastUnlockedAt
+      ? source.lastUnlockedAt
+      : null;
   return fallback;
 };
 
@@ -1543,11 +1609,16 @@ const normalizeGamificationState = (value, xpValue = 0) => {
     toBoundedInt(candidate.bestStreak, 0, 5000)
   );
   fallback.lastActiveDate = normalizeDateKey(candidate.lastActiveDate) || null;
-  fallback.nextLevelXp = Math.max(levelMeta.nextLevelXp, toBoundedInt(candidate.nextLevelXp, 0, 500000000));
+  fallback.nextLevelXp = Math.max(
+    levelMeta.nextLevelXp,
+    toBoundedInt(candidate.nextLevelXp, 0, 500000000)
+  );
 
   const badges = isPlainObject(candidate.badges) ? candidate.badges : {};
   Object.entries(badges).forEach(([badgeId, badge]) => {
-    const id = String(badgeId || "").trim().slice(0, 60);
+    const id = String(badgeId || "")
+      .trim()
+      .slice(0, 60);
     if (!id || !isPlainObject(badge)) {
       return;
     }
@@ -1573,10 +1644,17 @@ const normalizeGamificationState = (value, xpValue = 0) => {
   fallback.stats.grammarReviews = toBoundedInt(stats.grammarReviews, 0, 50000000);
   fallback.stats.questDaysCompleted = toBoundedInt(stats.questDaysCompleted, 0, 5000000);
   fallback.stats.worldsEngaged = Array.isArray(stats.worldsEngaged)
-    ? [...new Set(stats.worldsEngaged.map((key) => String(key || "").trim().slice(0, 40)).filter(Boolean))].slice(
-        0,
-        30
-      )
+    ? [
+        ...new Set(
+          stats.worldsEngaged
+            .map((key) =>
+              String(key || "")
+                .trim()
+                .slice(0, 40)
+            )
+            .filter(Boolean)
+        ),
+      ].slice(0, 30)
     : [];
 
   const daily = isPlainObject(candidate.daily) ? candidate.daily : {};
@@ -1599,7 +1677,9 @@ const normalizeProgress = (value) => {
     ? Math.max(0, Math.round(Number(totals.completedSections)))
     : 0;
   fallback.totals.lastActivityAt =
-    typeof totals.lastActivityAt === "string" && totals.lastActivityAt ? totals.lastActivityAt : null;
+    typeof totals.lastActivityAt === "string" && totals.lastActivityAt
+      ? totals.lastActivityAt
+      : null;
   fallback.worlds = isPlainObject(candidate.worlds)
     ? cloneObjectSafely(candidate.worlds, () => ({}), MAX_PROGRESS_SERIALIZED_CHARS - 5000)
     : {};
@@ -1614,7 +1694,8 @@ const normalizeProgress = (value) => {
       }))
     : [];
   fallback.gamification = normalizeGamificationState(candidate.gamification, fallback.totals.xp);
-  fallback.updatedAt = typeof candidate.updatedAt === "string" && candidate.updatedAt ? candidate.updatedAt : null;
+  fallback.updatedAt =
+    typeof candidate.updatedAt === "string" && candidate.updatedAt ? candidate.updatedAt : null;
   return fallback;
 };
 
@@ -1631,7 +1712,9 @@ const normalizeUserRecord = (candidate, fallbackUserId) => {
     return null;
   }
   const normalizedData = normalizeUserData(candidate.data);
-  const authProvider = String(normalizedData?.profile?.authProvider || "").trim().toLowerCase();
+  const authProvider = String(normalizedData?.profile?.authProvider || "")
+    .trim()
+    .toLowerCase();
   const rawEmailVerified = candidate.emailVerified;
   let explicitEmailVerified = null;
   if (typeof rawEmailVerified === "boolean") {
@@ -1650,7 +1733,8 @@ const normalizeUserRecord = (candidate, fallbackUserId) => {
       explicitEmailVerified = false;
     }
   }
-  const emailVerified = explicitEmailVerified !== null ? explicitEmailVerified : authProvider === "google";
+  const emailVerified =
+    explicitEmailVerified !== null ? explicitEmailVerified : authProvider === "google";
   const normalizedEmailVerification = normalizeEmailVerificationState(candidate.emailVerification);
   const normalizedPasswordReset = normalizePasswordResetState(candidate.passwordReset);
   return {
@@ -1669,7 +1753,8 @@ const normalizeUserRecord = (candidate, fallbackUserId) => {
     lastLoginAt: candidate.lastLoginAt ? String(candidate.lastLoginAt) : null,
     emailVerified: Boolean(emailVerified),
     emailVerification: normalizedEmailVerification,
-    passwordReset: authProvider === "google" ? createEmptyPasswordResetState() : normalizedPasswordReset,
+    passwordReset:
+      authProvider === "google" ? createEmptyPasswordResetState() : normalizedPasswordReset,
     data: normalizedData,
     progress: normalizeProgress(candidate.progress),
   };
@@ -1683,8 +1768,12 @@ const normalizeAuthStoreDeletedUsers = (candidate) => {
   const source = isPlainObject(candidate) ? candidate : {};
   const userIds = isPlainObject(source.userIds) ? source.userIds : {};
   Object.entries(userIds).forEach(([userId, at]) => {
-    const normalizedUserId = String(userId || "").trim().slice(0, 120);
-    const normalizedAt = String(at || "").trim().slice(0, 40);
+    const normalizedUserId = String(userId || "")
+      .trim()
+      .slice(0, 120);
+    const normalizedAt = String(at || "")
+      .trim()
+      .slice(0, 40);
     if (!normalizedUserId || !normalizedAt || !Number.isFinite(Date.parse(normalizedAt))) {
       return;
     }
@@ -1693,7 +1782,9 @@ const normalizeAuthStoreDeletedUsers = (candidate) => {
   const emails = isPlainObject(source.emails) ? source.emails : {};
   Object.entries(emails).forEach(([email, at]) => {
     const normalizedEmail = normalizeEmail(email);
-    const normalizedAt = String(at || "").trim().slice(0, 40);
+    const normalizedAt = String(at || "")
+      .trim()
+      .slice(0, 40);
     if (!normalizedEmail || !normalizedAt || !Number.isFinite(Date.parse(normalizedAt))) {
       return;
     }
@@ -1749,7 +1840,9 @@ const normalizeAuthStore = (candidate) => {
   });
 
   normalized.schemaVersion =
-    Number(candidate.schemaVersion) > 0 ? Number(candidate.schemaVersion) : AUTH_STORE_SCHEMA_VERSION;
+    Number(candidate.schemaVersion) > 0
+      ? Number(candidate.schemaVersion)
+      : AUTH_STORE_SCHEMA_VERSION;
   normalized.updatedAt = String(candidate.updatedAt || new Date().toISOString());
   normalized.giftTokens = normalizeGiftTokenStore(candidate.giftTokens);
   normalized.deletedUsers = normalizeAuthStoreDeletedUsers(candidate.deletedUsers);
@@ -1790,7 +1883,9 @@ const normalizeBlockedUsersStore = (candidate) => {
 
   const userIdEntries = isPlainObject(candidate.userIds) ? candidate.userIds : {};
   Object.entries(userIdEntries).forEach(([userId, meta]) => {
-    const normalizedUserId = String(userId || "").trim().slice(0, 120);
+    const normalizedUserId = String(userId || "")
+      .trim()
+      .slice(0, 120);
     if (!normalizedUserId) {
       return;
     }
@@ -1799,7 +1894,10 @@ const normalizeBlockedUsersStore = (candidate) => {
 
   const ipHashEntries = isPlainObject(candidate.ipHashes) ? candidate.ipHashes : {};
   Object.entries(ipHashEntries).forEach(([ipHash, meta]) => {
-    const normalizedIpHash = String(ipHash || "").trim().toLowerCase().slice(0, 120);
+    const normalizedIpHash = String(ipHash || "")
+      .trim()
+      .toLowerCase()
+      .slice(0, 120);
     if (!normalizedIpHash) {
       return;
     }
@@ -1807,7 +1905,9 @@ const normalizeBlockedUsersStore = (candidate) => {
   });
 
   normalized.schemaVersion =
-    Number(candidate.schemaVersion) > 0 ? Number(candidate.schemaVersion) : BLOCKED_USERS_SCHEMA_VERSION;
+    Number(candidate.schemaVersion) > 0
+      ? Number(candidate.schemaVersion)
+      : BLOCKED_USERS_SCHEMA_VERSION;
   normalized.updatedAt = String(candidate.updatedAt || new Date().toISOString());
   return normalized;
 };
@@ -1836,7 +1936,9 @@ const normalizeSecurityEventsStore = (candidate) => {
   const events = Array.isArray(candidate.events) ? candidate.events : [];
   normalized.events = events.map((event) => normalizeSecurityEventEntry(event));
   normalized.schemaVersion =
-    Number(candidate.schemaVersion) > 0 ? Number(candidate.schemaVersion) : SECURITY_EVENTS_SCHEMA_VERSION;
+    Number(candidate.schemaVersion) > 0
+      ? Number(candidate.schemaVersion)
+      : SECURITY_EVENTS_SCHEMA_VERSION;
   normalized.updatedAt = String(candidate.updatedAt || new Date().toISOString());
   return normalized;
 };
@@ -1905,7 +2007,10 @@ const loadAuthStoreFromDisk = () => {
     writeAuthStoreLastKnownGoodSync(normalized);
     return normalized;
   } catch (error) {
-    console.error("[auth-store] Failed to read auth store, attempting last-known-good recovery:", error?.message || error);
+    console.error(
+      "[auth-store] Failed to read auth store, attempting last-known-good recovery:",
+      error?.message || error
+    );
     try {
       if (!fs.existsSync(AUTH_DATA_ROOT)) {
         fs.mkdirSync(AUTH_DATA_ROOT, { recursive: true });
@@ -1937,7 +2042,9 @@ const loadAuthStoreFromDisk = () => {
     }
 
     const fallback = createEmptyAuthStore();
-    console.error("[auth-store] No recoverable snapshot found; starting with empty in-memory store");
+    console.error(
+      "[auth-store] No recoverable snapshot found; starting with empty in-memory store"
+    );
     return fallback;
   }
 };
@@ -1953,7 +2060,9 @@ const getAuthStorePostgresPool = () => {
   try {
     ({ Pool } = require("pg"));
   } catch (error) {
-    throw new Error(`Postgres backend requested but pg package is missing: ${error?.message || error}`);
+    throw new Error(
+      `Postgres backend requested but pg package is missing: ${error?.message || error}`
+    );
   }
   authStorePostgresPool = new Pool({
     connectionString: AUTH_POSTGRES_URL,
@@ -2021,7 +2130,10 @@ const mergeAuthStoresForConflictResolution = ({ remoteStore, localStore }) => {
     mergedDeletedUsers.userIds[userId] = String(at || "");
   });
   Object.entries(normalizedLocal.deletedUsers?.userIds || {}).forEach(([userId, at]) => {
-    mergedDeletedUsers.userIds[userId] = pickNewestTimestamp(mergedDeletedUsers.userIds[userId], at);
+    mergedDeletedUsers.userIds[userId] = pickNewestTimestamp(
+      mergedDeletedUsers.userIds[userId],
+      at
+    );
   });
   Object.entries(normalizedRemote.deletedUsers?.emails || {}).forEach(([email, at]) => {
     mergedDeletedUsers.emails[email] = String(at || "");
@@ -2150,7 +2262,9 @@ const mergeAuthStoresForConflictResolution = ({ remoteStore, localStore }) => {
     Number(normalizedRemote.schemaVersion) || AUTH_STORE_SCHEMA_VERSION,
     Number(normalizedLocal.schemaVersion) || AUTH_STORE_SCHEMA_VERSION
   );
-  merged.updatedAt = pickNewestTimestamp(normalizedRemote.updatedAt, normalizedLocal.updatedAt) || new Date().toISOString();
+  merged.updatedAt =
+    pickNewestTimestamp(normalizedRemote.updatedAt, normalizedLocal.updatedAt) ||
+    new Date().toISOString();
   return normalizeAuthStore(merged);
 };
 
@@ -2251,7 +2365,9 @@ const normalizeDeletedAccountPremiumSnapshot = (snapshot) => {
   const customerId = String(snapshot.customerId || snapshot.premiumStripeCustomerId || "")
     .trim()
     .slice(0, 120);
-  const subscriptionId = String(snapshot.subscriptionId || snapshot.premiumStripeSubscriptionId || "")
+  const subscriptionId = String(
+    snapshot.subscriptionId || snapshot.premiumStripeSubscriptionId || ""
+  )
     .trim()
     .slice(0, 120);
   const cancelAtPeriodEnd = snapshot.cancelAtPeriodEnd === true;
@@ -2306,7 +2422,10 @@ const loadDeletedAccountsAuditFromDisk = () => {
         deletedAt: String(entry.deletedAt || "").slice(0, 40) || new Date().toISOString(),
         userId: String(entry.userId || "").slice(0, 100),
         email: normalizeEmail(entry.email),
-        displayName: sanitizeDisplayName(String(entry.displayName || ""), String(entry.email || "")),
+        displayName: sanitizeDisplayName(
+          String(entry.displayName || ""),
+          String(entry.email || "")
+        ),
         authProvider: String(entry.authProvider || "email").slice(0, 32),
         createdAt: String(entry.createdAt || "").slice(0, 40) || null,
         lastLoginAt: String(entry.lastLoginAt || "").slice(0, 40) || null,
@@ -2329,13 +2448,19 @@ const loadDeletedAccountsAuditFromDisk = () => {
   }
 };
 
-const buildRegistrationAuditEntryFromUser = (userRecord = {}, source = "signup-email", req = null) => {
+const buildRegistrationAuditEntryFromUser = (
+  userRecord = {},
+  source = "signup-email",
+  req = null
+) => {
   const email = normalizeEmail(userRecord?.email);
   if (!email) {
     return null;
   }
   const authProvider =
-    String(userRecord?.data?.profile?.authProvider || (source === "signup-google" ? "google" : "email"))
+    String(
+      userRecord?.data?.profile?.authProvider || (source === "signup-google" ? "google" : "email")
+    )
       .trim()
       .toLowerCase() || "email";
   return {
@@ -2356,7 +2481,9 @@ const loadRegisteredAccountsAuditFromDisk = () => {
     }
     if (!fs.existsSync(REGISTERED_ACCOUNTS_AUDIT_FILE)) {
       const bootstrap = Object.values(authStore?.users || {})
-        .map((userRecord) => buildRegistrationAuditEntryFromUser(userRecord, "bootstrap-existing", null))
+        .map((userRecord) =>
+          buildRegistrationAuditEntryFromUser(userRecord, "bootstrap-existing", null)
+        )
         .filter(Boolean);
       writeRegisteredAccountsAuditSync(bootstrap);
       return bootstrap;
@@ -2373,7 +2500,10 @@ const loadRegisteredAccountsAuditFromDisk = () => {
         registeredAt: String(entry.registeredAt || "").slice(0, 40) || new Date().toISOString(),
         userId: String(entry.userId || "").slice(0, 100),
         email: normalizeEmail(entry.email),
-        displayName: sanitizeDisplayName(String(entry.displayName || ""), String(entry.email || "")),
+        displayName: sanitizeDisplayName(
+          String(entry.displayName || ""),
+          String(entry.email || "")
+        ),
         authProvider: String(entry.authProvider || "email").slice(0, 32),
         source: String(entry.source || "signup-email").slice(0, 40),
         requestId: String(entry.requestId || "").slice(0, 80),
@@ -2409,7 +2539,10 @@ const loadBlockedUsersStoreFromDisk = () => {
     writeBlockedUsersStoreSync(normalized);
     return normalized;
   } catch (error) {
-    console.error("[blocked-users-store] Failed to read block store, resetting:", error?.message || error);
+    console.error(
+      "[blocked-users-store] Failed to read block store, resetting:",
+      error?.message || error
+    );
     const fallback = createEmptyBlockedUsersStore();
     try {
       writeBlockedUsersStoreSync(fallback);
@@ -2434,7 +2567,10 @@ const loadSecurityEventsStoreFromDisk = () => {
     writeSecurityEventsStoreSync(normalized);
     return normalized;
   } catch (error) {
-    console.error("[security-events-store] Failed to read events store, resetting:", error?.message || error);
+    console.error(
+      "[security-events-store] Failed to read events store, resetting:",
+      error?.message || error
+    );
     const fallback = createEmptySecurityEventsStore();
     try {
       writeSecurityEventsStoreSync(fallback);
@@ -2556,7 +2692,11 @@ const markSecurityEventsStoreDirty = () => {
   void queuePersistSecurityEventsStore();
 };
 
-const hashText = (value) => crypto.createHash("sha256").update(String(value || "")).digest("hex");
+const hashText = (value) =>
+  crypto
+    .createHash("sha256")
+    .update(String(value || ""))
+    .digest("hex");
 const hashSessionToken = (token) => hashText(token);
 const hashEmailVerificationToken = (token) => hashText(`email-verify:${String(token || "")}`);
 const hashPasswordResetToken = (token) => hashText(`password-reset:${String(token || "")}`);
@@ -2599,7 +2739,11 @@ const resolvePremiumGrantUntilIso = ({ profile = {}, grantUntil = "", grantDays 
 
 const applyManualPremiumGrantToUserRecord = (
   userRecord,
-  { grantUntil = "", grantDays = PREMIUM_GIFT_TOKEN_DEFAULT_PREMIUM_DAYS, source = "manual-grant" } = {}
+  {
+    grantUntil = "",
+    grantDays = PREMIUM_GIFT_TOKEN_DEFAULT_PREMIUM_DAYS,
+    source = "manual-grant",
+  } = {}
 ) => {
   if (!isPlainObject(userRecord)) {
     return { grantedUntil: "", nowIso: new Date().toISOString() };
@@ -2622,7 +2766,10 @@ const applyManualPremiumGrantToUserRecord = (
   profile.tier = "premium";
   profile.membership = "premium";
   profile.premiumProvider = "manual";
-  profile.premiumLastSource = String(source || "manual-grant").trim().slice(0, 80) || "manual-grant";
+  profile.premiumLastSource =
+    String(source || "manual-grant")
+      .trim()
+      .slice(0, 80) || "manual-grant";
   profile.premiumStatus = "active";
   profile.subscriptionStatus = "active";
   profile.premiumCancelAtPeriodEnd = false;
@@ -2639,7 +2786,9 @@ const applyManualPremiumGrantToUserRecord = (
 };
 
 const findGiftTokenByRawToken = (rawToken) => {
-  const token = String(rawToken || "").trim().slice(0, 240);
+  const token = String(rawToken || "")
+    .trim()
+    .slice(0, 240);
   if (!token) {
     return { token: "", tokenHash: "", record: null };
   }
@@ -2681,7 +2830,9 @@ const buildGiftTokenSummary = (record = {}) => {
     expiresAt: safeRecord.expiresAt || null,
     createdBy: safeRecord.createdBy || null,
     recipientEmail: safeRecord.recipientEmail || null,
-    recipientHint: safeRecord.recipientEmail ? maskGiftRecipientEmail(safeRecord.recipientEmail) : null,
+    recipientHint: safeRecord.recipientEmail
+      ? maskGiftRecipientEmail(safeRecord.recipientEmail)
+      : null,
     grantDays: safeRecord.grantDays,
     grantUntil: safeRecord.grantUntil || null,
     title: safeRecord.title,
@@ -2750,7 +2901,11 @@ const appendSecurityEvent = async ({
   return true;
 };
 
-const sendSignupWebhookNotification = async ({ userRecord = null, source = "signup-email", req = null } = {}) => {
+const sendSignupWebhookNotification = async ({
+  userRecord = null,
+  source = "signup-email",
+  req = null,
+} = {}) => {
   if (!SIGNUP_WEBHOOK_URL || !userRecord || typeof userRecord !== "object") {
     return false;
   }
@@ -2790,7 +2945,9 @@ const sendSignupWebhookNotification = async ({ userRecord = null, source = "sign
 const findBlockedPrincipal = ({ email = "", userId = "", ipHash = "" } = {}) => {
   const normalizedUserId = String(userId || "").trim();
   const normalizedEmail = normalizeEmail(email);
-  const normalizedIpHash = String(ipHash || "").trim().toLowerCase();
+  const normalizedIpHash = String(ipHash || "")
+    .trim()
+    .toLowerCase();
 
   if (normalizedUserId && blockedUsersStore.userIds[normalizedUserId]) {
     return {
@@ -2846,7 +3003,11 @@ const rejectBlockedAccess = ({ req, res, email = "", userId = "", context = "" }
   return true;
 };
 
-const appendDeletedAccountAuditEntry = async ({ userRecord = null, req = null, source = "self-delete" } = {}) => {
+const appendDeletedAccountAuditEntry = async ({
+  userRecord = null,
+  req = null,
+  source = "self-delete",
+} = {}) => {
   if (!userRecord || !isPlainObject(userRecord)) {
     return false;
   }
@@ -2854,7 +3015,10 @@ const appendDeletedAccountAuditEntry = async ({ userRecord = null, req = null, s
   if (!email) {
     return false;
   }
-  const authProvider = String(userRecord?.data?.profile?.authProvider || "email").trim().toLowerCase() || "email";
+  const authProvider =
+    String(userRecord?.data?.profile?.authProvider || "email")
+      .trim()
+      .toLowerCase() || "email";
   const profile = isPlainObject(userRecord?.data?.profile) ? userRecord.data.profile : {};
   const premiumSnapshot = normalizeDeletedAccountPremiumSnapshot({
     isPremium: profile.isPremium,
@@ -2864,7 +3028,10 @@ const appendDeletedAccountAuditEntry = async ({ userRecord = null, req = null, s
     membership: profile.membership,
     provider: profile.premiumProvider,
     status:
-      profile.premiumStatus || profile.subscriptionStatus || profile.premiumStripeSubscriptionStatus || "",
+      profile.premiumStatus ||
+      profile.subscriptionStatus ||
+      profile.premiumStripeSubscriptionStatus ||
+      "",
     currentPeriodEnd:
       profile.premiumCurrentPeriodEnd ||
       profile.currentPeriodEnd ||
@@ -2897,7 +3064,11 @@ const appendDeletedAccountAuditEntry = async ({ userRecord = null, req = null, s
   return true;
 };
 
-const appendRegisteredAccountAuditEntry = async ({ userRecord = null, req = null, source = "signup-email" } = {}) => {
+const appendRegisteredAccountAuditEntry = async ({
+  userRecord = null,
+  req = null,
+  source = "signup-email",
+} = {}) => {
   const entry = buildRegistrationAuditEntryFromUser(userRecord, source, req);
   if (!entry) {
     return false;
@@ -3047,7 +3218,10 @@ const pruneExpiredSessions = () => {
 const trimUserSessions = (userId, keepLatest = MAX_SESSIONS_PER_USER) => {
   const sessions = Object.entries(authStore.sessions)
     .filter(([, session]) => String(session?.userId || "") === userId)
-    .sort((a, b) => Date.parse(String(b[1]?.createdAt || "")) - Date.parse(String(a[1]?.createdAt || "")));
+    .sort(
+      (a, b) =>
+        Date.parse(String(b[1]?.createdAt || "")) - Date.parse(String(a[1]?.createdAt || ""))
+    );
   if (sessions.length <= keepLatest) {
     return;
   }
@@ -3103,8 +3277,7 @@ const purgeUserFromAuthStore = ({ userId, email = "" } = {}) => {
   }
 
   const resolvedUserId =
-    normalizedUserId ||
-    String(authStore.emailIndex[normalizedEmail] || "").trim();
+    normalizedUserId || String(authStore.emailIndex[normalizedEmail] || "").trim();
   const userRecord = resolvedUserId ? authStore.users[resolvedUserId] : null;
   const resolvedEmail = normalizeEmail(userRecord?.email || normalizedEmail);
   let changed = false;
@@ -3254,7 +3427,9 @@ const cloneForResponse = (value) => {
 
 const toPublicUser = (userRecord) => {
   const authProvider =
-    String(userRecord?.data?.profile?.authProvider || "email").trim().toLowerCase() || "email";
+    String(userRecord?.data?.profile?.authProvider || "email")
+      .trim()
+      .toLowerCase() || "email";
   return {
     id: userRecord.id,
     email: userRecord.email,
@@ -3356,10 +3531,7 @@ const buildAdminUserSummary = (userRecord) => {
   const profile = isPlainObject(safeRecord.data?.profile) ? safeRecord.data.profile : {};
   const normalizedEmail = normalizeEmail(safeRecord.email || profile.email || "");
   const provider = String(
-    profile.authProvider ||
-      safeRecord.authProvider ||
-      profile.provider ||
-      "email"
+    profile.authProvider || safeRecord.authProvider || profile.provider || "email"
   )
     .trim()
     .toLowerCase();
@@ -3369,10 +3541,7 @@ const buildAdminUserSummary = (userRecord) => {
     .trim()
     .toLowerCase();
   const premiumEndRaw = String(
-    profile.premiumCurrentPeriodEnd ||
-      profile.premiumEndsAt ||
-      profile.subscriptionEndsAt ||
-      ""
+    profile.premiumCurrentPeriodEnd || profile.premiumEndsAt || profile.subscriptionEndsAt || ""
   ).trim();
   const premiumEndMs = Date.parse(premiumEndRaw);
   const hasFuturePremiumEnd = Number.isFinite(premiumEndMs) && premiumEndMs > Date.now();
@@ -3505,9 +3674,10 @@ app.post(
         error: "Invalid until timestamp. Use ISO-8601 or YYYY-MM-DD.",
       });
     }
-    const normalizedDays = Number.isFinite(requestedDays) && requestedDays > 0
-      ? Math.max(1, Math.min(PREMIUM_GIFT_TOKEN_MAX_DAYS, Math.round(requestedDays)))
-      : PREMIUM_GIFT_TOKEN_DEFAULT_PREMIUM_DAYS;
+    const normalizedDays =
+      Number.isFinite(requestedDays) && requestedDays > 0
+        ? Math.max(1, Math.min(PREMIUM_GIFT_TOKEN_MAX_DAYS, Math.round(requestedDays)))
+        : PREMIUM_GIFT_TOKEN_DEFAULT_PREMIUM_DAYS;
     const grantResult = applyManualPremiumGrantToUserRecord(userRecord, {
       grantUntil: untilRaw,
       grantDays: normalizedDays,
@@ -3640,7 +3810,9 @@ app.post(
         Number.isFinite(tokenTtlDaysRaw) && tokenTtlDaysRaw > 0
           ? Math.max(1, Math.min(PREMIUM_GIFT_TOKEN_MAX_DAYS, Math.round(tokenTtlDaysRaw)))
           : PREMIUM_GIFT_TOKEN_DEFAULT_TTL_DAYS;
-      expiresAtIso = new Date(Date.now() + normalizedTokenTtlDays * 24 * 60 * 60 * 1000).toISOString();
+      expiresAtIso = new Date(
+        Date.now() + normalizedTokenTtlDays * 24 * 60 * 60 * 1000
+      ).toISOString();
     }
 
     const rawToken = createGiftRedeemToken();
@@ -3820,7 +3992,9 @@ app.get("/api/gifts/redeem/preview", authVerifyLimiter, (req, res) => {
   const nowMs = Date.now();
   const expiresMs = Date.parse(String(record.expiresAt || ""));
   if (record.status === "revoked") {
-    return res.status(410).json({ error: "Gift link is no longer available.", code: "gift_revoked" });
+    return res
+      .status(410)
+      .json({ error: "Gift link is no longer available.", code: "gift_revoked" });
   }
   if (record.status === "used") {
     return res.status(409).json({ error: "Gift link has already been used.", code: "gift_used" });
@@ -3858,7 +4032,9 @@ app.post("/api/gifts/redeem/claim", authSessionLimiter, requireAuthenticatedUser
   const recipientEmail = normalizeEmail(record.recipientEmail);
 
   if (record.status === "revoked") {
-    return res.status(410).json({ error: "Gift link is no longer available.", code: "gift_revoked" });
+    return res
+      .status(410)
+      .json({ error: "Gift link is no longer available.", code: "gift_revoked" });
   }
   if (record.status === "used") {
     const alreadyUsedBySameUser =
@@ -3981,12 +4157,26 @@ app.post(
   requireAdminSecurityAccess,
   (req, res) => {
     const email = normalizeEmail(req.body?.email);
-    const userId = String(req.body?.userId || "").trim().slice(0, 120);
-    const ipHashInput = String(req.body?.ipHash || "").trim().toLowerCase().slice(0, 120);
-    const ipInput = String(req.body?.ip || "").trim().slice(0, 120);
-    const reason = String(req.body?.reason || "policy-violation").trim().slice(0, 200);
-    const note = String(req.body?.note || "").trim().slice(0, 300);
-    const blockedBy = String(req.body?.blockedBy || "admin").trim().slice(0, 80) || "admin";
+    const userId = String(req.body?.userId || "")
+      .trim()
+      .slice(0, 120);
+    const ipHashInput = String(req.body?.ipHash || "")
+      .trim()
+      .toLowerCase()
+      .slice(0, 120);
+    const ipInput = String(req.body?.ip || "")
+      .trim()
+      .slice(0, 120);
+    const reason = String(req.body?.reason || "policy-violation")
+      .trim()
+      .slice(0, 200);
+    const note = String(req.body?.note || "")
+      .trim()
+      .slice(0, 300);
+    const blockedBy =
+      String(req.body?.blockedBy || "admin")
+        .trim()
+        .slice(0, 80) || "admin";
 
     const resolvedIpHash = ipHashInput || (ipInput ? hashText(`ip:${ipInput}`) : "");
     const hasTarget = Boolean(email || userId || resolvedIpHash);
@@ -4045,9 +4235,16 @@ app.post(
   requireAdminSecurityAccess,
   (req, res) => {
     const email = normalizeEmail(req.body?.email);
-    const userId = String(req.body?.userId || "").trim().slice(0, 120);
-    const ipHashInput = String(req.body?.ipHash || "").trim().toLowerCase().slice(0, 120);
-    const ipInput = String(req.body?.ip || "").trim().slice(0, 120);
+    const userId = String(req.body?.userId || "")
+      .trim()
+      .slice(0, 120);
+    const ipHashInput = String(req.body?.ipHash || "")
+      .trim()
+      .toLowerCase()
+      .slice(0, 120);
+    const ipInput = String(req.body?.ip || "")
+      .trim()
+      .slice(0, 120);
     const resolvedIpHash = ipHashInput || (ipInput ? hashText(`ip:${ipInput}`) : "");
     const hasTarget = Boolean(email || userId || resolvedIpHash);
     if (!hasTarget) {
@@ -4096,7 +4293,7 @@ app.post(
 const isGoogleOauthConfigured = () =>
   Boolean(
     String(process.env.GOOGLE_OAUTH_CLIENT_ID || "").trim() &&
-      String(process.env.GOOGLE_OAUTH_CLIENT_SECRET || "").trim()
+    String(process.env.GOOGLE_OAUTH_CLIENT_SECRET || "").trim()
   );
 
 const getRequestOrigin = (req) => {
@@ -4204,7 +4401,9 @@ const exchangeGoogleCodeForTokens = async ({ code, redirectUri }) => {
   });
   const payload = await response.json().catch(() => null);
   if (!response.ok || !payload || typeof payload !== "object") {
-    const errorMessage = String(payload?.error_description || payload?.error || "Google token exchange failed");
+    const errorMessage = String(
+      payload?.error_description || payload?.error || "Google token exchange failed"
+    );
     throw new Error(errorMessage);
   }
   return payload;
@@ -4350,9 +4549,18 @@ const normalizeMapKey = (value) =>
     .toLowerCase()
     .replace(/[^a-z]/g, "")
     .slice(0, 20);
-const normalizeSectionKey = (value) => String(value || "").trim().slice(0, 120);
+const normalizeSectionKey = (value) =>
+  String(value || "")
+    .trim()
+    .slice(0, 120);
 const ALLOWED_PROGRESS_MAP_KEYS = new Set(["letters", "words", "phrases", "grammar"]);
-const ALLOWED_PROGRESS_STATUS = new Set(["started", "practiced", "reviewed", "completed", "uncompleted"]);
+const ALLOWED_PROGRESS_STATUS = new Set([
+  "started",
+  "practiced",
+  "reviewed",
+  "completed",
+  "uncompleted",
+]);
 
 const ensureProgressContainers = (progress, worldKey, mapKey) => {
   if (!isPlainObject(progress.worlds[worldKey])) {
@@ -4545,7 +4753,9 @@ const decrementQuestTaskProgress = (task, amount = 1) => {
 };
 
 const isCountableWorldMapSectionEvent = (eventContext) => {
-  const mapKey = String(eventContext?.mapKey || "").trim().toLowerCase();
+  const mapKey = String(eventContext?.mapKey || "")
+    .trim()
+    .toLowerCase();
   const sectionKey = String(eventContext?.sectionKey || "").trim();
   if (!ALLOWED_PROGRESS_MAP_KEYS.has(mapKey) || !sectionKey) {
     return false;
@@ -4560,13 +4770,22 @@ const isCountableWorldMapSectionEvent = (eventContext) => {
 };
 
 const isWorldMapCardPracticeEvent = (eventContext) => {
-  const status = String(eventContext?.status || "").trim().toLowerCase();
+  const status = String(eventContext?.status || "")
+    .trim()
+    .toLowerCase();
   return status === "practiced" && isCountableWorldMapSectionEvent(eventContext);
 };
 
 const isSectionVisitedForQuest = (sectionRecord) => {
-  const status = String(sectionRecord?.status || "").trim().toLowerCase();
-  if (status === "started" || status === "practiced" || status === "reviewed" || status === "completed") {
+  const status = String(sectionRecord?.status || "")
+    .trim()
+    .toLowerCase();
+  if (
+    status === "started" ||
+    status === "practiced" ||
+    status === "reviewed" ||
+    status === "completed"
+  ) {
     return true;
   }
   if (hasSectionCompletion(sectionRecord)) {
@@ -4670,7 +4889,8 @@ const countEffectiveCompletedSectionsForQuests = (progress) => {
       if (mapKey === "letters") {
         const hasAnyCompletedLettersSection = Object.entries(sections).some(
           ([sectionKey, sectionRecord]) =>
-            isCountableWorldMapSectionEvent({ mapKey, sectionKey }) && hasSectionCompletion(sectionRecord)
+            isCountableWorldMapSectionEvent({ mapKey, sectionKey }) &&
+            hasSectionCompletion(sectionRecord)
         );
         if (hasAnyCompletedLettersSection) {
           total += 1;
@@ -4732,7 +4952,11 @@ const syncGamificationStatsFromProgress = (progress) => {
     return;
   }
   stats.sectionsVisited = toBoundedInt(countVisitedSectionsForQuests(progress), 0, 5000000);
-  stats.sectionsCompleted = toBoundedInt(countEffectiveCompletedSectionsForQuests(progress), 0, 5000000);
+  stats.sectionsCompleted = toBoundedInt(
+    countEffectiveCompletedSectionsForQuests(progress),
+    0,
+    5000000
+  );
   stats.cardsPracticed = toBoundedInt(countCheckedPracticeItemsForQuests(progress), 0, 50000000);
   stats.grammarReviews = toBoundedInt(countGrammarReviewEventsForStats(progress), 0, 50000000);
 };
@@ -4924,7 +5148,9 @@ const trackProgressEventForUser = (userRecord, payload) => {
   const worldKey = normalizeWorldKey(payload.worldKey);
   const mapKey = normalizeMapKey(payload.mapKey);
   const sectionKey = normalizeSectionKey(payload.sectionKey);
-  const status = String(payload.status || "started").trim().toLowerCase();
+  const status = String(payload.status || "started")
+    .trim()
+    .toLowerCase();
   const scoreRaw = Number(payload.score);
 
   if (!worldKey || !mapKey || !sectionKey) {
@@ -4955,7 +5181,9 @@ const trackProgressEventForUser = (userRecord, payload) => {
       },
     };
   }
-  const questToggleMode = String(payload.questToggleMode || "").trim().toLowerCase();
+  const questToggleMode = String(payload.questToggleMode || "")
+    .trim()
+    .toLowerCase();
   const isPracticeQuestToggle = questToggleMode === "practice";
   const now = new Date().toISOString();
   const dateKey = getUtcDateKeyFromIso(now);
@@ -4964,23 +5192,28 @@ const trackProgressEventForUser = (userRecord, payload) => {
   const progress = userRecord.progress;
   ensureProgressContainers(progress, worldKey, mapKey);
   const mapProgress = progress.worlds[worldKey].maps[mapKey];
-  const previous = isPlainObject(mapProgress.sections[sectionKey]) ? mapProgress.sections[sectionKey] : null;
+  const previous = isPlainObject(mapProgress.sections[sectionKey])
+    ? mapProgress.sections[sectionKey]
+    : null;
   const previousStatus = String(previous?.status || "").toLowerCase();
   const previousHasCompletion = hasSectionCompletion(previous);
-  const isUncompleteEvent = !isPracticeQuestToggle && status === "uncompleted" && previousHasCompletion;
-  const nextStatus =
-    isPracticeQuestToggle
-      ? previousStatus || "started"
-      : status === "uncompleted"
+  const isUncompleteEvent =
+    !isPracticeQuestToggle && status === "uncompleted" && previousHasCompletion;
+  const nextStatus = isPracticeQuestToggle
+    ? previousStatus || "started"
+    : status === "uncompleted"
       ? previousStatus && previousStatus !== "completed"
         ? previousStatus
         : "started"
       : status;
-  const isFirstCompletion = !isPracticeQuestToggle && status === "completed" && !previousHasCompletion;
+  const isFirstCompletion =
+    !isPracticeQuestToggle && status === "completed" && !previousHasCompletion;
   const hasAnyCompletedLettersSection =
     mapKey === "letters" &&
     Object.entries(mapProgress.sections || {}).some(([existingSectionKey, existingSection]) => {
-      const existingStatus = String(existingSection?.status || "").trim().toLowerCase();
+      const existingStatus = String(existingSection?.status || "")
+        .trim()
+        .toLowerCase();
       return (
         existingStatus === "completed" &&
         isCountableWorldMapSectionEvent({
@@ -5003,7 +5236,9 @@ const trackProgressEventForUser = (userRecord, payload) => {
       if (existingSectionKey === sectionKey) {
         return false;
       }
-      const existingStatus = String(existingSection?.status || "").trim().toLowerCase();
+      const existingStatus = String(existingSection?.status || "")
+        .trim()
+        .toLowerCase();
       return (
         existingStatus === "completed" &&
         isCountableWorldMapSectionEvent({
@@ -5018,16 +5253,23 @@ const trackProgressEventForUser = (userRecord, payload) => {
     isCountableWorldMapSectionEvent({ mapKey, sectionKey }) &&
     (mapKey === "letters" ? !hasOtherCompletedLettersSection : true);
   const wasPracticeQuestChecked = Boolean(previous?.practiceQuestCheckedAt);
-  const wantsPracticeQuestChecked = isPracticeQuestToggle ? status !== "uncompleted" : wasPracticeQuestChecked;
-  const shouldMarkPracticeQuest = isPracticeQuestToggle && !wasPracticeQuestChecked && wantsPracticeQuestChecked;
-  const shouldUnmarkPracticeQuest = isPracticeQuestToggle && wasPracticeQuestChecked && !wantsPracticeQuestChecked;
+  const wantsPracticeQuestChecked = isPracticeQuestToggle
+    ? status !== "uncompleted"
+    : wasPracticeQuestChecked;
+  const shouldMarkPracticeQuest =
+    isPracticeQuestToggle && !wasPracticeQuestChecked && wantsPracticeQuestChecked;
+  const shouldUnmarkPracticeQuest =
+    isPracticeQuestToggle && wasPracticeQuestChecked && !wantsPracticeQuestChecked;
   const isFirstSectionVisit = !previous || toBoundedInt(previous.visitCount, 0, 5000000) === 0;
 
   const gamification = ensureGamificationDateState(progress, dateKey);
-  const computedXpDelta = isPracticeQuestToggle ? 0 : computeEventXpDelta(status, mapKey, previous, gamification.daily);
+  const computedXpDelta = isPracticeQuestToggle
+    ? 0
+    : computeEventXpDelta(status, mapKey, previous, gamification.daily);
   let xpDelta = 0;
 
-  const nextVisitCount = toBoundedInt(previous?.visitCount, 0, 5000000) + (status === "started" ? 1 : 0);
+  const nextVisitCount =
+    toBoundedInt(previous?.visitCount, 0, 5000000) + (status === "started" ? 1 : 0);
   const nextPracticeCount =
     toBoundedInt(previous?.practiceCount, 0, 50000000) + (status === "practiced" ? 1 : 0);
   const nextReviewCount =
@@ -5045,39 +5287,54 @@ const trackProgressEventForUser = (userRecord, payload) => {
     completionCount: nextCompletionCount,
     firstStartedAt: previous?.firstStartedAt || (status === "started" ? now : null),
     lastUpdatedAt: now,
-    firstCompletedAt:
-      isPracticeQuestToggle
-        ? previous?.firstCompletedAt || null
-        : status === "completed"
-          ? previous?.firstCompletedAt || now
-          : status === "uncompleted"
-            ? null
-            : previous?.firstCompletedAt || null,
-    practiceQuestCheckedAt: wantsPracticeQuestChecked ? previous?.practiceQuestCheckedAt || now : null,
+    firstCompletedAt: isPracticeQuestToggle
+      ? previous?.firstCompletedAt || null
+      : status === "completed"
+        ? previous?.firstCompletedAt || now
+        : status === "uncompleted"
+          ? null
+          : previous?.firstCompletedAt || null,
+    practiceQuestCheckedAt: wantsPracticeQuestChecked
+      ? previous?.practiceQuestCheckedAt || now
+      : null,
   };
 
   if (status === "started") {
     mapProgress.startedCount = toBoundedInt(Number(mapProgress.startedCount || 0) + 1, 0, 5000000);
   }
   if (status === "practiced") {
-    mapProgress.practiceCount = toBoundedInt(Number(mapProgress.practiceCount || 0) + 1, 0, 50000000);
+    mapProgress.practiceCount = toBoundedInt(
+      Number(mapProgress.practiceCount || 0) + 1,
+      0,
+      50000000
+    );
   }
   if (status === "reviewed") {
     mapProgress.reviewCount = toBoundedInt(Number(mapProgress.reviewCount || 0) + 1, 0, 50000000);
   }
   if (!isPracticeQuestToggle && status === "completed" && !previousHasCompletion) {
     mapProgress.completedCount = Math.max(0, Number(mapProgress.completedCount || 0) + 1);
-    progress.totals.completedSections = Math.max(0, Number(progress.totals.completedSections || 0) + 1);
+    progress.totals.completedSections = Math.max(
+      0,
+      Number(progress.totals.completedSections || 0) + 1
+    );
   }
   if (!isPracticeQuestToggle && isUncompleteEvent) {
     mapProgress.completedCount = Math.max(0, Number(mapProgress.completedCount || 0) - 1);
-    progress.totals.completedSections = Math.max(0, Number(progress.totals.completedSections || 0) - 1);
+    progress.totals.completedSections = Math.max(
+      0,
+      Number(progress.totals.completedSections || 0) - 1
+    );
   }
 
   progress.totals.lastActivityAt = now;
   gamification.daily.events = toBoundedInt(Number(gamification.daily.events || 0) + 1, 0, 50000);
   if (status === "started") {
-    gamification.daily.startedEvents = toBoundedInt(Number(gamification.daily.startedEvents || 0) + 1, 0, 50000);
+    gamification.daily.startedEvents = toBoundedInt(
+      Number(gamification.daily.startedEvents || 0) + 1,
+      0,
+      50000
+    );
   }
   if (status === "practiced") {
     gamification.daily.practicedEvents = toBoundedInt(
@@ -5087,7 +5344,11 @@ const trackProgressEventForUser = (userRecord, payload) => {
     );
   }
   if (status === "reviewed") {
-    gamification.daily.reviewEvents = toBoundedInt(Number(gamification.daily.reviewEvents || 0) + 1, 0, 50000);
+    gamification.daily.reviewEvents = toBoundedInt(
+      Number(gamification.daily.reviewEvents || 0) + 1,
+      0,
+      50000
+    );
   }
   if (!isPracticeQuestToggle && status === "completed") {
     gamification.daily.completedEvents = toBoundedInt(
@@ -5204,11 +5465,15 @@ const startGoogleOauthFlow = (req, res, forcedMode = "") => {
     return res.status(503).json({ error: "Google authentication is not configured" });
   }
 
-  const forced = String(forcedMode || "").trim().toLowerCase();
+  const forced = String(forcedMode || "")
+    .trim()
+    .toLowerCase();
   const mode =
     forced === "signup" || forced === "login"
       ? forced
-      : String(req.query?.mode || "").trim().toLowerCase() === "signup"
+      : String(req.query?.mode || "")
+            .trim()
+            .toLowerCase() === "signup"
         ? "signup"
         : "login";
   const returnTo = sanitizeReturnToPath(req.query?.returnTo);
@@ -5263,7 +5528,8 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
       .toLowerCase() === "true";
   const hasStateFlowToken = Boolean(stateFlowToken);
   const hasFlowCookieToken = Boolean(flowCookieToken);
-  const hasFlowTokenMismatch = hasFlowCookieToken && hasStateFlowToken && flowCookieToken !== stateFlowToken;
+  const hasFlowTokenMismatch =
+    hasFlowCookieToken && hasStateFlowToken && flowCookieToken !== stateFlowToken;
   if (!hasStateFlowToken || hasFlowTokenMismatch || (requireFlowCookie && !hasFlowCookieToken)) {
     return res.redirect(302, buildAuthErrorRedirectPath("google_flow"));
   }
@@ -5286,7 +5552,9 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
     });
 
     const email = normalizeEmail(profile.email);
-    const emailVerifiedRaw = String(profile.email_verified || "").trim().toLowerCase();
+    const emailVerifiedRaw = String(profile.email_verified || "")
+      .trim()
+      .toLowerCase();
     const emailVerified =
       profile.email_verified === true || emailVerifiedRaw === "true" || emailVerifiedRaw === "1";
     if (!isValidEmail(email) || !emailVerified) {
@@ -5305,7 +5573,11 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
 
     const nowIso = new Date().toISOString();
     const oauthMode =
-      String(stateData?.mode || "login").trim().toLowerCase() === "signup" ? "signup" : "login";
+      String(stateData?.mode || "login")
+        .trim()
+        .toLowerCase() === "signup"
+        ? "signup"
+        : "login";
     const indexedUserId = String(authStore.emailIndex[email] || "").trim();
     let userRecord = indexedUserId ? authStore.users[indexedUserId] : null;
     if (indexedUserId && !userRecord) {
@@ -5397,7 +5669,9 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
         userRecord.data.profile = {};
       }
       const existingAuthProvider =
-        String(userRecord.data.profile.authProvider || "email").trim().toLowerCase() || "email";
+        String(userRecord.data.profile.authProvider || "email")
+          .trim()
+          .toLowerCase() || "email";
       if (existingAuthProvider !== "google") {
         return res.redirect(
           302,
@@ -5419,7 +5693,10 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
         );
       }
       if (!userRecord.displayName || userRecord.displayName === "Explorer") {
-        userRecord.displayName = sanitizeDisplayName(profile.name || profile.given_name || "", email);
+        userRecord.displayName = sanitizeDisplayName(
+          profile.name || profile.given_name || "",
+          email
+        );
       }
       userRecord.data.profile.authProvider = "google";
       const pictureUrl = String(profile.picture || "").trim();
@@ -5578,7 +5855,10 @@ app.get("/api/auth/password/reset", authVerifyLimiter, (req, res) => {
     return res.redirect(302, buildAuthErrorRedirectPath("password_reset_invalid", returnTo));
   }
 
-  const authProvider = String(userRecord?.data?.profile?.authProvider || "email").trim().toLowerCase() || "email";
+  const authProvider =
+    String(userRecord?.data?.profile?.authProvider || "email")
+      .trim()
+      .toLowerCase() || "email";
   if (authProvider === "google") {
     return res.redirect(302, buildAuthErrorRedirectPath("password_reset_invalid", returnTo));
   }
@@ -5640,7 +5920,10 @@ app.post("/api/auth/password/forgot", authVerifyLimiter, async (req, res) => {
     });
   }
 
-  const authProvider = String(userRecord?.data?.profile?.authProvider || "email").trim().toLowerCase() || "email";
+  const authProvider =
+    String(userRecord?.data?.profile?.authProvider || "email")
+      .trim()
+      .toLowerCase() || "email";
   if (authProvider === "google") {
     return res.json({
       ok: true,
@@ -5676,7 +5959,10 @@ app.post("/api/auth/password/forgot", authVerifyLimiter, async (req, res) => {
         deliveryError,
       });
       const loweredDeliveryError = deliveryError.toLowerCase();
-      if (loweredDeliveryError.includes("testing emails") || loweredDeliveryError.includes("verify a domain")) {
+      if (
+        loweredDeliveryError.includes("testing emails") ||
+        loweredDeliveryError.includes("verify a domain")
+      ) {
         return res.status(502).json({
           error:
             "Email provider is in testing mode. Verify a domain in Resend and use AUTH_FROM with that domain.",
@@ -5742,7 +6028,10 @@ app.post("/api/auth/password/reset", authVerifyLimiter, async (req, res) => {
     return res.status(400).json({ error: "Reset link is invalid. Request a new one." });
   }
 
-  const authProvider = String(userRecord?.data?.profile?.authProvider || "email").trim().toLowerCase() || "email";
+  const authProvider =
+    String(userRecord?.data?.profile?.authProvider || "email")
+      .trim()
+      .toLowerCase() || "email";
   if (authProvider === "google") {
     return res.status(400).json({ error: "Google accounts must use Google sign-in." });
   }
@@ -5784,67 +6073,78 @@ app.post("/api/auth/password/reset", authVerifyLimiter, async (req, res) => {
 });
 
 // Change password for authenticated email/password users.
-app.post("/api/auth/password/change", authSessionLimiter, requireAuthenticatedUser, async (req, res) => {
-  const userRecord = req.authUser;
-  const authProvider = String(userRecord?.data?.profile?.authProvider || "email").trim().toLowerCase() || "email";
-  if (authProvider === "google") {
-    return res.status(400).json({ error: "Google accounts do not use password reset here." });
-  }
+app.post(
+  "/api/auth/password/change",
+  authSessionLimiter,
+  requireAuthenticatedUser,
+  async (req, res) => {
+    const userRecord = req.authUser;
+    const authProvider =
+      String(userRecord?.data?.profile?.authProvider || "email")
+        .trim()
+        .toLowerCase() || "email";
+    if (authProvider === "google") {
+      return res.status(400).json({ error: "Google accounts do not use password reset here." });
+    }
 
-  const currentPassword = String(req.body?.currentPassword || "");
-  const newPassword = String(req.body?.newPassword || "");
-  const confirmPassword = String(req.body?.confirmPassword || "");
-  if (!currentPassword) {
-    return res.status(400).json({ error: "Current password is required" });
-  }
-  if (!isValidPassword(newPassword)) {
-    return res.status(400).json({ error: "Password must be 8-128 characters" });
-  }
-  if (newPassword !== confirmPassword) {
-    return res.status(400).json({ error: "New password and confirm password do not match" });
-  }
+    const currentPassword = String(req.body?.currentPassword || "");
+    const newPassword = String(req.body?.newPassword || "");
+    const confirmPassword = String(req.body?.confirmPassword || "");
+    if (!currentPassword) {
+      return res.status(400).json({ error: "Current password is required" });
+    }
+    if (!isValidPassword(newPassword)) {
+      return res.status(400).json({ error: "Password must be 8-128 characters" });
+    }
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({ error: "New password and confirm password do not match" });
+    }
 
-  try {
-    const validCurrentPassword = await verifyPasswordAgainstRecord(currentPassword, userRecord.password);
-    if (!validCurrentPassword) {
+    try {
+      const validCurrentPassword = await verifyPasswordAgainstRecord(
+        currentPassword,
+        userRecord.password
+      );
+      if (!validCurrentPassword) {
+        void appendSecurityEvent({
+          type: "auth-password-change-failed",
+          req,
+          email: userRecord.email,
+          userId: userRecord.id,
+          reason: "Current password mismatch",
+        });
+        return res.status(401).json({ error: "Current password is incorrect" });
+      }
+
+      const passwordRecord = await buildPasswordRecord(newPassword);
+      userRecord.password = passwordRecord;
+      userRecord.passwordReset = createEmptyPasswordResetState();
+      userRecord.updatedAt = new Date().toISOString();
+      removeAllSessionsForUser(userRecord.id);
+      const sessionToken = createSessionForUser(userRecord.id, req);
+      setAuthSessionCookie(req, res, sessionToken);
+      markAuthStoreDirty();
       void appendSecurityEvent({
-        type: "auth-password-change-failed",
+        type: "auth-password-change-success",
         req,
         email: userRecord.email,
         userId: userRecord.id,
-        reason: "Current password mismatch",
+        reason: "Password updated from manage account",
       });
-      return res.status(401).json({ error: "Current password is incorrect" });
+      return res.json({
+        ok: true,
+        message: "Password updated.",
+      });
+    } catch (error) {
+      reportServerError("auth-password-change", error, {
+        requestId: req.requestId,
+        method: req.method,
+        path: req.originalUrl,
+      });
+      return res.status(500).json({ error: "Failed to update password" });
     }
-
-    const passwordRecord = await buildPasswordRecord(newPassword);
-    userRecord.password = passwordRecord;
-    userRecord.passwordReset = createEmptyPasswordResetState();
-    userRecord.updatedAt = new Date().toISOString();
-    removeAllSessionsForUser(userRecord.id);
-    const sessionToken = createSessionForUser(userRecord.id, req);
-    setAuthSessionCookie(req, res, sessionToken);
-    markAuthStoreDirty();
-    void appendSecurityEvent({
-      type: "auth-password-change-success",
-      req,
-      email: userRecord.email,
-      userId: userRecord.id,
-      reason: "Password updated from manage account",
-    });
-    return res.json({
-      ok: true,
-      message: "Password updated.",
-    });
-  } catch (error) {
-    reportServerError("auth-password-change", error, {
-      requestId: req.requestId,
-      method: req.method,
-      path: req.originalUrl,
-    });
-    return res.status(500).json({ error: "Failed to update password" });
   }
-});
+);
 
 // Create account and send email verification challenge.
 app.post("/api/auth/signup", authSignupLimiter, async (req, res) => {
@@ -5974,7 +6274,10 @@ app.post("/api/auth/signup", authSignupLimiter, async (req, res) => {
         deliveryError,
       });
       const loweredDeliveryError = deliveryError.toLowerCase();
-      if (loweredDeliveryError.includes("testing emails") || loweredDeliveryError.includes("verify a domain")) {
+      if (
+        loweredDeliveryError.includes("testing emails") ||
+        loweredDeliveryError.includes("verify a domain")
+      ) {
         return res.status(502).json({
           error:
             "Email provider is in testing mode. Verify a domain in Resend and use AUTH_FROM with that domain.",
@@ -5991,7 +6294,11 @@ app.post("/api/auth/signup", authSignupLimiter, async (req, res) => {
         req,
         source: "signup-email",
       });
-      void sendSignupWebhookNotification({ userRecord: pendingUserRecord, req, source: "signup-email" });
+      void sendSignupWebhookNotification({
+        userRecord: pendingUserRecord,
+        req,
+        source: "signup-email",
+      });
     } catch (auditError) {
       reportServerError("registered-account-audit-write", auditError, {
         requestId: req.requestId,
@@ -6103,7 +6410,10 @@ app.post("/api/auth/verification/resend", authVerifyLimiter, async (req, res) =>
         deliveryError,
       });
       const loweredDeliveryError = deliveryError.toLowerCase();
-      if (loweredDeliveryError.includes("testing emails") || loweredDeliveryError.includes("verify a domain")) {
+      if (
+        loweredDeliveryError.includes("testing emails") ||
+        loweredDeliveryError.includes("verify a domain")
+      ) {
         return res.status(502).json({
           error:
             "Email provider is in testing mode. Verify a domain in Resend and use AUTH_FROM with that domain.",
@@ -6194,7 +6504,9 @@ app.post("/api/auth/login", authLoginLimiter, async (req, res) => {
   }
 
   const authProvider =
-    String(userRecord?.data?.profile?.authProvider || "email").trim().toLowerCase() || "email";
+    String(userRecord?.data?.profile?.authProvider || "email")
+      .trim()
+      .toLowerCase() || "email";
   if (authProvider === "google") {
     return res.status(409).json({
       error: "Account already exists. Log in using your Google account.",
@@ -6355,38 +6667,33 @@ app.get("/api/account/data", authSessionLimiter, requireAuthenticatedUser, (req,
 });
 
 // Replace user-owned mutable data blob with size/shape guardrails.
-app.put(
-  "/api/account/data",
-  accountMutationLimiter,
-  requireAuthenticatedUser,
-  (req, res) => {
-    const incoming = req.body?.data;
-    if (!isPlainObject(incoming)) {
-      return res.status(400).json({ error: "data must be an object" });
-    }
-    let serialized = "";
-    try {
-      serialized = JSON.stringify(incoming);
-    } catch {
-      return res.status(400).json({ error: "data must be JSON-serializable" });
-    }
-    if (serialized.length > MAX_USER_DATA_SERIALIZED_CHARS) {
-      return res.status(413).json({ error: "data payload too large" });
-    }
-    const normalizedIncomingData = normalizeUserData(incoming);
-    const existingData = normalizeUserData(req.authUser.data);
-    normalizedIncomingData.profile = isPlainObject(existingData.profile)
-      ? cloneObjectSafely(existingData.profile, () => ({}), 20000)
-      : {};
-    req.authUser.data = normalizedIncomingData;
-    req.authUser.updatedAt = new Date().toISOString();
-    markAuthStoreDirty();
-    return res.json({
-      ok: true,
-      data: cloneForResponse(req.authUser.data),
-    });
+app.put("/api/account/data", accountMutationLimiter, requireAuthenticatedUser, (req, res) => {
+  const incoming = req.body?.data;
+  if (!isPlainObject(incoming)) {
+    return res.status(400).json({ error: "data must be an object" });
   }
-);
+  let serialized = "";
+  try {
+    serialized = JSON.stringify(incoming);
+  } catch {
+    return res.status(400).json({ error: "data must be JSON-serializable" });
+  }
+  if (serialized.length > MAX_USER_DATA_SERIALIZED_CHARS) {
+    return res.status(413).json({ error: "data payload too large" });
+  }
+  const normalizedIncomingData = normalizeUserData(incoming);
+  const existingData = normalizeUserData(req.authUser.data);
+  normalizedIncomingData.profile = isPlainObject(existingData.profile)
+    ? cloneObjectSafely(existingData.profile, () => ({}), 20000)
+    : {};
+  req.authUser.data = normalizedIncomingData;
+  req.authUser.updatedAt = new Date().toISOString();
+  markAuthStoreDirty();
+  return res.json({
+    ok: true,
+    data: cloneForResponse(req.authUser.data),
+  });
+});
 
 // Manual/test-only premium upgrade endpoint (guarded by env flag).
 app.post(
@@ -6477,11 +6784,7 @@ const pickFirstNonEmptyString = (...values) => {
 
 const parseKofiWebhookPayload = (requestBody) => {
   const candidate = isPlainObject(requestBody) ? requestBody : {};
-  const payloadCandidates = [
-    candidate.data,
-    candidate.payload,
-    candidate,
-  ];
+  const payloadCandidates = [candidate.data, candidate.payload, candidate];
   for (const item of payloadCandidates) {
     if (isPlainObject(item)) {
       return item;
@@ -6500,13 +6803,25 @@ const parseKofiWebhookPayload = (requestBody) => {
   return null;
 };
 
-const evaluateKofiWebhookPaymentAcceptance = ({ eventType = "", paymentStatus = "", amount = "" } = {}) => {
-  const normalizedEventType = String(eventType || "").trim().toLowerCase();
-  const normalizedStatus = String(paymentStatus || "").trim().toLowerCase();
+const evaluateKofiWebhookPaymentAcceptance = ({
+  eventType = "",
+  paymentStatus = "",
+  amount = "",
+} = {}) => {
+  const normalizedEventType = String(eventType || "")
+    .trim()
+    .toLowerCase();
+  const normalizedStatus = String(paymentStatus || "")
+    .trim()
+    .toLowerCase();
   const amountValue = Number.parseFloat(String(amount || "").replace(/[^0-9.-]/g, ""));
 
   const downgradeKeywords = ["refund", "refunded", "cancel", "canceled", "cancelled", "chargeback"];
-  if (downgradeKeywords.some((flag) => normalizedEventType.includes(flag) || normalizedStatus.includes(flag))) {
+  if (
+    downgradeKeywords.some(
+      (flag) => normalizedEventType.includes(flag) || normalizedStatus.includes(flag)
+    )
+  ) {
     return {
       accepted: false,
       action: "downgrade",
@@ -6531,8 +6846,18 @@ const evaluateKofiWebhookPaymentAcceptance = ({ eventType = "", paymentStatus = 
     };
   }
 
-  const acceptedEventKeywords = ["payment", "subscription", "membership", "donation", "shop_order", "sale"];
-  if (normalizedEventType && !acceptedEventKeywords.some((flag) => normalizedEventType.includes(flag))) {
+  const acceptedEventKeywords = [
+    "payment",
+    "subscription",
+    "membership",
+    "donation",
+    "shop_order",
+    "sale",
+  ];
+  if (
+    normalizedEventType &&
+    !acceptedEventKeywords.some((flag) => normalizedEventType.includes(flag))
+  ) {
     return {
       accepted: false,
       action: "ignore",
@@ -6581,7 +6906,9 @@ const applyPremiumProfileToUserRecord = (
 
   const profile = userRecord.data.profile;
   const alreadyPremium = userHasPremiumAccessForProgress(userRecord);
-  const normalizedEventId = String(eventId || "").trim().slice(0, 120);
+  const normalizedEventId = String(eventId || "")
+    .trim()
+    .slice(0, 120);
   const alreadyProcessed =
     Boolean(normalizedEventId) &&
     String(profile.premiumLastEventId || "").trim() === normalizedEventId;
@@ -6602,21 +6929,34 @@ const applyPremiumProfileToUserRecord = (
   if (!profile.premiumActivatedAt) {
     profile.premiumActivatedAt = nowIso;
   }
-  profile.premiumLastSource = String(source || "").trim().slice(0, 60) || "webhook";
-  profile.premiumProvider = String(provider || "").trim().slice(0, 40) || "ko-fi";
+  profile.premiumLastSource =
+    String(source || "")
+      .trim()
+      .slice(0, 60) || "webhook";
+  profile.premiumProvider =
+    String(provider || "")
+      .trim()
+      .slice(0, 40) || "ko-fi";
   profile.premiumLastEventAt = nowIso;
   if (normalizedEventId) {
     profile.premiumLastEventId = normalizedEventId;
   }
-  const normalizedEventType = String(eventType || "").trim().slice(0, 80);
+  const normalizedEventType = String(eventType || "")
+    .trim()
+    .slice(0, 80);
   if (normalizedEventType) {
     profile.premiumLastEventType = normalizedEventType;
   }
-  const normalizedAmount = String(amount || "").trim().slice(0, 40);
+  const normalizedAmount = String(amount || "")
+    .trim()
+    .slice(0, 40);
   if (normalizedAmount) {
     profile.premiumLastAmount = normalizedAmount;
   }
-  const normalizedCurrency = String(currency || "").trim().slice(0, 12).toUpperCase();
+  const normalizedCurrency = String(currency || "")
+    .trim()
+    .slice(0, 12)
+    .toUpperCase();
   if (normalizedCurrency) {
     profile.premiumLastCurrency = normalizedCurrency;
   }
@@ -6633,12 +6973,7 @@ const applyPremiumProfileToUserRecord = (
 
 const applyPremiumDowngradeToUserRecord = (
   userRecord,
-  {
-    provider = "ko-fi",
-    source = "webhook",
-    eventId = "",
-    eventType = "",
-  } = {}
+  { provider = "ko-fi", source = "webhook", eventId = "", eventType = "" } = {}
 ) => {
   if (!userRecord || !isPlainObject(userRecord)) {
     return {
@@ -6655,7 +6990,9 @@ const applyPremiumDowngradeToUserRecord = (
 
   const profile = userRecord.data.profile;
   const isPremium = userHasPremiumAccessForProgress(userRecord);
-  const normalizedEventId = String(eventId || "").trim().slice(0, 120);
+  const normalizedEventId = String(eventId || "")
+    .trim()
+    .slice(0, 120);
   const alreadyProcessed =
     Boolean(normalizedEventId) &&
     String(profile.premiumLastDowngradeEventId || "").trim() === normalizedEventId;
@@ -6673,14 +7010,22 @@ const applyPremiumDowngradeToUserRecord = (
   profile.plan = "free";
   profile.tier = "free";
   profile.membership = "free";
-  profile.premiumLastSource = String(source || "").trim().slice(0, 60) || "webhook";
-  profile.premiumProvider = String(provider || "").trim().slice(0, 40) || "ko-fi";
+  profile.premiumLastSource =
+    String(source || "")
+      .trim()
+      .slice(0, 60) || "webhook";
+  profile.premiumProvider =
+    String(provider || "")
+      .trim()
+      .slice(0, 40) || "ko-fi";
   profile.premiumLastEventAt = nowIso;
   profile.premiumDeactivatedAt = nowIso;
   if (normalizedEventId) {
     profile.premiumLastDowngradeEventId = normalizedEventId;
   }
-  const normalizedEventType = String(eventType || "").trim().slice(0, 80);
+  const normalizedEventType = String(eventType || "")
+    .trim()
+    .slice(0, 80);
   if (normalizedEventType) {
     profile.premiumLastEventType = normalizedEventType;
   }
@@ -6713,11 +7058,15 @@ app.post(
       process.env.KOFI_WEBHOOK_TOKEN
     );
     if (!configuredToken) {
-      reportServerError("kofi-webhook-not-configured", new Error("Missing webhook verification token"), {
-        requestId: req.requestId,
-        method: req.method,
-        path: req.originalUrl,
-      });
+      reportServerError(
+        "kofi-webhook-not-configured",
+        new Error("Missing webhook verification token"),
+        {
+          requestId: req.requestId,
+          method: req.method,
+          path: req.originalUrl,
+        }
+      );
       return res.status(503).json({
         error: "Ko-fi webhook is not configured yet",
       });
@@ -6830,10 +7179,7 @@ app.post(
     )
       .trim()
       .slice(0, 120);
-    const currency = pickFirstNonEmptyString(
-      kofiPayload.currency,
-      kofiPayload.currency_code
-    )
+    const currency = pickFirstNonEmptyString(kofiPayload.currency, kofiPayload.currency_code)
       .trim()
       .toUpperCase()
       .slice(0, 12);
@@ -6887,7 +7233,9 @@ app.post(
       req,
       email: payerEmail,
       userId: userRecord.id,
-      reason: premiumResult.changed ? "Premium activated from Ko-fi webhook" : "Ko-fi webhook idempotent replay",
+      reason: premiumResult.changed
+        ? "Premium activated from Ko-fi webhook"
+        : "Ko-fi webhook idempotent replay",
       details: {
         eventId,
         eventType,
@@ -6908,143 +7256,145 @@ app.post(
 );
 
 // Stripe webhook receiver: verifies signature and syncs subscription state.
-app.post(
-  "/api/billing/webhooks/stripe",
-  billingWebhookLimiter,
-  async (req, res) => {
-    const stripeSecretKey = String(process.env.STRIPE_SECRET_KEY || "").trim();
-    if (!stripeSecretKey) {
-      return res.status(503).json({
-        error: "Stripe webhook is unavailable because Stripe is not configured.",
-      });
-    }
-
-    let event = null;
-    try {
-      const stripe = getStripeClient();
-      const webhookSecret = String(process.env.STRIPE_WEBHOOK_SECRET || "").trim();
-      if (webhookSecret) {
-        const signature = String(req.get("stripe-signature") || "").trim();
-        if (!signature || !Buffer.isBuffer(req.rawBody)) {
-          return res.status(400).json({ error: "Missing Stripe signature or raw body" });
-        }
-        event = stripe.webhooks.constructEvent(req.rawBody, signature, webhookSecret);
-      } else {
-        const candidate = req.body;
-        if (!candidate || typeof candidate !== "object") {
-          return res.status(400).json({ error: "Invalid Stripe webhook payload" });
-        }
-        event = candidate;
-      }
-    } catch (error) {
-      reportServerError("stripe-webhook-parse", error, {
-        requestId: req.requestId,
-        method: req.method,
-        path: req.originalUrl,
-      });
-      return res.status(400).json({ error: "Stripe webhook signature verification failed" });
-    }
-
-    const eventType = String(event?.type || "").trim().toLowerCase();
-    const eventId = String(event?.id || "").trim().slice(0, 120);
-    const eventObject = event?.data?.object && typeof event.data.object === "object" ? event.data.object : null;
-
-    const actionableTypes = new Set([
-      "checkout.session.completed",
-      "customer.subscription.created",
-      "customer.subscription.updated",
-      "customer.subscription.deleted",
-      "invoice.payment_failed",
-      "invoice.payment_succeeded",
-      "invoice.paid",
-    ]);
-    if (!actionableTypes.has(eventType)) {
-      return res.json({ ok: true, ignored: true, eventType });
-    }
-
-    let subscription = null;
-    try {
-      subscription = await fetchStripeSubscriptionFromEvent(eventObject);
-    } catch (error) {
-      reportServerError("stripe-webhook-subscription-fetch", error, {
-        requestId: req.requestId,
-        method: req.method,
-        path: req.originalUrl,
-        eventType,
-        eventId,
-      });
-      return res.status(502).json({ error: "Could not fetch Stripe subscription" });
-    }
-
-    if (!subscription) {
-      return res.json({ ok: true, ignored: true, reason: "no-subscription", eventType });
-    }
-
-    const subscriptionMetadata = subscription?.metadata && typeof subscription.metadata === "object"
-      ? subscription.metadata
-      : {};
-    const objectEmail =
-      String(eventObject?.customer_email || "").trim() ||
-      String(eventObject?.receipt_email || "").trim() ||
-      String(subscriptionMetadata?.cosmicaUserEmail || "").trim();
-    const objectUserId = String(subscriptionMetadata?.cosmicaUserId || "").trim();
-    const customerId = String(subscription?.customer || eventObject?.customer || "").trim();
-    const subscriptionId = String(subscription?.id || eventObject?.subscription || "").trim();
-
-    const matchedUser = findUserByStripeLinkage({
-      userId: objectUserId,
-      email: objectEmail,
-      customerId,
-      subscriptionId,
-    });
-
-    if (!matchedUser) {
-      void appendSecurityEvent({
-        type: "stripe-webhook-unmatched",
-        req,
-        email: normalizeEmail(objectEmail),
-        reason: "No account matched Stripe webhook subscription",
-        details: {
-          eventType,
-          eventId,
-          customerId: customerId.slice(0, 120),
-          subscriptionId: subscriptionId.slice(0, 120),
-        },
-      });
-      return res.status(202).json({ ok: true, matched: false });
-    }
-
-    const syncResult = applyStripeSubscriptionStateToUserRecord(matchedUser, {
-      subscription,
-      source: "stripe-webhook",
-      eventId,
-      eventType,
-    });
-
-    void appendSecurityEvent({
-      type: "stripe-webhook-processed",
-      req,
-      email: matchedUser.email,
-      userId: matchedUser.id,
-      reason: `Stripe webhook processed (${eventType})`,
-      details: {
-        eventId,
-        eventType,
-        action: syncResult.action,
-        status: syncResult.status,
-        cancelAtPeriodEnd: syncResult.cancelAtPeriodEnd === true,
-        currentPeriodEnd: String(syncResult.currentPeriodEnd || "").slice(0, 60),
-      },
-    });
-
-    return res.json({
-      ok: true,
-      matched: true,
-      action: syncResult.action,
-      status: syncResult.status || "",
+app.post("/api/billing/webhooks/stripe", billingWebhookLimiter, async (req, res) => {
+  const stripeSecretKey = String(process.env.STRIPE_SECRET_KEY || "").trim();
+  if (!stripeSecretKey) {
+    return res.status(503).json({
+      error: "Stripe webhook is unavailable because Stripe is not configured.",
     });
   }
-);
+
+  let event = null;
+  try {
+    const stripe = getStripeClient();
+    const webhookSecret = String(process.env.STRIPE_WEBHOOK_SECRET || "").trim();
+    if (webhookSecret) {
+      const signature = String(req.get("stripe-signature") || "").trim();
+      if (!signature || !Buffer.isBuffer(req.rawBody)) {
+        return res.status(400).json({ error: "Missing Stripe signature or raw body" });
+      }
+      event = stripe.webhooks.constructEvent(req.rawBody, signature, webhookSecret);
+    } else {
+      const candidate = req.body;
+      if (!candidate || typeof candidate !== "object") {
+        return res.status(400).json({ error: "Invalid Stripe webhook payload" });
+      }
+      event = candidate;
+    }
+  } catch (error) {
+    reportServerError("stripe-webhook-parse", error, {
+      requestId: req.requestId,
+      method: req.method,
+      path: req.originalUrl,
+    });
+    return res.status(400).json({ error: "Stripe webhook signature verification failed" });
+  }
+
+  const eventType = String(event?.type || "")
+    .trim()
+    .toLowerCase();
+  const eventId = String(event?.id || "")
+    .trim()
+    .slice(0, 120);
+  const eventObject =
+    event?.data?.object && typeof event.data.object === "object" ? event.data.object : null;
+
+  const actionableTypes = new Set([
+    "checkout.session.completed",
+    "customer.subscription.created",
+    "customer.subscription.updated",
+    "customer.subscription.deleted",
+    "invoice.payment_failed",
+    "invoice.payment_succeeded",
+    "invoice.paid",
+  ]);
+  if (!actionableTypes.has(eventType)) {
+    return res.json({ ok: true, ignored: true, eventType });
+  }
+
+  let subscription = null;
+  try {
+    subscription = await fetchStripeSubscriptionFromEvent(eventObject);
+  } catch (error) {
+    reportServerError("stripe-webhook-subscription-fetch", error, {
+      requestId: req.requestId,
+      method: req.method,
+      path: req.originalUrl,
+      eventType,
+      eventId,
+    });
+    return res.status(502).json({ error: "Could not fetch Stripe subscription" });
+  }
+
+  if (!subscription) {
+    return res.json({ ok: true, ignored: true, reason: "no-subscription", eventType });
+  }
+
+  const subscriptionMetadata =
+    subscription?.metadata && typeof subscription.metadata === "object"
+      ? subscription.metadata
+      : {};
+  const objectEmail =
+    String(eventObject?.customer_email || "").trim() ||
+    String(eventObject?.receipt_email || "").trim() ||
+    String(subscriptionMetadata?.cosmicaUserEmail || "").trim();
+  const objectUserId = String(subscriptionMetadata?.cosmicaUserId || "").trim();
+  const customerId = String(subscription?.customer || eventObject?.customer || "").trim();
+  const subscriptionId = String(subscription?.id || eventObject?.subscription || "").trim();
+
+  const matchedUser = findUserByStripeLinkage({
+    userId: objectUserId,
+    email: objectEmail,
+    customerId,
+    subscriptionId,
+  });
+
+  if (!matchedUser) {
+    void appendSecurityEvent({
+      type: "stripe-webhook-unmatched",
+      req,
+      email: normalizeEmail(objectEmail),
+      reason: "No account matched Stripe webhook subscription",
+      details: {
+        eventType,
+        eventId,
+        customerId: customerId.slice(0, 120),
+        subscriptionId: subscriptionId.slice(0, 120),
+      },
+    });
+    return res.status(202).json({ ok: true, matched: false });
+  }
+
+  const syncResult = applyStripeSubscriptionStateToUserRecord(matchedUser, {
+    subscription,
+    source: "stripe-webhook",
+    eventId,
+    eventType,
+  });
+
+  void appendSecurityEvent({
+    type: "stripe-webhook-processed",
+    req,
+    email: matchedUser.email,
+    userId: matchedUser.id,
+    reason: `Stripe webhook processed (${eventType})`,
+    details: {
+      eventId,
+      eventType,
+      action: syncResult.action,
+      status: syncResult.status,
+      cancelAtPeriodEnd: syncResult.cancelAtPeriodEnd === true,
+      currentPeriodEnd: String(syncResult.currentPeriodEnd || "").slice(0, 60),
+    },
+  });
+
+  return res.json({
+    ok: true,
+    matched: true,
+    action: syncResult.action,
+    status: syncResult.status || "",
+  });
+});
 
 const isAllowedKoFiCheckoutUrl = (
   value,
@@ -7059,11 +7409,15 @@ const isAllowedKoFiCheckoutUrl = (
     if (parsed.protocol !== "https:") {
       return "";
     }
-    const host = String(parsed.hostname || "").trim().toLowerCase();
+    const host = String(parsed.hostname || "")
+      .trim()
+      .toLowerCase();
     if (host !== "ko-fi.com" && host !== "www.ko-fi.com") {
       return "";
     }
-    const pathName = String(parsed.pathname || "").trim().toLowerCase();
+    const pathName = String(parsed.pathname || "")
+      .trim()
+      .toLowerCase();
     if (requireSubscriptionLikePath) {
       const isSubscriptionLike = pathName.startsWith("/s/") || pathName.startsWith("/summary/");
       if (!isSubscriptionLike) {
@@ -7090,10 +7444,14 @@ const resolveConfiguredPremiumCheckoutOptions = () => {
   ).trim();
   const stripeSecretKey = String(process.env.STRIPE_SECRET_KEY || "").trim();
   if (stripeSecretKey && stripePriceId) {
-    const label = String(process.env.STRIPE_PREMIUM_LABEL || "Monthly").trim().slice(0, 60) || "Monthly";
+    const label =
+      String(process.env.STRIPE_PREMIUM_LABEL || "Monthly")
+        .trim()
+        .slice(0, 60) || "Monthly";
     const description =
-      String(process.env.STRIPE_PREMIUM_DESCRIPTION || "€9.99 per month").trim().slice(0, 140) ||
-      "€9.99 per month";
+      String(process.env.STRIPE_PREMIUM_DESCRIPTION || "€9.99 per month")
+        .trim()
+        .slice(0, 140) || "€9.99 per month";
     return {
       options: [
         {
@@ -7182,8 +7540,12 @@ const resolveConfiguredPremiumCheckoutOptions = () => {
               .trim()
               .toLowerCase()
               .slice(0, 32);
-            const label = String(candidate.label || "Premium option").trim().slice(0, 60);
-            const description = String(candidate.description || "").trim().slice(0, 140);
+            const label = String(candidate.label || "Premium option")
+              .trim()
+              .slice(0, 60);
+            const description = String(candidate.description || "")
+              .trim()
+              .slice(0, 140);
             if (!id || !label) {
               return null;
             }
@@ -7245,9 +7607,17 @@ const createStripePremiumCheckoutSession = async (req, userRecord, optionId = "m
   const cancelUrl = new URL(cancelPath.startsWith("/") ? cancelPath : `/${cancelPath}`, origin);
 
   const metadata = {
-    cosmicaUserId: String(userRecord?.id || "").trim().slice(0, 128),
-    cosmicaUserEmail: String(userRecord?.email || "").trim().toLowerCase().slice(0, 200),
-    premiumOption: String(optionId || "monthly").trim().toLowerCase().slice(0, 32),
+    cosmicaUserId: String(userRecord?.id || "")
+      .trim()
+      .slice(0, 128),
+    cosmicaUserEmail: String(userRecord?.email || "")
+      .trim()
+      .toLowerCase()
+      .slice(0, 200),
+    premiumOption: String(optionId || "monthly")
+      .trim()
+      .toLowerCase()
+      .slice(0, 32),
   };
 
   const subscriptionData = {
@@ -7277,7 +7647,9 @@ const createStripePremiumCheckoutSession = async (req, userRecord, optionId = "m
 };
 
 const getConfiguredStripeHostedBillingPortalUrl = () => {
-  const raw = String(process.env.STRIPE_BILLING_PORTAL_URL || process.env.STRIPE_CUSTOMER_PORTAL_URL || "").trim();
+  const raw = String(
+    process.env.STRIPE_BILLING_PORTAL_URL || process.env.STRIPE_CUSTOMER_PORTAL_URL || ""
+  ).trim();
   if (!raw) {
     return "";
   }
@@ -7286,7 +7658,9 @@ const getConfiguredStripeHostedBillingPortalUrl = () => {
     if (parsed.protocol !== "https:") {
       return "";
     }
-    const host = String(parsed.hostname || "").trim().toLowerCase();
+    const host = String(parsed.hostname || "")
+      .trim()
+      .toLowerCase();
     if (host !== "billing.stripe.com") {
       return "";
     }
@@ -7322,7 +7696,12 @@ const normalizeStripeUnixToIso = (unixSeconds) => {
   }
 };
 
-const findUserByStripeLinkage = ({ userId = "", email = "", customerId = "", subscriptionId = "" } = {}) => {
+const findUserByStripeLinkage = ({
+  userId = "",
+  email = "",
+  customerId = "",
+  subscriptionId = "",
+} = {}) => {
   const normalizedUserId = String(userId || "").trim();
   if (normalizedUserId && authStore.users[normalizedUserId]) {
     return authStore.users[normalizedUserId];
@@ -7359,14 +7738,14 @@ const findUserByStripeLinkage = ({ userId = "", email = "", customerId = "", sub
 
 const applyStripeSubscriptionStateToUserRecord = (
   userRecord,
-  {
-    subscription = null,
-    source = "stripe-webhook",
-    eventId = "",
-    eventType = "",
-  } = {}
+  { subscription = null, source = "stripe-webhook", eventId = "", eventType = "" } = {}
 ) => {
-  if (!userRecord || !isPlainObject(userRecord) || !subscription || typeof subscription !== "object") {
+  if (
+    !userRecord ||
+    !isPlainObject(userRecord) ||
+    !subscription ||
+    typeof subscription !== "object"
+  ) {
     return {
       changed: false,
       action: "none",
@@ -7379,7 +7758,9 @@ const applyStripeSubscriptionStateToUserRecord = (
   }
   const profile = userRecord.data.profile;
 
-  const status = String(subscription?.status || "").trim().toLowerCase();
+  const status = String(subscription?.status || "")
+    .trim()
+    .toLowerCase();
   const cancelAtPeriodEnd = subscription?.cancel_at_period_end === true;
   const currentPeriodEnd = normalizeStripeUnixToIso(subscription?.current_period_end);
   const customerId = String(subscription?.customer || "").trim();
@@ -7430,7 +7811,9 @@ const applyStripeSubscriptionStateToUserRecord = (
     action = "premium-downgraded";
   }
 
-  profile.premiumLastSource = String(source || "stripe-webhook").trim().slice(0, 60);
+  profile.premiumLastSource = String(source || "stripe-webhook")
+    .trim()
+    .slice(0, 60);
   profile.premiumLastEventAt = nowIso;
   if (eventId) {
     profile.premiumLastEventId = String(eventId).trim().slice(0, 120);
@@ -7454,7 +7837,11 @@ const fetchStripeSubscriptionFromEvent = async (eventObject = null) => {
   if (!eventObject || typeof eventObject !== "object") {
     return null;
   }
-  if (String(eventObject.object || "").trim().toLowerCase() === "subscription") {
+  if (
+    String(eventObject.object || "")
+      .trim()
+      .toLowerCase() === "subscription"
+  ) {
     return eventObject;
   }
   const linkedSubscriptionId = String(eventObject.subscription || "").trim();
@@ -7557,7 +7944,9 @@ const reconcileExpiredStripePremiumFromLocalProfile = (
   if (
     profile.isPremium === false &&
     profile.premium === false &&
-    String(profile.plan || "").trim().toLowerCase() === "free"
+    String(profile.plan || "")
+      .trim()
+      .toLowerCase() === "free"
   ) {
     return false;
   }
@@ -7573,7 +7962,9 @@ const reconcileExpiredStripePremiumFromLocalProfile = (
   profile.subscriptionStatus = "expired";
   profile.premiumStripeSubscriptionStatus = terminal ? status : "canceled";
   profile.stripeSubscriptionStatus = terminal ? status : "canceled";
-  profile.premiumLastSource = String(source || "subscription-expiry-local").trim().slice(0, 60);
+  profile.premiumLastSource = String(source || "subscription-expiry-local")
+    .trim()
+    .slice(0, 60);
   profile.premiumLastEventAt = nowIso;
   if (!profile.premiumDeactivatedAt) {
     profile.premiumDeactivatedAt = nowIso;
@@ -7643,10 +8034,15 @@ const findStripeActiveSubscriptionForUser = async (userRecord) => {
           : [];
         candidateSubscriptions.push(
           ...subscriptionItems.filter((subscription) =>
-            ACTIVE_STRIPE_PREMIUM_STATUSES.has(String(subscription?.status || "").trim().toLowerCase())
+            ACTIVE_STRIPE_PREMIUM_STATUSES.has(
+              String(subscription?.status || "")
+                .trim()
+                .toLowerCase()
+            )
           )
         );
-        hasMoreSubscriptions = Boolean(subscriptionResponse?.has_more) && subscriptionItems.length > 0;
+        hasMoreSubscriptions =
+          Boolean(subscriptionResponse?.has_more) && subscriptionItems.length > 0;
         subscriptionStartingAfter = hasMoreSubscriptions
           ? String(subscriptionItems[subscriptionItems.length - 1]?.id || "")
           : "";
@@ -7666,7 +8062,9 @@ const findStripeActiveSubscriptionForUser = async (userRecord) => {
       continue;
     }
 
-    const status = String(winner.status || "").trim().toLowerCase();
+    const status = String(winner.status || "")
+      .trim()
+      .toLowerCase();
     return {
       customerId,
       subscriptionId: String(winner.id || "").trim(),
@@ -7681,13 +8079,19 @@ const findStripeActiveSubscriptionForUser = async (userRecord) => {
 
 const findDeletedAccountActivePremiumForEmail = (email = "") => {
   const normalizedEmail = normalizeEmail(email);
-  if (!normalizedEmail || !Array.isArray(deletedAccountsAudit) || deletedAccountsAudit.length === 0) {
+  if (
+    !normalizedEmail ||
+    !Array.isArray(deletedAccountsAudit) ||
+    deletedAccountsAudit.length === 0
+  ) {
     return null;
   }
 
   const candidates = deletedAccountsAudit
     .filter((entry) => normalizeEmail(entry?.email) === normalizedEmail)
-    .sort((a, b) => Date.parse(String(b?.deletedAt || "")) - Date.parse(String(a?.deletedAt || "")));
+    .sort(
+      (a, b) => Date.parse(String(b?.deletedAt || "")) - Date.parse(String(a?.deletedAt || ""))
+    );
 
   for (const entry of candidates) {
     const snapshot = normalizeDeletedAccountPremiumSnapshot(entry?.premiumSnapshot);
@@ -7696,7 +8100,9 @@ const findDeletedAccountActivePremiumForEmail = (email = "") => {
     }
     const endMs = Date.parse(String(snapshot.currentPeriodEnd || ""));
     const hasFuturePremiumEnd = Number.isFinite(endMs) && endMs > Date.now();
-    const status = String(snapshot.status || "").trim().toLowerCase();
+    const status = String(snapshot.status || "")
+      .trim()
+      .toLowerCase();
     const activeByStatus =
       status === "active" ||
       status === "trialing" ||
@@ -7719,7 +8125,9 @@ const findDeletedAccountActivePremiumForEmail = (email = "") => {
     if (!hasFuturePremiumEnd && !activeByStatus && !activeByManualFlags) {
       continue;
     }
-    const provider = String(snapshot.provider || "").trim().toLowerCase();
+    const provider = String(snapshot.provider || "")
+      .trim()
+      .toLowerCase();
     return {
       customerId: String(snapshot.customerId || "").trim(),
       subscriptionId: String(snapshot.subscriptionId || "").trim(),
@@ -7756,13 +8164,20 @@ const applyStripeRestoreToUserRecord = (userRecord, stripeMatch) => {
   if (!profile.premiumActivatedAt) {
     profile.premiumActivatedAt = nowIso;
   }
-  profile.premiumProvider = String(stripeMatch?.provider || "stripe").trim().toLowerCase().slice(0, 40);
+  profile.premiumProvider = String(stripeMatch?.provider || "stripe")
+    .trim()
+    .toLowerCase()
+    .slice(0, 40);
   profile.premiumLastSource = String(stripeMatch?.source || "subscription-restore")
     .trim()
     .slice(0, 60);
   profile.premiumLastEventAt = nowIso;
-  profile.premiumStripeCustomerId = String(stripeMatch?.customerId || "").trim().slice(0, 120);
-  profile.premiumStripeSubscriptionId = String(stripeMatch?.subscriptionId || "").trim().slice(0, 120);
+  profile.premiumStripeCustomerId = String(stripeMatch?.customerId || "")
+    .trim()
+    .slice(0, 120);
+  profile.premiumStripeSubscriptionId = String(stripeMatch?.subscriptionId || "")
+    .trim()
+    .slice(0, 120);
   profile.premiumStripeSubscriptionStatus = String(stripeMatch?.status || "")
     .trim()
     .toLowerCase()
@@ -7872,7 +8287,9 @@ app.get(
     });
     const shouldTryStripeRefresh =
       Boolean(stripeSecretKey) &&
-      (String(profile.premiumProvider || "").trim().toLowerCase() === "stripe" ||
+      (String(profile.premiumProvider || "")
+        .trim()
+        .toLowerCase() === "stripe" ||
         Boolean(String(profile.premiumStripeSubscriptionId || "").trim()) ||
         Boolean(String(profile.premiumStripeCustomerId || "").trim()) ||
         userHasPremiumAccessForProgress(userRecord));
@@ -7898,7 +8315,9 @@ app.get(
       }
     }
 
-    const refreshedProfile = isPlainObject(userRecord?.data?.profile) ? userRecord.data.profile : {};
+    const refreshedProfile = isPlainObject(userRecord?.data?.profile)
+      ? userRecord.data.profile
+      : {};
     const hasPremiumAccess = userHasPremiumAccessForProgress(userRecord);
     const provider = String(refreshedProfile.premiumProvider || "")
       .trim()
@@ -7927,7 +8346,8 @@ app.get(
       Boolean(String(refreshedProfile.premiumStripeSubscriptionId || "").trim()) ||
       Boolean(String(refreshedProfile.premiumStripeCustomerId || "").trim());
     const canCancel = Boolean(stripeSecretKey) && hasPremiumAccess && !cancelAtPeriodEnd;
-    const resolvedStatus = status || (cancelAtPeriodEnd ? "canceling" : hasPremiumAccess ? "active" : "inactive");
+    const resolvedStatus =
+      status || (cancelAtPeriodEnd ? "canceling" : hasPremiumAccess ? "active" : "inactive");
 
     return res.json({
       ok: true,
@@ -7956,7 +8376,8 @@ app.post(
     const portalUrl = getConfiguredStripeHostedBillingPortalUrl();
     if (!portalUrl) {
       return res.status(503).json({
-        error: "Subscription management is unavailable because hosted Stripe portal URL is not configured.",
+        error:
+          "Subscription management is unavailable because hosted Stripe portal URL is not configured.",
       });
     }
 
@@ -8453,4 +8874,3 @@ const startServer = async () => {
 };
 
 void startServer();
-

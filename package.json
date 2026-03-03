@@ -5,6 +5,13 @@
   "main": "backend/server.js",
   "scripts": {
     "start": "node server.js",
+    "native:doctor": "npx cap doctor",
+    "native:add:android": "npx cap add android",
+    "native:add:ios": "npx cap add ios",
+    "native:copy": "npx cap copy",
+    "native:sync": "npx cap sync",
+    "native:open:android": "npx cap open android",
+    "native:open:ios": "npx cap open ios",
     "generate:translations": "node scripts/generate-translations.js",
     "generate:romanization": "node scripts/generate-world-romanization.js",
     "generate:native-grammar": "node scripts/generate-native-grammar-cards.js",
@@ -77,6 +84,10 @@
     "prettier": "^3.2.5"
   },
   "dependencies": {
+    "@capacitor/android": "^8.1.0",
+    "@capacitor/cli": "^8.1.0",
+    "@capacitor/core": "^8.1.0",
+    "@capacitor/ios": "^8.1.0",
     "@google-cloud/text-to-speech": "^6.4.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",

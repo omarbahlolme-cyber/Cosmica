@@ -1,0 +1,59 @@
+{
+  "id": "/",
+  "name": "Cosmica",
+  "short_name": "Cosmica",
+  "description": "Learn languages in immersive worlds with maps, guided practice, and Mimi as your AI guide.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#05050b",
+  "theme_color": "#0a0f24",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["education", "productivity", "reference"],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "/pwa/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/pwa/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/pwa/icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "English World",
+      "short_name": "English",
+      "url": "/english-world.html",
+      "icons": [
+        {
+          "src": "/pwa/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "French World",
+      "short_name": "French",
+      "url": "/world-french.html",
+      "icons": [
+        {
+          "src": "/pwa/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ]
+}

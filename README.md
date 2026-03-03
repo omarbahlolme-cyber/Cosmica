@@ -12,6 +12,7 @@ Cosmica is a static language-learning site with a small Node/Express backend for
 - Per-world linguist CSV tracker: `docs/LINGUIST_WORLD_REVIEW_TEMPLATE.csv`
 - Frontend runtime guardrails: `docs/FRONTEND_RUNTIME_NOTES.md`
 - Ops/security runbook: `docs/OPERATIONS_HARDENING.md`
+- App distribution guide (PWA + mobile stores): `docs/APP_DISTRIBUTION.md`
 - Billing ops quick commands: `docs/BILLING_OPS_QUICK_COMMANDS.md`
 - Policy enforcement runbook: `docs/ENFORCEMENT_RUNBOOK.md`
 - Front-end entry points: `frontend/index.html`, `frontend/english-*.html`, and per-world pages in `frontend/world-*.html`, `frontend/letters-*.html`, `frontend/words-*.html`, `frontend/phrases-*.html`, `frontend/grammar-*.html`
@@ -37,6 +38,7 @@ npm run auth:user:lifecycle -- --email=user@example.com
 This summarizes whether the account is currently active, previously deleted, or missing from current store state.
 
 For full recovery and incident workflow, use:
+
 - `docs/OPERATIONS_HARDENING.md` (section `3.7 Auth-store corruption recovery + user lifecycle triage`)
 
 ## Organization standards
@@ -69,9 +71,10 @@ stripe listen --forward-to http://127.0.0.1:3000/api/billing/webhooks/stripe
 ```
 
 5. In Stripe Dashboard, ensure this endpoint subscribes to:
-  - `checkout.session.completed`
-  - `customer.subscription.updated`
-  - `customer.subscription.deleted`
+
+- `checkout.session.completed`
+- `customer.subscription.updated`
+- `customer.subscription.deleted`
 
 Optional environment variables:
 
@@ -107,7 +110,12 @@ Ko-fi fallback:
 
 ```json
 [
-  { "id": "monthly", "label": "Monthly", "description": "€9.99 per month", "url": "https://ko-fi.com/yourpage" }
+  {
+    "id": "monthly",
+    "label": "Monthly",
+    "description": "€9.99 per month",
+    "url": "https://ko-fi.com/yourpage"
+  }
 ]
 ```
 
@@ -137,6 +145,7 @@ npm run smoke
 ```
 
 Runs two quick safeguards:
+
 1. Verifies local HTML `href/src` references point to real files.
 2. Starts the local server on an isolated port and checks core routes return `200`.
 
@@ -157,6 +166,7 @@ SMOKE_EXPECTED_PREMIUM_URL='https://ko-fi.com/s/your-monthly-tier'
 ```
 
 This check:
+
 1. Logs in using desktop and mobile user agents.
 2. Calls `/api/billing/premium/options` with authenticated session cookies.
 3. Verifies both devices return the same premium checkout options.
@@ -176,6 +186,7 @@ npm run verify:viewport
 ```
 
 This check:
+
 1. Runs key routes across Chromium, Firefox, and WebKit.
 2. Verifies key mobile/tablet/desktop viewport widths.
 3. Fails on horizontal overflow and clipped-content risk in critical containers.
@@ -183,6 +194,7 @@ This check:
 5. Saves failure screenshots under `perf/viewport-failures/`.
 
 Optional runtime overrides:
+
 - `VIEWPORT_BASE_URL` (use deployed/staging URL instead of local server)
 - `VIEWPORT_BROWSERS` (comma-separated, e.g. `chromium,firefox`)
 - `VIEWPORT_PORT` (local server port when `VIEWPORT_BASE_URL` is not set)
@@ -194,6 +206,7 @@ npm run billing:user-state:contract
 ```
 
 This check:
+
 1. Verifies guest access is blocked (`401`) on authenticated auth/account/billing routes.
 2. Verifies free user contract shape (`planTier=free`, `isPremium=false`, `billingStatus=expired`).
 3. Verifies premium active contract shape (`planTier=premium`, `isPremium=true`, `billingStatus=active`).
@@ -216,6 +229,7 @@ npm run verify:prod-integrations
 ```
 
 When auth credentials are set, production verification also checks:
+
 1. Login contract + session cookie creation.
 2. `/api/auth/me` authenticated contract shape (`user.planTier` present).
 3. `/api/billing/subscription/status` authenticated contract shape.
@@ -232,6 +246,7 @@ npm run verify:prod-integrations
 ```
 
 Production verification always includes:
+
 1. Security headers on home page (`HSTS`, `X-Content-Type-Options`, `Referrer-Policy`).
 2. Anonymous gate checks for admin routes and billing/profile authenticated routes.
 3. Public SEO/crawlability checks (`canonical` on home, `robots.txt`, `sitemap.xml`).
@@ -245,6 +260,7 @@ npm run quality
 ```
 
 Runs:
+
 1. Syntax checks for key server/client bundles.
 2. Accessibility baseline checks (`<main>`, `<h1>`, nav labels).
 3. SEO baseline checks (canonical metadata, JSON-LD, sitemap coverage).
@@ -300,6 +316,7 @@ npm run auth-backup:restore -- --yes --dry-run
 ```
 
 Optional offsite mirror for auth-data snapshots:
+
 1. Set `AUTH_DATA_BACKUP_OFFSITE_DIR` to a mounted/synced path.
 2. Run `npm run auth-backup:create`.
 
@@ -349,6 +366,7 @@ npm run auth:check:readiness
 ## Security hardening
 
 Implemented in app/server:
+
 - HTTPS enforcement in production.
 - Helmet headers including CSP/HSTS/frame protections.
 - API rate limiting (`/api`, `/api/chat`, `/api/feedback`, `/api/health`).
@@ -358,6 +376,7 @@ Implemented in app/server:
 - Legal protection pages: `privacy.html`, `terms.html`, `license.html`.
 
 Recommended external platform settings:
+
 1. Cloudflare WAF with managed rules enabled.
 2. Bot protection and rate limiting at edge.
 3. SSL/TLS mode: `Full (strict)`.
@@ -365,4 +384,3 @@ Recommended external platform settings:
 5. DNSSEC enabled for domain integrity.
 
 For exact step-by-step platform setup, use `docs/OPERATIONS_HARDENING.md`.
-
