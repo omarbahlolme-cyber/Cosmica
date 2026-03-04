@@ -4,18 +4,23 @@ This file tracks important runtime decisions and guardrails for `frontend/app.js
 
 ## Navigation Prefetch
 
-1. Background route prefetch is intentionally disabled in `frontend/app.js`.
-2. Link/document prefetch was causing repeated `503 Service Unavailable` noise on production when many pages were prefetched in bursts.
+1. General navigation prefetch is intentionally disabled in `frontend/app.js`.
+2. Broad link/document prefetch previously caused noisy production bursts when many pages were warmed at once.
 3. Current flags:
    - `ENABLE_NAVIGATION_PREFETCH = false`
    - `ENABLE_BACKGROUND_ROUTE_PREFETCH = false`
-4. If prefetch is re-enabled later, do it behind strict caps + staged rollout.
+4. World-page map warming is still allowed on capable devices:
+   - world pages warm likely next map documents
+   - after base-language selection, map documents are also background-fetched directly to improve map-entry speed
+5. If broader prefetch is re-enabled later, keep it behind strict caps + staged rollout.
 
 ## Map Loading UX
 
-1. Non-English map pages can render skeleton states while world translation packs hydrate.
-2. Skeleton classes are dynamic (generated in JS), so they are allowlisted in `scripts/bloat-allowlist.json`.
-3. If map content is unavailable, `app-maps.js` renders a visible fallback message instead of empty sections.
+1. Map pages now ship pre-rendered lesson sections in the HTML source.
+2. Those pre-rendered sections are the initial UI and should stay visible while runtime translation/data hydration catches up.
+3. Skeleton states are now a fallback path, not the preferred first paint, and should only appear when no usable pre-rendered sections are present.
+4. Skeleton classes are dynamic (generated in JS), so they are allowlisted in `scripts/bloat-allowlist.json`.
+5. If map content is genuinely unavailable, `app-maps.js` renders a visible fallback message instead of empty sections.
 
 ## Section Title Behavior
 
@@ -31,6 +36,7 @@ This file tracks important runtime decisions and guardrails for `frontend/app.js
    - World packs: `cosmicaWorldTranslationsCache:v1:<world>`
 3. Keep cache formats stable unless coordinated with migration logic.
 4. Runtime now deduplicates warm calls and skips near-fresh cache rewrites to reduce redundant network bursts.
+5. Base-language selection should prefer immediate UI refresh first, then let translation/network hydration enhance already-visible content.
 
 ## Base-Language Rules (2026-02)
 
@@ -42,6 +48,7 @@ This file tracks important runtime decisions and guardrails for `frontend/app.js
    - letters helper/title translation,
    - words/phrases/grammar translation surfaces.
 4. On world-page leave (`pagehide`, `beforeunload`, hidden visibility), selected language state is committed and map translation visibility is refreshed immediately.
+5. The selected base language is session-like for the world flow and is cleared when returning to the homepage.
 
 ## Runtime Performance Guardrails (2026-02)
 
@@ -105,3 +112,4 @@ This file tracks important runtime decisions and guardrails for `frontend/app.js
    - `npm run quality`
 3. For JS/CSS runtime class additions, update `scripts/bloat-allowlist.json` if classes are created dynamically.
 4. Bump `app.js` version query string in HTML only when cache invalidation is required.
+5. If runtime warmup/loading behavior changes, also update this file so it stays aligned with the current map-entry path.

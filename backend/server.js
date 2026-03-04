@@ -4687,12 +4687,7 @@ const updateStreakForDate = (gamification, dateKey) => {
   if (last === dateKey) {
     return;
   }
-  if (!last) {
-    gamification.currentStreak = 1;
-  } else {
-    const dayGap = daysBetweenUtcDateKeys(last, dateKey);
-    gamification.currentStreak = dayGap === 1 ? Math.max(1, gamification.currentStreak + 1) : 1;
-  }
+  gamification.currentStreak = Math.max(0, Number(gamification.currentStreak || 0)) + 1;
   gamification.bestStreak = Math.max(gamification.bestStreak, gamification.currentStreak);
   gamification.lastActiveDate = dateKey;
 };
@@ -4799,11 +4794,26 @@ const isSectionVisitedForQuest = (sectionRecord) => {
   );
 };
 
+const resolveQuestVisitedSectionKey = (mapKey, sectionKey) => {
+  const normalizedMapKey = String(mapKey || "")
+    .trim()
+    .toLowerCase();
+  const rawSectionKey = String(sectionKey || "").trim();
+  if (!normalizedMapKey || !rawSectionKey) {
+    return "";
+  }
+  if (rawSectionKey.startsWith("card::")) {
+    const [, parentSectionKey] = rawSectionKey.split("::");
+    return String(parentSectionKey || "").trim() || rawSectionKey;
+  }
+  return rawSectionKey;
+};
+
 const countVisitedSectionsForQuests = (progress) => {
   const worlds = isPlainObject(progress?.worlds) ? progress.worlds : {};
   let total = 0;
 
-  Object.values(worlds).forEach((worldRecord) => {
+  Object.entries(worlds).forEach(([worldKey, worldRecord]) => {
     const maps = isPlainObject(worldRecord?.maps) ? worldRecord.maps : {};
 
     ALLOWED_PROGRESS_MAP_KEYS.forEach((mapKey) => {
@@ -4811,11 +4821,18 @@ const countVisitedSectionsForQuests = (progress) => {
       if (!isPlainObject(sections)) {
         return;
       }
+      const countedSectionKeys = new Set();
       Object.entries(sections).forEach(([sectionKey, sectionRecord]) => {
         if (!isCountableWorldMapSectionEvent({ mapKey, sectionKey })) {
           return;
         }
         if (isSectionVisitedForQuest(sectionRecord)) {
+          const questSectionKey = resolveQuestVisitedSectionKey(mapKey, sectionKey);
+          const dedupeKey = `${String(worldKey || "").trim().toLowerCase()}::${mapKey}::${questSectionKey}`;
+          if (!questSectionKey || countedSectionKeys.has(dedupeKey)) {
+            return;
+          }
+          countedSectionKeys.add(dedupeKey);
           total += 1;
         }
       });

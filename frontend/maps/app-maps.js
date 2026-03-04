@@ -3363,6 +3363,16 @@ const createSectionFilterButton = (title, value, sourceTitle = title) => {
   return button;
 };
 
+const lockSectionFilterButton = (button, title = "Locked section") => {
+  if (!button) {
+    return;
+  }
+  button.classList.add("is-locked");
+  button.disabled = true;
+  button.setAttribute("aria-disabled", "true");
+  button.title = String(title || "Locked section");
+};
+
 const REGISTER_LEVEL_ORDER = ["informal", "neutral", "polite", "formal"];
 const REGISTER_FILTER_LABELS = {
   all: "All Registers",
@@ -3779,6 +3789,8 @@ const getPremiumAccessState = () => {
 const GRAMMAR_PREVIEW_SECTION_LIMIT = 2;
 const GRAMMAR_PREVIEW_CARD_LIMIT = 4;
 const GRAMMAR_FREE_PREVIEW_UNLOCKED_SECTIONS = new Set(["sentence structure", "verbs"]);
+const WORDS_PREVIEW_SECTION_LIMIT = 5;
+const PHRASES_PREVIEW_SECTION_LIMIT = 5;
 const MAPS_GRAMMAR_UNDER_EXPERT_REVIEW_WORLDS = new Set([]);
 
 const normalizeGrammarSectionKey = (value = "") =>
@@ -3807,6 +3819,15 @@ const isGrammarSectionLockedForCurrentAccess = (sectionName = "") => {
 const openGrammarPremiumUpgrade = ({
   message = "Upgrade to Premium to unlock the full grammar map.",
 } = {}) => {
+  const snapshot =
+    typeof window.cosmicaGamification?.getState === "function"
+      ? window.cosmicaGamification.getState()
+      : null;
+  const isAuthenticated = Boolean(snapshot?.isAuthenticated);
+  if (!isAuthenticated) {
+    window.location.assign("/?openAuth=1&authPanel=signup#support");
+    return;
+  }
   if (typeof window.cosmicaAccountHub?.openPremium === "function") {
     window.cosmicaAccountHub.openPremium({ message });
     return;
@@ -3844,7 +3865,7 @@ const createGrammarPreviewBanner = ({
   button.textContent = "Unlock full grammar map";
   button.addEventListener("click", () => {
     openGrammarPremiumUpgrade({
-      message: "Upgrade to Premium to unlock all grammar sections, cards, and explanations.",
+      message: "Upgrade to Premium to unlock the full grammar map.",
     });
   });
   banner.appendChild(title);
@@ -3880,8 +3901,80 @@ const createGrammarPreviewUpgradeSection = ({
   action.textContent = "Upgrade to Premium";
   action.addEventListener("click", () => {
     openGrammarPremiumUpgrade({
-      message: "Upgrade to Premium to unlock all grammar sections, cards, and explanations.",
+      message: "Upgrade to Premium to unlock the full grammar map.",
     });
+  });
+  section.appendChild(titleWrap);
+  section.appendChild(copy);
+  section.appendChild(action);
+  return section;
+};
+
+const createMapPreviewBanner = ({
+  mapLabel = "map",
+  itemLabel = "items",
+  lockedSectionCount = 0,
+  lockedItemCount = 0,
+  unlockedSectionNames = [],
+  upgradeMessage = "Upgrade to Premium to unlock the full map.",
+} = {}) => {
+  const banner = document.createElement("div");
+  banner.className = "grammar-preview-banner";
+  const title = document.createElement("p");
+  title.className = "grammar-preview-title";
+  title.textContent = "Free preview mode";
+  const details = document.createElement("p");
+  details.className = "grammar-preview-details";
+  const unlockedLead = Array.isArray(unlockedSectionNames) && unlockedSectionNames.length
+    ? `${unlockedSectionNames.join(" + ")} are fully open for free. `
+    : "";
+  details.textContent =
+    lockedSectionCount > 0 || lockedItemCount > 0
+      ? `${unlockedLead}${lockedSectionCount} sections and ${lockedItemCount} ${itemLabel} stay Premium-only.`
+      : `${unlockedLead}Full ${mapLabel} is available with Premium.`;
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "premium-setup-primary";
+  button.textContent = `Unlock full ${mapLabel}`;
+  button.addEventListener("click", () => {
+    openGrammarPremiumUpgrade({ message: upgradeMessage });
+  });
+  banner.appendChild(title);
+  banner.appendChild(details);
+  banner.appendChild(button);
+  return banner;
+};
+
+const createMapPreviewUpgradeSection = ({
+  mapLabel = "map",
+  itemLabel = "items",
+  lockedSectionCount = 0,
+  lockedItemCount = 0,
+  unlockedSectionNames = [],
+  upgradeMessage = "Upgrade to Premium to unlock the full map.",
+} = {}) => {
+  const section = document.createElement("section");
+  section.className = "section grammar-group grammar-preview-upgrade reveal";
+  const titleWrap = document.createElement("div");
+  titleWrap.className = "section-title";
+  const heading = document.createElement("h2");
+  heading.textContent = `Ready for full ${mapLabel}?`;
+  titleWrap.appendChild(heading);
+  const copy = document.createElement("p");
+  copy.className = "grammar-preview-upgrade-copy";
+  const unlockedLead = Array.isArray(unlockedSectionNames) && unlockedSectionNames.length
+    ? `${unlockedSectionNames.join(" + ")} are free right now. `
+    : "";
+  copy.textContent =
+    lockedSectionCount > 0 || lockedItemCount > 0
+      ? `${unlockedLead}Unlock ${lockedSectionCount} more sections and ${lockedItemCount} more ${itemLabel} with Premium.`
+      : `${unlockedLead}Unlock full ${mapLabel} with Premium.`;
+  const action = document.createElement("button");
+  action.type = "button";
+  action.className = "premium-setup-primary";
+  action.textContent = "Upgrade to Premium";
+  action.addEventListener("click", () => {
+    openGrammarPremiumUpgrade({ message: upgradeMessage });
   });
   section.appendChild(titleWrap);
   section.appendChild(copy);
@@ -3894,7 +3987,7 @@ const applySectionCompleteButtonState = (button, mapKey, sectionKey, mode = "com
     return;
   }
   const premiumAccessState = getPremiumAccessState();
-  if (premiumAccessState === "loading") {
+  if (premiumAccessState !== "premium") {
     button.hidden = true;
     button.classList.remove("is-complete");
     button.setAttribute("aria-pressed", "false");
@@ -4053,6 +4146,87 @@ const createCardPracticeButton = (mapKey, sectionKey, cardKey) => {
   return button;
 };
 
+const ensureWordsSectionProgressButtons = (root) => {
+  if (!(root instanceof HTMLElement)) {
+    return;
+  }
+  root.querySelectorAll(".words-group[data-section]").forEach((section) => {
+    const sectionKey = String(section.dataset.section || "").trim();
+    if (!sectionKey) {
+      return;
+    }
+    if (!section.querySelector('.map-section-complete-btn[data-map-key="words"]:not(.map-card-practice-btn)')) {
+      const grid = section.querySelector(".words-grid");
+      const button = createSectionCompleteButton("words", sectionKey);
+      if (grid) {
+        section.insertBefore(button, grid);
+      } else {
+        section.appendChild(button);
+      }
+    }
+    section.querySelectorAll(".word-card").forEach((card, index) => {
+      if (card.querySelector('.map-card-practice-btn[data-map-key="words"]')) {
+        return;
+      }
+      const cardKey = String(card.dataset.word || "").trim() || `word-${index}`;
+      card.appendChild(createCardPracticeButton("words", sectionKey, cardKey));
+    });
+  });
+};
+
+const ensurePhrasesSectionProgressButtons = (root) => {
+  if (!(root instanceof HTMLElement)) {
+    return;
+  }
+  root.querySelectorAll(".phrases-group[data-section]").forEach((section) => {
+    const sectionKey = String(section.dataset.section || "").trim();
+    if (!sectionKey) {
+      return;
+    }
+    if (
+      !section.querySelector('.map-section-complete-btn[data-map-key="phrases"]:not(.map-card-practice-btn)')
+    ) {
+      const grid = section.querySelector(".words-grid");
+      const button = createSectionCompleteButton("phrases", sectionKey);
+      if (grid) {
+        section.insertBefore(button, grid);
+      } else {
+        section.appendChild(button);
+      }
+    }
+    section.querySelectorAll(".phrase-card").forEach((card, index) => {
+      if (card.querySelector('.map-card-practice-btn[data-map-key="phrases"]')) {
+        return;
+      }
+      const cardKey = String(card.dataset.phrase || "").trim() || `phrase-${index}`;
+      card.appendChild(createCardPracticeButton("phrases", sectionKey, cardKey));
+    });
+  });
+};
+
+const ensureGrammarSectionProgressButtons = (root) => {
+  if (!(root instanceof HTMLElement)) {
+    return;
+  }
+  root.querySelectorAll(".grammar-group[data-section]").forEach((section) => {
+    const sectionKey = String(section.dataset.section || "").trim();
+    if (!sectionKey) {
+      return;
+    }
+    if (
+      !section.querySelector('.map-section-complete-btn[data-map-key="grammar"]:not(.map-card-practice-btn)')
+    ) {
+      const grid = section.querySelector(".words-grid");
+      const button = createSectionCompleteButton("grammar", sectionKey);
+      if (grid) {
+        section.insertBefore(button, grid);
+      } else {
+        section.appendChild(button);
+      }
+    }
+  });
+};
+
 const getMapRenderBatchSize = () => {
   const isMobileViewport = window.matchMedia("(max-width: 960px)").matches;
   if (isMobileViewport) {
@@ -4149,98 +4323,6 @@ let grammarSectionsRenderRunId = 0;
 let refreshWordsLessonShell = () => {};
 let refreshPhrasesLessonShell = () => {};
 
-const buildSpacedReviewCardKey = (sectionName, value) =>
-  `${normalizeWordLookupKey(sectionName).slice(0, 80)}::${normalizeWordLookupKey(value).slice(0, 120)}`;
-
-const attachSpacedReviewMetadata = (card, mapKey, sectionName, value) => {
-  if (!(card instanceof HTMLElement)) {
-    return;
-  }
-  const cardKey = buildSpacedReviewCardKey(sectionName, value);
-  card.dataset.srMapKey = mapKey;
-  card.dataset.srCardKey = cardKey;
-  const audioButton = card.querySelector(".word-audio");
-  if (audioButton instanceof HTMLElement) {
-    audioButton.dataset.srMapKey = mapKey;
-    audioButton.dataset.srCardKey = cardKey;
-  }
-};
-
-const setupMapSpacedReviewControls = ({ mapKey, controls, sections, cardSelector, idleCopy }) => {
-  if (!(controls instanceof HTMLElement) || !Array.isArray(sections) || !window.cosmicaSpacedReview) {
-    return;
-  }
-
-  let host = controls.querySelector(".spaced-review-controls");
-  if (!(host instanceof HTMLElement)) {
-    host = document.createElement("div");
-    host.className = "spaced-review-controls";
-    host.innerHTML = `
-      <div class="spaced-review-copy">
-        <span class="spaced-review-label">Spaced Review</span>
-        <p class="spaced-review-status" data-sr-status></p>
-      </div>
-      <button type="button" class="spaced-review-toggle" data-sr-toggle>Activate Review</button>
-    `;
-    controls.appendChild(host);
-  }
-
-  const toggleButton = host.querySelector("[data-sr-toggle]");
-  const statusNode = host.querySelector("[data-sr-status]");
-
-  const applyState = () => {
-    const cards = Array.from(document.querySelectorAll(cardSelector));
-    const active = Boolean(window.cosmicaSpacedReview?.isModeActive(mapKey));
-    const dueCards = cards.filter((card) =>
-      window.cosmicaSpacedReview?.isDue({
-        mapKey,
-        cardKey: card.dataset.srCardKey,
-      })
-    );
-    const firstDue = dueCards[0] || null;
-    const shouldFilter = active && dueCards.length > 0;
-
-    cards.forEach((card) => {
-      const isDue = dueCards.includes(card);
-      card.classList.toggle("is-sr-due", isDue);
-      card.classList.toggle("is-sr-next", card === firstDue);
-      card.classList.toggle("is-sr-hidden", shouldFilter && !isDue);
-    });
-
-    sections.forEach((section) => {
-      const hasDueCards = Array.from(section.querySelectorAll(cardSelector)).some((card) =>
-        dueCards.includes(card)
-      );
-      section.classList.toggle("is-sr-hidden", shouldFilter && !hasDueCards);
-    });
-
-    controls.classList.toggle("is-sr-active", active);
-    if (toggleButton instanceof HTMLButtonElement) {
-      toggleButton.textContent = active ? "Exit Review" : "Activate Review";
-      toggleButton.setAttribute("aria-pressed", active ? "true" : "false");
-    }
-    if (statusNode instanceof HTMLElement) {
-      statusNode.textContent = active
-        ? dueCards.length
-          ? `${dueCards.length} card${dueCards.length === 1 ? "" : "s"} due now.`
-          : "Nothing is due right now."
-        : idleCopy;
-    }
-  };
-
-  if (host.dataset.bound !== "1") {
-    host.dataset.bound = "1";
-    toggleButton?.addEventListener("click", () => {
-      const nextActive = !Boolean(window.cosmicaSpacedReview?.isModeActive(mapKey));
-      window.cosmicaSpacedReview?.setMode(mapKey, nextActive);
-      applyState();
-    });
-    window.addEventListener(window.cosmicaSpacedReview.eventName, applyState);
-  }
-
-  applyState();
-};
-
 const renderWordsSections = () => {
   const renderRunId = ++wordsSectionsRenderRunId;
   const isActiveRender = () => renderRunId === wordsSectionsRenderRunId;
@@ -4249,10 +4331,31 @@ const renderWordsSections = () => {
   if (!container) {
     return;
   }
-  container.innerHTML = "";
+  const existingSections = Array.from(container.querySelectorAll(".words-group[data-section]"));
+  const existingSectionMap = new Map(
+    existingSections.map((section) => [String(section.dataset.section || "").trim(), section])
+  );
   if (controls) {
     controls.innerHTML = "";
   }
+  container.querySelectorAll(".map-unavailable, .grammar-preview-upgrade").forEach((node) => {
+    node.remove();
+  });
+  if (!existingSections.length) {
+    container.innerHTML = "";
+  }
+
+  const premiumAccessState = getPremiumAccessState();
+  if (premiumAccessState === "loading") {
+    if (existingSections.length) {
+      document.body.classList.remove("maps-loading");
+      refreshWordsMapTranslations();
+      return;
+    }
+    renderMapLoadingState("words");
+    return;
+  }
+  const isPreviewMode = premiumAccessState !== "premium";
 
   const sectionEntries = [];
   WORD_SECTION_ORDER.forEach((sectionName) => {
@@ -4264,11 +4367,44 @@ const renderWordsSections = () => {
   });
 
   if (!sectionEntries.length) {
+    if (existingSections.length) {
+      document.body.classList.remove("maps-loading");
+      refreshWordsMapTranslations();
+      return;
+    }
     container.appendChild(buildMapUnavailableState("Words"));
     return;
   }
 
+  const totalSectionCount = sectionEntries.length;
+  const totalWordCount = sectionEntries.reduce((sum, entry) => sum + entry.words.length, 0);
+  const renderEntries = isPreviewMode
+    ? sectionEntries.slice(0, WORDS_PREVIEW_SECTION_LIMIT).map(({ sectionName, words }) => ({
+        sectionName,
+        words: words.slice(),
+      }))
+    : sectionEntries;
+  const unlockedSectionNames = renderEntries.map((entry) => entry.sectionName);
+  const previewSectionSet = new Set(renderEntries.map((entry) => entry.sectionName));
+  const previewSectionCount = renderEntries.length;
+  const previewWordCount = renderEntries.reduce((sum, entry) => sum + entry.words.length, 0);
+  const lockedSectionCount = Math.max(0, totalSectionCount - previewSectionCount);
+  const lockedWordCount = Math.max(0, totalWordCount - previewWordCount);
+  const hasLockedPreviewContent = lockedSectionCount > 0 || lockedWordCount > 0;
+
   const sections = [];
+  const renderSectionNameSet = new Set(renderEntries.map((entry) => entry.sectionName));
+  existingSections.forEach((section) => {
+    if (!renderSectionNameSet.has(String(section.dataset.section || "").trim())) {
+      section.remove();
+    }
+  });
+  renderEntries.forEach((entry) => {
+    const existing = existingSectionMap.get(entry.sectionName);
+    if (existing) {
+      sections.push(existing);
+    }
+  });
 
   const buildWordsSection = ({ sectionName, words }) => {
     const section = document.createElement("section");
@@ -4306,13 +4442,19 @@ const renderWordsSections = () => {
       `;
       const worldEntry = WORLD_TRANSLATIONS?.words?.[sectionName]?.[word] || null;
       applyCardRegisterBadge(card, worldEntry?.register);
-      attachSpacedReviewMetadata(card, "words", sectionName, word);
+      card.appendChild(createCardPracticeButton("words", sectionName, word));
       grid.appendChild(card);
     });
     section.appendChild(title);
+    section.appendChild(createSectionCompleteButton("words", sectionName));
     section.appendChild(grid);
     return section;
   };
+
+  const entriesToBuild = renderEntries.filter(({ sectionName }) => !existingSectionMap.has(sectionName));
+  if (sections.length) {
+    document.body.classList.remove("maps-loading");
+  }
 
   const initializeWordsControls = () => {
     if (!controls) {
@@ -4338,11 +4480,16 @@ const renderWordsSections = () => {
       document.body.dataset.wordsFilter = "all";
     }
 
-    WORD_SECTION_ORDER.forEach((sectionName) => {
+    sectionEntries.forEach(({ sectionName }) => {
       const displayName =
         getWorldSectionLabelFromPack("words", sectionName) ||
         (sectionName === "countries" ? "Countries" : sectionName);
-      list.appendChild(createSectionFilterButton(displayName, sectionName, sectionName));
+      const button = createSectionFilterButton(displayName, sectionName, sectionName);
+      const isLockedPreviewSection = isPreviewMode && !previewSectionSet.has(sectionName);
+      if (isLockedPreviewSection) {
+        lockSectionFilterButton(button);
+      }
+      list.appendChild(button);
     });
 
     const applyFilter = () => {
@@ -4358,16 +4505,13 @@ const renderWordsSections = () => {
       );
     };
 
-    const activateFilter = (filter = "all", { scroll = true, track = false } = {}) => {
+    const activateFilter = (filter = "all", { scroll = true } = {}) => {
       const nextFilter = String(filter || "all").trim() || "all";
       activeFilter = nextFilter;
       list.querySelectorAll(".words-filter").forEach((btn) => {
         btn.classList.toggle("is-active", (btn.dataset.filter || "all") === nextFilter);
       });
       applyFilter();
-      if (track && nextFilter !== "all") {
-        trackMapSectionEvent("words", nextFilter, "started");
-      }
       if (!scroll) {
         return;
       }
@@ -4403,8 +4547,11 @@ const renderWordsSections = () => {
       if (!button) {
         return;
       }
+      if (button.disabled || button.classList.contains("is-locked")) {
+        return;
+      }
       const filter = button.dataset.filter || "all";
-      activateFilter(filter, { scroll: true, track: filter !== "all" });
+      activateFilter(filter, { scroll: true });
     });
 
     const registerOptions = getRegisterFilterOptionsForSections(sections, ".word-card");
@@ -4416,23 +4563,44 @@ const renderWordsSections = () => {
     controls.appendChild(label);
     controls.appendChild(list);
 
+    const previewBanner =
+      isPreviewMode && hasLockedPreviewContent
+        ? createMapPreviewBanner({
+            mapLabel: "words map",
+            itemLabel: "words",
+            lockedSectionCount,
+            lockedItemCount: lockedWordCount,
+            unlockedSectionNames,
+            upgradeMessage: "Upgrade to Premium to unlock the full words map.",
+          })
+        : null;
+
     if (registerOptions.length) {
+      const shouldLockRegisterControls = isPreviewMode;
       const registerLabel = document.createElement("div");
       registerLabel.className = "words-controls-register-label";
       registerLabel.textContent = "Register";
+      registerLabel.classList.toggle("is-locked", shouldLockRegisterControls);
       const registerList = document.createElement("div");
       registerList.className = "words-controls-list words-register-list";
+      registerList.classList.toggle("is-locked", shouldLockRegisterControls);
       registerOptions.forEach((value) => {
         const button = createSectionFilterButton(getRegisterFilterLabel(value), value);
         button.dataset.registerFilter = value;
         if (value === activeRegisterFilter) {
           button.classList.add("is-active");
         }
+        if (shouldLockRegisterControls) {
+          lockSectionFilterButton(button, "Unlock with Premium");
+        }
         registerList.appendChild(button);
       });
       registerList.addEventListener("click", (event) => {
         const button = event.target.closest(".words-filter[data-register-filter]");
         if (!button) {
+          return;
+        }
+        if (button.disabled || button.classList.contains("is-locked")) {
           return;
         }
         registerList
@@ -4446,11 +4614,15 @@ const renderWordsSections = () => {
       controls.appendChild(registerList);
     }
 
+    if (previewBanner) {
+      controls.appendChild(previewBanner);
+    }
+
     applyFilter();
   };
 
   renderSectionsProgressively({
-    entries: sectionEntries,
+    entries: entriesToBuild,
     buildSection: buildWordsSection,
     onSectionReady: (section) => {
       if (!isActiveRender()) {
@@ -4469,14 +4641,20 @@ const renderWordsSections = () => {
       if (!isActiveRender()) {
         return;
       }
+      ensureWordsSectionProgressButtons(container);
       initializeWordsControls();
-      setupMapSpacedReviewControls({
-        mapKey: "words",
-        controls,
-        sections,
-        cardSelector: ".word-card",
-        idleCopy: "Review due words only.",
-      });
+      if (isPreviewMode && hasLockedPreviewContent) {
+        container.appendChild(
+          createMapPreviewUpgradeSection({
+            mapLabel: "words map",
+            itemLabel: "words",
+            lockedSectionCount,
+            lockedItemCount: lockedWordCount,
+            unlockedSectionNames,
+            upgradeMessage: "Upgrade to Premium to unlock the full words map.",
+          })
+        );
+      }
       refreshWordsMapTranslations();
     },
     shouldContinue: isActiveRender,
@@ -4491,10 +4669,31 @@ const renderPhrasesSections = () => {
   if (!container) {
     return;
   }
-  container.innerHTML = "";
+  const existingSections = Array.from(container.querySelectorAll(".phrases-group[data-section]"));
+  const existingSectionMap = new Map(
+    existingSections.map((section) => [String(section.dataset.section || "").trim(), section])
+  );
   if (controls) {
     controls.innerHTML = "";
   }
+  container.querySelectorAll(".map-unavailable, .grammar-preview-upgrade").forEach((node) => {
+    node.remove();
+  });
+  if (!existingSections.length) {
+    container.innerHTML = "";
+  }
+
+  const premiumAccessState = getPremiumAccessState();
+  if (premiumAccessState === "loading") {
+    if (existingSections.length) {
+      document.body.classList.remove("maps-loading");
+      refreshPhrasesMapTranslations();
+      return;
+    }
+    renderMapLoadingState("phrases");
+    return;
+  }
+  const isPreviewMode = premiumAccessState !== "premium";
 
   const sectionEntries = [];
   PHRASE_SECTION_ORDER.forEach((sectionName) => {
@@ -4506,11 +4705,44 @@ const renderPhrasesSections = () => {
   });
 
   if (!sectionEntries.length) {
+    if (existingSections.length) {
+      document.body.classList.remove("maps-loading");
+      refreshPhrasesMapTranslations();
+      return;
+    }
     container.appendChild(buildMapUnavailableState("Phrases"));
     return;
   }
 
+  const totalSectionCount = sectionEntries.length;
+  const totalPhraseCount = sectionEntries.reduce((sum, entry) => sum + entry.phrases.length, 0);
+  const renderEntries = isPreviewMode
+    ? sectionEntries.slice(0, PHRASES_PREVIEW_SECTION_LIMIT).map(({ sectionName, phrases }) => ({
+        sectionName,
+        phrases: phrases.slice(),
+      }))
+    : sectionEntries;
+  const unlockedSectionNames = renderEntries.map((entry) => entry.sectionName);
+  const previewSectionSet = new Set(renderEntries.map((entry) => entry.sectionName));
+  const previewSectionCount = renderEntries.length;
+  const previewPhraseCount = renderEntries.reduce((sum, entry) => sum + entry.phrases.length, 0);
+  const lockedSectionCount = Math.max(0, totalSectionCount - previewSectionCount);
+  const lockedPhraseCount = Math.max(0, totalPhraseCount - previewPhraseCount);
+  const hasLockedPreviewContent = lockedSectionCount > 0 || lockedPhraseCount > 0;
+
   const sections = [];
+  const renderSectionNameSet = new Set(renderEntries.map((entry) => entry.sectionName));
+  existingSections.forEach((section) => {
+    if (!renderSectionNameSet.has(String(section.dataset.section || "").trim())) {
+      section.remove();
+    }
+  });
+  renderEntries.forEach((entry) => {
+    const existing = existingSectionMap.get(entry.sectionName);
+    if (existing) {
+      sections.push(existing);
+    }
+  });
 
   const buildPhrasesSection = ({ sectionName, phrases }) => {
     const section = document.createElement("section");
@@ -4547,13 +4779,19 @@ const renderPhrasesSections = () => {
         </button>
       `;
       applyCardRegisterBadge(card, resolvePhraseRegister(sectionName, phrase));
-      attachSpacedReviewMetadata(card, "phrases", sectionName, phrase);
+      card.appendChild(createCardPracticeButton("phrases", sectionName, phrase));
       grid.appendChild(card);
     });
     section.appendChild(title);
+    section.appendChild(createSectionCompleteButton("phrases", sectionName));
     section.appendChild(grid);
     return section;
   };
+
+  const entriesToBuild = renderEntries.filter(({ sectionName }) => !existingSectionMap.has(sectionName));
+  if (sections.length) {
+    document.body.classList.remove("maps-loading");
+  }
 
   const initializePhrasesControls = () => {
     if (!controls) {
@@ -4579,10 +4817,15 @@ const renderPhrasesSections = () => {
       document.body.dataset.phrasesFilter = "all";
     }
 
-    PHRASE_SECTION_ORDER.forEach((sectionName) => {
+    sectionEntries.forEach(({ sectionName }) => {
       const displayName =
         getWorldSectionLabelFromPack("phrases", sectionName) || sectionName;
-      list.appendChild(createSectionFilterButton(displayName, sectionName, sectionName));
+      const button = createSectionFilterButton(displayName, sectionName, sectionName);
+      const isLockedPreviewSection = isPreviewMode && !previewSectionSet.has(sectionName);
+      if (isLockedPreviewSection) {
+        lockSectionFilterButton(button);
+      }
+      list.appendChild(button);
     });
 
     const applyFilter = () => {
@@ -4598,16 +4841,13 @@ const renderPhrasesSections = () => {
       );
     };
 
-    const activateFilter = (filter = "all", { scroll = true, track = false } = {}) => {
+    const activateFilter = (filter = "all", { scroll = true } = {}) => {
       const nextFilter = String(filter || "all").trim() || "all";
       activeFilter = nextFilter;
       list.querySelectorAll(".words-filter").forEach((btn) => {
         btn.classList.toggle("is-active", (btn.dataset.filter || "all") === nextFilter);
       });
       applyFilter();
-      if (track && nextFilter !== "all") {
-        trackMapSectionEvent("phrases", nextFilter, "started");
-      }
       if (!scroll) {
         return;
       }
@@ -4643,8 +4883,11 @@ const renderPhrasesSections = () => {
       if (!button) {
         return;
       }
+      if (button.disabled || button.classList.contains("is-locked")) {
+        return;
+      }
       const filter = button.dataset.filter || "all";
-      activateFilter(filter, { scroll: true, track: filter !== "all" });
+      activateFilter(filter, { scroll: true });
     });
 
     const registerOptions = getRegisterFilterOptionsForSections(sections, ".phrase-card");
@@ -4656,23 +4899,44 @@ const renderPhrasesSections = () => {
     controls.appendChild(label);
     controls.appendChild(list);
 
+    const previewBanner =
+      isPreviewMode && hasLockedPreviewContent
+        ? createMapPreviewBanner({
+            mapLabel: "phrases map",
+            itemLabel: "phrases",
+            lockedSectionCount,
+            lockedItemCount: lockedPhraseCount,
+            unlockedSectionNames,
+            upgradeMessage: "Upgrade to Premium to unlock the full phrases map.",
+          })
+        : null;
+
     if (registerOptions.length) {
+      const shouldLockRegisterControls = isPreviewMode;
       const registerLabel = document.createElement("div");
       registerLabel.className = "words-controls-register-label";
       registerLabel.textContent = "Register";
+      registerLabel.classList.toggle("is-locked", shouldLockRegisterControls);
       const registerList = document.createElement("div");
       registerList.className = "words-controls-list words-register-list";
+      registerList.classList.toggle("is-locked", shouldLockRegisterControls);
       registerOptions.forEach((value) => {
         const button = createSectionFilterButton(getRegisterFilterLabel(value), value);
         button.dataset.registerFilter = value;
         if (value === activeRegisterFilter) {
           button.classList.add("is-active");
         }
+        if (shouldLockRegisterControls) {
+          lockSectionFilterButton(button, "Unlock with Premium");
+        }
         registerList.appendChild(button);
       });
       registerList.addEventListener("click", (event) => {
         const button = event.target.closest(".words-filter[data-register-filter]");
         if (!button) {
+          return;
+        }
+        if (button.disabled || button.classList.contains("is-locked")) {
           return;
         }
         registerList
@@ -4686,11 +4950,15 @@ const renderPhrasesSections = () => {
       controls.appendChild(registerList);
     }
 
+    if (previewBanner) {
+      controls.appendChild(previewBanner);
+    }
+
     applyFilter();
   };
 
   renderSectionsProgressively({
-    entries: sectionEntries,
+    entries: entriesToBuild,
     buildSection: buildPhrasesSection,
     onSectionReady: (section) => {
       if (!isActiveRender()) {
@@ -4709,14 +4977,20 @@ const renderPhrasesSections = () => {
       if (!isActiveRender()) {
         return;
       }
+      ensurePhrasesSectionProgressButtons(container);
       initializePhrasesControls();
-      setupMapSpacedReviewControls({
-        mapKey: "phrases",
-        controls,
-        sections,
-        cardSelector: ".phrase-card",
-        idleCopy: "Review due phrases only.",
-      });
+      if (isPreviewMode && hasLockedPreviewContent) {
+        container.appendChild(
+          createMapPreviewUpgradeSection({
+            mapLabel: "phrases map",
+            itemLabel: "phrases",
+            lockedSectionCount,
+            lockedItemCount: lockedPhraseCount,
+            unlockedSectionNames,
+            upgradeMessage: "Upgrade to Premium to unlock the full phrases map.",
+          })
+        );
+      }
       refreshPhrasesMapTranslations();
     },
     shouldContinue: isActiveRender,
@@ -4731,9 +5005,18 @@ const renderGrammarSections = () => {
   if (!container) {
     return;
   }
-  container.innerHTML = "";
+  const existingSections = Array.from(container.querySelectorAll(".grammar-group[data-section]"));
+  const existingSectionMap = new Map(
+    existingSections.map((section) => [String(section.dataset.section || "").trim(), section])
+  );
   if (controls) {
     controls.innerHTML = "";
+  }
+  container.querySelectorAll(".map-unavailable, .grammar-preview-upgrade").forEach((node) => {
+    node.remove();
+  });
+  if (!existingSections.length) {
+    container.innerHTML = "";
   }
   if (isGrammarWorldUnderExpertReview()) {
     document.body.classList.remove("maps-loading");
@@ -4743,6 +5026,11 @@ const renderGrammarSections = () => {
 
   const premiumAccessState = getPremiumAccessState();
   if (premiumAccessState === "loading") {
+    if (existingSections.length) {
+      document.body.classList.remove("maps-loading");
+      refreshGrammarMapTranslations();
+      return;
+    }
     renderMapLoadingState("grammar");
     return;
   }
@@ -4758,6 +5046,11 @@ const renderGrammarSections = () => {
   });
 
   if (!sectionEntries.length) {
+    if (existingSections.length) {
+      document.body.classList.remove("maps-loading");
+      refreshGrammarMapTranslations();
+      return;
+    }
     container.appendChild(buildMapUnavailableState("Grammar"));
     return;
   }
@@ -4789,6 +5082,18 @@ const renderGrammarSections = () => {
   const lockedTopicCount = Math.max(0, totalTopicCount - previewTopicCount);
 
   const sections = [];
+  const renderSectionNameSet = new Set(renderEntries.map((entry) => entry.sectionName));
+  existingSections.forEach((section) => {
+    if (!renderSectionNameSet.has(String(section.dataset.section || "").trim())) {
+      section.remove();
+    }
+  });
+  renderEntries.forEach((entry) => {
+    const existing = existingSectionMap.get(entry.sectionName);
+    if (existing) {
+      sections.push(existing);
+    }
+  });
 
   const buildGrammarSection = ({ sectionName, concepts }) => {
     const section = document.createElement("section");
@@ -4855,9 +5160,15 @@ const renderGrammarSections = () => {
       grid.appendChild(card);
     });
     section.appendChild(title);
+    section.appendChild(createSectionCompleteButton("grammar", sectionName));
     section.appendChild(grid);
     return section;
   };
+
+  const entriesToBuild = renderEntries.filter(({ sectionName }) => !existingSectionMap.has(sectionName));
+  if (sections.length) {
+    document.body.classList.remove("maps-loading");
+  }
 
   const initializeGrammarControls = () => {
     if (!controls) {
@@ -4927,9 +5238,6 @@ const renderGrammarSections = () => {
       button.classList.add("is-active");
       const filter = button.dataset.filter || "all";
       applyFilter(filter);
-      if (filter !== "all") {
-        trackMapSectionEvent("grammar", filter, "started");
-      }
       if (filter === "all") {
         const first = sections[0];
         if (first) {
@@ -4972,7 +5280,7 @@ const renderGrammarSections = () => {
   };
 
   renderSectionsProgressively({
-    entries: renderEntries,
+    entries: entriesToBuild,
     buildSection: buildGrammarSection,
     onSectionReady: (section) => {
       if (!isActiveRender()) {
@@ -4991,6 +5299,7 @@ const renderGrammarSections = () => {
       if (!isActiveRender()) {
         return;
       }
+      ensureGrammarSectionProgressButtons(container);
       initializeGrammarControls();
       if (isPreviewMode) {
         container.appendChild(
@@ -10284,6 +10593,277 @@ const requestRuntimeSectionTitleTranslation = async (mapType, sectionTitleText, 
   return request;
 };
 
+const PREVIEW_UI_TRANSLATION_CACHE_KEY = "cosmicaPreviewUiTranslationCache:v1";
+const previewUiTranslationCache = new Map();
+const previewUiTranslationRequests = new Map();
+
+const persistPreviewUiTranslationCache = () => {
+  try {
+    localStorage.setItem(
+      PREVIEW_UI_TRANSLATION_CACHE_KEY,
+      JSON.stringify(Object.fromEntries(previewUiTranslationCache))
+    );
+  } catch {}
+};
+
+const loadPreviewUiTranslationCache = () => {
+  try {
+    const raw = localStorage.getItem(PREVIEW_UI_TRANSLATION_CACHE_KEY);
+    if (!raw) {
+      return;
+    }
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object") {
+      return;
+    }
+    Object.entries(parsed).forEach(([key, value]) => {
+      if (typeof value === "string" && value.trim()) {
+        previewUiTranslationCache.set(key, value.trim());
+      }
+    });
+  } catch {}
+};
+
+loadPreviewUiTranslationCache();
+
+const buildPreviewUiCacheKey = (sourceText, baseLanguage) => {
+  const textKey = normalizeWordLookupKey(sourceText);
+  const langKey = String(baseLanguage || "").trim().toLowerCase();
+  return `${WORLD_KEY}|preview-ui|${langKey}|${textKey}`;
+};
+
+const getPreviewUiTranslation = (sourceText, baseLanguage) => {
+  const cacheKey = buildPreviewUiCacheKey(sourceText, baseLanguage);
+  const value = previewUiTranslationCache.get(cacheKey);
+  return typeof value === "string" ? value.trim() : "";
+};
+
+const cachePreviewUiTranslation = (sourceText, baseLanguage, translation) => {
+  const cacheKey = buildPreviewUiCacheKey(sourceText, baseLanguage);
+  const text = String(translation || "").trim();
+  if (!cacheKey || !text || isInvalidRuntimeTitleTranslation(text)) {
+    return;
+  }
+  previewUiTranslationCache.set(cacheKey, text);
+  persistPreviewUiTranslationCache();
+};
+
+const requestPreviewUiTranslation = async (sourceText, baseLanguage) => {
+  const text = String(sourceText || "").trim();
+  const langKey = String(baseLanguage || "").trim().toLowerCase();
+  if (!text || !langKey || langKey === "english") {
+    return text;
+  }
+
+  const cacheKey = buildPreviewUiCacheKey(text, langKey);
+  const cached = previewUiTranslationCache.get(cacheKey);
+  if (typeof cached === "string" && cached.trim()) {
+    return cached.trim();
+  }
+  const pending = previewUiTranslationRequests.get(cacheKey);
+  if (pending) {
+    return pending;
+  }
+
+  const endpointCandidates = buildTranslateEndpointCandidates();
+  const request = (async () => {
+    try {
+      for (const endpoint of endpointCandidates) {
+        try {
+          const response = await fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              text,
+              targetLanguage: langKey,
+            }),
+            cache: "no-store",
+            credentials: "same-origin",
+          });
+          if (!response.ok) {
+            continue;
+          }
+          const data = await response.json().catch(() => ({}));
+          const translated = String(data?.translation || data?.content || "")
+            .replace(/^["'`]|["'`]$/g, "")
+            .trim();
+          if (!translated || isInvalidRuntimeTitleTranslation(translated)) {
+            continue;
+          }
+          cachePreviewUiTranslation(text, langKey, translated);
+          return translated;
+        } catch {}
+      }
+      return "";
+    } finally {
+      previewUiTranslationRequests.delete(cacheKey);
+    }
+  })();
+
+  previewUiTranslationRequests.set(cacheKey, request);
+  return request;
+};
+
+const formatPreviewFallbackText = (value) =>
+  String(value || "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .replace(/\b([a-z])/g, (match) => match.toUpperCase());
+
+const refreshSeoPreviewTranslations = (mapKey) => {
+  const baseLanguage = readMapsBaseLanguagePreference();
+  const langKey = String(baseLanguage || "").trim().toLowerCase();
+  if (langKey) {
+    document.body.dataset.previewBaseLanguage = langKey;
+  } else {
+    delete document.body.dataset.previewBaseLanguage;
+  }
+  const previewRoot = document.querySelector(".seo-map-support, .seo-map-preview-section");
+  if (!previewRoot) {
+    return;
+  }
+
+  document.querySelectorAll("[data-preview-ui-source]").forEach((node) => {
+    const sourceText = String(node.dataset.previewUiSource || "").trim();
+    if (!sourceText) {
+      return;
+    }
+    if (!langKey || langKey === "english") {
+      node.textContent = sourceText;
+      return;
+    }
+    const cached = getPreviewUiTranslation(sourceText, langKey);
+    if (cached) {
+      node.textContent = cached;
+      return;
+    }
+    node.textContent = sourceText;
+    const requestKey = `${langKey}|${sourceText}|${Date.now()}`;
+    node.dataset.previewUiRequest = requestKey;
+    requestPreviewUiTranslation(sourceText, langKey).then((translated) => {
+      if (node.dataset.previewUiRequest !== requestKey) {
+        return;
+      }
+      if (!translated) {
+        return;
+      }
+      node.textContent = translated;
+    });
+  });
+
+  document
+    .querySelectorAll(`[data-preview-map="${mapKey}"][data-preview-section-title-source]`)
+    .forEach((node) => {
+      const sourceTitle = String(node.dataset.previewSectionTitleSource || "").trim();
+      if (!sourceTitle) {
+        return;
+      }
+      if (!langKey || langKey === "english") {
+        node.textContent = sourceTitle;
+        return;
+      }
+      const cached = getRuntimeSectionTitleTranslation(mapKey, sourceTitle, langKey);
+      if (cached) {
+        node.textContent = cached;
+        return;
+      }
+      node.textContent = sourceTitle;
+      const requestKey = `${mapKey}|preview-title|${sourceTitle}|${langKey}|${Date.now()}`;
+      node.dataset.previewSectionTitleRequest = requestKey;
+      requestRuntimeSectionTitleTranslation(mapKey, sourceTitle, langKey).then((translated) => {
+        if (node.dataset.previewSectionTitleRequest !== requestKey) {
+          return;
+        }
+        if (!translated) {
+          return;
+        }
+        node.textContent = translated;
+      });
+    });
+
+  if (mapKey === "words" || mapKey === "phrases") {
+    document.querySelectorAll(`.seo-preview-gloss[data-preview-map="${mapKey}"]`).forEach((node) => {
+      const sourceText = String(node.dataset.previewSource || "").trim();
+      const sectionKey = String(node.dataset.previewSectionSource || "").trim();
+      const hideByDefault = String(node.dataset.previewDefaultHidden || "").trim() === "true";
+      if (!sourceText || !sectionKey) {
+        return;
+      }
+      if (!langKey || langKey === "english") {
+        node.textContent = formatPreviewFallbackText(sourceText);
+        node.hidden = hideByDefault;
+        return;
+      }
+      if (isWorldNativeBaseLanguage(baseLanguage)) {
+        node.hidden = true;
+        return;
+      }
+      const translated =
+        mapKey === "words"
+          ? resolveWordTranslation(sectionKey, sourceText, baseLanguage)
+          : resolvePhraseTranslation(sectionKey, sourceText, baseLanguage);
+      if (translated) {
+        node.textContent = translated;
+        node.hidden = false;
+        return;
+      }
+      node.textContent = formatPreviewFallbackText(sourceText);
+      node.hidden = false;
+      if (mapKey === "phrases") {
+        requestRuntimePhraseTranslation(sectionKey, sourceText, baseLanguage).then((runtimeText) => {
+          if (!runtimeText) {
+            return;
+          }
+          node.textContent = runtimeText;
+          node.hidden = false;
+        });
+      }
+    });
+    return;
+  }
+
+  if (mapKey === "grammar") {
+    document.querySelectorAll(".seo-preview-note[data-preview-grammar-section-source][data-preview-source]").forEach((node) => {
+      const sourceText = String(node.dataset.previewSource || "").trim();
+      const sectionKey = String(node.dataset.previewGrammarSectionSource || "").trim();
+      if (!sourceText || !sectionKey) {
+        return;
+      }
+      if (!langKey || langKey === "english") {
+        node.textContent = sourceText;
+        return;
+      }
+      const translated = resolveGrammarExplanation(sectionKey, sourceText, baseLanguage);
+      if (translated) {
+        node.textContent = translated;
+        return;
+      }
+      node.textContent = sourceText;
+      requestRuntimeGrammarExplanationTranslation(sectionKey, sourceText, baseLanguage).then(
+        (runtimeText) => {
+          if (!runtimeText) {
+            return;
+          }
+          node.textContent = runtimeText;
+        }
+      );
+    });
+  }
+};
+
+const hasStaticPrerenderedMapSections = () => {
+  if (isWordsPage && document.querySelector("#wordsSections .words-group[data-section]")) {
+    return true;
+  }
+  if (isPhrasesPage && document.querySelector("#phrasesSections .phrases-group[data-section]")) {
+    return true;
+  }
+  if (isGrammarPage && document.querySelector("#grammarSections .grammar-group[data-section]")) {
+    return true;
+  }
+  return false;
+};
+
 const ensureFilterButtonMainText = (button, text) => {
   if (!button) {
     return;
@@ -10557,6 +11137,7 @@ function refreshWordsMapTranslations() {
   applyWordTranslations();
   applySectionTitleTranslations("words");
   applySectionFilterButtonTranslations("words");
+  refreshSeoPreviewTranslations("words");
 }
 
 function refreshPhrasesMapTranslations() {
@@ -10567,6 +11148,7 @@ function refreshPhrasesMapTranslations() {
   applyPhraseTranslations();
   applySectionTitleTranslations("phrases");
   applySectionFilterButtonTranslations("phrases");
+  refreshSeoPreviewTranslations("phrases");
 }
 
 function refreshGrammarMapTranslations() {
@@ -10577,6 +11159,7 @@ function refreshGrammarMapTranslations() {
   applySectionTitleTranslations("grammar");
   applySectionFilterButtonTranslations("grammar");
   applyGrammarCardTitleTranslations();
+  refreshSeoPreviewTranslations("grammar");
 }
 
 const applyGrammarCardTitleTranslations = () => {
@@ -10995,9 +11578,17 @@ refreshMapsForBaseLanguage = () => {
     return;
   }
 
-  ensureTranslationsLoaded({ awaitNetwork: isNonEnglishWorld || isGrammarPage }).finally(
-    refreshRenderedMaps
-  );
+  refreshRenderedMaps();
+  ensureTranslationsLoaded({ awaitNetwork: false }).then(() => {
+    refreshRenderedMaps();
+    if (isGrammarPage) {
+      prewarmGrammarExplanationTranslations();
+      const overlay = ensureGrammarOverlay();
+      if (overlay && typeof overlay.__refresh === "function") {
+        overlay.__refresh();
+      }
+    }
+  });
 };
 
 const updateWordsTopState = () => {
@@ -11036,7 +11627,7 @@ if (cachedWorldTranslations) {
   hydrateMapsWorldTranslationsPayload(cachedWorldTranslations);
 }
 const shouldRenderLoadingSkeleton =
-  needsMapTranslations && isNonEnglishWorld && !cachedWorldTranslations;
+  needsMapTranslations && isNonEnglishWorld && !cachedWorldTranslations && !hasStaticPrerenderedMapSections();
 
 if (shouldRenderLoadingSkeleton) {
   if (isWordsPage) {
@@ -11172,22 +11763,30 @@ if (needsMapTranslations) {
   }
 }
 
-if (isGrammarPage && typeof window.cosmicaGamification?.subscribe === "function") {
-  let lastGrammarAccessState = getPremiumAccessState();
-  let grammarModeRerenderTimerId = 0;
+if ((isWordsPage || isPhrasesPage || isGrammarPage) && typeof window.cosmicaGamification?.subscribe === "function") {
+  let lastPremiumAccessState = getPremiumAccessState();
+  let premiumModeRerenderTimerId = 0;
   window.cosmicaGamification.subscribe(() => {
-    const nextGrammarAccessState = getPremiumAccessState();
-    if (nextGrammarAccessState === lastGrammarAccessState) {
+    const nextPremiumAccessState = getPremiumAccessState();
+    if (nextPremiumAccessState === lastPremiumAccessState) {
       return;
     }
-    lastGrammarAccessState = nextGrammarAccessState;
-    if (grammarModeRerenderTimerId) {
-      window.clearTimeout(grammarModeRerenderTimerId);
+    lastPremiumAccessState = nextPremiumAccessState;
+    if (premiumModeRerenderTimerId) {
+      window.clearTimeout(premiumModeRerenderTimerId);
     }
-    grammarModeRerenderTimerId = window.setTimeout(() => {
-      grammarModeRerenderTimerId = 0;
-      renderGrammarSections();
-      setupGrammarModal();
+    premiumModeRerenderTimerId = window.setTimeout(() => {
+      premiumModeRerenderTimerId = 0;
+      if (isWordsPage) {
+        renderWordsSections();
+      }
+      if (isPhrasesPage) {
+        renderPhrasesSections();
+      }
+      if (isGrammarPage) {
+        renderGrammarSections();
+        setupGrammarModal();
+      }
       if (typeof refreshMapsForBaseLanguage === "function") {
         refreshMapsForBaseLanguage();
       }

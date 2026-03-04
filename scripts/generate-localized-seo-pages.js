@@ -4,6 +4,9 @@ const path = require("path");
 const ROOT = path.resolve(__dirname, "..");
 const FRONTEND = path.join(ROOT, "frontend");
 const SITE_ORIGIN = "https://www.cosmicalearn.com";
+const STYLE_ASSET_VERSION = "20260413";
+const APP_ASSET_VERSION = "20260417";
+const ACCOUNT_CARET_ENTITY = "&#9662;";
 
 const escapeHtml = (value) =>
   String(value)
@@ -15,6 +18,18 @@ const escapeHtml = (value) =>
 const writeFile = (fileName, content) =>
   fs.writeFileSync(path.join(FRONTEND, fileName), content, "utf8");
 const pageUrl = (fileName) => (fileName === "index.html" ? `${SITE_ORIGIN}/` : `${SITE_ORIGIN}/${fileName}`);
+
+const buildAlternateLinks = (links = []) => {
+  const items = links
+    .filter((item) => item && item.lang && item.url)
+    .map(
+      (item) => `    <link rel="alternate" hreflang="${escapeHtml(item.lang)}" href="${escapeHtml(item.url)}" />`
+    );
+  if (!items.length) {
+    return "";
+  }
+  return `    <!-- Multilingual SEO: hreflang cluster -->\n${items.join("\n")}\n    <!-- /Multilingual SEO: hreflang cluster -->\n`;
+};
 
 const jsonLdScript = (schema, marker = "") => {
   const json = JSON.stringify(schema, null, 2)
@@ -77,6 +92,7 @@ const pageShell = ({
   footerText,
   content,
   extraStructuredData,
+  alternateLinks = "",
 }) => {
   const webPageSchema = {
     "@context": "https://schema.org",
@@ -113,6 +129,7 @@ const pageShell = ({
     <link rel="manifest" href="/app.webmanifest" />
     <link rel="apple-touch-icon" sizes="180x180" href="/pwa/apple-touch-icon.png" />
     <link rel="canonical" href="${SITE_ORIGIN}/${escapeHtml(canonicalPath)}" />
+${alternateLinks}
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Cosmica" />
     <meta property="og:title" content="${escapeHtml(title)}" />
@@ -121,8 +138,8 @@ const pageShell = ({
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="${escapeHtml(title)}" />
     <meta name="twitter:description" content="${escapeHtml(description)}" />
-    <link rel="preload" as="style" href="style.css?v=20260331" />
-    <link rel="stylesheet" href="style.css?v=20260331" />
+    <link rel="preload" as="style" href="style.css?v=${STYLE_ASSET_VERSION}" />
+    <link rel="stylesheet" href="style.css?v=${STYLE_ASSET_VERSION}" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -163,7 +180,7 @@ ${extraStructuredData ? `${extraStructuredData}\n` : ""}    <meta property="og:i
               <span class="account-trigger-label">Guest</span>
               <span class="account-trigger-meta">Sign in</span>
             </span>
-            <span class="account-trigger-caret" aria-hidden="true">▾</span>
+            <span class="account-trigger-caret" aria-hidden="true">${ACCOUNT_CARET_ENTITY}</span>
           </button>
         </div>
       </div>
@@ -186,7 +203,7 @@ ${content}
       </span>
     </footer>
     <!-- Shared client bundle -->
-    <script src="app.js?v=20260410" defer></script>
+    <script src="app.js?v=${APP_ASSET_VERSION}" defer></script>
   </body>
 </html>
 `;
@@ -514,6 +531,11 @@ for (const config of PAGES) {
     { name: "Cosmica", url: `${SITE_ORIGIN}/` },
     { name: config.h1, url: pageUrl(config.file) },
   ]);
+  const alternateLinks = buildAlternateLinks([
+    { lang: config.htmlLang, url: pageUrl(config.file) },
+    { lang: "en", url: pageUrl(config.worldFile) },
+    { lang: "x-default", url: pageUrl(config.worldFile) },
+  ]);
 
   writeFile(
     config.file,
@@ -528,6 +550,7 @@ for (const config of PAGES) {
       backLabel: config.backLabel,
       footerText: config.footerText,
       content: buildContent(config),
+      alternateLinks,
       extraStructuredData: [
         jsonLdScript(courseSchema(config), "Course structured data"),
         jsonLdScript(breadcrumbs, "Breadcrumb structured data"),

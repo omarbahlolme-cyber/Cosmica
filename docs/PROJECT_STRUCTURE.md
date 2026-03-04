@@ -18,6 +18,10 @@
 |   |-- words-<language>.html         # Non-English words maps
 |   |-- phrases-<language>.html       # Non-English phrases maps
 |   |-- grammar-<language>.html       # Non-English grammar maps
+|   |-- learn-<language>-for-beginners.html # Generated beginner SEO guides
+|   |-- <language>-pronunciation-guide.html # Generated pronunciation SEO guides
+|   |-- <language>-travel-phrases.html      # Generated travel-phrases SEO guides
+|   |-- learn-<language>-online-xx.html     # Generated localized native-language landing pages
 |   |-- app.js                        # Shared frontend runtime
 |   |-- style.css                     # Shared styles
 |   |-- maps/
@@ -76,6 +80,9 @@
 - `frontend/privacy.html`
 - `frontend/terms.html`
 - `frontend/license.html`
+- `scripts/refresh-seo-copy.js`
+- `scripts/generate-seo-landing-pages.js`
+- `scripts/generate-localized-seo-pages.js`
 
 5. Operational procedures:
 - `docs/OPERATIONS_HARDENING.md`

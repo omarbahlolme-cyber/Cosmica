@@ -15,7 +15,7 @@ Cosmica is a static language-learning site with a small Node/Express backend for
 - App distribution guide (PWA + mobile stores): `docs/APP_DISTRIBUTION.md`
 - Billing ops quick commands: `docs/BILLING_OPS_QUICK_COMMANDS.md`
 - Policy enforcement runbook: `docs/ENFORCEMENT_RUNBOOK.md`
-- Front-end entry points: `frontend/index.html`, `frontend/english-*.html`, and per-world pages in `frontend/world-*.html`, `frontend/letters-*.html`, `frontend/words-*.html`, `frontend/phrases-*.html`, `frontend/grammar-*.html`
+- Front-end entry points: `frontend/index.html`, `frontend/english-*.html`, per-world pages in `frontend/world-*.html`, `frontend/letters-*.html`, `frontend/words-*.html`, `frontend/phrases-*.html`, `frontend/grammar-*.html`, and generated SEO guides such as `frontend/learn-*-for-beginners.html`, `frontend/*-pronunciation-guide.html`, `frontend/*-travel-phrases.html`, `frontend/learn-*-online-xx.html`
 - Base front-end logic: `frontend/app.js`
 - Map-only front-end bundle: `frontend/maps/app-maps.js`
 - Shared styling: `frontend/style.css`
@@ -26,6 +26,10 @@ Cosmica is a static language-learning site with a small Node/Express backend for
   - World-specific packs: `frontend/worlds/<world-key>/translations.json`
 - World organization folder: `frontend/worlds/`
 - Translation generators: `scripts/`
+- SEO/page generators:
+  - `scripts/refresh-seo-copy.js` for world/map on-page SEO content
+  - `scripts/generate-seo-landing-pages.js` for English guide pages
+  - `scripts/generate-localized-seo-pages.js` for localized native-language landing pages
 
 ## Auth incident quick triage
 

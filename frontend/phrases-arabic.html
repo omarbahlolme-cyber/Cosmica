@@ -27,9 +27,9 @@
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="Learn Arabic Phrases Online | Everyday Speaking Practice | Cosmica" />
     <meta name="twitter:description" content="Practice useful Arabic phrases with audio, translations, and organized speaking review." />
-    <link rel="preload" as="style" href="style.css?v=20260331" />
-    <link rel="stylesheet" href="style.css?v=20260331" />
-    <link rel="stylesheet" href="maps/style-maps.css?v=20260324" />
+    <link rel="preload" as="style" href="style.css?v=20260413" />
+    <link rel="stylesheet" href="style.css?v=20260413" />
+    <link rel="stylesheet" href="maps/style-maps.css?v=20260414" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -83,24 +83,345 @@
               <span class="account-trigger-label">Guest</span>
               <span class="account-trigger-meta">Sign in</span>
             </span>
-            <span class="account-trigger-caret" aria-hidden="true">?</span>
+            <span class="account-trigger-caret" aria-hidden="true">▾</span>
           </button>
         </div>
       </div>
     </header>
     <!-- Page-specific main content -->
     <main>
-                                    <h1 class="visually-hidden">Learn Arabic Phrases Online</h1>
+                                                                                                                                          <h1 class="visually-hidden">Learn Arabic Phrases Online</h1>
       <!-- SEO landing content -->
-      <section class="section reveal">
+      <section class="section reveal seo-map-hero">
         <div class="section-title">
-          <div class="eyebrow">Arabic Phrases</div>
-          <h2>Learn useful Arabic phrases for everyday speaking</h2>
-          <p>Practical phrases with audio, translation, and quick review.</p>
+          <div class="eyebrow" data-preview-ui-source="Arabic Phrases">Arabic Phrases</div>
+          <h2 data-preview-ui-source="Learn useful Arabic phrases for everyday speaking">Learn useful Arabic phrases for everyday speaking</h2>
+          <p data-preview-ui-source="Practical phrases with audio, translation, and quick review.">Practical phrases with audio, translation, and quick review.</p>
+        </div>
+      </section>
+      <section class="section reveal seo-map-support">
+        <div class="section-title">
+          <div class="eyebrow" data-preview-ui-source="How It Helps">How It Helps</div>
+          <h2 data-preview-ui-source="Move from words to real conversation">Move from words to real conversation</h2>
+          <p data-preview-ui-source="Practice short phrases for greetings, questions, polite requests, and natural replies.">Practice short phrases for greetings, questions, polite requests, and natural replies.</p>
+        </div>
+      </section>
+      <section class="section reveal seo-map-preview-section">
+        <div class="section-title">
+          <div class="eyebrow" data-preview-ui-source="Sample Phrases">Sample Phrases</div>
+          <h2 data-preview-ui-source="Arabic phrase sets at a glance">Arabic phrase sets at a glance</h2>
+          <p data-preview-ui-source="Short examples from the page, paired with clear English meaning.">Short examples from the page, paired with clear English meaning.</p>
+        </div>
+        <div class="steps">
+          <article class="card seo-preview-card">
+            <h3 data-preview-map="phrases" data-preview-section-title-source="Greetings">Greetings</h3>
+            <div class="seo-preview-list">
+            <div class="seo-preview-item">
+              <span class="seo-preview-term">مرحبًا</span>
+              <span class="seo-preview-gloss" data-preview-map="phrases" data-preview-section-source="Greetings" data-preview-source="hi there" data-preview-default-hidden="false">Hi There</span>
+            </div>
+            <div class="seo-preview-item">
+              <span class="seo-preview-term">أهلا</span>
+              <span class="seo-preview-gloss" data-preview-map="phrases" data-preview-section-source="Greetings" data-preview-source="hello there" data-preview-default-hidden="false">Hello There</span>
+            </div>
+            </div>
+          </article>
+          <article class="card seo-preview-card">
+            <h3 data-preview-map="phrases" data-preview-section-title-source="Politeness">Politeness</h3>
+            <div class="seo-preview-list">
+            <div class="seo-preview-item">
+              <span class="seo-preview-term">عفواً</span>
+              <span class="seo-preview-gloss" data-preview-map="phrases" data-preview-section-source="Politeness" data-preview-source="pardon me" data-preview-default-hidden="false">Pardon Me</span>
+            </div>
+            <div class="seo-preview-item">
+              <span class="seo-preview-term">أنا آسف</span>
+              <span class="seo-preview-gloss" data-preview-map="phrases" data-preview-section-source="Politeness" data-preview-source="i am sorry" data-preview-default-hidden="false">I Am Sorry</span>
+            </div>
+            </div>
+          </article>
+          <article class="card seo-preview-card">
+            <h3 data-preview-map="phrases" data-preview-section-title-source="Introductions">Introductions</h3>
+            <div class="seo-preview-list">
+            <div class="seo-preview-item">
+              <span class="seo-preview-term">اسمي هو</span>
+              <span class="seo-preview-gloss" data-preview-map="phrases" data-preview-section-source="Introductions" data-preview-source="my name is" data-preview-default-hidden="false">My Name Is</span>
+            </div>
+            <div class="seo-preview-item">
+              <span class="seo-preview-term">أنا</span>
+              <span class="seo-preview-gloss" data-preview-map="phrases" data-preview-section-source="Introductions" data-preview-source="i am" data-preview-default-hidden="false">I Am</span>
+            </div>
+            </div>
+          </article>
         </div>
       </section>
       <div class="words-controls" id="phrasesControls"></div>
-      <div id="phrasesSections"></div>
+      <div id="phrasesSections">
+      <section class="section phrases-group reveal" data-section="Greetings">
+        <div class="section-title">
+          <h2 data-source-title="Greetings" data-base-title="Greetings"><span class="map-section-title-main">تحيات</span></h2>
+        </div>
+        <div class="words-grid">
+        <div class="card phrase-card" data-phrase="مرحبًا">
+          <div class="phrase-text">مرحبًا</div>
+          <div class="phrase-translation">Hi There</div>
+          <button class="word-audio" type="button" data-word="مرحبًا" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="أهلا">
+          <div class="phrase-text">أهلا</div>
+          <div class="phrase-translation">Hello There</div>
+          <button class="word-audio" type="button" data-word="أهلا" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="صباح الخير">
+          <div class="phrase-text">صباح الخير</div>
+          <div class="phrase-translation">Good Morning</div>
+          <button class="word-audio" type="button" data-word="صباح الخير" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="مساء الخير">
+          <div class="phrase-text">مساء الخير</div>
+          <div class="phrase-translation">Good Evening</div>
+          <button class="word-audio" type="button" data-word="مساء الخير" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="تصبح على خير">
+          <div class="phrase-text">تصبح على خير</div>
+          <div class="phrase-translation">Good Night</div>
+          <button class="word-audio" type="button" data-word="تصبح على خير" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="كيف حالك">
+          <div class="phrase-text">كيف حالك</div>
+          <div class="phrase-translation">How Are You</div>
+          <button class="word-audio" type="button" data-word="كيف حالك" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        </div>
+      </section>
+      <section class="section phrases-group reveal" data-section="Politeness">
+        <div class="section-title">
+          <h2 data-source-title="Politeness" data-base-title="Politeness"><span class="map-section-title-main">لباقة</span></h2>
+        </div>
+        <div class="words-grid">
+        <div class="card phrase-card" data-phrase="عفواً">
+          <div class="phrase-text">عفواً</div>
+          <div class="phrase-translation">Pardon Me</div>
+          <button class="word-audio" type="button" data-word="عفواً" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="أنا آسف">
+          <div class="phrase-text">أنا آسف</div>
+          <div class="phrase-translation">I Am Sorry</div>
+          <button class="word-audio" type="button" data-word="أنا آسف" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="آسف لذلك">
+          <div class="phrase-text">آسف لذلك</div>
+          <div class="phrase-translation">Sorry About That</div>
+          <button class="word-audio" type="button" data-word="آسف لذلك" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="شكراً">
+          <div class="phrase-text">شكراً</div>
+          <div class="phrase-translation">Thank You</div>
+          <button class="word-audio" type="button" data-word="شكراً" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="شكراً جزيلاً">
+          <div class="phrase-text">شكراً جزيلاً</div>
+          <div class="phrase-translation">Thank You Very Much</div>
+          <button class="word-audio" type="button" data-word="شكراً جزيلاً" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="شكراً كثيراً">
+          <div class="phrase-text">شكراً كثيراً</div>
+          <div class="phrase-translation">Thanks A Lot</div>
+          <button class="word-audio" type="button" data-word="شكراً كثيراً" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        </div>
+      </section>
+      </div>
+        <div class="words-grid">
+        <div class="card phrase-card" data-phrase="مرحبًا">
+          <div class="phrase-text">مرحبًا</div>
+          <div class="phrase-translation">Hi There</div>
+          <button class="word-audio" type="button" data-word="مرحبًا" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="أهلا">
+          <div class="phrase-text">أهلا</div>
+          <div class="phrase-translation">Hello There</div>
+          <button class="word-audio" type="button" data-word="أهلا" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="صباح الخير">
+          <div class="phrase-text">صباح الخير</div>
+          <div class="phrase-translation">Good Morning</div>
+          <button class="word-audio" type="button" data-word="صباح الخير" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="مساء الخير">
+          <div class="phrase-text">مساء الخير</div>
+          <div class="phrase-translation">Good Evening</div>
+          <button class="word-audio" type="button" data-word="مساء الخير" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="تصبح على خير">
+          <div class="phrase-text">تصبح على خير</div>
+          <div class="phrase-translation">Good Night</div>
+          <button class="word-audio" type="button" data-word="تصبح على خير" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="كيف حالك">
+          <div class="phrase-text">كيف حالك</div>
+          <div class="phrase-translation">How Are You</div>
+          <button class="word-audio" type="button" data-word="كيف حالك" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        </div>
+      </section>
+      <section class="section phrases-group reveal" data-section="Politeness">
+        <div class="section-title">
+          <h2 data-source-title="Politeness" data-base-title="Politeness"><span class="map-section-title-main">لباقة</span></h2>
+        </div>
+        <div class="words-grid">
+        <div class="card phrase-card" data-phrase="عفواً">
+          <div class="phrase-text">عفواً</div>
+          <div class="phrase-translation">Pardon Me</div>
+          <button class="word-audio" type="button" data-word="عفواً" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="أنا آسف">
+          <div class="phrase-text">أنا آسف</div>
+          <div class="phrase-translation">I Am Sorry</div>
+          <button class="word-audio" type="button" data-word="أنا آسف" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="آسف لذلك">
+          <div class="phrase-text">آسف لذلك</div>
+          <div class="phrase-translation">Sorry About That</div>
+          <button class="word-audio" type="button" data-word="آسف لذلك" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="شكراً">
+          <div class="phrase-text">شكراً</div>
+          <div class="phrase-translation">Thank You</div>
+          <button class="word-audio" type="button" data-word="شكراً" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="شكراً جزيلاً">
+          <div class="phrase-text">شكراً جزيلاً</div>
+          <div class="phrase-translation">Thank You Very Much</div>
+          <button class="word-audio" type="button" data-word="شكراً جزيلاً" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="شكراً كثيراً">
+          <div class="phrase-text">شكراً كثيراً</div>
+          <div class="phrase-translation">Thanks A Lot</div>
+          <button class="word-audio" type="button" data-word="شكراً كثيراً" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        </div>
+      </section>
+      </div>
     </main>
     <!-- Shared footer -->
     <footer class="footer">
@@ -116,6 +437,6 @@
       </span>
     </footer>
     <!-- Shared client bundle -->
-    <script src="app.js?v=20260410" defer></script>
+    <script src="app.js?v=20260417" defer></script>
   </body>
 </html>

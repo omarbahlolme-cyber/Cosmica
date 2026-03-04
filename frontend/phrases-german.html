@@ -27,9 +27,9 @@
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="Learn German Phrases Online | Everyday Speaking Practice | Cosmica" />
     <meta name="twitter:description" content="Practice useful German phrases with audio, translations, and organized speaking review." />
-    <link rel="preload" as="style" href="style.css?v=20260331" />
-    <link rel="stylesheet" href="style.css?v=20260331" />
-    <link rel="stylesheet" href="maps/style-maps.css?v=20260324" />
+    <link rel="preload" as="style" href="style.css?v=20260413" />
+    <link rel="stylesheet" href="style.css?v=20260413" />
+    <link rel="stylesheet" href="maps/style-maps.css?v=20260414" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -83,24 +83,345 @@
               <span class="account-trigger-label">Guest</span>
               <span class="account-trigger-meta">Sign in</span>
             </span>
-            <span class="account-trigger-caret" aria-hidden="true">?</span>
+            <span class="account-trigger-caret" aria-hidden="true">▾</span>
           </button>
         </div>
       </div>
     </header>
     <!-- Page-specific main content -->
     <main>
-                                    <h1 class="visually-hidden">Learn German Phrases Online</h1>
+                                                                                                                                          <h1 class="visually-hidden">Learn German Phrases Online</h1>
       <!-- SEO landing content -->
-      <section class="section reveal">
+      <section class="section reveal seo-map-hero">
         <div class="section-title">
-          <div class="eyebrow">German Phrases</div>
-          <h2>Learn useful German phrases for everyday speaking</h2>
-          <p>Practical phrases with audio, translation, and quick review.</p>
+          <div class="eyebrow" data-preview-ui-source="German Phrases">German Phrases</div>
+          <h2 data-preview-ui-source="Learn useful German phrases for everyday speaking">Learn useful German phrases for everyday speaking</h2>
+          <p data-preview-ui-source="Practical phrases with audio, translation, and quick review.">Practical phrases with audio, translation, and quick review.</p>
+        </div>
+      </section>
+      <section class="section reveal seo-map-support">
+        <div class="section-title">
+          <div class="eyebrow" data-preview-ui-source="How It Helps">How It Helps</div>
+          <h2 data-preview-ui-source="Move from words to real conversation">Move from words to real conversation</h2>
+          <p data-preview-ui-source="Practice short phrases for greetings, questions, polite requests, and natural replies.">Practice short phrases for greetings, questions, polite requests, and natural replies.</p>
+        </div>
+      </section>
+      <section class="section reveal seo-map-preview-section">
+        <div class="section-title">
+          <div class="eyebrow" data-preview-ui-source="Sample Phrases">Sample Phrases</div>
+          <h2 data-preview-ui-source="German phrase sets at a glance">German phrase sets at a glance</h2>
+          <p data-preview-ui-source="Short examples from the page, paired with clear English meaning.">Short examples from the page, paired with clear English meaning.</p>
+        </div>
+        <div class="steps">
+          <article class="card seo-preview-card">
+            <h3 data-preview-map="phrases" data-preview-section-title-source="Greetings">Greetings</h3>
+            <div class="seo-preview-list">
+            <div class="seo-preview-item">
+              <span class="seo-preview-term">Hallo</span>
+              <span class="seo-preview-gloss" data-preview-map="phrases" data-preview-section-source="Greetings" data-preview-source="hi there" data-preview-default-hidden="false">Hi There</span>
+            </div>
+            <div class="seo-preview-item">
+              <span class="seo-preview-term">Guten Morgen</span>
+              <span class="seo-preview-gloss" data-preview-map="phrases" data-preview-section-source="Greetings" data-preview-source="good morning" data-preview-default-hidden="false">Good Morning</span>
+            </div>
+            </div>
+          </article>
+          <article class="card seo-preview-card">
+            <h3 data-preview-map="phrases" data-preview-section-title-source="Politeness">Politeness</h3>
+            <div class="seo-preview-list">
+            <div class="seo-preview-item">
+              <span class="seo-preview-term">Entschuldigung</span>
+              <span class="seo-preview-gloss" data-preview-map="phrases" data-preview-section-source="Politeness" data-preview-source="excuse me" data-preview-default-hidden="false">Excuse Me</span>
+            </div>
+            <div class="seo-preview-item">
+              <span class="seo-preview-term">Verzeihung</span>
+              <span class="seo-preview-gloss" data-preview-map="phrases" data-preview-section-source="Politeness" data-preview-source="pardon me" data-preview-default-hidden="false">Pardon Me</span>
+            </div>
+            </div>
+          </article>
+          <article class="card seo-preview-card">
+            <h3 data-preview-map="phrases" data-preview-section-title-source="Introductions">Introductions</h3>
+            <div class="seo-preview-list">
+            <div class="seo-preview-item">
+              <span class="seo-preview-term">mein Name ist</span>
+              <span class="seo-preview-gloss" data-preview-map="phrases" data-preview-section-source="Introductions" data-preview-source="my name is" data-preview-default-hidden="false">My Name Is</span>
+            </div>
+            <div class="seo-preview-item">
+              <span class="seo-preview-term">ich bin</span>
+              <span class="seo-preview-gloss" data-preview-map="phrases" data-preview-section-source="Introductions" data-preview-source="i am" data-preview-default-hidden="false">I Am</span>
+            </div>
+            </div>
+          </article>
         </div>
       </section>
       <div class="words-controls" id="phrasesControls"></div>
-      <div id="phrasesSections"></div>
+      <div id="phrasesSections">
+      <section class="section phrases-group reveal" data-section="Greetings">
+        <div class="section-title">
+          <h2 data-source-title="Greetings" data-base-title="Greetings"><span class="map-section-title-main">Begrüßungen</span></h2>
+        </div>
+        <div class="words-grid">
+        <div class="card phrase-card" data-phrase="Hallo">
+          <div class="phrase-text">Hallo</div>
+          <div class="phrase-translation">Hi There</div>
+          <button class="word-audio" type="button" data-word="Hallo" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="Guten Morgen">
+          <div class="phrase-text">Guten Morgen</div>
+          <div class="phrase-translation">Good Morning</div>
+          <button class="word-audio" type="button" data-word="Guten Morgen" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="Guten Nachmittag">
+          <div class="phrase-text">Guten Nachmittag</div>
+          <div class="phrase-translation">Good Afternoon</div>
+          <button class="word-audio" type="button" data-word="Guten Nachmittag" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="Guten Abend">
+          <div class="phrase-text">Guten Abend</div>
+          <div class="phrase-translation">Good Evening</div>
+          <button class="word-audio" type="button" data-word="Guten Abend" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="Gute Nacht">
+          <div class="phrase-text">Gute Nacht</div>
+          <div class="phrase-translation">Good Night</div>
+          <button class="word-audio" type="button" data-word="Gute Nacht" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="Wie geht es dir?">
+          <div class="phrase-text">Wie geht es dir?</div>
+          <div class="phrase-translation">How Are You</div>
+          <button class="word-audio" type="button" data-word="Wie geht es dir?" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        </div>
+      </section>
+      <section class="section phrases-group reveal" data-section="Politeness">
+        <div class="section-title">
+          <h2 data-source-title="Politeness" data-base-title="Politeness"><span class="map-section-title-main">Höflichkeit</span></h2>
+        </div>
+        <div class="words-grid">
+        <div class="card phrase-card" data-phrase="Entschuldigung">
+          <div class="phrase-text">Entschuldigung</div>
+          <div class="phrase-translation">Excuse Me</div>
+          <button class="word-audio" type="button" data-word="Entschuldigung" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="Verzeihung">
+          <div class="phrase-text">Verzeihung</div>
+          <div class="phrase-translation">Pardon Me</div>
+          <button class="word-audio" type="button" data-word="Verzeihung" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="Es tut mir leid">
+          <div class="phrase-text">Es tut mir leid</div>
+          <div class="phrase-translation">I Am Sorry</div>
+          <button class="word-audio" type="button" data-word="Es tut mir leid" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="Tut mir leid dafür">
+          <div class="phrase-text">Tut mir leid dafür</div>
+          <div class="phrase-translation">Sorry About That</div>
+          <button class="word-audio" type="button" data-word="Tut mir leid dafür" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="Danke">
+          <div class="phrase-text">Danke</div>
+          <div class="phrase-translation">Thank You</div>
+          <button class="word-audio" type="button" data-word="Danke" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="Vielen Dank">
+          <div class="phrase-text">Vielen Dank</div>
+          <div class="phrase-translation">Thank You Very Much</div>
+          <button class="word-audio" type="button" data-word="Vielen Dank" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        </div>
+      </section>
+      </div>
+        <div class="words-grid">
+        <div class="card phrase-card" data-phrase="Hallo">
+          <div class="phrase-text">Hallo</div>
+          <div class="phrase-translation">Hi There</div>
+          <button class="word-audio" type="button" data-word="Hallo" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="Guten Morgen">
+          <div class="phrase-text">Guten Morgen</div>
+          <div class="phrase-translation">Good Morning</div>
+          <button class="word-audio" type="button" data-word="Guten Morgen" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="Guten Nachmittag">
+          <div class="phrase-text">Guten Nachmittag</div>
+          <div class="phrase-translation">Good Afternoon</div>
+          <button class="word-audio" type="button" data-word="Guten Nachmittag" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="Guten Abend">
+          <div class="phrase-text">Guten Abend</div>
+          <div class="phrase-translation">Good Evening</div>
+          <button class="word-audio" type="button" data-word="Guten Abend" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="Gute Nacht">
+          <div class="phrase-text">Gute Nacht</div>
+          <div class="phrase-translation">Good Night</div>
+          <button class="word-audio" type="button" data-word="Gute Nacht" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="Wie geht es dir?">
+          <div class="phrase-text">Wie geht es dir?</div>
+          <div class="phrase-translation">How Are You</div>
+          <button class="word-audio" type="button" data-word="Wie geht es dir?" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        </div>
+      </section>
+      <section class="section phrases-group reveal" data-section="Politeness">
+        <div class="section-title">
+          <h2 data-source-title="Politeness" data-base-title="Politeness"><span class="map-section-title-main">Höflichkeit</span></h2>
+        </div>
+        <div class="words-grid">
+        <div class="card phrase-card" data-phrase="Entschuldigung">
+          <div class="phrase-text">Entschuldigung</div>
+          <div class="phrase-translation">Excuse Me</div>
+          <button class="word-audio" type="button" data-word="Entschuldigung" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="Verzeihung">
+          <div class="phrase-text">Verzeihung</div>
+          <div class="phrase-translation">Pardon Me</div>
+          <button class="word-audio" type="button" data-word="Verzeihung" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="Es tut mir leid">
+          <div class="phrase-text">Es tut mir leid</div>
+          <div class="phrase-translation">I Am Sorry</div>
+          <button class="word-audio" type="button" data-word="Es tut mir leid" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="Tut mir leid dafür">
+          <div class="phrase-text">Tut mir leid dafür</div>
+          <div class="phrase-translation">Sorry About That</div>
+          <button class="word-audio" type="button" data-word="Tut mir leid dafür" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="Danke">
+          <div class="phrase-text">Danke</div>
+          <div class="phrase-translation">Thank You</div>
+          <button class="word-audio" type="button" data-word="Danke" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="Vielen Dank">
+          <div class="phrase-text">Vielen Dank</div>
+          <div class="phrase-translation">Thank You Very Much</div>
+          <button class="word-audio" type="button" data-word="Vielen Dank" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        </div>
+      </section>
+      </div>
     </main>
     <!-- Shared footer -->
     <footer class="footer">
@@ -116,6 +437,6 @@
       </span>
     </footer>
     <!-- Shared client bundle -->
-    <script src="app.js?v=20260410" defer></script>
+    <script src="app.js?v=20260417" defer></script>
   </body>
 </html>

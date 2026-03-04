@@ -867,16 +867,8 @@ const createCosmicaAuthClient = () => {
       localStorage.removeItem("cosmicaBaseLanguage");
       return;
     }
-    const baseLanguage = normalizeStoredBaseLanguagePreference(
-      payload?.data?.settings?.baseLanguage
-    );
-    if (!baseLanguage) {
-      localStorage.removeItem("cosmicaBaseLanguage");
-      return;
-    }
-    try {
-      localStorage.setItem("cosmicaBaseLanguage", baseLanguage);
-    } catch {}
+    // World base-language selection is session-scoped and should not be
+    // rehydrated from account settings after the user returns home.
   };
 
   return {
@@ -2571,7 +2563,12 @@ const setupAccountHub = () => {
       return;
     }
     hasShownEntryMenuPrompt = true;
-    showTriggerNoticeBubble("Become an explorer now.", "success", 4000, { compact: true });
+    showTriggerNoticeBubble(
+      "Become an Explorer Now.\nLog in or create your account.",
+      "success",
+      4000,
+      { compact: true }
+    );
   };
 
   const scrollExpandedAccountPanelIntoView = (panelNode) => {
@@ -4517,7 +4514,7 @@ const setupAccountHub = () => {
     const achievementCount = hasPremiumAccess
       ? Math.max(0, Math.round(Number(gamification?.stats?.questDaysCompleted) || 0))
       : 0;
-    const streakDays = Math.max(0, Math.round(Number(gamification.currentStreak) || 0));
+    const activeDays = Math.max(0, Math.round(Number(gamification.currentStreak) || 0));
     const showPremiumStatus = Boolean(isAuthenticated && hasPremiumAccess);
     const showFreeStreakOnly = Boolean(isAuthenticated && !hasPremiumAccess);
     const showSubscriptionManagement = Boolean(isAuthenticated && hasPremiumAccess);
@@ -4592,7 +4589,7 @@ const setupAccountHub = () => {
         : isAuthenticated
           ? hasPremiumAccess
             ? `Level ${levelMeta.level}`
-            : `Streak ${streakDays}d`
+            : `Active ${activeDays}d`
           : "Sign in";
     }
     if (trigger) {
@@ -4725,7 +4722,7 @@ const setupAccountHub = () => {
       }
     }
     if (menuStreak) {
-      menuStreak.textContent = `${streakDays} days`;
+      menuStreak.textContent = `${activeDays} active days`;
       const streakStatNode = menuStreak.closest(".account-menu-stat");
       if (streakStatNode) {
         streakStatNode.hidden = !showPremiumStatus && !showFreeStreakOnly;
@@ -5748,6 +5745,7 @@ const ENABLE_NAVIGATION_PREFETCH = false;
 const CAN_PREFETCH_NAVIGATION = ENABLE_NAVIGATION_PREFETCH && !prefersReducedData && !isSlowNetwork;
 const ENABLE_BACKGROUND_ROUTE_PREFETCH = false;
 const prefetchedDocuments = new Set();
+const activelyWarmedDocuments = new Set();
 const currentDocumentKey = `${window.location.origin}${window.location.pathname}${window.location.search}`;
 
 const normalizeInternalDocumentUrl = (href) => {
@@ -5813,6 +5811,31 @@ const prefetchDocumentForWorldWarm = (href) => {
   link.addEventListener("load", () => link.remove(), { once: true });
   link.addEventListener("error", () => link.remove(), { once: true });
   document.head.appendChild(link);
+};
+
+const fetchDocumentForWorldWarm = (href) => {
+  const normalizedUrl = normalizeInternalDocumentUrl(href);
+  if (
+    !normalizedUrl ||
+    normalizedUrl === currentDocumentKey ||
+    activelyWarmedDocuments.has(normalizedUrl)
+  ) {
+    return;
+  }
+  activelyWarmedDocuments.add(normalizedUrl);
+  fetch(normalizedUrl, {
+    credentials: "same-origin",
+    cache: "force-cache",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Warm fetch failed: ${response.status}`);
+      }
+      return response.text().catch(() => "");
+    })
+    .catch(() => {
+      activelyWarmedDocuments.delete(normalizedUrl);
+    });
 };
 
 const resolveWorldMapDocumentHref = (mapKey = "") => {
@@ -5889,6 +5912,9 @@ const scheduleWorldEntryMapWarm = ({ source = "init" } = {}) => {
           return;
         }
         prefetchDocumentForWorldWarm(route);
+        if (source === "language") {
+          fetchDocumentForWorldWarm(route);
+        }
       }, index * 320);
       worldEntryMapWarmTimers.add(timerId);
     });
@@ -6955,6 +6981,30 @@ const getApiEndpointCandidates = () => {
 
 const LETTERS_TITLE_TRANSLATION_CACHE_KEY = "cosmicaLettersTitleTranslationCache:v1";
 let lettersTitleTranslationCache = null;
+const LETTERS_TITLE_ENGLISH_SOURCES = Object.freeze({
+  english: "English alphabet",
+  french: "French alphabet",
+  spanish: "Spanish alphabet",
+  arabic: "Arabic letters",
+  chinese: "Chinese characters",
+  japanese: "Japanese characters",
+  korean: "Hangul letters",
+  hindi: "Devanagari letters",
+  german: "German alphabet",
+  portuguese: "Portuguese alphabet",
+  dutch: "Dutch alphabet",
+  swedish: "Swedish alphabet",
+});
+
+const resolveLettersTitleEnglishSource = (nativeTitle) => {
+  const mapped = String(LETTERS_TITLE_ENGLISH_SOURCES[WORLD_KEY] || "").trim();
+  if (mapped) {
+    return mapped;
+  }
+  return String(nativeTitle || "")
+    .replace(/\s+/g, " ")
+    .trim();
+};
 
 const readLettersTitleTranslationCache = () => {
   if (lettersTitleTranslationCache instanceof Map) {
@@ -7063,57 +7113,190 @@ const requestLettersTitleTranslation = async (titleText, targetLanguage) => {
   return "";
 };
 
-// Add translated subtitle for letters-page heading based on selected base language.
+const readLettersTextTranslationFromCache = (cacheKey) => {
+  const cache = readLettersTitleTranslationCache();
+  return String(cache.get(cacheKey) || "").trim();
+};
+
+const writeLettersTextTranslationToCache = (cacheKey, value) => {
+  const text = String(value || "").trim();
+  if (!cacheKey || !text) {
+    return;
+  }
+  const cache = readLettersTitleTranslationCache();
+  cache.set(cacheKey, text);
+  persistLettersTitleTranslationCache();
+};
+
+const buildLettersLevelEnglishFallback = (sourceText, index) => {
+  const raw = String(sourceText || "")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (!raw) {
+    return "";
+  }
+  const englishMatch = raw.match(/\(([^()]+)\)\s*$/);
+  const englishLabel = englishMatch ? String(englishMatch[1] || "").trim() : "";
+  const levelMatch = raw.match(/(?:^|[\s])level\s*([0-9]+)/i);
+  if (levelMatch && englishLabel) {
+    return `Level ${levelMatch[1]} — ${englishLabel}`;
+  }
+  if (/^المستوى/i.test(raw) && englishLabel) {
+    return `Level ${index + 1} — ${englishLabel}`;
+  }
+  if (englishLabel) {
+    return englishLabel;
+  }
+  return raw;
+};
+
+const syncLettersBaseLanguageDataset = () => {
+  if (!document.body.classList.contains("letters-page")) {
+    return;
+  }
+  const selectedBaseLanguage = readStoredBaseLanguagePreference();
+  if (selectedBaseLanguage) {
+    document.body.dataset.lettersBaseLanguage = selectedBaseLanguage;
+  } else {
+    delete document.body.dataset.lettersBaseLanguage;
+  }
+};
+
+const setupLettersLevelTranslations = async () => {
+  if (!document.body.classList.contains("letters-page")) {
+    return;
+  }
+  const selectedBaseLanguage = readStoredBaseLanguagePreference();
+  const targetLanguage = selectedBaseLanguage || "english";
+  syncLettersBaseLanguageDataset();
+
+  const headingNodes = Array.from(document.querySelectorAll(".letters-script-heading"));
+  const noteNodes = Array.from(document.querySelectorAll(".letters-script-note"));
+
+  const translateNode = async (
+    node,
+    { sourceDatasetKey, cachePrefix, englishFallback = "" } = {}
+  ) => {
+    if (!node) {
+      return;
+    }
+    const sourceText = String(
+      node.dataset[sourceDatasetKey] || node.textContent || ""
+    )
+      .replace(/\s+/g, " ")
+      .trim();
+    if (!sourceText) {
+      return;
+    }
+    node.dataset[sourceDatasetKey] = sourceText;
+
+    if (targetLanguage === WORLD_KEY) {
+      node.textContent = sourceText;
+      return;
+    }
+
+    const cacheKey = `${cachePrefix}::${WORLD_KEY}::${targetLanguage}::${sourceText.toLowerCase()}`;
+    const cached = readLettersTextTranslationFromCache(cacheKey);
+    if (cached && !isInvalidLettersHelperTranslation(cached)) {
+      node.textContent = cached;
+      return;
+    }
+
+    if (targetLanguage === "english" && englishFallback) {
+      node.textContent = englishFallback;
+    } else {
+      node.textContent = sourceText;
+    }
+
+    const translated = String(
+      (await requestLettersTitleTranslation(sourceText, targetLanguage)) || ""
+    ).trim();
+    if (!translated || isInvalidLettersHelperTranslation(translated)) {
+      return;
+    }
+
+    writeLettersTextTranslationToCache(cacheKey, translated);
+    node.textContent = translated;
+  };
+
+  await Promise.all(
+    headingNodes.map((node, index) =>
+      translateNode(node, {
+        sourceDatasetKey: "nativeHeadingSource",
+        cachePrefix: "level-heading",
+        englishFallback: buildLettersLevelEnglishFallback(node.textContent, index),
+      })
+    )
+  );
+
+  await Promise.all(
+    noteNodes.map((node) =>
+      translateNode(node, {
+        sourceDatasetKey: "nativeNoteSource",
+        cachePrefix: "level-note",
+      })
+    )
+  );
+};
+
+// Replace the letters heading with the selected base-language version when available.
 const setupLettersTitleTranslation = async () => {
   if (!document.body.classList.contains("letters-page")) {
     return;
   }
   const selectedBaseLanguage = readStoredBaseLanguagePreference();
+  syncLettersBaseLanguageDataset();
   const lettersHeading = document.querySelector(".letters-grid-section .section-title h2");
   if (!lettersHeading) {
     return;
   }
-  let translationNode = lettersHeading.querySelector(".letters-title-translation");
+  const existingTranslationNode = lettersHeading.querySelector(".letters-title-translation");
+  if (existingTranslationNode) {
+    existingTranslationNode.remove();
+  }
+  const sourceTitle =
+    String(lettersHeading.dataset.nativeTitleSource || lettersHeading.textContent || "")
+      .replace(/\s+/g, " ")
+      .trim();
+  if (!sourceTitle) {
+    return;
+  }
+  lettersHeading.dataset.nativeTitleSource = sourceTitle;
+  const englishSourceTitle = resolveLettersTitleEnglishSource(sourceTitle);
+  lettersHeading.dataset.englishTitleSource = englishSourceTitle;
   const shouldSkipForWorldNativeLanguage = selectedBaseLanguage === WORLD_KEY;
   if (!selectedBaseLanguage || shouldSkipForWorldNativeLanguage) {
-    if (translationNode) {
-      translationNode.textContent = "";
-      translationNode.hidden = true;
-    }
+    lettersHeading.textContent = sourceTitle;
     return;
   }
-  const baseTitle = String(lettersHeading.textContent || "")
-    .replace(/\s+/g, " ")
-    .trim();
-  if (!baseTitle) {
-    return;
-  }
-  if (!translationNode) {
-    translationNode = document.createElement("span");
-    translationNode.className = "letters-title-translation";
-    translationNode.setAttribute("dir", "auto");
-    lettersHeading.appendChild(document.createTextNode(" "));
-    lettersHeading.appendChild(translationNode);
-  }
-  translationNode.hidden = false;
 
   const cache = readLettersTitleTranslationCache();
-  const cacheKey = `${WORLD_KEY}::${selectedBaseLanguage}::${baseTitle.toLowerCase()}`;
+  const cacheKey = `${WORLD_KEY}::${selectedBaseLanguage}::${englishSourceTitle.toLowerCase()}`;
   const cached = cache.get(cacheKey);
   if (cached) {
-    translationNode.textContent = `(${cached})`;
-    translationNode.hidden = false;
+    lettersHeading.textContent = cached;
     return;
   }
 
-  const translated = await requestLettersTitleTranslation(baseTitle, selectedBaseLanguage);
+  if (selectedBaseLanguage === "english") {
+    lettersHeading.textContent = englishSourceTitle;
+    cache.set(cacheKey, englishSourceTitle);
+    persistLettersTitleTranslationCache();
+    return;
+  }
+
+  const translated = await requestLettersTitleTranslation(
+    englishSourceTitle,
+    selectedBaseLanguage
+  );
   if (!translated) {
+    lettersHeading.textContent =
+      selectedBaseLanguage === "english" ? englishSourceTitle : sourceTitle;
     return;
   }
   cache.set(cacheKey, translated);
   persistLettersTitleTranslationCache();
-  translationNode.textContent = `(${translated})`;
-  translationNode.hidden = false;
+  lettersHeading.textContent = translated;
 };
 
 // Keep legacy letters completion button behavior (now icon-only) for continuity.
@@ -7143,6 +7326,21 @@ const setupLettersSectionCompleteButton = () => {
   }
 
   const syncButtonState = () => {
+    const snapshot =
+      window.cosmicaGamification && typeof window.cosmicaGamification.getState === "function"
+        ? window.cosmicaGamification.getState()
+        : null;
+    const hasPremiumAccess = userHasPremiumAccess(snapshot?.user || null);
+    if (!hasPremiumAccess) {
+      button.hidden = true;
+      button.classList.remove("is-complete");
+      button.setAttribute("aria-pressed", "false");
+      button.setAttribute("aria-label", "");
+      button.title = "";
+      button.setAttribute("data-status-label", "");
+      return;
+    }
+    button.hidden = false;
     const mapKey = String(button.dataset.mapKey || "letters")
       .trim()
       .toLowerCase();
@@ -7187,6 +7385,9 @@ const setupLettersSectionCompleteButton = () => {
     button.addEventListener("click", async (event) => {
       event.preventDefault();
       event.stopPropagation();
+      if (button.hidden) {
+        return;
+      }
       const shouldUncheck = button.classList.contains("is-complete");
       const statusToSend = shouldUncheck ? "uncompleted" : "completed";
       const gamificationState =
@@ -7238,6 +7439,15 @@ const setupLettersSectionCompleteButton = () => {
   }
 
   syncButtonState();
+  if (
+    typeof window.cosmicaGamification?.subscribe === "function" &&
+    button.dataset.progressSubscribed !== "true"
+  ) {
+    button.dataset.progressSubscribed = "true";
+    window.cosmicaGamification.subscribe(() => {
+      syncButtonState();
+    });
+  }
   refreshLettersLessonShell();
 };
 
@@ -7260,6 +7470,11 @@ const setupLettersCardPracticeButtons = () => {
   if (!document.body.classList.contains("letters-page")) {
     return;
   }
+  document
+    .querySelectorAll('.letter-card .map-card-practice-btn[data-map-key="letters"]')
+    .forEach((button) => button.remove());
+  refreshLettersLessonShell();
+  return;
 
   const letterCards = Array.from(document.querySelectorAll(".letter-card"));
   if (!letterCards.length) {
@@ -7274,10 +7489,6 @@ const setupLettersCardPracticeButtons = () => {
       "letters-core",
       `${symbol || "letter"}-${index}`
     );
-    card.dataset.srMapKey = "letters";
-    card.dataset.srCardKey = practiceSectionKey;
-    card.querySelector(".letter-audio")?.setAttribute("data-sr-map-key", "letters");
-    card.querySelector(".letter-audio")?.setAttribute("data-sr-card-key", practiceSectionKey);
 
     let button = card.querySelector('.map-card-practice-btn[data-map-key="letters"]');
     if (!button) {
@@ -7291,6 +7502,20 @@ const setupLettersCardPracticeButtons = () => {
     }
 
     const syncButtonState = () => {
+      const snapshot =
+        window.cosmicaGamification && typeof window.cosmicaGamification.getState === "function"
+          ? window.cosmicaGamification.getState()
+          : null;
+      const hasPremiumAccess = userHasPremiumAccess(snapshot?.user || null);
+      if (!hasPremiumAccess) {
+        button.hidden = true;
+        button.classList.remove("is-complete");
+        button.setAttribute("aria-pressed", "false");
+        button.setAttribute("aria-label", "");
+        button.title = "";
+        return;
+      }
+      button.hidden = false;
       const overrideValue =
         typeof window.cosmicaGetSectionCompletionOverride === "function"
           ? window.cosmicaGetSectionCompletionOverride({
@@ -7326,6 +7551,9 @@ const setupLettersCardPracticeButtons = () => {
       button.addEventListener("click", async (event) => {
         event.preventDefault();
         event.stopPropagation();
+        if (button.hidden) {
+          return;
+        }
         if (button.dataset.busy === "1") {
           return;
         }
@@ -7381,95 +7609,6 @@ const setupLettersCardPracticeButtons = () => {
     syncButtonState();
   });
   refreshLettersLessonShell();
-};
-
-const setupLettersSpacedReviewControls = () => {
-  if (!document.body.classList.contains("letters-page")) {
-    return;
-  }
-  const section = document.querySelector(".letters-grid-section");
-  const title = section?.querySelector(".section-title");
-  const cards = Array.from(section?.querySelectorAll(".letter-card") || []);
-  if (!(section instanceof HTMLElement) || !(title instanceof HTMLElement) || !cards.length) {
-    return;
-  }
-
-  cards.forEach((card, index) => {
-    if (!card.dataset.srMapKey) {
-      const symbol = String(card.dataset.letter || card.querySelector(".letter")?.textContent || "").trim();
-      const cardKey = buildLettersCardPracticeSectionKey("letters-core", `${symbol || "letter"}-${index}`);
-      card.dataset.srMapKey = "letters";
-      card.dataset.srCardKey = cardKey;
-      const audioButton = card.querySelector(".letter-audio");
-      if (audioButton instanceof HTMLElement) {
-        audioButton.dataset.srMapKey = "letters";
-        audioButton.dataset.srCardKey = cardKey;
-      }
-    }
-  });
-
-  let host = section.querySelector(".spaced-review-controls");
-  if (!(host instanceof HTMLElement)) {
-    host = document.createElement("div");
-    host.className = "spaced-review-controls";
-    host.innerHTML = `
-      <div class="spaced-review-copy">
-        <span class="spaced-review-label">Spaced Review</span>
-        <p class="spaced-review-status" data-sr-status>Review due letters only.</p>
-      </div>
-      <button type="button" class="spaced-review-toggle" data-sr-toggle>Activate Review</button>
-    `;
-    title.insertAdjacentElement("afterend", host);
-  }
-
-  const toggleButton = host.querySelector("[data-sr-toggle]");
-  const statusNode = host.querySelector("[data-sr-status]");
-
-  const applyState = () => {
-    const active = Boolean(window.cosmicaSpacedReview?.isModeActive("letters"));
-    const dueCards = cards.filter((card) =>
-      window.cosmicaSpacedReview?.isDue({
-        mapKey: "letters",
-        cardKey: card.dataset.srCardKey,
-      })
-    );
-    const firstDue = dueCards[0] || null;
-    const shouldFilter = active && dueCards.length > 0;
-
-    cards.forEach((card) => {
-      const isDue = dueCards.includes(card);
-      card.classList.toggle("is-sr-due", isDue);
-      card.classList.toggle("is-sr-next", card === firstDue);
-      card.classList.toggle("is-sr-hidden", shouldFilter && !isDue);
-    });
-
-    section.classList.toggle("is-sr-active", active);
-    if (toggleButton instanceof HTMLButtonElement) {
-      toggleButton.textContent = active ? "Exit Review" : "Activate Review";
-      toggleButton.setAttribute("aria-pressed", active ? "true" : "false");
-    }
-    if (statusNode instanceof HTMLElement) {
-      statusNode.textContent = active
-        ? dueCards.length
-          ? `${dueCards.length} letter${dueCards.length === 1 ? "" : "s"} due now.`
-          : "No letters are due right now."
-        : "Review due letters only.";
-    }
-  };
-
-  if (host.dataset.bound !== "1") {
-    host.dataset.bound = "1";
-    toggleButton?.addEventListener("click", () => {
-      const nextActive = !Boolean(window.cosmicaSpacedReview?.isModeActive("letters"));
-      window.cosmicaSpacedReview?.setMode("letters", nextActive);
-      applyState();
-    });
-    window.addEventListener(window.cosmicaSpacedReview?.eventName || SPACED_REVIEW_UPDATED_EVENT, () => {
-      applyState();
-    });
-  }
-
-  applyState();
 };
 
 const setupLettersLessonShell = () => {
@@ -7544,22 +7683,15 @@ const setupLettersLessonShell = () => {
   }
 
   const sync = () => {
-    const practiceButtons = Array.from(
-      lettersSection.querySelectorAll(".letter-card .map-card-practice-btn")
-    );
-    const totalLetters = practiceButtons.length;
-    const practicedLetters = practiceButtons.filter((button) =>
-      button.classList.contains("is-complete")
-    ).length;
+    const totalLetters = lettersSection.querySelectorAll(".letter-card").length;
     const completionButton = lettersSection.querySelector(
       '.map-section-complete-btn[data-map-key="letters"][data-section-key="letters-core"]'
     );
-    const checkpointCleared = completionButton?.classList.contains("is-complete");
-    const progressPercent = totalLetters ? Math.round((practicedLetters / totalLetters) * 100) : 0;
+    const checkpointCleared = Boolean(completionButton?.classList.contains("is-complete"));
+    const practicedLetters = checkpointCleared ? totalLetters : 0;
+    const progressPercent = checkpointCleared ? 100 : 0;
     const selectedBaseLanguage = readStoredBaseLanguagePreference();
-    const nextIncompleteCard = Array.from(document.querySelectorAll(".letter-card")).find(
-      (card) => !card.querySelector(".map-card-practice-btn")?.classList.contains("is-complete")
-    );
+    const nextIncompleteCard = document.querySelector(".letter-card");
     const nextLetter = String(
       nextIncompleteCard?.dataset.letter || nextIncompleteCard?.querySelector(".letter")?.textContent || "A"
     ).trim();
@@ -7596,9 +7728,7 @@ const setupLettersLessonShell = () => {
     if (copyNode) {
       copyNode.textContent = checkpointCleared
         ? "Gate cleared."
-        : practicedLetters >= Math.max(6, Math.min(12, totalLetters))
-          ? "Boss ready."
-          : "Tap tiles.";
+        : "Tap tiles.";
     }
   };
 
@@ -7657,13 +7787,14 @@ const setupLettersHelperTranslation = async () => {
   if (!document.body.classList.contains("letters-page")) {
     return;
   }
+  syncLettersBaseLanguageDataset();
   const helperParagraph = document.querySelector(".letters-grid-section .section-title p");
   if (!helperParagraph) {
     return;
   }
 
   let mainNode = helperParagraph.querySelector(".letters-helper-main");
-  let translationNode = helperParagraph.querySelector(".letters-helper-translation");
+  const translationNode = helperParagraph.querySelector(".letters-helper-translation");
   if (!mainNode) {
     const existing = String(helperParagraph.textContent || "")
       .replace(/\s+/g, " ")
@@ -7674,27 +7805,27 @@ const setupLettersHelperTranslation = async () => {
     mainNode.textContent = existing;
     helperParagraph.appendChild(mainNode);
   }
-  if (!translationNode) {
-    translationNode = document.createElement("span");
-    translationNode.className = "letters-helper-translation";
-    translationNode.setAttribute("dir", "auto");
-    translationNode.hidden = true;
-    helperParagraph.appendChild(translationNode);
+  if (translationNode) {
+    translationNode.remove();
   }
 
   const nativeText =
-    LETTERS_HELPER_NATIVE_TEXT[WORLD_KEY] ||
-    String(mainNode.textContent || "")
+    String(
+      helperParagraph.dataset.nativeHelperSource ||
+        LETTERS_HELPER_NATIVE_TEXT[WORLD_KEY] ||
+        mainNode.textContent ||
+        ""
+    )
       .replace(/\s+/g, " ")
       .trim();
+  helperParagraph.dataset.nativeHelperSource = nativeText;
   if (nativeText) {
     mainNode.textContent = nativeText;
   }
 
   const selectedBaseLanguage = readStoredBaseLanguagePreference();
   if (!selectedBaseLanguage || selectedBaseLanguage === WORLD_KEY) {
-    translationNode.textContent = "";
-    translationNode.hidden = true;
+    mainNode.textContent = nativeText;
     return;
   }
 
@@ -7702,8 +7833,7 @@ const setupLettersHelperTranslation = async () => {
   const cacheKey = `helper::${WORLD_KEY}::${selectedBaseLanguage}::${nativeText.toLowerCase()}`;
   const cached = String(cache.get(cacheKey) || "").trim();
   if (cached && !isInvalidLettersHelperTranslation(cached)) {
-    translationNode.textContent = cached;
-    translationNode.hidden = false;
+    mainNode.textContent = cached;
     return;
   }
 
@@ -7711,15 +7841,13 @@ const setupLettersHelperTranslation = async () => {
     (await requestLettersTitleTranslation(nativeText, selectedBaseLanguage)) || ""
   ).trim();
   if (!translated || isInvalidLettersHelperTranslation(translated)) {
-    translationNode.textContent = "";
-    translationNode.hidden = true;
+    mainNode.textContent = nativeText;
     return;
   }
 
   cache.set(cacheKey, translated);
   persistLettersTitleTranslationCache();
-  translationNode.textContent = translated;
-  translationNode.hidden = false;
+  mainNode.textContent = translated;
 };
 
 const HINDI_ROMANIZATION_VARIANTS = Object.freeze({
@@ -8544,6 +8672,27 @@ function removeMimiPremiumBubble() {
   }
 }
 
+const isUserAuthenticated = () => {
+  return hasAuthenticatedGamificationSession();
+};
+
+const promptGuestAuthForMimi = () => {
+  removeMimiPremiumBubble();
+  const openAuthPrompt = () => {
+    if (typeof window.cosmicaAccountHub?.openAuth === "function") {
+      window.cosmicaAccountHub.openAuth({
+        panel: "signup",
+        message: "Log in or sign up to use Mimi chat.",
+        tone: "info",
+      });
+      return;
+    }
+    window.location.href = "/?openAuth=1&authPanel=signup#support";
+  };
+
+  window.setTimeout(openAuthPrompt, 0);
+};
+
 const userHasPremiumAccess = (user) => {
   if (!user || typeof user !== "object") {
     return false;
@@ -8621,6 +8770,10 @@ const isMimiPremiumAccessEnabled = () => {
 if (chatForm) {
   chatForm.addEventListener("submit", (event) => {
     event.preventDefault();
+    if (!isUserAuthenticated()) {
+      promptGuestAuthForMimi();
+      return;
+    }
     const isPremium = isMimiPremiumAccessEnabled();
     if (!isPremium) {
       showMimiPremiumBubble();
@@ -8654,6 +8807,10 @@ chatChips.forEach((chip) => {
   chip.addEventListener("blur", releaseChipPress);
   chip.addEventListener("click", () => {
     pulseGuideInteractivity(980);
+    if (!isUserAuthenticated()) {
+      promptGuestAuthForMimi();
+      return;
+    }
     const isPremium = isMimiPremiumAccessEnabled();
     if (!isPremium) {
       showMimiPremiumBubble();
@@ -9963,7 +10120,7 @@ const MOBILE_HOME_ANCHOR_DOWN_SHIFT = Object.freeze({
   default: 0,
   "#how": 34,
   "#worlds": 30,
-  "#faq": -28,
+  "#faq": 0,
   "#guide": 34,
   "#join": 62,
   "#support": -24,
@@ -9974,7 +10131,7 @@ const IPAD_HOME_ANCHOR_DOWN_SHIFT = Object.freeze({
   default: -6,
   "#how": -40,
   "#worlds": -98,
-  "#faq": -120,
+  "#faq": 0,
   "#guide": -56,
   "#join": -120,
   "#support": -230,
@@ -9983,7 +10140,7 @@ const getIpadHomeAnchorDownShift = (hash) =>
   IPAD_HOME_ANCHOR_DOWN_SHIFT[hash] ?? IPAD_HOME_ANCHOR_DOWN_SHIFT.default;
 const DESKTOP_HOME_ANCHOR_DOWN_SHIFT = Object.freeze({
   default: -30,
-  "#faq": -96,
+  "#faq": 0,
   "#join": -84,
 });
 const getDesktopHomeAnchorDownShift = (hash) =>
@@ -10047,7 +10204,7 @@ if (talkButton) {
   });
 }
 
-const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+const managedHashLinks = document.querySelectorAll('a[href^="#"]');
 const anchorTargets = new Set([
   "#home",
   "#how",
@@ -10116,7 +10273,11 @@ const stabilizeHomeEntryScroll = () => {
   if (hasManagedHash && samePageReload && !hasAuthIntentParams) {
     history.replaceState(null, "", baseUrl);
   } else if (currentHash) {
-    // Preserve explicit deep links on normal navigation.
+    if (hasManagedHash) {
+      window.requestAnimationFrame(() => {
+        scrollToAnchor(currentHash);
+      });
+    }
     return;
   }
   if ("scrollRestoration" in history) {
@@ -10143,7 +10304,7 @@ window.addEventListener(
   { passive: true }
 );
 
-navLinks.forEach((link) => {
+managedHashLinks.forEach((link) => {
   const hash = link.getAttribute("href");
   if (!hash || !anchorTargets.has(hash)) {
     return;
@@ -10759,7 +10920,7 @@ const isRecentTouchActivation = (element, windowMs = 500) => {
 
 worldCards.forEach((card) => {
   const worldName = card.dataset.world || "World";
-  const targetWorldUrl = worldPages[worldName] || "";
+  const targetWorldUrl = card.getAttribute("href") || worldPages[worldName] || "";
   bindNavigationPrefetch(card, () => targetWorldUrl);
   const activateWorldCard = () => {
     if (card.classList.contains("coming-soon")) {
@@ -10782,7 +10943,14 @@ worldCards.forEach((card) => {
     markTouchActivation(card);
     activateWorldCard();
   });
-  card.addEventListener("click", () => {
+  card.addEventListener("click", (event) => {
+    if (event.defaultPrevented || event.button !== 0) {
+      return;
+    }
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+      return;
+    }
+    event.preventDefault();
     if (isRecentTouchActivation(card)) {
       return;
     }
@@ -10878,6 +11046,93 @@ const openGuestSignupPanelUpwards = (message = "Sign up to save your progress.")
 
 window.cosmicaOpenSignupPanelUpwards = openGuestSignupPanelUpwards;
 
+const WORLD_GUEST_AUTH_PROMPT_STORAGE_KEY = "cosmicaWorldGuestAuthPromptSeen:v1";
+let worldGuestAuthPromptTimer = 0;
+
+const hasSeenWorldGuestAuthPrompt = () => {
+  try {
+    return sessionStorage.getItem(WORLD_GUEST_AUTH_PROMPT_STORAGE_KEY) === "1";
+  } catch {
+    return false;
+  }
+};
+
+const markWorldGuestAuthPromptSeen = () => {
+  try {
+    sessionStorage.setItem(WORLD_GUEST_AUTH_PROMPT_STORAGE_KEY, "1");
+  } catch {}
+};
+
+const scheduleWorldGuestAuthPrompt = () => {
+  if (!document.body.classList.contains("world-page") || hasSeenWorldGuestAuthPrompt()) {
+    return;
+  }
+  if (
+    urlParams.has("openAuth") ||
+    urlParams.has("authPanel") ||
+    urlParams.has("authError") ||
+    urlParams.has("emailVerified") ||
+    urlParams.has("accountDeleted")
+  ) {
+    return;
+  }
+
+  const snapshot =
+    typeof window.cosmicaGamification?.getState === "function"
+      ? window.cosmicaGamification.getState()
+      : null;
+  if (snapshot?.isAuthenticated) {
+    return;
+  }
+
+  window.clearTimeout(worldGuestAuthPromptTimer);
+  worldGuestAuthPromptTimer = window.setTimeout(() => {
+    if (document.visibilityState === "hidden") {
+      return;
+    }
+    const latestSnapshot =
+      typeof window.cosmicaGamification?.getState === "function"
+        ? window.cosmicaGamification.getState()
+        : null;
+    if (latestSnapshot?.isAuthenticated) {
+      return;
+    }
+    markWorldGuestAuthPromptSeen();
+    openGuestSignupPanelUpwards("Create an account to save progress and continue where you left off.");
+  }, 1400);
+};
+
+const clearWorldGuestAuthPrompt = () => {
+  if (worldGuestAuthPromptTimer) {
+    window.clearTimeout(worldGuestAuthPromptTimer);
+    worldGuestAuthPromptTimer = 0;
+  }
+};
+
+if (document.body.classList.contains("world-page")) {
+  window.addEventListener("pagehide", clearWorldGuestAuthPrompt, { passive: true });
+  window.addEventListener("beforeunload", clearWorldGuestAuthPrompt, { passive: true });
+  document.addEventListener(
+    "visibilitychange",
+    () => {
+      if (document.visibilityState === "hidden") {
+        clearWorldGuestAuthPrompt();
+      }
+    },
+    { passive: true }
+  );
+  scheduleWorldGuestAuthPrompt();
+  if (typeof window.cosmicaGamification?.subscribe === "function") {
+    window.cosmicaGamification.subscribe(() => {
+      const snapshot = window.cosmicaGamification.getState?.() || null;
+      if (snapshot?.isAuthenticated) {
+        markWorldGuestAuthPromptSeen();
+        clearWorldGuestAuthPrompt();
+      }
+    });
+  }
+}
+
 const applyMapComingSoonRules = () => {
   if (!document.body.classList.contains("world-page")) {
     return;
@@ -10902,9 +11157,7 @@ const applyMapComingSoonRules = () => {
     grammarCard.setAttribute("title", "Under expert review");
     grammarCard.removeAttribute("href");
 
-    const existingMarker = grammarCard.querySelector(
-      ".coming-soon-badge, .premium-map-upgrade-button"
-    );
+    const existingMarker = grammarCard.querySelector(".coming-soon-badge");
     if (!(existingMarker instanceof HTMLElement) || existingMarker.tagName !== "SPAN") {
       existingMarker?.remove();
       const badge = document.createElement("span");
@@ -10944,33 +11197,12 @@ const applyMapComingSoonRules = () => {
       grammarCard.setAttribute("href", originalHref);
       grammarCard.dataset.originalHref = originalHref;
     }
-    const existingMarker = grammarCard.querySelector(
-      ".coming-soon-badge, .premium-map-upgrade-button"
-    );
+    const existingMarker = grammarCard.querySelector(".coming-soon-badge");
     if (!lockLookForFree) {
       existingMarker?.remove();
       return;
     }
-    if (!(existingMarker instanceof HTMLElement) || existingMarker.tagName !== "BUTTON") {
-      existingMarker?.remove();
-      const upgradeBtn = document.createElement("button");
-      upgradeBtn.type = "button";
-      upgradeBtn.className = "premium-setup-primary premium-map-upgrade-button";
-      upgradeBtn.textContent = "Upgrade to Premium";
-      upgradeBtn.dataset.passThrough = "true";
-      upgradeBtn.setAttribute("aria-hidden", "true");
-      upgradeBtn.tabIndex = -1;
-      grammarCard.appendChild(upgradeBtn);
-      return;
-    }
-    existingMarker.className = "premium-setup-primary premium-map-upgrade-button";
-    existingMarker.textContent = "Upgrade to Premium";
-    if (existingMarker instanceof HTMLButtonElement) {
-      existingMarker.type = "button";
-      existingMarker.dataset.passThrough = "true";
-      existingMarker.setAttribute("aria-hidden", "true");
-      existingMarker.tabIndex = -1;
-    }
+    existingMarker?.remove();
     return;
   }
 
@@ -10993,9 +11225,7 @@ const applyMapComingSoonRules = () => {
   grammarCard.setAttribute("title", "Coming soon");
   grammarCard.removeAttribute("href");
 
-  const existingMarker = grammarCard.querySelector(
-    ".coming-soon-badge, .premium-map-upgrade-button"
-  );
+  const existingMarker = grammarCard.querySelector(".coming-soon-badge");
   if (forceComingSoon) {
     if (!(existingMarker instanceof HTMLElement) || existingMarker.tagName !== "SPAN") {
       existingMarker?.remove();
@@ -11400,9 +11630,6 @@ if (languagePills.length) {
     } else {
       localStorage.removeItem("cosmicaBaseLanguage");
       scheduleWorldEntryMapWarm({ source: "language" });
-    }
-    if (window.cosmicaAuth && typeof window.cosmicaAuth.syncBaseLanguageToAccount === "function") {
-      void window.cosmicaAuth.syncBaseLanguageToAccount(selected).catch(() => {});
     }
     document.body.classList.add("language-picked");
     languageSection?.classList.remove("is-visible");
@@ -11942,146 +12169,6 @@ const setupWorldMissionPath = () => {
 };
 
 setupWorldMissionPath();
-
-const SPACED_REVIEW_STORAGE_KEY = "cosmicaSpacedReview:v1";
-const SPACED_REVIEW_UPDATED_EVENT = "cosmica:spaced-review-updated";
-const SPACED_REVIEW_STEP_DELAYS_MS = [
-  24 * 60 * 60 * 1000,
-  3 * 24 * 60 * 60 * 1000,
-  7 * 24 * 60 * 60 * 1000,
-  14 * 24 * 60 * 60 * 1000,
-  30 * 24 * 60 * 60 * 1000,
-];
-
-const readSpacedReviewStore = () => {
-  try {
-    const raw = localStorage.getItem(SPACED_REVIEW_STORAGE_KEY);
-    if (!raw) {
-      return {};
-    }
-    const parsed = JSON.parse(raw);
-    return parsed && typeof parsed === "object" ? parsed : {};
-  } catch {
-    return {};
-  }
-};
-
-const writeSpacedReviewStore = (store) => {
-  try {
-    localStorage.setItem(SPACED_REVIEW_STORAGE_KEY, JSON.stringify(store || {}));
-  } catch {}
-};
-
-const buildSpacedReviewStorageId = ({ worldKey = WORLD_KEY, mapKey = "", cardKey = "" } = {}) =>
-  `${String(worldKey || "").trim().toLowerCase()}::${String(mapKey || "")
-    .trim()
-    .toLowerCase()}::${String(cardKey || "").trim()}`;
-
-const getSpacedReviewEntry = ({ worldKey = WORLD_KEY, mapKey = "", cardKey = "" } = {}) => {
-  const storageId = buildSpacedReviewStorageId({ worldKey, mapKey, cardKey });
-  if (!storageId || storageId.endsWith("::")) {
-    return null;
-  }
-  const store = readSpacedReviewStore();
-  const entry = store[storageId];
-  return entry && typeof entry === "object" ? entry : null;
-};
-
-const isSpacedReviewDue = ({ worldKey = WORLD_KEY, mapKey = "", cardKey = "", now = Date.now() } = {}) => {
-  const entry = getSpacedReviewEntry({ worldKey, mapKey, cardKey });
-  if (!entry) {
-    return true;
-  }
-  return Number(entry.dueAt || 0) <= now;
-};
-
-const dispatchSpacedReviewUpdate = (detail = {}) => {
-  window.dispatchEvent(new CustomEvent(SPACED_REVIEW_UPDATED_EVENT, { detail }));
-};
-
-const isSpacedReviewModeActive = (mapKey = "") =>
-  document.body.dataset.spacedReviewActive === "true" &&
-  (!mapKey || document.body.dataset.spacedReviewMap === String(mapKey || "").trim().toLowerCase());
-
-const setSpacedReviewMode = (mapKey, active) => {
-  const normalizedMapKey = String(mapKey || "").trim().toLowerCase();
-  if (!normalizedMapKey) {
-    return;
-  }
-  if (active) {
-    document.body.dataset.spacedReviewActive = "true";
-    document.body.dataset.spacedReviewMap = normalizedMapKey;
-  } else if (document.body.dataset.spacedReviewMap === normalizedMapKey) {
-    delete document.body.dataset.spacedReviewActive;
-    delete document.body.dataset.spacedReviewMap;
-  }
-  dispatchSpacedReviewUpdate({ mapKey: normalizedMapKey, modeActive: isSpacedReviewModeActive(normalizedMapKey) });
-};
-
-const recordSpacedReviewSuccess = ({ worldKey = WORLD_KEY, mapKey = "", cardKey = "" } = {}) => {
-  const normalizedMapKey = String(mapKey || "").trim().toLowerCase();
-  const normalizedCardKey = String(cardKey || "").trim();
-  if (!normalizedMapKey || !normalizedCardKey) {
-    return null;
-  }
-  const store = readSpacedReviewStore();
-  const storageId = buildSpacedReviewStorageId({
-    worldKey,
-    mapKey: normalizedMapKey,
-    cardKey: normalizedCardKey,
-  });
-  const current = store[storageId] && typeof store[storageId] === "object" ? store[storageId] : {};
-  const previousStep = Math.max(-1, Number(current.step || -1));
-  const nextStep = Math.min(previousStep + 1, SPACED_REVIEW_STEP_DELAYS_MS.length - 1);
-  const now = Date.now();
-  store[storageId] = {
-    worldKey: String(worldKey || "").trim().toLowerCase(),
-    mapKey: normalizedMapKey,
-    cardKey: normalizedCardKey,
-    step: nextStep,
-    reviewCount: Math.max(0, Number(current.reviewCount || 0)) + 1,
-    lastReviewedAt: now,
-    dueAt: now + SPACED_REVIEW_STEP_DELAYS_MS[nextStep],
-  };
-  writeSpacedReviewStore(store);
-  dispatchSpacedReviewUpdate({
-    mapKey: normalizedMapKey,
-    cardKey: normalizedCardKey,
-    modeActive: isSpacedReviewModeActive(normalizedMapKey),
-  });
-  return store[storageId];
-};
-
-const markSpacedReviewInteraction = (element) => {
-  if (!isSpacedReviewModeActive()) {
-    return;
-  }
-  const card = element?.closest?.(".letter-card, .word-card, .phrase-card") || null;
-  const target = card || element;
-  if (!(target instanceof HTMLElement)) {
-    return;
-  }
-  const mapKey = String(target.dataset.srMapKey || card?.dataset.srMapKey || "").trim().toLowerCase();
-  const cardKey = String(target.dataset.srCardKey || card?.dataset.srCardKey || "").trim();
-  if (!mapKey || !cardKey || !isSpacedReviewModeActive(mapKey)) {
-    return;
-  }
-  recordSpacedReviewSuccess({ mapKey, cardKey });
-  if (card instanceof HTMLElement) {
-    card.classList.add("is-sr-reviewed");
-    window.setTimeout(() => {
-      card.classList.remove("is-sr-reviewed");
-    }, 520);
-  }
-};
-
-window.cosmicaSpacedReview = Object.assign(window.cosmicaSpacedReview || {}, {
-  eventName: SPACED_REVIEW_UPDATED_EVENT,
-  isDue: ({ mapKey = "", cardKey = "", worldKey = WORLD_KEY } = {}) =>
-    isSpacedReviewDue({ worldKey, mapKey, cardKey }),
-  isModeActive: (mapKey = "") => isSpacedReviewModeActive(mapKey),
-  setMode: (mapKey, active) => setSpacedReviewMode(mapKey, active),
-});
 
 /* ==========================================================================
    CARD AUDIO (LETTER / WORD / PHRASE)
@@ -12639,7 +12726,6 @@ const setupSpeechCards = () => {
         markSpeechActivation(card);
         playSpeech(card.dataset[datasetKey], { rate, pitch });
         trackPracticeFromElement(card);
-        markSpacedReviewInteraction(card);
       });
       card.addEventListener("click", (event) => {
         if (event.target?.closest?.(".letter-audio, .word-audio")) {
@@ -12654,7 +12740,6 @@ const setupSpeechCards = () => {
         markSpeechActivation(card);
         playSpeech(card.dataset[datasetKey], { rate, pitch });
         trackPracticeFromElement(card);
-        markSpacedReviewInteraction(card);
       });
       card.addEventListener("keydown", (event) => {
         if (event.key === "Enter" || event.key === " ") {
@@ -12665,7 +12750,6 @@ const setupSpeechCards = () => {
           markSpeechActivation(card);
           playSpeech(card.dataset[datasetKey], { rate, pitch });
           trackPracticeFromElement(card);
-          markSpacedReviewInteraction(card);
         }
       });
     });
@@ -12694,7 +12778,6 @@ const setupSpeechCards = () => {
           markSpeechActivation(button);
           playSpeech(value, { rate, pitch });
           trackPracticeFromElement(button);
-          markSpacedReviewInteraction(button);
         }
       };
       button.addEventListener("pointerup", (event) => {
@@ -13872,6 +13955,14 @@ const registerServiceWorker = () => {
   window.addEventListener("load", () => {
     navigator.serviceWorker
       .register(withAssetVersion("service-worker.js"), { scope: "/" })
+      .then((registration) => {
+        registration.update().catch(() => {});
+        return navigator.serviceWorker.ready
+          .then((readyRegistration) => {
+            readyRegistration.active?.postMessage({ type: "CLEAR_OLD_CACHES" });
+          })
+          .catch(() => {});
+      })
       .catch(() => {});
   });
 };
@@ -13925,11 +14016,13 @@ const initializeCommonShell = () => {
   syncRuntimeNavHeightVar();
   window.addEventListener("resize", syncRuntimeNavHeightVar, { passive: true });
   window.addEventListener("orientationchange", syncRuntimeNavHeightVar, { passive: true });
+  setupLettersSectionCompleteButton();
+  setupLettersCardPracticeButtons();
   scheduleNonCriticalShellSetup(() => {
     setupHomeAltInteractivity();
     void setupLettersTitleTranslation();
     void setupLettersHelperTranslation();
-    setupLettersSpacedReviewControls();
+    void setupLettersLevelTranslations();
     setupLetterRomanization();
     setupSpeechCards();
     setupBackToTopButton();

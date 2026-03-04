@@ -4,6 +4,9 @@ const path = require("path");
 const ROOT = path.resolve(__dirname, "..");
 const FRONTEND = path.join(ROOT, "frontend");
 const SITE_ORIGIN = "https://www.cosmicalearn.com";
+const STYLE_ASSET_VERSION = "20260413";
+const APP_ASSET_VERSION = "20260417";
+const ACCOUNT_CARET_ENTITY = "&#9662;";
 
 const LANGUAGES = [
   {
@@ -140,10 +143,23 @@ const LANGUAGES = [
 
 const beginnerPageFile = (key) => `learn-${key}-for-beginners.html`;
 const pronunciationPageFile = (key) => `${key}-pronunciation-guide.html`;
+const travelPhrasesPageFile = (key) => `${key}-travel-phrases.html`;
 
 const readFile = (fileName) => fs.readFileSync(path.join(FRONTEND, fileName), "utf8");
 const writeFile = (fileName, content) => fs.writeFileSync(path.join(FRONTEND, fileName), content, "utf8");
 const pageUrl = (fileName) => (fileName === "index.html" ? `${SITE_ORIGIN}/` : `${SITE_ORIGIN}/${fileName}`);
+
+const buildAlternateLinks = (links = []) => {
+  const items = links
+    .filter((item) => item && item.lang && item.url)
+    .map(
+      (item) => `    <link rel="alternate" hreflang="${item.lang}" href="${item.url}" />`
+    );
+  if (!items.length) {
+    return "";
+  }
+  return `    <!-- Multilingual SEO: hreflang cluster -->\n${items.join("\n")}\n    <!-- /Multilingual SEO: hreflang cluster -->\n`;
+};
 
 const jsonLdScript = (schema, marker = "") => `    ${marker ? `<!-- ${marker} -->\n    ` : ""}<script type="application/ld+json">
 ${JSON.stringify(schema, null, 2)
@@ -192,6 +208,7 @@ const pageShell = ({
   bodyClass,
   content,
   structuredData,
+  alternateLinks = "",
 }) => `<!doctype html>
 <!-- Page Structure: metadata, navigation, main content, footer -->
 <html lang="en">
@@ -213,6 +230,7 @@ const pageShell = ({
     <link rel="manifest" href="/app.webmanifest" />
     <link rel="apple-touch-icon" sizes="180x180" href="/pwa/apple-touch-icon.png" />
     <link rel="canonical" href="${SITE_ORIGIN}/${canonicalPath}" />
+${alternateLinks}
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Cosmica" />
     <meta property="og:title" content="${title}" />
@@ -221,8 +239,8 @@ const pageShell = ({
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="${title}" />
     <meta name="twitter:description" content="${description}" />
-    <link rel="preload" as="style" href="style.css?v=20260331" />
-    <link rel="stylesheet" href="style.css?v=20260331" />
+    <link rel="preload" as="style" href="style.css?v=${STYLE_ASSET_VERSION}" />
+    <link rel="stylesheet" href="style.css?v=${STYLE_ASSET_VERSION}" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -274,7 +292,7 @@ ${structuredData || jsonLdScript({
               <span class="account-trigger-label">Guest</span>
               <span class="account-trigger-meta">Sign in</span>
             </span>
-            <span class="account-trigger-caret" aria-hidden="true">▾</span>
+            <span class="account-trigger-caret" aria-hidden="true">${ACCOUNT_CARET_ENTITY}</span>
           </button>
         </div>
       </div>
@@ -297,7 +315,7 @@ ${content}
       </span>
     </footer>
     <!-- Shared client bundle -->
-    <script src="app.js?v=20260410" defer></script>
+    <script src="app.js?v=${APP_ASSET_VERSION}" defer></script>
   </body>
 </html>
 `;
@@ -346,6 +364,12 @@ const beginnerContent = (config) => `      <section class="section world-hero" i
           </article>
         </div>
       </section>
+      <section class="section reveal">
+        <div class="section-title">
+          <h2>Why this path works</h2>
+          <p>Start with sound and core vocabulary, then move into phrases and grammar so each new ${config.language} lesson builds on what you already understand.</p>
+        </div>
+      </section>
 ${buildGuidePager(
   {
     href: config.worldFile,
@@ -390,10 +414,66 @@ const pronunciationContent = (config) => `      <section class="section world-he
           </article>
         </div>
       </section>
+      <section class="section reveal">
+        <div class="section-title">
+          <h2>What to focus on while you practice</h2>
+          <p>Listen for clear vowel sounds, stress, rhythm, and sentence flow so your ${config.language} pronunciation improves in both single words and full phrases.</p>
+        </div>
+      </section>
 ${buildGuidePager(
   {
     href: beginnerPageFile(config.key),
     title: `${config.language} beginner guide`,
+  },
+  {
+    href: travelPhrasesPageFile(config.key),
+    title: `${config.language} travel phrases`,
+  }
+)}`;
+
+const travelPhrasesContent = (config) => `      <section class="section world-hero" id="guide">
+        <div class="section-title">
+          <div class="eyebrow">${config.language} Travel Phrases</div>
+          <h1>${config.language} travel phrases</h1>
+          <p class="lede">
+            Learn practical ${config.language} travel phrases for greetings, directions, food,
+            transport, and simple everyday situations.
+          </p>
+        </div>
+      </section>
+      <section class="section reveal">
+        <div class="section-title">
+          <h2>Useful ${config.language} phrases for travel</h2>
+        </div>
+        <div class="steps">
+          <article class="card">
+            <h3>${config.language} greetings</h3>
+            <p>Start conversations politely and confidently.</p>
+          </article>
+          <article class="card">
+            <h3>${config.language} directions</h3>
+            <p>Ask where to go and understand simple place words.</p>
+          </article>
+          <article class="card">
+            <h3>${config.language} food phrases</h3>
+            <p>Order clearly and handle simple restaurant situations.</p>
+          </article>
+          <article class="card">
+            <h3>${config.language} transport phrases</h3>
+            <p>Use common phrases for tickets, timing, and movement.</p>
+          </article>
+        </div>
+      </section>
+      <section class="section reveal">
+        <div class="section-title">
+          <h2>Best lessons for travel-ready speaking</h2>
+          <p>Use the phrases map for short speaking patterns, then review vocabulary and pronunciation so your ${config.language} travel phrases feel easier to remember and use.</p>
+        </div>
+      </section>
+${buildGuidePager(
+  {
+    href: pronunciationPageFile(config.key),
+    title: `${config.language} pronunciation guide`,
   },
   config.localizedGuideFile
     ? {
@@ -414,6 +494,10 @@ const pronunciationTitle = (language) =>
   `${language} Pronunciation Guide | Audio, Sounds and Speaking Practice | Cosmica`;
 const pronunciationDescription = (language) =>
   `Improve ${language} pronunciation with audio practice, sound training, vocabulary review, and phrase-based speaking support inside Cosmica.`;
+const travelPhrasesTitle = (language) =>
+  `${language} Travel Phrases | Useful Words and Speaking Practice | Cosmica`;
+const travelPhrasesDescription = (language) =>
+  `Learn useful ${language} travel phrases for greetings, directions, food, transport, and everyday situations with clear guided practice.`;
 
 const guideStructuredData = (config, pageTitle, pageDescription, fileName, pageLabel) => {
   const pageSchema = {
@@ -495,12 +579,10 @@ const buildGuideCards = (config) => `
           <a class="card" href="${pronunciationPageFile(config.key)}">
             <h3>${config.language} pronunciation guide</h3>
           </a>
-${config.localizedGuideFile
-  ? `          <a class="card" href="${config.localizedGuideFile}">
-            <h3>${config.language} overview in ${config.language}</h3>
+          <a class="card" href="${travelPhrasesPageFile(config.key)}">
+            <h3>${config.language} travel phrases</h3>
           </a>
-`
-  : ""}        </div>
+        </div>
       </section>`;
 
 const buildFaqSection = (config) => `
@@ -586,6 +668,29 @@ const buildWorldStructuredData = (config) => {
   return `${jsonLdScript(graph)}\n${jsonLdScript(breadcrumbs, "Breadcrumb structured data")}`;
 };
 
+const buildWorldAlternateLinks = (config) => {
+  const links = [{ lang: "en", url: pageUrl(config.worldFile) }];
+  if (config.localizedGuideFile) {
+    const languageCodeMatch = config.localizedGuideFile.match(/-([a-z]{2})\.html$/i);
+    const localizedLang = languageCodeMatch ? languageCodeMatch[1].toLowerCase() : "";
+    if (localizedLang) {
+      links.push({ lang: localizedLang, url: pageUrl(config.localizedGuideFile) });
+    }
+  }
+  links.push({ lang: "x-default", url: pageUrl(config.worldFile) });
+  return buildAlternateLinks(links);
+};
+
+const replaceHeadStructuredData = (html, blocks) => {
+  const ogImageMarker = '<meta property="og:image"';
+  const schemaStart = html.indexOf('<script type="application/ld+json">');
+  const ogImageIndex = html.indexOf(ogImageMarker, schemaStart);
+  if (schemaStart === -1 || ogImageIndex === -1) {
+    return html;
+  }
+  return `${html.slice(0, schemaStart)}${blocks}\n${html.slice(ogImageIndex)}`;
+};
+
 const upsertWorldHubSeo = (config) => {
   let html = readFile(config.worldFile);
   const sections = `${buildGuideCards(config)}\n${buildFaqSection(config)}`;
@@ -598,18 +703,19 @@ const upsertWorldHubSeo = (config) => {
     html = html.replace(/<\/main>/i, `${sections}\n    </main>`);
   }
   const worldStructuredData = buildWorldStructuredData(config);
-  html = html.replace(
-    /<script type="application\/ld\+json">[\s\S]*?<\/script>/i,
-    worldStructuredData
-  );
   const faqScript = buildFaqJsonLd(config);
-  if (html.includes("<!-- FAQ structured data -->")) {
+  html = replaceHeadStructuredData(html, `${worldStructuredData}\n${faqScript}`);
+  const alternateLinks = buildWorldAlternateLinks(config);
+  if (html.includes("<!-- Multilingual SEO: hreflang cluster -->")) {
     html = html.replace(
-      /\s*<!-- FAQ structured data -->[\s\S]*?<\/script>\s*/i,
-      `\n${faqScript}\n`
+      /\s*<!-- Multilingual SEO: hreflang cluster -->[\s\S]*?<!-- \/Multilingual SEO: hreflang cluster -->\s*/i,
+      `\n${alternateLinks}`
     );
   } else {
-    html = html.replace(/<\/script>/i, `</script>\n${faqScript}`);
+    html = html.replace(
+      /(<link rel="canonical" href="[^"]+" \/>)/i,
+      `$1\n${alternateLinks.trimEnd()}`
+    );
   }
 
   writeFile(config.worldFile, html);
@@ -658,7 +764,28 @@ for (const config of LANGUAGES) {
     })
   );
 
+  writeFile(
+    travelPhrasesPageFile(config.key),
+    pageShell({
+      title: travelPhrasesTitle(config.language),
+      description: travelPhrasesDescription(config.language),
+      canonicalPath: travelPhrasesPageFile(config.key),
+      brandSub: `${config.language} Travel Phrases`,
+      backHref: config.worldFile,
+      backLabel: `Return to ${config.language} course`,
+      bodyClass: "world-page seo-guide-page",
+      content: travelPhrasesContent(config),
+      structuredData: guideStructuredData(
+        config,
+        travelPhrasesTitle(config.language),
+        travelPhrasesDescription(config.language),
+        travelPhrasesPageFile(config.key),
+        `${config.language} travel phrases`
+      ),
+    })
+  );
+
   upsertWorldHubSeo(config);
 }
 
-console.log(`Generated ${LANGUAGES.length * 2} SEO landing pages and linked them from world hubs.`);
+console.log(`Generated ${LANGUAGES.length * 3} SEO landing pages and linked them from world hubs.`);
