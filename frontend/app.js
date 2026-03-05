@@ -5746,6 +5746,7 @@ const CAN_PREFETCH_NAVIGATION = ENABLE_NAVIGATION_PREFETCH && !prefersReducedDat
 const ENABLE_BACKGROUND_ROUTE_PREFETCH = false;
 const prefetchedDocuments = new Set();
 const activelyWarmedDocuments = new Set();
+const activelyWarmedAssets = new Set();
 const currentDocumentKey = `${window.location.origin}${window.location.pathname}${window.location.search}`;
 
 const normalizeInternalDocumentUrl = (href) => {
@@ -5820,10 +5821,10 @@ const fetchDocumentForWorldWarm = (href) => {
     normalizedUrl === currentDocumentKey ||
     activelyWarmedDocuments.has(normalizedUrl)
   ) {
-    return;
+    return Promise.resolve("");
   }
   activelyWarmedDocuments.add(normalizedUrl);
-  fetch(normalizedUrl, {
+  return fetch(normalizedUrl, {
     credentials: "same-origin",
     cache: "force-cache",
   })
@@ -5836,6 +5837,68 @@ const fetchDocumentForWorldWarm = (href) => {
     .catch(() => {
       activelyWarmedDocuments.delete(normalizedUrl);
     });
+};
+
+const normalizeInternalResourceUrl = (href) => {
+  if (!href) {
+    return "";
+  }
+  try {
+    const parsed = new URL(href, window.location.href);
+    if (parsed.origin !== window.location.origin) {
+      return "";
+    }
+    return `${parsed.origin}${parsed.pathname}${parsed.search}`;
+  } catch {
+    return "";
+  }
+};
+
+const fetchAssetForWorldWarm = (href) => {
+  const normalizedUrl = normalizeInternalResourceUrl(href);
+  if (!normalizedUrl || activelyWarmedAssets.has(normalizedUrl)) {
+    return Promise.resolve("");
+  }
+  activelyWarmedAssets.add(normalizedUrl);
+  return fetch(normalizedUrl, {
+    credentials: "same-origin",
+    cache: "force-cache",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Asset warm failed: ${response.status}`);
+      }
+      return response.text().catch(() => "");
+    })
+    .catch(() => {
+      activelyWarmedAssets.delete(normalizedUrl);
+    });
+};
+
+const warmMapRuntimeAssetsForWorld = () => {
+  if (
+    !document.body.classList.contains("world-page") ||
+    document.visibilityState === "hidden" ||
+    prefersReducedData ||
+    isSlowNetwork
+  ) {
+    return Promise.resolve();
+  }
+  const assets = [
+    withAssetVersion("maps/style-maps.css"),
+    withAssetVersion("maps/app-maps.js"),
+    BASE_MAP_TRANSLATION_FILE,
+  ];
+  if (isNonEnglishWorld && WORLD_TRANSLATION_FILE !== BASE_MAP_TRANSLATION_FILE) {
+    assets.push(WORLD_TRANSLATION_FILE);
+  }
+  const uniqueAssets = [...new Set(assets.filter(Boolean))];
+  if (!uniqueAssets.length) {
+    return Promise.resolve();
+  }
+  return Promise.allSettled(uniqueAssets.map((asset) => fetchAssetForWorldWarm(asset))).then(
+    () => {}
+  );
 };
 
 const resolveWorldMapDocumentHref = (mapKey = "") => {
@@ -5867,6 +5930,8 @@ const CAN_WORLD_ENTRY_MAP_WARM =
 let worldEntryMapWarmRunId = 0;
 let worldEntryMapWarmIdleTimer = 0;
 const worldEntryMapWarmTimers = new Set();
+let worldLanguageSelectionWarmPromise = null;
+const WORLD_LANGUAGE_SELECTION_NAV_WAIT_MS = 1400;
 
 const clearWorldEntryMapWarmTimers = () => {
   if (worldEntryMapWarmIdleTimer) {
@@ -5879,11 +5944,7 @@ const clearWorldEntryMapWarmTimers = () => {
   worldEntryMapWarmTimers.clear();
 };
 
-// Warm likely next map documents while the user is on world landing pages.
-const scheduleWorldEntryMapWarm = ({ source = "init" } = {}) => {
-  if (!CAN_WORLD_ENTRY_MAP_WARM || document.visibilityState === "hidden") {
-    return;
-  }
+const collectWorldEntryMapWarmRoutes = () => {
   const snapshot =
     typeof window.cosmicaGamification?.getState === "function"
       ? window.cosmicaGamification.getState()
@@ -5897,13 +5958,49 @@ const scheduleWorldEntryMapWarm = ({ source = "init" } = {}) => {
   const warmRoutes = prioritizedMapKeys
     .map((mapKey) => resolveWorldMapDocumentHref(mapKey))
     .filter(Boolean);
-  const uniqueWarmRoutes = [...new Set(warmRoutes)].slice(0, prioritizedMapKeys.length);
+  return [...new Set(warmRoutes)].slice(0, prioritizedMapKeys.length);
+};
+
+const warmWorldAfterBaseLanguageSelection = () => {
+  if (!document.body.classList.contains("world-page")) {
+    return Promise.resolve();
+  }
+  if (worldLanguageSelectionWarmPromise) {
+    return worldLanguageSelectionWarmPromise;
+  }
+  const warmRoutes = collectWorldEntryMapWarmRoutes();
+  const warmRoutesPromise = Promise.allSettled(
+    warmRoutes.map((route) => {
+      prefetchDocumentForWorldWarm(route);
+      return fetchDocumentForWorldWarm(route);
+    })
+  );
+  worldLanguageSelectionWarmPromise = Promise.allSettled([
+    Promise.resolve(warmMapTranslationsCache()),
+    Promise.resolve(warmWorldTranslationsCache()),
+    warmMapRuntimeAssetsForWorld(),
+    warmRoutesPromise,
+  ])
+    .then(() => {})
+    .finally(() => {
+      worldLanguageSelectionWarmPromise = null;
+    });
+  return worldLanguageSelectionWarmPromise;
+};
+
+// Warm likely next map documents while the user is on world landing pages.
+const scheduleWorldEntryMapWarm = ({ source = "init" } = {}) => {
+  if (!CAN_WORLD_ENTRY_MAP_WARM || document.visibilityState === "hidden") {
+    return;
+  }
+  const uniqueWarmRoutes = collectWorldEntryMapWarmRoutes();
   if (!uniqueWarmRoutes.length) {
     return;
   }
 
   clearWorldEntryMapWarmTimers();
   const runId = ++worldEntryMapWarmRunId;
+  const stepMs = source === "language" ? 120 : 320;
   const runWarmQueue = () => {
     uniqueWarmRoutes.forEach((route, index) => {
       const timerId = window.setTimeout(() => {
@@ -5915,10 +6012,15 @@ const scheduleWorldEntryMapWarm = ({ source = "init" } = {}) => {
         if (source === "language") {
           fetchDocumentForWorldWarm(route);
         }
-      }, index * 320);
+      }, index * stepMs);
       worldEntryMapWarmTimers.add(timerId);
     });
   };
+
+  if (source === "language") {
+    runWarmQueue();
+    return;
+  }
 
   if ("requestIdleCallback" in window) {
     window.requestIdleCallback(
@@ -5939,6 +6041,7 @@ const scheduleWorldEntryMapWarm = ({ source = "init" } = {}) => {
 const cancelWorldEntryMapWarm = () => {
   worldEntryMapWarmRunId += 1;
   clearWorldEntryMapWarmTimers();
+  worldLanguageSelectionWarmPromise = null;
 };
 
 if (document.body.classList.contains("world-page")) {
@@ -11623,6 +11726,7 @@ const navigateToMapLink = (href) => {
     window.location.href = href;
     return;
   }
+  const languageWarmPromise = warmWorldAfterBaseLanguageSelection();
   let navigated = false;
   const finalize = () => {
     if (navigated) {
@@ -11631,10 +11735,11 @@ const navigateToMapLink = (href) => {
     navigated = true;
     window.location.href = href;
   };
-  const deadline = window.setTimeout(finalize, 800);
+  const deadline = window.setTimeout(finalize, WORLD_LANGUAGE_SELECTION_NAV_WAIT_MS);
   Promise.allSettled([
     Promise.resolve(warmMapTranslationsCache()),
     Promise.resolve(warmWorldTranslationsCache()),
+    Promise.resolve(languageWarmPromise),
   ]).finally(() => {
     window.clearTimeout(deadline);
     finalize();
