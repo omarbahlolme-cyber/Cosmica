@@ -6,7 +6,7 @@ const ROOT = path.resolve(__dirname, "..");
 const FRONTEND = path.join(ROOT, "frontend");
 const MAPS_BUNDLE = path.join(FRONTEND, "maps", "app-maps.js");
 const MAP_STYLE_ASSET_VERSION = "20260417";
-const APP_ASSET_VERSION = "20260420";
+const APP_ASSET_VERSION = "20260421";
 
 const LANGUAGES = [
   {

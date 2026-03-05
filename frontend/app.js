@@ -11953,6 +11953,7 @@ if (languagePills.length) {
       localStorage.setItem("cosmicaBaseLanguage", selected);
       void warmMapTranslationsCache();
       void warmWorldTranslationsCache();
+      void warmWorldAfterBaseLanguageSelection();
       scheduleWorldEntryMapWarm({ source: "language" });
     } else {
       localStorage.removeItem("cosmicaBaseLanguage");
