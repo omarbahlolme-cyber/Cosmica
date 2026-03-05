@@ -15,6 +15,8 @@ Cosmica is a static language-learning site with a small Node/Express backend for
 - App distribution guide (PWA + mobile stores): `docs/APP_DISTRIBUTION.md`
 - Billing ops quick commands: `docs/BILLING_OPS_QUICK_COMMANDS.md`
 - Policy enforcement runbook: `docs/ENFORCEMENT_RUNBOOK.md`
+- SEO Phase 6 playbook (Search Console/Bing + CTR workflow): `docs/SEO_PHASE6_PLAYBOOK.md`
+- Internal TODO map (vitals and priority checklist): `docs/TODO_MAP.md`
 - Front-end entry points: `frontend/index.html`, `frontend/english-*.html`, per-world pages in `frontend/world-*.html`, `frontend/letters-*.html`, `frontend/words-*.html`, `frontend/phrases-*.html`, `frontend/grammar-*.html`, and generated SEO guides such as `frontend/learn-*-for-beginners.html`, `frontend/*-pronunciation-guide.html`, `frontend/*-travel-phrases.html`, `frontend/learn-*-online-xx.html`
 - Base front-end logic: `frontend/app.js`
 - Map-only front-end bundle: `frontend/maps/app-maps.js`
@@ -343,6 +345,26 @@ npm run indexing:check
 ```
 
 This verifies `robots.txt`, `sitemap.xml`, canonical tags, and JSON-LD on key pages.
+
+Phase 6 SEO workflow (internal-link checks + CTR opportunities from Search Console export):
+
+```bash
+npm run seo:phase6 -- --input perf/search-console-page-query.csv
+```
+
+Quick steps:
+
+1. Export `Search results` CSV from Google Search Console.
+2. Save it to `perf/search-console-page-query.csv`.
+3. Run the command above.
+4. Open `perf/seo-ctr-opportunities.json`.
+
+Related commands:
+
+```bash
+npm run check:seo:links
+npm run seo:ctr:report -- --input perf/search-console-page-query.csv
+```
 
 ## Monitoring + releases
 

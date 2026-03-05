@@ -2322,6 +2322,21 @@ const setupAccountHub = () => {
 
   const formatNumber = (value) =>
     Intl.NumberFormat().format(Math.max(0, Math.round(Number(value) || 0)));
+  const normalizeAccountDisplayName = (value) => {
+    const normalized = String(value || "")
+      .replace(/\s+/g, " ")
+      .trim();
+    return normalized || "Guest";
+  };
+  const formatAccountMenuDisplayName = (value, maxChars = 20) => {
+    const full = normalizeAccountDisplayName(value);
+    const limit = Math.max(1, Math.floor(Number(maxChars) || 20));
+    if (full.length <= limit) {
+      return { full, display: full, truncated: false };
+    }
+    const display = `${full.slice(0, limit).trimEnd()}...`;
+    return { full, display, truncated: true };
+  };
   const guestAvatarIconMarkup =
     '<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true"><path d="M12 12.2a4.6 4.6 0 1 0 0-9.2 4.6 4.6 0 0 0 0 9.2zm0 2.2c-4.7 0-8.5 2.8-8.5 6.3 0 .7.5 1.3 1.2 1.3h14.6c.7 0 1.2-.6 1.2-1.3 0-3.5-3.8-6.3-8.5-6.3z"></path></svg>';
 
@@ -2435,6 +2450,28 @@ const setupAccountHub = () => {
   let reopenPremiumGiftAfterAuth = false;
   let logoutConfirmArmedAtMs = 0;
   let hasShownEntryMenuPrompt = false;
+  let progressCelebrationOverlay = null;
+  let progressCelebrationCard = null;
+  let progressCelebrationKickerNode = null;
+  let progressCelebrationTitleNode = null;
+  let progressCelebrationMessageNode = null;
+  let progressCelebrationDismissBtn = null;
+  let progressCelebrationDismissTimer = 0;
+  let progressCelebrationAction = null;
+  let isProgressCelebrationVisible = false;
+  const progressCelebrationQueue = [];
+  const progressCompletionTracker = {
+    primed: false,
+    userKey: "",
+    xpFull: false,
+    questDate: "",
+    allCompleted: false,
+    questCompletedByKey: {
+      practice: false,
+      discover: false,
+      complete: false,
+    },
+  };
   const PREMIUM_GIFT_TOKEN_STORAGE_KEY = "cosmicaPendingGiftToken";
 
   const setFeedback = (message, tone = "") => {
@@ -4458,6 +4495,294 @@ const setupAccountHub = () => {
     },
   };
 
+  const resetPremiumProgressCelebrationTracker = () => {
+    progressCompletionTracker.primed = false;
+    progressCompletionTracker.userKey = "";
+    progressCompletionTracker.xpFull = false;
+    progressCompletionTracker.questDate = "";
+    progressCompletionTracker.allCompleted = false;
+    progressCompletionTracker.questCompletedByKey = {
+      practice: false,
+      discover: false,
+      complete: false,
+    };
+  };
+
+  const closeProgressCelebrationPrompt = () => {
+    if (progressCelebrationDismissTimer) {
+      window.clearTimeout(progressCelebrationDismissTimer);
+      progressCelebrationDismissTimer = 0;
+    }
+    if (!(progressCelebrationOverlay instanceof HTMLElement)) {
+      isProgressCelebrationVisible = false;
+      return;
+    }
+    progressCelebrationOverlay.classList.remove("is-visible");
+    isProgressCelebrationVisible = false;
+    window.setTimeout(() => {
+      if (progressCelebrationOverlay) {
+        progressCelebrationOverlay.dataset.variant = "";
+        progressCelebrationOverlay.hidden = true;
+      }
+      if (progressCelebrationCard) {
+        progressCelebrationCard.dataset.variant = "";
+      }
+      progressCelebrationAction = null;
+      if (progressCelebrationQueue.length > 0) {
+        window.requestAnimationFrame(() => {
+          openNextProgressCelebrationPrompt();
+        });
+      }
+    }, 180);
+  };
+
+  const ensureProgressCelebrationPrompt = () => {
+    if (progressCelebrationOverlay?.isConnected) {
+      return progressCelebrationOverlay;
+    }
+    if (!(document.body instanceof HTMLElement)) {
+      return null;
+    }
+    const overlay = document.createElement("div");
+    overlay.className = "progress-celebration-overlay";
+    overlay.hidden = true;
+    overlay.innerHTML = `
+      <section class="progress-celebration-card" role="dialog" aria-modal="true" aria-labelledby="progressCelebrationTitle">
+        <p class="progress-celebration-kicker">Progress Update</p>
+        <h3 class="progress-celebration-title" id="progressCelebrationTitle"></h3>
+        <p class="progress-celebration-message"></p>
+        <button class="progress-celebration-dismiss" type="button">Keep Going</button>
+      </section>
+    `;
+    overlay.addEventListener("click", (event) => {
+      if (event.target === overlay) {
+        closeProgressCelebrationPrompt();
+      }
+    });
+    progressCelebrationOverlay = overlay;
+    progressCelebrationCard = overlay.querySelector(".progress-celebration-card");
+    progressCelebrationKickerNode = overlay.querySelector(".progress-celebration-kicker");
+    progressCelebrationTitleNode = overlay.querySelector(".progress-celebration-title");
+    progressCelebrationMessageNode = overlay.querySelector(".progress-celebration-message");
+    progressCelebrationDismissBtn = overlay.querySelector(".progress-celebration-dismiss");
+    progressCelebrationDismissBtn?.addEventListener("click", () => {
+      const action = progressCelebrationAction;
+      closeProgressCelebrationPrompt();
+      if (typeof action === "function") {
+        window.setTimeout(() => {
+          try {
+            action();
+          } catch {}
+        }, 140);
+      }
+    });
+    document.body.appendChild(overlay);
+    return overlay;
+  };
+
+  const focusPremiumQuestBoard = () => {
+    if (!(menuQuestsPanel instanceof HTMLElement)) {
+      return;
+    }
+    if (dropdown.hidden) {
+      openDropdown();
+    }
+    const runFocus = () => {
+      positionDropdown();
+      scrollMenuPanelIntoView(menuQuestsPanel, { behavior: "smooth", block: "center" });
+      if (prefersReducedMotion) {
+        return;
+      }
+      menuQuestsPanel.classList.remove("is-celebrating");
+      window.requestAnimationFrame(() => {
+        menuQuestsPanel.classList.add("is-celebrating");
+      });
+      window.setTimeout(() => {
+        menuQuestsPanel.classList.remove("is-celebrating");
+      }, 1600);
+    };
+    window.setTimeout(runFocus, 80);
+  };
+
+  const openNextProgressCelebrationPrompt = () => {
+    if (isProgressCelebrationVisible || progressCelebrationQueue.length <= 0) {
+      return;
+    }
+    const overlay = ensureProgressCelebrationPrompt();
+    if (!(overlay instanceof HTMLElement)) {
+      return;
+    }
+    const next = progressCelebrationQueue.shift();
+    if (!next) {
+      return;
+    }
+    const variant = String(next.variant || "")
+      .trim()
+      .toLowerCase();
+    if (progressCelebrationTitleNode) {
+      progressCelebrationTitleNode.textContent = String(next.title || "").trim();
+    }
+    if (progressCelebrationKickerNode) {
+      progressCelebrationKickerNode.textContent =
+        String(next.kicker || "").trim() || "Progress Update";
+    }
+    if (progressCelebrationMessageNode) {
+      progressCelebrationMessageNode.textContent = String(next.message || "").trim();
+    }
+    if (progressCelebrationDismissBtn) {
+      progressCelebrationDismissBtn.textContent =
+        String(next.actionLabel || "").trim() || "Keep Going";
+    }
+    progressCelebrationAction = typeof next.onAction === "function" ? next.onAction : null;
+    overlay.dataset.variant = variant;
+    if (progressCelebrationCard) {
+      progressCelebrationCard.dataset.variant = variant;
+    }
+    overlay.hidden = false;
+    window.requestAnimationFrame(() => {
+      overlay.classList.add("is-visible");
+      if (progressCelebrationCard && !prefersReducedMotion) {
+        progressCelebrationCard.classList.remove("is-popping");
+        window.requestAnimationFrame(() => {
+          progressCelebrationCard?.classList.add("is-popping");
+        });
+      }
+    });
+    isProgressCelebrationVisible = true;
+    if (progressCelebrationDismissTimer) {
+      window.clearTimeout(progressCelebrationDismissTimer);
+    }
+    const autoDismissMs = Math.max(
+      2800,
+      Math.min(14000, (Number(next.autoDismissMs) || 2500) * 2)
+    );
+    progressCelebrationDismissTimer = window.setTimeout(() => {
+      closeProgressCelebrationPrompt();
+    }, autoDismissMs);
+  };
+
+  const queuePremiumProgressCelebration = ({
+    key = "",
+    title = "",
+    message = "",
+    kicker = "",
+    actionLabel = "",
+    autoDismissMs = 2500,
+    variant = "",
+    onAction = null,
+  } = {}) => {
+    const normalizedKey = String(key || "").trim();
+    if (!normalizedKey) {
+      return;
+    }
+    progressCelebrationQueue.push({
+      key: normalizedKey,
+      title: String(title || "").trim() || "Great progress!",
+      message:
+        String(message || "").trim() ||
+        "Great progress. Keep going and complete your next milestone.",
+      kicker: String(kicker || "").trim() || "Progress Update",
+      actionLabel: String(actionLabel || "").trim() || "Keep Going",
+      autoDismissMs: Math.max(1400, Math.min(7000, Number(autoDismissMs) || 2500)),
+      variant:
+        String(variant || "")
+          .trim()
+          .toLowerCase() || "default",
+      onAction: typeof onAction === "function" ? onAction : null,
+    });
+    openNextProgressCelebrationPrompt();
+  };
+
+  const trackPremiumProgressCelebrations = ({
+    snapshot,
+    hasPremiumAccess = false,
+    showPremiumStatus = false,
+    levelMeta = null,
+    questSummaries = [],
+    allCompleted = false,
+    questDate = "",
+  } = {}) => {
+    if (!hasPremiumAccess || !showPremiumStatus) {
+      resetPremiumProgressCelebrationTracker();
+      return;
+    }
+    const userKey =
+      String(snapshot?.user?.id || snapshot?.user?.email || "")
+        .trim()
+        .toLowerCase() || "premium-user";
+    const normalizedQuestDate = String(questDate || "").trim() || "undated";
+    const xpRatio = Math.max(0, Math.min(1, Number(levelMeta?.ratio) || 0));
+    const xpFull = xpRatio >= 0.999;
+    const questCompletedByKey = {
+      practice: Boolean(questSummaries.find((quest) => quest.key === "practice")?.completed),
+      discover: Boolean(questSummaries.find((quest) => quest.key === "discover")?.completed),
+      complete: Boolean(questSummaries.find((quest) => quest.key === "complete")?.completed),
+    };
+
+    if (!progressCompletionTracker.primed || progressCompletionTracker.userKey !== userKey) {
+      progressCompletionTracker.primed = true;
+      progressCompletionTracker.userKey = userKey;
+      progressCompletionTracker.xpFull = xpFull;
+      progressCompletionTracker.questDate = normalizedQuestDate;
+      progressCompletionTracker.allCompleted = Boolean(allCompleted);
+      progressCompletionTracker.questCompletedByKey = { ...questCompletedByKey };
+      return;
+    }
+
+    const trackerQuestDateChanged = progressCompletionTracker.questDate !== normalizedQuestDate;
+    if (trackerQuestDateChanged) {
+      progressCompletionTracker.questDate = normalizedQuestDate;
+      progressCompletionTracker.allCompleted = false;
+      progressCompletionTracker.questCompletedByKey = {
+        practice: false,
+        discover: false,
+        complete: false,
+      };
+    }
+
+    if (!progressCompletionTracker.xpFull && xpFull) {
+      const levelLabel = Math.max(1, Math.round(Number(levelMeta?.level) || 1));
+      queuePremiumProgressCelebration({
+        key: `${userKey}:xp:level:${levelLabel}`,
+        title: "XP Bar Complete",
+        message: `Congrats! You filled your Level ${levelLabel} XP bar.`,
+      });
+    }
+
+    questSummaries.forEach((quest) => {
+      const questKey = String(quest?.key || "").trim().toLowerCase();
+      if (!questKey) {
+        return;
+      }
+      const wasCompleted = Boolean(progressCompletionTracker.questCompletedByKey?.[questKey]);
+      const isCompleted = Boolean(quest?.completed);
+      if (!wasCompleted && isCompleted) {
+        queuePremiumProgressCelebration({
+          key: `${userKey}:quest:${normalizedQuestDate}:${questKey}`,
+          title: "Daily Quest Complete",
+          message: `Congrats! You completed ${String(quest.label || questKey)}.`,
+        });
+      }
+    });
+
+    if (!progressCompletionTracker.allCompleted && allCompleted) {
+      queuePremiumProgressCelebration({
+        key: `${userKey}:quests-all:${normalizedQuestDate}`,
+        title: "All Daily Quests Complete",
+        message: "Excellent consistency. Every daily quest is complete and fully synced.",
+        kicker: "Premium Milestone",
+        actionLabel: "View Quest Board",
+        autoDismissMs: 4200,
+        variant: "all-quests",
+        onAction: focusPremiumQuestBoard,
+      });
+    }
+
+    progressCompletionTracker.xpFull = xpFull;
+    progressCompletionTracker.allCompleted = Boolean(allCompleted);
+    progressCompletionTracker.questCompletedByKey = { ...questCompletedByKey };
+  };
+
   const resolveSubscriptionStateFromSnapshot = (snapshot) => {
     const user = snapshot?.user && typeof snapshot.user === "object" ? snapshot.user : {};
     const status = String(
@@ -4503,7 +4828,7 @@ const setupAccountHub = () => {
     const progress = snapshot?.progress || {};
     const gamification = progress.gamification || {};
     const levelMeta = snapshot?.levelMeta || { level: 1, xp: 0, ratio: 0, toNextXp: 0 };
-    const displayName = String(snapshot?.user?.displayName || "Guest");
+    const displayName = normalizeAccountDisplayName(snapshot?.user?.displayName);
     currentAuthProvider = String(snapshot?.user?.authProvider || "")
       .trim()
       .toLowerCase();
@@ -4682,6 +5007,7 @@ const setupAccountHub = () => {
     }
 
     if (!isAuthenticated) {
+      resetPremiumProgressCelebrationTracker();
       setAuthPanel(activeAuthPanel, false);
       return;
     }
@@ -4690,7 +5016,10 @@ const setupAccountHub = () => {
       menuAvatar.textContent = avatarLetters;
     }
     if (menuName) {
-      menuName.textContent = displayName;
+      const { full, display, truncated } = formatAccountMenuDisplayName(displayName, 20);
+      menuName.textContent = display;
+      menuName.title = truncated ? full : "";
+      menuName.classList.toggle("is-truncated", truncated);
     }
     if (menuLevel) {
       menuLevel.textContent = `Level ${levelMeta.level} Explorer`;
@@ -4801,6 +5130,16 @@ const setupAccountHub = () => {
       }
       questNode.classList.toggle("is-complete", !lockQuestsForFree && quest.completed);
     });
+
+    trackPremiumProgressCelebrations({
+      snapshot,
+      hasPremiumAccess,
+      showPremiumStatus,
+      levelMeta,
+      questSummaries,
+      allCompleted,
+      questDate: quests?.date || "",
+    });
   };
 
   const navigateToHash = (hash) => {
@@ -4895,6 +5234,11 @@ const setupAccountHub = () => {
   });
   document.addEventListener("keydown", (event) => {
     if (event.key !== "Escape") {
+      return;
+    }
+    if (isProgressCelebrationVisible) {
+      event.preventDefault();
+      closeProgressCelebrationPrompt();
       return;
     }
     hideTriggerNoticeBubble();
@@ -6375,6 +6719,7 @@ let mimiBubbleFollowPendingOptions = null;
 let mimiBubbleFollowStopTimer;
 let mimiBubbleRevealTimer;
 let mimiBubbleRevealRaf = 0;
+let mimiTypingFollowLastAt = 0;
 const MIMI_BUBBLE_SCROLL_ABORT_KEYS = new Set([
   "ArrowDown",
   "ArrowUp",
@@ -6626,6 +6971,7 @@ const speakLine = (text, mood = "happy", options = {}) => {
     index += 1;
     speechText.textContent = line.slice(0, index);
     if (followBubble) {
+      maybeForceMimiTypingFollow();
       queueMimiBubbleFollow({ behavior: "auto" });
     }
     if (index < line.length) {
@@ -6762,6 +7108,7 @@ const isMimiBubbleFollowActive = () =>
 const stopMimiBubbleFollowSession = () => {
   mimiBubbleFollowSessionEndsAt = 0;
   mimiBubbleFollowUserOverride = false;
+  mimiTypingFollowLastAt = 0;
   mimiBubbleFollowPendingOptions = null;
   window.clearTimeout(mimiBubbleFollowStopTimer);
   if (mimiBubbleFollowRaf) {
@@ -6799,6 +7146,7 @@ const stopMimiBubbleFollowSoon = (delayMs = 420) => {
 const startMimiBubbleFollowSession = ({ durationMs = 12000 } = {}) => {
   mimiBubbleFollowSessionEndsAt = Date.now() + Math.max(1000, Number(durationMs) || 12000);
   mimiBubbleFollowUserOverride = false;
+  mimiTypingFollowLastAt = 0;
   window.clearTimeout(mimiBubbleFollowStopTimer);
 };
 
@@ -6831,8 +7179,8 @@ const scrollMimiBubbleIntoView = ({ behavior = "smooth", force = false } = {}) =
     return;
   }
   const rect = speechBubble.getBoundingClientRect();
-  const targetTop = Math.max(16, viewportHeight * 0.1);
-  const targetBottom = Math.max(targetTop + 150, viewportHeight * 0.74);
+  const targetTop = Math.max(18, viewportHeight * 0.14);
+  const targetBottom = Math.max(targetTop + 170, viewportHeight * 0.76);
   const targetWindow = targetBottom - targetTop;
   let delta = 0;
   if (rect.height >= targetWindow) {
@@ -6865,11 +7213,7 @@ const forceMimiBubbleIntoViewNow = ({ behavior = "smooth" } = {}) => {
     return;
   }
   const scrollBehavior = prefersReducedMotion ? "auto" : behavior || "smooth";
-  speechBubble.scrollIntoView({
-    behavior: scrollBehavior,
-    block: "center",
-    inline: "nearest",
-  });
+  scrollMimiBubbleIntoView({ behavior: scrollBehavior, force: true });
   window.requestAnimationFrame(() => {
     if (!speechBubble) {
       return;
@@ -6879,6 +7223,18 @@ const forceMimiBubbleIntoViewNow = ({ behavior = "smooth" } = {}) => {
   window.setTimeout(() => {
     scrollMimiBubbleIntoView({ behavior: "auto", force: true });
   }, 110);
+};
+
+const maybeForceMimiTypingFollow = () => {
+  if (!isMimiBubbleFollowActive() || mimiBubbleFollowUserOverride) {
+    return;
+  }
+  const now = Date.now();
+  if (now - mimiTypingFollowLastAt < 90) {
+    return;
+  }
+  mimiTypingFollowLastAt = now;
+  forceMimiBubbleIntoViewNow({ behavior: "auto" });
 };
 
 const queueMimiBubbleFollow = ({ behavior = "auto", force = false } = {}) => {
@@ -6909,6 +7265,7 @@ if (speechBubble && typeof ResizeObserver !== "undefined") {
     if (!isMimiBubbleFollowActive()) {
       return;
     }
+    maybeForceMimiTypingFollow();
     queueMimiBubbleFollow({ behavior: "auto" });
   });
   mimiBubbleResizeObserver.observe(speechBubble);

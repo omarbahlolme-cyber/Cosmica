@@ -4347,6 +4347,63 @@ const replaceMapSectionsArray = (target, nextSections) => {
   nextSections.forEach((section) => target.push(section));
 };
 
+const buildStaticWordSectionEntries = (sections = []) =>
+  sections
+    .map((section) => {
+      const sectionName = String(section?.dataset?.section || "").trim();
+      if (!sectionName) {
+        return null;
+      }
+      const words = Array.from(section.querySelectorAll(".word-card[data-word]"))
+        .map((card) => String(card?.dataset?.word || "").trim())
+        .filter(Boolean);
+      if (!words.length) {
+        return null;
+      }
+      return { sectionName, words };
+    })
+    .filter(Boolean);
+
+const buildStaticPhraseSectionEntries = (sections = []) =>
+  sections
+    .map((section) => {
+      const sectionName = String(section?.dataset?.section || "").trim();
+      if (!sectionName) {
+        return null;
+      }
+      const phrases = Array.from(section.querySelectorAll(".phrase-card[data-phrase]"))
+        .map((card) => String(card?.dataset?.phrase || "").trim())
+        .filter(Boolean);
+      if (!phrases.length) {
+        return null;
+      }
+      return { sectionName, phrases };
+    })
+    .filter(Boolean);
+
+const buildStaticGrammarSectionEntries = (sections = []) =>
+  sections
+    .map((section) => {
+      const sectionName = String(section?.dataset?.section || "").trim();
+      if (!sectionName) {
+        return null;
+      }
+      const concepts = Array.from(section.querySelectorAll(".grammar-card")).map((card) => ({
+        title: String(
+          card?.dataset?.sourceTitle ||
+            card?.dataset?.concept ||
+            card.querySelector(".grammar-title-main")?.textContent ||
+            ""
+        ).trim(),
+      }));
+      const filteredConcepts = concepts.filter((concept) => concept.title);
+      if (!filteredConcepts.length) {
+        return null;
+      }
+      return { sectionName, concepts: filteredConcepts };
+    })
+    .filter(Boolean);
+
 const renderWordsSections = () => {
   const renderRunId = ++wordsSectionsRenderRunId;
   const isActiveRender = () => renderRunId === wordsSectionsRenderRunId;
@@ -4393,7 +4450,14 @@ const renderWordsSections = () => {
     sectionEntries.push({ sectionName, words });
   });
 
-  if (!sectionEntries.length) {
+  const staticSectionEntries =
+    !sectionEntries.length && existingSections.length
+      ? buildStaticWordSectionEntries(existingSections)
+      : [];
+  const usingStaticSectionFallback = !sectionEntries.length && staticSectionEntries.length > 0;
+  const sourceSectionEntries = usingStaticSectionFallback ? staticSectionEntries : sectionEntries;
+
+  if (!sourceSectionEntries.length) {
     if (existingSections.length) {
       document.body.classList.remove("maps-loading");
       refreshWordsMapTranslations();
@@ -4403,20 +4467,30 @@ const renderWordsSections = () => {
     return;
   }
 
-  const totalSectionCount = sectionEntries.length;
-  const totalWordCount = sectionEntries.reduce((sum, entry) => sum + entry.words.length, 0);
-  const renderEntries = isPreviewMode
-    ? sectionEntries.slice(0, WORDS_PREVIEW_SECTION_LIMIT).map(({ sectionName, words }) => ({
-        sectionName,
-        words: words.slice(),
-      }))
-    : sectionEntries;
+  const totalSectionCount = sourceSectionEntries.length;
+  const totalWordCount = sourceSectionEntries.reduce((sum, entry) => sum + entry.words.length, 0);
+  const renderEntries =
+    isPreviewMode && !usingStaticSectionFallback
+      ? sourceSectionEntries
+          .slice(0, WORDS_PREVIEW_SECTION_LIMIT)
+          .map(({ sectionName, words }) => ({
+            sectionName,
+            words: words.slice(),
+          }))
+      : sourceSectionEntries.map(({ sectionName, words }) => ({
+          sectionName,
+          words: words.slice(),
+        }));
   const unlockedSectionNames = renderEntries.map((entry) => entry.sectionName);
   const previewSectionSet = new Set(renderEntries.map((entry) => entry.sectionName));
   const previewSectionCount = renderEntries.length;
   const previewWordCount = renderEntries.reduce((sum, entry) => sum + entry.words.length, 0);
-  const lockedSectionCount = Math.max(0, totalSectionCount - previewSectionCount);
-  const lockedWordCount = Math.max(0, totalWordCount - previewWordCount);
+  const lockedSectionCount = usingStaticSectionFallback
+    ? 0
+    : Math.max(0, totalSectionCount - previewSectionCount);
+  const lockedWordCount = usingStaticSectionFallback
+    ? 0
+    : Math.max(0, totalWordCount - previewWordCount);
   const hasLockedPreviewContent = lockedSectionCount > 0 || lockedWordCount > 0;
 
   const sections = [];
@@ -4507,7 +4581,7 @@ const renderWordsSections = () => {
       document.body.dataset.wordsFilter = "all";
     }
 
-    sectionEntries.forEach(({ sectionName }) => {
+    sourceSectionEntries.forEach(({ sectionName }) => {
       const displayName =
         getWorldSectionLabelFromPack("words", sectionName) ||
         (sectionName === "countries" ? "Countries" : sectionName);
@@ -4725,7 +4799,14 @@ const renderPhrasesSections = () => {
     sectionEntries.push({ sectionName, phrases });
   });
 
-  if (!sectionEntries.length) {
+  const staticSectionEntries =
+    !sectionEntries.length && existingSections.length
+      ? buildStaticPhraseSectionEntries(existingSections)
+      : [];
+  const usingStaticSectionFallback = !sectionEntries.length && staticSectionEntries.length > 0;
+  const sourceSectionEntries = usingStaticSectionFallback ? staticSectionEntries : sectionEntries;
+
+  if (!sourceSectionEntries.length) {
     if (existingSections.length) {
       document.body.classList.remove("maps-loading");
       refreshPhrasesMapTranslations();
@@ -4735,20 +4816,30 @@ const renderPhrasesSections = () => {
     return;
   }
 
-  const totalSectionCount = sectionEntries.length;
-  const totalPhraseCount = sectionEntries.reduce((sum, entry) => sum + entry.phrases.length, 0);
-  const renderEntries = isPreviewMode
-    ? sectionEntries.slice(0, PHRASES_PREVIEW_SECTION_LIMIT).map(({ sectionName, phrases }) => ({
-        sectionName,
-        phrases: phrases.slice(),
-      }))
-    : sectionEntries;
+  const totalSectionCount = sourceSectionEntries.length;
+  const totalPhraseCount = sourceSectionEntries.reduce((sum, entry) => sum + entry.phrases.length, 0);
+  const renderEntries =
+    isPreviewMode && !usingStaticSectionFallback
+      ? sourceSectionEntries
+          .slice(0, PHRASES_PREVIEW_SECTION_LIMIT)
+          .map(({ sectionName, phrases }) => ({
+            sectionName,
+            phrases: phrases.slice(),
+          }))
+      : sourceSectionEntries.map(({ sectionName, phrases }) => ({
+          sectionName,
+          phrases: phrases.slice(),
+        }));
   const unlockedSectionNames = renderEntries.map((entry) => entry.sectionName);
   const previewSectionSet = new Set(renderEntries.map((entry) => entry.sectionName));
   const previewSectionCount = renderEntries.length;
   const previewPhraseCount = renderEntries.reduce((sum, entry) => sum + entry.phrases.length, 0);
-  const lockedSectionCount = Math.max(0, totalSectionCount - previewSectionCount);
-  const lockedPhraseCount = Math.max(0, totalPhraseCount - previewPhraseCount);
+  const lockedSectionCount = usingStaticSectionFallback
+    ? 0
+    : Math.max(0, totalSectionCount - previewSectionCount);
+  const lockedPhraseCount = usingStaticSectionFallback
+    ? 0
+    : Math.max(0, totalPhraseCount - previewPhraseCount);
   const hasLockedPreviewContent = lockedSectionCount > 0 || lockedPhraseCount > 0;
 
   const sections = [];
@@ -4838,7 +4929,7 @@ const renderPhrasesSections = () => {
       document.body.dataset.phrasesFilter = "all";
     }
 
-    sectionEntries.forEach(({ sectionName }) => {
+    sourceSectionEntries.forEach(({ sectionName }) => {
       const displayName =
         getWorldSectionLabelFromPack("phrases", sectionName) || sectionName;
       const button = createSectionFilterButton(displayName, sectionName, sectionName);
@@ -5060,7 +5151,14 @@ const renderGrammarSections = () => {
     sectionEntries.push({ sectionName, concepts });
   });
 
-  if (!sectionEntries.length) {
+  const staticSectionEntries =
+    !sectionEntries.length && existingSections.length
+      ? buildStaticGrammarSectionEntries(existingSections)
+      : [];
+  const usingStaticSectionFallback = !sectionEntries.length && staticSectionEntries.length > 0;
+  const sourceSectionEntries = usingStaticSectionFallback ? staticSectionEntries : sectionEntries;
+
+  if (!sourceSectionEntries.length) {
     if (existingSections.length) {
       document.body.classList.remove("maps-loading");
       refreshGrammarMapTranslations();
@@ -5070,31 +5168,39 @@ const renderGrammarSections = () => {
     return;
   }
 
-  const totalSectionCount = sectionEntries.length;
-  const totalTopicCount = sectionEntries.reduce((sum, entry) => sum + entry.concepts.length, 0);
-  const namedUnlockedPreviewEntries = sectionEntries.filter(({ sectionName }) =>
+  const totalSectionCount = sourceSectionEntries.length;
+  const totalTopicCount = sourceSectionEntries.reduce((sum, entry) => sum + entry.concepts.length, 0);
+  const namedUnlockedPreviewEntries = sourceSectionEntries.filter(({ sectionName }) =>
     isGrammarSectionFreePreviewUnlocked(sectionName)
   );
   const hasNamedUnlockedPreviewEntries = namedUnlockedPreviewEntries.length > 0;
-  const renderEntries = isPreviewMode
-    ? hasNamedUnlockedPreviewEntries
-      ? namedUnlockedPreviewEntries.map(({ sectionName, concepts }) => ({
+  const renderEntries =
+    isPreviewMode && !usingStaticSectionFallback
+      ? hasNamedUnlockedPreviewEntries
+        ? namedUnlockedPreviewEntries.map(({ sectionName, concepts }) => ({
+            sectionName,
+            concepts: concepts.slice(),
+          }))
+        : sourceSectionEntries
+            .slice(0, GRAMMAR_PREVIEW_SECTION_LIMIT)
+            .map(({ sectionName, concepts }) => ({
+              sectionName,
+              concepts: concepts.slice(0, GRAMMAR_PREVIEW_CARD_LIMIT),
+            }))
+      : sourceSectionEntries.map(({ sectionName, concepts }) => ({
           sectionName,
           concepts: concepts.slice(),
-        }))
-      : sectionEntries
-          .slice(0, GRAMMAR_PREVIEW_SECTION_LIMIT)
-          .map(({ sectionName, concepts }) => ({
-            sectionName,
-            concepts: concepts.slice(0, GRAMMAR_PREVIEW_CARD_LIMIT),
-          }))
-    : sectionEntries;
+        }));
   const unlockedSectionNames = renderEntries.map((entry) => entry.sectionName);
   const previewSectionSet = new Set(renderEntries.map((entry) => entry.sectionName));
   const previewSectionCount = renderEntries.length;
   const previewTopicCount = renderEntries.reduce((sum, entry) => sum + entry.concepts.length, 0);
-  const lockedSectionCount = Math.max(0, totalSectionCount - previewSectionCount);
-  const lockedTopicCount = Math.max(0, totalTopicCount - previewTopicCount);
+  const lockedSectionCount = usingStaticSectionFallback
+    ? 0
+    : Math.max(0, totalSectionCount - previewSectionCount);
+  const lockedTopicCount = usingStaticSectionFallback
+    ? 0
+    : Math.max(0, totalTopicCount - previewTopicCount);
 
   const sections = [];
   const renderSectionNameSet = new Set(renderEntries.map((entry) => entry.sectionName));
@@ -5208,7 +5314,7 @@ const renderGrammarSections = () => {
       document.body.dataset.grammarFilter = "all";
     }
 
-    sectionEntries.forEach(({ sectionName }) => {
+    sourceSectionEntries.forEach(({ sectionName }) => {
       const button = createSectionFilterButton(
         getWorldGrammarSectionLabel(sectionName),
         sectionName,
@@ -10977,14 +11083,35 @@ const refreshSeoPreviewTranslations = (mapKey) => {
 };
 
 const hasStaticPrerenderedMapSections = () => {
-  if (isWordsPage && document.querySelector("#wordsSections .words-group[data-section]")) {
-    return true;
+  if (isWordsPage) {
+    if (
+      document.querySelector(
+        '#wordsSections[data-static-prerender="true"] .words-group[data-section]'
+      ) ||
+      document.querySelector("#wordsSections .words-group[data-section]")
+    ) {
+      return true;
+    }
   }
-  if (isPhrasesPage && document.querySelector("#phrasesSections .phrases-group[data-section]")) {
-    return true;
+  if (isPhrasesPage) {
+    if (
+      document.querySelector(
+        '#phrasesSections[data-static-prerender="true"] .phrases-group[data-section]'
+      ) ||
+      document.querySelector("#phrasesSections .phrases-group[data-section]")
+    ) {
+      return true;
+    }
   }
-  if (isGrammarPage && document.querySelector("#grammarSections .grammar-group[data-section]")) {
-    return true;
+  if (isGrammarPage) {
+    if (
+      document.querySelector(
+        '#grammarSections[data-static-prerender="true"] .grammar-group[data-section]'
+      ) ||
+      document.querySelector("#grammarSections .grammar-group[data-section]")
+    ) {
+      return true;
+    }
   }
   return false;
 };

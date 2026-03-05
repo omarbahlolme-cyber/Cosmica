@@ -1,0 +1,59 @@
+{
+  "generatedAt": "2026-03-05T13:19:34.136Z",
+  "config": {
+    "input": "C:\\Projects\\My website\\perf\\search-console-page-query.template.csv",
+    "output": "C:\\Projects\\My website\\perf\\seo-ctr-opportunities.json",
+    "minImpressions": 120,
+    "maxCtr": 0.03,
+    "maxPosition": 20,
+    "limit": 30
+  },
+  "analyzedRows": 2,
+  "pagesWithData": 2,
+  "opportunities": [
+    {
+      "pagePath": "/world-french.html",
+      "impressions": 5500,
+      "clicks": 120,
+      "ctr": 0.02181818181818182,
+      "avgPosition": 8.3,
+      "primaryQuery": "learn french online",
+      "topQueries": [
+        {
+          "query": "learn french online",
+          "impressions": 5500,
+          "clicks": 120,
+          "ctr": 0.0218,
+          "position": 8.3
+        }
+      ],
+      "currentTitle": "Learn French Online Course | Cosmica",
+      "currentDescription": "Learn French online with guided lessons for letters, vocabulary, phrases, and grammar.",
+      "suggestedTitle": "Learn French Online | Cosmica",
+      "suggestedDescription": "Learn learn french online with structured lessons, audio, and guided practice on Cosmica.",
+      "priorityScore": 46.037499999999994
+    },
+    {
+      "pagePath": "/words-french.html",
+      "impressions": 4100,
+      "clicks": 80,
+      "ctr": 0.01951219512195122,
+      "avgPosition": 10.2,
+      "primaryQuery": "french vocabulary with audio",
+      "topQueries": [
+        {
+          "query": "french vocabulary with audio",
+          "impressions": 4100,
+          "clicks": 80,
+          "ctr": 0.0195,
+          "position": 10.2
+        }
+      ],
+      "currentTitle": "Learn French Vocabulary with Audio | Cosmica",
+      "currentDescription": "Build French vocabulary with topic cards, audio pronunciation, and translation support for daily speaking.",
+      "suggestedTitle": "French Vocabulary With Audio | Cosmica",
+      "suggestedDescription": "Learn french vocabulary with audio with structured lessons, audio, and guided practice on Cosmica.",
+      "priorityScore": 34.29
+    }
+  ]
+}

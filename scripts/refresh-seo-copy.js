@@ -6,7 +6,7 @@ const ROOT = path.resolve(__dirname, "..");
 const FRONTEND = path.join(ROOT, "frontend");
 const MAPS_BUNDLE = path.join(FRONTEND, "maps", "app-maps.js");
 const MAP_STYLE_ASSET_VERSION = "20260417";
-const APP_ASSET_VERSION = "20260423";
+const APP_ASSET_VERSION = "20260440";
 
 const LANGUAGES = [
   {
@@ -235,12 +235,15 @@ const BASE_PHRASE_SECTION_ORDER = parseLiteralFromMapsBundle("PHRASE_SECTION_ORD
 const BASE_PHRASE_SECTION_LISTS = parseLiteralFromMapsBundle("PHRASE_SECTION_LISTS");
 const BASE_GRAMMAR_SECTION_ORDER = parseLiteralFromMapsBundle("GRAMMAR_SECTION_ORDER");
 const BASE_GRAMMAR_SECTION_LISTS = parseLiteralFromMapsBundle("GRAMMAR_SECTION_LISTS");
-const STATIC_WORD_SECTION_LIMIT = 2;
+const STATIC_WORD_SECTION_LIMIT_NON_ENGLISH = Number.POSITIVE_INFINITY;
 const STATIC_WORD_CARD_LIMIT = 8;
-const STATIC_PHRASE_SECTION_LIMIT = 2;
-const STATIC_PHRASE_CARD_LIMIT = 6;
-const STATIC_GRAMMAR_SECTION_LIMIT = 2;
-const STATIC_GRAMMAR_CARD_LIMIT = 6;
+const STATIC_PHRASE_SECTION_LIMIT_NON_ENGLISH = Number.POSITIVE_INFINITY;
+const STATIC_PHRASE_CARD_LIMIT = 7;
+const STATIC_GRAMMAR_SECTION_LIMIT_NON_ENGLISH = Number.POSITIVE_INFINITY;
+const STATIC_GRAMMAR_CARD_LIMIT = 7;
+const STATIC_WORD_HTML_BUDGET_NON_ENGLISH_BYTES = 44800;
+const STATIC_PHRASE_HTML_BUDGET_NON_ENGLISH_BYTES = 41600;
+const STATIC_GRAMMAR_HTML_BUDGET_NON_ENGLISH_BYTES = 35200;
 
 const worldPackCache = new Map();
 const loadWorldPack = (worldKey) => {
@@ -457,6 +460,7 @@ const renderGrammarPreviewCards = (entries) =>
     .join("\n");
 
 const buildStaticWordSections = (config) => {
+  const sectionLimit = config.key === "english" ? 0 : STATIC_WORD_SECTION_LIMIT_NON_ENGLISH;
   const pack = loadWorldPack(config.key);
   return BASE_WORD_SECTION_ORDER.map((sectionName) => {
     const worldSection = pack?.words?.[sectionName];
@@ -485,10 +489,11 @@ const buildStaticWordSections = (config) => {
     };
   })
     .filter(Boolean)
-    .slice(0, STATIC_WORD_SECTION_LIMIT);
+    .slice(0, sectionLimit);
 };
 
 const buildStaticPhraseSections = (config) => {
+  const sectionLimit = config.key === "english" ? 0 : STATIC_PHRASE_SECTION_LIMIT_NON_ENGLISH;
   const pack = loadWorldPack(config.key);
   return BASE_PHRASE_SECTION_ORDER.map((sectionName) => {
     const worldSection = pack?.phrases?.[sectionName];
@@ -517,10 +522,11 @@ const buildStaticPhraseSections = (config) => {
     };
   })
     .filter(Boolean)
-    .slice(0, STATIC_PHRASE_SECTION_LIMIT);
+    .slice(0, sectionLimit);
 };
 
 const buildStaticGrammarSections = (config) => {
+  const sectionLimit = config.key === "english" ? 0 : STATIC_GRAMMAR_SECTION_LIMIT_NON_ENGLISH;
   const pack = loadWorldPack(config.key);
   return BASE_GRAMMAR_SECTION_ORDER.map((sectionName) => {
     const translatedCards = Array.isArray(pack?.grammar?.cards?.[sectionName])
@@ -556,7 +562,7 @@ const buildStaticGrammarSections = (config) => {
     };
   })
     .filter(Boolean)
-    .slice(0, STATIC_GRAMMAR_SECTION_LIMIT);
+    .slice(0, sectionLimit);
 };
 
 const renderStaticWordSections = (sections) =>
@@ -581,7 +587,7 @@ const renderStaticWordSections = (sections) =>
         .join("\n");
       return `      <section class="section words-group reveal" data-section="${escapeHtml(
         section.sectionName
-      )}">
+      )}" data-prerendered="true" data-prerender-source="seo-static-v1">
         <div class="section-title">
           <h2 data-source-title="${escapeHtml(section.sectionName)}" data-base-title="${escapeHtml(
             section.sectionName
@@ -618,7 +624,7 @@ const renderStaticPhraseSections = (sections) =>
         .join("\n");
       return `      <section class="section phrases-group reveal" data-section="${escapeHtml(
         section.sectionName
-      )}">
+      )}" data-prerendered="true" data-prerender-source="seo-static-v1">
         <div class="section-title">
           <h2 data-source-title="${escapeHtml(section.sectionName)}" data-base-title="${escapeHtml(
             section.sectionName
@@ -652,7 +658,7 @@ const renderStaticGrammarSections = (sections) =>
         .join("\n");
       return `      <section class="section grammar-group reveal" data-section="${escapeHtml(
         section.sectionName
-      )}">
+      )}" data-prerendered="true" data-prerender-source="seo-static-v1">
         <div class="section-title">
           <h2 data-source-title="${escapeHtml(section.sectionName)}" data-base-title="${escapeHtml(
             section.sectionName
@@ -666,6 +672,27 @@ ${cards}
       </section>`;
     })
     .join("\n");
+
+const clampSectionsByHtmlBudget = (sections, renderSections, maxBytes) => {
+  const normalizedMaxBytes = Number(maxBytes || 0);
+  if (!Array.isArray(sections) || !sections.length || normalizedMaxBytes <= 0) {
+    return [];
+  }
+  const accepted = [];
+  for (const section of sections) {
+    accepted.push(section);
+    const html = renderSections(accepted);
+    const bytes = Buffer.byteLength(String(html || ""), "utf8");
+    if (bytes > normalizedMaxBytes) {
+      accepted.pop();
+      break;
+    }
+  }
+  if (!accepted.length && sections.length) {
+    return [sections[0]];
+  }
+  return accepted;
+};
 
 const replaceTitle = (html, value) => html.replace(/<title>[\s\S]*?<\/title>/i, `<title>${value}</title>`);
 
@@ -744,6 +771,12 @@ const replaceWorldPage = (config) => {
 const buildMapContent = (config, map) => {
   if (map === "words") {
     const previewCards = buildWordPreviewCards(config);
+    const staticWordSections = clampSectionsByHtmlBudget(
+      buildStaticWordSections(config),
+      renderStaticWordSections,
+      config.key === "english" ? 0 : STATIC_WORD_HTML_BUDGET_NON_ENGLISH_BYTES
+    );
+    const staticWordSectionsHtml = renderStaticWordSections(staticWordSections);
     return `      <h1 class="visually-hidden">Learn ${config.language} Vocabulary Online</h1>
       <!-- SEO landing content -->
       <section class="section reveal seo-map-hero">
@@ -771,11 +804,19 @@ ${renderVocabPreviewCards(previewCards, "words")}
         </div>
       </section>
       <div class="words-controls" id="wordsControls"></div>
-      <div id="wordsSections"></div>`;
+      <div id="wordsSections" data-static-prerender="true" data-prerender-map="words">
+${staticWordSectionsHtml}
+      </div>`;
   }
 
   if (map === "phrases") {
     const previewCards = buildPhrasePreviewCards(config);
+    const staticPhraseSections = clampSectionsByHtmlBudget(
+      buildStaticPhraseSections(config),
+      renderStaticPhraseSections,
+      config.key === "english" ? 0 : STATIC_PHRASE_HTML_BUDGET_NON_ENGLISH_BYTES
+    );
+    const staticPhraseSectionsHtml = renderStaticPhraseSections(staticPhraseSections);
     return `      <h1 class="visually-hidden">Learn ${config.language} Phrases Online</h1>
       <!-- SEO landing content -->
       <section class="section reveal seo-map-hero">
@@ -803,10 +844,18 @@ ${renderVocabPreviewCards(previewCards, "phrases")}
         </div>
       </section>
       <div class="words-controls" id="phrasesControls"></div>
-      <div id="phrasesSections"></div>`;
+      <div id="phrasesSections" data-static-prerender="true" data-prerender-map="phrases">
+${staticPhraseSectionsHtml}
+      </div>`;
   }
 
   const previewCards = buildGrammarPreviewCards(config);
+  const staticGrammarSections = clampSectionsByHtmlBudget(
+    buildStaticGrammarSections(config),
+    renderStaticGrammarSections,
+    config.key === "english" ? 0 : STATIC_GRAMMAR_HTML_BUDGET_NON_ENGLISH_BYTES
+  );
+  const staticGrammarSectionsHtml = renderStaticGrammarSections(staticGrammarSections);
   return `      <h1 class="visually-hidden">Learn ${config.language} Grammar Online</h1>
       <!-- SEO landing content -->
       <section class="section reveal seo-map-hero">
@@ -834,7 +883,9 @@ ${renderGrammarPreviewCards(previewCards)}
         </div>
       </section>
       <div class="words-controls" id="grammarControls"></div>
-      <div id="grammarSections"></div>`;
+      <div id="grammarSections" data-static-prerender="true" data-prerender-map="grammar">
+${staticGrammarSectionsHtml}
+      </div>`;
 };
 
 const replaceMapPage = (config, map, fileName, title, description, socialDescription, hiddenH1) => {
@@ -849,16 +900,8 @@ const replaceMapPage = (config, map, fileName, title, description, socialDescrip
   html = replaceMetaByName(html, "twitter:title", title);
   html = replaceMetaByName(html, "twitter:description", socialDescription);
   html = replaceJsonLdNameAndDescription(html, title, description);
-  const controlsId = map === "words" ? "wordsControls" : map === "phrases" ? "phrasesControls" : "grammarControls";
-  const sectionsId = map === "words" ? "wordsSections" : map === "phrases" ? "phrasesSections" : "grammarSections";
   const landingContent = buildMapContent(config, map);
-  const mainContentPattern = new RegExp(
-    `<h1 class="visually-hidden">[\\s\\S]*?<div class="words-controls" id="${escapeRegex(
-      controlsId
-    )}"><\\/div>\\s*<div id="${escapeRegex(sectionsId)}">[\\s\\S]*?<\\/div>`,
-    "i"
-  );
-  html = html.replace(mainContentPattern, landingContent);
+  html = html.replace(/<main>[\s\S]*?<\/main>/i, `<main>\n${landingContent}\n    </main>`);
   html = html.replace(
     /<h1 class="visually-hidden">[\s\S]*?<\/h1>/,
     `<h1 class="visually-hidden">${hiddenH1}</h1>`
@@ -894,7 +937,7 @@ for (const config of LANGUAGES) {
     config,
     "words",
     config.wordsFile,
-    `Learn ${config.language} Vocabulary | Cosmica`,
+    `Learn ${config.language} Vocabulary with Audio | Cosmica`,
     `Build ${config.language} vocabulary with topic cards, audio pronunciation, and translation support for daily speaking.`,
     `Practice ${config.language} vocabulary with audio and translation support.`,
     `Learn ${config.language} Vocabulary Online`
@@ -904,7 +947,7 @@ for (const config of LANGUAGES) {
     config,
     "phrases",
     config.phrasesFile,
-    `Learn ${config.language} Phrases | Cosmica`,
+    `Learn ${config.language} Phrases with Audio | Cosmica`,
     `Learn useful ${config.language} phrases with structured practice, translation support, and audio for daily conversation.`,
     `Practice useful ${config.language} phrases with audio and translation support.`,
     `Learn ${config.language} Phrases Online`
