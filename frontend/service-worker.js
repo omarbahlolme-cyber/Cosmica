@@ -1,12 +1,12 @@
-const CACHE_VERSION = "cosmica-pwa-v20260304j";
+const CACHE_VERSION = "cosmica-pwa-v20260304m";
 const SHELL_CACHE = `${CACHE_VERSION}:shell`;
 const PAGE_CACHE = `${CACHE_VERSION}:pages`;
 const STATIC_CACHE = `${CACHE_VERSION}:static`;
 const ACTIVE_CACHE_NAMES = new Set([SHELL_CACHE, PAGE_CACHE, STATIC_CACHE]);
 const OFFLINE_FALLBACK_PATH = "/offline.html";
-const APP_ASSET_VERSION = "20260417";
+const APP_ASSET_VERSION = "20260420";
 const STYLE_ASSET_VERSION = "20260413";
-const MAP_STYLE_ASSET_VERSION = "20260416";
+const MAP_STYLE_ASSET_VERSION = "20260417";
 const CORE_SHELL_ASSETS = [
   "/",
   "/index.html",

@@ -4323,6 +4323,30 @@ let grammarSectionsRenderRunId = 0;
 let refreshWordsLessonShell = () => {};
 let refreshPhrasesLessonShell = () => {};
 
+const dedupeRenderedMapSections = (container, selector) => {
+  if (!container) {
+    return [];
+  }
+  const seenSections = new Set();
+  return Array.from(container.querySelectorAll(selector)).filter((section) => {
+    const sectionKey = String(section?.dataset?.section || "").trim();
+    if (!sectionKey) {
+      return false;
+    }
+    if (seenSections.has(sectionKey)) {
+      section.remove();
+      return false;
+    }
+    seenSections.add(sectionKey);
+    return true;
+  });
+};
+
+const replaceMapSectionsArray = (target, nextSections) => {
+  target.length = 0;
+  nextSections.forEach((section) => target.push(section));
+};
+
 const renderWordsSections = () => {
   const renderRunId = ++wordsSectionsRenderRunId;
   const isActiveRender = () => renderRunId === wordsSectionsRenderRunId;
@@ -4331,7 +4355,10 @@ const renderWordsSections = () => {
   if (!container) {
     return;
   }
-  const existingSections = Array.from(container.querySelectorAll(".words-group[data-section]"));
+  const existingSections = dedupeRenderedMapSections(
+    container,
+    ".words-group[data-section]"
+  );
   const existingSectionMap = new Map(
     existingSections.map((section) => [String(section.dataset.section || "").trim(), section])
   );
@@ -4563,18 +4590,6 @@ const renderWordsSections = () => {
     controls.appendChild(label);
     controls.appendChild(list);
 
-    const previewBanner =
-      isPreviewMode && hasLockedPreviewContent
-        ? createMapPreviewBanner({
-            mapLabel: "words map",
-            itemLabel: "words",
-            lockedSectionCount,
-            lockedItemCount: lockedWordCount,
-            unlockedSectionNames,
-            upgradeMessage: "Upgrade to Premium to unlock the full words map.",
-          })
-        : null;
-
     if (registerOptions.length) {
       const shouldLockRegisterControls = isPreviewMode;
       const registerLabel = document.createElement("div");
@@ -4614,10 +4629,6 @@ const renderWordsSections = () => {
       controls.appendChild(registerList);
     }
 
-    if (previewBanner) {
-      controls.appendChild(previewBanner);
-    }
-
     applyFilter();
   };
 
@@ -4629,7 +4640,10 @@ const renderWordsSections = () => {
         return;
       }
       container.appendChild(section);
-      sections.push(section);
+      replaceMapSectionsArray(
+        sections,
+        dedupeRenderedMapSections(container, ".words-group[data-section]")
+      );
     },
     onFirstSectionReady: () => {
       if (!isActiveRender()) {
@@ -4641,6 +4655,10 @@ const renderWordsSections = () => {
       if (!isActiveRender()) {
         return;
       }
+      replaceMapSectionsArray(
+        sections,
+        dedupeRenderedMapSections(container, ".words-group[data-section]")
+      );
       ensureWordsSectionProgressButtons(container);
       initializeWordsControls();
       if (isPreviewMode && hasLockedPreviewContent) {
@@ -4669,7 +4687,10 @@ const renderPhrasesSections = () => {
   if (!container) {
     return;
   }
-  const existingSections = Array.from(container.querySelectorAll(".phrases-group[data-section]"));
+  const existingSections = dedupeRenderedMapSections(
+    container,
+    ".phrases-group[data-section]"
+  );
   const existingSectionMap = new Map(
     existingSections.map((section) => [String(section.dataset.section || "").trim(), section])
   );
@@ -4899,18 +4920,6 @@ const renderPhrasesSections = () => {
     controls.appendChild(label);
     controls.appendChild(list);
 
-    const previewBanner =
-      isPreviewMode && hasLockedPreviewContent
-        ? createMapPreviewBanner({
-            mapLabel: "phrases map",
-            itemLabel: "phrases",
-            lockedSectionCount,
-            lockedItemCount: lockedPhraseCount,
-            unlockedSectionNames,
-            upgradeMessage: "Upgrade to Premium to unlock the full phrases map.",
-          })
-        : null;
-
     if (registerOptions.length) {
       const shouldLockRegisterControls = isPreviewMode;
       const registerLabel = document.createElement("div");
@@ -4950,10 +4959,6 @@ const renderPhrasesSections = () => {
       controls.appendChild(registerList);
     }
 
-    if (previewBanner) {
-      controls.appendChild(previewBanner);
-    }
-
     applyFilter();
   };
 
@@ -4965,7 +4970,10 @@ const renderPhrasesSections = () => {
         return;
       }
       container.appendChild(section);
-      sections.push(section);
+      replaceMapSectionsArray(
+        sections,
+        dedupeRenderedMapSections(container, ".phrases-group[data-section]")
+      );
     },
     onFirstSectionReady: () => {
       if (!isActiveRender()) {
@@ -4977,6 +4985,10 @@ const renderPhrasesSections = () => {
       if (!isActiveRender()) {
         return;
       }
+      replaceMapSectionsArray(
+        sections,
+        dedupeRenderedMapSections(container, ".phrases-group[data-section]")
+      );
       ensurePhrasesSectionProgressButtons(container);
       initializePhrasesControls();
       if (isPreviewMode && hasLockedPreviewContent) {
@@ -5005,7 +5017,10 @@ const renderGrammarSections = () => {
   if (!container) {
     return;
   }
-  const existingSections = Array.from(container.querySelectorAll(".grammar-group[data-section]"));
+  const existingSections = dedupeRenderedMapSections(
+    container,
+    ".grammar-group[data-section]"
+  );
   const existingSectionMap = new Map(
     existingSections.map((section) => [String(section.dataset.section || "").trim(), section])
   );
@@ -5268,15 +5283,6 @@ const renderGrammarSections = () => {
     controls.appendChild(eyebrow);
     controls.appendChild(label);
     controls.appendChild(list);
-    if (isPreviewMode) {
-      controls.appendChild(
-        createGrammarPreviewBanner({
-          lockedSectionCount,
-          lockedTopicCount,
-          unlockedSectionNames,
-        })
-      );
-    }
   };
 
   renderSectionsProgressively({
@@ -5287,7 +5293,10 @@ const renderGrammarSections = () => {
         return;
       }
       container.appendChild(section);
-      sections.push(section);
+      replaceMapSectionsArray(
+        sections,
+        dedupeRenderedMapSections(container, ".grammar-group[data-section]")
+      );
     },
     onFirstSectionReady: () => {
       if (!isActiveRender()) {
@@ -5299,6 +5308,10 @@ const renderGrammarSections = () => {
       if (!isActiveRender()) {
         return;
       }
+      replaceMapSectionsArray(
+        sections,
+        dedupeRenderedMapSections(container, ".grammar-group[data-section]")
+      );
       ensureGrammarSectionProgressButtons(container);
       initializeGrammarControls();
       if (isPreviewMode) {
@@ -9584,6 +9597,7 @@ const getGrammarUiLabels = () => ({
   chooseSection: "Choose a section",
   allSections: "All sections",
   rules: "Rules",
+  rule: "Rule:",
   examples: "Examples",
   commonMistakes: "Common mistakes",
   wrong: "Wrong:",
@@ -9661,9 +9675,48 @@ const renderGrammarModal = (section, index) => {
   const explanationTranslation = shouldTranslateExplanation
     ? resolveGrammarExplanation(section, explanation, grammarTranslationLanguage)
     : "";
-  const howItWorks = buildGrammarHowItWorks(cardData);
-  const shouldCapPhrase = true;
   const grammarUi = getGrammarUiLabels();
+  const howItWorks = buildGrammarHowItWorks(cardData);
+  const rulesBullets = Array.isArray(howItWorks?.bullets)
+    ? howItWorks.bullets
+        .map((item) => String(item || "").trim())
+        .filter(Boolean)
+    : [];
+  const encodedRuleTemplate = howItWorks.template
+    ? encodeURIComponent(String(howItWorks.template || "").trim())
+    : "";
+  const renderedRuleBullets = rulesBullets
+    .map((item) => {
+      const translated = shouldTranslateExplanation
+        ? resolveGrammarExplanation(section, item, grammarTranslationLanguage)
+        : "";
+      const displayText = shouldTranslateExplanation ? translated || "..." : item;
+      const sourceAttr = shouldTranslateExplanation
+        ? ` data-grammar-rule-source="${encodeURIComponent(item)}"`
+        : "";
+      return `<li${sourceAttr}><span class="grammar-rule-prefix">${grammarUi.rule}</span> ${displayText}</li>`;
+    })
+    .join("");
+  const renderedRuleTemplate = howItWorks.template
+    ? (() => {
+        const translated = shouldTranslateExplanation
+          ? resolveGrammarExplanation(
+              section,
+              String(howItWorks.template || "").trim(),
+              grammarTranslationLanguage
+            )
+          : "";
+        const displayText = shouldTranslateExplanation
+          ? translated || "..."
+          : String(howItWorks.template || "").trim();
+        const sourceAttr =
+          shouldTranslateExplanation && encodedRuleTemplate
+            ? ` data-grammar-template-source="${encodedRuleTemplate}"`
+            : "";
+        return `<div class="grammar-template"${rtlAttr}${sourceAttr}>${displayText}</div>`;
+      })()
+    : "";
+  const shouldCapPhrase = true;
 
   const shouldUseTemplateExamples = WORLD_KEY === "english";
   const structureExamples =
@@ -9801,9 +9854,9 @@ const renderGrammarModal = (section, index) => {
       <div class="grammar-block"${rtlAttr}>
         <h4>${grammarUi.rules}</h4>
         <ul>
-          ${(howItWorks.bullets || []).map((item) => `<li>${item}</li>`).join("")}
+          ${renderedRuleBullets}
         </ul>
-        ${howItWorks.template ? `<div class="grammar-template"${rtlAttr}>${howItWorks.template}</div>` : ""}
+        ${renderedRuleTemplate}
       </div>
       <div class="grammar-block"${rtlAttr}>
         <h4>${grammarUi.examples}</h4>
@@ -9811,15 +9864,17 @@ const renderGrammarModal = (section, index) => {
       </div>
       <div class="grammar-block"${rtlAttr}>
         <h4>${grammarUi.commonMistakes}</h4>
-        <ul>
+        <div class="grammar-mistake-list">
           ${limitedMistakes
             .map(
               (mistake) =>
-                `<li><span class="mistake-wrong">${grammarUi.wrong}</span> ${mistake.wrong}</li>
-                 <li><span class="mistake-fix">${grammarUi.fix}</span> ${mistake.fix}</li>`
+                `<div class="grammar-example grammar-mistake"${isRtlWorld ? ' dir="rtl"' : ""}>
+                  <div class="grammar-mistake-line"><span class="mistake-wrong">${grammarUi.wrong}</span> ${mistake.wrong}</div>
+                  <div class="grammar-mistake-line"><span class="mistake-fix">${grammarUi.fix}</span> ${mistake.fix}</div>
+                </div>`
             )
             .join("")}
-        </ul>
+        </div>
       </div>
     </div>
   `;
@@ -9867,6 +9922,58 @@ const renderGrammarModal = (section, index) => {
       }
       liveTranslationNode.textContent = translated;
     });
+  }
+
+  if (shouldTranslateExplanation) {
+    modalBody
+      .querySelectorAll("[data-grammar-rule-source]")
+      .forEach((node) => {
+        const sourceText = decodeURIComponent(
+          String(node.getAttribute("data-grammar-rule-source") || "").trim()
+        );
+        if (!sourceText) {
+          return;
+        }
+        void requestRuntimeGrammarExplanationTranslation(
+          section,
+          sourceText,
+          grammarTranslationLanguage
+        ).then((translated) => {
+          const expectedSection = String(section || "");
+          const expectedIndex = String(index ?? "0");
+          if (
+            overlay.dataset.section !== expectedSection ||
+            overlay.dataset.index !== expectedIndex ||
+            !translated
+          ) {
+            return;
+          }
+          node.textContent = translated;
+        });
+      });
+
+    const templateNode = modalBody.querySelector("[data-grammar-template-source]");
+    const templateSource = decodeURIComponent(
+      String(templateNode?.getAttribute("data-grammar-template-source") || "").trim()
+    );
+    if (templateNode && templateSource) {
+      void requestRuntimeGrammarExplanationTranslation(
+        section,
+        templateSource,
+        grammarTranslationLanguage
+      ).then((translated) => {
+        const expectedSection = String(section || "");
+        const expectedIndex = String(index ?? "0");
+        if (
+          overlay.dataset.section !== expectedSection ||
+          overlay.dataset.index !== expectedIndex ||
+          !translated
+        ) {
+          return;
+        }
+        templateNode.textContent = translated;
+      });
+    }
   }
 };
 
@@ -10286,6 +10393,9 @@ const resolveWordTranslation = (section, englishWord, baseLanguage) => {
     }
   }
   if (!translation) {
+    translation = getRuntimePhraseTranslation(sectionKey, englishWord, langKey);
+  }
+  if (!translation) {
     if (englishWord && baseLanguage) {
       console.warn(
         `Missing translation: section="${sectionKey}", word="${englishWord}", language="${baseLanguage}"`
@@ -10321,7 +10431,22 @@ const applyWordTranslations = () => {
     applyCardRegisterBadge(card, register);
     romanizationEl.textContent = romanization;
     romanizationEl.hidden = !romanization;
-    translationEl.textContent = resolveWordTranslation(section, word, baseLanguage);
+    const resolved = resolveWordTranslation(section, word, baseLanguage);
+    translationEl.textContent = resolved;
+    if (!resolved && baseLanguage && !isWorldNativeBaseLanguage(baseLanguage)) {
+      requestRuntimePhraseTranslation(section, word, baseLanguage).then((translated) => {
+        if (!translated) {
+          return;
+        }
+        const currentWord = card.dataset.word || card.querySelector(".word")?.textContent?.trim() || "";
+        if (currentWord !== word) {
+          return;
+        }
+        if (translationEl) {
+          translationEl.textContent = translated;
+        }
+      });
+    }
   });
 };
 
@@ -11138,6 +11263,9 @@ function refreshWordsMapTranslations() {
   applySectionTitleTranslations("words");
   applySectionFilterButtonTranslations("words");
   refreshSeoPreviewTranslations("words");
+  if (typeof setupSpeechCards === "function") {
+    setupSpeechCards();
+  }
 }
 
 function refreshPhrasesMapTranslations() {
@@ -11149,6 +11277,9 @@ function refreshPhrasesMapTranslations() {
   applySectionTitleTranslations("phrases");
   applySectionFilterButtonTranslations("phrases");
   refreshSeoPreviewTranslations("phrases");
+  if (typeof setupSpeechCards === "function") {
+    setupSpeechCards();
+  }
 }
 
 function refreshGrammarMapTranslations() {
@@ -11234,7 +11365,7 @@ const requestRuntimePhraseTranslation = async (section, phraseText, baseLanguage
   const sectionKey = String(section || PHRASE_SECTION_ORDER[0]).trim();
   const langKey = String(baseLanguage || "").trim().toLowerCase();
   const phrase = String(phraseText || "").trim();
-  if (!sectionKey || !langKey || !phrase || langKey === "english") {
+  if (!sectionKey || !langKey || !phrase) {
     return "";
   }
   if (langKey === WORLD_KEY) {
@@ -11381,7 +11512,7 @@ const resolvePhraseTranslation = (section, englishPhrase, baseLanguage) => {
   if (!translation) {
     translation = PHRASE_TRANSLATIONS[sectionKey]?.[phraseKey]?.[langKey] || "";
   }
-  if (!translation && worldEntry?.intent) {
+  if (!translation) {
     translation = getRuntimePhraseTranslation(sectionKey, englishPhrase, langKey);
   }
   if (!translation) {
@@ -11424,13 +11555,7 @@ const applyPhraseTranslations = () => {
     romanizationEl.hidden = !romanization;
     const resolved = resolvePhraseTranslation(section, phrase, baseLanguage);
     translationEl.textContent = resolved;
-    if (
-      !resolved &&
-      worldEntry?.intent &&
-      baseLanguage &&
-      String(baseLanguage).trim().toLowerCase() !== "english" &&
-      !isWorldNativeBaseLanguage(baseLanguage)
-    ) {
+    if (!resolved && baseLanguage && !isWorldNativeBaseLanguage(baseLanguage)) {
       requestRuntimePhraseTranslation(section, phrase, baseLanguage).then((translated) => {
         if (!translated) {
           return;

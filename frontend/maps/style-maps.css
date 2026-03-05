@@ -462,6 +462,11 @@ html[lang="ar"] body:is(.words-page, .phrases-page, .grammar-page) main > .secti
   position: relative;
 }
 
+.seo-map-support,
+.seo-map-preview-section {
+  display: none !important;
+}
+
 .map-section-complete-btn {
   position: absolute;
   top: 14px;
@@ -776,12 +781,10 @@ body.letters-page[data-world="Japanese"] .letters-script-group-katakana {
 }
 
 /* === Words/Phrases/Grammar maps === */
-.map-page-lesson,
 .map-lesson-shell {
   margin-bottom: 16px;
 }
 
-.map-page-lesson,
 .map-lesson-shell {
   display: none !important;
 }
@@ -923,23 +926,8 @@ body.letters-page[data-world="Japanese"] .letters-script-group-katakana {
   color: #ffffff;
 }
 
-.map-lesson-run-copy {
-  margin: -2px 0 0;
-  min-height: 1.2em;
-  text-align: center;
-  color: rgba(246, 250, 255, 0.96);
-  font-size: 0.84rem;
-  font-weight: 700;
-}
-
 .map-lesson-actions {
   display: grid;
-  gap: 8px;
-}
-
-.map-lesson-run-actions {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 8px;
 }
 
@@ -970,27 +958,6 @@ body.letters-page[data-world="Japanese"] .letters-script-group-katakana {
 .map-lesson-action-primary {
   color: #06111e;
   background: linear-gradient(135deg, rgba(246, 251, 255, 0.98), rgba(169, 232, 255, 0.96));
-}
-
-.map-section-brief {
-  display: none;
-}
-
-.map-section-brief-copy {
-  display: none;
-}
-
-.map-section-brief-copy strong {
-  display: none;
-}
-
-.map-section-brief-copy p,
-.map-section-brief-meta span {
-  display: none;
-}
-
-.map-section-brief-meta {
-  display: none;
 }
 
 .words-controls {
@@ -1441,6 +1408,11 @@ body.modal-open {
   font-weight: 700;
 }
 
+.grammar-rule-prefix {
+  color: rgba(168, 222, 255, 0.92);
+  font-weight: 700;
+}
+
 .grammar-order {
   font-size: 0.85rem;
   color: rgba(179, 189, 215, 0.8);
@@ -1462,6 +1434,20 @@ body.modal-open {
   border-radius: 12px;
   background: rgba(18, 26, 44, 0.8);
   border: 1px solid rgba(120, 200, 240, 0.12);
+}
+
+.grammar-mistake-list {
+  display: grid;
+  gap: 10px;
+}
+
+.grammar-mistake {
+  display: grid;
+  gap: 8px;
+}
+
+.grammar-mistake-line {
+  line-height: 1.45;
 }
 
 .grammar-example-variant {
@@ -2040,6 +2026,7 @@ body:is(.letters-page, .words-page, .phrases-page, .grammar-page) main {
 }
 
 .grammar-preview-banner {
+  display: none !important;
   margin-top: 12px;
   border: 1px solid rgba(255, 227, 166, 0.46);
   border-radius: 14px;
@@ -2494,10 +2481,10 @@ html[lang="ar"] body.phrases-page .phrase-card .word-audio {
   box-shadow: 0 0 0 2px rgba(112, 223, 255, 0.28);
 }
 
-.word-card.is-quick-current:not(.is-quick-revealed) .word-translation,
-.word-card.is-quick-current:not(.is-quick-revealed) .word-romanization,
-.phrase-card.is-quick-current:not(.is-quick-revealed) .phrase-translation,
-.phrase-card.is-quick-current:not(.is-quick-revealed) .phrase-romanization {
+.word-card.is-quick-current .word-translation,
+.word-card.is-quick-current .word-romanization,
+.phrase-card.is-quick-current .phrase-translation,
+.phrase-card.is-quick-current .phrase-romanization {
   opacity: 0;
   transform: translateY(4px);
   filter: blur(8px);
@@ -2748,10 +2735,6 @@ html[lang="ar"] body.phrases-page .phrase-card .word-audio {
 
   .map-lesson-actions {
     grid-template-columns: 1fr;
-  }
-
-  .map-lesson-run-actions {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   body.letters-page[data-world="Japanese"] .letters-grid {

@@ -1436,7 +1436,49 @@ const normalizeDateKey = (value) => {
   return new Date(parsed).toISOString().slice(0, 10);
 };
 
-const getUtcDateKeyFromIso = (isoValue) => normalizeDateKey(isoValue || new Date().toISOString());
+const normalizeIanaTimeZone = (value) => {
+  const candidate = String(value || "").trim();
+  if (!candidate) {
+    return "";
+  }
+  try {
+    // Validate by constructing a formatter once.
+    new Intl.DateTimeFormat("en-US", { timeZone: candidate });
+    return candidate;
+  } catch {
+    return "";
+  }
+};
+
+const STREAK_DAY_TIMEZONE = (() => {
+  const configured =
+    normalizeIanaTimeZone(process.env.STREAK_DAY_TIMEZONE) ||
+    normalizeIanaTimeZone(process.env.APP_TIMEZONE) ||
+    normalizeIanaTimeZone(process.env.TZ);
+  return configured || "UTC";
+})();
+
+const getDateKeyFromIsoInTimeZone = (isoValue, timeZone = STREAK_DAY_TIMEZONE) => {
+  const parsedMs = Date.parse(String(isoValue || ""));
+  const sourceDate = Number.isFinite(parsedMs) ? new Date(parsedMs) : new Date();
+  const resolvedTimeZone = normalizeIanaTimeZone(timeZone) || STREAK_DAY_TIMEZONE;
+  try {
+    const formatter = new Intl.DateTimeFormat("en-CA", {
+      timeZone: resolvedTimeZone,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+    const parts = formatter.formatToParts(sourceDate);
+    const year = String(parts.find((part) => part.type === "year")?.value || "").trim();
+    const month = String(parts.find((part) => part.type === "month")?.value || "").trim();
+    const day = String(parts.find((part) => part.type === "day")?.value || "").trim();
+    const dateKey = `${year}-${month}-${day}`;
+    return normalizeDateKey(dateKey) || sourceDate.toISOString().slice(0, 10);
+  } catch {
+    return sourceDate.toISOString().slice(0, 10);
+  }
+};
 
 const daysBetweenUtcDateKeys = (fromDateKey, toDateKey) => {
   const from = normalizeDateKey(fromDateKey);
@@ -4682,9 +4724,11 @@ const awardBadge = (gamification, badgeId, nowIso) => {
   return true;
 };
 
-const updateStreakForDate = (gamification, dateKey) => {
+const updateStreakForDate = (gamification, dateKey, { previousLoginDateKey = "" } = {}) => {
   const last = normalizeDateKey(gamification.lastActiveDate);
-  if (last === dateKey) {
+  const dailyDate = normalizeDateKey(gamification?.daily?.date);
+  const previousLoginDate = normalizeDateKey(previousLoginDateKey);
+  if (last === dateKey || dailyDate === dateKey || previousLoginDate === dateKey) {
     return;
   }
   gamification.currentStreak = Math.max(0, Number(gamification.currentStreak || 0)) + 1;
@@ -4692,7 +4736,7 @@ const updateStreakForDate = (gamification, dateKey) => {
   gamification.lastActiveDate = dateKey;
 };
 
-const ensureGamificationDateState = (progress, dateKey) => {
+const ensureGamificationDateState = (progress, dateKey, options = {}) => {
   progress.gamification = normalizeGamificationState(progress.gamification, progress.totals.xp);
   const gamification = progress.gamification;
   if (gamification.daily.date !== dateKey) {
@@ -4713,17 +4757,22 @@ const ensureGamificationDateState = (progress, dateKey) => {
       allCompleted: false,
     };
   }
-  updateStreakForDate(gamification, dateKey);
+  updateStreakForDate(gamification, dateKey, options);
   return gamification;
 };
 
-const applyLoginDayStreak = (userRecord, nowIso) => {
+const applyLoginDayStreak = (userRecord, nowIso, { previousLoginAt = null } = {}) => {
   if (!userRecord) {
     return;
   }
-  const dateKey = getUtcDateKeyFromIso(nowIso);
+  const dateKey = getDateKeyFromIsoInTimeZone(nowIso, STREAK_DAY_TIMEZONE);
+  const previousLoginDateKey = String(previousLoginAt || "").trim()
+    ? getDateKeyFromIsoInTimeZone(previousLoginAt, STREAK_DAY_TIMEZONE)
+    : "";
   const normalizedProgress = normalizeProgress(userRecord.progress);
-  ensureGamificationDateState(normalizedProgress, dateKey);
+  ensureGamificationDateState(normalizedProgress, dateKey, {
+    previousLoginDateKey,
+  });
   userRecord.progress = normalizedProgress;
 };
 
@@ -5203,7 +5252,7 @@ const trackProgressEventForUser = (userRecord, payload) => {
     .toLowerCase();
   const isPracticeQuestToggle = questToggleMode === "practice";
   const now = new Date().toISOString();
-  const dateKey = getUtcDateKeyFromIso(now);
+  const dateKey = getDateKeyFromIsoInTimeZone(now, STREAK_DAY_TIMEZONE);
 
   userRecord.progress = normalizeProgress(userRecord.progress);
   const progress = userRecord.progress;
@@ -5616,6 +5665,7 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
       }
     }
     let createdNewGoogleUser = false;
+    let previousLoginAt = null;
     if (
       userRecord &&
       rejectBlockedAccess({
@@ -5681,6 +5731,7 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
       authStore.emailIndex[email] = userId;
       createdNewGoogleUser = true;
     } else {
+      previousLoginAt = String(userRecord.lastLoginAt || "").trim() || null;
       userRecord.data = normalizeUserData(userRecord.data);
       if (!isPlainObject(userRecord.data.profile)) {
         userRecord.data.profile = {};
@@ -5745,7 +5796,7 @@ app.get("/api/auth/google/callback", authGoogleLimiter, async (req, res) => {
     }
 
     markAuthStoreDirty();
-    applyLoginDayStreak(userRecord, nowIso);
+    applyLoginDayStreak(userRecord, nowIso, { previousLoginAt });
     const sessionToken = createSessionForUser(userRecord.id, req);
     setAuthSessionCookie(req, res, sessionToken);
     return res.redirect(302, sanitizeReturnToPath(stateData.returnTo));
@@ -6557,9 +6608,10 @@ app.post("/api/auth/login", authLoginLimiter, async (req, res) => {
       });
     }
 
+    const previousLoginAt = String(userRecord.lastLoginAt || "").trim() || null;
     userRecord.lastLoginAt = new Date().toISOString();
     userRecord.updatedAt = userRecord.lastLoginAt;
-    applyLoginDayStreak(userRecord, userRecord.lastLoginAt);
+    applyLoginDayStreak(userRecord, userRecord.lastLoginAt, { previousLoginAt });
     markAuthStoreDirty();
     const sessionToken = createSessionForUser(userRecord.id, req);
     setAuthSessionCookie(req, res, sessionToken);

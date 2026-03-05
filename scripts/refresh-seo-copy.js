@@ -5,8 +5,8 @@ const vm = require("vm");
 const ROOT = path.resolve(__dirname, "..");
 const FRONTEND = path.join(ROOT, "frontend");
 const MAPS_BUNDLE = path.join(FRONTEND, "maps", "app-maps.js");
-const MAP_STYLE_ASSET_VERSION = "20260414";
-const APP_ASSET_VERSION = "20260417";
+const MAP_STYLE_ASSET_VERSION = "20260417";
+const APP_ASSET_VERSION = "20260420";
 
 const LANGUAGES = [
   {
@@ -731,7 +731,6 @@ const replaceWorldPage = (config) => {
 const buildMapContent = (config, map) => {
   if (map === "words") {
     const previewCards = buildWordPreviewCards(config);
-    const staticSections = buildStaticWordSections(config);
     return `      <h1 class="visually-hidden">Learn ${config.language} Vocabulary Online</h1>
       <!-- SEO landing content -->
       <section class="section reveal seo-map-hero">
@@ -759,14 +758,11 @@ ${renderVocabPreviewCards(previewCards, "words")}
         </div>
       </section>
       <div class="words-controls" id="wordsControls"></div>
-      <div id="wordsSections">
-${renderStaticWordSections(staticSections)}
-      </div>`;
+      <div id="wordsSections"></div>`;
   }
 
   if (map === "phrases") {
     const previewCards = buildPhrasePreviewCards(config);
-    const staticSections = buildStaticPhraseSections(config);
     return `      <h1 class="visually-hidden">Learn ${config.language} Phrases Online</h1>
       <!-- SEO landing content -->
       <section class="section reveal seo-map-hero">
@@ -794,13 +790,10 @@ ${renderVocabPreviewCards(previewCards, "phrases")}
         </div>
       </section>
       <div class="words-controls" id="phrasesControls"></div>
-      <div id="phrasesSections">
-${renderStaticPhraseSections(staticSections)}
-      </div>`;
+      <div id="phrasesSections"></div>`;
   }
 
   const previewCards = buildGrammarPreviewCards(config);
-  const staticSections = buildStaticGrammarSections(config);
   return `      <h1 class="visually-hidden">Learn ${config.language} Grammar Online</h1>
       <!-- SEO landing content -->
       <section class="section reveal seo-map-hero">
@@ -828,9 +821,7 @@ ${renderGrammarPreviewCards(previewCards)}
         </div>
       </section>
       <div class="words-controls" id="grammarControls"></div>
-      <div id="grammarSections">
-${renderStaticGrammarSections(staticSections)}
-      </div>`;
+      <div id="grammarSections"></div>`;
 };
 
 const replaceMapPage = (config, map, fileName, title, description, socialDescription, hiddenH1) => {

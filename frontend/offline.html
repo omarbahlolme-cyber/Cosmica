@@ -17,6 +17,7 @@
     <meta name="apple-mobile-web-app-title" content="Cosmica" />
     <link rel="manifest" href="/app.webmanifest" />
     <link rel="apple-touch-icon" sizes="180x180" href="/pwa/apple-touch-icon.png" />
+    <link rel="preload" as="style" href="style.css?v=20260413" />
     <style>
       :root {
         color-scheme: dark;
@@ -75,6 +76,17 @@
         margin-top: 22px;
       }
 
+      .nav-links {
+        margin-bottom: 18px;
+      }
+
+      .nav-links a {
+        color: var(--accent);
+        background: transparent;
+        padding: 0;
+        min-height: auto;
+      }
+
       a,
       button {
         min-height: 48px;
@@ -100,6 +112,9 @@
   </head>
   <body>
     <main>
+      <nav class="nav-links" aria-label="Offline navigation">
+        <a href="/">Cosmica Home</a>
+      </nav>
       <h1>You are offline</h1>
       <p>Cosmica could not reach the network for this page.</p>
       <p>Reconnect and retry, or jump back to the cached home page if it is already available.</p>
@@ -113,5 +128,6 @@
         window.location.reload();
       });
     </script>
+    <script src="app.js?v=20260420" defer></script>
   </body>
 </html>

@@ -79,6 +79,31 @@ const ENGLISH_LANGUAGE_NAMES = {
 };
 
 const pronunciationPageFile = (key) => `${key}-pronunciation-guide.html`;
+const travelPhrasesPageFile = (key) => `${key}-travel-phrases.html`;
+const localizedPronunciationPageFile = ({ languageKey = "", htmlLang = "" } = {}) => {
+  const key = String(languageKey || "").trim().toLowerCase();
+  const langRaw = String(htmlLang || "").trim().toLowerCase();
+  if (!key || !langRaw) {
+    return "";
+  }
+  const langSlug = langRaw.split("-")[0];
+  if (!langSlug) {
+    return "";
+  }
+  return `${key}-pronunciation-${langSlug}.html`;
+};
+const localizedTravelPhrasesPageFile = ({ languageKey = "", htmlLang = "" } = {}) => {
+  const key = String(languageKey || "").trim().toLowerCase();
+  const langRaw = String(htmlLang || "").trim().toLowerCase();
+  if (!key || !langRaw) {
+    return "";
+  }
+  const langSlug = langRaw.split("-")[0];
+  if (!langSlug) {
+    return "";
+  }
+  return `${key}-travel-phrases-${langSlug}.html`;
+};
 
 const pageShell = ({
   htmlLang,
@@ -253,10 +278,90 @@ ${buildGuidePager(
     title: `${ENGLISH_LANGUAGE_NAMES[config.languageKey]} pronunciation guide`,
   },
   {
-    href: config.worldFile,
-    title: config.backLabel,
+    href: localizedPronunciationPageFile(config),
+    title: `${ENGLISH_LANGUAGE_NAMES[config.languageKey]} pronunciation (${config.htmlLang})`,
   }
 )}`;
+
+const localizedPronunciationTitle = (config) =>
+  `${String(config.h1 || "").trim()} | Pronunciation Focus | Cosmica`;
+
+const localizedPronunciationDescription = (config) =>
+  `${String(config.description || "").trim()} Focus on pronunciation, listening clarity, and speaking rhythm with guided audio practice.`;
+
+const buildPronunciationContent = (config) => {
+  const cards = Array.isArray(config.lessonCards)
+    ? config.lessonCards.filter(Boolean).slice(0, 4)
+    : [];
+  return `      <section class="section world-hero" id="guide">
+        <div class="section-title">
+          <div class="eyebrow">${config.eyebrow}</div>
+          <h1>${config.h1}</h1>
+          <p class="lede">
+            ${config.lede}
+          </p>
+        </div>
+      </section>
+      <section class="section reveal">
+        <div class="section-title">
+          <h2>${config.lessonsTitle}</h2>
+          <p>Pronunciation focus with audio, repeat practice, and clearer speaking rhythm.</p>
+        </div>
+        <div class="steps">
+${staticCardsHtml(cards)}
+        </div>
+      </section>
+${buildGuidePager(
+  {
+    href: config.file,
+    title: config.h1,
+  },
+  {
+    href: localizedTravelPhrasesPageFile(config),
+    title: `${ENGLISH_LANGUAGE_NAMES[config.languageKey]} travel phrases (${config.htmlLang})`,
+  }
+)}`;
+};
+
+const localizedTravelPhrasesTitle = (config) =>
+  `${String(config.h1 || "").trim()} | Travel Phrases | Cosmica`;
+
+const localizedTravelPhrasesDescription = (config) =>
+  `${String(config.description || "").trim()} Focus on practical travel phrases, short speaking patterns, and fast everyday recall.`;
+
+const buildTravelPhrasesContent = (config) => {
+  const cards = Array.isArray(config.lessonCards)
+    ? config.lessonCards.filter(Boolean).slice(0, 4)
+    : [];
+  return `      <section class="section world-hero" id="guide">
+        <div class="section-title">
+          <div class="eyebrow">${config.eyebrow}</div>
+          <h1>${config.h1}</h1>
+          <p class="lede">
+            ${config.lede}
+          </p>
+        </div>
+      </section>
+      <section class="section reveal">
+        <div class="section-title">
+          <h2>${config.lessonsTitle}</h2>
+          <p>Travel phrase focus for greetings, directions, transport, and daily interactions.</p>
+        </div>
+        <div class="steps">
+${staticCardsHtml(cards)}
+        </div>
+      </section>
+${buildGuidePager(
+  {
+    href: localizedPronunciationPageFile(config),
+    title: `${ENGLISH_LANGUAGE_NAMES[config.languageKey]} pronunciation (${config.htmlLang})`,
+  },
+  {
+    href: travelPhrasesPageFile(config.languageKey),
+    title: `${ENGLISH_LANGUAGE_NAMES[config.languageKey]} travel phrases guide`,
+  }
+)}`;
+};
 
 const PAGES = [
   {
@@ -557,6 +662,98 @@ for (const config of PAGES) {
       ].join("\n"),
     })
   );
+
+  const localizedPronunciationFile = localizedPronunciationPageFile(config);
+  const pronunciationBreadcrumbs = breadcrumbSchema([
+    { name: "Cosmica", url: `${SITE_ORIGIN}/` },
+    { name: config.h1, url: pageUrl(config.file) },
+    {
+      name: `${ENGLISH_LANGUAGE_NAMES[config.languageKey]} pronunciation`,
+      url: pageUrl(localizedPronunciationFile),
+    },
+  ]);
+  const pronunciationAlternateLinks = buildAlternateLinks([
+    { lang: config.htmlLang, url: pageUrl(localizedPronunciationFile) },
+    { lang: "en", url: pageUrl(pronunciationPageFile(config.languageKey)) },
+    { lang: "x-default", url: pageUrl(pronunciationPageFile(config.languageKey)) },
+  ]);
+
+  writeFile(
+    localizedPronunciationFile,
+    pageShell({
+      htmlLang: config.htmlLang,
+      dir: config.dir,
+      title: localizedPronunciationTitle(config),
+      description: localizedPronunciationDescription(config),
+      canonicalPath: localizedPronunciationFile,
+      brandSub: `${config.brandSub} - Pronunciation`,
+      backHref: config.file,
+      backLabel: config.h1,
+      footerText: config.footerText,
+      content: buildPronunciationContent(config),
+      alternateLinks: pronunciationAlternateLinks,
+      extraStructuredData: [
+        jsonLdScript(
+          {
+            ...courseSchema({
+              ...config,
+              file: localizedPronunciationFile,
+              h1: `${config.h1} - Pronunciation`,
+              description: localizedPronunciationDescription(config),
+            }),
+          },
+          "Course structured data"
+        ),
+        jsonLdScript(pronunciationBreadcrumbs, "Breadcrumb structured data"),
+      ].join("\n"),
+    })
+  );
+
+  const localizedTravelPhrasesFile = localizedTravelPhrasesPageFile(config);
+  const travelPhrasesBreadcrumbs = breadcrumbSchema([
+    { name: "Cosmica", url: `${SITE_ORIGIN}/` },
+    { name: config.h1, url: pageUrl(config.file) },
+    {
+      name: `${ENGLISH_LANGUAGE_NAMES[config.languageKey]} travel phrases`,
+      url: pageUrl(localizedTravelPhrasesFile),
+    },
+  ]);
+  const travelPhrasesAlternateLinks = buildAlternateLinks([
+    { lang: config.htmlLang, url: pageUrl(localizedTravelPhrasesFile) },
+    { lang: "en", url: pageUrl(travelPhrasesPageFile(config.languageKey)) },
+    { lang: "x-default", url: pageUrl(travelPhrasesPageFile(config.languageKey)) },
+  ]);
+
+  writeFile(
+    localizedTravelPhrasesFile,
+    pageShell({
+      htmlLang: config.htmlLang,
+      dir: config.dir,
+      title: localizedTravelPhrasesTitle(config),
+      description: localizedTravelPhrasesDescription(config),
+      canonicalPath: localizedTravelPhrasesFile,
+      brandSub: `${config.brandSub} - Travel`,
+      backHref: localizedPronunciationFile,
+      backLabel: `${ENGLISH_LANGUAGE_NAMES[config.languageKey]} pronunciation`,
+      footerText: config.footerText,
+      content: buildTravelPhrasesContent(config),
+      alternateLinks: travelPhrasesAlternateLinks,
+      extraStructuredData: [
+        jsonLdScript(
+          {
+            ...courseSchema({
+              ...config,
+              file: localizedTravelPhrasesFile,
+              h1: `${config.h1} - Travel Phrases`,
+              description: localizedTravelPhrasesDescription(config),
+            }),
+          },
+          "Course structured data"
+        ),
+        jsonLdScript(travelPhrasesBreadcrumbs, "Breadcrumb structured data"),
+      ].join("\n"),
+    })
+  );
 }
 
-console.log(`Generated ${PAGES.length} localized SEO landing pages.`);
+console.log(`Generated ${PAGES.length * 3} localized SEO landing pages.`);

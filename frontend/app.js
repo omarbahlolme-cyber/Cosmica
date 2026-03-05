@@ -6268,6 +6268,8 @@ let mimiBubbleFollowUserOverride = false;
 let mimiBubbleFollowRaf = 0;
 let mimiBubbleFollowPendingOptions = null;
 let mimiBubbleFollowStopTimer;
+let mimiBubbleRevealTimer;
+let mimiBubbleRevealRaf = 0;
 const MIMI_BUBBLE_SCROLL_ABORT_KEYS = new Set([
   "ArrowDown",
   "ArrowUp",
@@ -6493,6 +6495,7 @@ const speakLine = (text, mood = "happy", options = {}) => {
   if (followBubble) {
     const estimatedFollowDurationMs = Math.min(32000, Math.max(9000, line.length * 70));
     startMimiBubbleFollowSession({ durationMs: estimatedFollowDurationMs });
+    triggerMimiReplyRevealEffect();
     queueMimiBubbleFollow({
       behavior: prefersReducedMotion ? "auto" : "smooth",
       force: true,
@@ -6615,6 +6618,25 @@ const stopMimiBubbleFollowSession = () => {
   }
 };
 
+const triggerMimiReplyRevealEffect = () => {
+  if (!speechBubble || prefersReducedMotion) {
+    return;
+  }
+  window.clearTimeout(mimiBubbleRevealTimer);
+  if (mimiBubbleRevealRaf) {
+    window.cancelAnimationFrame(mimiBubbleRevealRaf);
+    mimiBubbleRevealRaf = 0;
+  }
+  speechBubble.classList.remove("is-reply-reveal");
+  mimiBubbleRevealRaf = window.requestAnimationFrame(() => {
+    mimiBubbleRevealRaf = 0;
+    speechBubble.classList.add("is-reply-reveal");
+    mimiBubbleRevealTimer = window.setTimeout(() => {
+      speechBubble.classList.remove("is-reply-reveal");
+    }, 760);
+  });
+};
+
 const stopMimiBubbleFollowSoon = (delayMs = 420) => {
   window.clearTimeout(mimiBubbleFollowStopTimer);
   mimiBubbleFollowStopTimer = window.setTimeout(() => {
@@ -6658,8 +6680,17 @@ const scrollMimiBubbleIntoView = ({ behavior = "smooth", force = false } = {}) =
   }
   const rect = speechBubble.getBoundingClientRect();
   const targetTop = Math.max(16, viewportHeight * 0.1);
-  const delta = rect.top - targetTop;
-  if (!force && Math.abs(delta) < 18) {
+  const targetBottom = Math.max(targetTop + 150, viewportHeight * 0.74);
+  const targetWindow = targetBottom - targetTop;
+  let delta = 0;
+  if (rect.height >= targetWindow) {
+    delta = rect.top - targetTop;
+  } else if (rect.top < targetTop) {
+    delta = rect.top - targetTop;
+  } else if (rect.bottom > targetBottom) {
+    delta = rect.bottom - targetBottom;
+  }
+  if (!force && Math.abs(delta) < 12) {
     return;
   }
   const nextTop = Math.max(0, window.scrollY + delta);
@@ -6692,6 +6723,16 @@ const queueMimiBubbleFollow = ({ behavior = "auto", force = false } = {}) => {
   });
 };
 
+if (speechBubble && typeof ResizeObserver !== "undefined") {
+  const mimiBubbleResizeObserver = new ResizeObserver(() => {
+    if (!isMimiBubbleFollowActive()) {
+      return;
+    }
+    queueMimiBubbleFollow({ behavior: "auto" });
+  });
+  mimiBubbleResizeObserver.observe(speechBubble);
+}
+
 // Stop auto-follow immediately if user starts their own navigation input.
 window.addEventListener("wheel", cancelMimiBubbleFollowOnUserScroll, { passive: true });
 window.addEventListener("touchmove", cancelMimiBubbleFollowOnUserScroll, { passive: true });
@@ -6704,6 +6745,18 @@ window.addEventListener("keydown", (event) => {
   }
   cancelMimiBubbleFollowOnUserScroll();
 });
+if (window.visualViewport && typeof window.visualViewport.addEventListener === "function") {
+  window.visualViewport.addEventListener(
+    "resize",
+    () => {
+      if (!isMimiBubbleFollowActive()) {
+        return;
+      }
+      queueMimiBubbleFollow({ behavior: "auto", force: true });
+    },
+    { passive: true }
+  );
+}
 
 const revealMimiBubbleOnMobile = () => {
   if (!speechBubble) {
@@ -6713,6 +6766,19 @@ const revealMimiBubbleOnMobile = () => {
   scrollMimiBubbleIntoView({
     behavior: shouldSmooth ? "smooth" : "auto",
     force: false,
+  });
+};
+
+const primeMimiBubbleFollowFromSend = () => {
+  if (!speechBubble) {
+    return;
+  }
+  // Start following as soon as user sends the message (before reply arrives),
+  // then the reveal/typing phase continues with the same follow session.
+  startMimiBubbleFollowSession({ durationMs: 22000 });
+  queueMimiBubbleFollow({
+    behavior: prefersReducedMotion ? "auto" : "smooth",
+    force: true,
   });
 };
 
@@ -6840,6 +6906,12 @@ const resetMimiConversationState = ({ resetPromptText = false, clearStorage = tr
   if (speechBubble) {
     speechBubble.classList.remove("speaking");
     speechBubble.classList.remove("is-replaying");
+    speechBubble.classList.remove("is-reply-reveal");
+  }
+  window.clearTimeout(mimiBubbleRevealTimer);
+  if (mimiBubbleRevealRaf) {
+    window.cancelAnimationFrame(mimiBubbleRevealRaf);
+    mimiBubbleRevealRaf = 0;
   }
   const guideSection = document.getElementById("guide");
   if (guideSection) {
@@ -6969,7 +7041,6 @@ const getApiEndpointCandidates = () => {
 
   // Local/mobile dev fallback: when UI runs on a non-3000 dev port, API usually runs on :3000.
   if (port && port !== "3000" && isLocalDevHost(hostname)) {
-    addCandidate(`${protocol}//${hostname}:3000${endpoint}`);
     addCandidate(endpoint);
     return candidates;
   }
@@ -6979,10 +7050,10 @@ const getApiEndpointCandidates = () => {
   return candidates;
 };
 
-const LETTERS_TITLE_TRANSLATION_CACHE_KEY = "cosmicaLettersTitleTranslationCache:v1";
+const LETTERS_TITLE_TRANSLATION_CACHE_KEY = "cosmicaLettersTitleTranslationCache:v2";
 let lettersTitleTranslationCache = null;
 const LETTERS_TITLE_ENGLISH_SOURCES = Object.freeze({
-  english: "English alphabet",
+  english: "Letters A-Z",
   french: "French alphabet",
   spanish: "Spanish alphabet",
   arabic: "Arabic letters",
@@ -6996,6 +7067,97 @@ const LETTERS_TITLE_ENGLISH_SOURCES = Object.freeze({
   swedish: "Swedish alphabet",
 });
 
+const LETTERS_HELPER_ENGLISH_SOURCE = "Tap a letter to hear a clear pronunciation.";
+
+const ENGLISH_LETTERS_BASE_TITLE_FALLBACKS = Object.freeze({
+  albanian: "Shkronjat A-Z",
+  arabic: "الحروف A-Z",
+  bulgarian: "Букви A-Z",
+  chinese: "字母 A-Z",
+  croatian: "Slova A-Z",
+  czech: "Písmena A-Z",
+  dutch: "Letters A-Z",
+  finnish: "Kirjaimet A-Z",
+  german: "Buchstaben A-Z",
+  greek: "Γράμματα A-Z",
+  hebrew: "אותיות A-Z",
+  hindi: "अक्षर A-Z",
+  indonesian: "Huruf A-Z",
+  italian: "Lettere A-Z",
+  japanese: "文字 A-Z",
+  korean: "문자 A-Z",
+  kurdish: "Tîpên A-Z",
+  malaysian: "Huruf A-Z",
+  norwegian: "Bokstaver A-Z",
+  persian: "حروف A-Z",
+  polish: "Litery A-Z",
+  romanian: "Literele A-Z",
+  russian: "Буквы A-Z",
+  somali: "Xarfaha A-Z",
+  spanish: "Letras A-Z",
+  swedish: "Bokstäver A-Z",
+  tagalog: "Mga Titik A-Z",
+  thai: "ตัวอักษร A-Z",
+  turkish: "Harfler A-Z",
+  ukrainian: "Літери A-Z",
+  urdu: "حروف A-Z",
+  uzbek: "Harflar A-Z",
+  vietnamese: "Chữ cái A-Z",
+});
+
+const ENGLISH_LETTERS_BASE_HELPER_FALLBACKS = Object.freeze({
+  albanian: "Prek një shkronjë për të dëgjuar një shqiptim të qartë.",
+  arabic: "اضغط على حرف لسماع نطق واضح.",
+  bulgarian: "Докоснете буква, за да чуете ясно произношение.",
+  chinese: "点击一个字母即可听到清晰发音。",
+  croatian: "Dodirnite slovo da biste čuli jasan izgovor.",
+  czech: "Klepněte na písmeno a uslyšíte jasnou výslovnost.",
+  dutch: "Tik op een letter om een duidelijke uitspraak te horen.",
+  finnish: "Napauta kirjainta kuullaksesi selkeän ääntämisen.",
+  german: "Tippe auf einen Buchstaben, um eine klare Aussprache zu hören.",
+  greek: "Πατήστε ένα γράμμα για να ακούσετε καθαρή προφορά.",
+  hebrew: "הקש על אות כדי לשמוע הגייה ברורה.",
+  hindi: "स्पष्ट उच्चारण सुनने के लिए किसी अक्षर पर टैप करें।",
+  indonesian: "Ketuk huruf untuk mendengar pelafalan yang jelas.",
+  italian: "Tocca una lettera per ascoltare una pronuncia chiara.",
+  japanese: "文字をタップすると、はっきりした発音を聞けます。",
+  korean: "문자를 탭하면 또렷한 발음을 들을 수 있습니다.",
+  kurdish: "Li ser tîpekê bitikîne da ku dengdaneke zelal bibihîze.",
+  malaysian: "Ketik huruf untuk mendengar sebutan yang jelas.",
+  norwegian: "Trykk på en bokstav for å høre tydelig uttale.",
+  persian: "برای شنیدن تلفظ واضح، روی یک حرف بزنید.",
+  polish: "Dotknij litery, aby usłyszeć wyraźną wymowę.",
+  romanian: "Atinge o literă pentru a auzi o pronunție clară.",
+  russian: "Нажмите на букву, чтобы услышать четкое произношение.",
+  somali: "Taabo xaraf si aad u maqasho ku dhawaaq cad.",
+  spanish: "Toca una letra para escuchar una pronunciación clara.",
+  swedish: "Tryck på en bokstav för att höra ett tydligt uttal.",
+  tagalog: "I-tap ang titik para marinig ang malinaw na pagbigkas.",
+  thai: "แตะตัวอักษรเพื่อฟังการออกเสียงที่ชัดเจน",
+  turkish: "Net bir telaffuz duymak için bir harfe dokunun.",
+  ukrainian: "Торкніться літери, щоб почути чітку вимову.",
+  urdu: "واضح تلفظ سننے کے لیے کسی حرف پر ٹیپ کریں۔",
+  uzbek: "Aniq talaffuzni eshitish uchun harfni bosing.",
+  vietnamese: "Chạm vào một chữ cái để nghe phát âm rõ ràng.",
+});
+
+const resolveEnglishLettersBaseTitleFallback = (baseLanguage) =>
+  String(
+    ENGLISH_LETTERS_BASE_TITLE_FALLBACKS[String(baseLanguage || "").trim().toLowerCase()] || ""
+  ).trim();
+
+const resolveEnglishLettersBaseHelperFallback = (baseLanguage) =>
+  String(
+    ENGLISH_LETTERS_BASE_HELPER_FALLBACKS[String(baseLanguage || "").trim().toLowerCase()] || ""
+  ).trim();
+
+const LETTERS_LEVEL_NOTE_ENGLISH_SOURCES = Object.freeze({
+  arabic: Object.freeze([
+    "Start with the core letters first in a clear sequence from alif through zay.",
+    "Continue with the remaining letters, then practice their word forms later.",
+  ]),
+});
+
 const resolveLettersTitleEnglishSource = (nativeTitle) => {
   const mapped = String(LETTERS_TITLE_ENGLISH_SOURCES[WORLD_KEY] || "").trim();
   if (mapped) {
@@ -7005,6 +7167,8 @@ const resolveLettersTitleEnglishSource = (nativeTitle) => {
     .replace(/\s+/g, " ")
     .trim();
 };
+
+const resolveLettersHelperEnglishSource = () => LETTERS_HELPER_ENGLISH_SOURCE;
 
 const readLettersTitleTranslationCache = () => {
   if (lettersTitleTranslationCache instanceof Map) {
@@ -7150,6 +7314,23 @@ const buildLettersLevelEnglishFallback = (sourceText, index) => {
   return raw;
 };
 
+const resolveLettersLevelHeadingEnglishSource = (sourceText, index) =>
+  String(buildLettersLevelEnglishFallback(sourceText, index) || sourceText || "")
+    .replace(/â€”/g, "-")
+    .replace(/\s+/g, " ")
+    .trim();
+
+const resolveLettersLevelNoteEnglishSource = (sourceText, index) => {
+  const mapped = LETTERS_LEVEL_NOTE_ENGLISH_SOURCES[WORLD_KEY];
+  const mappedText = Array.isArray(mapped) ? String(mapped[index] || "").trim() : "";
+  if (mappedText) {
+    return mappedText;
+  }
+  return String(sourceText || "")
+    .replace(/\s+/g, " ")
+    .trim();
+};
+
 const syncLettersBaseLanguageDataset = () => {
   if (!document.body.classList.contains("letters-page")) {
     return;
@@ -7175,7 +7356,7 @@ const setupLettersLevelTranslations = async () => {
 
   const translateNode = async (
     node,
-    { sourceDatasetKey, cachePrefix, englishFallback = "" } = {}
+    { sourceDatasetKey, cachePrefix, englishSource = "" } = {}
   ) => {
     if (!node) {
       return;
@@ -7189,27 +7370,33 @@ const setupLettersLevelTranslations = async () => {
       return;
     }
     node.dataset[sourceDatasetKey] = sourceText;
+    const translationSource =
+      String(englishSource || sourceText || "")
+        .replace(/\s+/g, " ")
+        .trim() || sourceText;
 
     if (targetLanguage === WORLD_KEY) {
       node.textContent = sourceText;
       return;
     }
 
-    const cacheKey = `${cachePrefix}::${WORLD_KEY}::${targetLanguage}::${sourceText.toLowerCase()}`;
+    const cacheKey = `${cachePrefix}::${WORLD_KEY}::${targetLanguage}::${translationSource.toLowerCase()}`;
     const cached = readLettersTextTranslationFromCache(cacheKey);
     if (cached && !isInvalidLettersHelperTranslation(cached)) {
       node.textContent = cached;
       return;
     }
 
-    if (targetLanguage === "english" && englishFallback) {
-      node.textContent = englishFallback;
+    if (targetLanguage === "english" && translationSource) {
+      node.textContent = translationSource;
+      writeLettersTextTranslationToCache(cacheKey, translationSource);
+      return;
     } else {
       node.textContent = sourceText;
     }
 
     const translated = String(
-      (await requestLettersTitleTranslation(sourceText, targetLanguage)) || ""
+      (await requestLettersTitleTranslation(translationSource, targetLanguage)) || ""
     ).trim();
     if (!translated || isInvalidLettersHelperTranslation(translated)) {
       return;
@@ -7224,16 +7411,17 @@ const setupLettersLevelTranslations = async () => {
       translateNode(node, {
         sourceDatasetKey: "nativeHeadingSource",
         cachePrefix: "level-heading",
-        englishFallback: buildLettersLevelEnglishFallback(node.textContent, index),
+        englishSource: resolveLettersLevelHeadingEnglishSource(node.textContent, index),
       })
     )
   );
 
   await Promise.all(
-    noteNodes.map((node) =>
+    noteNodes.map((node, index) =>
       translateNode(node, {
         sourceDatasetKey: "nativeNoteSource",
         cachePrefix: "level-note",
+        englishSource: resolveLettersLevelNoteEnglishSource(node.textContent, index),
       })
     )
   );
@@ -7270,6 +7458,14 @@ const setupLettersTitleTranslation = async () => {
     return;
   }
 
+  if (WORLD_KEY === "english") {
+    const staticLocalizedTitle = resolveEnglishLettersBaseTitleFallback(selectedBaseLanguage);
+    if (staticLocalizedTitle) {
+      lettersHeading.textContent = staticLocalizedTitle;
+      return;
+    }
+  }
+
   const cache = readLettersTitleTranslationCache();
   const cacheKey = `${WORLD_KEY}::${selectedBaseLanguage}::${englishSourceTitle.toLowerCase()}`;
   const cached = cache.get(cacheKey);
@@ -7298,6 +7494,8 @@ const setupLettersTitleTranslation = async () => {
   persistLettersTitleTranslationCache();
   lettersHeading.textContent = translated;
 };
+
+let refreshLettersLessonShell = () => {};
 
 // Keep legacy letters completion button behavior (now icon-only) for continuity.
 const setupLettersSectionCompleteButton = () => {
@@ -7822,6 +8020,8 @@ const setupLettersHelperTranslation = async () => {
   if (nativeText) {
     mainNode.textContent = nativeText;
   }
+  const englishSourceText = resolveLettersHelperEnglishSource();
+  helperParagraph.dataset.englishHelperSource = englishSourceText;
 
   const selectedBaseLanguage = readStoredBaseLanguagePreference();
   if (!selectedBaseLanguage || selectedBaseLanguage === WORLD_KEY) {
@@ -7829,16 +8029,31 @@ const setupLettersHelperTranslation = async () => {
     return;
   }
 
+  if (WORLD_KEY === "english") {
+    const staticLocalizedHelper = resolveEnglishLettersBaseHelperFallback(selectedBaseLanguage);
+    if (staticLocalizedHelper) {
+      mainNode.textContent = staticLocalizedHelper;
+      return;
+    }
+  }
+
   const cache = readLettersTitleTranslationCache();
-  const cacheKey = `helper::${WORLD_KEY}::${selectedBaseLanguage}::${nativeText.toLowerCase()}`;
+  const cacheKey = `helper::${WORLD_KEY}::${selectedBaseLanguage}::${englishSourceText.toLowerCase()}`;
   const cached = String(cache.get(cacheKey) || "").trim();
   if (cached && !isInvalidLettersHelperTranslation(cached)) {
     mainNode.textContent = cached;
     return;
   }
 
+  if (selectedBaseLanguage === "english") {
+    mainNode.textContent = englishSourceText;
+    cache.set(cacheKey, englishSourceText);
+    persistLettersTitleTranslationCache();
+    return;
+  }
+
   const translated = String(
-    (await requestLettersTitleTranslation(nativeText, selectedBaseLanguage)) || ""
+    (await requestLettersTitleTranslation(englishSourceText, selectedBaseLanguage)) || ""
   ).trim();
   if (!translated || isInvalidLettersHelperTranslation(translated)) {
     mainNode.textContent = nativeText;
@@ -8578,6 +8793,7 @@ const sendChatMessage = async (message) => {
     if (!message && isMobileViewport && document.activeElement === chatInput) {
       chatInput.blur();
     }
+    primeMimiBubbleFollowFromSend();
     revealMimiBubbleOnMobile();
     chatHistory.push({ role: "user", content: text });
     if (chatHistory.length > MIMI_CONFIG.historyLimit) {
@@ -8662,6 +8878,7 @@ function showMimiPremiumBubble() {
   animateChatLogPulse && animateChatLogPulse();
   trimVisibleChatMessages && trimVisibleChatMessages();
   scrollChatToBottom && scrollChatToBottom();
+  stopMimiBubbleFollowSoon(650);
 }
 
 function removeMimiPremiumBubble() {
@@ -8678,6 +8895,7 @@ const isUserAuthenticated = () => {
 
 const promptGuestAuthForMimi = () => {
   removeMimiPremiumBubble();
+  stopMimiBubbleFollowSoon(650);
   const openAuthPrompt = () => {
     if (typeof window.cosmicaAccountHub?.openAuth === "function") {
       window.cosmicaAccountHub.openAuth({
@@ -8770,6 +8988,8 @@ const isMimiPremiumAccessEnabled = () => {
 if (chatForm) {
   chatForm.addEventListener("submit", (event) => {
     event.preventDefault();
+    primeMimiBubbleFollowFromSend();
+    revealMimiBubbleOnMobile();
     if (!isUserAuthenticated()) {
       promptGuestAuthForMimi();
       return;
@@ -8807,6 +9027,8 @@ chatChips.forEach((chip) => {
   chip.addEventListener("blur", releaseChipPress);
   chip.addEventListener("click", () => {
     pulseGuideInteractivity(980);
+    primeMimiBubbleFollowFromSend();
+    revealMimiBubbleOnMobile();
     if (!isUserAuthenticated()) {
       promptGuestAuthForMimi();
       return;
@@ -12813,7 +13035,15 @@ const setupSpeechCards = () => {
    Keep this no-op in the base bundle so world pages can call language picker
    handlers safely even when the maps bundle is not loaded.
    ========================================================================== */
-let refreshMapsForBaseLanguage = () => {};
+let refreshMapsForBaseLanguage = () => {
+  if (!document.body.classList.contains("letters-page")) {
+    return;
+  }
+  void setupLettersTitleTranslation();
+  void setupLettersHelperTranslation();
+  void setupLettersLevelTranslations();
+  refreshLettersLessonShell();
+};
 
 const runWhenBrowserIdle = (task, { timeoutMs = 1400, fallbackDelayMs = 280 } = {}) => {
   if (typeof task !== "function") {
@@ -13667,7 +13897,27 @@ const shouldRegisterServiceWorker = () => {
   if (window.location.protocol === "https:") {
     return true;
   }
-  return ["localhost", "127.0.0.1"].includes(String(window.location.hostname || "").toLowerCase());
+  return false;
+};
+
+const clearDevelopmentServiceWorkerCaches = async () => {
+  const host = String(window.location.hostname || "").toLowerCase();
+  const isLocalDevHost = host === "localhost" || host === "127.0.0.1" || host === "::1";
+  if (!isLocalDevHost || !("serviceWorker" in navigator)) {
+    return;
+  }
+  try {
+    const registrations = await navigator.serviceWorker.getRegistrations();
+    await Promise.all(
+      registrations.map((registration) => registration.unregister().catch(() => false))
+    );
+  } catch {}
+  if ("caches" in window) {
+    try {
+      const cacheNames = await caches.keys();
+      await Promise.all(cacheNames.map((cacheName) => caches.delete(cacheName).catch(() => false)));
+    } catch {}
+  }
 };
 
 const clearLegacyInstallPromptDismissed = () => {
@@ -13950,6 +14200,7 @@ const setupInstallPromptUi = () => {
 
 const registerServiceWorker = () => {
   if (!shouldRegisterServiceWorker()) {
+    void clearDevelopmentServiceWorkerCaches();
     return;
   }
   window.addEventListener("load", () => {
@@ -14018,13 +14269,14 @@ const initializeCommonShell = () => {
   window.addEventListener("orientationchange", syncRuntimeNavHeightVar, { passive: true });
   setupLettersSectionCompleteButton();
   setupLettersCardPracticeButtons();
+  // Keep letters/maps interactions available immediately on first paint.
+  void setupLettersTitleTranslation();
+  void setupLettersHelperTranslation();
+  void setupLettersLevelTranslations();
+  setupLetterRomanization();
+  setupSpeechCards();
   scheduleNonCriticalShellSetup(() => {
     setupHomeAltInteractivity();
-    void setupLettersTitleTranslation();
-    void setupLettersHelperTranslation();
-    void setupLettersLevelTranslations();
-    setupLetterRomanization();
-    setupSpeechCards();
     setupBackToTopButton();
     setupEssentialCookieNotice();
   });

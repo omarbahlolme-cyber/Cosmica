@@ -280,6 +280,13 @@ const checkPremiumUpsellPresent = async (page) => {
   return page.locator(".chat-message.mimi.premium-upsell").count();
 };
 
+const checkAuthDropdownOpen = async (page) => {
+  return page.evaluate(() => {
+    const dropdown = document.querySelector(".account-dropdown");
+    return Boolean(dropdown && !dropdown.hidden);
+  });
+};
+
 const submitChat = async (page, text) => {
   await page.waitForSelector("#chatForm", { timeout: 15000 });
   const chatInput = page.locator("#chatInput");
@@ -319,6 +326,16 @@ const checkLettersCheckmarkExists = async (page) => {
   return page.evaluate(() => {
     const btn = document.querySelector(".letters-grid-section .map-section-complete-btn");
     return Boolean(btn);
+  });
+};
+
+const checkLettersCheckmarkVisible = async (page) => {
+  return page.evaluate(() => {
+    const btn = document.querySelector(".letters-grid-section .map-section-complete-btn");
+    if (!(btn instanceof HTMLElement)) {
+      return false;
+    }
+    return !btn.hidden;
   });
 };
 
@@ -378,7 +395,7 @@ const runMatrix = async () => {
     addResult("guest-streak-hidden", /^sign in$/i.test(guestMeta), `meta=${guestMeta}`);
 
     await submitChat(page, "hello guest");
-    addResult("guest-chat-upsell", (await checkPremiumUpsellPresent(page)) > 0);
+    addResult("guest-chat-auth-prompt", await checkAuthDropdownOpen(page));
 
     await gotoAndInit(page, "/world-french.html");
     await waitForGrammarLockState(page, true);
@@ -389,8 +406,12 @@ const runMatrix = async () => {
     addResult("guest-grammar-locked", guestGrammarLocked === true);
 
     await gotoAndInit(page, "/letters-french.html");
-    await page.waitForSelector(".letters-grid-section .map-section-complete-btn", { timeout: 15000 });
+    await page.waitForSelector(".letters-grid-section .map-section-complete-btn", {
+      timeout: 15000,
+      state: "attached",
+    });
     addResult("guest-checkmark-present", (await checkLettersCheckmarkExists(page)) === true);
+    addResult("guest-checkmark-hidden", (await checkLettersCheckmarkVisible(page)) === false);
 
     // Free
     const freeCookie = await loginAndGetSessionCookieValue(FREE_USER);
@@ -401,7 +422,7 @@ const runMatrix = async () => {
     addResult("free-auth-state", freeAuth === true);
 
     const freeMeta = await getAccountTriggerMeta(page);
-    addResult("free-streak-visible", /^streak\s+\d+d$/i.test(freeMeta), `meta=${freeMeta}`);
+    addResult("free-streak-visible", /^(streak|active)\s+\d+d$/i.test(freeMeta), `meta=${freeMeta}`);
 
     await submitChat(page, "hello free");
     addResult("free-chat-upsell", (await checkPremiumUpsellPresent(page)) > 0);

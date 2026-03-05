@@ -144,6 +144,43 @@ const LANGUAGES = [
 const beginnerPageFile = (key) => `learn-${key}-for-beginners.html`;
 const pronunciationPageFile = (key) => `${key}-pronunciation-guide.html`;
 const travelPhrasesPageFile = (key) => `${key}-travel-phrases.html`;
+const localizedPronunciationPageFile = (key) => {
+  const normalizedKey = String(key || "").trim().toLowerCase();
+  const localizedLang = String(LOCALIZED_HREFLANG_BY_KEY[normalizedKey] || "").trim().toLowerCase();
+  if (!normalizedKey || !localizedLang) {
+    return "";
+  }
+  const langSlug = localizedLang.split("-")[0];
+  if (!langSlug) {
+    return "";
+  }
+  return `${normalizedKey}-pronunciation-${langSlug}.html`;
+};
+const localizedTravelPhrasesPageFile = (key) => {
+  const normalizedKey = String(key || "").trim().toLowerCase();
+  const localizedLang = String(LOCALIZED_HREFLANG_BY_KEY[normalizedKey] || "").trim().toLowerCase();
+  if (!normalizedKey || !localizedLang) {
+    return "";
+  }
+  const langSlug = localizedLang.split("-")[0];
+  if (!langSlug) {
+    return "";
+  }
+  return `${normalizedKey}-travel-phrases-${langSlug}.html`;
+};
+const LOCALIZED_HREFLANG_BY_KEY = Object.freeze({
+  french: "fr",
+  spanish: "es",
+  arabic: "ar",
+  chinese: "zh-Hans",
+  japanese: "ja",
+  korean: "ko",
+  hindi: "hi",
+  german: "de",
+  portuguese: "pt",
+  dutch: "nl",
+  swedish: "sv",
+});
 
 const readFile = (fileName) => fs.readFileSync(path.join(FRONTEND, fileName), "utf8");
 const writeFile = (fileName, content) => fs.writeFileSync(path.join(FRONTEND, fileName), content, "utf8");
@@ -582,6 +619,13 @@ const buildGuideCards = (config) => `
           <a class="card" href="${travelPhrasesPageFile(config.key)}">
             <h3>${config.language} travel phrases</h3>
           </a>
+          ${
+            config.localizedGuideFile
+              ? `<a class="card" href="${localizedPronunciationPageFile(config.key)}">
+            <h3>${config.language} pronunciation in native language</h3>
+          </a>`
+              : ""
+          }
         </div>
       </section>`;
 
@@ -671,13 +715,34 @@ const buildWorldStructuredData = (config) => {
 const buildWorldAlternateLinks = (config) => {
   const links = [{ lang: "en", url: pageUrl(config.worldFile) }];
   if (config.localizedGuideFile) {
-    const languageCodeMatch = config.localizedGuideFile.match(/-([a-z]{2})\.html$/i);
-    const localizedLang = languageCodeMatch ? languageCodeMatch[1].toLowerCase() : "";
+    const localizedLang = String(LOCALIZED_HREFLANG_BY_KEY[config.key] || "").trim();
     if (localizedLang) {
       links.push({ lang: localizedLang, url: pageUrl(config.localizedGuideFile) });
     }
   }
   links.push({ lang: "x-default", url: pageUrl(config.worldFile) });
+  return buildAlternateLinks(links);
+};
+
+const buildPronunciationAlternateLinks = (config) => {
+  const links = [{ lang: "en", url: pageUrl(pronunciationPageFile(config.key)) }];
+  const localizedLang = String(LOCALIZED_HREFLANG_BY_KEY[config.key] || "").trim();
+  const localizedFile = localizedPronunciationPageFile(config.key);
+  if (localizedLang && localizedFile) {
+    links.push({ lang: localizedLang, url: pageUrl(localizedFile) });
+  }
+  links.push({ lang: "x-default", url: pageUrl(pronunciationPageFile(config.key)) });
+  return buildAlternateLinks(links);
+};
+
+const buildTravelAlternateLinks = (config) => {
+  const links = [{ lang: "en", url: pageUrl(travelPhrasesPageFile(config.key)) }];
+  const localizedLang = String(LOCALIZED_HREFLANG_BY_KEY[config.key] || "").trim();
+  const localizedFile = localizedTravelPhrasesPageFile(config.key);
+  if (localizedLang && localizedFile) {
+    links.push({ lang: localizedLang, url: pageUrl(localizedFile) });
+  }
+  links.push({ lang: "x-default", url: pageUrl(travelPhrasesPageFile(config.key)) });
   return buildAlternateLinks(links);
 };
 
@@ -754,6 +819,7 @@ for (const config of LANGUAGES) {
       backLabel: `Return to ${config.language} course`,
       bodyClass: "world-page seo-guide-page",
       content: pronunciationContent(config),
+      alternateLinks: buildPronunciationAlternateLinks(config),
       structuredData: guideStructuredData(
         config,
         pronunciationTitle(config.language),
@@ -775,6 +841,7 @@ for (const config of LANGUAGES) {
       backLabel: `Return to ${config.language} course`,
       bodyClass: "world-page seo-guide-page",
       content: travelPhrasesContent(config),
+      alternateLinks: buildTravelAlternateLinks(config),
       structuredData: guideStructuredData(
         config,
         travelPhrasesTitle(config.language),
