@@ -78,6 +78,156 @@ const ENGLISH_LANGUAGE_NAMES = {
   swedish: "Swedish",
 };
 
+const LOCALIZED_SEO_TEXT = Object.freeze({
+  default: {
+    pronunciationLabel: "Pronunciation Guide",
+    travelLabel: "Travel Phrases",
+    pronunciationDescription:
+      "Improve pronunciation with audio practice, repeat drills, and clearer speaking rhythm.",
+    travelDescription:
+      "Learn practical travel phrases for greetings, directions, transport, and daily situations.",
+    pronunciationSectionText:
+      "Pronunciation practice with audio, repeat drills, and clearer speaking rhythm.",
+    travelSectionText:
+      "Travel phrase practice for greetings, directions, transport, and daily interactions.",
+  },
+  french: {
+    pronunciationLabel: "Guide de prononciation",
+    travelLabel: "Phrases de voyage",
+    pronunciationDescription:
+      "Ameliorez la prononciation avec audio, repetition et rythme de parole plus naturel.",
+    travelDescription:
+      "Apprenez des phrases utiles pour saluer, demander une direction et voyager.",
+    pronunciationSectionText:
+      "Travail de prononciation avec audio, repetition et rythme de parole plus naturel.",
+    travelSectionText:
+      "Entrainement aux phrases de voyage pour saluer, se deplacer et communiquer au quotidien.",
+  },
+  spanish: {
+    pronunciationLabel: "Guia de pronunciacion",
+    travelLabel: "Frases de viaje",
+    pronunciationDescription:
+      "Mejora tu pronunciacion con audio, repeticion y ritmo de habla mas claro.",
+    travelDescription:
+      "Aprende frases utiles para saludar, pedir direcciones y viajar con mas confianza.",
+    pronunciationSectionText:
+      "Practica de pronunciacion con audio, repeticion y ritmo de habla mas claro.",
+    travelSectionText:
+      "Practica frases de viaje para saludos, direcciones, transporte y situaciones diarias.",
+  },
+  arabic: {
+    pronunciationLabel: "\u062f\u0644\u064a\u0644 \u0627\u0644\u0646\u0637\u0642",
+    travelLabel: "\u0639\u0628\u0627\u0631\u0627\u062a \u0627\u0644\u0633\u0641\u0631",
+    pronunciationDescription:
+      "\u062d\u0633\u0651\u0646 \u0627\u0644\u0646\u0637\u0642 \u0628\u0627\u0644\u0635\u0648\u062a \u0648\u0627\u0644\u062a\u0643\u0631\u0627\u0631 \u0648\u0625\u064a\u0642\u0627\u0639 \u0627\u0644\u0643\u0644\u0627\u0645 \u0628\u0634\u0643\u0644 \u0623\u0648\u0636\u062d.",
+    travelDescription:
+      "\u062a\u0639\u0644\u0645 \u0639\u0628\u0627\u0631\u0627\u062a \u0639\u0645\u0644\u064a\u0629 \u0644\u0644\u0633\u0641\u0631 \u0644\u0644\u062a\u062d\u064a\u0629 \u0648\u0627\u0644\u0627\u062a\u062c\u0627\u0647\u0627\u062a \u0648\u0627\u0644\u0646\u0642\u0644 \u0648\u0627\u0644\u0645\u0648\u0627\u0642\u0641 \u0627\u0644\u064a\u0648\u0645\u064a\u0629.",
+    pronunciationSectionText:
+      "\u062a\u062f\u0631\u064a\u0628 \u0646\u0637\u0642 \u0628\u0627\u0644\u0635\u0648\u062a \u0648\u0627\u0644\u062a\u0643\u0631\u0627\u0631 \u0648\u0625\u064a\u0642\u0627\u0639 \u0623\u0648\u0636\u062d \u0644\u0644\u0643\u0644\u0627\u0645.",
+    travelSectionText:
+      "\u062a\u062f\u0631\u064a\u0628 \u0639\u0644\u0649 \u0639\u0628\u0627\u0631\u0627\u062a \u0627\u0644\u0633\u0641\u0631 \u0644\u0644\u062a\u062d\u064a\u0627\u062a \u0648\u0627\u0644\u0627\u062a\u062c\u0627\u0647\u0627\u062a \u0648\u0627\u0644\u0646\u0642\u0644 \u0648\u0627\u0644\u062d\u064a\u0627\u0629 \u0627\u0644\u064a\u0648\u0645\u064a\u0629.",
+  },
+  chinese: {
+    pronunciationLabel: "\u53d1\u97f3\u6307\u5357",
+    travelLabel: "\u65c5\u884c\u77ed\u8bed",
+    pronunciationDescription:
+      "\u901a\u8fc7\u97f3\u9891\u548c\u8ddf\u8bfb\u7ec3\u4e60\uff0c\u63d0\u5347\u53d1\u97f3\u6e05\u6670\u5ea6\u4e0e\u8bed\u8c03\u8282\u594f\u3002",
+    travelDescription:
+      "\u5b66\u4e60\u65c5\u884c\u4e2d\u5e38\u7528\u7684\u95ee\u5019\u3001\u95ee\u8def\u3001\u4ea4\u901a\u548c\u65e5\u5e38\u77ed\u8bed\u3002",
+    pronunciationSectionText:
+      "\u53d1\u97f3\u8bad\u7ec3\u5305\u542b\u97f3\u9891\u3001\u8ddf\u8bfb\u4e0e\u66f4\u6e05\u6670\u7684\u53e3\u8bed\u8282\u594f\u3002",
+    travelSectionText:
+      "\u65c5\u884c\u77ed\u8bed\u8bad\u7ec3\u6db5\u76d6\u95ee\u5019\u3001\u95ee\u8def\u3001\u4ea4\u901a\u4e0e\u65e5\u5e38\u573a\u666f\u3002",
+  },
+  japanese: {
+    pronunciationLabel: "\u767a\u97f3\u30ac\u30a4\u30c9",
+    travelLabel: "\u65c5\u884c\u30d5\u30ec\u30fc\u30ba",
+    pronunciationDescription:
+      "\u97f3\u58f0\u3068\u53cd\u5fa9\u7df4\u7fd2\u3067\u3001\u767a\u97f3\u306e\u660e\u77ad\u3055\u3068\u8a71\u3059\u30ea\u30ba\u30e0\u3092\u6574\u3048\u307e\u3059\u3002",
+    travelDescription:
+      "\u3042\u3044\u3055\u3064\u3001\u9053\u6848\u5185\u3001\u4ea4\u901a\u3001\u65e5\u5e38\u5834\u9762\u3067\u4f7f\u3048\u308b\u5b9f\u7528\u30d5\u30ec\u30fc\u30ba\u3092\u5b66\u3073\u307e\u3059\u3002",
+    pronunciationSectionText:
+      "\u97f3\u58f0\u3068\u53cd\u5fa9\u7df4\u7fd2\u3067\u3001\u767a\u97f3\u3068\u8a71\u3059\u30ea\u30ba\u30e0\u3092\u78ba\u5b9f\u306b\u6574\u3048\u307e\u3059\u3002",
+    travelSectionText:
+      "\u65c5\u884c\u306b\u5f79\u7acb\u3064\u30d5\u30ec\u30fc\u30ba\u3092\u3001\u3042\u3044\u3055\u3064\u304b\u3089\u79fb\u52d5\u307e\u3067\u7df4\u7fd2\u3057\u307e\u3059\u3002",
+  },
+  korean: {
+    pronunciationLabel: "\ubc1c\uc74c \uac00\uc774\ub4dc",
+    travelLabel: "\uc5ec\ud589 \ud45c\ud604",
+    pronunciationDescription:
+      "\uc624\ub514\uc624\uc640 \ubc18\ubcf5 \uc5f0\uc2b5\uc73c\ub85c \ubc1c\uc74c\uc744 \ub354 \uc815\ud655\ud558\uace0 \uc790\uc5f0\uc2a4\ub7fd\uac8c \ub2e4\ub4ec\uc2b5\ub2c8\ub2e4.",
+    travelDescription:
+      "\uc778\uc0ac, \uae38 \ubb3b\uae30, \uad50\ud1b5, \uc77c\uc0c1 \uc0c1\ud669\uc5d0\uc11c \uc4f8 \uc218 \uc788\ub294 \uc2e4\uc6a9 \ud45c\ud604\uc744 \ubc30\uc6c1\ub2c8\ub2e4.",
+    pronunciationSectionText:
+      "\uc624\ub514\uc624\uc640 \ubc18\ubcf5 \uc5f0\uc2b5\uc73c\ub85c \ubc1c\uc74c\uacfc \ub9d0\ud558\uae30 \ub9ac\ub4ec\uc744 \uac1c\uc120\ud569\ub2c8\ub2e4.",
+    travelSectionText:
+      "\uc5ec\ud589\uc5d0 \ud544\uc694\ud55c \ud45c\ud604\uc744 \uc778\uc0ac, \uc774\ub3d9, \uc77c\uc0c1 \uc0c1\ud669 \uc911\uc2ec\uc73c\ub85c \uc5f0\uc2b5\ud569\ub2c8\ub2e4.",
+  },
+  hindi: {
+    pronunciationLabel: "\u0909\u091a\u094d\u091a\u093e\u0930\u0923 \u0917\u093e\u0907\u0921",
+    travelLabel: "\u092f\u093e\u0924\u094d\u0930\u093e \u0935\u093e\u0915\u094d\u092f\u093e\u0902\u0936",
+    pronunciationDescription:
+      "\u0911\u0921\u093f\u092f\u094b \u0914\u0930 \u0926\u094b\u0939\u0930\u093e\u0935 \u0905\u092d\u094d\u092f\u093e\u0938 \u0915\u0947 \u0938\u093e\u0925 \u0909\u091a\u094d\u091a\u093e\u0930\u0923 \u0914\u0930 \u092c\u094b\u0932\u0928\u0947 \u0915\u093e \u0932\u092f \u0938\u0941\u0927\u093e\u0930\u0947\u0902\u0964",
+    travelDescription:
+      "\u0928\u092e\u0938\u094d\u0915\u093e\u0930, \u0930\u093e\u0938\u094d\u0924\u093e, \u092f\u093e\u0924\u093e\u092f\u093e\u0924 \u0914\u0930 \u0930\u094b\u091c\u093c\u092e\u0930\u094d\u0930\u093e \u0938\u094d\u0925\u093f\u0924\u093f\u092f\u094b\u0902 \u0915\u0947 \u0932\u093f\u090f \u0909\u092a\u092f\u094b\u0917\u0940 \u0935\u093e\u0915\u094d\u092f\u093e\u0902\u0936 \u0938\u0940\u0916\u0947\u0902\u0964",
+    pronunciationSectionText:
+      "\u0911\u0921\u093f\u092f\u094b \u0914\u0930 \u0926\u094b\u0939\u0930\u093e\u0935 \u0938\u0947 \u0909\u091a\u094d\u091a\u093e\u0930\u0923 \u0914\u0930 \u092c\u094b\u0932\u0928\u0947 \u0915\u0940 \u0932\u092f \u0915\u094b \u092e\u091c\u092c\u0942\u0924 \u0915\u0930\u0947\u0902\u0964",
+    travelSectionText:
+      "\u092f\u093e\u0924\u094d\u0930\u093e \u0915\u0947 \u0932\u093f\u090f \u091c\u0930\u0942\u0930\u0940 \u0935\u093e\u0915\u094d\u092f\u093e\u0902\u0936 \u0915\u094b \u0928\u092e\u0938\u094d\u0915\u093e\u0930 \u0938\u0947 \u0926\u0948\u0928\u093f\u0915 \u0938\u0902\u092d\u093e\u0937\u0923 \u0924\u0915 \u0905\u092d\u094d\u092f\u093e\u0938 \u0915\u0930\u0947\u0902\u0964",
+  },
+  german: {
+    pronunciationLabel: "Aussprache",
+    travelLabel: "Reisephrasen",
+    pronunciationDescription:
+      "Verbessern Sie die Aussprache mit Audio, Wiederholung und klarerem Sprechrhythmus.",
+    travelDescription:
+      "Lernen Sie praktische Reisephrasen fuer Begruessungen, Wege, Verkehr und Alltag.",
+    pronunciationSectionText:
+      "Aussprachetraining mit Audio, Wiederholung und klarerem Sprechrhythmus.",
+    travelSectionText:
+      "Training von Reisephrasen fuer Begruessungen, Orientierung, Verkehr und Alltagssituationen.",
+  },
+  portuguese: {
+    pronunciationLabel: "Guia de pronuncia",
+    travelLabel: "Frases de viagem",
+    pronunciationDescription:
+      "Melhore a pronuncia com audio, repeticao e ritmo de fala mais claro.",
+    travelDescription:
+      "Aprenda frases praticas para cumprimentos, direcoes, transporte e situacoes do dia a dia.",
+    pronunciationSectionText:
+      "Pratica de pronuncia com audio, repeticao e ritmo de fala mais claro.",
+    travelSectionText:
+      "Pratica de frases de viagem para cumprimentos, direcoes, transporte e conversas do dia a dia.",
+  },
+  dutch: {
+    pronunciationLabel: "Uitspraakgids",
+    travelLabel: "Reiszinnen",
+    pronunciationDescription:
+      "Verbeter je uitspraak met audio, herhaling en een duidelijker spreekritme.",
+    travelDescription:
+      "Leer praktische reiszinnen voor begroetingen, routevragen, vervoer en dagelijkse situaties.",
+    pronunciationSectionText:
+      "Uitspraaktraining met audio, herhaling en een duidelijker spreekritme.",
+    travelSectionText:
+      "Oefen reiszinnen voor begroetingen, routevragen, vervoer en dagelijkse situaties.",
+  },
+  swedish: {
+    pronunciationLabel: "Uttalsguide",
+    travelLabel: "Resefraser",
+    pronunciationDescription:
+      "Forbattra uttalet med ljud, repetition och tydligare talrytm.",
+    travelDescription:
+      "Lar dig praktiska resefraser for halsningar, vagar, transport och vardagliga situationer.",
+    pronunciationSectionText:
+      "Uttalstraning med ljud, repetition och tydligare talrytm.",
+    travelSectionText:
+      "Trana resefraser for halsningar, vagar, transport och vardagliga situationer.",
+  },
+});
+
+const getLocalizedSeoText = (languageKey = "") =>
+  LOCALIZED_SEO_TEXT[String(languageKey || "").trim().toLowerCase()] || LOCALIZED_SEO_TEXT.default;
+
 const pronunciationPageFile = (key) => `${key}-pronunciation-guide.html`;
 const travelPhrasesPageFile = (key) => `${key}-travel-phrases.html`;
 const localizedPronunciationPageFile = ({ languageKey = "", htmlLang = "" } = {}) => {
@@ -275,19 +425,21 @@ ${staticCardsHtml(config.lessonCards)}
 ${buildGuidePager(
   {
     href: pronunciationPageFile(config.languageKey),
-    title: `${ENGLISH_LANGUAGE_NAMES[config.languageKey]} pronunciation guide`,
+    title: `${config.h1} - ${getLocalizedSeoText(config.languageKey).pronunciationLabel}`,
   },
   {
     href: localizedPronunciationPageFile(config),
-    title: `${ENGLISH_LANGUAGE_NAMES[config.languageKey]} pronunciation (${config.htmlLang})`,
+    title: `${config.h1} - ${getLocalizedSeoText(config.languageKey).pronunciationLabel}`,
   }
 )}`;
 
+const localizedMainGuideTitle = (config) => `${String(config.h1 || "").trim()} | Cosmica`;
+
 const localizedPronunciationTitle = (config) =>
-  `${String(config.h1 || "").trim()} | Pronunciation Focus | Cosmica`;
+  `${String(config.h1 || "").trim()} | ${getLocalizedSeoText(config.languageKey).pronunciationLabel} | Cosmica`;
 
 const localizedPronunciationDescription = (config) =>
-  `${String(config.description || "").trim()} Focus on pronunciation, listening clarity, and speaking rhythm with guided audio practice.`;
+  getLocalizedSeoText(config.languageKey).pronunciationDescription;
 
 const buildPronunciationContent = (config) => {
   const cards = Array.isArray(config.lessonCards)
@@ -305,7 +457,7 @@ const buildPronunciationContent = (config) => {
       <section class="section reveal">
         <div class="section-title">
           <h2>${config.lessonsTitle}</h2>
-          <p>Pronunciation focus with audio, repeat practice, and clearer speaking rhythm.</p>
+          <p>${getLocalizedSeoText(config.languageKey).pronunciationSectionText}</p>
         </div>
         <div class="steps">
 ${staticCardsHtml(cards)}
@@ -318,16 +470,16 @@ ${buildGuidePager(
   },
   {
     href: localizedTravelPhrasesPageFile(config),
-    title: `${ENGLISH_LANGUAGE_NAMES[config.languageKey]} travel phrases (${config.htmlLang})`,
+    title: `${config.h1} - ${getLocalizedSeoText(config.languageKey).travelLabel}`,
   }
 )}`;
 };
 
 const localizedTravelPhrasesTitle = (config) =>
-  `${String(config.h1 || "").trim()} | Travel Phrases | Cosmica`;
+  `${String(config.h1 || "").trim()} | ${getLocalizedSeoText(config.languageKey).travelLabel} | Cosmica`;
 
 const localizedTravelPhrasesDescription = (config) =>
-  `${String(config.description || "").trim()} Focus on practical travel phrases, short speaking patterns, and fast everyday recall.`;
+  getLocalizedSeoText(config.languageKey).travelDescription;
 
 const buildTravelPhrasesContent = (config) => {
   const cards = Array.isArray(config.lessonCards)
@@ -345,7 +497,7 @@ const buildTravelPhrasesContent = (config) => {
       <section class="section reveal">
         <div class="section-title">
           <h2>${config.lessonsTitle}</h2>
-          <p>Travel phrase focus for greetings, directions, transport, and daily interactions.</p>
+          <p>${getLocalizedSeoText(config.languageKey).travelSectionText}</p>
         </div>
         <div class="steps">
 ${staticCardsHtml(cards)}
@@ -354,11 +506,11 @@ ${staticCardsHtml(cards)}
 ${buildGuidePager(
   {
     href: localizedPronunciationPageFile(config),
-    title: `${ENGLISH_LANGUAGE_NAMES[config.languageKey]} pronunciation (${config.htmlLang})`,
+    title: `${config.h1} - ${getLocalizedSeoText(config.languageKey).pronunciationLabel}`,
   },
   {
     href: travelPhrasesPageFile(config.languageKey),
-    title: `${ENGLISH_LANGUAGE_NAMES[config.languageKey]} travel phrases guide`,
+    title: `${ENGLISH_LANGUAGE_NAMES[config.languageKey]} travel phrases`,
   }
 )}`;
 };
@@ -632,6 +784,7 @@ const PAGES = [
 ];
 
 for (const config of PAGES) {
+  const localizedSeoText = getLocalizedSeoText(config.languageKey);
   const breadcrumbs = breadcrumbSchema([
     { name: "Cosmica", url: `${SITE_ORIGIN}/` },
     { name: config.h1, url: pageUrl(config.file) },
@@ -647,7 +800,7 @@ for (const config of PAGES) {
     pageShell({
       htmlLang: config.htmlLang,
       dir: config.dir,
-      title: config.title,
+      title: localizedMainGuideTitle(config),
       description: config.description,
       canonicalPath: config.file,
       brandSub: config.brandSub,
@@ -668,7 +821,7 @@ for (const config of PAGES) {
     { name: "Cosmica", url: `${SITE_ORIGIN}/` },
     { name: config.h1, url: pageUrl(config.file) },
     {
-      name: `${ENGLISH_LANGUAGE_NAMES[config.languageKey]} pronunciation`,
+      name: `${config.h1} - ${localizedSeoText.pronunciationLabel}`,
       url: pageUrl(localizedPronunciationFile),
     },
   ]);
@@ -686,7 +839,7 @@ for (const config of PAGES) {
       title: localizedPronunciationTitle(config),
       description: localizedPronunciationDescription(config),
       canonicalPath: localizedPronunciationFile,
-      brandSub: `${config.brandSub} - Pronunciation`,
+      brandSub: `${config.brandSub} - ${localizedSeoText.pronunciationLabel}`,
       backHref: config.file,
       backLabel: config.h1,
       footerText: config.footerText,
@@ -698,7 +851,7 @@ for (const config of PAGES) {
             ...courseSchema({
               ...config,
               file: localizedPronunciationFile,
-              h1: `${config.h1} - Pronunciation`,
+              h1: `${config.h1} - ${localizedSeoText.pronunciationLabel}`,
               description: localizedPronunciationDescription(config),
             }),
           },
@@ -714,7 +867,7 @@ for (const config of PAGES) {
     { name: "Cosmica", url: `${SITE_ORIGIN}/` },
     { name: config.h1, url: pageUrl(config.file) },
     {
-      name: `${ENGLISH_LANGUAGE_NAMES[config.languageKey]} travel phrases`,
+      name: `${config.h1} - ${localizedSeoText.travelLabel}`,
       url: pageUrl(localizedTravelPhrasesFile),
     },
   ]);
@@ -732,9 +885,9 @@ for (const config of PAGES) {
       title: localizedTravelPhrasesTitle(config),
       description: localizedTravelPhrasesDescription(config),
       canonicalPath: localizedTravelPhrasesFile,
-      brandSub: `${config.brandSub} - Travel`,
+      brandSub: `${config.brandSub} - ${localizedSeoText.travelLabel}`,
       backHref: localizedPronunciationFile,
-      backLabel: `${ENGLISH_LANGUAGE_NAMES[config.languageKey]} pronunciation`,
+      backLabel: localizedSeoText.pronunciationLabel,
       footerText: config.footerText,
       content: buildTravelPhrasesContent(config),
       alternateLinks: travelPhrasesAlternateLinks,
@@ -744,7 +897,7 @@ for (const config of PAGES) {
             ...courseSchema({
               ...config,
               file: localizedTravelPhrasesFile,
-              h1: `${config.h1} - Travel Phrases`,
+              h1: `${config.h1} - ${localizedSeoText.travelLabel}`,
               description: localizedTravelPhrasesDescription(config),
             }),
           },

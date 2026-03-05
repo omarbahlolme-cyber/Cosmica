@@ -3096,9 +3096,17 @@ body.premium-setup-lock {
 }
 
 .account-menu-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 100%;
   font-size: 0.96rem;
   font-weight: 700;
   color: #f4f9ff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  overflow-wrap: normal;
+  word-break: keep-all;
   text-shadow: 0 1px 8px rgba(122, 177, 226, 0.14);
 }
 
@@ -3116,6 +3124,7 @@ body.premium-setup-lock {
   color: rgba(170, 193, 218, 0.88);
   line-height: 1.1;
   text-align: right;
+  white-space: nowrap;
 }
 
 .account-menu-plan-status.is-premium {
@@ -7340,6 +7349,8 @@ body.world-page .is-energized {
   position: relative;
   height: clamp(180px, calc(var(--vh) * 24), 300px);
   overflow-y: hidden;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
   display: grid;
   grid-auto-rows: max-content;
   align-content: start;
@@ -7355,6 +7366,10 @@ body.world-page .is-energized {
 }
 
 .chat-log.has-user-messages {
+  overflow-y: hidden;
+}
+
+.chat-log.has-user-messages.is-scrollable {
   overflow-y: auto;
 }
 
@@ -7475,14 +7490,18 @@ body.world-page .is-energized {
   .chat-log {
     height: clamp(160px, calc(var(--vh) * 22), 230px);
     overflow-y: hidden;
-    overscroll-behavior-y: auto;
-    -webkit-overflow-scrolling: auto;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
     touch-action: pan-y;
     padding: 9px 6px;
   }
 
   .chat-log.has-user-messages {
     overflow-y: hidden;
+  }
+
+  .chat-log.has-user-messages.is-scrollable {
+    overflow-y: auto;
   }
 
   .chat-bubble {

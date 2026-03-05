@@ -6,7 +6,7 @@ const ROOT = path.resolve(__dirname, "..");
 const FRONTEND = path.join(ROOT, "frontend");
 const MAPS_BUNDLE = path.join(FRONTEND, "maps", "app-maps.js");
 const MAP_STYLE_ASSET_VERSION = "20260417";
-const APP_ASSET_VERSION = "20260421";
+const APP_ASSET_VERSION = "20260423";
 
 const LANGUAGES = [
   {
@@ -694,10 +694,23 @@ const replaceMapStyleAsset = (html) =>
 const replaceMapAppAsset = (html) =>
   html.replace(/app\.js\?v=[^"]+/i, `app.js?v=${APP_ASSET_VERSION}`);
 
+const buildLettersTitle = (config) => {
+  if (config.key === "chinese") {
+    return "Learn Chinese Characters | Cosmica";
+  }
+  if (config.key === "japanese") {
+    return "Learn Japanese Characters | Cosmica";
+  }
+  if (config.key === "hindi") {
+    return "Learn Hindi Script | Cosmica";
+  }
+  return `Learn ${config.language} Alphabet | Cosmica`;
+};
+
 const replaceWorldPage = (config) => {
-  const title = `Learn ${config.language} Online | Vocabulary, Phrases and Grammar | Cosmica`;
-  const description = `Learn ${config.language} online with step-by-step lessons for letters, vocabulary, phrases, and grammar. Use audio, translations, and guided practice to build confidence.`;
-  const socialDescription = `Learn ${config.language} online with structured lessons, audio, translations, and guided practice for real-world speaking.`;
+  const title = `Learn ${config.language} Online Course | Cosmica`;
+  const description = `Learn ${config.language} online with guided lessons for letters, vocabulary, phrases, and grammar.`;
+  const socialDescription = `Learn ${config.language} online with guided lessons, audio, and practice for real speaking.`;
   const h1 = `Learn ${config.language} Online`;
   const eyebrow = `Learn ${config.language}`;
   const h2 = `Build ${config.language} skills with step-by-step lessons`;
@@ -855,19 +868,21 @@ const replaceMapPage = (config, map, fileName, title, description, socialDescrip
 
 const replaceLettersPage = (config) => {
   let html = readFile(config.lettersFile);
+  const lettersTitle = buildLettersTitle(config);
+  const hiddenH1 = lettersTitle.replace(" | Cosmica", "");
   html = replaceLangToEnglish(html);
   html = replaceMapStyleAsset(html);
   html = replaceMapAppAsset(html);
-  html = replaceTitle(html, config.lettersTitle);
+  html = replaceTitle(html, lettersTitle);
   html = replaceMetaByName(html, "description", config.lettersDescription);
-  html = replaceMetaByProperty(html, "og:title", config.lettersTitle);
+  html = replaceMetaByProperty(html, "og:title", lettersTitle);
   html = replaceMetaByProperty(html, "og:description", config.lettersDescription);
-  html = replaceMetaByName(html, "twitter:title", config.lettersTitle);
+  html = replaceMetaByName(html, "twitter:title", lettersTitle);
   html = replaceMetaByName(html, "twitter:description", config.lettersDescription);
-  html = replaceJsonLdNameAndDescription(html, config.lettersTitle, config.lettersDescription);
+  html = replaceJsonLdNameAndDescription(html, lettersTitle, config.lettersDescription);
   html = html.replace(
     /<h1 class="visually-hidden">[\s\S]*?<\/h1>/,
-    `<h1 class="visually-hidden">${config.lettersTitle.replace(" | Cosmica", "")}</h1>`
+    `<h1 class="visually-hidden">${hiddenH1}</h1>`
   );
   writeFile(config.lettersFile, html);
 };
@@ -879,9 +894,9 @@ for (const config of LANGUAGES) {
     config,
     "words",
     config.wordsFile,
-    `Learn ${config.language} Vocabulary Online | Audio Flashcards | Cosmica`,
-    `Build ${config.language} vocabulary with topic-based word cards, audio pronunciation, and translation support for everyday speaking, travel, study, and work.`,
-    `Practice ${config.language} vocabulary with audio, translations, and focused topic-based review.`,
+    `Learn ${config.language} Vocabulary | Cosmica`,
+    `Build ${config.language} vocabulary with topic cards, audio pronunciation, and translation support for daily speaking.`,
+    `Practice ${config.language} vocabulary with audio and translation support.`,
     `Learn ${config.language} Vocabulary Online`
   );
 
@@ -889,9 +904,9 @@ for (const config of LANGUAGES) {
     config,
     "phrases",
     config.phrasesFile,
-    `Learn ${config.language} Phrases Online | Everyday Speaking Practice | Cosmica`,
-    `Learn useful ${config.language} phrases with structured practice, translations, and audio support for greetings, travel, daily conversation, and common situations.`,
-    `Practice useful ${config.language} phrases with audio, translations, and organized speaking review.`,
+    `Learn ${config.language} Phrases | Cosmica`,
+    `Learn useful ${config.language} phrases with structured practice, translation support, and audio for daily conversation.`,
+    `Practice useful ${config.language} phrases with audio and translation support.`,
     `Learn ${config.language} Phrases Online`
   );
 
@@ -899,9 +914,9 @@ for (const config of LANGUAGES) {
     config,
     "grammar",
     config.grammarFile,
-    `Learn ${config.language} Grammar Online | Lessons and Examples | Cosmica`,
-    `Study ${config.language} grammar with structured lessons, practical examples, and clear explanations that help you build accurate speaking and writing skills.`,
-    `Learn ${config.language} grammar with examples, explanations, and guided lesson sections.`,
+    `Learn ${config.language} Grammar | Cosmica`,
+    `Study ${config.language} grammar with structured lessons, practical examples, and clear explanations for accurate use.`,
+    `Learn ${config.language} grammar with examples and guided lesson sections.`,
     `Learn ${config.language} Grammar Online`
   );
 

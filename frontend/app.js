@@ -1963,7 +1963,7 @@ const setupAccountHub = () => {
                       <circle class="icon-streak-spark" cx="8.2" cy="5" r="1.1"></circle>
                     </svg>
                   </span>
-                  <span class="account-menu-streak">0 days</span>
+                  <span class="account-menu-streak">1 active day</span>
                 </div>
                 <div class="account-menu-stat account-menu-stat-achievement">
                   <span class="account-menu-stat-icon" aria-hidden="true">
@@ -4514,7 +4514,8 @@ const setupAccountHub = () => {
     const achievementCount = hasPremiumAccess
       ? Math.max(0, Math.round(Number(gamification?.stats?.questDaysCompleted) || 0))
       : 0;
-    const activeDays = Math.max(0, Math.round(Number(gamification.currentStreak) || 0));
+    const normalizedStreakDays = Math.max(0, Math.round(Number(gamification.currentStreak) || 0));
+    const activeDays = isAuthenticated ? Math.max(1, normalizedStreakDays) : normalizedStreakDays;
     const showPremiumStatus = Boolean(isAuthenticated && hasPremiumAccess);
     const showFreeStreakOnly = Boolean(isAuthenticated && !hasPremiumAccess);
     const showSubscriptionManagement = Boolean(isAuthenticated && hasPremiumAccess);
@@ -6366,6 +6367,7 @@ const MAX_VISIBLE_CHAT_MESSAGES = 16;
 let userHasMessagedMimi = false;
 let lastMimiReply = "";
 let chatFreshPulseTimer;
+let chatLogTouchStartY = 0;
 let mimiBubbleFollowSessionEndsAt = 0;
 let mimiBubbleFollowUserOverride = false;
 let mimiBubbleFollowRaf = 0;
@@ -6599,6 +6601,9 @@ const speakLine = (text, mood = "happy", options = {}) => {
     const estimatedFollowDurationMs = Math.min(32000, Math.max(9000, line.length * 70));
     startMimiBubbleFollowSession({ durationMs: estimatedFollowDurationMs });
     triggerMimiReplyRevealEffect();
+    forceMimiBubbleIntoViewNow({
+      behavior: prefersReducedMotion ? "auto" : "smooth",
+    });
     queueMimiBubbleFollow({
       behavior: prefersReducedMotion ? "auto" : "smooth",
       force: true,
@@ -6642,6 +6647,49 @@ const scrollChatToBottom = () => {
   chatLog.scrollTop = chatLog.scrollHeight;
 };
 
+const getChatLogMaxScrollTop = () => {
+  if (!chatLog) {
+    return 0;
+  }
+  return Math.max(0, chatLog.scrollHeight - chatLog.clientHeight);
+};
+
+const shouldBlockChatLogBoundaryScroll = (deltaY) => {
+  if (!chatLog) {
+    return false;
+  }
+  const maxScrollTop = getChatLogMaxScrollTop();
+  if (maxScrollTop <= 1) {
+    return true;
+  }
+  if (!Number.isFinite(deltaY) || deltaY === 0) {
+    return false;
+  }
+  const atTop = chatLog.scrollTop <= 1;
+  const atBottom = chatLog.scrollTop >= maxScrollTop - 1;
+  return (deltaY < 0 && atTop) || (deltaY > 0 && atBottom);
+};
+
+const refreshChatLogOverflowState = () => {
+  if (!chatLog) {
+    return;
+  }
+  const maxScrollTop = getChatLogMaxScrollTop();
+  const hasOverflow = maxScrollTop > 1;
+  chatLog.classList.toggle("is-scrollable", hasOverflow);
+  if (!hasOverflow) {
+    chatLog.scrollTop = 0;
+    return;
+  }
+  if (chatLog.scrollTop < 0) {
+    chatLog.scrollTop = 0;
+    return;
+  }
+  if (chatLog.scrollTop > maxScrollTop) {
+    chatLog.scrollTop = maxScrollTop;
+  }
+};
+
 const syncChatLogMessageState = () => {
   if (!chatLog) {
     return;
@@ -6650,6 +6698,7 @@ const syncChatLogMessageState = () => {
   const hasUserMessages = Boolean(chatLog.querySelector(".chat-message.user"));
   chatLog.classList.toggle("has-messages", hasMessages);
   chatLog.classList.toggle("has-user-messages", hasUserMessages);
+  refreshChatLogOverflowState();
 };
 
 const animateChatLogPulse = () => {
@@ -6787,7 +6836,15 @@ const scrollMimiBubbleIntoView = ({ behavior = "smooth", force = false } = {}) =
   const targetWindow = targetBottom - targetTop;
   let delta = 0;
   if (rect.height >= targetWindow) {
-    delta = rect.top - targetTop;
+    // For tall expanding replies, follow the newest content near the bottom
+    // instead of pinning the bubble top.
+    const trackedBottom = speechText
+      ? Math.max(rect.top + 24, Math.min(rect.bottom, speechText.getBoundingClientRect().bottom + 16))
+      : rect.bottom;
+    delta = trackedBottom - targetBottom;
+    if (delta < 0 && !force) {
+      delta = 0;
+    }
   } else if (rect.top < targetTop) {
     delta = rect.top - targetTop;
   } else if (rect.bottom > targetBottom) {
@@ -6801,6 +6858,27 @@ const scrollMimiBubbleIntoView = ({ behavior = "smooth", force = false } = {}) =
     return;
   }
   window.scrollTo({ top: nextTop, behavior });
+};
+
+const forceMimiBubbleIntoViewNow = ({ behavior = "smooth" } = {}) => {
+  if (!speechBubble) {
+    return;
+  }
+  const scrollBehavior = prefersReducedMotion ? "auto" : behavior || "smooth";
+  speechBubble.scrollIntoView({
+    behavior: scrollBehavior,
+    block: "center",
+    inline: "nearest",
+  });
+  window.requestAnimationFrame(() => {
+    if (!speechBubble) {
+      return;
+    }
+    scrollMimiBubbleIntoView({ behavior: "auto", force: true });
+  });
+  window.setTimeout(() => {
+    scrollMimiBubbleIntoView({ behavior: "auto", force: true });
+  }, 110);
 };
 
 const queueMimiBubbleFollow = ({ behavior = "auto", force = false } = {}) => {
@@ -6866,10 +6944,7 @@ const revealMimiBubbleOnMobile = () => {
     return;
   }
   const shouldSmooth = window.matchMedia("(max-width: 960px)").matches && !prefersReducedMotion;
-  scrollMimiBubbleIntoView({
-    behavior: shouldSmooth ? "smooth" : "auto",
-    force: false,
-  });
+  forceMimiBubbleIntoViewNow({ behavior: shouldSmooth ? "smooth" : "auto" });
 };
 
 const primeMimiBubbleFollowFromSend = () => {
@@ -6879,6 +6954,9 @@ const primeMimiBubbleFollowFromSend = () => {
   // Start following as soon as user sends the message (before reply arrives),
   // then the reveal/typing phase continues with the same follow session.
   startMimiBubbleFollowSession({ durationMs: 22000 });
+  forceMimiBubbleIntoViewNow({
+    behavior: prefersReducedMotion ? "auto" : "smooth",
+  });
   queueMimiBubbleFollow({
     behavior: prefersReducedMotion ? "auto" : "smooth",
     force: true,
@@ -9153,6 +9231,64 @@ if (chatLog) {
   chatLog.removeAttribute("aria-hidden");
   chatLog.style.removeProperty("display");
   syncChatLogMessageState();
+  chatLog.addEventListener(
+    "wheel",
+    (event) => {
+      if (shouldBlockChatLogBoundaryScroll(event.deltaY)) {
+        event.preventDefault();
+      }
+    },
+    { passive: false }
+  );
+  chatLog.addEventListener(
+    "touchstart",
+    (event) => {
+      const firstTouch = event.touches && event.touches[0];
+      chatLogTouchStartY = firstTouch ? firstTouch.clientY : 0;
+    },
+    { passive: true }
+  );
+  chatLog.addEventListener(
+    "touchmove",
+    (event) => {
+      const firstTouch = event.touches && event.touches[0];
+      if (!firstTouch) {
+        return;
+      }
+      const deltaY = chatLogTouchStartY - firstTouch.clientY;
+      if (shouldBlockChatLogBoundaryScroll(deltaY)) {
+        event.preventDefault();
+      }
+      chatLogTouchStartY = firstTouch.clientY;
+    },
+    { passive: false }
+  );
+  chatLog.addEventListener(
+    "scroll",
+    () => {
+      refreshChatLogOverflowState();
+      if (!chatLog.classList.contains("is-scrollable") && chatLog.scrollTop !== 0) {
+        chatLog.scrollTop = 0;
+      }
+    },
+    { passive: true }
+  );
+  window.addEventListener(
+    "resize",
+    () => {
+      refreshChatLogOverflowState();
+    },
+    { passive: true }
+  );
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener(
+      "resize",
+      () => {
+        refreshChatLogOverflowState();
+      },
+      { passive: true }
+    );
+  }
 }
 if (chatStatus) {
   const statusText = chatStatus.querySelector(".chat-status-text");

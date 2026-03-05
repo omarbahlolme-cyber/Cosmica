@@ -523,18 +523,16 @@ ${buildGuidePager(
       }
 )}`;
 
-const beginnerTitle = (language) => `Learn ${language} for Beginners | Start Speaking ${language} | Cosmica`;
+const beginnerTitle = (language) => `Learn ${language} for Beginners | Cosmica`;
 const beginnerDescription = (language) =>
-  `Learn ${language} for beginners with structured lessons for pronunciation, vocabulary, phrases, and grammar. Start clearly and build toward confident speaking.`;
+  `Start ${language} with clear lessons for pronunciation, vocabulary, phrases, and grammar. Build speaking step by step.`;
 
-const pronunciationTitle = (language) =>
-  `${language} Pronunciation Guide | Audio, Sounds and Speaking Practice | Cosmica`;
+const pronunciationTitle = (language) => `${language} Pronunciation Guide | Cosmica`;
 const pronunciationDescription = (language) =>
-  `Improve ${language} pronunciation with audio practice, sound training, vocabulary review, and phrase-based speaking support inside Cosmica.`;
-const travelPhrasesTitle = (language) =>
-  `${language} Travel Phrases | Useful Words and Speaking Practice | Cosmica`;
+  `Improve ${language} pronunciation with audio, repeat practice, and phrase-based speaking support.`;
+const travelPhrasesTitle = (language) => `${language} Travel Phrases | Cosmica`;
 const travelPhrasesDescription = (language) =>
-  `Learn useful ${language} travel phrases for greetings, directions, food, transport, and everyday situations with clear guided practice.`;
+  `Learn useful ${language} travel phrases for greetings, directions, transport, and daily situations.`;
 
 const guideStructuredData = (config, pageTitle, pageDescription, fileName, pageLabel) => {
   const pageSchema = {
@@ -665,8 +663,8 @@ ${JSON.stringify(schema, null, 2)
 };
 
 const buildWorldStructuredData = (config) => {
-  const title = `Learn ${config.language} Online | Vocabulary, Phrases and Grammar | Cosmica`;
-  const description = `Learn ${config.language} online with step-by-step lessons for letters, vocabulary, phrases, and grammar. Use audio, translations, and guided practice to build confidence.`;
+  const title = `Learn ${config.language} Online Course | Cosmica`;
+  const description = `Learn ${config.language} online with guided lessons for letters, vocabulary, phrases, and grammar.`;
   const graph = {
     "@context": "https://schema.org",
     "@graph": [
