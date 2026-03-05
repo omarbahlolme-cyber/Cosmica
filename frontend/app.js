@@ -577,8 +577,27 @@ const ASSET_VERSION = resolveAssetVersion();
 const withAssetVersion = (assetPath) =>
   ASSET_VERSION ? `${assetPath}?v=${encodeURIComponent(ASSET_VERSION)}` : assetPath;
 const LEGACY_PWA_INSTALL_DISMISSED_KEY = "cosmicaPwaInstallPromptDismissed:v1";
-const COSMICA_APP_STORE_URL = "";
-const COSMICA_PLAY_STORE_URL = "";
+const sanitizeStoreListingUrl = (value) => {
+  const raw = String(value || "").trim();
+  if (!raw) {
+    return "";
+  }
+  try {
+    const parsed = new URL(raw, window.location.href);
+    if (!/^https?:$/i.test(parsed.protocol)) {
+      return "";
+    }
+    return parsed.toString();
+  } catch {
+    return "";
+  }
+};
+const COSMICA_STORE_LINKS =
+  window.COSMICA_STORE_LINKS && typeof window.COSMICA_STORE_LINKS === "object"
+    ? window.COSMICA_STORE_LINKS
+    : {};
+const COSMICA_APP_STORE_URL = sanitizeStoreListingUrl(COSMICA_STORE_LINKS.appStoreUrl || "");
+const COSMICA_PLAY_STORE_URL = sanitizeStoreListingUrl(COSMICA_STORE_LINKS.playStoreUrl || "");
 let deferredInstallPrompt = null;
 let installEntryButton = null;
 let installModal = null;
@@ -3621,6 +3640,16 @@ const setupAccountHub = () => {
     premiumCheckoutFeedback.dataset.tone = String(tone || "");
   };
 
+  const setNativeCheckoutBlockedState = () => {
+    premiumCheckoutOptionsReady = false;
+    renderPremiumCheckoutOptions(buildFallbackPremiumBillingOptions());
+    setPremiumCheckoutPrimaryState(false);
+    setPremiumCheckoutFeedback(
+      "Premium purchase in the mobile app is not enabled yet. Use cosmicalearn.com in your browser to subscribe for now.",
+      "info"
+    );
+  };
+
   const setPremiumCheckoutPrimaryState = (isLoading = false) => {
     if (!(premiumCheckoutPrimaryBtn instanceof HTMLButtonElement)) {
       return;
@@ -3770,6 +3799,10 @@ const setupAccountHub = () => {
   };
 
   const redirectToExternalPremiumCheckout = ({ url = "", label = "Premium" } = {}) => {
+    if (isNativeShellRuntime()) {
+      setNativeCheckoutBlockedState();
+      return;
+    }
     const safeUrl = sanitizePremiumCheckoutUrl(url);
     if (!safeUrl) {
       setPremiumCheckoutPrimaryState(false);
@@ -3790,6 +3823,13 @@ const setupAccountHub = () => {
     setPremiumCheckoutFeedback("");
     premiumCheckoutOverlay.hidden = false;
     syncPremiumModalBodyLock();
+    if (isNativeShellRuntime()) {
+      setNativeCheckoutBlockedState();
+      window.setTimeout(() => {
+        premiumCheckoutCard?.focus?.();
+      }, 20);
+      return;
+    }
     setPremiumCheckoutFeedback("Loading secure subscription options...", "info");
     const loadResult = await loadPremiumBillingOptions();
     if (!premiumCheckoutOptionsReady) {
@@ -14484,6 +14524,25 @@ const setupEssentialCookieNotice = () => {
    -------------------------------------------------------------------------- */
 const isStandaloneAppDisplay = () =>
   window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+
+const isNativeShellRuntime = () => {
+  try {
+    const cap = window.Capacitor;
+    if (cap && typeof cap.isNativePlatform === "function") {
+      return cap.isNativePlatform() === true;
+    }
+    if (cap && typeof cap.getPlatform === "function") {
+      const platform = String(cap.getPlatform() || "")
+        .trim()
+        .toLowerCase();
+      if (platform === "ios" || platform === "android") {
+        return true;
+      }
+    }
+  } catch {}
+  const ua = String(window.navigator.userAgent || "").toLowerCase();
+  return /\bcapacitor\b/.test(ua);
+};
 
 const syncStandaloneBodyClass = () => {
   document.body.classList.toggle("is-standalone-app", isStandaloneAppDisplay());

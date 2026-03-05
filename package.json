@@ -10,6 +10,7 @@
     "native:add:ios": "npx cap add ios",
     "native:copy": "npx cap copy",
     "native:sync": "npx cap sync",
+    "native:check": "node scripts/native-readiness-check.js",
     "native:open:android": "npx cap open android",
     "native:open:ios": "npx cap open ios",
     "generate:translations": "node scripts/generate-translations.js",

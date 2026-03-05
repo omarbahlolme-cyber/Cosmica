@@ -4891,7 +4891,58 @@ const countVisitedSectionsForQuests = (progress) => {
   return total;
 };
 
-const countCheckedPracticeItemsForQuests = (progress) => {
+const resolveQuestDateKeyForProgress = (progress, preferredDateKey = "") => {
+  const preferred = normalizeDateKey(preferredDateKey);
+  if (preferred) {
+    return preferred;
+  }
+  const questDate = normalizeDateKey(progress?.gamification?.quests?.date);
+  if (questDate) {
+    return questDate;
+  }
+  return getDateKeyFromIsoInTimeZone(new Date().toISOString(), STREAK_DAY_TIMEZONE);
+};
+
+const getTimestampDateKey = (value) => {
+  const raw = String(value || "").trim();
+  if (!raw) {
+    return "";
+  }
+  return getDateKeyFromIsoInTimeZone(raw, STREAK_DAY_TIMEZONE);
+};
+
+const countCheckedPracticeItemsForQuestsOnDate = (progress, dateKey) => {
+  const worlds = isPlainObject(progress?.worlds) ? progress.worlds : {};
+  const targetDateKey = normalizeDateKey(dateKey);
+  if (!targetDateKey) {
+    return 0;
+  }
+  let total = 0;
+
+  Object.values(worlds).forEach((worldRecord) => {
+    const maps = isPlainObject(worldRecord?.maps) ? worldRecord.maps : {};
+
+    ALLOWED_PROGRESS_MAP_KEYS.forEach((mapKey) => {
+      const sections = isPlainObject(maps?.[mapKey]?.sections) ? maps[mapKey].sections : {};
+      if (!isPlainObject(sections)) {
+        return;
+      }
+      Object.entries(sections).forEach(([sectionKey, sectionRecord]) => {
+        if (!isCountableWorldMapSectionEvent({ mapKey, sectionKey })) {
+          return;
+        }
+        const checkedAtDateKey = getTimestampDateKey(sectionRecord?.practiceQuestCheckedAt);
+        if (checkedAtDateKey === targetDateKey) {
+          total += 1;
+        }
+      });
+    });
+  });
+
+  return total;
+};
+
+const countCheckedPracticeItemsForStats = (progress) => {
   const worlds = isPlainObject(progress?.worlds) ? progress.worlds : {};
   let total = 0;
 
@@ -4917,29 +4968,119 @@ const countCheckedPracticeItemsForQuests = (progress) => {
   return total;
 };
 
-const syncPracticeQuestTaskFromProgress = (progress, tasks) => {
+const syncPracticeQuestTaskFromProgress = (progress, tasks, dateKey) => {
   const practiceTask = tasks?.practice;
   if (!practiceTask) {
     return;
   }
   const target = Math.max(1, Number(practiceTask.target || 25));
-  const checkedCount = countCheckedPracticeItemsForQuests(progress);
+  const checkedCount = countCheckedPracticeItemsForQuestsOnDate(progress, dateKey);
   practiceTask.progress = Math.max(0, Math.min(target, checkedCount));
   practiceTask.completed = practiceTask.progress >= target;
 };
 
-const syncDiscoverQuestTaskFromProgress = (progress, tasks) => {
+const countVisitedSectionsForQuestsOnDate = (progress, dateKey) => {
+  const targetDateKey = normalizeDateKey(dateKey);
+  if (!targetDateKey) {
+    return 0;
+  }
+  const seenSectionKeys = new Set();
+  let total = 0;
+
+  const worlds = isPlainObject(progress?.worlds) ? progress.worlds : {};
+  Object.entries(worlds).forEach(([worldKey, worldRecord]) => {
+    const maps = isPlainObject(worldRecord?.maps) ? worldRecord.maps : {};
+    ALLOWED_PROGRESS_MAP_KEYS.forEach((mapKey) => {
+      const sections = isPlainObject(maps?.[mapKey]?.sections) ? maps[mapKey].sections : {};
+      if (!isPlainObject(sections)) {
+        return;
+      }
+      Object.entries(sections).forEach(([sectionKey, sectionRecord]) => {
+        if (!isCountableWorldMapSectionEvent({ mapKey, sectionKey })) {
+          return;
+        }
+        const discoverDateKey = getTimestampDateKey(sectionRecord?.questDiscoverAt);
+        if (discoverDateKey !== targetDateKey) {
+          return;
+        }
+        const questSectionKey = resolveQuestVisitedSectionKey(mapKey, sectionKey);
+        if (!questSectionKey) {
+          return;
+        }
+        const dedupeKey = `${String(worldKey || "").trim().toLowerCase()}::${mapKey}::${questSectionKey}`;
+        if (seenSectionKeys.has(dedupeKey)) {
+          return;
+        }
+        seenSectionKeys.add(dedupeKey);
+        total += 1;
+      });
+    });
+  });
+
+  return total;
+};
+
+const syncDiscoverQuestTaskFromProgress = (progress, tasks, dateKey) => {
   const discoverTask = tasks?.discover;
   if (!discoverTask) {
     return;
   }
   const target = Math.max(1, Number(discoverTask.target || 3));
-  const visitedCount = countVisitedSectionsForQuests(progress);
+  const visitedCount = countVisitedSectionsForQuestsOnDate(progress, dateKey);
   discoverTask.progress = Math.max(0, Math.min(target, visitedCount));
   discoverTask.completed = discoverTask.progress >= target;
 };
 
-const countEffectiveCompletedSectionsForQuests = (progress) => {
+const countEffectiveCompletedSectionsForQuestsOnDate = (progress, dateKey) => {
+  const worlds = isPlainObject(progress?.worlds) ? progress.worlds : {};
+  const targetDateKey = normalizeDateKey(dateKey);
+  if (!targetDateKey) {
+    return 0;
+  }
+  let total = 0;
+
+  Object.values(worlds).forEach((worldRecord) => {
+    const maps = isPlainObject(worldRecord?.maps) ? worldRecord.maps : {};
+
+    ALLOWED_PROGRESS_MAP_KEYS.forEach((mapKey) => {
+      const sections = isPlainObject(maps?.[mapKey]?.sections) ? maps[mapKey].sections : {};
+      if (!isPlainObject(sections)) {
+        return;
+      }
+
+      if (mapKey === "letters") {
+        const hasAnyCompletedLettersSection = Object.entries(sections).some(
+          ([sectionKey, sectionRecord]) =>
+            isCountableWorldMapSectionEvent({ mapKey, sectionKey }) &&
+            hasSectionCompletion(sectionRecord) &&
+            getTimestampDateKey(sectionRecord?.lastCompletedAt || sectionRecord?.firstCompletedAt) ===
+              targetDateKey
+        );
+        if (hasAnyCompletedLettersSection) {
+          total += 1;
+        }
+        return;
+      }
+
+      Object.entries(sections).forEach(([sectionKey, sectionRecord]) => {
+        if (!isCountableWorldMapSectionEvent({ mapKey, sectionKey })) {
+          return;
+        }
+        if (
+          hasSectionCompletion(sectionRecord) &&
+          getTimestampDateKey(sectionRecord?.lastCompletedAt || sectionRecord?.firstCompletedAt) ===
+            targetDateKey
+        ) {
+          total += 1;
+        }
+      });
+    });
+  });
+
+  return total;
+};
+
+const countEffectiveCompletedSectionsForStats = (progress) => {
   const worlds = isPlainObject(progress?.worlds) ? progress.worlds : {};
   let total = 0;
 
@@ -4978,13 +5119,13 @@ const countEffectiveCompletedSectionsForQuests = (progress) => {
   return total;
 };
 
-const syncCompleteQuestTaskFromProgress = (progress, tasks) => {
+const syncCompleteQuestTaskFromProgress = (progress, tasks, dateKey) => {
   const completeTask = tasks?.complete;
   if (!completeTask) {
     return;
   }
   const target = Math.max(1, Number(completeTask.target || 2));
-  const effectiveCompleted = countEffectiveCompletedSectionsForQuests(progress);
+  const effectiveCompleted = countEffectiveCompletedSectionsForQuestsOnDate(progress, dateKey);
   completeTask.progress = Math.max(0, Math.min(target, effectiveCompleted));
   completeTask.completed = completeTask.progress >= target;
 };
@@ -5018,12 +5159,8 @@ const syncGamificationStatsFromProgress = (progress) => {
     return;
   }
   stats.sectionsVisited = toBoundedInt(countVisitedSectionsForQuests(progress), 0, 5000000);
-  stats.sectionsCompleted = toBoundedInt(
-    countEffectiveCompletedSectionsForQuests(progress),
-    0,
-    5000000
-  );
-  stats.cardsPracticed = toBoundedInt(countCheckedPracticeItemsForQuests(progress), 0, 50000000);
+  stats.sectionsCompleted = toBoundedInt(countEffectiveCompletedSectionsForStats(progress), 0, 5000000);
+  stats.cardsPracticed = toBoundedInt(countCheckedPracticeItemsForStats(progress), 0, 50000000);
   stats.grammarReviews = toBoundedInt(countGrammarReviewEventsForStats(progress), 0, 50000000);
 };
 
@@ -5031,19 +5168,19 @@ const updateQuestProgressFromEvent = (progress, eventContext) => {
   const gamification = progress.gamification;
   const tasks = gamification.quests.tasks;
   const hasPremiumAccess = eventContext?.hasPremiumAccess !== false;
+  const questDateKey = resolveQuestDateKeyForProgress(progress, eventContext?.dateKey);
   if (!tasks) {
     return false;
   }
+  syncPracticeQuestTaskFromProgress(progress, tasks, questDateKey);
+  syncDiscoverQuestTaskFromProgress(progress, tasks, questDateKey);
+  syncCompleteQuestTaskFromProgress(progress, tasks, questDateKey);
 
-  if (eventContext.isPracticeQuestToggle) {
-    syncPracticeQuestTaskFromProgress(progress, tasks);
-    syncDiscoverQuestTaskFromProgress(progress, tasks);
-    syncCompleteQuestTaskFromProgress(progress, tasks);
-
-    const previouslyAllCompleted = Boolean(gamification.quests.allCompleted);
-    const nowAllCompleted = Object.values(tasks).every((task) => task.completed);
-    gamification.quests.allCompleted = nowAllCompleted;
-    if (hasPremiumAccess && !previouslyAllCompleted && nowAllCompleted) {
+  const previouslyAllCompleted = Boolean(gamification.quests.allCompleted);
+  const nowAllCompleted = Object.values(tasks).every((task) => task.completed);
+  gamification.quests.allCompleted = nowAllCompleted;
+  if (hasPremiumAccess) {
+    if (!previouslyAllCompleted && nowAllCompleted) {
       gamification.stats.questDaysCompleted = toBoundedInt(
         Number(gamification.stats.questDaysCompleted || 0) + 1,
         0,
@@ -5051,22 +5188,14 @@ const updateQuestProgressFromEvent = (progress, eventContext) => {
       );
       return true;
     }
-    return false;
-  }
-  syncPracticeQuestTaskFromProgress(progress, tasks);
-  syncDiscoverQuestTaskFromProgress(progress, tasks);
-  syncCompleteQuestTaskFromProgress(progress, tasks);
-
-  const previouslyAllCompleted = Boolean(gamification.quests.allCompleted);
-  const nowAllCompleted = Object.values(tasks).every((task) => task.completed);
-  gamification.quests.allCompleted = nowAllCompleted;
-  if (hasPremiumAccess && !previouslyAllCompleted && nowAllCompleted) {
-    gamification.stats.questDaysCompleted = toBoundedInt(
-      Number(gamification.stats.questDaysCompleted || 0) + 1,
-      0,
-      5000000
-    );
-    return true;
+    if (previouslyAllCompleted && !nowAllCompleted) {
+      gamification.stats.questDaysCompleted = toBoundedInt(
+        Number(gamification.stats.questDaysCompleted || 0) - 1,
+        0,
+        5000000
+      );
+      return false;
+    }
   }
   return false;
 };
@@ -5095,7 +5224,12 @@ const computeEventXpDelta = (status, mapKey, previousSection, dailyState) => {
     return 0;
   }
   if (status === "completed") {
-    return previousStatus === "completed" ? weight.repeatedComplete : weight.completed;
+    const currentDateKey = normalizeDateKey(dailyState?.date) || "";
+    const awardedDateKey = getTimestampDateKey(previousSection?.completionXpAwardedAt);
+    if (currentDateKey && currentDateKey === awardedDateKey) {
+      return 0;
+    }
+    return weight.completed;
   }
   if (status === "started") {
     if (!previousSection) {
@@ -5352,6 +5486,7 @@ const trackProgressEventForUser = (userRecord, payload) => {
     reviewCount: nextReviewCount,
     completionCount: nextCompletionCount,
     firstStartedAt: previous?.firstStartedAt || (status === "started" ? now : null),
+    lastStartedAt: status === "started" ? now : previous?.lastStartedAt || null,
     lastUpdatedAt: now,
     firstCompletedAt: isPracticeQuestToggle
       ? previous?.firstCompletedAt || null
@@ -5360,6 +5495,18 @@ const trackProgressEventForUser = (userRecord, payload) => {
         : status === "uncompleted"
           ? null
           : previous?.firstCompletedAt || null,
+    lastCompletedAt:
+      !isPracticeQuestToggle && status === "completed"
+        ? now
+        : previous?.lastCompletedAt || null,
+    completionXpAwardedAt:
+      !isPracticeQuestToggle && status === "completed" && computedXpDelta > 0
+        ? now
+        : previous?.completionXpAwardedAt || null,
+    questDiscoverAt:
+      !isPracticeQuestToggle && status !== "uncompleted"
+        ? now
+        : previous?.questDiscoverAt || null,
     practiceQuestCheckedAt: wantsPracticeQuestChecked
       ? previous?.practiceQuestCheckedAt || now
       : null,
@@ -5481,7 +5628,7 @@ const trackProgressEventForUser = (userRecord, payload) => {
 
   syncGamificationStatsFromProgress(progress);
 
-  if (hasPremiumAccess && gamification.quests.allCompleted) {
+  if (hasPremiumAccess) {
     xpDelta = computedXpDelta;
   }
 
