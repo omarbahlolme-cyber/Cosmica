@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.cosmicalearn.com/</loc>
@@ -13,11 +13,11 @@
     <lastmod>2026-03-05T13:46:04.176Z</lastmod>
   </url>
   <url>
-    <loc>https://www.cosmicalearn.com/arabic-travel-phrases-ar.html</loc>
+    <loc>https://www.cosmicalearn.com/arabic-travel-phrases.html</loc>
     <lastmod>2026-03-05T13:46:04.176Z</lastmod>
   </url>
   <url>
-    <loc>https://www.cosmicalearn.com/arabic-travel-phrases.html</loc>
+    <loc>https://www.cosmicalearn.com/arabic-travel-phrases-ar.html</loc>
     <lastmod>2026-03-05T13:46:04.176Z</lastmod>
   </url>
   <url>
@@ -29,12 +29,12 @@
     <lastmod>2026-03-05T13:46:04.176Z</lastmod>
   </url>
   <url>
-    <loc>https://www.cosmicalearn.com/chinese-travel-phrases-zh.html</loc>
-    <lastmod>2026-03-05T13:46:04.176Z</lastmod>
-  </url>
-  <url>
     <loc>https://www.cosmicalearn.com/chinese-travel-phrases.html</loc>
     <lastmod>2026-03-05T13:46:04.183Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.cosmicalearn.com/chinese-travel-phrases-zh.html</loc>
+    <lastmod>2026-03-05T13:46:04.176Z</lastmod>
   </url>
   <url>
     <loc>https://www.cosmicalearn.com/dutch-pronunciation-guide.html</loc>
@@ -45,11 +45,11 @@
     <lastmod>2026-03-05T13:46:04.185Z</lastmod>
   </url>
   <url>
-    <loc>https://www.cosmicalearn.com/dutch-travel-phrases-nl.html</loc>
+    <loc>https://www.cosmicalearn.com/dutch-travel-phrases.html</loc>
     <lastmod>2026-03-05T13:46:04.186Z</lastmod>
   </url>
   <url>
-    <loc>https://www.cosmicalearn.com/dutch-travel-phrases.html</loc>
+    <loc>https://www.cosmicalearn.com/dutch-travel-phrases-nl.html</loc>
     <lastmod>2026-03-05T13:46:04.186Z</lastmod>
   </url>
   <url>
@@ -89,11 +89,11 @@
     <lastmod>2026-03-05T13:46:04.196Z</lastmod>
   </url>
   <url>
-    <loc>https://www.cosmicalearn.com/french-travel-phrases-fr.html</loc>
+    <loc>https://www.cosmicalearn.com/french-travel-phrases.html</loc>
     <lastmod>2026-03-05T13:46:04.196Z</lastmod>
   </url>
   <url>
-    <loc>https://www.cosmicalearn.com/french-travel-phrases.html</loc>
+    <loc>https://www.cosmicalearn.com/french-travel-phrases-fr.html</loc>
     <lastmod>2026-03-05T13:46:04.196Z</lastmod>
   </url>
   <url>
@@ -105,11 +105,11 @@
     <lastmod>2026-03-05T13:46:04.200Z</lastmod>
   </url>
   <url>
-    <loc>https://www.cosmicalearn.com/german-travel-phrases-de.html</loc>
+    <loc>https://www.cosmicalearn.com/german-travel-phrases.html</loc>
     <lastmod>2026-03-05T13:46:04.200Z</lastmod>
   </url>
   <url>
-    <loc>https://www.cosmicalearn.com/german-travel-phrases.html</loc>
+    <loc>https://www.cosmicalearn.com/german-travel-phrases-de.html</loc>
     <lastmod>2026-03-05T13:46:04.200Z</lastmod>
   </url>
   <url>
@@ -165,11 +165,11 @@
     <lastmod>2026-03-05T13:46:04.218Z</lastmod>
   </url>
   <url>
-    <loc>https://www.cosmicalearn.com/hindi-travel-phrases-hi.html</loc>
+    <loc>https://www.cosmicalearn.com/hindi-travel-phrases.html</loc>
     <lastmod>2026-03-05T13:46:04.219Z</lastmod>
   </url>
   <url>
-    <loc>https://www.cosmicalearn.com/hindi-travel-phrases.html</loc>
+    <loc>https://www.cosmicalearn.com/hindi-travel-phrases-hi.html</loc>
     <lastmod>2026-03-05T13:46:04.219Z</lastmod>
   </url>
   <url>
@@ -181,12 +181,12 @@
     <lastmod>2026-03-05T13:46:04.222Z</lastmod>
   </url>
   <url>
-    <loc>https://www.cosmicalearn.com/japanese-travel-phrases-ja.html</loc>
-    <lastmod>2026-03-05T13:46:04.223Z</lastmod>
-  </url>
-  <url>
     <loc>https://www.cosmicalearn.com/japanese-travel-phrases.html</loc>
     <lastmod>2026-03-05T13:46:04.224Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.cosmicalearn.com/japanese-travel-phrases-ja.html</loc>
+    <lastmod>2026-03-05T13:46:04.223Z</lastmod>
   </url>
   <url>
     <loc>https://www.cosmicalearn.com/korean-pronunciation-guide.html</loc>
@@ -197,12 +197,12 @@
     <lastmod>2026-03-05T13:46:04.226Z</lastmod>
   </url>
   <url>
-    <loc>https://www.cosmicalearn.com/korean-travel-phrases-ko.html</loc>
-    <lastmod>2026-03-05T13:46:04.227Z</lastmod>
-  </url>
-  <url>
     <loc>https://www.cosmicalearn.com/korean-travel-phrases.html</loc>
     <lastmod>2026-03-05T13:46:04.228Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.cosmicalearn.com/korean-travel-phrases-ko.html</loc>
+    <lastmod>2026-03-05T13:46:04.227Z</lastmod>
   </url>
   <url>
     <loc>https://www.cosmicalearn.com/learn-arabic-for-beginners.html</loc>
@@ -397,11 +397,11 @@
     <lastmod>2026-03-05T13:46:04.277Z</lastmod>
   </url>
   <url>
-    <loc>https://www.cosmicalearn.com/portuguese-travel-phrases-pt.html</loc>
+    <loc>https://www.cosmicalearn.com/portuguese-travel-phrases.html</loc>
     <lastmod>2026-03-05T13:46:04.277Z</lastmod>
   </url>
   <url>
-    <loc>https://www.cosmicalearn.com/portuguese-travel-phrases.html</loc>
+    <loc>https://www.cosmicalearn.com/portuguese-travel-phrases-pt.html</loc>
     <lastmod>2026-03-05T13:46:04.277Z</lastmod>
   </url>
   <url>
@@ -417,11 +417,11 @@
     <lastmod>2026-03-05T13:46:04.284Z</lastmod>
   </url>
   <url>
-    <loc>https://www.cosmicalearn.com/spanish-travel-phrases-es.html</loc>
+    <loc>https://www.cosmicalearn.com/spanish-travel-phrases.html</loc>
     <lastmod>2026-03-05T13:46:04.285Z</lastmod>
   </url>
   <url>
-    <loc>https://www.cosmicalearn.com/spanish-travel-phrases.html</loc>
+    <loc>https://www.cosmicalearn.com/spanish-travel-phrases-es.html</loc>
     <lastmod>2026-03-05T13:46:04.285Z</lastmod>
   </url>
   <url>
@@ -433,11 +433,11 @@
     <lastmod>2026-03-05T13:46:04.286Z</lastmod>
   </url>
   <url>
-    <loc>https://www.cosmicalearn.com/swedish-travel-phrases-sv.html</loc>
+    <loc>https://www.cosmicalearn.com/swedish-travel-phrases.html</loc>
     <lastmod>2026-03-05T13:46:04.286Z</lastmod>
   </url>
   <url>
-    <loc>https://www.cosmicalearn.com/swedish-travel-phrases.html</loc>
+    <loc>https://www.cosmicalearn.com/swedish-travel-phrases-sv.html</loc>
     <lastmod>2026-03-05T13:46:04.286Z</lastmod>
   </url>
   <url>

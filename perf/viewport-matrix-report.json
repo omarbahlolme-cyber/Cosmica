@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-26T07:40:31.773Z",
+  "generatedAt": "2026-03-05T15:06:43.904Z",
   "baseUrl": "http://127.0.0.1:4175",
   "routes": [
     "/",
@@ -13,7 +13,9 @@
     "/terms.html"
   ],
   "browsers": [
-    "chromium"
+    "chromium",
+    "firefox",
+    "webkit"
   ],
   "viewports": [
     {
@@ -142,7 +144,646 @@
       "height": 1440
     }
   ],
-  "failures": [],
-  "checks": 225,
-  "passed": 225
+  "failures": [
+    {
+      "browser": "chromium",
+      "viewport": "1024x768",
+      "route": "/",
+      "title": "Learn English, French, Spanish and More Online | Cosmica",
+      "htmlOverflow": 0,
+      "bodyOverflow": 8,
+      "clippedRisk": [],
+      "screenshot": "perf/viewport-failures/chromium-1024x768-root.png"
+    },
+    {
+      "browser": "firefox",
+      "viewport": "1024x768",
+      "route": "/",
+      "title": "Learn English, French, Spanish and More Online | Cosmica",
+      "htmlOverflow": 0,
+      "bodyOverflow": 5,
+      "clippedRisk": [],
+      "screenshot": "perf/viewport-failures/firefox-1024x768-root.png"
+    },
+    {
+      "browser": "firefox",
+      "viewport": "1024x768",
+      "route": "/english-world.html",
+      "title": "Learn English Online Course | Cosmica",
+      "htmlOverflow": 0,
+      "bodyOverflow": 0,
+      "clippedRisk": [
+        {
+          "selector": ".section",
+          "index": 2,
+          "riskType": "local_clip",
+          "overflowX": "clip",
+          "localOverflowPx": 54,
+          "rectLeft": 46,
+          "rectRight": 978,
+          "viewportWidth": 1024
+        }
+      ],
+      "screenshot": "perf/viewport-failures/firefox-1024x768-english-world.html.png"
+    },
+    {
+      "browser": "firefox",
+      "viewport": "1024x768",
+      "route": "/world-french.html",
+      "title": "Learn French Online Course | Cosmica",
+      "htmlOverflow": 0,
+      "bodyOverflow": 0,
+      "clippedRisk": [
+        {
+          "selector": ".section",
+          "index": 1,
+          "riskType": "local_clip",
+          "overflowX": "clip",
+          "localOverflowPx": 63,
+          "rectLeft": 46,
+          "rectRight": 978,
+          "viewportWidth": 1024
+        },
+        {
+          "selector": ".section",
+          "index": 2,
+          "riskType": "local_clip",
+          "overflowX": "clip",
+          "localOverflowPx": 97,
+          "rectLeft": 46,
+          "rectRight": 978,
+          "viewportWidth": 1024
+        }
+      ],
+      "screenshot": "perf/viewport-failures/firefox-1024x768-world-french.html.png"
+    },
+    {
+      "browser": "firefox",
+      "viewport": "1280x720",
+      "route": "/world-french.html",
+      "title": "Learn French Online Course | Cosmica",
+      "htmlOverflow": 0,
+      "bodyOverflow": 0,
+      "clippedRisk": [
+        {
+          "selector": ".section",
+          "index": 1,
+          "riskType": "local_clip",
+          "overflowX": "clip",
+          "localOverflowPx": 64,
+          "rectLeft": 117,
+          "rectRight": 1163,
+          "viewportWidth": 1280
+        },
+        {
+          "selector": ".section",
+          "index": 2,
+          "riskType": "local_clip",
+          "overflowX": "clip",
+          "localOverflowPx": 98,
+          "rectLeft": 117,
+          "rectRight": 1163,
+          "viewportWidth": 1280
+        }
+      ],
+      "screenshot": "perf/viewport-failures/firefox-1280x720-world-french.html.png"
+    },
+    {
+      "browser": "firefox",
+      "viewport": "1366x768",
+      "route": "/world-french.html",
+      "title": "Learn French Online Course | Cosmica",
+      "htmlOverflow": 0,
+      "bodyOverflow": 0,
+      "clippedRisk": [
+        {
+          "selector": ".section",
+          "index": 2,
+          "riskType": "local_clip",
+          "overflowX": "clip",
+          "localOverflowPx": 66,
+          "rectLeft": 165,
+          "rectRight": 1201,
+          "viewportWidth": 1366
+        }
+      ],
+      "screenshot": "perf/viewport-failures/firefox-1366x768-world-french.html.png"
+    },
+    {
+      "browser": "firefox",
+      "viewport": "1440x900",
+      "route": "/english-world.html",
+      "title": "Learn English Online Course | Cosmica",
+      "htmlOverflow": 0,
+      "bodyOverflow": 0,
+      "clippedRisk": [
+        {
+          "selector": ".section",
+          "index": 2,
+          "riskType": "local_clip",
+          "overflowX": "clip",
+          "localOverflowPx": 66,
+          "rectLeft": 206,
+          "rectRight": 1234,
+          "viewportWidth": 1440
+        }
+      ],
+      "screenshot": "perf/viewport-failures/firefox-1440x900-english-world.html.png"
+    },
+    {
+      "browser": "firefox",
+      "viewport": "1600x900",
+      "route": "/english-world.html",
+      "title": "Learn English Online Course | Cosmica",
+      "htmlOverflow": 0,
+      "bodyOverflow": 0,
+      "clippedRisk": [
+        {
+          "selector": ".section",
+          "index": 2,
+          "riskType": "local_clip",
+          "overflowX": "clip",
+          "localOverflowPx": 66,
+          "rectLeft": 296,
+          "rectRight": 1304,
+          "viewportWidth": 1600
+        }
+      ],
+      "screenshot": "perf/viewport-failures/firefox-1600x900-english-world.html.png"
+    },
+    {
+      "browser": "webkit",
+      "viewport": "768x1024",
+      "route": "/english-world.html",
+      "title": "Learn English Online Course | Cosmica",
+      "htmlOverflow": 0,
+      "bodyOverflow": 0,
+      "clippedRisk": [
+        {
+          "selector": ".section",
+          "index": 2,
+          "riskType": "local_clip",
+          "overflowX": "clip",
+          "localOverflowPx": 54,
+          "rectLeft": 35,
+          "rectRight": 733,
+          "viewportWidth": 768
+        }
+      ],
+      "screenshot": "perf/viewport-failures/webkit-768x1024-english-world.html.png"
+    },
+    {
+      "browser": "webkit",
+      "viewport": "768x1024",
+      "route": "/world-french.html",
+      "title": "Learn French Online Course | Cosmica",
+      "htmlOverflow": 0,
+      "bodyOverflow": 0,
+      "clippedRisk": [
+        {
+          "selector": ".section",
+          "index": 2,
+          "riskType": "local_clip",
+          "overflowX": "clip",
+          "localOverflowPx": 54,
+          "rectLeft": 35,
+          "rectRight": 733,
+          "viewportWidth": 768
+        }
+      ],
+      "screenshot": "perf/viewport-failures/webkit-768x1024-world-french.html.png"
+    },
+    {
+      "browser": "webkit",
+      "viewport": "810x1080",
+      "route": "/english-world.html",
+      "title": "Learn English Online Course | Cosmica",
+      "htmlOverflow": 0,
+      "bodyOverflow": 0,
+      "clippedRisk": [
+        {
+          "selector": ".section",
+          "index": 2,
+          "riskType": "local_clip",
+          "overflowX": "clip",
+          "localOverflowPx": 58,
+          "rectLeft": 36,
+          "rectRight": 774,
+          "viewportWidth": 810
+        }
+      ],
+      "screenshot": "perf/viewport-failures/webkit-810x1080-english-world.html.png"
+    },
+    {
+      "browser": "webkit",
+      "viewport": "810x1080",
+      "route": "/world-french.html",
+      "title": "Learn French Online Course | Cosmica",
+      "htmlOverflow": 0,
+      "bodyOverflow": 0,
+      "clippedRisk": [
+        {
+          "selector": ".section",
+          "index": 2,
+          "riskType": "local_clip",
+          "overflowX": "clip",
+          "localOverflowPx": 58,
+          "rectLeft": 36,
+          "rectRight": 774,
+          "viewportWidth": 810
+        }
+      ],
+      "screenshot": "perf/viewport-failures/webkit-810x1080-world-french.html.png"
+    },
+    {
+      "browser": "webkit",
+      "viewport": "820x1180",
+      "route": "/english-world.html",
+      "title": "Learn English Online Course | Cosmica",
+      "htmlOverflow": 0,
+      "bodyOverflow": 0,
+      "clippedRisk": [
+        {
+          "selector": ".section",
+          "index": 2,
+          "riskType": "local_clip",
+          "overflowX": "clip",
+          "localOverflowPx": 59,
+          "rectLeft": 37,
+          "rectRight": 783,
+          "viewportWidth": 820
+        }
+      ],
+      "screenshot": "perf/viewport-failures/webkit-820x1180-english-world.html.png"
+    },
+    {
+      "browser": "webkit",
+      "viewport": "820x1180",
+      "route": "/world-french.html",
+      "title": "Learn French Online Course | Cosmica",
+      "htmlOverflow": 0,
+      "bodyOverflow": 0,
+      "clippedRisk": [
+        {
+          "selector": ".section",
+          "index": 2,
+          "riskType": "local_clip",
+          "overflowX": "clip",
+          "localOverflowPx": 59,
+          "rectLeft": 37,
+          "rectRight": 783,
+          "viewportWidth": 820
+        }
+      ],
+      "screenshot": "perf/viewport-failures/webkit-820x1180-world-french.html.png"
+    },
+    {
+      "browser": "webkit",
+      "viewport": "1024x768",
+      "route": "/",
+      "title": "Learn English, French, Spanish and More Online | Cosmica",
+      "htmlOverflow": 0,
+      "bodyOverflow": 10,
+      "clippedRisk": [],
+      "screenshot": "perf/viewport-failures/webkit-1024x768-root.png"
+    },
+    {
+      "browser": "webkit",
+      "viewport": "1024x768",
+      "route": "/english-world.html",
+      "title": "Learn English Online Course | Cosmica",
+      "htmlOverflow": 0,
+      "bodyOverflow": 0,
+      "clippedRisk": [
+        {
+          "selector": ".section",
+          "index": 2,
+          "riskType": "local_clip",
+          "overflowX": "clip",
+          "localOverflowPx": 77,
+          "rectLeft": 46,
+          "rectRight": 978,
+          "viewportWidth": 1024
+        }
+      ],
+      "screenshot": "perf/viewport-failures/webkit-1024x768-english-world.html.png"
+    },
+    {
+      "browser": "webkit",
+      "viewport": "1024x768",
+      "route": "/world-french.html",
+      "title": "Learn French Online Course | Cosmica",
+      "htmlOverflow": 0,
+      "bodyOverflow": 0,
+      "clippedRisk": [
+        {
+          "selector": ".section",
+          "index": 2,
+          "riskType": "local_clip",
+          "overflowX": "clip",
+          "localOverflowPx": 77,
+          "rectLeft": 46,
+          "rectRight": 978,
+          "viewportWidth": 1024
+        }
+      ],
+      "screenshot": "perf/viewport-failures/webkit-1024x768-world-french.html.png"
+    },
+    {
+      "browser": "webkit",
+      "viewport": "1024x1366",
+      "route": "/english-world.html",
+      "title": "Learn English Online Course | Cosmica",
+      "htmlOverflow": 0,
+      "bodyOverflow": 0,
+      "clippedRisk": [
+        {
+          "selector": ".section",
+          "index": 2,
+          "riskType": "local_clip",
+          "overflowX": "clip",
+          "localOverflowPx": 77,
+          "rectLeft": 46,
+          "rectRight": 978,
+          "viewportWidth": 1024
+        }
+      ],
+      "screenshot": "perf/viewport-failures/webkit-1024x1366-english-world.html.png"
+    },
+    {
+      "browser": "webkit",
+      "viewport": "1024x1366",
+      "route": "/world-french.html",
+      "title": "Learn French Online Course | Cosmica",
+      "htmlOverflow": 0,
+      "bodyOverflow": 0,
+      "clippedRisk": [
+        {
+          "selector": ".section",
+          "index": 2,
+          "riskType": "local_clip",
+          "overflowX": "clip",
+          "localOverflowPx": 77,
+          "rectLeft": 46,
+          "rectRight": 978,
+          "viewportWidth": 1024
+        }
+      ],
+      "screenshot": "perf/viewport-failures/webkit-1024x1366-world-french.html.png"
+    },
+    {
+      "browser": "webkit",
+      "viewport": "1280x720",
+      "route": "/english-world.html",
+      "title": "Learn English Online Course | Cosmica",
+      "htmlOverflow": 0,
+      "bodyOverflow": 0,
+      "clippedRisk": [
+        {
+          "selector": ".section",
+          "index": 2,
+          "riskType": "local_clip",
+          "overflowX": "clip",
+          "localOverflowPx": 219,
+          "rectLeft": 117,
+          "rectRight": 1163,
+          "viewportWidth": 1280
+        }
+      ],
+      "screenshot": "perf/viewport-failures/webkit-1280x720-english-world.html.png"
+    },
+    {
+      "browser": "webkit",
+      "viewport": "1280x720",
+      "route": "/world-french.html",
+      "title": "Learn French Online Course | Cosmica",
+      "htmlOverflow": 0,
+      "bodyOverflow": 0,
+      "clippedRisk": [
+        {
+          "selector": ".section",
+          "index": 2,
+          "riskType": "local_clip",
+          "overflowX": "clip",
+          "localOverflowPx": 219,
+          "rectLeft": 117,
+          "rectRight": 1163,
+          "viewportWidth": 1280
+        }
+      ],
+      "screenshot": "perf/viewport-failures/webkit-1280x720-world-french.html.png"
+    },
+    {
+      "browser": "webkit",
+      "viewport": "1366x768",
+      "route": "/english-world.html",
+      "title": "Learn English Online Course | Cosmica",
+      "htmlOverflow": 0,
+      "bodyOverflow": 0,
+      "clippedRisk": [
+        {
+          "selector": ".section",
+          "index": 2,
+          "riskType": "local_clip",
+          "overflowX": "clip",
+          "localOverflowPx": 315,
+          "rectLeft": 165,
+          "rectRight": 1201,
+          "viewportWidth": 1366
+        }
+      ],
+      "screenshot": "perf/viewport-failures/webkit-1366x768-english-world.html.png"
+    },
+    {
+      "browser": "webkit",
+      "viewport": "1366x768",
+      "route": "/world-french.html",
+      "title": "Learn French Online Course | Cosmica",
+      "htmlOverflow": 0,
+      "bodyOverflow": 0,
+      "clippedRisk": [
+        {
+          "selector": ".section",
+          "index": 2,
+          "riskType": "local_clip",
+          "overflowX": "clip",
+          "localOverflowPx": 315,
+          "rectLeft": 165,
+          "rectRight": 1201,
+          "viewportWidth": 1366
+        }
+      ],
+      "screenshot": "perf/viewport-failures/webkit-1366x768-world-french.html.png"
+    },
+    {
+      "browser": "webkit",
+      "viewport": "1440x900",
+      "route": "/world-french.html",
+      "title": "Learn French Online Course | Cosmica",
+      "htmlOverflow": 0,
+      "bodyOverflow": 0,
+      "clippedRisk": [
+        {
+          "selector": ".section",
+          "index": 2,
+          "riskType": "local_clip",
+          "overflowX": "clip",
+          "localOverflowPx": 398,
+          "rectLeft": 206,
+          "rectRight": 1234,
+          "viewportWidth": 1440
+        }
+      ],
+      "screenshot": "perf/viewport-failures/webkit-1440x900-world-french.html.png"
+    },
+    {
+      "browser": "webkit",
+      "viewport": "1536x864",
+      "route": "/english-world.html",
+      "title": "Learn English Online Course | Cosmica",
+      "htmlOverflow": 0,
+      "bodyOverflow": 0,
+      "clippedRisk": [
+        {
+          "selector": ".section",
+          "index": 2,
+          "riskType": "local_clip",
+          "overflowX": "clip",
+          "localOverflowPx": 505,
+          "rectLeft": 260,
+          "rectRight": 1276,
+          "viewportWidth": 1536
+        }
+      ],
+      "screenshot": "perf/viewport-failures/webkit-1536x864-english-world.html.png"
+    },
+    {
+      "browser": "webkit",
+      "viewport": "1536x864",
+      "route": "/world-french.html",
+      "title": "Learn French Online Course | Cosmica",
+      "htmlOverflow": 0,
+      "bodyOverflow": 0,
+      "clippedRisk": [
+        {
+          "selector": ".section",
+          "index": 2,
+          "riskType": "local_clip",
+          "overflowX": "clip",
+          "localOverflowPx": 505,
+          "rectLeft": 260,
+          "rectRight": 1276,
+          "viewportWidth": 1536
+        }
+      ],
+      "screenshot": "perf/viewport-failures/webkit-1536x864-world-french.html.png"
+    },
+    {
+      "browser": "webkit",
+      "viewport": "1600x900",
+      "route": "/english-world.html",
+      "title": "Learn English Online Course | Cosmica",
+      "htmlOverflow": 0,
+      "bodyOverflow": 0,
+      "clippedRisk": [
+        {
+          "selector": ".section",
+          "index": 2,
+          "riskType": "local_clip",
+          "overflowX": "clip",
+          "localOverflowPx": 577,
+          "rectLeft": 296,
+          "rectRight": 1304,
+          "viewportWidth": 1600
+        }
+      ],
+      "screenshot": "perf/viewport-failures/webkit-1600x900-english-world.html.png"
+    },
+    {
+      "browser": "webkit",
+      "viewport": "1600x900",
+      "route": "/world-french.html",
+      "title": "Learn French Online Course | Cosmica",
+      "htmlOverflow": 0,
+      "bodyOverflow": 0,
+      "clippedRisk": [
+        {
+          "selector": ".section",
+          "index": 2,
+          "riskType": "local_clip",
+          "overflowX": "clip",
+          "localOverflowPx": 577,
+          "rectLeft": 296,
+          "rectRight": 1304,
+          "viewportWidth": 1600
+        }
+      ],
+      "screenshot": "perf/viewport-failures/webkit-1600x900-world-french.html.png"
+    },
+    {
+      "browser": "webkit",
+      "viewport": "1920x1080",
+      "route": "/english-world.html",
+      "title": "Learn English Online Course | Cosmica",
+      "htmlOverflow": 0,
+      "bodyOverflow": 0,
+      "clippedRisk": [
+        {
+          "selector": ".section",
+          "index": 2,
+          "riskType": "local_clip",
+          "overflowX": "clip",
+          "localOverflowPx": 935,
+          "rectLeft": 475,
+          "rectRight": 1445,
+          "viewportWidth": 1920
+        }
+      ],
+      "screenshot": "perf/viewport-failures/webkit-1920x1080-english-world.html.png"
+    },
+    {
+      "browser": "webkit",
+      "viewport": "1920x1080",
+      "route": "/world-french.html",
+      "title": "Learn French Online Course | Cosmica",
+      "htmlOverflow": 0,
+      "bodyOverflow": 0,
+      "clippedRisk": [
+        {
+          "selector": ".section",
+          "index": 2,
+          "riskType": "local_clip",
+          "overflowX": "clip",
+          "localOverflowPx": 935,
+          "rectLeft": 475,
+          "rectRight": 1445,
+          "viewportWidth": 1920
+        }
+      ],
+      "screenshot": "perf/viewport-failures/webkit-1920x1080-world-french.html.png"
+    },
+    {
+      "browser": "webkit",
+      "viewport": "2560x1440",
+      "route": "/world-french.html",
+      "title": "Learn French Online Course | Cosmica",
+      "htmlOverflow": 0,
+      "bodyOverflow": 0,
+      "clippedRisk": [
+        {
+          "selector": ".section",
+          "index": 2,
+          "riskType": "local_clip",
+          "overflowX": "clip",
+          "localOverflowPx": 1652,
+          "rectLeft": 834,
+          "rectRight": 1726,
+          "viewportWidth": 2560
+        }
+      ],
+      "screenshot": "perf/viewport-failures/webkit-2560x1440-world-french.html.png"
+    }
+  ],
+  "checks": 675,
+  "passed": 644
 }

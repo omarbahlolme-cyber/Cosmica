@@ -13861,6 +13861,9 @@ body.is-ipad .footer-inline-links {
     width: auto !important;
     max-width: 100%;
     display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
     flex: 0 0 auto !important;
     margin-left: 0 !important;
     margin-right: 0 !important;
