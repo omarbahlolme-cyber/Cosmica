@@ -395,8 +395,8 @@ const WORLD_TTS_CONFIG = {
     voice: "es-ES-Neural2-F",
   },
   portuguese: {
-    languageCode: "pt-BR",
-    voice: "pt-BR-Wavenet-A",
+    languageCode: "pt-PT",
+    voice: "pt-PT-Wavenet-A",
   },
   dutch: {
     languageCode: "nl-NL",

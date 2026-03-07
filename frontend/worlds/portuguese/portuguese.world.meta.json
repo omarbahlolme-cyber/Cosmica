@@ -2,8 +2,8 @@
   "worldKey": "portuguese",
   "nativeName": "Português",
   "tts": {
-    "languageCode": "pt-BR",
-    "voice": "pt-BR-Wavenet-A"
+    "languageCode": "pt-PT",
+    "voice": "pt-PT-Wavenet-A"
   },
   "phraseIntents": {
     "englishLanguageLabel": "portuguese",

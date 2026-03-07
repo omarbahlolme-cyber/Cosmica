@@ -4,8 +4,9 @@ const path = require("path");
 const ROOT = path.resolve(__dirname, "..");
 const FRONTEND = path.join(ROOT, "frontend");
 const SITE_ORIGIN = "https://www.cosmicalearn.com";
-const STYLE_ASSET_VERSION = "20260413";
-const APP_ASSET_VERSION = "20260417";
+const SHARED_ASSET_VERSION = "20260438";
+const STYLE_ASSET_VERSION = SHARED_ASSET_VERSION;
+const APP_ASSET_VERSION = SHARED_ASSET_VERSION;
 const ACCOUNT_CARET_ENTITY = "&#9662;";
 
 const escapeHtml = (value) =>
@@ -18,6 +19,34 @@ const escapeHtml = (value) =>
 const writeFile = (fileName, content) =>
   fs.writeFileSync(path.join(FRONTEND, fileName), content, "utf8");
 const pageUrl = (fileName) => (fileName === "index.html" ? `${SITE_ORIGIN}/` : `${SITE_ORIGIN}/${fileName}`);
+const hasMojibake = (value) =>
+  /Ã|Â|â|Ø|Ù|Ð|Ñ|ä¸|åœ|æ—|ì˜|í•|à¤|à¥/.test(String(value || ""));
+const fixMojibake = (value) => {
+  const text = String(value || "");
+  if (!hasMojibake(text)) {
+    return text;
+  }
+  try {
+    const repaired = Buffer.from(text, "latin1").toString("utf8");
+    return repaired || text;
+  } catch {
+    return text;
+  }
+};
+const repairDeepText = (value) => {
+  if (typeof value === "string") {
+    return fixMojibake(value);
+  }
+  if (Array.isArray(value)) {
+    return value.map((item) => repairDeepText(item));
+  }
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, item]) => [key, repairDeepText(item)])
+    );
+  }
+  return value;
+};
 
 const buildAlternateLinks = (links = []) => {
   const items = links
@@ -78,7 +107,7 @@ const ENGLISH_LANGUAGE_NAMES = {
   swedish: "Swedish",
 };
 
-const LOCALIZED_SEO_TEXT = Object.freeze({
+const LOCALIZED_SEO_TEXT = Object.freeze(repairDeepText({
   default: {
     pronunciationLabel: "Pronunciation Guide",
     travelLabel: "Travel Phrases",
@@ -223,7 +252,7 @@ const LOCALIZED_SEO_TEXT = Object.freeze({
     travelSectionText:
       "Trana resefraser for halsningar, vagar, transport och vardagliga situationer.",
   },
-});
+}));
 
 const getLocalizedSeoText = (languageKey = "") =>
   LOCALIZED_SEO_TEXT[String(languageKey || "").trim().toLowerCase()] || LOCALIZED_SEO_TEXT.default;
@@ -515,7 +544,7 @@ ${buildGuidePager(
 )}`;
 };
 
-const PAGES = [
+const PAGES = repairDeepText([
   {
     file: "learn-french-online-fr.html",
     languageKey: "french",
@@ -781,7 +810,7 @@ const PAGES = [
       { title: "Svensk grammatik", text: "Förbättra precisionen i tal och skrift." },
     ],
   },
-];
+]);
 
 for (const config of PAGES) {
   const localizedSeoText = getLocalizedSeoText(config.languageKey);

@@ -4,11 +4,40 @@ const path = require("path");
 const ROOT = path.resolve(__dirname, "..");
 const FRONTEND = path.join(ROOT, "frontend");
 const SITE_ORIGIN = "https://www.cosmicalearn.com";
-const STYLE_ASSET_VERSION = "20260413";
-const APP_ASSET_VERSION = "20260417";
+const SHARED_ASSET_VERSION = "20260438";
+const STYLE_ASSET_VERSION = SHARED_ASSET_VERSION;
+const APP_ASSET_VERSION = SHARED_ASSET_VERSION;
 const ACCOUNT_CARET_ENTITY = "&#9662;";
+const hasMojibake = (value) =>
+  /Ã|Â|â|Ø|Ù|Ð|Ñ|ä¸|åœ|æ—|ì˜|í•|à¤|à¥/.test(String(value || ""));
+const fixMojibake = (value) => {
+  const text = String(value || "");
+  if (!hasMojibake(text)) {
+    return text;
+  }
+  try {
+    const repaired = Buffer.from(text, "latin1").toString("utf8");
+    return repaired || text;
+  } catch {
+    return text;
+  }
+};
+const repairDeepText = (value) => {
+  if (typeof value === "string") {
+    return fixMojibake(value);
+  }
+  if (Array.isArray(value)) {
+    return value.map((item) => repairDeepText(item));
+  }
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, item]) => [key, repairDeepText(item)])
+    );
+  }
+  return value;
+};
 
-const LANGUAGES = [
+const LANGUAGES = repairDeepText([
   {
     key: "english",
     language: "English",
@@ -139,7 +168,7 @@ const LANGUAGES = [
     localizedGuideFile: "learn-swedish-online-sv.html",
     localizedGuideTitle: "Guide på svenska",
   },
-];
+]);
 
 const beginnerPageFile = (key) => `learn-${key}-for-beginners.html`;
 const pronunciationPageFile = (key) => `${key}-pronunciation-guide.html`;

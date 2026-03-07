@@ -29,8 +29,8 @@ const worldConfigs = [
     displayName: 'Portuguese',
     nativeName: 'Português',
     htmlLang: 'pt',
-    ttsLanguageCode: 'pt-BR',
-    ttsVoice: 'pt-BR-Wavenet-A',
+    ttsLanguageCode: 'pt-PT',
+    ttsVoice: 'pt-PT-Wavenet-A',
     phraseIntents: {
       englishLanguageLabel: 'portuguese',
       forms: {

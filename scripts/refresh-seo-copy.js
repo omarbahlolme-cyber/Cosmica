@@ -6,7 +6,7 @@ const ROOT = path.resolve(__dirname, "..");
 const FRONTEND = path.join(ROOT, "frontend");
 const MAPS_BUNDLE = path.join(FRONTEND, "maps", "app-maps.js");
 const MAP_STYLE_ASSET_VERSION = "20260417";
-const APP_ASSET_VERSION = "20260442";
+const APP_ASSET_VERSION = "20260438";
 
 const LANGUAGES = [
   {
@@ -154,9 +154,36 @@ const LANGUAGES = [
       "Practice the Swedish alphabet with audio pronunciation and structured review to build early reading and speaking confidence.",
   },
 ];
+const LOCALIZED_HREFLANG_BY_KEY = Object.freeze({
+  french: "fr",
+  spanish: "es",
+  arabic: "ar",
+  chinese: "zh-Hans",
+  japanese: "ja",
+  korean: "ko",
+  hindi: "hi",
+  german: "de",
+  portuguese: "pt",
+  dutch: "nl",
+  swedish: "sv",
+});
+const LOCALIZED_GUIDE_FILE_BY_KEY = Object.freeze({
+  french: "learn-french-online-fr.html",
+  spanish: "learn-spanish-online-es.html",
+  arabic: "learn-arabic-online-ar.html",
+  chinese: "learn-chinese-online-zh.html",
+  japanese: "learn-japanese-online-ja.html",
+  korean: "learn-korean-online-ko.html",
+  hindi: "learn-hindi-online-hi.html",
+  german: "learn-german-online-de.html",
+  portuguese: "learn-portuguese-online-pt.html",
+  dutch: "learn-dutch-online-nl.html",
+  swedish: "learn-swedish-online-sv.html",
+});
 
 const readFile = (fileName) => fs.readFileSync(path.join(FRONTEND, fileName), "utf8");
 const writeFile = (fileName, content) => fs.writeFileSync(path.join(FRONTEND, fileName), content);
+const pageUrl = (fileName) => (fileName === "index.html" ? "https://www.cosmicalearn.com/" : `https://www.cosmicalearn.com/${fileName}`);
 const escapeRegex = (value) => String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const escapeHtml = (value) =>
   String(value ?? "")
@@ -720,6 +747,40 @@ const replaceMapStyleAsset = (html) =>
 
 const replaceMapAppAsset = (html) =>
   html.replace(/app\.js\?v=[^"]+/i, `app.js?v=${APP_ASSET_VERSION}`);
+const buildAlternateLinks = (links = []) => {
+  const items = links
+    .filter((item) => item && item.lang && item.url)
+    .map((item) => `    <link rel="alternate" hreflang="${item.lang}" href="${item.url}" />`);
+  if (!items.length) {
+    return "";
+  }
+  return `    <!-- Multilingual SEO: hreflang cluster -->\n${items.join("\n")}\n    <!-- /Multilingual SEO: hreflang cluster -->\n`;
+};
+const buildWorldAlternateLinks = (config) => {
+  const links = [{ lang: "en", url: pageUrl(config.worldFile) }];
+  const localizedLang = String(LOCALIZED_HREFLANG_BY_KEY[config.key] || "").trim();
+  const localizedGuideFile = String(LOCALIZED_GUIDE_FILE_BY_KEY[config.key] || "").trim();
+  if (localizedLang && localizedGuideFile) {
+    links.push({ lang: localizedLang, url: pageUrl(localizedGuideFile) });
+  }
+  links.push({ lang: "x-default", url: pageUrl(config.worldFile) });
+  return buildAlternateLinks(links);
+};
+const upsertAlternateLinks = (html, alternateLinks) => {
+  if (!alternateLinks.trim()) {
+    return html;
+  }
+  if (html.includes("<!-- Multilingual SEO: hreflang cluster -->")) {
+    return html.replace(
+      /\s*<!-- Multilingual SEO: hreflang cluster -->[\s\S]*?<!-- \/Multilingual SEO: hreflang cluster -->\s*/i,
+      `\n${alternateLinks}`
+    );
+  }
+  return html.replace(
+    /(<link rel="canonical" href="[^"]+" \/>)/i,
+    `$1\n${alternateLinks.trimEnd()}`
+  );
+};
 
 const buildLettersTitle = (config) => {
   if (config.key === "chinese") {
@@ -746,16 +807,13 @@ const replaceWorldPage = (config) => {
 
   let html = readFile(config.worldFile);
   html = replaceLangToEnglish(html);
-  html = html.replace(
-    /\s*<!-- Multilingual SEO: hreflang cluster -->[\s\S]*?<!-- \/Multilingual SEO: hreflang cluster -->\s*/i,
-    "\n"
-  );
   html = replaceTitle(html, title);
   html = replaceMetaByName(html, "description", description);
   html = replaceMetaByProperty(html, "og:title", title);
   html = replaceMetaByProperty(html, "og:description", socialDescription);
   html = replaceMetaByName(html, "twitter:title", title);
   html = replaceMetaByName(html, "twitter:description", socialDescription);
+  html = upsertAlternateLinks(html, buildWorldAlternateLinks(config));
   html = replaceJsonLdNameAndDescription(html, title, description);
   html = html.replace(/<h1[\s\S]*?<\/h1>/i, `<h1 class="visually-hidden">${h1}</h1>`);
   html = html.replace(/<div class="eyebrow">[\s\S]*?<\/div>/, `<div class="eyebrow">${eyebrow}</div>`);
