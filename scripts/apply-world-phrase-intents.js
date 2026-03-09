@@ -63,6 +63,40 @@ const removeLegacyIntentEntries = (section) => {
   });
 };
 
+const removeLegacyIntentWorldSourceEntries = (section) => {
+  if (!section || typeof section !== "object") {
+    return;
+  }
+  Object.keys(section).forEach((key) => {
+    const normalizedKey = normalize(key);
+    const normalizedValue = normalize(section[key]);
+    const keyHasEnglish = /\benglish\b/.test(normalizedKey);
+    const valueHasEnglish = /\benglish\b/.test(normalizedValue);
+    if (
+      LEGACY_ENGLISH_SOURCES.includes(normalizedKey) ||
+      LEGACY_ENGLISH_SOURCES.includes(normalizedValue) ||
+      keyHasEnglish ||
+      valueHasEnglish
+    ) {
+      delete section[key];
+    }
+  });
+};
+
+const removeConflictingIntentEntries = (section, intentKey, source) => {
+  if (!section || typeof section !== "object") {
+    return;
+  }
+  const normalizedSource = normalize(source);
+  Object.entries(section).forEach(([key, payload]) => {
+    const payloadIntent = String(payload?.intent || "").trim();
+    const payloadSource = normalize(payload?.source);
+    if (payloadIntent === intentKey || payloadSource === normalizedSource) {
+      delete section[key];
+    }
+  });
+};
+
 const applyForWorld = (worldKey) => {
   if (worldKey === "english") {
     return false;
@@ -105,6 +139,7 @@ const applyForWorld = (worldKey) => {
     }
     const source = spec.sourceBuilder(englishLanguageLabel);
     const targetSection = pack.phrases[spec.section];
+    removeConflictingIntentEntries(targetSection, spec.intent, source);
     targetSection[worldPhrase] = {
       source,
       intent: spec.intent,
@@ -132,6 +167,9 @@ const applyForWorld = (worldKey) => {
   ) {
     pack.worldSource.phrases.Questions = {};
   }
+
+  removeLegacyIntentWorldSourceEntries(pack.worldSource.phrases.Introductions);
+  removeLegacyIntentWorldSourceEntries(pack.worldSource.phrases.Questions);
 
   INTENT_SPECS.forEach((spec) => {
     const worldPhrase = String(forms[spec.intent] || "").trim();

@@ -1,10 +1,11 @@
 const fs = require("fs");
 const path = require("path");
+const { repairDeepText } = require("./lib/mojibake");
 
 const ROOT = path.resolve(__dirname, "..");
 const FRONTEND = path.join(ROOT, "frontend");
 const SITE_ORIGIN = "https://www.cosmicalearn.com";
-const SHARED_ASSET_VERSION = "20260438";
+const SHARED_ASSET_VERSION = "20260440";
 const STYLE_ASSET_VERSION = SHARED_ASSET_VERSION;
 const APP_ASSET_VERSION = SHARED_ASSET_VERSION;
 const ACCOUNT_CARET_ENTITY = "&#9662;";
@@ -18,35 +19,8 @@ const escapeHtml = (value) =>
 
 const writeFile = (fileName, content) =>
   fs.writeFileSync(path.join(FRONTEND, fileName), content, "utf8");
-const pageUrl = (fileName) => (fileName === "index.html" ? `${SITE_ORIGIN}/` : `${SITE_ORIGIN}/${fileName}`);
-const hasMojibake = (value) =>
-  /Ã|Â|â|Ø|Ù|Ð|Ñ|ä¸|åœ|æ—|ì˜|í•|à¤|à¥/.test(String(value || ""));
-const fixMojibake = (value) => {
-  const text = String(value || "");
-  if (!hasMojibake(text)) {
-    return text;
-  }
-  try {
-    const repaired = Buffer.from(text, "latin1").toString("utf8");
-    return repaired || text;
-  } catch {
-    return text;
-  }
-};
-const repairDeepText = (value) => {
-  if (typeof value === "string") {
-    return fixMojibake(value);
-  }
-  if (Array.isArray(value)) {
-    return value.map((item) => repairDeepText(item));
-  }
-  if (value && typeof value === "object") {
-    return Object.fromEntries(
-      Object.entries(value).map(([key, item]) => [key, repairDeepText(item)])
-    );
-  }
-  return value;
-};
+const pageUrl = (fileName) =>
+  (fileName === "index.html" ? `${SITE_ORIGIN}/` : `${SITE_ORIGIN}/${fileName}`);
 
 const buildAlternateLinks = (links = []) => {
   const items = links
@@ -108,150 +82,102 @@ const ENGLISH_LANGUAGE_NAMES = {
 };
 
 const LOCALIZED_SEO_TEXT = Object.freeze(repairDeepText({
-  default: {
-    pronunciationLabel: "Pronunciation Guide",
-    travelLabel: "Travel Phrases",
-    pronunciationDescription:
-      "Improve pronunciation with audio practice, repeat drills, and clearer speaking rhythm.",
-    travelDescription:
-      "Learn practical travel phrases for greetings, directions, transport, and daily situations.",
-    pronunciationSectionText:
-      "Pronunciation practice with audio, repeat drills, and clearer speaking rhythm.",
-    travelSectionText:
-      "Travel phrase practice for greetings, directions, transport, and daily interactions.",
+  "default": {
+    "pronunciationLabel": "Pronunciation Guide",
+    "travelLabel": "Travel Phrases",
+    "pronunciationDescription": "Improve pronunciation with audio practice, repeat drills, and clearer speaking rhythm.",
+    "travelDescription": "Learn practical travel phrases for greetings, directions, transport, and daily situations.",
+    "pronunciationSectionText": "Pronunciation practice with audio, repeat drills, and clearer speaking rhythm.",
+    "travelSectionText": "Travel phrase practice for greetings, directions, transport, and daily interactions."
   },
-  french: {
-    pronunciationLabel: "Guide de prononciation",
-    travelLabel: "Phrases de voyage",
-    pronunciationDescription:
-      "Ameliorez la prononciation avec audio, repetition et rythme de parole plus naturel.",
-    travelDescription:
-      "Apprenez des phrases utiles pour saluer, demander une direction et voyager.",
-    pronunciationSectionText:
-      "Travail de prononciation avec audio, repetition et rythme de parole plus naturel.",
-    travelSectionText:
-      "Entrainement aux phrases de voyage pour saluer, se deplacer et communiquer au quotidien.",
+  "french": {
+    "pronunciationLabel": "Guide de prononciation",
+    "travelLabel": "Phrases de voyage",
+    "pronunciationDescription": "Ameliorez la prononciation avec audio, repetition et rythme de parole plus naturel.",
+    "travelDescription": "Apprenez des phrases utiles pour saluer, demander une direction et voyager.",
+    "pronunciationSectionText": "Travail de prononciation avec audio, repetition et rythme de parole plus naturel.",
+    "travelSectionText": "Entrainement aux phrases de voyage pour saluer, se deplacer et communiquer au quotidien."
   },
-  spanish: {
-    pronunciationLabel: "Guia de pronunciacion",
-    travelLabel: "Frases de viaje",
-    pronunciationDescription:
-      "Mejora tu pronunciacion con audio, repeticion y ritmo de habla mas claro.",
-    travelDescription:
-      "Aprende frases utiles para saludar, pedir direcciones y viajar con mas confianza.",
-    pronunciationSectionText:
-      "Practica de pronunciacion con audio, repeticion y ritmo de habla mas claro.",
-    travelSectionText:
-      "Practica frases de viaje para saludos, direcciones, transporte y situaciones diarias.",
+  "spanish": {
+    "pronunciationLabel": "Guia de pronunciacion",
+    "travelLabel": "Frases de viaje",
+    "pronunciationDescription": "Mejora tu pronunciacion con audio, repeticion y ritmo de habla mas claro.",
+    "travelDescription": "Aprende frases utiles para saludar, pedir direcciones y viajar con mas confianza.",
+    "pronunciationSectionText": "Practica de pronunciacion con audio, repeticion y ritmo de habla mas claro.",
+    "travelSectionText": "Practica frases de viaje para saludos, direcciones, transporte y situaciones diarias."
   },
-  arabic: {
-    pronunciationLabel: "\u062f\u0644\u064a\u0644 \u0627\u0644\u0646\u0637\u0642",
-    travelLabel: "\u0639\u0628\u0627\u0631\u0627\u062a \u0627\u0644\u0633\u0641\u0631",
-    pronunciationDescription:
-      "\u062d\u0633\u0651\u0646 \u0627\u0644\u0646\u0637\u0642 \u0628\u0627\u0644\u0635\u0648\u062a \u0648\u0627\u0644\u062a\u0643\u0631\u0627\u0631 \u0648\u0625\u064a\u0642\u0627\u0639 \u0627\u0644\u0643\u0644\u0627\u0645 \u0628\u0634\u0643\u0644 \u0623\u0648\u0636\u062d.",
-    travelDescription:
-      "\u062a\u0639\u0644\u0645 \u0639\u0628\u0627\u0631\u0627\u062a \u0639\u0645\u0644\u064a\u0629 \u0644\u0644\u0633\u0641\u0631 \u0644\u0644\u062a\u062d\u064a\u0629 \u0648\u0627\u0644\u0627\u062a\u062c\u0627\u0647\u0627\u062a \u0648\u0627\u0644\u0646\u0642\u0644 \u0648\u0627\u0644\u0645\u0648\u0627\u0642\u0641 \u0627\u0644\u064a\u0648\u0645\u064a\u0629.",
-    pronunciationSectionText:
-      "\u062a\u062f\u0631\u064a\u0628 \u0646\u0637\u0642 \u0628\u0627\u0644\u0635\u0648\u062a \u0648\u0627\u0644\u062a\u0643\u0631\u0627\u0631 \u0648\u0625\u064a\u0642\u0627\u0639 \u0623\u0648\u0636\u062d \u0644\u0644\u0643\u0644\u0627\u0645.",
-    travelSectionText:
-      "\u062a\u062f\u0631\u064a\u0628 \u0639\u0644\u0649 \u0639\u0628\u0627\u0631\u0627\u062a \u0627\u0644\u0633\u0641\u0631 \u0644\u0644\u062a\u062d\u064a\u0627\u062a \u0648\u0627\u0644\u0627\u062a\u062c\u0627\u0647\u0627\u062a \u0648\u0627\u0644\u0646\u0642\u0644 \u0648\u0627\u0644\u062d\u064a\u0627\u0629 \u0627\u0644\u064a\u0648\u0645\u064a\u0629.",
+  "arabic": {
+    "pronunciationLabel": "دليل النطق",
+    "travelLabel": "عبارات السفر",
+    "pronunciationDescription": "حسّن النطق بالصوت والتكرار وإيقاع الكلام بشكل أوضح.",
+    "travelDescription": "تعلم عبارات عملية للسفر للتحية والاتجاهات والنقل والمواقف اليومية.",
+    "pronunciationSectionText": "تدريب نطق بالصوت والتكرار وإيقاع أوضح للكلام.",
+    "travelSectionText": "تدريب على عبارات السفر للتحيات والاتجاهات والنقل والحياة اليومية."
   },
-  chinese: {
-    pronunciationLabel: "\u53d1\u97f3\u6307\u5357",
-    travelLabel: "\u65c5\u884c\u77ed\u8bed",
-    pronunciationDescription:
-      "\u901a\u8fc7\u97f3\u9891\u548c\u8ddf\u8bfb\u7ec3\u4e60\uff0c\u63d0\u5347\u53d1\u97f3\u6e05\u6670\u5ea6\u4e0e\u8bed\u8c03\u8282\u594f\u3002",
-    travelDescription:
-      "\u5b66\u4e60\u65c5\u884c\u4e2d\u5e38\u7528\u7684\u95ee\u5019\u3001\u95ee\u8def\u3001\u4ea4\u901a\u548c\u65e5\u5e38\u77ed\u8bed\u3002",
-    pronunciationSectionText:
-      "\u53d1\u97f3\u8bad\u7ec3\u5305\u542b\u97f3\u9891\u3001\u8ddf\u8bfb\u4e0e\u66f4\u6e05\u6670\u7684\u53e3\u8bed\u8282\u594f\u3002",
-    travelSectionText:
-      "\u65c5\u884c\u77ed\u8bed\u8bad\u7ec3\u6db5\u76d6\u95ee\u5019\u3001\u95ee\u8def\u3001\u4ea4\u901a\u4e0e\u65e5\u5e38\u573a\u666f\u3002",
+  "chinese": {
+    "pronunciationLabel": "发音指南",
+    "travelLabel": "旅行短语",
+    "pronunciationDescription": "通过音频和跟读练习，提升发音清晰度与语调节奏。",
+    "travelDescription": "学习旅行中常用的问候、问路、交通和日常短语。",
+    "pronunciationSectionText": "发音训练包含音频、跟读与更清晰的口语节奏。",
+    "travelSectionText": "旅行短语训练涵盖问候、问路、交通与日常场景。"
   },
-  japanese: {
-    pronunciationLabel: "\u767a\u97f3\u30ac\u30a4\u30c9",
-    travelLabel: "\u65c5\u884c\u30d5\u30ec\u30fc\u30ba",
-    pronunciationDescription:
-      "\u97f3\u58f0\u3068\u53cd\u5fa9\u7df4\u7fd2\u3067\u3001\u767a\u97f3\u306e\u660e\u77ad\u3055\u3068\u8a71\u3059\u30ea\u30ba\u30e0\u3092\u6574\u3048\u307e\u3059\u3002",
-    travelDescription:
-      "\u3042\u3044\u3055\u3064\u3001\u9053\u6848\u5185\u3001\u4ea4\u901a\u3001\u65e5\u5e38\u5834\u9762\u3067\u4f7f\u3048\u308b\u5b9f\u7528\u30d5\u30ec\u30fc\u30ba\u3092\u5b66\u3073\u307e\u3059\u3002",
-    pronunciationSectionText:
-      "\u97f3\u58f0\u3068\u53cd\u5fa9\u7df4\u7fd2\u3067\u3001\u767a\u97f3\u3068\u8a71\u3059\u30ea\u30ba\u30e0\u3092\u78ba\u5b9f\u306b\u6574\u3048\u307e\u3059\u3002",
-    travelSectionText:
-      "\u65c5\u884c\u306b\u5f79\u7acb\u3064\u30d5\u30ec\u30fc\u30ba\u3092\u3001\u3042\u3044\u3055\u3064\u304b\u3089\u79fb\u52d5\u307e\u3067\u7df4\u7fd2\u3057\u307e\u3059\u3002",
+  "japanese": {
+    "pronunciationLabel": "発音ガイド",
+    "travelLabel": "旅行フレーズ",
+    "pronunciationDescription": "音声と反復練習で、発音の明瞭さと話すリズムを整えます。",
+    "travelDescription": "あいさつ、道案内、交通、日常場面で使える実用フレーズを学びます。",
+    "pronunciationSectionText": "音声と反復練習で、発音と話すリズムを確実に整えます。",
+    "travelSectionText": "旅行に役立つフレーズを、あいさつから移動まで練習します。"
   },
-  korean: {
-    pronunciationLabel: "\ubc1c\uc74c \uac00\uc774\ub4dc",
-    travelLabel: "\uc5ec\ud589 \ud45c\ud604",
-    pronunciationDescription:
-      "\uc624\ub514\uc624\uc640 \ubc18\ubcf5 \uc5f0\uc2b5\uc73c\ub85c \ubc1c\uc74c\uc744 \ub354 \uc815\ud655\ud558\uace0 \uc790\uc5f0\uc2a4\ub7fd\uac8c \ub2e4\ub4ec\uc2b5\ub2c8\ub2e4.",
-    travelDescription:
-      "\uc778\uc0ac, \uae38 \ubb3b\uae30, \uad50\ud1b5, \uc77c\uc0c1 \uc0c1\ud669\uc5d0\uc11c \uc4f8 \uc218 \uc788\ub294 \uc2e4\uc6a9 \ud45c\ud604\uc744 \ubc30\uc6c1\ub2c8\ub2e4.",
-    pronunciationSectionText:
-      "\uc624\ub514\uc624\uc640 \ubc18\ubcf5 \uc5f0\uc2b5\uc73c\ub85c \ubc1c\uc74c\uacfc \ub9d0\ud558\uae30 \ub9ac\ub4ec\uc744 \uac1c\uc120\ud569\ub2c8\ub2e4.",
-    travelSectionText:
-      "\uc5ec\ud589\uc5d0 \ud544\uc694\ud55c \ud45c\ud604\uc744 \uc778\uc0ac, \uc774\ub3d9, \uc77c\uc0c1 \uc0c1\ud669 \uc911\uc2ec\uc73c\ub85c \uc5f0\uc2b5\ud569\ub2c8\ub2e4.",
+  "korean": {
+    "pronunciationLabel": "발음 가이드",
+    "travelLabel": "여행 표현",
+    "pronunciationDescription": "오디오와 반복 연습으로 발음을 더 정확하고 자연스럽게 다듬습니다.",
+    "travelDescription": "인사, 길 묻기, 교통, 일상 상황에서 쓸 수 있는 실용 표현을 배웁니다.",
+    "pronunciationSectionText": "오디오와 반복 연습으로 발음과 말하기 리듬을 개선합니다.",
+    "travelSectionText": "여행에 필요한 표현을 인사, 이동, 일상 상황 중심으로 연습합니다."
   },
-  hindi: {
-    pronunciationLabel: "\u0909\u091a\u094d\u091a\u093e\u0930\u0923 \u0917\u093e\u0907\u0921",
-    travelLabel: "\u092f\u093e\u0924\u094d\u0930\u093e \u0935\u093e\u0915\u094d\u092f\u093e\u0902\u0936",
-    pronunciationDescription:
-      "\u0911\u0921\u093f\u092f\u094b \u0914\u0930 \u0926\u094b\u0939\u0930\u093e\u0935 \u0905\u092d\u094d\u092f\u093e\u0938 \u0915\u0947 \u0938\u093e\u0925 \u0909\u091a\u094d\u091a\u093e\u0930\u0923 \u0914\u0930 \u092c\u094b\u0932\u0928\u0947 \u0915\u093e \u0932\u092f \u0938\u0941\u0927\u093e\u0930\u0947\u0902\u0964",
-    travelDescription:
-      "\u0928\u092e\u0938\u094d\u0915\u093e\u0930, \u0930\u093e\u0938\u094d\u0924\u093e, \u092f\u093e\u0924\u093e\u092f\u093e\u0924 \u0914\u0930 \u0930\u094b\u091c\u093c\u092e\u0930\u094d\u0930\u093e \u0938\u094d\u0925\u093f\u0924\u093f\u092f\u094b\u0902 \u0915\u0947 \u0932\u093f\u090f \u0909\u092a\u092f\u094b\u0917\u0940 \u0935\u093e\u0915\u094d\u092f\u093e\u0902\u0936 \u0938\u0940\u0916\u0947\u0902\u0964",
-    pronunciationSectionText:
-      "\u0911\u0921\u093f\u092f\u094b \u0914\u0930 \u0926\u094b\u0939\u0930\u093e\u0935 \u0938\u0947 \u0909\u091a\u094d\u091a\u093e\u0930\u0923 \u0914\u0930 \u092c\u094b\u0932\u0928\u0947 \u0915\u0940 \u0932\u092f \u0915\u094b \u092e\u091c\u092c\u0942\u0924 \u0915\u0930\u0947\u0902\u0964",
-    travelSectionText:
-      "\u092f\u093e\u0924\u094d\u0930\u093e \u0915\u0947 \u0932\u093f\u090f \u091c\u0930\u0942\u0930\u0940 \u0935\u093e\u0915\u094d\u092f\u093e\u0902\u0936 \u0915\u094b \u0928\u092e\u0938\u094d\u0915\u093e\u0930 \u0938\u0947 \u0926\u0948\u0928\u093f\u0915 \u0938\u0902\u092d\u093e\u0937\u0923 \u0924\u0915 \u0905\u092d\u094d\u092f\u093e\u0938 \u0915\u0930\u0947\u0902\u0964",
+  "hindi": {
+    "pronunciationLabel": "उच्चारण गाइड",
+    "travelLabel": "यात्रा वाक्यांश",
+    "pronunciationDescription": "ऑडियो और दोहराव अभ्यास के साथ उच्चारण और बोलने का लय सुधारें।",
+    "travelDescription": "नमस्कार, रास्ता, यातायात और रोज़मर्रा स्थितियों के लिए उपयोगी वाक्यांश सीखें।",
+    "pronunciationSectionText": "ऑडियो और दोहराव से उच्चारण और बोलने की लय को मजबूत करें।",
+    "travelSectionText": "यात्रा के लिए जरूरी वाक्यांश को नमस्कार से दैनिक संभाषण तक अभ्यास करें।"
   },
-  german: {
-    pronunciationLabel: "Aussprache",
-    travelLabel: "Reisephrasen",
-    pronunciationDescription:
-      "Verbessern Sie die Aussprache mit Audio, Wiederholung und klarerem Sprechrhythmus.",
-    travelDescription:
-      "Lernen Sie praktische Reisephrasen fuer Begruessungen, Wege, Verkehr und Alltag.",
-    pronunciationSectionText:
-      "Aussprachetraining mit Audio, Wiederholung und klarerem Sprechrhythmus.",
-    travelSectionText:
-      "Training von Reisephrasen fuer Begruessungen, Orientierung, Verkehr und Alltagssituationen.",
+  "german": {
+    "pronunciationLabel": "Aussprache",
+    "travelLabel": "Reisephrasen",
+    "pronunciationDescription": "Verbessern Sie die Aussprache mit Audio, Wiederholung und klarerem Sprechrhythmus.",
+    "travelDescription": "Lernen Sie praktische Reisephrasen fuer Begruessungen, Wege, Verkehr und Alltag.",
+    "pronunciationSectionText": "Aussprachetraining mit Audio, Wiederholung und klarerem Sprechrhythmus.",
+    "travelSectionText": "Training von Reisephrasen fuer Begruessungen, Orientierung, Verkehr und Alltagssituationen."
   },
-  portuguese: {
-    pronunciationLabel: "Guia de pronuncia",
-    travelLabel: "Frases de viagem",
-    pronunciationDescription:
-      "Melhore a pronuncia com audio, repeticao e ritmo de fala mais claro.",
-    travelDescription:
-      "Aprenda frases praticas para cumprimentos, direcoes, transporte e situacoes do dia a dia.",
-    pronunciationSectionText:
-      "Pratica de pronuncia com audio, repeticao e ritmo de fala mais claro.",
-    travelSectionText:
-      "Pratica de frases de viagem para cumprimentos, direcoes, transporte e conversas do dia a dia.",
+  "portuguese": {
+    "pronunciationLabel": "Guia de pronuncia",
+    "travelLabel": "Frases de viagem",
+    "pronunciationDescription": "Melhore a pronuncia com audio, repeticao e ritmo de fala mais claro.",
+    "travelDescription": "Aprenda frases praticas para cumprimentos, direcoes, transporte e situacoes do dia a dia.",
+    "pronunciationSectionText": "Pratica de pronuncia com audio, repeticao e ritmo de fala mais claro.",
+    "travelSectionText": "Pratica de frases de viagem para cumprimentos, direcoes, transporte e conversas do dia a dia."
   },
-  dutch: {
-    pronunciationLabel: "Uitspraakgids",
-    travelLabel: "Reiszinnen",
-    pronunciationDescription:
-      "Verbeter je uitspraak met audio, herhaling en een duidelijker spreekritme.",
-    travelDescription:
-      "Leer praktische reiszinnen voor begroetingen, routevragen, vervoer en dagelijkse situaties.",
-    pronunciationSectionText:
-      "Uitspraaktraining met audio, herhaling en een duidelijker spreekritme.",
-    travelSectionText:
-      "Oefen reiszinnen voor begroetingen, routevragen, vervoer en dagelijkse situaties.",
+  "dutch": {
+    "pronunciationLabel": "Uitspraakgids",
+    "travelLabel": "Reiszinnen",
+    "pronunciationDescription": "Verbeter je uitspraak met audio, herhaling en een duidelijker spreekritme.",
+    "travelDescription": "Leer praktische reiszinnen voor begroetingen, routevragen, vervoer en dagelijkse situaties.",
+    "pronunciationSectionText": "Uitspraaktraining met audio, herhaling en een duidelijker spreekritme.",
+    "travelSectionText": "Oefen reiszinnen voor begroetingen, routevragen, vervoer en dagelijkse situaties."
   },
-  swedish: {
-    pronunciationLabel: "Uttalsguide",
-    travelLabel: "Resefraser",
-    pronunciationDescription:
-      "Forbattra uttalet med ljud, repetition och tydligare talrytm.",
-    travelDescription:
-      "Lar dig praktiska resefraser for halsningar, vagar, transport och vardagliga situationer.",
-    pronunciationSectionText:
-      "Uttalstraning med ljud, repetition och tydligare talrytm.",
-    travelSectionText:
-      "Trana resefraser for halsningar, vagar, transport och vardagliga situationer.",
-  },
+  "swedish": {
+    "pronunciationLabel": "Uttalsguide",
+    "travelLabel": "Resefraser",
+    "pronunciationDescription": "Forbattra uttalet med ljud, repetition och tydligare talrytm.",
+    "travelDescription": "Lar dig praktiska resefraser for halsningar, vagar, transport och vardagliga situationer.",
+    "pronunciationSectionText": "Uttalstraning med ljud, repetition och tydligare talrytm.",
+    "travelSectionText": "Trana resefraser for halsningar, vagar, transport och vardagliga situationer."
+  }
 }));
 
 const getLocalizedSeoText = (languageKey = "") =>
@@ -544,273 +470,383 @@ ${buildGuidePager(
 )}`;
 };
 
-const PAGES = repairDeepText([
+const PAGES = [
   {
-    file: "learn-french-online-fr.html",
-    languageKey: "french",
-    htmlLang: "fr",
-    title: "Apprendre le français en ligne | Vocabulaire, phrases et grammaire | Cosmica",
-    description:
-      "Apprenez le français en ligne avec des leçons structurées pour la prononciation, le vocabulaire, les phrases et la grammaire.",
-    brandSub: "Guide français",
-    backHref: "world-french.html",
-    backLabel: "Retour au cours de français",
-    footerText: "Apprentissage structuré des langues avec des étapes claires.",
-    worldFile: "world-french.html",
-    eyebrow: "Français en ligne",
-    h1: "Apprendre le français en ligne",
-    lede:
-      "Progressez du niveau débutant aux structures avancées avec de l audio, des traductions et des parcours courts et structurés.",
-    lessonsTitle: "Leçons recommandées de français",
-    lessonCards: [
-      { title: "Alphabet et sons du français", text: "Travaillez la lecture et la prononciation de base." },
-      { title: "Vocabulaire français", text: "Renforcez les mots utiles avant de passer à des phrases plus longues." },
-      { title: "Phrases françaises utiles", text: "Pratiquez les salutations, les demandes et les situations courantes." },
-      { title: "Grammaire française", text: "Clarifiez les structures pour parler et écrire avec plus de précision." },
-    ],
+    "file": "learn-french-online-fr.html",
+    "languageKey": "french",
+    "htmlLang": "fr",
+    "title": "Apprendre le français en ligne | Vocabulaire, phrases et grammaire | Cosmica",
+    "description": "Apprenez le français en ligne avec des leçons structurées pour la prononciation, le vocabulaire, les phrases et la grammaire.",
+    "brandSub": "Guide français",
+    "backHref": "world-french.html",
+    "backLabel": "Retour au cours de français",
+    "footerText": "Apprentissage structuré des langues avec des étapes claires.",
+    "worldFile": "world-french.html",
+    "eyebrow": "Français en ligne",
+    "h1": "Apprendre le français en ligne",
+    "lede": "Progressez du niveau débutant aux structures avancées avec de l audio, des traductions et des parcours courts et structurés.",
+    "lessonsTitle": "Leçons recommandées de français",
+    "lessonCards": [
+      {
+        "title": "Alphabet et sons du français",
+        "text": "Travaillez la lecture et la prononciation de base."
+      },
+      {
+        "title": "Vocabulaire français",
+        "text": "Renforcez les mots utiles avant de passer à des phrases plus longues."
+      },
+      {
+        "title": "Phrases françaises utiles",
+        "text": "Pratiquez les salutations, les demandes et les situations courantes."
+      },
+      {
+        "title": "Grammaire française",
+        "text": "Clarifiez les structures pour parler et écrire avec plus de précision."
+      }
+    ]
   },
   {
-    file: "learn-spanish-online-es.html",
-    languageKey: "spanish",
-    htmlLang: "es",
-    title: "Aprender español en línea | Vocabulario, frases y gramática | Cosmica",
-    description:
-      "Aprende español en línea con lecciones estructuradas de pronunciación, vocabulario, frases y gramática.",
-    brandSub: "Guía en español",
-    backHref: "world-spanish.html",
-    backLabel: "Volver al curso de español",
-    footerText: "Aprendizaje de idiomas con estructura y pasos claros.",
-    worldFile: "world-spanish.html",
-    eyebrow: "Español en línea",
-    h1: "Aprender español en línea",
-    lede:
-      "Avanza desde las bases hasta estructuras más precisas con audio, traducciones y rutas cortas para estudiar con claridad.",
-    lessonsTitle: "Lecciones recomendadas de español",
-    lessonCards: [
-      { title: "Letras y pronunciación", text: "Refuerza sonidos, lectura y base oral." },
-      { title: "Vocabulario en español", text: "Aprende palabras comunes antes de pasar a expresiones más largas." },
-      { title: "Frases útiles en español", text: "Practica saludos, peticiones y situaciones reales." },
-      { title: "Gramática española", text: "Mejora la precisión al hablar y escribir." },
-    ],
+    "file": "learn-spanish-online-es.html",
+    "languageKey": "spanish",
+    "htmlLang": "es",
+    "title": "Aprender español en línea | Vocabulario, frases y gramática | Cosmica",
+    "description": "Aprende español en línea con lecciones estructuradas de pronunciación, vocabulario, frases y gramática.",
+    "brandSub": "Guía en español",
+    "backHref": "world-spanish.html",
+    "backLabel": "Volver al curso de español",
+    "footerText": "Aprendizaje de idiomas con estructura y pasos claros.",
+    "worldFile": "world-spanish.html",
+    "eyebrow": "Español en línea",
+    "h1": "Aprender español en línea",
+    "lede": "Avanza desde las bases hasta estructuras más precisas con audio, traducciones y rutas cortas para estudiar con claridad.",
+    "lessonsTitle": "Lecciones recomendadas de español",
+    "lessonCards": [
+      {
+        "title": "Letras y pronunciación",
+        "text": "Refuerza sonidos, lectura y base oral."
+      },
+      {
+        "title": "Vocabulario en español",
+        "text": "Aprende palabras comunes antes de pasar a expresiones más largas."
+      },
+      {
+        "title": "Frases útiles en español",
+        "text": "Practica saludos, peticiones y situaciones reales."
+      },
+      {
+        "title": "Gramática española",
+        "text": "Mejora la precisión al hablar y escribir."
+      }
+    ]
   },
   {
-    file: "learn-arabic-online-ar.html",
-    languageKey: "arabic",
-    htmlLang: "ar",
-    dir: "rtl",
-    title: "تعلم العربية عبر الإنترنت | المفردات والعبارات والقواعد | Cosmica",
-    description:
-      "تعلم العربية عبر الإنترنت من خلال دروس منظمة في النطق والمفردات والعبارات والقواعد.",
-    brandSub: "دليل بالعربية",
-    backHref: "world-arabic.html",
-    backLabel: "العودة إلى دورة العربية",
-    footerText: "تعلم منظم للغات بخطوات واضحة.",
-    worldFile: "world-arabic.html",
-    eyebrow: "العربية عبر الإنترنت",
-    h1: "تعلم العربية عبر الإنترنت",
-    lede:
-      "ابدأ من الأساسيات ثم انتقل إلى القواعد الأكثر تقدما مع الصوت والترجمة ومسار واضح يدعم القراءة والاستماع والتحدث.",
-    lessonsTitle: "دروس عربية مقترحة",
-    lessonCards: [
-      { title: "الحروف والأصوات", text: "ابن أساس القراءة والنطق بطريقة واضحة." },
-      { title: "المفردات العربية", text: "وسع حصيلتك من الكلمات الشائعة قبل الانتقال إلى العبارات." },
-      { title: "العبارات العربية", text: "تدرب على التحيات والطلبات والمواقف اليومية." },
-      { title: "قواعد العربية", text: "طور بناء الجملة ودقة التعبير الشفهي والكتابي." },
-    ],
+    "file": "learn-arabic-online-ar.html",
+    "languageKey": "arabic",
+    "htmlLang": "ar",
+    "dir": "rtl",
+    "title": "تعلم العربية عبر الإنترنت | المفردات والعبارات والقواعد | Cosmica",
+    "description": "تعلم العربية عبر الإنترنت من خلال دروس منظمة في الحروف والمفردات والعبارات والقواعد.",
+    "brandSub": "دليل بالعربية",
+    "backHref": "world-arabic.html",
+    "backLabel": "العودة إلى دورة العربية",
+    "footerText": "تعلم منظم للغات بخطوات واضحة.",
+    "worldFile": "world-arabic.html",
+    "eyebrow": "العربية عبر الإنترنت",
+    "h1": "تعلم العربية عبر الإنترنت",
+    "lede": "ابدأ من الأساسيات ثم انتقل إلى القواعد الأكثر تقدماً مع الصوت والترجمة ومسار واضح يدعم القراءة والاستماع والتحدث.",
+    "lessonsTitle": "دروس عربية مقترحة",
+    "lessonCards": [
+      {
+        "title": "الحروف والأصوات",
+        "text": "ابنِ أساس القراءة والنطق بطريقة واضحة."
+      },
+      {
+        "title": "المفردات العربية",
+        "text": "وسع حصيلتك من الكلمات الشائعة قبل الانتقال إلى العبارات."
+      },
+      {
+        "title": "العبارات العربية",
+        "text": "تدرّب على التحيات والطلبات والمواقف اليومية."
+      },
+      {
+        "title": "قواعد العربية",
+        "text": "طوّر بناء الجملة ودقة التعبير الشفهي والكتابي."
+      }
+    ]
   },
   {
-    file: "learn-chinese-online-zh.html",
-    languageKey: "chinese",
-    htmlLang: "zh-Hans",
-    title: "在线学习中文 | 词汇 短语和语法 | Cosmica",
-    description:
-      "通过结构化课程在线学习中文，练习发音 词汇 常用短语和语法。",
-    brandSub: "中文指南",
-    backHref: "world-chinese.html",
-    backLabel: "返回中文课程",
-    footerText: "结构清晰的语言学习路径。",
-    worldFile: "world-chinese.html",
-    eyebrow: "在线中文课程",
-    h1: "在线学习中文",
-    lede:
-      "从基础内容到更深入的语法逐步提升，配合音频、翻译和清晰的学习路径来加强阅读、听力和口语。",
-    lessonsTitle: "推荐的中文学习内容",
-    lessonCards: [
-      { title: "汉字与发音", text: "先打好识字和发音基础。" },
-      { title: "中文词汇", text: "积累高频词，再进入更完整的表达。" },
-      { title: "常用中文短语", text: "练习问候、请求和真实场景表达。" },
-      { title: "中文语法", text: "提高句子组织和表达准确性。" },
-    ],
+    "file": "learn-chinese-online-zh.html",
+    "languageKey": "chinese",
+    "htmlLang": "zh-Hans",
+    "title": "在线学习中文 | 词汇、短语与语法 | Cosmica",
+    "description": "通过结构清晰的课程在线学习中文，练习汉字、词汇、常用短语和语法。",
+    "brandSub": "中文指南",
+    "backHref": "world-chinese.html",
+    "backLabel": "返回中文课程",
+    "footerText": "按清晰步骤系统学习语言。",
+    "worldFile": "world-chinese.html",
+    "eyebrow": "在线中文课程",
+    "h1": "在线学习中文",
+    "lede": "从基础汉字到更深入的语法，配合音频、翻译和清晰学习路径，提升阅读、听力和口语能力。",
+    "lessonsTitle": "推荐的中文学习内容",
+    "lessonCards": [
+      {
+        "title": "汉字与发音",
+        "text": "打好识字、语音和朗读基础。"
+      },
+      {
+        "title": "中文词汇",
+        "text": "积累常用词汇，再逐步过渡到更长表达。"
+      },
+      {
+        "title": "常用中文短语",
+        "text": "练习问候、请求和日常情境表达。"
+      },
+      {
+        "title": "中文语法",
+        "text": "提升句子结构和表达准确度。"
+      }
+    ]
   },
   {
-    file: "learn-japanese-online-ja.html",
-    languageKey: "japanese",
-    htmlLang: "ja",
-    title: "オンラインで日本語を学ぶ | 語彙 フレーズ 文法 | Cosmica",
-    description:
-      "発音、語彙、フレーズ、文法を順序よく学べる日本語コースです。",
-    brandSub: "日本語ガイド",
-    backHref: "world-japanese.html",
-    backLabel: "日本語コースに戻る",
-    footerText: "順序が分かりやすい語学学習。",
-    worldFile: "world-japanese.html",
-    eyebrow: "オンライン日本語",
-    h1: "オンラインで日本語を学ぶ",
-    lede:
-      "基礎から発展的な文法まで、音声、翻訳、短い学習ルートを使って読み、聞き取り、会話を伸ばせます。",
-    lessonsTitle: "おすすめの日本語レッスン",
-    lessonCards: [
-      { title: "文字と発音", text: "ひらがな、カタカナと発音の基礎を固めます。" },
-      { title: "日本語の語彙", text: "よく使う単語を増やして理解を広げます。" },
-      { title: "日本語フレーズ", text: "あいさつや依頼など実用的な表現を練習します。" },
-      { title: "日本語文法", text: "文の形を整理して、より正確に話せるようにします。" },
-    ],
+    "file": "learn-japanese-online-ja.html",
+    "languageKey": "japanese",
+    "htmlLang": "ja",
+    "title": "オンラインで日本語を学ぶ | 語彙・フレーズ・文法 | Cosmica",
+    "description": "文字、語彙、フレーズ、文法を順序よく学べるオンライン日本語ガイド。",
+    "brandSub": "日本語ガイド",
+    "backHref": "world-japanese.html",
+    "backLabel": "日本語コースに戻る",
+    "footerText": "順序立てた学習で着実に語学力を伸ばします。",
+    "worldFile": "world-japanese.html",
+    "eyebrow": "オンライン日本語",
+    "h1": "オンラインで日本語を学ぶ",
+    "lede": "ひらがなから高度な文法まで、音声、翻訳、明確な学習ルートで読み、聞き、話す力を伸ばします。",
+    "lessonsTitle": "おすすめの日本語レッスン",
+    "lessonCards": [
+      {
+        "title": "文字と発音",
+        "text": "ひらがな、カタカナ、発音の基礎を固めます。"
+      },
+      {
+        "title": "日本語の語彙",
+        "text": "よく使う単語を増やし、理解を広げます。"
+      },
+      {
+        "title": "日本語フレーズ",
+        "text": "あいさつや依頼など日常的な表現を練習します。"
+      },
+      {
+        "title": "日本語文法",
+        "text": "文の組み立てと表現の正確さを高めます。"
+      }
+    ]
   },
   {
-    file: "learn-korean-online-ko.html",
-    languageKey: "korean",
-    htmlLang: "ko",
-    title: "온라인으로 한국어 배우기 | 어휘 표현 문법 | Cosmica",
-    description:
-      "발음, 어휘, 표현, 문법을 체계적으로 연습할 수 있는 한국어 코스입니다.",
-    brandSub: "한국어 가이드",
-    backHref: "world-korean.html",
-    backLabel: "한국어 코스로 돌아가기",
-    footerText: "단계가 분명한 구조형 언어 학습.",
-    worldFile: "world-korean.html",
-    eyebrow: "온라인 한국어",
-    h1: "온라인으로 한국어 배우기",
-    lede:
-      "기초부터 더 정교한 문법까지, 오디오와 번역, 짧은 학습 경로를 통해 읽기, 듣기, 말하기를 함께 키울 수 있습니다.",
-    lessonsTitle: "추천 한국어 학습 경로",
-    lessonCards: [
-      { title: "한글과 발음", text: "읽기와 발음의 기초를 먼저 다집니다." },
-      { title: "한국어 어휘", text: "자주 쓰는 단어를 익혀 표현력을 넓힙니다." },
-      { title: "한국어 표현", text: "인사, 요청, 실제 상황 표현을 연습합니다." },
-      { title: "한국어 문법", text: "더 정확한 문장 구성과 말하기를 돕습니다." },
-    ],
+    "file": "learn-korean-online-ko.html",
+    "languageKey": "korean",
+    "htmlLang": "ko",
+    "title": "온라인으로 한국어 배우기 | 어휘, 표현, 문법 | Cosmica",
+    "description": "발음, 어휘, 표현, 문법을 체계적으로 익히는 온라인 한국어 가이드입니다.",
+    "brandSub": "한국어 가이드",
+    "backHref": "world-korean.html",
+    "backLabel": "한국어 코스로 돌아가기",
+    "footerText": "명확한 단계로 차근차근 언어 실력을 키우세요.",
+    "worldFile": "world-korean.html",
+    "eyebrow": "온라인 한국어",
+    "h1": "온라인으로 한국어 배우기",
+    "lede": "기초부터 더 높은 수준의 문법까지, 오디오, 번역, 짧은 학습 경로를 따라 읽기, 듣기, 말하기 실력을 균형 있게 키워 보세요.",
+    "lessonsTitle": "추천 한국어 학습 코스",
+    "lessonCards": [
+      {
+        "title": "한글과 발음",
+        "text": "읽기와 발음의 기초를 먼저 단단히 다지세요."
+      },
+      {
+        "title": "한국어 어휘",
+        "text": "자주 쓰는 단어를 익혀 표현의 폭을 넓히세요."
+      },
+      {
+        "title": "한국어 표현",
+        "text": "인사, 요청, 일상 상황 표현을 자연스럽게 연습하세요."
+      },
+      {
+        "title": "한국어 문법",
+        "text": "문장 구성과 표현 정확도를 높이세요."
+      }
+    ]
   },
   {
-    file: "learn-hindi-online-hi.html",
-    languageKey: "hindi",
-    htmlLang: "hi",
-    title: "ऑनलाइन हिंदी सीखें | शब्दावली वाक्यांश और व्याकरण | Cosmica",
-    description:
-      "उच्चारण, शब्दावली, वाक्यांश और व्याकरण के साथ संरचित तरीके से हिंदी सीखें।",
-    brandSub: "हिंदी गाइड",
-    backHref: "world-hindi.html",
-    backLabel: "हिंदी कोर्स पर लौटें",
-    footerText: "स्पष्ट चरणों के साथ संरचित भाषा सीखना।",
-    worldFile: "world-hindi.html",
-    eyebrow: "ऑनलाइन हिंदी",
-    h1: "ऑनलाइन हिंदी सीखें",
-    lede:
-      "बुनियादी स्तर से आगे बढ़कर उन्नत व्याकरण तक पहुंचें, और ऑडियो, अनुवाद तथा स्पष्ट अध्ययन पथ के साथ पढ़ना, सुनना और बोलना मजबूत करें।",
-    lessonsTitle: "सुझाए गए हिंदी पाठ",
-    lessonCards: [
-      { title: "अक्षर और उच्चारण", text: "देवनागरी और ध्वनियों की मजबूत नींव बनाएं।" },
-      { title: "हिंदी शब्दावली", text: "सामान्य शब्द सीखें और अपनी समझ बढ़ाएं।" },
-      { title: "उपयोगी हिंदी वाक्यांश", text: "अभिवादन, अनुरोध और रोजमर्रा की स्थितियों का अभ्यास करें।" },
-      { title: "हिंदी व्याकरण", text: "वाक्य रचना और अभिव्यक्ति की शुद्धता मजबूत करें।" },
-    ],
+    "file": "learn-hindi-online-hi.html",
+    "languageKey": "hindi",
+    "htmlLang": "hi",
+    "title": "ऑनलाइन हिन्दी सीखें | शब्दावली, वाक्यांश और व्याकरण | Cosmica",
+    "description": "उच्चारण, शब्दावली, वाक्यांश और व्याकरण के साथ संरचित तरीके से हिन्दी सीखें।",
+    "brandSub": "हिन्दी गाइड",
+    "backHref": "world-hindi.html",
+    "backLabel": "हिन्दी कोर्स पर लौटें",
+    "footerText": "स्पष्ट अगले चरणों के साथ संरचित भाषा सीखना।",
+    "worldFile": "world-hindi.html",
+    "eyebrow": "ऑनलाइन हिन्दी",
+    "h1": "ऑनलाइन हिन्दी सीखें",
+    "lede": "बुनियाद से शुरू करके उन्नत व्याकरण तक पहुँचें, जहाँ ऑडियो, अनुवाद और स्पष्ट अध्ययन-पथ पढ़ने, सुनने और बोलने को मजबूत करते हैं।",
+    "lessonsTitle": "सुझाए गए हिन्दी पाठ",
+    "lessonCards": [
+      {
+        "title": "अक्षर और उच्चारण",
+        "text": "देवनागरी और ध्वनियों की मजबूत नींव बनाइए।"
+      },
+      {
+        "title": "हिन्दी शब्दावली",
+        "text": "सामान्य शब्द सीखें और समझ बढ़ाइए।"
+      },
+      {
+        "title": "उपयोगी हिन्दी वाक्यांश",
+        "text": "अभिवादन, अनुरोध और रोज़मर्रा की स्थितियों का अभ्यास कीजिए।"
+      },
+      {
+        "title": "हिन्दी व्याकरण",
+        "text": "वाक्य रचना और अभिव्यक्ति की शुद्धता बेहतर कीजिए।"
+      }
+    ]
   },
   {
-    file: "learn-german-online-de.html",
-    languageKey: "german",
-    htmlLang: "de",
-    title: "Deutsch online lernen | Wortschatz, Sätze und Grammatik | Cosmica",
-    description:
-      "Lernen Sie Deutsch online mit strukturierten Lektionen zu Aussprache, Wortschatz, Sätzen und Grammatik.",
-    brandSub: "Leitfaden auf Deutsch",
-    backHref: "world-german.html",
-    backLabel: "Zurück zum Deutschkurs",
-    footerText: "Strukturiertes Sprachenlernen mit klaren nächsten Schritten.",
-    worldFile: "world-german.html",
-    eyebrow: "Deutsch online",
-    h1: "Deutsch online lernen",
-    lede:
-      "Gehen Sie von den Grundlagen bis zu fortgeschrittener Grammatik mit Audio, Übersetzungen und klaren Lernpfaden für Lesen, Hören und Sprechen.",
-    lessonsTitle: "Empfohlene Deutschlektionen",
-    lessonCards: [
-      { title: "Alphabet und Aussprache", text: "Stärken Sie die Grundlagen für Lesen und Sprechen." },
-      { title: "Deutscher Wortschatz", text: "Bauen Sie wichtige Wörter für den Alltag auf." },
-      { title: "Nützliche deutsche Sätze", text: "Üben Sie Begrüßungen, Bitten und Alltagssituationen." },
-      { title: "Deutsche Grammatik", text: "Arbeiten Sie an genauerem Satzbau und sichererem Ausdruck." },
-    ],
+    "file": "learn-german-online-de.html",
+    "languageKey": "german",
+    "htmlLang": "de",
+    "title": "Deutsch online lernen | Wortschatz, Sätze und Grammatik | Cosmica",
+    "description": "Lernen Sie Deutsch online mit strukturierten Lektionen zu Aussprache, Wortschatz, Sätzen und Grammatik.",
+    "brandSub": "Leitfaden auf Deutsch",
+    "backHref": "world-german.html",
+    "backLabel": "Zurück zum Deutschkurs",
+    "footerText": "Strukturiertes Sprachenlernen mit klaren nächsten Schritten.",
+    "worldFile": "world-german.html",
+    "eyebrow": "Deutsch online",
+    "h1": "Deutsch online lernen",
+    "lede": "Gehen Sie von den Grundlagen bis zu fortgeschrittener Grammatik mit Audio, Übersetzungen und klaren Lernpfaden für Lesen, Hören und Sprechen.",
+    "lessonsTitle": "Empfohlene Deutschlektionen",
+    "lessonCards": [
+      {
+        "title": "Alphabet und Aussprache",
+        "text": "Stärken Sie die Grundlagen für Lesen und Sprechen."
+      },
+      {
+        "title": "Deutscher Wortschatz",
+        "text": "Bauen Sie wichtige Wörter für den Alltag auf."
+      },
+      {
+        "title": "Nützliche deutsche Sätze",
+        "text": "Üben Sie Begrüßungen, Bitten und Alltagssituationen."
+      },
+      {
+        "title": "Deutsche Grammatik",
+        "text": "Arbeiten Sie an genauerem Satzbau und sichererem Ausdruck."
+      }
+    ]
   },
   {
-    file: "learn-portuguese-online-pt.html",
-    languageKey: "portuguese",
-    htmlLang: "pt",
-    title: "Aprender português online | Vocabulário, frases e gramática | Cosmica",
-    description:
-      "Aprenda português online com aulas estruturadas de pronúncia, vocabulário, frases e gramática.",
-    brandSub: "Guia em português",
-    backHref: "world-portuguese.html",
-    backLabel: "Voltar ao curso de português",
-    footerText: "Aprendizagem de línguas com estrutura e próximos passos claros.",
-    worldFile: "world-portuguese.html",
-    eyebrow: "Português online",
-    h1: "Aprender português online",
-    lede:
-      "Avance das bases para estruturas mais complexas com áudio, traduções e percursos curtos para leitura, escuta e fala.",
-    lessonsTitle: "Lições recomendadas de português",
-    lessonCards: [
-      { title: "Letras e pronúncia", text: "Fortaleça a base de leitura e som." },
-      { title: "Vocabulário em português", text: "Construa palavras frequentes antes de avançar para expressões maiores." },
-      { title: "Frases úteis em português", text: "Pratique cumprimentos, pedidos e situações comuns." },
-      { title: "Gramática portuguesa", text: "Melhore a precisão ao falar e escrever." },
-    ],
+    "file": "learn-portuguese-online-pt.html",
+    "languageKey": "portuguese",
+    "htmlLang": "pt",
+    "title": "Aprender português online | Vocabulário, frases e gramática | Cosmica",
+    "description": "Aprenda português online com aulas estruturadas de pronúncia, vocabulário, frases e gramática.",
+    "brandSub": "Guia em português",
+    "backHref": "world-portuguese.html",
+    "backLabel": "Voltar ao curso de português",
+    "footerText": "Aprendizagem de línguas com estrutura e próximos passos claros.",
+    "worldFile": "world-portuguese.html",
+    "eyebrow": "Português online",
+    "h1": "Aprender português online",
+    "lede": "Avance das bases para estruturas mais complexas com áudio, traduções e percursos curtos para leitura, escuta e fala.",
+    "lessonsTitle": "Lições recomendadas de português",
+    "lessonCards": [
+      {
+        "title": "Letras e pronúncia",
+        "text": "Fortaleça a base de leitura e som."
+      },
+      {
+        "title": "Vocabulário em português",
+        "text": "Construa palavras frequentes antes de avançar para expressões maiores."
+      },
+      {
+        "title": "Frases úteis em português",
+        "text": "Pratique cumprimentos, pedidos e situações comuns."
+      },
+      {
+        "title": "Gramática portuguesa",
+        "text": "Melhore a precisão ao falar e escrever."
+      }
+    ]
   },
   {
-    file: "learn-dutch-online-nl.html",
-    languageKey: "dutch",
-    htmlLang: "nl",
-    title: "Nederlands online leren | Woordenschat, zinnen en grammatica | Cosmica",
-    description:
-      "Leer Nederlands online met gestructureerde lessen voor uitspraak, woordenschat, zinnen en grammatica.",
-    brandSub: "Gids in het Nederlands",
-    backHref: "world-dutch.html",
-    backLabel: "Terug naar de cursus Nederlands",
-    footerText: "Gestructureerd talen leren met duidelijke volgende stappen.",
-    worldFile: "world-dutch.html",
-    eyebrow: "Nederlands online",
-    h1: "Nederlands online leren",
-    lede:
-      "Werk van de basis naar meer gevorderde grammatica met audio, vertalingen en korte leerroutes voor lezen, luisteren en spreken.",
-    lessonsTitle: "Aanbevolen lessen Nederlands",
-    lessonCards: [
-      { title: "Letters en uitspraak", text: "Versterk de basis voor lezen en spreken." },
-      { title: "Nederlandse woordenschat", text: "Bouw nuttige woorden op voor alledaagse situaties." },
-      { title: "Nuttige Nederlandse zinnen", text: "Oefen begroetingen, verzoeken en echte situaties." },
-      { title: "Nederlandse grammatica", text: "Werk aan nauwkeuriger zinsbouw en helderder taalgebruik." },
-    ],
+    "file": "learn-dutch-online-nl.html",
+    "languageKey": "dutch",
+    "htmlLang": "nl",
+    "title": "Nederlands online leren | Woordenschat, zinnen en grammatica | Cosmica",
+    "description": "Leer Nederlands online met gestructureerde lessen voor uitspraak, woordenschat, zinnen en grammatica.",
+    "brandSub": "Gids in het Nederlands",
+    "backHref": "world-dutch.html",
+    "backLabel": "Terug naar de cursus Nederlands",
+    "footerText": "Gestructureerd talen leren met duidelijke volgende stappen.",
+    "worldFile": "world-dutch.html",
+    "eyebrow": "Nederlands online",
+    "h1": "Nederlands online leren",
+    "lede": "Werk van de basis naar meer gevorderde grammatica met audio, vertalingen en korte leerroutes voor lezen, luisteren en spreken.",
+    "lessonsTitle": "Aanbevolen lessen Nederlands",
+    "lessonCards": [
+      {
+        "title": "Letters en uitspraak",
+        "text": "Versterk de basis voor lezen en spreken."
+      },
+      {
+        "title": "Nederlandse woordenschat",
+        "text": "Bouw nuttige woorden op voor alledaagse situaties."
+      },
+      {
+        "title": "Nuttige Nederlandse zinnen",
+        "text": "Oefen begroetingen, verzoeken en echte situaties."
+      },
+      {
+        "title": "Nederlandse grammatica",
+        "text": "Werk aan nauwkeuriger zinsbouw en helderder taalgebruik."
+      }
+    ]
   },
   {
-    file: "learn-swedish-online-sv.html",
-    languageKey: "swedish",
-    htmlLang: "sv",
-    title: "Lär dig svenska online | Ordförråd, fraser och grammatik | Cosmica",
-    description:
-      "Lär dig svenska online med strukturerade lektioner i uttal, ordförråd, fraser och grammatik.",
-    brandSub: "Guide på svenska",
-    backHref: "world-swedish.html",
-    backLabel: "Tillbaka till svenskakursen",
-    footerText: "Strukturerat språklärande med tydliga nästa steg.",
-    worldFile: "world-swedish.html",
-    eyebrow: "Svenska online",
-    h1: "Lär dig svenska online",
-    lede:
-      "Gå från grunderna till mer avancerad grammatik med ljud, översättningar och korta studievägar för läsning, lyssning och tal.",
-    lessonsTitle: "Rekommenderade svenskalektioner",
-    lessonCards: [
-      { title: "Bokstäver och uttal", text: "Stärk grunden för läsning och tal." },
-      { title: "Svenskt ordförråd", text: "Bygg upp vanliga ord innan du går vidare till längre uttryck." },
-      { title: "Användbara svenska fraser", text: "Öva hälsningar, frågor och vanliga situationer." },
-      { title: "Svensk grammatik", text: "Förbättra precisionen i tal och skrift." },
-    ],
-  },
-]);
+    "file": "learn-swedish-online-sv.html",
+    "languageKey": "swedish",
+    "htmlLang": "sv",
+    "title": "Lär dig svenska online | Ordförråd, fraser och grammatik | Cosmica",
+    "description": "Lär dig svenska online med strukturerade lektioner i uttal, ordförråd, fraser och grammatik.",
+    "brandSub": "Guide på svenska",
+    "backHref": "world-swedish.html",
+    "backLabel": "Tillbaka till svenskakursen",
+    "footerText": "Strukturerat språklärande med tydliga nästa steg.",
+    "worldFile": "world-swedish.html",
+    "eyebrow": "Svenska online",
+    "h1": "Lär dig svenska online",
+    "lede": "Gå från grunderna till mer avancerad grammatik med ljud, översättningar och korta studievägar för läsning, lyssning och tal.",
+    "lessonsTitle": "Rekommenderade svenskalektioner",
+    "lessonCards": [
+      {
+        "title": "Bokstäver och uttal",
+        "text": "Stärk grunden för läsning och tal."
+      },
+      {
+        "title": "Svenskt ordförråd",
+        "text": "Bygg upp vanliga ord innan du går vidare till längre uttryck."
+      },
+      {
+        "title": "Användbara svenska fraser",
+        "text": "Öva hälsningar, frågor och vanliga situationer."
+      },
+      {
+        "title": "Svensk grammatik",
+        "text": "Förbättra precisionen i tal och skrift."
+      }
+    ]
+  }
+];
 
 for (const config of PAGES) {
   const localizedSeoText = getLocalizedSeoText(config.languageKey);
@@ -939,3 +975,6 @@ for (const config of PAGES) {
 }
 
 console.log(`Generated ${PAGES.length * 3} localized SEO landing pages.`);
+
+
+

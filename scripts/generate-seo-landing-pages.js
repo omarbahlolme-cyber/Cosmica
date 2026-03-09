@@ -1,173 +1,146 @@
 const fs = require("fs");
 const path = require("path");
+const { repairDeepText } = require("./lib/mojibake");
 
 const ROOT = path.resolve(__dirname, "..");
 const FRONTEND = path.join(ROOT, "frontend");
 const SITE_ORIGIN = "https://www.cosmicalearn.com";
-const SHARED_ASSET_VERSION = "20260438";
+const SHARED_ASSET_VERSION = "20260440";
 const STYLE_ASSET_VERSION = SHARED_ASSET_VERSION;
 const APP_ASSET_VERSION = SHARED_ASSET_VERSION;
 const ACCOUNT_CARET_ENTITY = "&#9662;";
-const hasMojibake = (value) =>
-  /Ã|Â|â|Ø|Ù|Ð|Ñ|ä¸|åœ|æ—|ì˜|í•|à¤|à¥/.test(String(value || ""));
-const fixMojibake = (value) => {
-  const text = String(value || "");
-  if (!hasMojibake(text)) {
-    return text;
-  }
-  try {
-    const repaired = Buffer.from(text, "latin1").toString("utf8");
-    return repaired || text;
-  } catch {
-    return text;
-  }
-};
-const repairDeepText = (value) => {
-  if (typeof value === "string") {
-    return fixMojibake(value);
-  }
-  if (Array.isArray(value)) {
-    return value.map((item) => repairDeepText(item));
-  }
-  if (value && typeof value === "object") {
-    return Object.fromEntries(
-      Object.entries(value).map(([key, item]) => [key, repairDeepText(item)])
-    );
-  }
-  return value;
-};
 
 const LANGUAGES = repairDeepText([
   {
-    key: "english",
-    language: "English",
-    worldFile: "english-world.html",
-    lettersFile: "english-letters.html",
-    wordsFile: "english-words.html",
-    phrasesFile: "english-phrases.html",
-    grammarFile: "english-grammar.html",
+    "key": "english",
+    "language": "English",
+    "worldFile": "english-world.html",
+    "lettersFile": "english-letters.html",
+    "wordsFile": "english-words.html",
+    "phrasesFile": "english-phrases.html",
+    "grammarFile": "english-grammar.html"
   },
   {
-    key: "french",
-    language: "French",
-    worldFile: "world-french.html",
-    lettersFile: "letters-french.html",
-    wordsFile: "words-french.html",
-    phrasesFile: "phrases-french.html",
-    grammarFile: "grammar-french.html",
-    localizedGuideFile: "learn-french-online-fr.html",
-    localizedGuideTitle: "Guide en français",
+    "key": "french",
+    "language": "French",
+    "worldFile": "world-french.html",
+    "lettersFile": "letters-french.html",
+    "wordsFile": "words-french.html",
+    "phrasesFile": "phrases-french.html",
+    "grammarFile": "grammar-french.html",
+    "localizedGuideFile": "learn-french-online-fr.html",
+    "localizedGuideTitle": "Guide en français"
   },
   {
-    key: "spanish",
-    language: "Spanish",
-    worldFile: "world-spanish.html",
-    lettersFile: "letters-spanish.html",
-    wordsFile: "words-spanish.html",
-    phrasesFile: "phrases-spanish.html",
-    grammarFile: "grammar-spanish.html",
-    localizedGuideFile: "learn-spanish-online-es.html",
-    localizedGuideTitle: "Guía en español",
+    "key": "spanish",
+    "language": "Spanish",
+    "worldFile": "world-spanish.html",
+    "lettersFile": "letters-spanish.html",
+    "wordsFile": "words-spanish.html",
+    "phrasesFile": "phrases-spanish.html",
+    "grammarFile": "grammar-spanish.html",
+    "localizedGuideFile": "learn-spanish-online-es.html",
+    "localizedGuideTitle": "Guía en español"
   },
   {
-    key: "arabic",
-    language: "Arabic",
-    worldFile: "world-arabic.html",
-    lettersFile: "letters-arabic.html",
-    wordsFile: "words-arabic.html",
-    phrasesFile: "phrases-arabic.html",
-    grammarFile: "grammar-arabic.html",
-    localizedGuideFile: "learn-arabic-online-ar.html",
-    localizedGuideTitle: "دليل بالعربية",
+    "key": "arabic",
+    "language": "Arabic",
+    "worldFile": "world-arabic.html",
+    "lettersFile": "letters-arabic.html",
+    "wordsFile": "words-arabic.html",
+    "phrasesFile": "phrases-arabic.html",
+    "grammarFile": "grammar-arabic.html",
+    "localizedGuideFile": "learn-arabic-online-ar.html",
+    "localizedGuideTitle": "دليل بالعربية"
   },
   {
-    key: "chinese",
-    language: "Chinese",
-    worldFile: "world-chinese.html",
-    lettersFile: "letters-chinese.html",
-    wordsFile: "words-chinese.html",
-    phrasesFile: "phrases-chinese.html",
-    grammarFile: "grammar-chinese.html",
-    localizedGuideFile: "learn-chinese-online-zh.html",
-    localizedGuideTitle: "中文指南",
+    "key": "chinese",
+    "language": "Chinese",
+    "worldFile": "world-chinese.html",
+    "lettersFile": "letters-chinese.html",
+    "wordsFile": "words-chinese.html",
+    "phrasesFile": "phrases-chinese.html",
+    "grammarFile": "grammar-chinese.html",
+    "localizedGuideFile": "learn-chinese-online-zh.html",
+    "localizedGuideTitle": "中文指南"
   },
   {
-    key: "japanese",
-    language: "Japanese",
-    worldFile: "world-japanese.html",
-    lettersFile: "letters-japanese.html",
-    wordsFile: "words-japanese.html",
-    phrasesFile: "phrases-japanese.html",
-    grammarFile: "grammar-japanese.html",
-    localizedGuideFile: "learn-japanese-online-ja.html",
-    localizedGuideTitle: "日本語ガイド",
+    "key": "japanese",
+    "language": "Japanese",
+    "worldFile": "world-japanese.html",
+    "lettersFile": "letters-japanese.html",
+    "wordsFile": "words-japanese.html",
+    "phrasesFile": "phrases-japanese.html",
+    "grammarFile": "grammar-japanese.html",
+    "localizedGuideFile": "learn-japanese-online-ja.html",
+    "localizedGuideTitle": "日本語ガイド"
   },
   {
-    key: "korean",
-    language: "Korean",
-    worldFile: "world-korean.html",
-    lettersFile: "letters-korean.html",
-    wordsFile: "words-korean.html",
-    phrasesFile: "phrases-korean.html",
-    grammarFile: "grammar-korean.html",
-    localizedGuideFile: "learn-korean-online-ko.html",
-    localizedGuideTitle: "한국어 가이드",
+    "key": "korean",
+    "language": "Korean",
+    "worldFile": "world-korean.html",
+    "lettersFile": "letters-korean.html",
+    "wordsFile": "words-korean.html",
+    "phrasesFile": "phrases-korean.html",
+    "grammarFile": "grammar-korean.html",
+    "localizedGuideFile": "learn-korean-online-ko.html",
+    "localizedGuideTitle": "한국어 가이드"
   },
   {
-    key: "hindi",
-    language: "Hindi",
-    worldFile: "world-hindi.html",
-    lettersFile: "letters-hindi.html",
-    wordsFile: "words-hindi.html",
-    phrasesFile: "phrases-hindi.html",
-    grammarFile: "grammar-hindi.html",
-    localizedGuideFile: "learn-hindi-online-hi.html",
-    localizedGuideTitle: "हिंदी गाइड",
+    "key": "hindi",
+    "language": "Hindi",
+    "worldFile": "world-hindi.html",
+    "lettersFile": "letters-hindi.html",
+    "wordsFile": "words-hindi.html",
+    "phrasesFile": "phrases-hindi.html",
+    "grammarFile": "grammar-hindi.html",
+    "localizedGuideFile": "learn-hindi-online-hi.html",
+    "localizedGuideTitle": "हिन्दी गाइड"
   },
   {
-    key: "german",
-    language: "German",
-    worldFile: "world-german.html",
-    lettersFile: "letters-german.html",
-    wordsFile: "words-german.html",
-    phrasesFile: "phrases-german.html",
-    grammarFile: "grammar-german.html",
-    localizedGuideFile: "learn-german-online-de.html",
-    localizedGuideTitle: "Leitfaden auf Deutsch",
+    "key": "german",
+    "language": "German",
+    "worldFile": "world-german.html",
+    "lettersFile": "letters-german.html",
+    "wordsFile": "words-german.html",
+    "phrasesFile": "phrases-german.html",
+    "grammarFile": "grammar-german.html",
+    "localizedGuideFile": "learn-german-online-de.html",
+    "localizedGuideTitle": "Leitfaden auf Deutsch"
   },
   {
-    key: "portuguese",
-    language: "Portuguese",
-    worldFile: "world-portuguese.html",
-    lettersFile: "letters-portuguese.html",
-    wordsFile: "words-portuguese.html",
-    phrasesFile: "phrases-portuguese.html",
-    grammarFile: "grammar-portuguese.html",
-    localizedGuideFile: "learn-portuguese-online-pt.html",
-    localizedGuideTitle: "Guia em português",
+    "key": "portuguese",
+    "language": "Portuguese",
+    "worldFile": "world-portuguese.html",
+    "lettersFile": "letters-portuguese.html",
+    "wordsFile": "words-portuguese.html",
+    "phrasesFile": "phrases-portuguese.html",
+    "grammarFile": "grammar-portuguese.html",
+    "localizedGuideFile": "learn-portuguese-online-pt.html",
+    "localizedGuideTitle": "Guia em português"
   },
   {
-    key: "dutch",
-    language: "Dutch",
-    worldFile: "world-dutch.html",
-    lettersFile: "letters-dutch.html",
-    wordsFile: "words-dutch.html",
-    phrasesFile: "phrases-dutch.html",
-    grammarFile: "grammar-dutch.html",
-    localizedGuideFile: "learn-dutch-online-nl.html",
-    localizedGuideTitle: "Gids in het Nederlands",
+    "key": "dutch",
+    "language": "Dutch",
+    "worldFile": "world-dutch.html",
+    "lettersFile": "letters-dutch.html",
+    "wordsFile": "words-dutch.html",
+    "phrasesFile": "phrases-dutch.html",
+    "grammarFile": "grammar-dutch.html",
+    "localizedGuideFile": "learn-dutch-online-nl.html",
+    "localizedGuideTitle": "Gids in het Nederlands"
   },
   {
-    key: "swedish",
-    language: "Swedish",
-    worldFile: "world-swedish.html",
-    lettersFile: "letters-swedish.html",
-    wordsFile: "words-swedish.html",
-    phrasesFile: "phrases-swedish.html",
-    grammarFile: "grammar-swedish.html",
-    localizedGuideFile: "learn-swedish-online-sv.html",
-    localizedGuideTitle: "Guide på svenska",
-  },
+    "key": "swedish",
+    "language": "Swedish",
+    "worldFile": "world-swedish.html",
+    "lettersFile": "letters-swedish.html",
+    "wordsFile": "words-swedish.html",
+    "phrasesFile": "phrases-swedish.html",
+    "grammarFile": "grammar-swedish.html",
+    "localizedGuideFile": "learn-swedish-online-sv.html",
+    "localizedGuideTitle": "Guide på svenska"
+  }
 ]);
 
 const beginnerPageFile = (key) => `learn-${key}-for-beginners.html`;
@@ -883,3 +856,5 @@ for (const config of LANGUAGES) {
 }
 
 console.log(`Generated ${LANGUAGES.length * 3} SEO landing pages and linked them from world hubs.`);
+
+

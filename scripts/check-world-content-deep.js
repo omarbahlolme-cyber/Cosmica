@@ -7,6 +7,10 @@
    ========================================================================== */
 const fs = require("fs");
 const path = require("path");
+const {
+  inferHighlightsForCard,
+  sameHighlights,
+} = require("./grammar-highlight-repairs");
 
 const ROOT = path.resolve(__dirname, "..");
 const WORLDS_ROOT = path.join(ROOT, "frontend", "worlds");
@@ -18,6 +22,256 @@ const REQUIRED_INTENTS = [
 ];
 const INTENT_SCAN_SECTIONS = ["Introductions", "Questions"];
 const REQUIRED_NON_ENGLISH_GRAMMAR_DISPLAY_MODES = ["english", "base"];
+const PHRASE_CANARIES = {
+  german: {
+    Introductions: {
+      "Darf ich mich vorstellen?": "let me introduce myself",
+    },
+    Questions: {
+      "was ist das da": "what is that",
+    },
+    Politeness: {
+      "Ich weiß das zu schätzen": "i appreciate it",
+    },
+  },
+  hindi: {
+    Introductions: {
+      "यह मेरा दोस्त है / यह मेरी दोस्त है": "this is my friend",
+    },
+    Politeness: {
+      "मैं क्षमा चाहता/चाहती हूँ": "my apologies",
+    },
+    Requests: {
+      "क्या मैं ... ले सकता/सकती हूँ?": "can i have",
+      "क्या मुझे ... मिल सकता है?": "could i have",
+      "मैं ... चाहूँगा/चाहूँगी": "i would like",
+    },
+  },
+  japanese: {
+    Introductions: {
+      "こちらは私の兄 / 弟です": "this is my brother",
+    },
+    Politeness: {
+      "失礼します": "pardon me",
+      "本当にありがとうございます": "thanks a lot",
+    },
+    Questions: {
+      "どこにいますか": "where are you",
+    },
+  },
+  korean: {
+    Introductions: {
+      "제 이름은": "my name is",
+      "저는": "i am",
+      "이분은 제 친구예요": "this is my friend",
+      "한국어를 말해요": "i speak korean",
+    },
+    Politeness: {
+      "그건 죄송해요": "sorry about that",
+      "정말 감사드립니다": "i appreciate it",
+      "정말 감사합니다": "thanks a lot",
+      "문제없어요": "no problem",
+    },
+    Questions: {
+      "어디에 계세요?": "where are you",
+    },
+    Requests: {
+      "...을/를 원해요": "i would like",
+    },
+  },
+};
+const WORD_CANARIES = {
+  arabic: {
+    "Questions & Connectors": {
+      "من": "who",
+    },
+    "Verbs & Tenses": {
+      "يكون": "be",
+      "يذهب": "go",
+      "يأخذ": "take",
+      "يقول": "say",
+      "يعطي": "give",
+    },
+    Pronouns: {
+      "إياي": "me",
+      "إياه": "him",
+      "إياها": "her",
+      "إيانا": "us",
+      "إياهم": "them",
+      "ـي": "my",
+      "ـكَ / ـكِ": "your",
+      "ـه": "his",
+      "ـه / ـها": "its",
+      "ـنا": "our",
+      "ـهم": "their",
+      "لي": "mine",
+      "لك / لكِ": "yours",
+      "لها": "hers",
+      "لنا": "ours",
+      "لهم": "theirs",
+    },
+  },
+  chinese: {
+    "Questions & Connectors": {
+      "谁": "who",
+    },
+  },
+  dutch: {
+    "Questions & Connectors": {
+      "wie": "who",
+    },
+    "Feelings & States": {
+      kalm: "calm",
+    },
+    Pronouns: {
+      zij: { source: "she / they", worldSources: ["she", "they"] },
+      zijn: { source: "his / its", worldSources: ["his", "its"] },
+      iedereen: { source: "everyone / everybody", worldSources: ["everyone", "everybody"] },
+      iemand: { source: "someone / anyone", worldSources: ["someone", "anyone", "anybody"] },
+    },
+  },
+  french: {
+    "Questions & Connectors": {
+      qui: "who",
+    },
+    Pronouns: {
+      lui: { source: "him / her", worldSources: ["him"] },
+      son: { source: "his / her / its", worldSources: ["his", "its"] },
+      ces: { source: "these / those", worldSources: ["these", "those"] },
+    },
+  },
+  german: {
+    "Verbs & Tenses": {
+      gehen: "go",
+    },
+    Pronouns: {
+      sie: { source: "she / they", worldSources: ["she", "they"] },
+      sein: { source: "his / its", worldSources: ["his", "its"] },
+      irgendjemand: { source: "anybody", worldSources: ["anyone", "anybody"] },
+    },
+  },
+  hindi: {
+    "Questions & Connectors": {
+      "क्या": "what",
+    },
+    "Verbs & Tenses": {
+      "पास होना": "have",
+    },
+    "Feelings & States": {
+      "डरा हुआ/डरी हुई": "afraid",
+    },
+    Pronouns: {
+      "वह": { source: "he / she / that", worldSources: ["he", "she", "that"] },
+      "यह": { source: "this / it", worldSources: ["this", "it"] },
+      "वे": { source: "they / those", worldSources: ["they", "those"] },
+      "उसे": { source: "him / her", worldSources: ["him", "her"] },
+      "मेरा": { source: "my / mine", worldSources: ["my", "mine"] },
+      "तुम्हारा": { source: "your / yours", worldSources: ["your", "yours"] },
+      "उसका": { source: "his / her / hers", worldSources: ["his", "hers"] },
+      "हमारा": { source: "our / ours", worldSources: ["our", "ours"] },
+      "उनका": { source: "their / theirs", worldSources: ["their", "theirs"] },
+      "वह खुद": { source: "himself / herself", worldSources: ["himself", "herself"] },
+    },
+  },
+  japanese: {
+    Greetings: {
+      "こんにちは": "hello",
+      "バイバイ": "bye",
+    },
+    "Feelings & States": {
+      "さみしい": "lonely",
+    },
+  },
+  korean: {
+    "Feelings & States": {
+      "행복하다": "happy",
+      "슬프다": "sad",
+      "화나다": "angry",
+      "두렵다": "afraid",
+      "신나다": "excited",
+      "지루하다": "bored",
+      "피곤하다": "tired",
+      "졸리다": "sleepy",
+      "배고프다": "hungry",
+      "목마르다": "thirsty",
+      "긴장되다": "nervous",
+      "차분하다": "calm",
+      "괜찮다": "okay",
+      "외롭다": "lonely",
+    },
+    Greetings: {
+      "안녕하세요": {
+        source: "hello",
+        worldSources: ["hello", "good morning", "good afternoon", "good evening"],
+      },
+      "죄송합니다": "sorry",
+      "고마워요": "thanks",
+      "별말씀을요": "you're welcome",
+      "만나 뵙게 되어 기쁩니다": "pleased to meet you",
+    },
+    Pronouns: {
+      "이": { source: "this / this one", worldSources: ["this"] },
+      "저": { source: "that / that one", worldSources: ["that"] },
+      "누군가": { source: "someone / somebody", worldSources: ["someone", "somebody"] },
+      "아무나": { source: "anyone / anybody", worldSources: ["anyone", "anybody"] },
+      "모두": { source: "everyone / everybody / all", worldSources: ["everyone", "everybody", "all"] },
+      "아무도": { source: "nobody / no one", worldSources: ["nobody", "no one"] },
+      "아무것도": "nothing",
+    },
+  },
+  portuguese: {
+    Greetings: {
+      "bom dia": "good morning",
+    },
+    "Questions & Connectors": {
+      como: "how",
+    },
+    "Verbs & Tenses": {
+      conseguir: "get",
+    },
+    Pronouns: {
+      isso: { source: "it / that", worldSources: ["it"] },
+      meu: { source: "my / mine", worldSources: ["my", "mine"] },
+      nosso: { source: "our / ours", worldSources: ["our", "ours"] },
+    },
+  },
+  spanish: {
+    Greetings: {
+      "adiós": "goodbye",
+    },
+    "Verbs & Tenses": {
+      conseguir: "get",
+    },
+    Pronouns: {
+      eso: { source: "it / that", worldSources: ["it", "that"] },
+      nuestro: { source: "our / ours", worldSources: ["our", "ours"] },
+      suyo: { source: "his / hers / its / theirs", worldSources: ["hers", "theirs"] },
+    },
+  },
+  swedish: {
+    "Questions & Connectors": {
+      vem: "who",
+    },
+    "Verbs & Tenses": {
+      "gå": "go",
+    },
+    Pronouns: {
+      det: { source: "it / that", worldSources: ["it", "that"] },
+      min: { source: "my / mine", worldSources: ["my", "mine"] },
+      din: { source: "your / yours", worldSources: ["your", "yours"] },
+      vår: { source: "our / ours", worldSources: ["our", "ours"] },
+      "sig själv": {
+        source: "himself / herself / itself",
+        worldSources: ["himself", "herself", "itself"],
+      },
+    },
+  },
+};
+const FORBIDDEN_WORD_ENTRIES = {
+  korean: {
+    Greetings: ["좋은 아침", "좋은 오후", "좋은 저녁"],
+  },
+};
 
 const readJson = (filePath) => {
   const raw = fs.readFileSync(filePath, "utf8").replace(/^\uFEFF/, "");
@@ -25,6 +279,7 @@ const readJson = (filePath) => {
 };
 
 const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
+const normalize = (value) => String(value || "").trim().toLowerCase();
 
 const hasNonEmptyString = (value) => String(value || "").trim().length > 0;
 
@@ -224,6 +479,15 @@ const main = () => {
             `Grammar card mismatch in ${sectionName} #${cardIndex + 1} (${ruleOrder.length} rule slots vs ${highlights.length} highlights).`
           );
         }
+
+        const expectedHighlights = inferHighlightsForCard(worldKey, sectionName, card);
+        if (expectedHighlights.length >= 2 && !sameHighlights(highlights, expectedHighlights)) {
+          fail(
+            failures,
+            worldKey,
+            `Grammar highlight alignment drift in ${sectionName} #${cardIndex + 1}.`
+          );
+        }
       });
     });
 
@@ -285,6 +549,103 @@ const main = () => {
         fail(failures, worldKey, `Intent not found in phrase entries: ${intentKey}`);
       }
     });
+
+    const phraseCanaries = PHRASE_CANARIES[worldKey];
+    if (phraseCanaries) {
+      Object.entries(phraseCanaries).forEach(([sectionName, expectations]) => {
+        const section = isObject(pack?.phrases?.[sectionName]) ? pack.phrases[sectionName] : {};
+        const worldSourceSection = isObject(pack?.worldSource?.phrases?.[sectionName])
+          ? pack.worldSource.phrases[sectionName]
+          : {};
+        Object.entries(expectations).forEach(([nativePhrase, expectedSource]) => {
+          const entry = section[nativePhrase];
+          if (!isObject(entry)) {
+            fail(
+              failures,
+              worldKey,
+              `Missing phrase canary in ${sectionName}: "${nativePhrase}".`
+            );
+            return;
+          }
+          if (normalize(entry.source) !== normalize(expectedSource)) {
+            fail(
+              failures,
+              worldKey,
+              `Phrase canary source drift in ${sectionName}: "${nativePhrase}" -> "${entry.source}".`
+            );
+          }
+          if (normalize(worldSourceSection[expectedSource]) !== normalize(nativePhrase)) {
+            fail(
+              failures,
+              worldKey,
+              `worldSource mismatch in ${sectionName}: "${expectedSource}" -> "${worldSourceSection[expectedSource] || "<missing>"}".`
+            );
+          }
+        });
+      });
+    }
+
+    const wordCanaries = WORD_CANARIES[worldKey];
+    if (wordCanaries) {
+      Object.entries(wordCanaries).forEach(([sectionName, expectations]) => {
+        const section = isObject(pack?.words?.[sectionName]) ? pack.words[sectionName] : {};
+        const worldSourceSection = isObject(pack?.worldSource?.words?.[sectionName])
+          ? pack.worldSource.words[sectionName]
+          : {};
+        Object.entries(expectations).forEach(([nativeWord, expectedValue]) => {
+          const config =
+            typeof expectedValue === "string"
+              ? { source: expectedValue, worldSources: [expectedValue] }
+              : {
+                  source: expectedValue?.source || "",
+                  worldSources: Array.isArray(expectedValue?.worldSources)
+                    ? expectedValue.worldSources
+                    : [],
+                };
+          const entry = section[nativeWord];
+          if (!isObject(entry)) {
+            fail(
+              failures,
+              worldKey,
+              `Missing word canary in ${sectionName}: "${nativeWord}".`
+            );
+            return;
+          }
+          if (normalize(entry.source) !== normalize(config.source)) {
+            fail(
+              failures,
+              worldKey,
+              `Word canary source drift in ${sectionName}: "${nativeWord}" -> "${entry.source}".`
+            );
+          }
+          config.worldSources.forEach((worldSourceKey) => {
+            if (normalize(worldSourceSection[worldSourceKey]) !== normalize(nativeWord)) {
+              fail(
+                failures,
+                worldKey,
+                `wordSource mismatch in ${sectionName}: "${worldSourceKey}" -> "${worldSourceSection[worldSourceKey] || "<missing>"}".`
+              );
+            }
+          });
+        });
+      });
+    }
+
+    const forbiddenWords = FORBIDDEN_WORD_ENTRIES[worldKey];
+    if (forbiddenWords) {
+      Object.entries(forbiddenWords).forEach(([sectionName, blockedWords]) => {
+        const section = isObject(pack?.words?.[sectionName]) ? pack.words[sectionName] : {};
+        blockedWords.forEach((blockedWord) => {
+          if (isObject(section[blockedWord])) {
+            fail(
+              failures,
+              worldKey,
+              `Forbidden word entry still present in ${sectionName}: "${blockedWord}".`
+            );
+          }
+        });
+      });
+    }
 
     report.push({
       worldKey,

@@ -6,7 +6,7 @@ const ROOT = path.resolve(__dirname, "..");
 const FRONTEND = path.join(ROOT, "frontend");
 const MAPS_BUNDLE = path.join(FRONTEND, "maps", "app-maps.js");
 const MAP_STYLE_ASSET_VERSION = "20260417";
-const APP_ASSET_VERSION = "20260438";
+const APP_ASSET_VERSION = "20260440";
 
 const LANGUAGES = [
   {
@@ -270,7 +270,7 @@ const STATIC_GRAMMAR_SECTION_LIMIT_NON_ENGLISH = Number.POSITIVE_INFINITY;
 const STATIC_GRAMMAR_CARD_LIMIT = 7;
 const STATIC_WORD_HTML_BUDGET_NON_ENGLISH_BYTES = 44800;
 const STATIC_PHRASE_HTML_BUDGET_NON_ENGLISH_BYTES = 41600;
-const STATIC_GRAMMAR_HTML_BUDGET_NON_ENGLISH_BYTES = 35200;
+const STATIC_GRAMMAR_HTML_BUDGET_NON_ENGLISH_BYTES = Number.POSITIVE_INFINITY;
 
 const worldPackCache = new Map();
 const loadWorldPack = (worldKey) => {
@@ -377,6 +377,8 @@ const buildGrammarPreviewCards = (config) => {
       const baseCard = baseCards[index] || {};
       const title = String(card?.title || "").trim();
       const example = String(card?.example || "").trim();
+      const point =
+        Array.isArray(card?.points) && card.points.length ? String(card.points[0] || "").trim() : "";
       if (!title || !example) {
         continue;
       }
@@ -386,11 +388,13 @@ const buildGrammarPreviewCards = (config) => {
         sectionLabel,
         sourceSectionLabel: sectionName,
         title,
-        sourceTitle: toTitleCase(baseCard?.title || title),
+        sourceTitle: String(card?.sourceTitle || title).trim() || title,
         example,
-        point: Array.isArray(card?.points) && card.points.length ? String(card.points[0]) : "",
-        supportTitle: toTitleCase(baseCard?.title || ""),
-        supportPoint: Array.isArray(baseCard?.points) && baseCard.points.length ? String(baseCard.points[0]) : "",
+        point,
+        supportTitle: title,
+        supportPoint:
+          point ||
+          (Array.isArray(baseCard?.points) && baseCard.points.length ? String(baseCard.points[0]) : ""),
       };
       if (!seenTitles.has(normalizedTitle) && !seenExamples.has(normalizedExample)) {
         selectedEntry = candidate;
@@ -473,10 +477,8 @@ const renderGrammarPreviewCards = (entries) =>
       return `          <article class="card seo-preview-card">
             <div class="seo-preview-kicker" data-preview-map="grammar" data-preview-section-title-source="${escapeHtml(
               entry.sourceSectionLabel
-            )}">${escapeHtml(entry.sourceSectionLabel)}</div>
-            <h3 data-preview-ui-source="${escapeHtml(entry.sourceTitle || entry.title)}">${escapeHtml(
-              entry.sourceTitle || entry.title
-            )}</h3>
+            )}">${escapeHtml(entry.sectionLabel || entry.sourceSectionLabel)}</div>
+            <h3 data-preview-ui-source="${escapeHtml(entry.title)}">${escapeHtml(entry.title)}</h3>
             ${supportTitleMarkup}
             ${supportPointMarkup}
             <p class="seo-preview-example"><span class="seo-preview-example-label" data-preview-ui-source="Example">Example</span>: <span class="seo-preview-example-sentence">${escapeHtml(
@@ -567,9 +569,8 @@ const buildStaticGrammarSections = (config) => {
     const items = cards
       .slice(0, STATIC_GRAMMAR_CARD_LIMIT)
       .map((card, index) => {
-        const baseCard = baseCards[index] || {};
         const displayTitle = String(card?.title || "").trim();
-        const sourceTitle = String(baseCard?.title || card?.sourceTitle || displayTitle).trim();
+        const sourceTitle = String(card?.sourceTitle || displayTitle).trim();
         if (!displayTitle) {
           return null;
         }
@@ -747,6 +748,11 @@ const replaceMapStyleAsset = (html) =>
 
 const replaceMapAppAsset = (html) =>
   html.replace(/app\.js\?v=[^"]+/i, `app.js?v=${APP_ASSET_VERSION}`);
+const normalizeAccountCaret = (html) =>
+  html.replace(
+    /(<span class="account-trigger-caret" aria-hidden="true">)[\s\S]*?(<\/span>)/gi,
+    "$1&#9662;$2"
+  );
 const buildAlternateLinks = (links = []) => {
   const items = links
     .filter((item) => item && item.lang && item.url)
@@ -819,6 +825,7 @@ const replaceWorldPage = (config) => {
   html = html.replace(/<div class="eyebrow">[\s\S]*?<\/div>/, `<div class="eyebrow">${eyebrow}</div>`);
   html = html.replace(/<h2>[\s\S]*?<\/h2>/, `<h2>${h2}</h2>`);
   html = html.replace(/<p class="lede">[\s\S]*?<\/p>/, `<p class="lede">\n            ${lede}\n          </p>`);
+  html = normalizeAccountCaret(html);
   html = html.replace(
     /<div class="hero-actions"><a class="primary" href="#language">[\s\S]*?<\/a><\/div>/,
     `<div class="hero-actions"><a class="primary" href="#language">${button}</a></div>`
@@ -958,6 +965,7 @@ const replaceMapPage = (config, map, fileName, title, description, socialDescrip
   html = replaceMetaByName(html, "twitter:title", title);
   html = replaceMetaByName(html, "twitter:description", socialDescription);
   html = replaceJsonLdNameAndDescription(html, title, description);
+  html = normalizeAccountCaret(html);
   const landingContent = buildMapContent(config, map);
   html = html.replace(/<main>[\s\S]*?<\/main>/i, `<main>\n${landingContent}\n    </main>`);
   html = html.replace(
@@ -981,6 +989,7 @@ const replaceLettersPage = (config) => {
   html = replaceMetaByName(html, "twitter:title", lettersTitle);
   html = replaceMetaByName(html, "twitter:description", config.lettersDescription);
   html = replaceJsonLdNameAndDescription(html, lettersTitle, config.lettersDescription);
+  html = normalizeAccountCaret(html);
   html = html.replace(
     /<h1 class="visually-hidden">[\s\S]*?<\/h1>/,
     `<h1 class="visually-hidden">${hiddenH1}</h1>`
@@ -988,40 +997,89 @@ const replaceLettersPage = (config) => {
   writeFile(config.lettersFile, html);
 };
 
-for (const config of LANGUAGES) {
-  replaceWorldPage(config);
+const normalizeArgList = (value) =>
+  String(value || "")
+    .split(",")
+    .map((item) => item.trim().toLowerCase())
+    .filter(Boolean);
 
-  replaceMapPage(
-    config,
-    "words",
-    config.wordsFile,
-    `Learn ${config.language} Vocabulary with Audio | Cosmica`,
-    `Build ${config.language} vocabulary with topic cards, audio pronunciation, and translation support for daily speaking.`,
-    `Practice ${config.language} vocabulary with audio and translation support.`,
-    `Learn ${config.language} Vocabulary Online`
-  );
-
-  replaceMapPage(
-    config,
-    "phrases",
-    config.phrasesFile,
-    `Learn ${config.language} Phrases with Audio | Cosmica`,
-    `Learn useful ${config.language} phrases with structured practice, translation support, and audio for daily conversation.`,
-    `Practice useful ${config.language} phrases with audio and translation support.`,
-    `Learn ${config.language} Phrases Online`
-  );
-
-  replaceMapPage(
-    config,
-    "grammar",
-    config.grammarFile,
-    `Learn ${config.language} Grammar | Cosmica`,
-    `Study ${config.language} grammar with structured lessons, practical examples, and clear explanations for accurate use.`,
-    `Learn ${config.language} grammar with examples and guided lesson sections.`,
-    `Learn ${config.language} Grammar Online`
-  );
-
-  replaceLettersPage(config);
+const cliArgs = process.argv.slice(2);
+const selectedMaps = new Set();
+const selectedWorlds = new Set();
+for (let index = 0; index < cliArgs.length; index += 1) {
+  const arg = String(cliArgs[index] || "").trim();
+  if (!arg) {
+    continue;
+  }
+  if (arg === "--maps" || arg === "--map") {
+    normalizeArgList(cliArgs[index + 1]).forEach((item) => selectedMaps.add(item));
+    index += 1;
+    continue;
+  }
+  if (arg === "--worlds" || arg === "--world") {
+    normalizeArgList(cliArgs[index + 1]).forEach((item) => selectedWorlds.add(item));
+    index += 1;
+  }
 }
 
-console.log(`Updated SEO copy for ${LANGUAGES.length} language sets.`);
+const shouldProcessWorld = (worldKey) =>
+  selectedWorlds.size === 0 || selectedWorlds.has(String(worldKey || "").trim().toLowerCase());
+const shouldProcessPageType = (pageType) =>
+  selectedMaps.size === 0 ||
+  selectedMaps.has("all") ||
+  selectedMaps.has(String(pageType || "").trim().toLowerCase());
+
+for (const config of LANGUAGES) {
+  if (!shouldProcessWorld(config.key)) {
+    continue;
+  }
+
+  if (shouldProcessPageType("world")) {
+    replaceWorldPage(config);
+  }
+
+  if (shouldProcessPageType("words")) {
+    replaceMapPage(
+      config,
+      "words",
+      config.wordsFile,
+      `Learn ${config.language} Vocabulary with Audio | Cosmica`,
+      `Build ${config.language} vocabulary with topic cards, audio pronunciation, and translation support for daily speaking.`,
+      `Practice ${config.language} vocabulary with audio and translation support.`,
+      `Learn ${config.language} Vocabulary Online`
+    );
+  }
+
+  if (shouldProcessPageType("phrases")) {
+    replaceMapPage(
+      config,
+      "phrases",
+      config.phrasesFile,
+      `Learn ${config.language} Phrases with Audio | Cosmica`,
+      `Learn useful ${config.language} phrases with structured practice, translation support, and audio for daily conversation.`,
+      `Practice useful ${config.language} phrases with audio and translation support.`,
+      `Learn ${config.language} Phrases Online`
+    );
+  }
+
+  if (shouldProcessPageType("grammar")) {
+    replaceMapPage(
+      config,
+      "grammar",
+      config.grammarFile,
+      `Learn ${config.language} Grammar | Cosmica`,
+      `Study ${config.language} grammar with structured lessons, practical examples, and clear explanations for accurate use.`,
+      `Learn ${config.language} grammar with examples and guided lesson sections.`,
+      `Learn ${config.language} Grammar Online`
+    );
+  }
+
+  if (shouldProcessPageType("letters")) {
+    replaceLettersPage(config);
+  }
+}
+
+console.log(
+  `Updated SEO copy for ${LANGUAGES.filter((config) => shouldProcessWorld(config.key)).length} language sets.`
+);
+

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-18T15:33:45.196Z",
+  "generatedAt": "2026-03-08T17:21:29.237Z",
   "worldLanguage": "french",
   "baseLanguages": [
     "albanian",
@@ -39,9 +39,9 @@
   "words": {
     "Greetings": {
       "salut": {
-        "source": "bye",
+        "source": "hi",
         "translations": {
-          "english": "bye"
+          "english": "hi"
         }
       },
       "bonjour": {
@@ -191,9 +191,9 @@
         }
       },
       "elle": {
-        "source": "her",
+        "source": "she",
         "translations": {
-          "english": "her"
+          "english": "she"
         }
       },
       "il/elle": {
@@ -203,9 +203,9 @@
         }
       },
       "nous": {
-        "source": "us",
+        "source": "we",
         "translations": {
-          "english": "us"
+          "english": "we"
         }
       },
       "ils/elles": {
@@ -221,9 +221,9 @@
         }
       },
       "lui": {
-        "source": "him",
+        "source": "him / her",
         "translations": {
-          "english": "him"
+          "english": "him / her"
         }
       },
       "eux/elles": {
@@ -245,9 +245,9 @@
         }
       },
       "son": {
-        "source": "its",
+        "source": "his / her / its",
         "translations": {
-          "english": "its"
+          "english": "his / her / its"
         }
       },
       "notre": {
@@ -347,9 +347,9 @@
         }
       },
       "ces": {
-        "source": "those",
+        "source": "these / those",
         "translations": {
-          "english": "those"
+          "english": "these / those"
         }
       },
       "quelqu'un": {
@@ -927,9 +927,9 @@
     },
     "Questions & Connectors": {
       "qui": {
-        "source": "whom",
+        "source": "who",
         "translations": {
-          "english": "whom"
+          "english": "who"
         }
       },
       "quoi": {
@@ -6692,7 +6692,7 @@
           "english": "what is your name"
         }
       },
-      "parles-tu français": {
+      "parlez-vous français ?": {
         "source": "do you speak french",
         "intent": "ask_speak_world_language",
         "translations": {
@@ -8033,7 +8033,9 @@
               "wrong": "Marie mangent une pomme.",
               "fix": "Marie mange une pomme."
             }
-          ]
+          ],
+          "sourceTitle": "basic clause order",
+          "sourceExample": "Marie eats an apple."
         },
         {
           "title": "Utilisation des articles définis",
@@ -8072,7 +8074,9 @@
               "wrong": "Chat dort sur canapé.",
               "fix": "Le chat dort sur le canapé."
             }
-          ]
+          ],
+          "sourceTitle": "definite articles in sentences",
+          "sourceExample": "The cat is sleeping on the sofa."
         },
         {
           "title": "Utilisation des articles indéfinis",
@@ -8111,7 +8115,9 @@
               "wrong": "Fille joue dans parc.",
               "fix": "Une fille joue dans le parc."
             }
-          ]
+          ],
+          "sourceTitle": "indefinite articles in sentences",
+          "sourceExample": "A girl is playing in the park."
         },
         {
           "title": "Distinction de formalité (tu/vous)",
@@ -8145,7 +8151,9 @@
               "wrong": "Tu aime le chocolat ?",
               "fix": "Tu aimes le chocolat ?"
             }
-          ]
+          ],
+          "sourceTitle": "formal and informal address with tu and vous",
+          "sourceExample": "Do you like chocolate?"
         },
         {
           "title": "Formes composées",
@@ -8184,7 +8192,9 @@
               "wrong": "Elle mangé une pomme.",
               "fix": "Elle a mangé une pomme."
             }
-          ]
+          ],
+          "sourceTitle": "compound forms in sentences",
+          "sourceExample": "She ate an apple."
         }
       ],
       "Verbs": [
@@ -8220,7 +8230,9 @@
               "wrong": "Je mangez une pomme.",
               "fix": "Je mange une pomme."
             }
-          ]
+          ],
+          "sourceTitle": "present indicative",
+          "sourceExample": "I eat an apple."
         },
         {
           "title": "Passé composé",
@@ -8254,7 +8266,9 @@
               "wrong": "Elle est allé au marché.",
               "fix": "Elle est allée au marché."
             }
-          ]
+          ],
+          "sourceTitle": "passe compose",
+          "sourceExample": "She went to the market."
         },
         {
           "title": "Futur simple",
@@ -8288,7 +8302,9 @@
               "wrong": "Nous partirais demain.",
               "fix": "Nous partirons demain."
             }
-          ]
+          ],
+          "sourceTitle": "future simple",
+          "sourceExample": "We will leave tomorrow."
         },
         {
           "title": "Imparfait",
@@ -8322,7 +8338,9 @@
               "wrong": "Ils jouait au parc.",
               "fix": "Ils jouaient au parc."
             }
-          ]
+          ],
+          "sourceTitle": "imparfait",
+          "sourceExample": "They were playing in the park."
         },
         {
           "title": "Conditionnel présent",
@@ -8356,7 +8374,9 @@
               "wrong": "Je voudrait un café.",
               "fix": "Je voudrais un café."
             }
-          ]
+          ],
+          "sourceTitle": "present conditional",
+          "sourceExample": "I would like a coffee."
         },
         {
           "title": "Subjonctif présent",
@@ -8385,7 +8405,9 @@
               "wrong": "Il faut que tu viens.",
               "fix": "Il faut que tu viennes."
             }
-          ]
+          ],
+          "sourceTitle": "present subjunctive",
+          "sourceExample": "You need to come."
         }
       ],
       "Tenses & Aspect": [
@@ -8421,7 +8443,9 @@
               "wrong": "Je mangeais une pomme.",
               "fix": "Je mange une pomme."
             }
-          ]
+          ],
+          "sourceTitle": "present indicative for present or habitual actions",
+          "sourceExample": "I eat an apple."
         },
         {
           "title": "Passé composé",
@@ -8455,7 +8479,9 @@
               "wrong": "Je mange une pomme.",
               "fix": "J'ai mangé une pomme."
             }
-          ]
+          ],
+          "sourceTitle": "passe compose for completed past actions",
+          "sourceExample": "I ate an apple."
         },
         {
           "title": "Imparfait",
@@ -8489,7 +8515,9 @@
               "wrong": "J'ai mangé une pomme.",
               "fix": "Je mangeais une pomme."
             }
-          ]
+          ],
+          "sourceTitle": "imparfait for background or ongoing past action",
+          "sourceExample": "I was eating an apple."
         },
         {
           "title": "Futur proche",
@@ -8523,7 +8551,9 @@
               "wrong": "Je vais mangé une pomme.",
               "fix": "Je vais manger une pomme."
             }
-          ]
+          ],
+          "sourceTitle": "futur proche for the near future",
+          "sourceExample": "I am going to eat an apple."
         },
         {
           "title": "Futur simple",
@@ -8557,7 +8587,9 @@
               "wrong": "Je mange une pomme demain.",
               "fix": "Je mangerai une pomme."
             }
-          ]
+          ],
+          "sourceTitle": "futur simple for future events",
+          "sourceExample": "I will eat an apple."
         },
         {
           "title": "Conditionnel présent",
@@ -8591,7 +8623,9 @@
               "wrong": "Je mangerai une pomme.",
               "fix": "Je mangerais une pomme."
             }
-          ]
+          ],
+          "sourceTitle": "present conditional for hypothetical results",
+          "sourceExample": "I would eat an apple."
         },
         {
           "title": "Plus-que-parfait",
@@ -8625,7 +8659,9 @@
               "wrong": "J'ai mangé une pomme.",
               "fix": "J'avais mangé une pomme."
             }
-          ]
+          ],
+          "sourceTitle": "plus-que-parfait for an earlier past event",
+          "sourceExample": "I had eaten an apple."
         },
         {
           "title": "Futur antérieur",
@@ -8659,7 +8695,9 @@
               "wrong": "Je mangerai une pomme.",
               "fix": "J'aurai mangé une pomme."
             }
-          ]
+          ],
+          "sourceTitle": "futur anterieur for completion before a future point",
+          "sourceExample": "I will have eaten an apple."
         },
         {
           "title": "Subjonctif présent",
@@ -8693,7 +8731,9 @@
               "wrong": "Il faut que je fais mes devoirs.",
               "fix": "Il faut que je fasse mes devoirs."
             }
-          ]
+          ],
+          "sourceTitle": "present subjunctive after il faut que",
+          "sourceExample": "It is necessary that I do my homework."
         },
         {
           "title": "Passé récent",
@@ -8732,7 +8772,9 @@
               "wrong": "Je viens de mangé une pomme.",
               "fix": "Je viens de manger une pomme."
             }
-          ]
+          ],
+          "sourceTitle": "venir de plus infinitive for the recent past",
+          "sourceExample": "I have just eaten an apple."
         }
       ],
       "Nouns & Articles": [
@@ -8768,7 +8810,9 @@
               "wrong": "La chat est sur la table.",
               "fix": "Le chat est sur la table."
             }
-          ]
+          ],
+          "sourceTitle": "Articles définis",
+          "sourceExample": "Le chat est sur la table."
         },
         {
           "title": "Articles indéfinis",
@@ -8802,7 +8846,9 @@
               "wrong": "Un pomme est sur la table.",
               "fix": "Une pomme est sur la table."
             }
-          ]
+          ],
+          "sourceTitle": "Articles indéfinis",
+          "sourceExample": "Une pomme est sur la table."
         },
         {
           "title": "Accord des articles",
@@ -8836,7 +8882,9 @@
               "wrong": "Les enfant jouent dans le parc.",
               "fix": "Les enfants jouent dans le parc."
             }
-          ]
+          ],
+          "sourceTitle": "Accord des articles",
+          "sourceExample": "Les enfants jouent dans le parc."
         },
         {
           "title": "Usage des articles avec les adjectifs",
@@ -8870,7 +8918,9 @@
               "wrong": "Le belle maison est à vendre.",
               "fix": "La belle maison est à vendre."
             }
-          ]
+          ],
+          "sourceTitle": "Usage des articles avec les adjectifs",
+          "sourceExample": "La belle maison est à vendre."
         },
         {
           "title": "Articles dans des expressions courantes",
@@ -8904,7 +8954,9 @@
               "wrong": "Je vais à le cinéma ce soir.",
               "fix": "Je vais au cinéma ce soir."
             }
-          ]
+          ],
+          "sourceTitle": "Articles dans des expressions courantes",
+          "sourceExample": "Je vais au cinéma ce soir."
         },
         {
           "title": "Articles et possession",
@@ -8938,7 +8990,9 @@
               "wrong": "C'est le stylo à Paul.",
               "fix": "C'est le stylo de Paul."
             }
-          ]
+          ],
+          "sourceTitle": "Articles et possession",
+          "sourceExample": "C'est le stylo de Paul."
         },
         {
           "title": "Singulier et pluriel",
@@ -9033,22 +9087,31 @@
                 "complément"
               ]
             }
-          ]
+          ],
+          "sourceTitle": "Singulier et pluriel",
+          "sourceExample": "Les livres sont sur la table."
         }
       ],
       "Pronouns & Reference": [
         {
           "title": "Pronoms sujets",
           "points": [
-            "Utilisés pour remplacer un nom sujet.",
-            "Exemples : je, tu, il, elle, nous, vous, ils, elles.",
-            "Importants pour éviter la répétition."
+            "En français standard, le pronom sujet accompagne normalement le verbe conjugué.",
+            "On ne l'efface pas comme dans des langues où le sujet peut rester implicite."
           ],
           "example": "Je mange une pomme.",
           "ruleOrder": [
             "sujet",
             "verbe",
-            "objet"
+            "complément"
+          ],
+          "sourceTitle": "subject pronouns before a finite verb",
+          "sourceExample": "I am eating an apple.",
+          "mistakes": [
+            {
+              "wrong": "Mange une pomme.",
+              "fix": "Je mange une pomme."
+            }
           ],
           "exampleHighlights": [
             {
@@ -9060,33 +9123,33 @@
               "text": "mange"
             },
             {
-              "label": "objet",
+              "label": "complément",
               "text": "une pomme"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "Mange une pomme.",
-              "fix": "Je mange une pomme."
             }
           ]
         },
         {
           "title": "Pronoms objets directs",
           "points": [
-            "Remplacent un nom qui reçoit l'action du verbe.",
-            "Exemples : me, te, le, la, nous, vous, les.",
-            "Utilisés pour simplifier les phrases."
+            "Les pronoms me, te, le, la, nous, vous, les remplacent un complément direct.",
+            "Ils se placent avant le verbe conjugué dans les phrases simples."
           ],
           "example": "Je le vois.",
           "ruleOrder": [
             "sujet",
+            "pronom",
             "verbe"
           ],
+          "sourceTitle": "direct object pronouns",
+          "sourceExample": "I see him.",
           "exampleHighlights": [
             {
               "label": "sujet",
               "text": "Je"
+            },
+            {
+              "label": "pronom",
+              "text": "le"
             },
             {
               "label": "verbe",
@@ -9095,153 +9158,168 @@
           ],
           "mistakes": [
             {
-              "wrong": "Je lui vois.",
+              "wrong": "Je vois lui.",
               "fix": "Je le vois."
+            }
+          ]
+        },
+        {
+          "title": "Pronoms objets indirects",
+          "points": [
+            "Lui et leur remplacent souvent un complément introduit par à pour une personne.",
+            "L'ordre des pronoms avant le verbe est un point clé de la phrase française."
+          ],
+          "example": "Je lui parle.",
+          "ruleOrder": [
+            "sujet",
+            "pronom",
+            "verbe"
+          ],
+          "sourceTitle": "indirect object pronouns",
+          "sourceExample": "I am talking to him.",
+          "exampleHighlights": [
+            {
+              "label": "sujet",
+              "text": "Je"
+            },
+            {
+              "label": "pronom",
+              "text": "lui"
+            },
+            {
+              "label": "verbe",
+              "text": "parle"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Je parle le.",
+              "fix": "Je lui parle."
             }
           ]
         },
         {
           "title": "Pronoms réfléchis",
           "points": [
-            "Indiquent que le sujet fait l'action sur lui-même.",
-            "Exemples : me, te, se, nous, vous.",
-            "Utilisés avec des verbes réfléchis."
+            "Me, te, se, nous, vous marquent que l'action revient vers le sujet.",
+            "Ils sont fréquents avec les verbes pronominaux comme se laver ou se souvenir."
           ],
           "example": "Elle se lave.",
           "ruleOrder": [
             "sujet",
+            "pronom",
             "verbe"
           ],
+          "sourceTitle": "reflexive pronouns",
+          "sourceExample": "She is washing herself.",
           "exampleHighlights": [
             {
               "label": "sujet",
               "text": "Elle"
             },
             {
+              "label": "pronom",
+              "text": "se"
+            },
+            {
               "label": "verbe",
-              "text": "se lave"
+              "text": "lave"
             }
           ],
           "mistakes": [
             {
-              "wrong": "Elle lave.",
+              "wrong": "Elle lave se.",
               "fix": "Elle se lave."
             }
           ]
         },
         {
-          "title": "Pronoms relatifs",
+          "title": "Pronoms relatifs : qui / que",
           "points": [
-            "Connectent une proposition subordonnée à un nom.",
-            "Exemples : qui, que, dont, où.",
-            "Essentiels pour la complexité des phrases."
+            "Qui et que relient un nom à une proposition relative.",
+            "Le choix dépend du rôle joué dans la relative: sujet avec qui, objet avec que."
           ],
           "example": "La fille qui chante est talentueuse.",
           "ruleOrder": [
-            "nom",
-            "pronom relatif",
-            "verbe"
+            "groupe nominal",
+            "relatif",
+            "suite"
           ],
+          "sourceTitle": "relative pronouns qui and que",
+          "sourceExample": "The girl who is singing is talented.",
           "exampleHighlights": [
             {
-              "label": "nom",
-              "text": "La fille"
+              "label": "groupe nominal",
+              "text": "La"
             },
             {
-              "label": "pronom relatif",
-              "text": "qui"
+              "label": "relatif",
+              "text": "fille"
             },
             {
-              "label": "verbe",
-              "text": "chante"
+              "label": "suite",
+              "text": "qui chante est talentueuse"
             }
           ],
           "mistakes": [
             {
-              "wrong": "La fille chante est talentueuse.",
+              "wrong": "La fille que chante est talentueuse.",
               "fix": "La fille qui chante est talentueuse."
             }
           ]
         },
         {
-          "title": "Pronoms démonstratifs",
+          "title": "Pronoms démonstratifs : celui / celle",
           "points": [
-            "Désignent une chose ou une personne spécifique.",
-            "Exemples : ce, cet, cette, ces.",
-            "Utilisés pour préciser."
+            "Celui, celle, ceux et celles remplacent un nom déjà connu du contexte.",
+            "Ce ne sont pas des déterminants comme ce livre, mais de vrais pronoms."
           ],
-          "example": "Cette voiture est rapide.",
+          "example": "Celle-ci est plus rapide.",
           "ruleOrder": [
-            "pronom démonstratif",
-            "nom",
-            "verbe"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "pronom démonstratif",
-              "text": "Cette"
-            },
-            {
-              "label": "nom",
-              "text": "voiture"
-            },
-            {
-              "label": "verbe",
-              "text": "est rapide"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "Voiture est rapide.",
-              "fix": "Cette voiture est rapide."
-            }
-          ]
-        },
-        {
-          "title": "Omission des pronoms",
-          "points": [
-            "En français, les pronoms sujets peuvent être omis.",
-            "Surtout dans le langage familier.",
-            "Exemple : 'Mange' au lieu de 'Je mange'."
-          ],
-          "example": "Mange une pomme.",
-          "ruleOrder": [
+            "pronom",
             "verbe",
-            "objet"
+            "comparaison"
           ],
+          "sourceTitle": "demonstrative pronouns celui and celle",
+          "sourceExample": "This one is faster.",
           "exampleHighlights": [
             {
-              "label": "verbe",
-              "text": "Mange"
+              "label": "pronom",
+              "text": "Celle-ci"
             },
             {
-              "label": "objet",
-              "text": "une pomme"
+              "label": "verbe",
+              "text": "est"
+            },
+            {
+              "label": "comparaison",
+              "text": "plus rapide"
             }
           ],
           "mistakes": [
             {
-              "wrong": "Je mange une pomme.",
-              "fix": "Mange une pomme."
+              "wrong": "Cette-ci est plus rapide.",
+              "fix": "Celle-ci est plus rapide."
             }
           ]
         },
         {
-          "title": "Politesse avec pronoms",
+          "title": "Tu / vous et la politesse",
           "points": [
-            "Utilisation de 'vous' pour montrer du respect.",
-            "Différent de 'tu' qui est informel.",
-            "Important dans les contextes formels."
+            "Tu s'emploie avec la proximité ou l'informel; vous marque la distance, le respect ou le pluriel.",
+            "Le choix du pronom change la relation sociale, pas seulement la grammaire."
           ],
           "example": "Vous êtes très aimable.",
           "ruleOrder": [
-            "pronom de politesse",
+            "pronom",
             "verbe",
-            "adjectif"
+            "attribut"
           ],
+          "sourceTitle": "tu and vous for politeness",
+          "sourceExample": "You are very kind.",
           "exampleHighlights": [
             {
-              "label": "pronom de politesse",
+              "label": "pronom",
               "text": "Vous"
             },
             {
@@ -9249,13 +9327,13 @@
               "text": "êtes"
             },
             {
-              "label": "adjectif",
-              "text": "aimable"
+              "label": "attribut",
+              "text": "très aimable"
             }
           ],
           "mistakes": [
             {
-              "wrong": "Vous est très aimable.",
+              "wrong": "Tu êtes très aimable.",
               "fix": "Vous êtes très aimable."
             }
           ]
@@ -9289,7 +9367,9 @@
               "wrong": "Une maison rouges.",
               "fix": "Une maison rouge."
             }
-          ]
+          ],
+          "sourceTitle": "Position des adjectifs",
+          "sourceExample": "Une maison rouge."
         },
         {
           "title": "Adjectifs de couleur",
@@ -9318,7 +9398,9 @@
               "wrong": "Des voitures bleu.",
               "fix": "Des voitures bleues."
             }
-          ]
+          ],
+          "sourceTitle": "Adjectifs de couleur",
+          "sourceExample": "Des voitures bleues."
         },
         {
           "title": "Adverbes de manière",
@@ -9352,7 +9434,9 @@
               "wrong": "Il court rapide.",
               "fix": "Il court rapidement."
             }
-          ]
+          ],
+          "sourceTitle": "Adverbes de manière",
+          "sourceExample": "Il court rapidement."
         },
         {
           "title": "Comparatifs",
@@ -9391,7 +9475,9 @@
               "wrong": "Marie est plus grande de Sophie.",
               "fix": "Marie est plus grande que Sophie."
             }
-          ]
+          ],
+          "sourceTitle": "Comparatifs",
+          "sourceExample": "Marie est plus grande que Sophie."
         },
         {
           "title": "Superlatifs",
@@ -9430,7 +9516,9 @@
               "wrong": "C'est plus beau tableau.",
               "fix": "C'est le plus beau tableau."
             }
-          ]
+          ],
+          "sourceTitle": "Superlatifs",
+          "sourceExample": "C'est le plus beau tableau."
         },
         {
           "title": "Adverbes de fréquence",
@@ -9469,7 +9557,9 @@
               "wrong": "Il mange souvent de fruits.",
               "fix": "Il mange souvent des fruits."
             }
-          ]
+          ],
+          "sourceTitle": "Adverbes de fréquence",
+          "sourceExample": "Il mange souvent des fruits."
         },
         {
           "title": "Adjectifs démonstratifs",
@@ -9503,7 +9593,9 @@
               "wrong": "Cet voiture est rapide.",
               "fix": "Cette voiture est rapide."
             }
-          ]
+          ],
+          "sourceTitle": "Adjectifs démonstratifs",
+          "sourceExample": "Cette voiture est rapide."
         },
         {
           "title": "Adjectifs indéfinis",
@@ -9542,7 +9634,9 @@
               "wrong": "Il a plusieurs ami.",
               "fix": "Il a plusieurs amis."
             }
-          ]
+          ],
+          "sourceTitle": "Adjectifs indéfinis",
+          "sourceExample": "Il a plusieurs amis."
         },
         {
           "title": "Adverbes de temps",
@@ -9581,7 +9675,9 @@
               "wrong": "Demain, il partir en voyage.",
               "fix": "Demain, il partira en voyage."
             }
-          ]
+          ],
+          "sourceTitle": "Adverbes de temps",
+          "sourceExample": "Demain, il partira en voyage."
         },
         {
           "title": "Adjectifs possessifs",
@@ -9620,16 +9716,18 @@
               "wrong": "Ma livre est sur la table.",
               "fix": "Mon livre est sur la table."
             }
-          ]
+          ],
+          "sourceTitle": "Adjectifs possessifs",
+          "sourceExample": "Mon livre est sur la table."
         }
       ],
       "Questions": [
         {
           "title": "Questions fermées",
           "points": [
-            "Utilisez l'intonation montante.",
-            "Commencez par le sujet ou le verbe.",
-            "Utilisez 'est-ce que' pour former des questions."
+            "Utilisez 'est-ce que' ou l'intonation montante pour les questions fermées.",
+            "Gardez l'ordre sujet-verbe après 'est-ce que'.",
+            "L'inversion est possible dans un registre plus formel."
           ],
           "example": "Est-ce que tu viens ce soir ?",
           "ruleOrder": [
@@ -9661,7 +9759,9 @@
               "wrong": "Est-ce que tu vient ce soir ?",
               "fix": "Est-ce que tu viens ce soir ?"
             }
-          ]
+          ],
+          "sourceTitle": "yes/no questions with est-ce que",
+          "sourceExample": "Are you coming tonight?"
         },
         {
           "title": "Questions ouvertes",
@@ -9695,7 +9795,9 @@
               "wrong": "O? va-tu ?",
               "fix": "Où vas-tu ?"
             }
-          ]
+          ],
+          "sourceTitle": "open questions",
+          "sourceExample": "Where are you going?"
         },
         {
           "title": "Inversion sujet-verbe",
@@ -9724,7 +9826,9 @@
               "wrong": "Aime-tu le chocolat ?",
               "fix": "Aimes-tu le chocolat ?"
             }
-          ]
+          ],
+          "sourceTitle": "subject-verb inversion",
+          "sourceExample": "Do you like chocolate?"
         },
         {
           "title": "Questions avec 'qu'est-ce que'",
@@ -9758,7 +9862,9 @@
               "wrong": "Tu fais qu'est-ce ?",
               "fix": "Qu'est-ce que tu fais ?"
             }
-          ]
+          ],
+          "sourceTitle": "questions with qu'est-ce que",
+          "sourceExample": "What are you doing?"
         },
         {
           "title": "Questions avec 'qui'",
@@ -9792,14 +9898,16 @@
               "wrong": "Qui viens ? la f?te ?",
               "fix": "Qui vient à la fête ?"
             }
-          ]
+          ],
+          "sourceTitle": "questions with qui",
+          "sourceExample": "Who is coming to the party?"
         },
         {
           "title": "Questions avec 'quoi'",
           "points": [
-            "Utilisez 'quoi' pour demander des choses.",
-            "Peut être utilisé en début ou fin de question.",
-            "Utilisez 'qu'est-ce que' pour plus de formalité."
+            "Utilisez souvent 'quoi' à la fin d'une question ou dans une expression figée.",
+            "À l'oral, 'quoi' est naturel dans plusieurs contextes informels.",
+            "Pour une formulation plus neutre, 'qu'est-ce que' reste fréquent."
           ],
           "example": "Quoi de neuf ?",
           "ruleOrder": [
@@ -9821,14 +9929,16 @@
               "wrong": "Quoi de neufs ?",
               "fix": "Quoi de neuf ?"
             }
-          ]
+          ],
+          "sourceTitle": "questions with quoi",
+          "sourceExample": "What is new?"
         },
         {
           "title": "Questions indirectes",
           "points": [
             "Utilisez 'si' pour les questions indirectes.",
             "Pas d'inversion dans les questions indirectes.",
-            "Utilisez le verbe à l'infinitif."
+            "Gardez l'ordre sujet-verbe dans la proposition indirecte."
           ],
           "example": "Je me demande si tu viens.",
           "ruleOrder": [
@@ -9855,7 +9965,9 @@
               "wrong": "Je me demande si tu vient.",
               "fix": "Je me demande si tu viens."
             }
-          ]
+          ],
+          "sourceTitle": "indirect questions",
+          "sourceExample": "I wonder whether you are coming."
         }
       ],
       "Negation": [
@@ -9901,7 +10013,9 @@
               "wrong": "Je mange pas de pommes.",
               "fix": "Je ne mange pas de pommes."
             }
-          ]
+          ],
+          "sourceTitle": "ne... pas for basic negation",
+          "sourceExample": "I do not eat apples."
         },
         {
           "title": "Négation avec 'ne... jamais'",
@@ -9945,7 +10059,9 @@
               "wrong": "Il ne mange pas de chocolat.",
               "fix": "Il ne mange jamais de chocolat."
             }
-          ]
+          ],
+          "sourceTitle": "ne... jamais for never",
+          "sourceExample": "He never eats chocolate."
         },
         {
           "title": "Négation avec 'ne... rien'",
@@ -9989,7 +10105,9 @@
               "wrong": "Elle a rien dit.",
               "fix": "Elle n'a rien dit."
             }
-          ]
+          ],
+          "sourceTitle": "ne... rien for nothing",
+          "sourceExample": "She said nothing."
         },
         {
           "title": "Négation avec 'ne... personne'",
@@ -10028,7 +10146,9 @@
               "wrong": "Nous verrons personne.",
               "fix": "Nous ne verrons personne."
             }
-          ]
+          ],
+          "sourceTitle": "ne... personne for nobody or no one",
+          "sourceExample": "We will see nobody."
         },
         {
           "title": "Négation avec 'ne... aucun(e)'",
@@ -10042,8 +10162,8 @@
             "sujet",
             "ne",
             "verbe",
-            "reste",
-            "aucun"
+            "aucun",
+            "nom"
           ],
           "exampleHighlights": [
             {
@@ -10059,11 +10179,11 @@
               "text": "reste"
             },
             {
-              "label": "reste",
+              "label": "aucun",
               "text": "aucun"
             },
             {
-              "label": "aucun",
+              "label": "nom",
               "text": "livre"
             }
           ],
@@ -10072,7 +10192,9 @@
               "wrong": "Il reste aucun livre.",
               "fix": "Il ne reste aucun livre."
             }
-          ]
+          ],
+          "sourceTitle": "ne... aucun with a noun phrase",
+          "sourceExample": "No book remains."
         },
         {
           "title": "Négation avec 'ne... que'",
@@ -10116,7 +10238,9 @@
               "wrong": "Elle a que des amis.",
               "fix": "Elle n'a que des amis."
             }
-          ]
+          ],
+          "sourceTitle": "ne... que for only and restriction",
+          "sourceExample": "She only has friends."
         }
       ],
       "Connections": [
@@ -10157,7 +10281,9 @@
               "wrong": "Je mange une pomme et je boit de l'eau.",
               "fix": "Je mange une pomme et je bois de l'eau."
             }
-          ]
+          ],
+          "sourceTitle": "and for addition",
+          "sourceExample": "I am eating an apple and I am drinking water."
         },
         {
           "title": "Utilisation de 'mais'",
@@ -10196,7 +10322,9 @@
               "wrong": "Je veux sortir, mais je pleut.",
               "fix": "Je veux sortir, mais il pleut."
             }
-          ]
+          ],
+          "sourceTitle": "but for contrast",
+          "sourceExample": "I want to go out, but it is raining."
         },
         {
           "title": "Utilisation de 'parce que'",
@@ -10235,7 +10363,9 @@
               "wrong": "Je reste à la maison parce il pleut.",
               "fix": "Je reste à la maison parce qu'il pleut."
             }
-          ]
+          ],
+          "sourceTitle": "because for reasons",
+          "sourceExample": "I am staying home because it is raining."
         },
         {
           "title": "Utilisation de 'si'",
@@ -10274,7 +10404,9 @@
               "wrong": "Si tu viens, je serais heureux.",
               "fix": "Si tu viens, je serai heureux."
             }
-          ]
+          ],
+          "sourceTitle": "if for conditions",
+          "sourceExample": "If you come, I will be happy."
         },
         {
           "title": "Utilisation de 'donc'",
@@ -10313,7 +10445,9 @@
               "wrong": "Il pleut, donc je prend un parapluie.",
               "fix": "Il pleut, donc je prends un parapluie."
             }
-          ]
+          ],
+          "sourceTitle": "therefore with donc",
+          "sourceExample": "It is raining, so I am taking an umbrella."
         },
         {
           "title": "Utilisation de 'alors'",
@@ -10352,7 +10486,9 @@
               "wrong": "Il a fini ses devoirs, alors il peux jouer.",
               "fix": "Il a fini ses devoirs, alors il peut jouer."
             }
-          ]
+          ],
+          "sourceTitle": "then with alors",
+          "sourceExample": "He finished his homework, so he can play."
         },
         {
           "title": "Utilisation de 'tandis que'",
@@ -10391,12 +10527,14 @@
               "wrong": "Je lis un livre tandis que mon frère regardent la télévision.",
               "fix": "Je lis un livre tandis que mon frère regarde la télévision."
             }
-          ]
+          ],
+          "sourceTitle": "while with tandis que",
+          "sourceExample": "I am reading a book while my brother watches television."
         }
       ],
       "Conditions": [
         {
-          "title": "Conditionnel présent",
+          "title": "Si + imparfait, conditionnel présent",
           "points": [
             "Utilisé pour exprimer une condition possible.",
             "Formé avec le verbe à l'infinitif + terminaisons de l'imparfait.",
@@ -10404,16 +10542,16 @@
           ],
           "example": "Si j'avais de l'argent, j'achèterais une voiture.",
           "ruleOrder": [
-            "si + présent",
-            "conditionnel"
+            "proposition en si",
+            "résultat"
           ],
           "exampleHighlights": [
             {
-              "label": "si + présent",
+              "label": "proposition en si",
               "text": "Si j'avais de l'argent"
             },
             {
-              "label": "conditionnel",
+              "label": "résultat",
               "text": "j'achèterais une voiture"
             }
           ],
@@ -10422,10 +10560,12 @@
               "wrong": "Si j'ai de l'argent, j'achète une voiture.",
               "fix": "Si j'avais de l'argent, j'achèterais une voiture."
             }
-          ]
+          ],
+          "sourceTitle": "si + imperfect with present conditional",
+          "sourceExample": "If I had money, I would buy a car."
         },
         {
-          "title": "Conditionnel passé",
+          "title": "Si + plus-que-parfait, conditionnel passé",
           "points": [
             "Utilisé pour exprimer une condition non réalisée dans le passé.",
             "Formé avec l'auxiliaire au conditionnel + participe passé.",
@@ -10433,16 +10573,16 @@
           ],
           "example": "Si j'avais su, je ne serais pas venu.",
           "ruleOrder": [
-            "si + plus-que-parfait",
-            "conditionnel passé"
+            "proposition en si",
+            "résultat"
           ],
           "exampleHighlights": [
             {
-              "label": "si + plus-que-parfait",
+              "label": "proposition en si",
               "text": "Si j'avais su"
             },
             {
-              "label": "conditionnel passé",
+              "label": "résultat",
               "text": "je ne serais pas venu"
             }
           ],
@@ -10451,27 +10591,29 @@
               "wrong": "Si j'ai su, je ne viens pas.",
               "fix": "Si j'avais su, je ne serais pas venu."
             }
-          ]
+          ],
+          "sourceTitle": "si + pluperfect with past conditional",
+          "sourceExample": "If I had known, I would not have come."
         },
         {
-          "title": "Conditionnel avec 'si' et futur",
+          "title": "Si + présent, futur",
           "points": [
-            "Utilisé pour exprimer une condition future.",
-            "Formé avec 'si' + futur simple et conditionnel.",
+            "Utilisé pour exprimer une condition réelle ou probable dans l'avenir.",
+            "Après 'si', on emploie ici le présent, pas le futur.",
             "Exemple : Si tu étudies, tu réussiras."
           ],
           "example": "Si tu étudies, tu réussiras.",
           "ruleOrder": [
-            "si + futur",
-            "conditionnel"
+            "proposition en si",
+            "résultat"
           ],
           "exampleHighlights": [
             {
-              "label": "si + futur",
+              "label": "proposition en si",
               "text": "Si tu étudies"
             },
             {
-              "label": "conditionnel",
+              "label": "résultat",
               "text": "tu réussiras"
             }
           ],
@@ -10480,10 +10622,12 @@
               "wrong": "Si tu étudieras, tu réussis.",
               "fix": "Si tu étudies, tu réussiras."
             }
-          ]
+          ],
+          "sourceTitle": "si + present with future result",
+          "sourceExample": "If you study, you will succeed."
         },
         {
-          "title": "Conditionnel avec 'au cas où'",
+          "title": "Au cas où + conditionnel",
           "points": [
             "Utilisé pour exprimer une précaution.",
             "Formé avec 'au cas où' + conditionnel.",
@@ -10491,16 +10635,16 @@
           ],
           "example": "Au cas où il pleuvrait, prends un parapluie.",
           "ruleOrder": [
-            "au cas où",
-            "conditionnel"
+            "proposition de précaution",
+            "résultat"
           ],
           "exampleHighlights": [
             {
-              "label": "au cas où",
+              "label": "proposition de précaution",
               "text": "Au cas où il pleuvrait"
             },
             {
-              "label": "conditionnel",
+              "label": "résultat",
               "text": "prends un parapluie"
             }
           ],
@@ -10509,10 +10653,12 @@
               "wrong": "Au cas où il pleut, prends un parapluie.",
               "fix": "Au cas où il pleuvrait, prends un parapluie."
             }
-          ]
+          ],
+          "sourceTitle": "au cas ou + conditional for precautions",
+          "sourceExample": "In case it rains, take an umbrella."
         },
         {
-          "title": "Conditionnel avec 'si' et impératif",
+          "title": "Si + présent, impératif",
           "points": [
             "Utilisé pour donner des conseils conditionnels.",
             "Formé avec 'si' + présent et impératif.",
@@ -10520,12 +10666,12 @@
           ],
           "example": "Si tu veux, fais-le maintenant.",
           "ruleOrder": [
-            "si + présent",
+            "proposition en si",
             "impératif"
           ],
           "exampleHighlights": [
             {
-              "label": "si + présent",
+              "label": "proposition en si",
               "text": "Si tu veux"
             },
             {
@@ -10538,10 +10684,12 @@
               "wrong": "Si tu veux, fais maintenant.",
               "fix": "Si tu veux, fais-le maintenant."
             }
-          ]
+          ],
+          "sourceTitle": "si + present with imperative result",
+          "sourceExample": "If you want, do it now."
         },
         {
-          "title": "Conditionnel avec 'à condition que'",
+          "title": "À condition que + subjonctif",
           "points": [
             "Utilisé pour exprimer une condition stricte.",
             "Formé avec 'à condition que' + subjonctif.",
@@ -10549,16 +10697,16 @@
           ],
           "example": "À condition que tu sois prêt, nous partirons.",
           "ruleOrder": [
-            "à condition que",
-            "subjonctif"
+            "condition",
+            "résultat"
           ],
           "exampleHighlights": [
             {
-              "label": "à condition que",
+              "label": "condition",
               "text": "À condition que tu sois prêt"
             },
             {
-              "label": "subjonctif",
+              "label": "résultat",
               "text": "nous partirons"
             }
           ],
@@ -10567,52 +10715,19 @@
               "wrong": "À condition que tu es prêt, nous partons.",
               "fix": "À condition que tu sois prêt, nous partirons."
             }
-          ]
+          ],
+          "sourceTitle": "a condition que + subjunctive",
+          "sourceExample": "Provided that you are ready, we will leave."
         }
       ],
       "Voice & Focus": [
         {
-          "title": "Sujets et Verbes",
+          "title": "Les phrases actives montrent l'agent",
           "points": [
-            "Le sujet précède généralement le verbe dans une phrase simple.",
-            "Le verbe conjugué indique le temps de l'action.",
-            "Le sujet est souvent explicite en français."
+            "Dans la phrase active, celui qui fait l'action reste au premier plan.",
+            "C'est souvent la forme la plus directe pour raconter un événement."
           ],
-          "example": "Marie mange une pomme.",
-          "ruleOrder": [
-            "sujet",
-            "verbe",
-            "objet"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "sujet",
-              "text": "Marie"
-            },
-            {
-              "label": "verbe",
-              "text": "mange"
-            },
-            {
-              "label": "objet",
-              "text": "une pomme"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "Marie mangent une pomme.",
-              "fix": "Marie mange une pomme."
-            }
-          ]
-        },
-        {
-          "title": "Accord du Verbe",
-          "points": [
-            "Le verbe s'accorde avec le sujet en nombre et en personne.",
-            "Attention aux verbes irréguliers.",
-            "La conjugaison est essentielle pour la clarté."
-          ],
-          "example": "Les enfants jouent dans le parc.",
+          "example": "Le chef prépare le dîner.",
           "ruleOrder": [
             "sujet",
             "verbe",
@@ -10621,1175 +10736,778 @@
           "exampleHighlights": [
             {
               "label": "sujet",
-              "text": "Les enfants"
+              "text": "Le chef"
             },
             {
               "label": "verbe",
-              "text": "jouent"
+              "text": "prépare"
             },
             {
               "label": "complément",
-              "text": "dans le parc"
+              "text": "le dîner"
             }
           ],
+          "sourceTitle": "active clauses foreground the doer",
+          "sourceExample": "The chef is preparing the dinner.",
           "mistakes": [
             {
-              "wrong": "Les enfants joue dans le parc.",
-              "fix": "Les enfants jouent dans le parc."
+              "wrong": "Le dîner est préparé par le chef.",
+              "fix": "Le chef prépare le dîner."
             }
           ]
         },
         {
-          "title": "Mise en Évidence",
+          "title": "La voix passive avance le patient",
           "points": [
-            "Utilisez l'inversion pour mettre en avant le verbe.",
-            "Les adverbes peuvent également servir à focaliser.",
-            "L'ordre des mots peut changer pour l'emphase."
+            "La voix passive met en avant ce qui subit l'action.",
+            "L'agent peut être ajouté avec par, mais il peut aussi rester implicite."
           ],
-          "example": "Jamais je n'ai vu un tel spectacle.",
+          "example": "Le dîner est préparé par le chef.",
           "ruleOrder": [
-            "adverbe",
-            "sujet",
-            "verbe",
-            "objet"
+            "patient",
+            "passif",
+            "agent"
           ],
           "exampleHighlights": [
             {
-              "label": "adverbe",
-              "text": "Jamais"
+              "label": "patient",
+              "text": "Le dîner"
             },
             {
-              "label": "sujet",
+              "label": "passif",
+              "text": "est"
+            },
+            {
+              "label": "agent",
+              "text": "préparé par le chef"
+            }
+          ],
+          "sourceTitle": "passive voice with etre",
+          "sourceExample": "The dinner is prepared by the chef.",
+          "mistakes": [
+            {
+              "wrong": "Le chef prépare le dîner.",
+              "fix": "Le dîner est préparé par le chef."
+            }
+          ]
+        },
+        {
+          "title": "La dislocation met un thème devant",
+          "points": [
+            "En français parlé et écrit, on peut placer un élément au début puis le reprendre par un pronom.",
+            "Cela sert à installer le thème avant le commentaire principal."
+          ],
+          "example": "Ce livre, je l'ai déjà lu.",
+          "ruleOrder": [
+            "thème",
+            "reprise",
+            "commentaire"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "thème",
+              "text": "Ce livre"
+            },
+            {
+              "label": "reprise",
               "text": "je"
             },
             {
-              "label": "verbe",
-              "text": "n'ai vu"
-            },
-            {
-              "label": "objet",
-              "text": "un tel spectacle"
+              "label": "commentaire",
+              "text": "l'ai déjà lu"
             }
           ],
+          "sourceTitle": "left dislocation with resumptive pronouns",
+          "sourceExample": "This book, I have already read it.",
           "mistakes": [
             {
-              "wrong": "Jamais je ai vu un tel spectacle.",
-              "fix": "Jamais je n'ai vu un tel spectacle."
+              "wrong": "Ce livre, j'ai déjà lu.",
+              "fix": "Ce livre, je l'ai déjà lu."
             }
           ]
         },
         {
-          "title": "Voix Passive",
+          "title": "C'est ... qui / que focalise",
           "points": [
-            "La voix passive se forme avec 'être' + participe passé.",
-            "Utilisez la voix passive pour mettre l'accent sur l'objet.",
-            "Attention à l'accord du participe passé."
+            "La structure c'est ... qui/que sert à mettre un constituant en relief.",
+            "Elle est très fréquente quand on corrige, contraste ou précise."
           ],
-          "example": "La lettre a été écrite par Paul.",
+          "example": "C'est Marie qui a appelé.",
           "ruleOrder": [
-            "objet",
-            "verbe être",
-            "participe passé",
-            "par"
+            "cadre",
+            "focus",
+            "suite"
           ],
           "exampleHighlights": [
             {
-              "label": "objet",
-              "text": "La lettre"
+              "label": "cadre",
+              "text": "C'est"
             },
             {
-              "label": "verbe être",
-              "text": "a été"
+              "label": "focus",
+              "text": "Marie"
             },
             {
-              "label": "participe passé",
-              "text": "écrite"
-            },
-            {
-              "label": "par",
-              "text": "par Paul"
+              "label": "suite",
+              "text": "qui a appelé"
             }
           ],
+          "sourceTitle": "cleft sentences for focus",
+          "sourceExample": "It is Marie who called.",
           "mistakes": [
             {
-              "wrong": "La lettre est écrite par Paul.",
-              "fix": "La lettre a été écrite par Paul."
+              "wrong": "Marie a appelé.",
+              "fix": "C'est Marie qui a appelé."
             }
           ]
         },
         {
-          "title": "Focalisation par Inversion",
+          "title": "'On' laisse l'agent en arrière-plan",
           "points": [
-            "L'inversion du sujet et du verbe souligne l'importance.",
-            "Utilisez cette structure pour les questions.",
-            "C'est une méthode formelle et emphatique."
+            "On permet souvent de parler d'une action sans nommer précisément l'agent.",
+            "C'est une stratégie très naturelle en français pour garder le focus ailleurs."
           ],
-          "example": "Venez-vous à la fête ?",
+          "example": "On m'a conseillé ce livre.",
           "ruleOrder": [
+            "agent flou",
             "verbe",
-            "sujet",
-            "complément"
+            "objet"
           ],
           "exampleHighlights": [
             {
+              "label": "agent flou",
+              "text": "On"
+            },
+            {
               "label": "verbe",
-              "text": "Venez"
+              "text": "m'a"
             },
             {
-              "label": "sujet",
-              "text": "vous"
-            },
-            {
-              "label": "complément",
-              "text": "à la fête"
+              "label": "objet",
+              "text": "conseillé ce livre"
             }
           ],
+          "sourceTitle": "on backgrounds the agent",
+          "sourceExample": "I was advised to read this book.",
           "mistakes": [
             {
-              "wrong": "Venez-vous ? le f?te ?",
-              "fix": "Venez-vous à la fête ?"
+              "wrong": "Quelqu'un m'a conseillé ce livre.",
+              "fix": "On m'a conseillé ce livre."
             }
           ]
         }
       ],
       "Modality": [
         {
-          "title": "Obligation avec 'devoir'",
+          "title": "Devoir pour l'obligation",
           "points": [
-            "Utilisé pour exprimer une obligation.",
-            "Conjuguer 'devoir' selon le sujet.",
-            "Peut être utilisé au futur pour exprimer une obligation future."
+            "Devoir exprime une obligation ou une nécessité claire.",
+            "La force dépend du contexte, mais la pression est réelle."
           ],
-          "example": "Je dois finir mes devoirs.",
+          "example": "Je dois partir maintenant.",
           "ruleOrder": [
-            "sujet",
-            "devoir",
-            "complément"
+            "modal",
+            "infinitif"
           ],
           "exampleHighlights": [
             {
-              "label": "sujet",
-              "text": "Je"
-            },
-            {
-              "label": "devoir",
+              "label": "modal",
               "text": "dois"
             },
             {
-              "label": "complément",
-              "text": "finir mes devoirs"
+              "label": "infinitif",
+              "text": "partir maintenant"
             }
           ],
+          "sourceTitle": "strong obligation",
+          "sourceExample": "I must leave now.",
           "mistakes": [
             {
-              "wrong": "Je doit finir mes devoirs.",
-              "fix": "Je dois finir mes devoirs."
+              "wrong": "Je peux partir maintenant.",
+              "fix": "Je dois partir maintenant."
             }
           ]
         },
         {
-          "title": "Possibilité avec 'pouvoir'",
+          "title": "Il faut / tu devrais pour le conseil",
           "points": [
-            "Utilisé pour exprimer la capacité ou la possibilité.",
-            "Conjuguer 'pouvoir' selon le sujet.",
-            "Peut être utilisé au passé pour exprimer une possibilité passée."
+            "Il faut et devoir n'ont pas toujours la même force; devrais donne souvent un conseil plus doux.",
+            "Le choix module la relation entre parler et imposer."
           ],
-          "example": "Je peux venir à la fête.",
+          "example": "Tu devrais dormir plus tôt.",
           "ruleOrder": [
-            "sujet",
-            "pouvoir",
-            "complément"
+            "conseil",
+            "infinitif"
           ],
           "exampleHighlights": [
             {
-              "label": "sujet",
-              "text": "Je"
-            },
-            {
-              "label": "pouvoir",
-              "text": "peux"
-            },
-            {
-              "label": "complément",
-              "text": "venir à la fête"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "Je peut venir à la fête.",
-              "fix": "Je peux venir à la fête."
-            }
-          ]
-        },
-        {
-          "title": "Capacité avec 'savoir'",
-          "points": [
-            "Utilisé pour exprimer une compétence ou une capacité acquise.",
-            "Conjuguer 'savoir' selon le sujet.",
-            "Peut être utilisé avec un infinitif pour indiquer ce que l'on sait faire."
-          ],
-          "example": "Je sais parler français.",
-          "ruleOrder": [
-            "sujet",
-            "savoir",
-            "complément"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "sujet",
-              "text": "Je"
-            },
-            {
-              "label": "savoir",
-              "text": "sais"
-            },
-            {
-              "label": "complément",
-              "text": "parler français"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "Je sais parler de français.",
-              "fix": "Je sais parler français."
-            }
-          ]
-        },
-        {
-          "title": "Certitude avec 'être sûr'",
-          "points": [
-            "Utilisé pour exprimer la certitude ou la conviction.",
-            "Utiliser 'être sûr de' suivi d'un complément.",
-            "Peut être utilisé avec un infinitif pour exprimer une certitude sur une action."
-          ],
-          "example": "Je suis sûr de réussir.",
-          "ruleOrder": [
-            "sujet",
-            "être",
-            "sûr",
-            "de",
-            "complément"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "sujet",
-              "text": "Je"
-            },
-            {
-              "label": "être",
-              "text": "suis"
-            },
-            {
-              "label": "sûr",
-              "text": "sûr"
-            },
-            {
-              "label": "de",
-              "text": "de"
-            },
-            {
-              "label": "complément",
-              "text": "réussir"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "Je suis sûr réussir.",
-              "fix": "Je suis sûr de réussir."
-            }
-          ]
-        },
-        {
-          "title": "Opinion avec 'penser'",
-          "points": [
-            "Utilisé pour exprimer une opinion ou un point de vue.",
-            "Conjuguer 'penser' selon le sujet.",
-            "Peut être suivi d'une proposition subordonnée."
-          ],
-          "example": "Je pense que c'est une bonne idée.",
-          "ruleOrder": [
-            "sujet",
-            "penser",
-            "que",
-            "complément"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "sujet",
-              "text": "Je"
-            },
-            {
-              "label": "penser",
-              "text": "pense"
-            },
-            {
-              "label": "que",
-              "text": "que"
-            },
-            {
-              "label": "complément",
-              "text": "c'est une bonne idée"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "Je pense c'est une bonne idée.",
-              "fix": "Je pense que c'est une bonne idée."
-            }
-          ]
-        },
-        {
-          "title": "Suggestion avec 'devoir'",
-          "points": [
-            "Utilisé pour faire une suggestion.",
-            "Peut être utilisé au conditionnel pour adoucir la suggestion.",
-            "Conjuguer 'devoir' selon le sujet."
-          ],
-          "example": "Tu devrais essayer ce restaurant.",
-          "ruleOrder": [
-            "sujet",
-            "devoir",
-            "complément"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "sujet",
+              "label": "conseil",
               "text": "Tu"
             },
             {
-              "label": "devoir",
-              "text": "devrais"
-            },
-            {
-              "label": "complément",
-              "text": "essayer ce restaurant"
+              "label": "infinitif",
+              "text": "devrais dormir plus tôt"
             }
           ],
+          "sourceTitle": "advice and recommendation",
+          "sourceExample": "You should sleep earlier.",
           "mistakes": [
             {
-              "wrong": "Tu doit essayer ce restaurant.",
-              "fix": "Tu devrais essayer ce restaurant."
+              "wrong": "Tu dois dormir plus tôt.",
+              "fix": "Tu devrais dormir plus tôt."
             }
           ]
         },
         {
-          "title": "Doute avec 'douter'",
+          "title": "Pouvoir pour capacité ou permission",
           "points": [
-            "Utilisé pour exprimer le doute.",
-            "Utiliser 'douter de' suivi d'un complément.",
-            "Peut être utilisé avec un infinitif pour exprimer un doute sur une action."
+            "Pouvoir peut parler de capacité, de possibilité ou d'autorisation.",
+            "Le contexte décide la nuance exacte."
           ],
-          "example": "Je doute de sa sincérité.",
+          "example": "Je peux venir demain.",
           "ruleOrder": [
-            "sujet",
-            "douter",
-            "de",
-            "complément"
+            "modal",
+            "infinitif"
           ],
           "exampleHighlights": [
             {
-              "label": "sujet",
-              "text": "Je"
+              "label": "modal",
+              "text": "peux"
             },
             {
-              "label": "douter",
-              "text": "doute"
-            },
-            {
-              "label": "de",
-              "text": "de"
-            },
-            {
-              "label": "complément",
-              "text": "sa sincérité"
+              "label": "infinitif",
+              "text": "venir demain"
             }
           ],
+          "sourceTitle": "ability and permission with pouvoir",
+          "sourceExample": "I can come tomorrow.",
           "mistakes": [
             {
-              "wrong": "Je doute sa sincérité.",
-              "fix": "Je doute de sa sincérité."
+              "wrong": "Je veux venir demain.",
+              "fix": "Je peux venir demain."
             }
           ]
         },
         {
-          "title": "Préférence avec 'préférer'",
+          "title": "Vouloir pour intention",
           "points": [
-            "Utilisé pour exprimer une préférence.",
-            "Conjuguer 'préférer' selon le sujet.",
-            "Peut être suivi d'un infinitif ou d'un nom."
+            "Vouloir exprime la volonté, le projet ou l'intention du sujet.",
+            "Dans les demandes, il doit souvent être adouci pour rester poli."
           ],
-          "example": "Je préfère lire plutôt que regarder la télévision.",
+          "example": "Je veux apprendre plus vite.",
           "ruleOrder": [
-            "sujet",
-            "préférer",
-            "complément"
+            "volonté",
+            "objectif"
           ],
           "exampleHighlights": [
             {
-              "label": "sujet",
-              "text": "Je"
+              "label": "volonté",
+              "text": "veux"
             },
             {
-              "label": "préférer",
-              "text": "préfère"
-            },
-            {
-              "label": "complément",
-              "text": "lire plutôt que regarder la télévision"
+              "label": "objectif",
+              "text": "apprendre plus vite"
             }
           ],
+          "sourceTitle": "intention and desire",
+          "sourceExample": "I want to learn faster.",
           "mistakes": [
             {
-              "wrong": "Je préfère lire que regarder la télévision.",
-              "fix": "Je préfère lire plutôt que regarder la télévision."
+              "wrong": "Il est chez lui.",
+              "fix": "Il doit être chez lui."
+            }
+          ]
+        },
+        {
+          "title": "Peut-être / devoir pour la probabilité",
+          "points": [
+            "Peut-être et devoir peuvent signaler une conclusion probable.",
+            "On passe alors d'un fait certain à une inférence."
+          ],
+          "example": "Il doit être chez lui.",
+          "ruleOrder": [
+            "indice",
+            "inférence"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "indice",
+              "text": "doit"
+            },
+            {
+              "label": "inférence",
+              "text": "être chez lui"
+            }
+          ],
+          "sourceTitle": "possibility and probability",
+          "sourceExample": "He is probably at home.",
+          "mistakes": [
+            {
+              "wrong": "Il peut-être chez lui.",
+              "fix": "Il doit être chez lui."
             }
           ]
         }
       ],
       "Reported Speech": [
         {
-          "title": "Introduction au discours indirect",
+          "title": "Discours direct avec guillemets",
           "points": [
-            "Utiliser 'que' pour introduire le discours indirect.",
-            "Pas de changement de temps pour les faits universels.",
-            "Le sujet doit être clairement identifié."
+            "Le discours direct reprend les paroles exactes du locuteur.",
+            "Les guillemets ou les deux-points signalent clairement la citation."
           ],
-          "example": "Il dit que Marie vient demain.",
+          "example": "Il a dit : « Je viens demain. »",
           "ruleOrder": [
-            "sujet",
-            "verbe",
-            "complément"
+            "verbe introducteur",
+            "citation"
           ],
+          "sourceTitle": "direct quotation with guillemets",
+          "sourceExample": "He said, “I am coming tomorrow.”",
           "exampleHighlights": [
             {
-              "label": "sujet",
-              "text": "Il"
+              "label": "verbe introducteur",
+              "text": "Il a dit"
             },
             {
-              "label": "verbe",
+              "label": "citation",
+              "text": "Je viens demain"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Il a dit qu'il venait demain.",
+              "fix": "Il a dit : « Je viens demain. »"
+            }
+          ]
+        },
+        {
+          "title": "Discours indirect avec que",
+          "points": [
+            "On emploie souvent que après un verbe de parole pour rapporter une déclaration.",
+            "Le but est de transmettre le contenu, pas de garder les mots exacts."
+          ],
+          "example": "Il dit qu'il vient demain.",
+          "ruleOrder": [
+            "verbe introducteur",
+            "que",
+            "proposition"
+          ],
+          "sourceTitle": "reported statements with que",
+          "sourceExample": "He says that he is coming tomorrow.",
+          "mistakes": [
+            {
+              "wrong": "Il dit il vient demain.",
+              "fix": "Il dit qu'il vient demain."
+            }
+          ]
+        },
+        {
+          "title": "Concordance des temps après un verbe au passé",
+          "points": [
+            "Après un verbe introducteur au passé, le français ajuste souvent le temps pour garder le bon repérage.",
+            "On change aussi souvent des mots comme demain en le lendemain selon le point de vue."
+          ],
+          "example": "Il a dit qu'il viendrait le lendemain.",
+          "ruleOrder": [
+            "verbe introducteur",
+            "que",
+            "proposition"
+          ],
+          "sourceTitle": "sequence of tense after a past reporting verb",
+          "sourceExample": "He said that he would come the next day.",
+          "mistakes": [
+            {
+              "wrong": "Il a dit qu'il vient demain.",
+              "fix": "Il a dit qu'il viendrait le lendemain."
+            }
+          ]
+        },
+        {
+          "title": "Questions indirectes avec si",
+          "points": [
+            "Pour rapporter une question oui/non, on emploie si et non pas l'ordre interrogatif direct.",
+            "La phrase rapportée reprend ensuite l'ordre d'une proposition subordonnée."
+          ],
+          "example": "Elle demande si tu viens.",
+          "ruleOrder": [
+            "verbe introducteur",
+            "si",
+            "proposition"
+          ],
+          "sourceTitle": "reported yes-no questions with si",
+          "sourceExample": "She is asking whether you are coming.",
+          "exampleHighlights": [
+            {
+              "label": "verbe introducteur",
+              "text": "Elle demande"
+            },
+            {
+              "label": "si",
+              "text": "si"
+            },
+            {
+              "label": "proposition",
+              "text": "tu viens"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Elle demande est-ce que tu viens.",
+              "fix": "Elle demande si tu viens."
+            }
+          ]
+        },
+        {
+          "title": "Questions indirectes avec mot interrogatif",
+          "points": [
+            "Quand la question porte sur où, quand, pourquoi, comment, le mot interrogatif reste en tête de la subordonnée.",
+            "Le verbe suit alors l'ordre normal d'une subordonnée, sans inversion."
+          ],
+          "example": "Il a demandé où Marie habitait.",
+          "ruleOrder": [
+            "verbe introducteur",
+            "mot interrogatif",
+            "proposition"
+          ],
+          "sourceTitle": "reported wh-questions",
+          "sourceExample": "He asked where Marie lived.",
+          "exampleHighlights": [
+            {
+              "label": "verbe introducteur",
+              "text": "Il a demandé"
+            },
+            {
+              "label": "mot interrogatif",
+              "text": "où"
+            },
+            {
+              "label": "proposition",
+              "text": "Marie habitait"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Il a demandé que Marie habitait.",
+              "fix": "Il a demandé où Marie habitait."
+            }
+          ]
+        },
+        {
+          "title": "Ordres et conseils avec de + infinitif",
+          "points": [
+            "Pour rapporter un ordre, un conseil ou une consigne, on emploie souvent de + infinitif.",
+            "La structure change parce qu'on ne garde pas l'impératif tel quel."
+          ],
+          "example": "Il m'a dit de fermer la porte.",
+          "ruleOrder": [
+            "verbe introducteur",
+            "destinataire",
+            "infinitif"
+          ],
+          "sourceTitle": "reported orders with de plus infinitive",
+          "sourceExample": "He told me to close the door.",
+          "exampleHighlights": [
+            {
+              "label": "verbe introducteur",
+              "text": "Il m'a"
+            },
+            {
+              "label": "destinataire",
               "text": "dit"
             },
             {
-              "label": "complément",
-              "text": "que Marie vient demain"
+              "label": "infinitif",
+              "text": "de fermer la porte"
             }
           ],
           "mistakes": [
             {
-              "wrong": "Il dit Marie vient demain.",
-              "fix": "Il dit que Marie vient demain."
-            }
-          ]
-        },
-        {
-          "title": "Changement de temps dans le discours indirect",
-          "points": [
-            "Changer le temps du verbe si le verbe principal est au passé.",
-            "Utiliser le conditionnel pour des actions futures.",
-            "Attention aux exceptions pour les vérités générales."
-          ],
-          "example": "Il a dit que Marie viendrait demain.",
-          "ruleOrder": [
-            "sujet",
-            "verbe",
-            "complément"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "sujet",
-              "text": "Il"
-            },
-            {
-              "label": "verbe",
-              "text": "a dit"
-            },
-            {
-              "label": "complément",
-              "text": "que Marie viendrait demain"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "Il a dit que Marie vient demain.",
-              "fix": "Il a dit que Marie viendrait demain."
-            }
-          ]
-        },
-        {
-          "title": "Utilisation de 'si' dans le discours indirect",
-          "points": [
-            "Utiliser 'si' pour rapporter des questions indirectes.",
-            "Le verbe doit être à l'infinitif dans la question.",
-            "Ne pas utiliser d'inversion dans le discours indirect."
-          ],
-          "example": "Il se demande si Marie vient.",
-          "ruleOrder": [
-            "sujet",
-            "verbe",
-            "complément"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "sujet",
-              "text": "Il"
-            },
-            {
-              "label": "verbe",
-              "text": "se demande"
-            },
-            {
-              "label": "complément",
-              "text": "si Marie vient"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "Il se demande est-ce que Marie vient.",
-              "fix": "Il se demande si Marie vient."
-            }
-          ]
-        },
-        {
-          "title": "Discours indirect avec des verbes d'opinion",
-          "points": [
-            "Utiliser 'que' après des verbes comme 'penser' ou 'croire'.",
-            "Le temps peut changer selon le contexte.",
-            "Clarifier le sujet pour éviter la confusion."
-          ],
-          "example": "Elle pense que Pierre est parti.",
-          "ruleOrder": [
-            "sujet",
-            "verbe",
-            "complément"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "sujet",
-              "text": "Elle"
-            },
-            {
-              "label": "verbe",
-              "text": "pense"
-            },
-            {
-              "label": "complément",
-              "text": "que Pierre est parti"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "Elle pense Pierre est parti.",
-              "fix": "Elle pense que Pierre est parti."
-            }
-          ]
-        },
-        {
-          "title": "Rapport de discours indirect avec des verbes de déclaration",
-          "points": [
-            "Utiliser 'que' pour rapporter des déclarations.",
-            "Les temps doivent être ajustés selon le temps du verbe principal.",
-            "Éviter les répétitions dans le discours indirect."
-          ],
-          "example": "Il a déclaré que le projet est terminé.",
-          "ruleOrder": [
-            "sujet",
-            "verbe",
-            "complément"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "sujet",
-              "text": "Il"
-            },
-            {
-              "label": "verbe",
-              "text": "a déclaré"
-            },
-            {
-              "label": "complément",
-              "text": "que le projet est terminé"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "Il a déclaré le projet est terminé.",
-              "fix": "Il a déclaré que le projet est terminé."
-            }
-          ]
-        },
-        {
-          "title": "Nuances du discours indirect",
-          "points": [
-            "Utiliser des verbes de perception pour rapporter des actions.",
-            "Le temps peut rester au présent si l'action est toujours vraie.",
-            "Attention à la concordance des temps."
-          ],
-          "example": "Il a vu que Marie souriait.",
-          "ruleOrder": [
-            "sujet",
-            "verbe",
-            "complément"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "sujet",
-              "text": "Il"
-            },
-            {
-              "label": "verbe",
-              "text": "a vu"
-            },
-            {
-              "label": "complément",
-              "text": "que Marie souriait"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "Il a vu Marie sourit.",
-              "fix": "Il a vu que Marie souriait."
+              "wrong": "Il m'a dit fermer la porte.",
+              "fix": "Il m'a dit de fermer la porte."
             }
           ]
         }
       ],
       "Formality & Style": [
         {
-          "title": "Utilisation de 'tu' et 'vous'",
+          "title": "Tu / vous selon la relation",
           "points": [
-            "Utilisez 'tu' pour des amis ou des personnes de votre âge.",
-            "Utilisez 'vous' pour des inconnus ou des situations formelles.",
-            "Le choix entre 'tu' et 'vous' peut influencer la perception de la relation."
+            "Tu marque la proximité; vous marque le respect, la distance ou le pluriel.",
+            "Choisir le bon pronom est un choix social autant que grammatical."
           ],
-          "example": "Tu viens ce soir ?",
+          "example": "Vous avez un moment ?",
           "ruleOrder": [
-            "sujet",
-            "verbe",
-            "complément"
+            "pronom",
+            "demande"
           ],
           "exampleHighlights": [
             {
-              "label": "sujet",
-              "text": "Tu"
+              "label": "pronom",
+              "text": "Vous"
             },
             {
-              "label": "verbe",
-              "text": "viens"
-            },
-            {
-              "label": "complément",
-              "text": "ce soir"
+              "label": "demande",
+              "text": "avez un moment"
             }
           ],
+          "sourceTitle": "formal and informal second-person address",
+          "sourceExample": "Do you have a moment?",
           "mistakes": [
             {
-              "wrong": "Vous viens ce soir ?",
-              "fix": "Tu viens ce soir ?"
+              "wrong": "Tu as un moment ?",
+              "fix": "Vous avez un moment ?"
             }
           ]
         },
         {
-          "title": "Formules de politesse",
+          "title": "Les demandes polies avec le conditionnel",
           "points": [
-            "Commencez par 'Bonjour' ou 'Bonsoir' selon le moment de la journée.",
-            "Terminez par 'S'il vous plaît' pour une demande polie.",
-            "Utilisez 'Merci' pour exprimer votre gratitude."
+            "Pourriez-vous et je voudrais rendent une demande plus douce.",
+            "Le conditionnel sert souvent à éviter un impératif trop direct."
           ],
-          "example": "Bonjour, pourriez-vous m'aider, s'il vous plaît ?",
+          "example": "Pourriez-vous répéter, s'il vous plaît ?",
           "ruleOrder": [
-            "sujet",
-            "verbe",
-            "complément"
+            "formule polie",
+            "demande"
           ],
           "exampleHighlights": [
             {
-              "label": "sujet",
-              "text": "vous"
+              "label": "formule polie",
+              "text": "Pourriez-vous répéter"
             },
             {
-              "label": "verbe",
-              "text": "m'aider"
-            },
-            {
-              "label": "complément",
+              "label": "demande",
               "text": "s'il vous plaît"
             }
           ],
+          "sourceTitle": "polite requests with conditional forms",
+          "sourceExample": "Could you repeat, please?",
           "mistakes": [
             {
-              "wrong": "Bonjour, peux-tu m'aider, s'il te pla?t ?",
-              "fix": "Bonjour, pourriez-vous m'aider, s'il vous plaît ?"
+              "wrong": "Répétez, s'il vous plaît.",
+              "fix": "Pourriez-vous répéter, s'il vous plaît ?"
             }
           ]
         },
         {
-          "title": "Expressions de respect",
+          "title": "Monsieur / Madame et les salutations",
           "points": [
-            "Utilisez 'Monsieur' ou 'Madame' pour montrer du respect.",
-            "Évitez les familiarités dans des contextes formels.",
-            "Adaptez votre langage selon le statut de l'interlocuteur."
+            "Bonjour, bonsoir, Monsieur et Madame installent un registre plus formel.",
+            "En français, l'ouverture de l'échange compte beaucoup pour la politesse."
           ],
-          "example": "Madame, puis-je vous poser une question ?",
+          "example": "Bonjour Madame, je vous remercie.",
           "ruleOrder": [
-            "sujet",
-            "verbe"
+            "salutation",
+            "suite"
           ],
           "exampleHighlights": [
             {
-              "label": "sujet",
-              "text": "je"
+              "label": "salutation",
+              "text": "Bonjour Madame"
             },
             {
-              "label": "verbe",
-              "text": "vous poser une question"
+              "label": "suite",
+              "text": "je vous remercie"
             }
           ],
+          "sourceTitle": "titles and formal greetings",
+          "sourceExample": "Good morning, ma'am, thank you.",
           "mistakes": [
             {
-              "wrong": "Salut, je peux te poser une question ?",
-              "fix": "Madame, puis-je vous poser une question ?"
+              "wrong": "Salut Madame, merci.",
+              "fix": "Bonjour Madame, je vous remercie."
             }
           ]
         },
         {
-          "title": "Choix de vocabulaire formel",
+          "title": "Je voudrais sonne plus diplomatique",
           "points": [
-            "Privilégiez des termes comme 'demander' au lieu de 'demander à'.",
-            "Utilisez des synonymes plus formels pour des contextes professionnels.",
-            "Évitez le jargon familier dans des situations sérieuses."
+            "Je veux peut paraître abrupt; je voudrais est plus diplomatique.",
+            "Le style formel privilégie souvent l'atténuation."
           ],
-          "example": "Je souhaiterais demander un rendez-vous.",
+          "example": "Je voudrais prendre rendez-vous.",
           "ruleOrder": [
-            "sujet",
-            "verbe"
+            "atténuation",
+            "objectif"
           ],
           "exampleHighlights": [
             {
-              "label": "sujet",
-              "text": "souhaiterais"
+              "label": "atténuation",
+              "text": "Je"
             },
             {
-              "label": "verbe",
-              "text": "demander un rendez-vous"
+              "label": "objectif",
+              "text": "voudrais prendre rendez-vous"
             }
           ],
+          "sourceTitle": "softening and diplomatic style",
+          "sourceExample": "I would like to make an appointment.",
           "mistakes": [
             {
-              "wrong": "Je veux un rendez-vous.",
-              "fix": "Je souhaiterais demander un rendez-vous."
-            }
-          ]
-        },
-        {
-          "title": "Adaptation au contexte",
-          "points": [
-            "Adaptez votre langage selon l'âge et le statut de l'interlocuteur.",
-            "Utilisez un registre plus soutenu dans des réunions d'affaires.",
-            "Soyez conscient des différences culturelles dans l'utilisation du langage."
-          ],
-          "example": "Je vous remercie pour votre compréhension.",
-          "ruleOrder": [
-            "sujet",
-            "verbe"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "sujet",
-              "text": "vous remercie"
-            },
-            {
-              "label": "verbe",
-              "text": "pour votre compréhension"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "Merci pour ta compréhension.",
-              "fix": "Je vous remercie pour votre compréhension."
-            }
-          ]
-        },
-        {
-          "title": "Utilisation des titres",
-          "points": [
-            "Utilisez des titres comme 'Docteur' ou 'Professeur' pour montrer du respect.",
-            "Évitez d'utiliser des prénoms sans permission dans un cadre formel.",
-            "Les titres peuvent varier selon le contexte culturel."
-          ],
-          "example": "Docteur, avez-vous un moment ?",
-          "ruleOrder": [
-            "sujet",
-            "verbe"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "sujet",
-              "text": "vous"
-            },
-            {
-              "label": "verbe",
-              "text": "un moment"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "Salut, tu as un moment ?",
-              "fix": "Docteur, avez-vous un moment ?"
-            }
-          ]
-        },
-        {
-          "title": "Expressions de gratitude",
-          "points": [
-            "Utilisez 'Je vous remercie' pour une gratitude formelle.",
-            "Évitez les expressions trop familières dans des contextes professionnels.",
-            "Montrez de la reconnaissance pour des efforts ou des services."
-          ],
-          "example": "Je vous remercie pour votre aide précieuse.",
-          "ruleOrder": [
-            "sujet",
-            "verbe"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "sujet",
-              "text": "vous remercie"
-            },
-            {
-              "label": "verbe",
-              "text": "pour votre aide précieuse"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "Merci beaucoup pour ton aide.",
-              "fix": "Je vous remercie pour votre aide précieuse."
+              "wrong": "Je veux prendre rendez-vous.",
+              "fix": "Je voudrais prendre rendez-vous."
             }
           ]
         }
       ],
       "Discourse & Flow": [
         {
-          "title": "Utilisation de 'et' pour l'addition",
+          "title": "Et / mais pour ajouter ou contraster",
           "points": [
-            "Introduit une idée supplémentaire.",
-            "Utilisé pour relier des phrases simples.",
-            "Facilite la fluidité du discours."
+            "Et ajoute une idée; mais introduit une opposition.",
+            "Ces petits mots pilotent le mouvement logique du discours."
           ],
-          "example": "J'aime le chocolat et je préfère le noir.",
+          "example": "Je lis beaucoup, mais j'écris peu.",
           "ruleOrder": [
-            "sujet",
-            "verbe"
+            "idée 1",
+            "connecteur",
+            "idée 2"
           ],
           "exampleHighlights": [
             {
-              "label": "sujet",
-              "text": "J'aime"
+              "label": "idée 1",
+              "text": "Je lis beaucoup"
             },
             {
-              "label": "verbe",
-              "text": "le chocolat et je préfère le noir"
+              "label": "connecteur",
+              "text": "mais"
+            },
+            {
+              "label": "idée 2",
+              "text": "j'écris peu"
             }
           ],
+          "sourceTitle": "addition and contrast markers",
+          "sourceExample": "I read a lot, but I write little.",
           "mistakes": [
             {
-              "wrong": "J'aime le chocolat et je préfère noir.",
-              "fix": "J'aime le chocolat et je préfère le noir."
+              "wrong": "Je lis beaucoup, et j'écris peu.",
+              "fix": "Je lis beaucoup, mais j'écris peu."
             }
           ]
         },
         {
-          "title": "Utilisation de 'mais' pour le contraste",
+          "title": "Parce que / donc pour cause et conséquence",
           "points": [
-            "Introduit une idée opposée.",
-            "Utilisé pour nuancer le discours.",
-            "Permet d'exprimer des contradictions."
+            "Parce que donne la cause; donc donne le résultat ou la conclusion.",
+            "Les deux n'occupent pas la même place argumentative."
           ],
-          "example": "J'aime le chocolat, mais je préfère le noir.",
+          "example": "Je suis resté chez moi parce qu'il pleuvait, donc j'ai étudié.",
           "ruleOrder": [
-            "sujet",
-            "verbe"
+            "cause",
+            "conséquence"
           ],
           "exampleHighlights": [
             {
-              "label": "sujet",
-              "text": "J'aime"
+              "label": "cause",
+              "text": "Je suis resté chez moi parce qu'il pleuvait"
             },
             {
-              "label": "verbe",
-              "text": "le chocolat, mais je préfère le noir"
+              "label": "conséquence",
+              "text": "donc j'ai étudié"
             }
           ],
+          "sourceTitle": "reason and result markers",
+          "sourceExample": "I stayed home because it was raining, so I studied.",
           "mistakes": [
             {
-              "wrong": "J'aime le chocolat, mais je préfères le noir.",
-              "fix": "J'aime le chocolat, mais je préfère le noir."
+              "wrong": "Je suis resté chez moi donc il pleuvait.",
+              "fix": "Je suis resté chez moi parce qu'il pleuvait, donc j'ai étudié."
             }
           ]
         },
         {
-          "title": "Utilisation de 'donc' pour la conséquence",
+          "title": "D'abord / puis / enfin structurent",
           "points": [
-            "Introduit une conclusion ou un résultat.",
-            "Renforce la logique du discours.",
-            "Facilite la compréhension des relations causales."
+            "Ces marqueurs ordonnent des étapes ou un récit.",
+            "Ils sont très utiles pour expliquer une méthode."
           ],
-          "example": "Il pleut, donc je prends un parapluie.",
+          "example": "D'abord je lis, puis je note, enfin je révise.",
           "ruleOrder": [
-            "sujet",
-            "verbe",
-            "complément"
+            "début",
+            "milieu",
+            "fin"
           ],
           "exampleHighlights": [
             {
-              "label": "sujet",
-              "text": "Il"
+              "label": "début",
+              "text": "D'abord je lis"
             },
             {
-              "label": "verbe",
-              "text": "pleut"
+              "label": "milieu",
+              "text": "puis je note"
             },
             {
-              "label": "complément",
-              "text": "donc je prends un parapluie"
+              "label": "fin",
+              "text": "enfin je révise"
             }
           ],
+          "sourceTitle": "sequencing markers",
+          "sourceExample": "First I read, then I take notes, and finally I review.",
           "mistakes": [
             {
-              "wrong": "Il pleut, donc je prend un parapluie.",
-              "fix": "Il pleut, donc je prends un parapluie."
+              "wrong": "Enfin je lis, puis je note, d'abord je révise.",
+              "fix": "D'abord je lis, puis je note, enfin je révise."
             }
           ]
         },
         {
-          "title": "Utilisation de 'parce que' pour l'explication",
+          "title": "En fait et d'ailleurs guident l'enchaînement",
           "points": [
-            "Introduit une cause.",
-            "Clarifie les raisons derrière une affirmation.",
-            "Améliore la cohérence du discours."
+            "En fait reformule ou corrige; d'ailleurs ajoute une remarque liée.",
+            "Le discours paraît plus naturel quand ces transitions sont bien choisies."
           ],
-          "example": "Je suis en retard parce que le bus est en panne.",
+          "example": "En fait, le problème est plus simple.",
           "ruleOrder": [
-            "sujet",
-            "verbe",
-            "complément"
+            "transition",
+            "reformulation"
           ],
           "exampleHighlights": [
             {
-              "label": "sujet",
-              "text": "Je"
+              "label": "transition",
+              "text": "En fait"
             },
             {
-              "label": "verbe",
-              "text": "suis"
-            },
-            {
-              "label": "complément",
-              "text": "en retard parce que le bus est en panne"
+              "label": "reformulation",
+              "text": "le problème est plus simple"
             }
           ],
+          "sourceTitle": "flow-managing discourse markers",
+          "sourceExample": "In fact, the problem is simpler.",
           "mistakes": [
             {
-              "wrong": "Je suis en retard parce que le bus en panne.",
-              "fix": "Je suis en retard parce que le bus est en panne."
+              "wrong": "Par exemple, le problème est plus simple.",
+              "fix": "En fait, le problème est plus simple."
             }
           ]
         },
         {
-          "title": "Utilisation de 'toutefois' pour la nuance",
+          "title": "Par exemple et en résumé cadrent le texte",
           "points": [
-            "Introduit une restriction ou une nuance.",
-            "Utilisé pour modérer une affirmation.",
-            "Ajoute de la sophistication au discours."
+            "Par exemple annonce une illustration; en résumé ferme et synthétise.",
+            "Ces balises aident l'auditeur à suivre la macro-structure."
           ],
-          "example": "Il est talentueux, toutefois il doit travailler plus.",
+          "example": "Tu peux pratiquer de plusieurs façons, par exemple avec des dialogues.",
           "ruleOrder": [
-            "sujet",
-            "verbe",
-            "complément"
+            "idée générale",
+            "exemple"
           ],
           "exampleHighlights": [
             {
-              "label": "sujet",
-              "text": "Il"
+              "label": "idée générale",
+              "text": "Tu peux pratiquer de plusieurs façons"
             },
             {
-              "label": "verbe",
-              "text": "est"
-            },
-            {
-              "label": "complément",
-              "text": "talentueux, toutefois il doit travailler plus"
+              "label": "exemple",
+              "text": "par exemple avec des dialogues"
             }
           ],
+          "sourceTitle": "examples and conclusions",
+          "sourceExample": "You can practice in several ways, for example with dialogues.",
           "mistakes": [
             {
-              "wrong": "Il est talentueux, toutefois il doit travaille plus.",
-              "fix": "Il est talentueux, toutefois il doit travailler plus."
-            }
-          ]
-        },
-        {
-          "title": "Utilisation de 'en revanche' pour la comparaison",
-          "points": [
-            "Introduit une alternative ou une comparaison.",
-            "Utilisé pour mettre en contraste deux idées.",
-            "Rend le discours plus dynamique."
-          ],
-          "example": "Elle aime le thé, en revanche il préfère le café.",
-          "ruleOrder": [
-            "sujet",
-            "verbe",
-            "complément"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "sujet",
-              "text": "Elle"
-            },
-            {
-              "label": "verbe",
-              "text": "aime"
-            },
-            {
-              "label": "complément",
-              "text": "le thé, en revanche il préfère le café"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "Elle aime le thé, en revanche il préfèrent le café.",
-              "fix": "Elle aime le thé, en revanche il préfère le café."
-            }
-          ]
-        },
-        {
-          "title": "Utilisation de 'en effet' pour la confirmation",
-          "points": [
-            "Renforce une affirmation.",
-            "Utilisé pour valider une idée.",
-            "Ajoute de la clarté au discours."
-          ],
-          "example": "Il est très intelligent, en effet il a toujours de bonnes notes.",
-          "ruleOrder": [
-            "sujet",
-            "verbe",
-            "complément"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "sujet",
-              "text": "Il"
-            },
-            {
-              "label": "verbe",
-              "text": "est"
-            },
-            {
-              "label": "complément",
-              "text": "très intelligent, en effet il a toujours de bonnes notes"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "Il est très intelligent, en effet il as toujours de bonnes notes.",
-              "fix": "Il est très intelligent, en effet il a toujours de bonnes notes."
-            }
-          ]
-        },
-        {
-          "title": "Utilisation de 'd'abord' pour l'ordre",
-          "points": [
-            "Introduit une première idée ou étape.",
-            "Utilisé pour structurer le discours.",
-            "Facilite la compréhension des séquences."
-          ],
-          "example": "D'abord, nous allons au marché.",
-          "ruleOrder": [
-            "sujet",
-            "verbe",
-            "complément"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "sujet",
-              "text": "nous"
-            },
-            {
-              "label": "verbe",
-              "text": "allons"
-            },
-            {
-              "label": "complément",
-              "text": "au marché"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "D'abord, nous allons au marché et.",
-              "fix": "D'abord, nous allons au marché."
-            }
-          ]
-        },
-        {
-          "title": "Utilisation de 'ensuite' pour la continuité",
-          "points": [
-            "Introduit une idée suivante.",
-            "Utilisé pour maintenir le flux du discours.",
-            "Rend le discours plus cohérent."
-          ],
-          "example": "Nous allons au marché, ensuite nous ferons les courses.",
-          "ruleOrder": [
-            "sujet",
-            "verbe"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "sujet",
-              "text": "Nous"
-            },
-            {
-              "label": "verbe",
-              "text": "ferons les courses"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "Nous allons au marché, ensuite nous fait les courses.",
-              "fix": "Nous allons au marché, ensuite nous ferons les courses."
-            }
-          ]
-        },
-        {
-          "title": "Utilisation de 'finalement' pour la conclusion",
-          "points": [
-            "Introduit une idée finale.",
-            "Utilisé pour clore un discours.",
-            "Rend le discours plus complet."
-          ],
-          "example": "Nous avons visité Paris, finalement nous sommes allés à Lyon.",
-          "ruleOrder": [
-            "sujet",
-            "verbe",
-            "complément"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "sujet",
-              "text": "Nous"
-            },
-            {
-              "label": "verbe",
-              "text": "sommes"
-            },
-            {
-              "label": "complément",
-              "text": "allés à Lyon"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "Nous avons visité Paris, finalement nous sommes allé à Lyon.",
-              "fix": "Nous avons visité Paris, finalement nous sommes allés à Lyon."
+              "wrong": "Tu peux pratiquer de plusieurs façons, en résumé avec des dialogues.",
+              "fix": "Tu peux pratiquer de plusieurs façons, par exemple avec des dialogues."
             }
           ]
         }
@@ -11987,7 +11705,6 @@
         "save": "sauvegarder"
       },
       "Questions & Connectors": {
-        "who": "qui",
         "what": "quoi",
         "where": "où",
         "when": "quand",
@@ -12012,7 +11729,6 @@
         "until": "jusqu'à",
         "although": "bien que",
         "however": "cependant",
-        "whom": "qui",
         "where from": "d'où",
         "what time": "à quelle heure",
         "how long": "combien de temps",
@@ -12043,7 +11759,8 @@
         "behind": "derrière",
         "in front of": "devant",
         "next to": "à côté de",
-        "past": "passé"
+        "past": "passé",
+        "who": "qui"
       },
       "Numbers & Counting": {
         "zero": "zéro",
@@ -12995,7 +12712,7 @@
         "are you ready": "es-tu prêt",
         "what do you think": "que penses-tu",
         "what is your name": "comment t'appelles-tu",
-        "do you speak french": "parles-tu français"
+        "do you speak french": "parlez-vous français ?"
       },
       "Requests": {
         "can you help me": "peux-tu m'aider",
@@ -13236,979 +12953,327 @@
     },
     "grammarTitles": {
       "Sentence Structure": {
-        "basic word order": "ordre des mots de base",
-        "sentence parts": "parties de la phrase",
-        "adding details": "ajouter des détails",
-        "linking clauses": "lier des propositions",
-        "sentence variety": "variété des phrases"
+        "basic clause order": "Ordre de base de la phrase",
+        "definite articles in sentences": "Utilisation des articles définis",
+        "indefinite articles in sentences": "Utilisation des articles indéfinis",
+        "formal and informal address with tu and vous": "Distinction de formalité (tu/vous)",
+        "compound forms in sentences": "Formes composées"
       },
       "Verbs": {
-        "action verbs": "verbes d'action",
-        "state verbs": "verbes d'état",
-        "linking verbs": "verbes de liaison",
-        "verb patterns": "schémas verbaux",
-        "verb combinations": "combinaisons de verbes",
-        "phrasal verbs": "verbes à particule"
+        "present indicative": "Présent de l'indicatif",
+        "passe compose": "Passé composé",
+        "future simple": "Futur simple",
+        "imparfait": "Imparfait",
+        "present conditional": "Conditionnel présent",
+        "present subjunctive": "Subjonctif présent"
       },
       "Tenses & Aspect": {
-        "present simple": "présent simple",
-        "present continuous": "présent continu",
-        "past simple": "passé simple",
-        "past continuous": "passé continu",
-        "present perfect": "passé composé",
-        "past perfect": "plus-que-parfait",
-        "future forms": "formes futures",
-        "future continuous": "futur continu",
-        "future perfect": "futur antérieur",
-        "aspect contrasts": "contrastes d'aspect"
+        "present indicative for present or habitual actions": "Présent de l'indicatif",
+        "passe compose for completed past actions": "Passé composé",
+        "imparfait for background or ongoing past action": "Imparfait",
+        "futur proche for the near future": "Futur proche",
+        "futur simple for future events": "Futur simple",
+        "present conditional for hypothetical results": "Conditionnel présent",
+        "plus-que-parfait for an earlier past event": "Plus-que-parfait",
+        "futur anterieur for completion before a future point": "Futur antérieur",
+        "present subjunctive after il faut que": "Subjonctif présent",
+        "venir de plus infinitive for the recent past": "Passé récent"
       },
       "Nouns & Articles": {
-        "countable nouns": "noms dénombrables",
-        "uncountable nouns": "noms indénombrables",
-        "articles": "articles",
-        "plural forms": "formes plurielles",
-        "possessive nouns": "noms possessifs",
-        "noun phrases": "groupes nominaux",
-        "quantifiers": "quantificateurs"
+        "articles définis": "Articles définis",
+        "articles indéfinis": "Articles indéfinis",
+        "accord des articles": "Accord des articles",
+        "usage des articles avec les adjectifs": "Usage des articles avec les adjectifs",
+        "articles dans des expressions courantes": "Articles dans des expressions courantes",
+        "articles et possession": "Articles et possession",
+        "singulier et pluriel": "Singulier et pluriel"
       },
       "Pronouns & Reference": {
-        "subject pronouns": "pronoms sujets",
-        "object pronouns": "pronoms objets",
-        "possessive forms": "formes possessives",
-        "reflexive pronouns": "pronoms réfléchis",
-        "demonstratives": "démonstratifs",
-        "relative reference": "référence relative",
-        "indefinite reference": "référence indéfinie"
+        "subject pronouns before a finite verb": "Pronoms sujets",
+        "direct object pronouns": "Pronoms objets directs",
+        "indirect object pronouns": "Pronoms objets indirects",
+        "reflexive pronouns": "Pronoms réfléchis",
+        "relative pronouns qui and que": "Pronoms relatifs : qui / que",
+        "demonstrative pronouns celui and celle": "Pronoms démonstratifs : celui / celle",
+        "tu and vous for politeness": "Tu / vous et la politesse"
       },
       "Modifiers": {
-        "adjectives basics": "les bases des adjectifs",
-        "adjective order": "l'ordre des adjectifs",
-        "comparatives": "les comparatifs",
-        "superlatives": "les superlatifs",
-        "adverbs basics": "les bases des adverbes",
-        "frequency adverbs": "les adverbes de fréquence",
-        "time and place adverbs": "les adverbes de temps et de lieu",
-        "degree words": "les mots de degré",
-        "participles": "les participes",
-        "modifier stacking": "l'empilement des modificateurs"
+        "position des adjectifs": "Position des adjectifs",
+        "adjectifs de couleur": "Adjectifs de couleur",
+        "adverbes de manière": "Adverbes de manière",
+        "comparatifs": "Comparatifs",
+        "superlatifs": "Superlatifs",
+        "adverbes de fréquence": "Adverbes de fréquence",
+        "adjectifs démonstratifs": "Adjectifs démonstratifs",
+        "adjectifs indéfinis": "Adjectifs indéfinis",
+        "adverbes de temps": "Adverbes de temps",
+        "adjectifs possessifs": "Adjectifs possessifs"
       },
       "Questions": {
-        "yes no questions": "questions fermées",
-        "wh questions": "questions ouvertes",
-        "questions with be": "questions avec être",
-        "questions with do": "questions avec faire",
-        "questions with modals": "questions avec des modaux",
-        "tag questions": "questions tag",
-        "indirect questions": "questions indirectes"
+        "yes/no questions with est-ce que": "Questions fermées",
+        "open questions": "Questions ouvertes",
+        "subject-verb inversion": "Inversion sujet-verbe",
+        "questions with qu'est-ce que": "Questions avec 'qu'est-ce que'",
+        "questions with qui": "Questions avec 'qui'",
+        "questions with quoi": "Questions avec 'quoi'",
+        "indirect questions": "Questions indirectes"
       },
       "Negation": {
-        "not with be": "pas avec être",
-        "not with do": "pas avec faire",
-        "negative short forms": "formes courtes négatives",
-        "negative words": "mots négatifs",
-        "negative questions": "questions négatives",
-        "limited negatives": "négatifs limités"
+        "ne... pas for basic negation": "Négation simple avec 'ne... pas'",
+        "ne... jamais for never": "Négation avec 'ne... jamais'",
+        "ne... rien for nothing": "Négation avec 'ne... rien'",
+        "ne... personne for nobody or no one": "Négation avec 'ne... personne'",
+        "ne... aucun with a noun phrase": "Négation avec 'ne... aucun(e)'",
+        "ne... que for only and restriction": "Négation avec 'ne... que'"
       },
       "Connections": {
-        "basic connectors": "connecteurs de base",
-        "reason and result": "raison et résultat",
-        "contrast and choice": "contraste et choix",
-        "time connectors": "connecteurs temporels",
-        "comparison links": "liens de comparaison",
-        "adding ideas": "ajout d'idées",
-        "ordering ideas": "ordonnancement des idées"
+        "and for addition": "Utilisation de 'et'",
+        "but for contrast": "Utilisation de 'mais'",
+        "because for reasons": "Utilisation de 'parce que'",
+        "if for conditions": "Utilisation de 'si'",
+        "therefore with donc": "Utilisation de 'donc'",
+        "then with alors": "Utilisation de 'alors'",
+        "while with tandis que": "Utilisation de 'tandis que'"
       },
       "Conditions": {
-        "real conditions": "conditions réelles",
-        "future conditions": "conditions futures",
-        "unreal present": "présent irréel",
-        "unreal past": "passé irréel",
-        "mixed conditions": "conditions mixtes",
-        "unless and otherwise": "sauf et autrement"
+        "si + imperfect with present conditional": "Si + imparfait, conditionnel présent",
+        "si + pluperfect with past conditional": "Si + plus-que-parfait, conditionnel passé",
+        "si + present with future result": "Si + présent, futur",
+        "au cas ou + conditional for precautions": "Au cas où + conditionnel",
+        "si + present with imperative result": "Si + présent, impératif",
+        "a condition que + subjunctive": "À condition que + subjonctif"
       },
       "Voice & Focus": {
-        "active voice": "voix active",
-        "passive voice": "voix passive",
-        "focus shifts": "changement de focus",
-        "cleft sentences": "phrases éclatées",
-        "there and it subjects": "sujets 'il' et 'il y a'"
+        "active clauses foreground the doer": "Les phrases actives montrent l'agent",
+        "passive voice with etre": "La voix passive avance le patient",
+        "left dislocation with resumptive pronouns": "La dislocation met un thème devant",
+        "cleft sentences for focus": "C'est ... qui / que focalise",
+        "on backgrounds the agent": "'On' laisse l'agent en arrière-plan"
       },
       "Modality": {
-        "ability": "capacité",
-        "permission": "permission",
-        "obligation": "obligation",
-        "advice": "conseil",
-        "possibility": "possibilité",
-        "probability": "probabilité",
-        "polite requests": "demandes polies",
-        "offers and invitations": "offres et invitations"
+        "strong obligation": "Devoir pour l'obligation",
+        "advice and recommendation": "Il faut / tu devrais pour le conseil",
+        "ability and permission with pouvoir": "Pouvoir pour capacité ou permission",
+        "intention and desire": "Vouloir pour intention",
+        "possibility and probability": "Peut-être / devoir pour la probabilité"
       },
       "Reported Speech": {
-        "reporting statements": "rapport des déclarations",
-        "reporting questions": "rapport des questions",
-        "reporting requests": "rapport des demandes",
-        "reporting commands": "rapport des ordres",
-        "backshift basics": "les bases du décalage",
-        "time place changes": "changements de temps et de lieu"
+        "direct quotation with guillemets": "Discours direct avec guillemets",
+        "reported statements with que": "Discours indirect avec que",
+        "sequence of tense after a past reporting verb": "Concordance des temps après un verbe au passé",
+        "reported yes-no questions with si": "Questions indirectes avec si",
+        "reported wh-questions": "Questions indirectes avec mot interrogatif",
+        "reported orders with de plus infinitive": "Ordres et conseils avec de + infinitif"
       },
       "Formality & Style": {
-        "formal vs informal": "formel vs informel",
-        "contractions": "contractions",
-        "polite softening": "adoucir poliment",
-        "spoken vs written": "oral vs écrit",
-        "professional style": "style professionnel",
-        "casual style": "style décontracté",
-        "clarity and brevity": "clarté et concision"
+        "formal and informal second-person address": "Tu / vous selon la relation",
+        "polite requests with conditional forms": "Les demandes polies avec le conditionnel",
+        "titles and formal greetings": "Monsieur / Madame et les salutations",
+        "softening and diplomatic style": "Je voudrais sonne plus diplomatique"
       },
       "Discourse & Flow": {
-        "opening and closing": "ouverture et fermeture",
-        "topic shifts": "changements de sujet",
-        "cohesion tools": "outils de cohésion",
-        "sequencing ideas": "séquençage des idées",
-        "clarification moves": "mouvements de clarification",
-        "summaries": "résumés",
-        "emphasis and repetition": "emphase et répétition",
-        "conversation flow": "flux de conversation",
-        "giving examples": "donner des exemples",
-        "repair and correction": "réparation et correction"
+        "addition and contrast markers": "Et / mais pour ajouter ou contraster",
+        "reason and result markers": "Parce que / donc pour cause et conséquence",
+        "sequencing markers": "D'abord / puis / enfin structurent",
+        "flow-managing discourse markers": "En fait et d'ailleurs guident l'enchaînement",
+        "examples and conclusions": "Par exemple et en résumé cadrent le texte"
       }
     },
     "grammarExamples": {
       "Sentence Structure": {
-        "she reads a book.": "Elle lit un livre.",
-        "they named her captain.": "Ils l'ont nommée capitaine.",
-        "she met him at noon at the station.": "Elle l'a rencontré à midi à la gare.",
-        "i stayed home because it rained.": "Je suis resté à la maison parce qu'il a plu.",
-        "we finished early. we went home after class because we were tired.": "Nous avons fini tôt. Nous sommes rentrés chez nous après le cours parce que nous étions fatigués."
+        "marie eats an apple.": "Marie mange une pomme.",
+        "the cat is sleeping on the sofa.": "Le chat dort sur le canapé.",
+        "a girl is playing in the park.": "Une fille joue dans le parc.",
+        "do you like chocolate?": "Tu aimes le chocolat ?",
+        "she ate an apple.": "Elle a mangé une pomme."
       },
       "Verbs": {
-        "they carry the boxes.": "Ils portent les boîtes.",
-        "she feels tired.": "Elle se sent fatiguée.",
-        "the room feels quiet.": "La pièce semble calme.",
-        "he placed the book on the table.": "Il a placé le livre sur la table.",
-        "we decided to stay.": "Nous avons décidé de rester.",
-        "she turned off the light.": "Elle a éteint la lumière."
+        "i eat an apple.": "Je mange une pomme.",
+        "she went to the market.": "Elle est allée au marché.",
+        "we will leave tomorrow.": "Nous partirons demain.",
+        "they were playing in the park.": "Ils jouaient au parc.",
+        "i would like a coffee.": "Je voudrais un café.",
+        "you need to come.": "Il faut que tu viennes."
       },
       "Tenses & Aspect": {
-        "she works every day.": "Elle travaille tous les jours.",
-        "i am waiting outside.": "J'attends dehors.",
-        "they visited paris last year.": "",
-        "i was cooking when he called.": "Je cuisinais quand il a appelé.",
-        "he has lived here for years.": "Il vit ici depuis des années.",
-        "she had left before i arrived.": "Elle était partie avant que j'arrive.",
-        "i will call you tonight. i am going to study later. i am meeting sam tomorrow.": "",
-        "i will be working at six.": "Je travaillerai à six heures.",
-        "they will have finished by friday.": "Ils auront fini d'ici vendredi.",
-        "i work every day. i am working now. i have worked here for years.": ""
+        "i eat an apple.": "Je mange une pomme.",
+        "i ate an apple.": "J'ai mangé une pomme.",
+        "i was eating an apple.": "Je mangeais une pomme.",
+        "i am going to eat an apple.": "Je vais manger une pomme.",
+        "i will eat an apple.": "Je mangerai une pomme.",
+        "i would eat an apple.": "Je mangerais une pomme.",
+        "i had eaten an apple.": "J'avais mangé une pomme.",
+        "i will have eaten an apple.": "J'aurai mangé une pomme.",
+        "it is necessary that i do my homework.": "Il faut que je fasse mes devoirs.",
+        "i have just eaten an apple.": "Je viens de manger une pomme."
       },
       "Nouns & Articles": {
-        "i have a coin and two apples.": "J'ai une piece et deux pommes.",
-        "we need some rice and a piece of bread.": "Nous avons besoin de riz et d'un morceau de pain.",
-        "i saw a dog. the dog is outside.": "J'ai vu un chien. Le chien est dehors.",
-        "two apples and three children are here.": "Deux pommes et trois enfants sont ici.",
-        "sara's phone is new.": "Le téléphone de Sara est nouveau.",
-        "she bought the red dress.": "",
-        "there are many options, and there is much information.": ""
+        "le chat est sur la table.": "Le chat est sur la table.",
+        "une pomme est sur la table.": "Une pomme est sur la table.",
+        "les enfants jouent dans le parc.": "Les enfants jouent dans le parc.",
+        "la belle maison est à vendre.": "La belle maison est à vendre.",
+        "je vais au cinéma ce soir.": "Je vais au cinéma ce soir.",
+        "c'est le stylo de paul.": "C'est le stylo de Paul.",
+        "les livres sont sur la table.": "Les livres sont sur la table."
       },
       "Pronouns & Reference": {
-        "they are ready.": "",
-        "he saw me.": "",
-        "my bag is new. hers is old.": "Mon sac est neuf. Le sien est vieux.",
-        "he hurt himself.": "",
-        "these keys are mine.": "Ces cles sont a moi.",
-        "the man who called me left.": "L'homme qui m'a appele est parti.",
-        "someone is waiting outside.": "Quelqu'un attend dehors."
+        "i am eating an apple.": "Je mange une pomme.",
+        "i see him.": "Je le vois.",
+        "i am talking to him.": "Je lui parle.",
+        "she is washing herself.": "Elle se lave.",
+        "the girl who is singing is talented.": "La fille qui chante est talentueuse.",
+        "this one is faster.": "Celle-ci est plus rapide.",
+        "you are very kind.": "Vous êtes très aimable."
       },
       "Modifiers": {
-        "she bought a lovely small red bag.": "Elle a achete un joli petit sac rouge.",
-        "this is faster than that.": "Ceci est plus rapide que cela.",
-        "he is the tallest.": "Il est le plus grand.",
-        "she speaks clearly.": "Elle parle clairement.",
-        "she usually wakes early.": "Elle se reveille habituellement tot.",
-        "we met here yesterday.": "Nous nous sommes rencontres ici hier.",
-        "the room is very warm.": "La piece est tres chaude.",
-        "the movie was boring, and i was bored.": "Le film etait ennuyeux et j'etais ennuye.",
-        "she answered the very difficult question quickly.": "Elle a repondu rapidement a la question tres difficile.",
-        "the quiet house is empty.": ""
+        "une maison rouge.": "Une maison rouge.",
+        "des voitures bleues.": "Des voitures bleues.",
+        "il court rapidement.": "Il court rapidement.",
+        "marie est plus grande que sophie.": "Marie est plus grande que Sophie.",
+        "c'est le plus beau tableau.": "C'est le plus beau tableau.",
+        "il mange souvent des fruits.": "Il mange souvent des fruits.",
+        "cette voiture est rapide.": "Cette voiture est rapide.",
+        "il a plusieurs amis.": "Il a plusieurs amis.",
+        "demain, il partira en voyage.": "Demain, il partira en voyage.",
+        "mon livre est sur la table.": "Mon livre est sur la table."
       },
       "Questions": {
-        "do you work here?": "Travaillez-vous ici ?",
-        "where does he live?": "Où habite-t-il ?",
-        "is the store open?": "Le magasin est-il ouvert ?",
-        "did you call her?": "L'as-tu appelée ?",
-        "could you help me?": "Pourriez-vous m'aider ?",
-        "you are ready, aren't you?": "Tu es prêt, n'est-ce pas ?",
-        "could you tell me where it is?": "Pourriez-vous me dire où c'est ?"
+        "are you coming tonight?": "Est-ce que tu viens ce soir ?",
+        "where are you going?": "Où vas-tu ?",
+        "do you like chocolate?": "Aimes-tu le chocolat ?",
+        "what are you doing?": "Qu'est-ce que tu fais ?",
+        "who is coming to the party?": "Qui vient à la fête ?",
+        "what is new?": "Quoi de neuf ?",
+        "i wonder whether you are coming.": "Je me demande si tu viens."
       },
       "Negation": {
-        "she is not tired.": "Elle n'est pas fatiguée.",
-        "they do not agree.": "Ils ne sont pas d'accord.",
-        "i don't know.": "Je ne sais pas.",
-        "there is no milk.": "Il n'y a pas de lait.",
-        "don't you want coffee?": "Tu ne veux pas de café ?",
-        "he rarely eats out.": "Il mange rarement au restaurant."
+        "i do not eat apples.": "Je ne mange pas de pommes.",
+        "he never eats chocolate.": "Il ne mange jamais de chocolat.",
+        "she said nothing.": "Elle n'a rien dit.",
+        "we will see nobody.": "Nous ne verrons personne.",
+        "no book remains.": "Il ne reste aucun livre.",
+        "she only has friends.": "Elle n'a que des amis."
       },
       "Connections": {
-        "i called but no one answered.": "J'ai appelé mais personne n'a répondu.",
-        "it rained, so we stayed.": "Il a plu, donc nous sommes restés.",
-        "she went, although she was tired.": "Elle est partie, bien qu'elle fût fatiguée.",
-        "call me when you arrive.": "Appelle-moi quand tu arrives.",
-        "this feels like home.": "C'est comme à la maison.",
-        "we also need chairs.": "Nous avons aussi besoin de chaises.",
-        "first we plan, then we act.": "D'abord nous planifions, ensuite nous agissons."
+        "i am eating an apple and i am drinking water.": "Je mange une pomme et je bois de l'eau.",
+        "i want to go out, but it is raining.": "Je veux sortir, mais il pleut.",
+        "i am staying home because it is raining.": "Je reste à la maison parce qu'il pleut.",
+        "if you come, i will be happy.": "Si tu viens, je serai heureux.",
+        "it is raining, so i am taking an umbrella.": "Il pleut, donc je prends un parapluie.",
+        "he finished his homework, so he can play.": "Il a fini ses devoirs, alors il peut jouer.",
+        "i am reading a book while my brother watches television.": "Je lis un livre tandis que mon frère regarde la télévision."
       },
       "Conditions": {
-        "if you press this, it starts.": "Si vous appuyez sur cela, ça commence.",
-        "if it is sunny, we will go.": "S'il fait beau, nous irons.",
-        "if i had time, i would help.": "Si j'avais le temps, j'aiderais.",
-        "if we had left earlier, we would have arrived.": "Si nous étions partis plus tôt, nous serions arrivés.",
-        "if she had studied, she would be calm now.": "Si elle avait étudié, elle serait calme maintenant.",
-        "we will go unless it rains.": "Nous irons à moins qu'il ne pleuve."
+        "if i had money, i would buy a car.": "Si j'avais de l'argent, j'achèterais une voiture.",
+        "if i had known, i would not have come.": "Si j'avais su, je ne serais pas venu.",
+        "if you study, you will succeed.": "Si tu étudies, tu réussiras.",
+        "in case it rains, take an umbrella.": "Au cas où il pleuvrait, prends un parapluie.",
+        "if you want, do it now.": "Si tu veux, fais-le maintenant.",
+        "provided that you are ready, we will leave.": "À condition que tu sois prêt, nous partirons."
       },
       "Voice & Focus": {
-        "the chef cooked dinner.": "Le chef a préparé le dîner.",
-        "the meal was cooked.": "Le repas a été préparé.",
-        "that book, i finished yesterday.": "Ce livre, je l'ai fini hier.",
-        "it is john who called.": "C'est John qui a appelé.",
-        "there is a problem.": "Il y a un problème."
+        "the chef is preparing the dinner.": "Le chef prépare le dîner.",
+        "the dinner is prepared by the chef.": "Le dîner est préparé par le chef.",
+        "this book, i have already read it.": "Ce livre, je l'ai déjà lu.",
+        "it is marie who called.": "C'est Marie qui a appelé.",
+        "i was advised to read this book.": "On m'a conseillé ce livre."
       },
       "Modality": {
-        "she can swim.": "Elle peut nager.",
-        "may i sit here?": "Puis-je m'asseoir ici ?",
-        "you must wear a seatbelt.": "Vous devez porter une ceinture de sécurité.",
-        "you should rest.": "Vous devriez vous reposer.",
-        "it might rain today.": "Il pourrait pleuvoir aujourd'hui.",
-        "he will probably come.": "Il viendra probablement.",
-        "could you open the window?": "Pourriez-vous ouvrir la fenêtre ?",
-        "would you like some tea?": "Voudriez-vous du thé ?"
+        "i must leave now.": "Je dois partir maintenant.",
+        "you should sleep earlier.": "Tu devrais dormir plus tôt.",
+        "i can come tomorrow.": "Je peux venir demain.",
+        "i want to learn faster.": "Je veux apprendre plus vite.",
+        "he is probably at home.": "Il doit être chez lui."
       },
       "Reported Speech": {
-        "she said she was ready.": "Elle a dit qu'elle était prête.",
-        "he asked if i was okay.": "Il a demandé si j'allais bien.",
-        "she asked me to wait.": "Elle m'a demandé d'attendre.",
-        "he told us to leave.": "Il nous a dit de partir.",
-        "they said they had time.": "Ils ont dit qu'ils avaient le temps.",
-        "he said he was there.": "Il a dit qu'il était là."
+        "he said, “i am coming tomorrow.”": "Il a dit : « Je viens demain. »",
+        "he says that he is coming tomorrow.": "Il dit qu'il vient demain.",
+        "he said that he would come the next day.": "Il a dit qu'il viendrait le lendemain.",
+        "she is asking whether you are coming.": "Elle demande si tu viens.",
+        "he asked where marie lived.": "Il a demandé où Marie habitait.",
+        "he told me to close the door.": "Il m'a dit de fermer la porte."
       },
       "Formality & Style": {
-        "could you assist me?": "Pourriez-vous m'aider ?",
-        "i can't stay long.": "Je ne peux pas rester longtemps.",
-        "could you close the door?": "Pourriez-vous fermer la porte ?",
-        "please see the details below.": "Veuillez voir les détails ci-dessous.",
-        "thank you for your time.": "Merci pour votre temps.",
-        "hey, how is it going?": "Salut, comment ça va ?",
-        "we need a quick answer.": "Nous avons besoin d'une réponse rapide."
+        "do you have a moment?": "Vous avez un moment ?",
+        "could you repeat, please?": "Pourriez-vous répéter, s'il vous plaît ?",
+        "good morning, ma'am, thank you.": "Bonjour Madame, je vous remercie.",
+        "i would like to make an appointment.": "Je voudrais prendre rendez-vous."
       },
       "Discourse & Flow": {
-        "hi everyone, anyway, that is all for today.": "Salut tout le monde, de toute façon, c'est tout pour aujourd'hui.",
-        "by the way, i have news.": "Au fait, j'ai des nouvelles.",
-        "this idea connects to the last point.": "Cette idée se connecte au dernier point.",
-        "first we pack, then we leave.": "D'abord nous faisons nos bagages, puis nous partons.",
-        "let me put it another way.": "Laissez-moi le formuler autrement.",
-        "in short, we are ready.": "En résumé, nous sommes prêts.",
-        "it is really important.": "C'est vraiment important.",
-        "i see, please continue.": "Je vois, s'il vous plaît continuez.",
-        "for example, call the help desk.": "Par exemple, appelez le service d'assistance.",
-        "sorry, let me try again.": "Désolé, laissez-moi essayer à nouveau."
+        "i read a lot, but i write little.": "Je lis beaucoup, mais j'écris peu.",
+        "i stayed home because it was raining, so i studied.": "Je suis resté chez moi parce qu'il pleuvait, donc j'ai étudié.",
+        "first i read, then i take notes, and finally i review.": "D'abord je lis, puis je note, enfin je révise.",
+        "in fact, the problem is simpler.": "En fait, le problème est plus simple.",
+        "you can practice in several ways, for example with dialogues.": "Tu peux pratiquer de plusieurs façons, par exemple avec des dialogues."
       }
     },
     "grammarExplanations": {
-      "Sentence Structure": {
-        "this card explains basic word order and how to form it clearly in real sentences.": "Cette carte explique l'ordre des mots de base et comment le former clairement dans de vraies phrases.",
-        "this card explains sentence parts and how to form it clearly in real sentences.": "Cette carte explique les parties de la phrase et comment les former clairement dans de vraies phrases.",
-        "this card explains adding details and how to form it clearly in real sentences.": "Cette carte explique l'ajout de détails et comment le former clairement dans de vraies phrases.",
-        "this card explains linking clauses and how to form it clearly in real sentences.": "Cette carte explique le lien des propositions et comment le former clairement dans de vraies phrases.",
-        "this card explains sentence variety and how to form it clearly in real sentences.": "Cette carte explique la variété des phrases et comment la former clairement dans de vraies phrases."
-      },
-      "Verbs": {
-        "this card explains action verbs and how to form it clearly in real sentences.": "Cette carte explique les verbes d'action et comment les former clairement dans de vraies phrases.",
-        "this card explains state verbs and how to form it clearly in real sentences.": "Cette carte explique les verbes d'état et comment les former clairement dans de vraies phrases.",
-        "this card explains linking verbs and how to form it clearly in real sentences.": "Cette carte explique les verbes de liaison et comment les former clairement dans de vraies phrases.",
-        "this card explains verb patterns and how to form it clearly in real sentences.": "Cette carte explique les schémas de verbes et comment les former clairement dans de vraies phrases.",
-        "this card explains verb combinations and how to form it clearly in real sentences.": "Cette carte explique les combinaisons de verbes et comment les former clairement dans de vraies phrases.",
-        "this card explains phrasal verbs and how to form it clearly in real sentences.": "Cette carte explique les verbes à particule et comment les former clairement dans de vraies phrases."
-      },
-      "Tenses & Aspect": {
-        "this card explains present simple and how to form it clearly in real sentences.": "Cette carte explique le présent simple et comment le former clairement dans des phrases réelles.",
-        "this card explains present continuous and how to form it clearly in real sentences.": "Cette carte explique le présent continu et comment le former clairement dans des phrases réelles.",
-        "this card explains past simple and how to form it clearly in real sentences.": "Cette carte explique le passé simple et comment le former clairement dans des phrases réelles.",
-        "this card explains past continuous and how to form it clearly in real sentences.": "Cette carte explique le passé continu et comment le former clairement dans des phrases réelles.",
-        "this card explains present perfect and how to form it clearly in real sentences.": "Cette carte explique le présent parfait et comment le former clairement dans des phrases réelles.",
-        "this card explains past perfect and how to form it clearly in real sentences.": "Cette carte explique le passé parfait et comment le former clairement dans des phrases réelles.",
-        "this card explains future forms and how to form it clearly in real sentences.": "Cette carte explique les formes futures et comment les former clairement dans des phrases réelles.",
-        "this card explains future continuous and how to form it clearly in real sentences.": "Cette carte explique le futur continu et comment le former clairement dans des phrases réelles.",
-        "this card explains future perfect and how to form it clearly in real sentences.": "Cette carte explique le futur parfait et comment le former clairement dans des phrases réelles.",
-        "this card explains aspect contrasts and how to form it clearly in real sentences.": "Cette carte explique les contrastes d'aspect et comment les former clairement dans des phrases réelles."
-      },
-      "Nouns & Articles": {
-        "this card explains countable nouns and how to form it clearly in real sentences.": "Cette carte explique les noms dénombrables et comment les former clairement dans des phrases réelles.",
-        "this card explains uncountable nouns and how to form it clearly in real sentences.": "Cette carte explique les noms indénombrables et comment les former clairement dans des phrases réelles.",
-        "this card explains articles and how to form it clearly in real sentences.": "Cette carte explique les articles et comment les former clairement dans des phrases réelles.",
-        "this card explains plural forms and how to form it clearly in real sentences.": "Cette carte explique les formes plurielles et comment les former clairement dans des phrases réelles.",
-        "this card explains possessive nouns and how to form it clearly in real sentences.": "Cette carte explique les noms possessifs et comment les former clairement dans des phrases réelles.",
-        "this card explains noun phrases and how to form it clearly in real sentences.": "Cette carte explique les groupes nominaux et comment les former clairement dans des phrases réelles.",
-        "this card explains quantifiers and how to form it clearly in real sentences.": "Cette carte explique les quantificateurs et comment les former clairement dans des phrases réelles."
-      },
-      "Pronouns & Reference": {
-        "this card explains subject pronouns and how to form it clearly in real sentences.": "Cette carte explique les pronoms sujets et comment les former clairement dans de vraies phrases.",
-        "this card explains object pronouns and how to form it clearly in real sentences.": "Cette carte explique les pronoms objets et comment les former clairement dans de vraies phrases.",
-        "this card explains possessive forms and how to form it clearly in real sentences.": "Cette carte explique les formes possessives et comment les former clairement dans de vraies phrases.",
-        "this card explains reflexive pronouns and how to form it clearly in real sentences.": "Cette carte explique les pronoms réfléchis et comment les former clairement dans de vraies phrases.",
-        "this card explains demonstratives and how to form it clearly in real sentences.": "Cette carte explique les démonstratifs et comment les former clairement dans de vraies phrases.",
-        "this card explains relative reference and how to form it clearly in real sentences.": "Cette carte explique la référence relative et comment la former clairement dans de vraies phrases.",
-        "this card explains indefinite reference and how to form it clearly in real sentences.": "Cette carte explique la référence indéfinie et comment la former clairement dans de vraies phrases."
-      },
-      "Modifiers": {
-        "this card explains adjectives basics and how to form it clearly in real sentences.": "Cette carte explique les bases des adjectifs et comment les former clairement dans des phrases réelles.",
-        "this card explains adjective order and how to form it clearly in real sentences.": "Cette carte explique l'ordre des adjectifs et comment le former clairement dans des phrases réelles.",
-        "this card explains comparatives and how to form it clearly in real sentences.": "Cette carte explique les comparatifs et comment les former clairement dans des phrases réelles.",
-        "this card explains superlatives and how to form it clearly in real sentences.": "Cette carte explique les superlatifs et comment les former clairement dans des phrases réelles.",
-        "this card explains adverbs basics and how to form it clearly in real sentences.": "Cette carte explique les bases des adverbes et comment les former clairement dans des phrases réelles.",
-        "this card explains frequency adverbs and how to form it clearly in real sentences.": "Cette carte explique les adverbes de fréquence et comment les former clairement dans des phrases réelles.",
-        "this card explains time and place adverbs and how to form it clearly in real sentences.": "Cette carte explique les adverbes de temps et de lieu et comment les former clairement dans des phrases réelles.",
-        "this card explains degree words and how to form it clearly in real sentences.": "Cette carte explique les mots de degré et comment les former clairement dans des phrases réelles.",
-        "this card explains participles and how to form it clearly in real sentences.": "Cette carte explique les participes et comment les former clairement dans des phrases réelles.",
-        "this card explains modifier stacking and how to form it clearly in real sentences.": "Cette carte explique l'empilement des modificateurs et comment le former clairement dans des phrases réelles."
-      },
-      "Questions": {
-        "this card explains yes no questions and how to form it clearly in real sentences.": "Cette carte explique les questions par oui ou par non et comment les formuler clairement dans de vraies phrases.",
-        "this card explains wh questions and how to form it clearly in real sentences.": "Cette carte explique les questions en wh et comment les formuler clairement dans de vraies phrases.",
-        "this card explains questions with be and how to form it clearly in real sentences.": "Cette carte explique les questions avec 'être' et comment les formuler clairement dans de vraies phrases.",
-        "this card explains questions with do and how to form it clearly in real sentences.": "Cette carte explique les questions avec 'faire' et comment les formuler clairement dans de vraies phrases.",
-        "this card explains questions with modals and how to form it clearly in real sentences.": "Cette carte explique les questions avec des modaux et comment les formuler clairement dans de vraies phrases.",
-        "this card explains tag questions and how to form it clearly in real sentences.": "Cette carte explique les questions tag et comment les formuler clairement dans de vraies phrases.",
-        "this card explains indirect questions and how to form it clearly in real sentences.": "Cette carte explique les questions indirectes et comment les formuler clairement dans de vraies phrases."
-      },
-      "Negation": {
-        "this card explains not with be and how to form it clearly in real sentences.": "Cette carte explique la négation avec 'être' et comment la former clairement dans de vraies phrases.",
-        "this card explains not with do and how to form it clearly in real sentences.": "Cette carte explique la négation avec 'faire' et comment la former clairement dans de vraies phrases.",
-        "this card explains negative short forms and how to form it clearly in real sentences.": "Cette carte explique les formes courtes négatives et comment les former clairement dans de vraies phrases.",
-        "this card explains negative words and how to form it clearly in real sentences.": "Cette carte explique les mots négatifs et comment les former clairement dans de vraies phrases.",
-        "this card explains negative questions and how to form it clearly in real sentences.": "Cette carte explique les questions négatives et comment les former clairement dans de vraies phrases.",
-        "this card explains limited negatives and how to form it clearly in real sentences.": "Cette carte explique les négations limitées et comment les former clairement dans de vraies phrases."
-      },
-      "Connections": {
-        "this card explains basic connectors and how to form it clearly in real sentences.": "Cette carte explique les connecteurs de base et comment les former clairement dans de vraies phrases.",
-        "this card explains reason and result and how to form it clearly in real sentences.": "Cette carte explique la raison et le résultat et comment les former clairement dans de vraies phrases.",
-        "this card explains contrast and choice and how to form it clearly in real sentences.": "Cette carte explique le contraste et le choix et comment les former clairement dans de vraies phrases.",
-        "this card explains time connectors and how to form it clearly in real sentences.": "Cette carte explique les connecteurs de temps et comment les former clairement dans de vraies phrases.",
-        "this card explains comparison links and how to form it clearly in real sentences.": "Cette carte explique les liens de comparaison et comment les former clairement dans de vraies phrases.",
-        "this card explains adding ideas and how to form it clearly in real sentences.": "Cette carte explique l'ajout d'idées et comment les former clairement dans de vraies phrases.",
-        "this card explains ordering ideas and how to form it clearly in real sentences.": "Cette carte explique l'ordre des idées et comment les former clairement dans de vraies phrases."
-      },
-      "Conditions": {
-        "this card explains real conditions and how to form it clearly in real sentences.": "Cette carte explique les conditions réelles et comment les formuler clairement dans des phrases réelles.",
-        "this card explains future conditions and how to form it clearly in real sentences.": "Cette carte explique les conditions futures et comment les formuler clairement dans des phrases réelles.",
-        "this card explains unreal present and how to form it clearly in real sentences.": "Cette carte explique le présent irréel et comment le formuler clairement dans des phrases réelles.",
-        "this card explains unreal past and how to form it clearly in real sentences.": "Cette carte explique le passé irréel et comment le formuler clairement dans des phrases réelles.",
-        "this card explains mixed conditions and how to form it clearly in real sentences.": "Cette carte explique les conditions mixtes et comment les formuler clairement dans des phrases réelles.",
-        "this card explains unless and otherwise and how to form it clearly in real sentences.": "Cette carte explique 'unless' et 'otherwise' et comment les formuler clairement dans des phrases réelles."
-      },
-      "Voice & Focus": {
-        "this card explains active voice and how to form it clearly in real sentences.": "Cette carte explique la voix active et comment la former clairement dans de vraies phrases.",
-        "this card explains passive voice and how to form it clearly in real sentences.": "Cette carte explique la voix passive et comment la former clairement dans de vraies phrases.",
-        "this card explains focus shifts and how to form it clearly in real sentences.": "Cette carte explique les changements de focus et comment les former clairement dans de vraies phrases.",
-        "this card explains cleft sentences and how to form it clearly in real sentences.": "Cette carte explique les phrases clivées et comment les former clairement dans de vraies phrases.",
-        "this card explains there and it subjects and how to form it clearly in real sentences.": "Cette carte explique les sujets 'there' et 'it' et comment les former clairement dans de vraies phrases."
-      },
-      "Modality": {
-        "this card explains ability and how to form it clearly in real sentences.": "Cette carte explique la capacité et comment la former clairement dans de vraies phrases.",
-        "this card explains permission and how to form it clearly in real sentences.": "Cette carte explique la permission et comment la former clairement dans de vraies phrases.",
-        "this card explains obligation and how to form it clearly in real sentences.": "Cette carte explique l'obligation et comment la former clairement dans de vraies phrases.",
-        "this card explains advice and how to form it clearly in real sentences.": "Cette carte explique le conseil et comment le former clairement dans de vraies phrases.",
-        "this card explains possibility and how to form it clearly in real sentences.": "Cette carte explique la possibilité et comment la former clairement dans de vraies phrases.",
-        "this card explains probability and how to form it clearly in real sentences.": "Cette carte explique la probabilité et comment la former clairement dans de vraies phrases.",
-        "this card explains polite requests and how to form it clearly in real sentences.": "Cette carte explique les demandes polies et comment les former clairement dans de vraies phrases.",
-        "this card explains offers and invitations and how to form it clearly in real sentences.": "Cette carte explique les offres et les invitations et comment les former clairement dans de vraies phrases."
-      },
-      "Reported Speech": {
-        "this card explains reporting statements and how to form it clearly in real sentences.": "Cette carte explique les déclarations rapportées et comment les formuler clairement dans de vraies phrases.",
-        "this card explains reporting questions and how to form it clearly in real sentences.": "Cette carte explique les questions rapportées et comment les formuler clairement dans de vraies phrases.",
-        "this card explains reporting requests and how to form it clearly in real sentences.": "Cette carte explique les demandes rapportées et comment les formuler clairement dans de vraies phrases.",
-        "this card explains reporting commands and how to form it clearly in real sentences.": "Cette carte explique les ordres rapportés et comment les formuler clairement dans de vraies phrases.",
-        "this card explains backshift basics and how to form it clearly in real sentences.": "Cette carte explique les bases du décalage temporel et comment les formuler clairement dans de vraies phrases.",
-        "this card explains time place changes and how to form it clearly in real sentences.": "Cette carte explique les changements de temps et de lieu et comment les formuler clairement dans de vraies phrases."
-      },
-      "Formality & Style": {
-        "this card explains formal vs informal and how to form it clearly in real sentences.": "Cette carte explique le formel vs l'informel et comment le former clairement dans de vraies phrases.",
-        "this card explains contractions and how to form it clearly in real sentences.": "Cette carte explique les contractions et comment les former clairement dans de vraies phrases.",
-        "this card explains polite softening and how to form it clearly in real sentences.": "Cette carte explique l'adoucissement poli et comment le former clairement dans de vraies phrases.",
-        "this card explains spoken vs written and how to form it clearly in real sentences.": "Cette carte explique le parlé vs l'écrit et comment le former clairement dans de vraies phrases.",
-        "this card explains professional style and how to form it clearly in real sentences.": "Cette carte explique le style professionnel et comment le former clairement dans de vraies phrases.",
-        "this card explains casual style and how to form it clearly in real sentences.": "Cette carte explique le style décontracté et comment le former clairement dans de vraies phrases.",
-        "this card explains clarity and brevity and how to form it clearly in real sentences.": "Cette carte explique la clarté et la brièveté et comment les former clairement dans de vraies phrases."
-      },
-      "Discourse & Flow": {
-        "this card explains opening and closing and how to form it clearly in real sentences.": "Cette carte explique l'ouverture et la fermeture et comment les former clairement dans de vraies phrases.",
-        "this card explains topic shifts and how to form it clearly in real sentences.": "Cette carte explique les changements de sujet et comment les former clairement dans de vraies phrases.",
-        "this card explains cohesion tools and how to form it clearly in real sentences.": "Cette carte explique les outils de cohésion et comment les former clairement dans de vraies phrases.",
-        "this card explains sequencing ideas and how to form it clearly in real sentences.": "Cette carte explique le séquençage des idées et comment les former clairement dans de vraies phrases.",
-        "this card explains clarification moves and how to form it clearly in real sentences.": "Cette carte explique les mouvements de clarification et comment les former clairement dans de vraies phrases.",
-        "this card explains summaries and how to form it clearly in real sentences.": "Cette carte explique les résumés et comment les former clairement dans de vraies phrases.",
-        "this card explains emphasis and repetition and how to form it clearly in real sentences.": "Cette carte explique l'emphase et la répétition et comment les former clairement dans de vraies phrases.",
-        "this card explains conversation flow and how to form it clearly in real sentences.": "Cette carte explique le flux de la conversation et comment le former clairement dans de vraies phrases.",
-        "this card explains giving examples and how to form it clearly in real sentences.": "Cette carte explique comment donner des exemples et comment les former clairement dans de vraies phrases.",
-        "this card explains repair and correction and how to form it clearly in real sentences.": "Cette carte explique la réparation et la correction et comment les former clairement dans de vraies phrases."
-      }
+      "Sentence Structure": {},
+      "Verbs": {},
+      "Tenses & Aspect": {},
+      "Nouns & Articles": {},
+      "Pronouns & Reference": {},
+      "Modifiers": {},
+      "Questions": {},
+      "Negation": {},
+      "Connections": {},
+      "Conditions": {},
+      "Voice & Focus": {},
+      "Modality": {},
+      "Reported Speech": {},
+      "Formality & Style": {},
+      "Discourse & Flow": {}
     },
     "grammarPoints": {
-      "Sentence Structure": {
-        "basic word order in simple statements": "ordre des mots de base pour les déclarations",
-        "subject usually comes before the verb": "sujet avant le verbe",
-        "if the verb takes an object, put it after the verb": "objet après le verbe",
-        "a complete clause needs a subject": "",
-        "a complete clause needs a main verb": "",
-        "an object or complement can follow the verb": "",
-        "add a time phrase after the main clause (for example, at noon or yesterday)": "temps à la fin de la phrase",
-        "add a place phrase after the time phrase (for example, at the station or in the kitchen)": "lieu après le verbe",
-        "main clause gives the core message": "idée de la proposition principale",
-        "use a connector to link clauses (for example, because or when)": "ajout de la clause de raison",
-        "the linked clause needs its own subject and verb": "ajout de la clause de temps",
-        "use short sentences for key points": "phrases courtes pour l'impact",
-        "use longer sentences for supporting detail": "phrases longues pour le détail",
-        "separate independent clauses with correct punctuation": "éviter les phrases à rallonge"
-      },
-      "Verbs": {
-        "action verbs show what the subject does": "verbes d'action pour le mouvement",
-        "in simple statements, place the action verb after the subject": "verbes d'action pour les tâches",
-        "if there is an object, place it after the action verb": "verbes d'action pour le changement",
-        "state verbs describe a condition, thought, feeling, or possession": "verbes d'état pour les sentiments",
-        "in simple statements, place the state verb after the subject": "verbes d'état pour les pensées",
-        "state verbs are usually not used in continuous forms": "verbes d'état pour la possession",
-        "linking verbs connect the subject to a complement": "être en tant que verbe de liaison",
-        "place the linking verb after the subject in a simple statement": "liens de sentir et sembler",
-        "use an adjective or noun as the complement after the linking verb": "liens de devenir et rester",
-        "some verbs are followed by a preposition phrase": "",
-        "after the verb and object, add the required preposition": "",
-        "complete the preposition with a noun phrase": "",
-        "one common verb combination is verb + to-infinitive": "",
-        "use to + base verb immediately after the main verb": "",
-        "do not omit to in this pattern": "",
-        "verb plus particle": "verbe plus particule",
-        "separable phrasal verbs": "verbes à particule séparables",
-        "meaning shift with particles": "changement de sens avec des particules"
-      },
-      "Tenses & Aspect": {
-        "present simple for habits": "présent simple pour les habitudes",
-        "present simple for facts": "présent simple pour les faits",
-        "present simple for schedules": "présent simple pour les horaires",
-        "present continuous for now": "présent continu pour maintenant",
-        "present continuous for temporary actions": "présent continu pour les actions temporaires",
-        "present continuous for near plans": "présent continu pour les projets proches",
-        "past simple for finished actions": "passé simple pour les actions terminées",
-        "past simple for past time words": "passé simple pour les mots de temps passés",
-        "past simple for sequences": "passé simple pour les séquences",
-        "past continuous for background": "passé continu pour le contexte",
-        "past continuous with interruption": "passé continu avec interruption",
-        "past continuous for two actions": "passé continu pour deux actions",
-        "present perfect for experience": "présent parfait pour l'expérience",
-        "present perfect for recent results": "présent parfait pour les résultats récents",
-        "present perfect with since and for": "présent parfait avec depuis et pendant",
-        "past perfect for earlier past": "plus-que-parfait pour un passé antérieur",
-        "past perfect for cause in past": "plus-que-parfait pour cause dans le passé",
-        "past perfect with before": "plus-que-parfait avec avant",
-        "use will + base verb for one future form": "",
-        "use be going to + base verb for another future form": "",
-        "use present continuous + future time for arranged plans": "",
-        "future continuous for progress": "futur continu pour le progrès",
-        "future continuous for background": "futur continu pour le contexte",
-        "future continuous for polite inquiry": "futur continu pour une demande polie",
-        "future perfect for deadlines": "futur parfait pour les délais",
-        "future perfect with by time": "futur parfait avec d'ici",
-        "future perfect for completion": "futur parfait pour l'achèvement",
-        "simple vs continuous contrast": "contraste simple vs continu",
-        "perfect vs simple contrast": "contraste parfait vs simple",
-        "duration focus contrast": "contraste de focalisation sur la durée"
-      },
-      "Nouns & Articles": {
-        "countable nouns can be singular or plural": "",
-        "use a or an before singular countable nouns": "",
-        "use a number with plural countable nouns": "",
-        "uncountable nouns usually do not have plural forms": "",
-        "use some with uncountable nouns": "",
-        "use a piece of for countable units": "",
-        "use a or an for first mention of a singular countable noun": "",
-        "use the when the noun is specific or already known": "",
-        "place the article directly before the noun": "",
-        "use a plural noun for more than one": "",
-        "many plurals add -s or -es": "",
-        "some plurals are irregular (child -> children)": "",
-        "add apostrophe + s to a singular noun to show ownership": "",
-        "place the possessive noun before the thing owned": "",
-        "keep the apostrophe in the correct position": "",
-        "a noun phrase can include determiner + noun": "",
-        "an adjective can appear before the noun": "",
-        "keep the order determiner + adjective + noun": "",
-        "use many with plural countable nouns": "",
-        "use much with uncountable nouns": "",
-        "choose the quantifier by noun type": ""
-      },
-      "Pronouns & Reference": {
-        "subject pronouns replace noun subjects (i, you, he, she, it, we, they)": "",
-        "use a subject pronoun before the main verb in statements": "",
-        "choose the pronoun that matches number and person": "",
-        "object pronouns replace noun objects (me, you, him, her, it, us, them)": "",
-        "place object pronouns after the main verb": "",
-        "use object forms, not subject forms, in object position": "",
-        "use possessive adjectives before nouns (my, your, his, her, our, their)": "",
-        "use possessive pronouns without a noun (mine, yours, his, hers, ours, theirs)": "",
-        "do not add apostrophes to possessive pronouns": "",
-        "use reflexive pronouns when subject and object are the same": "",
-        "singular forms: myself, yourself, himself, herself, itself": "",
-        "plural forms: ourselves, yourselves, themselves": "",
-        "use this and these for things near the speaker": "",
-        "use that and those for things farther away": "",
-        "use this or that with singular nouns and these or those with plural nouns": "",
-        "use who for people in relative clauses": "",
-        "use which for things in relative clauses": "",
-        "use that for people or things in defining relative clauses": "",
-        "use someone and something in affirmative statements": "",
-        "use anyone and anything in negative statements and questions": "",
-        "use everyone and everything for complete groups": ""
-      },
-      "Modifiers": {
-        "adjectives describe nouns": "",
-        "adjectives can come before nouns": "",
-        "adjectives can come after linking verbs like be": "",
-        "when several adjectives come before a noun, use a common order": "",
-        "opinion usually comes before size": "",
-        "size usually comes before color": "",
-        "use comparatives to compare two things": "",
-        "many short adjectives take -er": "",
-        "many longer adjectives use more": "",
-        "use superlatives to compare one item with a group": "",
-        "many short adjectives take -est and longer adjectives use most": "",
-        "use the before superlative adjectives": "",
-        "adverbs can modify verbs": "",
-        "many adverbs of manner end in -ly": "",
-        "adverbs of manner usually come after the verb or object": "",
-        "common frequency adverbs include always, usually, often, sometimes, and never": "",
-        "place frequency adverbs before main verbs": "",
-        "place frequency adverbs after be": "",
-        "place adverbs answer where and time adverbs answer when": "",
-        "in neutral order, place usually comes before time": "",
-        "both often appear near the end of the clause": "",
-        "degree words modify adjectives or adverbs": "",
-        "use very to strengthen adjectives or adverbs": "",
-        "use enough after adjectives and adverbs": "",
-        "use -ing adjectives for things that cause a feeling": "",
-        "use -ed adjectives for how people feel": "",
-        "do not mix -ing and -ed meanings": "",
-        "when multiple modifiers appear, keep a clear order": "",
-        "put degree words before adjectives": "",
-        "keep manner adverbs in a natural position in the clause": ""
-      },
-      "Questions": {
-        "use do, does, or did before the subject": "",
-        "use the base verb after the subject": "",
-        "end yes-no questions with a question mark": "",
-        "start with a wh word such as who, what, where, when, why, or how": "",
-        "place the auxiliary before the subject": "",
-        "place be before the subject": "",
-        "do not use do or does with be questions": "",
-        "place the complement after the subject": "",
-        "keep the main verb in base form after do, does, or did": "",
-        "use did for past-time yes-no questions": "",
-        "place the modal before the subject": "",
-        "do not use do or does with modal questions": "",
-        "add a short tag after a statement": "",
-        "use a negative tag after a positive statement": "",
-        "use a positive tag after a negative statement": "",
-        "start with an introductory phrase such as could you tell me": "",
-        "use statement word order inside the embedded question": "",
-        "do not invert subject and verb inside the embedded question": ""
-      },
-      "Negation": {
-        "subject + be + not + complement": "sujet + être + ne + complément",
-        "subject + aux + not + base verb": "sujet + auxiliaire + ne + verbe à l'infinitif",
-        "negative word + noun": "mot négatif + nom",
-        "aux + not + subject + base verb + object": "auxiliaire + ne + sujet + verbe à l'infinitif + objet",
-        "subject + negative adverb + verb": "sujet + adverbe négatif + verbe"
-      },
-      "Connections": {
-        "clause 1 + connector + clause 2": "clause 1 + connecteur + clause 2",
-        "reason clause + connector + result clause": "clause de raison + connecteur + clause de résultat",
-        "clause 1 + contrast connector + clause 2": "clause 1 + connecteur de contraste + clause 2",
-        "main clause + time connector + clause": "clause principale + connecteur temporel + clause",
-        "subject + verb + comparison + object": "sujet + verbe + comparaison + objet",
-        "addition marker + clause": "marqueur d'addition + clause",
-        "sequence + clause": "séquence + clause"
-      },
-      "Conditions": {
-        "if clause + result clause": "si clause + résultat clause",
-        "if clause + would clause": "si clause + conditionnel clause",
-        "if clause + would have clause": "si clause + conditionnel passé clause",
-        "if clause (past perfect) + present result (would + base verb)": "si clause (plus-que-parfait) + résultat présent (conditionnel + verbe à l'infinitif)",
-        "result clause + unless clause": "résultat clause + sauf si clause"
-      },
-      "Voice & Focus": {
-        "doer + action verb + object": "acteur + verbe d'action + objet",
-        "object + be verb + past participle": "objet + verbe être + participe passé",
-        "focus phrase + subject + verb": "phrase de focus + sujet + verbe",
-        "it subject + focus phrase + clause": "sujet il + phrase de focus + proposition",
-        "there subject + be verb + noun": "sujet il y a + verbe être + nom"
-      },
-      "Modality": {
-        "subject + modal + base verb": "sujet + modal + verbe à l'infinitif",
-        "modal + subject + base verb": "modal + sujet + verbe à l'infinitif",
-        "modal + base verb": "modal + verbe à l'infinitif",
-        "subject + modal + probability word + base verb": "sujet + modal + mot de probabilité + verbe à l'infinitif",
-        "modal + subject + base verb + object": "modal + sujet + verbe à l'infinitif + objet",
-        "modal phrase + object": "phrase modale + objet"
-      },
-      "Reported Speech": {
-        "say with (that) clause": "dire avec une clause (que)",
-        "that often omitted": "que souvent omis",
-        "reporting verb + clause": "verbe de rapport + clause",
-        "ask with if": "demander avec si",
-        "ask with question word": "demander avec un mot interrogatif",
-        "no inversion": "pas d'inversion",
-        "ask to do": "demander de faire",
-        "tell to do requests": "dire de faire des demandes",
-        "polite reporting": "rapport poli",
-        "tell to do commands": "dire de faire des ordres",
-        "order to do": "ordonner de faire",
-        "instruction shift": "changement d'instruction",
-        "present to past shift": "changement du présent au passé",
-        "will to would shift": "changement de will à would",
-        "can to could shift": "changement de can à could",
-        "now to then": "maintenant à alors",
-        "here to there": "ici à là",
-        "today to that day": "aujourd'hui à ce jour-là"
-      },
-      "Formality & Style": {
-        "formal word choice": "choix de mots formels",
-        "informal word choice": "choix de mots informels",
-        "match audience tone": "adapter le ton au public",
-        "short forms in speech": "formes courtes dans le discours",
-        "avoid in formal writing": "éviter dans l'écriture formelle",
-        "clarity choices": "choix de clarté",
-        "please for politeness": "s'il vous plaît pour la politesse",
-        "soft request forms": "formes de demande douce",
-        "indirect language": "langage indirect",
-        "spoken simplicity": "simplicité orale",
-        "written clarity": "clarté écrite",
-        "sentence length control": "contrôle de la longueur des phrases",
-        "clear purpose first": "objectif clair en premier",
-        "neutral tone": "ton neutre",
-        "polite closing": "fermeture polie",
-        "friendly tone": "ton amical",
-        "short phrases": "phrases courtes",
-        "informal openings": "ouvertures informelles",
-        "short sentences": "phrases courtes",
-        "avoid extra words": "éviter les mots superflus",
-        "main point first": "point principal en premier"
-      },
-      "Discourse & Flow": {
-        "start a talk": "commencer une conversation",
-        "end a talk": "terminer une conversation",
-        "closing signal words": "mots de signal de clôture",
-        "change topic smoothly": "changer de sujet en douceur",
-        "return to topic": "revenir au sujet",
-        "signal the shift": "signaler le changement",
-        "reference words": "mots de référence",
-        "linking phrases": "phrases de liaison",
-        "topic tracking": "suivi du sujet",
-        "first next last": "premier suivant dernier",
-        "sequence signal words": "mots de signal de séquence",
-        "clear sequence": "séquence claire",
-        "rephrase key point": "reformuler le point clé",
-        "ask for clarity": "demander des éclaircissements",
-        "confirm meaning": "confirmer le sens",
-        "in short": "en résumé",
-        "to sum up": "pour résumer",
-        "main point recap": "récapitulatif du point principal",
-        "stress key idea": "insister sur l'idée clé",
-        "repeat for focus": "répéter pour l'accent",
-        "signal emphasis": "signaler l'emphase",
-        "turn taking": "prise de parole",
-        "listening signals": "signaux d'écoute",
-        "smooth exchange": "échange fluide",
-        "for example": "par exemple",
-        "for instance": "par instance",
-        "such as": "tel que",
-        "self correction": "auto-correction",
-        "clarify quickly": "clarifier rapidement",
-        "restart phrasing": "redémarrer la formulation"
-      }
+      "Sentence Structure": {},
+      "Verbs": {},
+      "Tenses & Aspect": {},
+      "Nouns & Articles": {},
+      "Pronouns & Reference": {},
+      "Modifiers": {},
+      "Questions": {},
+      "Negation": {},
+      "Connections": {},
+      "Conditions": {},
+      "Voice & Focus": {},
+      "Modality": {},
+      "Reported Speech": {},
+      "Formality & Style": {},
+      "Discourse & Flow": {}
     },
     "grammarMistakeWrong": {
-      "Sentence Structure": {
-        "reads she a book.": "Lit-elle un livre.",
-        "they named captain her.": "",
-        "she met him at noon the station.": "",
-        "i stayed home because.": "Je suis resté à la maison parce que.",
-        "we finished early we went home after class because we were tired.": ""
-      },
-      "Verbs": {
-        "they the boxes carry.": "",
-        "she is feeling tired.": "",
-        "the room feels quietly.": "",
-        "he placed the book on.": "Il a posé le livre.",
-        "we decided stay.": "",
-        "he turned the light on off.": "Il a allumé et éteint la lumière."
-      },
-      "Tenses & Aspect": {
-        "she work every day.": "",
-        "i am wait outside.": "",
-        "they visit paris last year.": "",
-        "she was cook when i called.": "Elle cuisinait quand j'ai appelé.",
-        "he has live here for years.": "",
-        "he had leave before i arrived.": "",
-        "she will going to call tomorrow.": "",
-        "she will be work at 8.": "",
-        "she will have finish by noon.": "",
-        "i have work here for years.": ""
-      },
-      "Nouns & Articles": {
-        "i have coin and two apples.": "",
-        "i need two breads.": "J'ai besoin de deux pains.",
-        "i saw movie.": "J'ai vu un film.",
-        "three child play.": "Trois enfants jouent.",
-        "the teachers book is new.": "Le livre du professeur est nouveau.",
-        "she bought the dress red.": "Elle a acheté une robe rouge.",
-        "how much apples?": "Combien de pommes ?"
-      },
-      "Pronouns & Reference": {
-        "her is here.": "",
-        "he saw i.": "",
-        "this book is her's.": "Ce livre est a elle.",
-        "i hurt me.": "",
-        "this books are mine.": "Ce livres sont a moi.",
-        "the man which called me left.": "L'homme lequel m'a appele est parti.",
-        "i saw anyone at the station.": "J'ai vu n'importe qui a la gare."
-      },
-      "Modifiers": {
-        "she bought a red small bag.": "Elle a achete un rouge petit sac.",
-        "this is more cheap.": "Ceci est plus pas cher.",
-        "he is the most fast.": "Il est le plus rapide.",
-        "she speaks slow.": "Elle parle lent.",
-        "she goes always early.": "Elle va toujours tot.",
-        "he arrived yesterday here.": "Il est arrive hier ici.",
-        "it is enough hot.": "Il est assez chaud.",
-        "i am boring.": "Je suis ennuyeux.",
-        "she answered the difficult very question quickly.": "Elle a repondu a la question difficile tres rapidement.",
-        "the quiet house is noisily.": "La maison calme est bruyamment."
-      },
-      "Questions": {
-        "you like coffee?": "Tu aimes le café ?",
-        "where you live?": "Où tu vis ?",
-        "the store is open?": "",
-        "did you called her?": "",
-        "you can help me?": "Tu peux m'aider ?",
-        "you are ready, are you?": "",
-        "could you tell me where is it?": ""
-      },
-      "Negation": {
-        "he not happy.": "Il n'est pas heureux.",
-        "she not like tea.": "Elle n'aime pas le thé.",
-        "he does notn't know.": "Il ne sait pas.",
-        "i don't have nothing.": "Je n'ai rien.",
-        "you don't like it?": "Tu n'aimes pas ça ?",
-        "she hardly doesn't sleep.": "Elle ne dort presque pas."
-      },
-      "Connections": {
-        "i went and but stayed.": "Je suis allé mais je suis resté.",
-        "i was late because the bus.": "J'étais en retard à cause du bus.",
-        "i like tea but also or coffee.": "J'aime le thé mais aussi le café.",
-        "i left before i will eat.": "Je suis parti avant de manger.",
-        "she is like taller me.": "Elle est plus grande que moi.",
-        "he also went but too.": "Il est aussi allé.",
-        "finally, first we meet.": "Enfin, nous nous rencontrons d'abord."
-      },
-      "Conditions": {
-        "if you will come, we meet.": "Si tu viens, nous nous rencontrons.",
-        "if it will rain, we will stay.": "S'il pleut, nous resterons.",
-        "if i will have time, i would go.": "Si j'ai le temps, j'irais.",
-        "if i knew, i would have told.": "Si je savais, je l'aurais dit.",
-        "if i studied, i would have the job now.": "Si j'étudiais, j'aurais le poste maintenant.",
-        "we will go unless it will rain.": "Nous irons à moins qu'il ne pleuve."
-      },
-      "Voice & Focus": {
-        "the cake baked my mom.": "Le gâteau a été cuit par ma mère.",
-        "the report finished yesterday.": "Le rapport a été terminé hier.",
-        "this book i bought yesterday it.": "Ce livre que j'ai acheté hier.",
-        "was it she called.": "Est-ce elle qui a appelé.",
-        "is a problem in the room.": "Il y a un problème dans la pièce."
-      },
-      "Modality": {
-        "she can to swim.": "Elle peut nager.",
-        "may i to sit here?": "Puis-je m'asseoir ici ?",
-        "you must to wear a badge.": "Vous devez porter un badge.",
-        "you should to rest.": "Vous devriez vous reposer.",
-        "it might to rain.": "Il pourrait pleuvoir.",
-        "he probably to arrive late.": "Il arrivera probablement en retard.",
-        "could you opens the door?": "Pourriez-vous ouvrir la porte ?",
-        "do you like to come?": "Aimez-vous venir ?"
-      },
-      "Reported Speech": {
-        "she said me she is tired.": "Elle m'a dit qu'elle est fatiguée.",
-        "he asked where is the station.": "Il a demandé où est la gare.",
-        "she asked me can i help.": "Elle m'a demandé si je peux aider.",
-        "he told me to went.": "Il m'a dit d'aller.",
-        "she said she is ready.": "Elle a dit qu'elle est prête.",
-        "he said he will come here today.": "Il a dit qu'il viendra ici aujourd'hui."
-      },
-      "Formality & Style": {
-        "hey, give me the report.": "Salut, donne-moi le rapport.",
-        "i am late, do not wait.": "Je suis en retard, ne m'attendez pas.",
-        "send me the file now.": "Envoie-moi le fichier maintenant.",
-        "in formal writing: i arrived lol.": "Dans un écrit formel : Je suis arrivé(e) lol.",
-        "hey, i need this asap.": "Salut, j'ai besoin de ça dès que possible.",
-        "dear sir or madam, what's up?": "Monsieur ou Madame, comment ça va ?",
-        "due to the fact that it is raining, we will not go.": "Étant donné qu'il pleut, nous n'irons pas."
-      },
-      "Discourse & Flow": {
-        "i want to talk. goodbye.": "Je veux parler. Au revoir.",
-        "by the way because schedule.": "Au fait, à cause du planning.",
-        "i bought a book. book is new.": "J'ai acheté un livre. Le livre est nouveau.",
-        "first i left, then i woke up.": "D'abord, je suis parti, puis je me suis réveillé.",
-        "what you said?": "Qu'est-ce que tu as dit ?",
-        "in short, many things.": "En résumé, beaucoup de choses.",
-        "i do want to go not.": "Je ne veux pas y aller.",
-        "me too. and you is?": "Moi aussi. Et toi, tu es ?",
-        "for example, it is.": "Par exemple, c'est.",
-        "i mean, i am go.": "Je veux dire, je vais."
-      }
+      "Sentence Structure": {},
+      "Verbs": {},
+      "Tenses & Aspect": {},
+      "Nouns & Articles": {},
+      "Pronouns & Reference": {},
+      "Modifiers": {},
+      "Questions": {},
+      "Negation": {},
+      "Connections": {},
+      "Conditions": {},
+      "Voice & Focus": {},
+      "Modality": {},
+      "Reported Speech": {},
+      "Formality & Style": {},
+      "Discourse & Flow": {}
     },
     "grammarMistakeFix": {
-      "Sentence Structure": {
-        "she reads a book.": "Elle lit un livre.",
-        "they named her captain.": "",
-        "she met him at noon at the station.": "Elle l'a rencontré à midi à la gare.",
-        "i stayed home because it rained.": "Je suis resté à la maison parce qu'il a plu.",
-        "we finished early, and we went home after class because we were tired.": "Nous avons fini tot et nous sommes rentres chez nous apres le cours parce que nous etions fatigues."
-      },
-      "Verbs": {
-        "they carry the boxes.": "",
-        "she feels tired.": "",
-        "the room feels quiet.": "",
-        "he placed the book on the table.": "Il a placé le livre sur la table.",
-        "we decided to stay.": "",
-        "he turned off the light.": "Il a éteint la lumière."
-      },
-      "Tenses & Aspect": {
-        "she works every day.": "Elle travaille tous les jours.",
-        "i am waiting outside.": "",
-        "they visited paris last year.": "",
-        "she was cooking when i called.": "Elle cuisinait quand j'ai appelé.",
-        "he has lived here for years.": "",
-        "he had left before i arrived.": "",
-        "she is going to call tomorrow.": "",
-        "she will be working at 8.": "Elle travaillera à 8 heures.",
-        "she will have finished by noon.": "Elle aura fini d'ici midi.",
-        "i have worked here for years.": ""
-      },
-      "Nouns & Articles": {
-        "i have a coin and two apples.": "",
-        "i need two pieces of bread.": "J'ai besoin de deux morceaux de pain.",
-        "i saw a movie.": "J'ai vu un film.",
-        "three children play.": "Trois enfants jouent.",
-        "the teacher's book is new.": "Le livre du professeur est nouveau.",
-        "she bought the red dress.": "Elle a achet? la robe rouge.",
-        "how many apples?": "Combien de pommes ?"
-      },
-      "Pronouns & Reference": {
-        "she is here.": "",
-        "he saw me.": "",
-        "this book is hers.": "Ce livre est a elle.",
-        "i hurt myself.": "",
-        "these books are mine.": "Ces livres sont a moi.",
-        "the man who called me left.": "L'homme qui m'a appele est parti.",
-        "i saw someone at the station.": "J'ai vu quelqu'un a la gare."
-      },
-      "Modifiers": {
-        "she bought a small red bag.": "Elle a achete un petit sac rouge.",
-        "this is cheaper.": "Ceci est moins cher.",
-        "he is the fastest.": "Il est le plus rapide.",
-        "she speaks slowly.": "Elle parle lentement.",
-        "she always goes early.": "Elle va toujours tot.",
-        "he arrived here yesterday.": "Il est arrive ici hier.",
-        "it is hot enough.": "Il fait assez chaud.",
-        "i am bored.": "Je suis ennuye.",
-        "she answered the very difficult question quickly.": "Elle a repondu rapidement a la question tres difficile.",
-        "the quiet house is noisy.": "La maison calme est bruyante."
-      },
-      "Questions": {
-        "do you like coffee?": "Aimes-tu le café ?",
-        "where do you live?": "Où vis-tu ?",
-        "is the store open?": "",
-        "did you call her?": "",
-        "can you help me?": "Peux-tu m'aider ?",
-        "you are ready, aren't you?": "",
-        "could you tell me where it is?": ""
-      },
-      "Negation": {
-        "he is not happy.": "Il n'est pas heureux.",
-        "she does not like tea.": "Elle n'aime pas le thé.",
-        "he doesn't know.": "Il ne sait pas.",
-        "i don't have anything.": "Je n'ai rien.",
-        "don't you like it?": "Tu ne l'aimes pas ?",
-        "she hardly sleeps.": "Elle dort à peine."
-      },
-      "Connections": {
-        "i went and stayed.": "Je suis allé et je suis resté.",
-        "i was late because the bus was late.": "J'étais en retard parce que le bus était en retard.",
-        "i like tea, but i also like coffee.": "J'aime le thé, mais j'aime aussi le café.",
-        "i left before i ate.": "Je suis parti avant de manger.",
-        "she is taller than me.": "Elle est plus grande que moi.",
-        "he also went.": "Il est aussi parti.",
-        "first we met, finally we left.": "D'abord nous nous sommes rencontrés, enfin nous sommes partis."
-      },
-      "Conditions": {
-        "if you come, we meet.": "Si tu viens, nous nous rencontrons.",
-        "if it rains, we will stay.": "S'il pleut, nous resterons.",
-        "if i had time, i would go.": "Si j'avais le temps, j'irais.",
-        "if i had known, i would have told.": "Si j'avais su, je l'aurais dit.",
-        "if i had studied, i would have the job now.": "Si j'avais étudié, j'aurais le poste maintenant.",
-        "we will go unless it rains.": "Nous irons à moins qu'il ne pleuve."
-      },
-      "Voice & Focus": {
-        "my mom baked the cake.": "Ma mère a cuit le gâteau.",
-        "the report was finished yesterday.": "Le rapport a été terminé hier.",
-        "this book, i bought yesterday.": "Ce livre, je l'ai acheté hier.",
-        "it was she who called.": "C'est elle qui a appelé.",
-        "there is a problem in the room.": "Il y a un problème dans la pièce."
-      },
-      "Modality": {
-        "she can swim.": "Elle peut nager.",
-        "may i sit here?": "Puis-je m'asseoir ici ?",
-        "you must wear a badge.": "Vous devez porter un badge.",
-        "you should rest.": "Vous devriez vous reposer.",
-        "it might rain.": "Il pourrait pleuvoir.",
-        "he will probably arrive late.": "Il arrivera probablement en retard.",
-        "could you open the door, please?": "Pourriez-vous ouvrir la porte, s'il vous plaît ?",
-        "would you like to come?": "Voudriez-vous venir ?"
-      },
-      "Reported Speech": {
-        "she said she was tired.": "Elle a dit qu'elle était fatiguée.",
-        "he asked where the station was.": "Il a demandé où était la gare.",
-        "she asked me to help.": "Elle m'a demandé d'aider.",
-        "he told me to go.": "Il m'a dit d'y aller.",
-        "she said she was ready.": "Elle a dit qu'elle était prête.",
-        "he said he would come there that day.": "Il a dit qu'il viendrait là-bas ce jour-là."
-      },
-      "Formality & Style": {
-        "hello, could you send the report?": "Bonjour, pourriez-vous envoyer le rapport ?",
-        "i'm late, don't wait.": "Je suis en retard, ne m'attendez pas.",
-        "could you send me the file?": "Pourriez-vous m'envoyer le fichier ?",
-        "in formal writing: i have arrived.": "Dans un écrit formel : Je suis arrivé.",
-        "hello, i need this soon.": "Bonjour, j'ai besoin de cela rapidement.",
-        "hey, what's up?": "Salut, quoi de neuf ?",
-        "it is raining, so we will not go.": "Il pleut, donc nous n'irons pas."
-      },
-      "Discourse & Flow": {
-        "hi, i wanted to talk. thanks, goodbye.": "Salut, je voulais parler. Merci, au revoir.",
-        "by the way, can we talk about the schedule?": "Au fait, pouvons-nous parler du planning ?",
-        "i bought a book. it is new.": "J'ai acheté un livre. Il est nouveau.",
-        "first i woke up, then i left.": "D'abord, je me suis réveillé, puis je suis parti.",
-        "what do you mean?": "Que veux-tu dire ?",
-        "in short, we need more time.": "En résumé, nous avons besoin de plus de temps.",
-        "i do want to go.": "Je veux vraiment y aller.",
-        "me too. and you?": "Moi aussi. Et toi ?",
-        "for example, it is useful for travel.": "Par exemple, c'est utile pour voyager.",
-        "sorry, i mean i am going.": "Désolé, je veux dire que je pars."
-      }
+      "Sentence Structure": {},
+      "Verbs": {},
+      "Tenses & Aspect": {},
+      "Nouns & Articles": {},
+      "Pronouns & Reference": {},
+      "Modifiers": {},
+      "Questions": {},
+      "Negation": {},
+      "Connections": {},
+      "Conditions": {},
+      "Voice & Focus": {},
+      "Modality": {},
+      "Reported Speech": {},
+      "Formality & Style": {},
+      "Discourse & Flow": {}
     }
   }
 }

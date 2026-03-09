@@ -174,6 +174,68 @@ const translateToWorldCached = async (items, label, sourceToWorldMap, result) =>
 const buildGrammarExplanation = (title) =>
   `This card explains ${title} and how to form it clearly in real sentences.`;
 
+const syncWorldSourceGrammarFromExistingCards = (result, section, existingCards) => {
+  if (!Array.isArray(existingCards) || !existingCards.length) {
+    return;
+  }
+
+  ensureSection(result.worldSource.grammarTitles, section);
+  ensureSection(result.worldSource.grammarExamples, section);
+  ensureSection(result.worldSource.grammarExplanations, section);
+  ensureSection(result.worldSource.grammarPoints, section);
+  ensureSection(result.worldSource.grammarMistakeWrong, section);
+  ensureSection(result.worldSource.grammarMistakeFix, section);
+
+  existingCards.forEach((existingCard) => {
+    if (!existingCard || typeof existingCard !== "object") {
+      return;
+    }
+
+    const sourceTitle = String(existingCard?.sourceTitle || "").trim();
+    const worldTitle = String(existingCard?.title || "").trim();
+    if (sourceTitle && worldTitle) {
+      result.worldSource.grammarTitles[section][normalizeKey(sourceTitle)] = worldTitle;
+    }
+
+    const sourceExample = String(existingCard?.sourceExample || "").trim();
+    const worldExample = String(existingCard?.example || "").trim();
+    if (sourceExample && worldExample) {
+      result.worldSource.grammarExamples[section][normalizeKey(sourceExample)] = worldExample;
+    }
+
+    const sourceExplanation = buildGrammarExplanation(sourceTitle);
+    const worldExplanation = String(existingCard?.explanation || "").trim();
+    if (sourceExplanation && worldExplanation) {
+      result.worldSource.grammarExplanations[section][normalizeKey(sourceExplanation)] =
+        worldExplanation;
+    }
+
+    const sourcePoints = Array.isArray(existingCard?.sourcePoints) ? existingCard.sourcePoints : [];
+    const worldPoints = Array.isArray(existingCard?.points) ? existingCard.points : [];
+    sourcePoints.forEach((sourcePoint, pointIndex) => {
+      const englishPoint = String(sourcePoint || "").trim();
+      const worldPoint = String(worldPoints[pointIndex] || "").trim();
+      if (englishPoint && worldPoint) {
+        result.worldSource.grammarPoints[section][normalizeKey(englishPoint)] = worldPoint;
+      }
+    });
+
+    const mistakes = Array.isArray(existingCard?.mistakes) ? existingCard.mistakes : [];
+    mistakes.forEach((worldMistake) => {
+      const sourceWrong = String(worldMistake?.sourceWrong || "").trim();
+      const sourceFix = String(worldMistake?.sourceFix || "").trim();
+      const wrong = String(worldMistake?.wrong || "").trim();
+      const fix = String(worldMistake?.fix || "").trim();
+      if (sourceWrong && wrong) {
+        result.worldSource.grammarMistakeWrong[section][normalizeKey(sourceWrong)] = wrong;
+      }
+      if (sourceFix && fix) {
+        result.worldSource.grammarMistakeFix[section][normalizeKey(sourceFix)] = fix;
+      }
+    });
+  });
+};
+
 const run = async () => {
   const existing = loadExisting();
   const result = {
@@ -327,6 +389,9 @@ const run = async () => {
   }
 
   for (const [section, cards] of Object.entries(GRAMMAR_SECTION_LISTS)) {
+    const existingCardsForSection = Array.isArray(result?.grammar?.cards?.[section])
+      ? result.grammar.cards[section]
+      : [];
     const englishTitles = cards.map((card) => String(card.title || "").trim()).filter(Boolean);
     const englishExamples = cards.map((card) => String(card.example || "").trim()).filter(Boolean);
     const englishExplanations = englishTitles.map((title) => buildGrammarExplanation(title));
@@ -389,50 +454,77 @@ const run = async () => {
       result
     );
 
-    result.grammar.cards[section] = cards.map((card) => {
-      const sourceTitle = String(card.title || "").trim();
-      const sourceExample = String(card.example || "").trim();
+    result.grammar.cards[section] = cards.map((card, index) => {
+      const existingCard = existingCardsForSection[index];
+      const sourceTitle = String(existingCard?.sourceTitle || card.title || "").trim();
+      const sourceExample = String(existingCard?.sourceExample || card.example || "").trim();
+      const sourcePoints =
+        Array.isArray(existingCard?.sourcePoints) && existingCard.sourcePoints.length
+          ? existingCard.sourcePoints.map((point) => String(point || "").trim()).filter(Boolean)
+          : (card.points || []).map((point) => String(point || "").trim()).filter(Boolean);
       const translatedTitle =
-        result.worldSource.grammarTitles[section][normalizeKey(sourceTitle)] || sourceTitle;
+        String(existingCard?.title || "").trim() ||
+        result.worldSource.grammarTitles[section][normalizeKey(String(card.title || "").trim())] ||
+        sourceTitle;
       const translatedExample =
-        result.worldSource.grammarExamples[section][normalizeKey(sourceExample)] || sourceExample;
-      const translatedPoints = (card.points || []).map((point) => {
-        const sourcePoint = String(point || "").trim();
-        if (!sourcePoint) {
-          return sourcePoint;
-        }
-        return (
-          result.worldSource.grammarPoints[section][normalizeKey(sourcePoint)] || sourcePoint
-        );
-      });
-      const sourceMistake = GRAMMAR_MISTAKES[normalizeKey(sourceTitle)];
-      const mistakes = sourceMistake
-        ? [
-            {
-              wrong:
-                result.worldSource.grammarMistakeWrong[section][
-                  normalizeKey(sourceMistake.wrong)
-                ] || sourceMistake.wrong,
-              fix:
-                result.worldSource.grammarMistakeFix[section][
-                  normalizeKey(sourceMistake.fix)
-                ] || sourceMistake.fix,
-              sourceWrong: sourceMistake.wrong,
-              sourceFix: sourceMistake.fix,
-            },
-          ]
-        : [];
+        String(existingCard?.example || "").trim() ||
+        result.worldSource.grammarExamples[section][normalizeKey(String(card.example || "").trim())] ||
+        sourceExample;
+      const translatedPoints =
+        Array.isArray(existingCard?.points) && existingCard.points.length
+          ? existingCard.points.map((point) => String(point || "").trim()).filter(Boolean)
+          : sourcePoints.map((point) => {
+              const sourcePoint = String(point || "").trim();
+              if (!sourcePoint) {
+                return sourcePoint;
+              }
+              return (
+                result.worldSource.grammarPoints[section][normalizeKey(sourcePoint)] || sourcePoint
+              );
+            });
+      const sourceMistake = GRAMMAR_MISTAKES[normalizeKey(String(card.title || "").trim())];
+      const translatedMistakes =
+        Array.isArray(existingCard?.mistakes) && existingCard.mistakes.length
+          ? existingCard.mistakes.map((entry) => ({
+              wrong: String(entry?.wrong || "").trim(),
+              fix: String(entry?.fix || "").trim(),
+              sourceWrong: String(entry?.sourceWrong || "").trim(),
+              sourceFix: String(entry?.sourceFix || "").trim(),
+            }))
+          : [];
+      const mistakes =
+        translatedMistakes.length
+          ? translatedMistakes
+          : sourceMistake
+            ? [
+                {
+                  wrong:
+                    result.worldSource.grammarMistakeWrong[section][
+                      normalizeKey(sourceMistake.wrong)
+                    ] || sourceMistake.wrong,
+                  fix:
+                    result.worldSource.grammarMistakeFix[section][
+                      normalizeKey(sourceMistake.fix)
+                    ] || sourceMistake.fix,
+                  sourceWrong: sourceMistake.wrong,
+                  sourceFix: sourceMistake.fix,
+                },
+              ]
+            : [];
 
       return {
+        ...(existingCard && typeof existingCard === "object" ? existingCard : {}),
         title: translatedTitle,
         sourceTitle,
         points: translatedPoints,
-        sourcePoints: [...(card.points || [])],
+        sourcePoints: [...sourcePoints],
         example: translatedExample,
         sourceExample,
         mistakes,
       };
     });
+
+    syncWorldSourceGrammarFromExistingCards(result, section, result.grammar.cards[section]);
 
     Object.entries(result.worldSource.grammarTitles[section]).forEach(([englishKey, worldTitle]) => {
       const sourceTitle =

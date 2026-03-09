@@ -27,8 +27,8 @@
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="Learn Chinese Characters | Cosmica" />
     <meta name="twitter:description" content="Practice Chinese characters with audio support and guided review to build Hanzi recognition and reading confidence." />
-    <link rel="preload" as="style" href="style.css?v=20260438" />
-    <link rel="stylesheet" href="style.css?v=20260438" />
+    <link rel="preload" as="style" href="style.css?v=20260440" />
+    <link rel="stylesheet" href="style.css?v=20260440" />
     <link rel="stylesheet" href="maps/style-maps.css?v=20260417" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -84,28 +84,56 @@
               <span class="account-trigger-label">Guest</span>
               <span class="account-trigger-meta">Sign in</span>
             </span>
-            <span class="account-trigger-caret" aria-hidden="true">▾</span>
+            <span class="account-trigger-caret" aria-hidden="true">&#9662;</span>
           </button>
         </div>
       </div>
     </header>
 
     <!-- Page-specific main content -->
-    <main>
+                            <main>
       <h1 class="visually-hidden">Learn Chinese Characters</h1>
-      <!-- Content section -->
       <section class="section letters-grid-section reveal" id="letters">
         <div class="section-title">
           <div class="eyebrow">Characters</div>
-          <h2>汉字入门（初学者常用字）</h2>
-          <p>This Hanzi map builds character recognition through high-utility symbols, moving from core forms into characters used in words and phrases.</p>
+          <h2>汉字</h2>
+          <p>This Hanzi map moves from simple visual forms into sentence-ready characters and full characters built from reusable components.</p>
         </div>
-        <h3 class="letters-script-heading">Level 1 — 基础字形 (Foundational Forms)</h3>
-        <p class="letters-script-note">Start with simple, concrete shapes that build visual recognition and stroke confidence.</p>
+        <div class="letters-study-grid">
+          <article class="letters-study-panel">
+            <div class="letters-study-kicker">Write</div>
+            <h3 class="letters-study-title">Use stroke order, not random drawing</h3>
+            <ul class="letters-study-points">
+              <li>Practice top to bottom, left to right, and outside before inside until the motion feels automatic.</li>
+              <li>Finish one clean square before speeding up, because stroke order stabilizes recognition.</li>
+              <li>Say the syllable aloud as you write so the sound and shape lock together.</li>
+            </ul>
+          </article>
+          <article class="letters-study-panel">
+            <div class="letters-study-kicker">Decode</div>
+            <h3 class="letters-study-title">Read whole characters first</h3>
+            <ul class="letters-study-points">
+              <li>Each square is a full syllable and meaning unit, so do not read Hanzi like alphabet letters.</li>
+              <li>Scan the whole character shape first, then notice the smaller parts inside it.</li>
+              <li>Move quickly from one character to two-character words so recognition becomes usable in context.</li>
+            </ul>
+          </article>
+          <article class="letters-study-panel">
+            <div class="letters-study-kicker">Components</div>
+            <h3 class="letters-study-title">Reuse radicals and familiar parts</h3>
+            <ul class="letters-study-points">
+              <li>Look for semantic clues like 女, 氵, or 亻 and link them to families of meaning.</li>
+              <li>Look for sound-bearing parts when a component repeats across related characters.</li>
+              <li>After spotting the parts, return to the whole character so the page teaches reading, not disassembly only.</li>
+            </ul>
+          </article>
+        </div>
+        <h3 class="letters-script-heading">Level 1 基础字形 (Foundational Forms)</h3>
+        <p class="letters-script-note">从简单、具体的字形开始，先稳住视觉识别和笔画方向感。</p>
         <div class="letters-grid">
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="一">
             <div class="letter">一</div>
-            <button class="letter-audio" type="button" data-letter="一" aria-label="Play letter 一">
+            <button class="letter-audio" type="button" data-letter="一" aria-label="Play pronunciation for 一">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -118,9 +146,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="二">
             <div class="letter">二</div>
-            <button class="letter-audio" type="button" data-letter="二" aria-label="Play letter 二">
+            <button class="letter-audio" type="button" data-letter="二" aria-label="Play pronunciation for 二">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -133,9 +161,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="三">
             <div class="letter">三</div>
-            <button class="letter-audio" type="button" data-letter="三" aria-label="Play letter 三">
+            <button class="letter-audio" type="button" data-letter="三" aria-label="Play pronunciation for 三">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -148,9 +176,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="人">
             <div class="letter">人</div>
-            <button class="letter-audio" type="button" data-letter="人" aria-label="Play letter 人">
+            <button class="letter-audio" type="button" data-letter="人" aria-label="Play pronunciation for 人">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -163,9 +191,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="口">
             <div class="letter">口</div>
-            <button class="letter-audio" type="button" data-letter="口" aria-label="Play letter 口">
+            <button class="letter-audio" type="button" data-letter="口" aria-label="Play pronunciation for 口">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -178,9 +206,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="日">
             <div class="letter">日</div>
-            <button class="letter-audio" type="button" data-letter="日" aria-label="Play letter 日">
+            <button class="letter-audio" type="button" data-letter="日" aria-label="Play pronunciation for 日">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -193,9 +221,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="月">
             <div class="letter">月</div>
-            <button class="letter-audio" type="button" data-letter="月" aria-label="Play letter 月">
+            <button class="letter-audio" type="button" data-letter="月" aria-label="Play pronunciation for 月">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -208,9 +236,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="山">
             <div class="letter">山</div>
-            <button class="letter-audio" type="button" data-letter="山" aria-label="Play letter 山">
+            <button class="letter-audio" type="button" data-letter="山" aria-label="Play pronunciation for 山">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -223,9 +251,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="水">
             <div class="letter">水</div>
-            <button class="letter-audio" type="button" data-letter="水" aria-label="Play letter 水">
+            <button class="letter-audio" type="button" data-letter="水" aria-label="Play pronunciation for 水">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -238,9 +266,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="火">
             <div class="letter">火</div>
-            <button class="letter-audio" type="button" data-letter="火" aria-label="Play letter 火">
+            <button class="letter-audio" type="button" data-letter="火" aria-label="Play pronunciation for 火">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -253,9 +281,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="木">
             <div class="letter">木</div>
-            <button class="letter-audio" type="button" data-letter="木" aria-label="Play letter 木">
+            <button class="letter-audio" type="button" data-letter="木" aria-label="Play pronunciation for 木">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -268,9 +296,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="土">
             <div class="letter">土</div>
-            <button class="letter-audio" type="button" data-letter="土" aria-label="Play letter 土">
+            <button class="letter-audio" type="button" data-letter="土" aria-label="Play pronunciation for 土">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -283,9 +311,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="金">
             <div class="letter">金</div>
-            <button class="letter-audio" type="button" data-letter="金" aria-label="Play letter 金">
+            <button class="letter-audio" type="button" data-letter="金" aria-label="Play pronunciation for 金">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -298,9 +326,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="女">
             <div class="letter">女</div>
-            <button class="letter-audio" type="button" data-letter="女" aria-label="Play letter 女">
+            <button class="letter-audio" type="button" data-letter="女" aria-label="Play pronunciation for 女">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -313,9 +341,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="子">
             <div class="letter">子</div>
-            <button class="letter-audio" type="button" data-letter="子" aria-label="Play letter 子">
+            <button class="letter-audio" type="button" data-letter="子" aria-label="Play pronunciation for 子">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -328,13 +356,9 @@
               </svg>
             </button>
           </div>
-        </div>
-        <h3 class="letters-script-heading">Level 2 — 自然与基础主题字 (Nature & Core Topic Characters)</h3>
-        <p class="letters-script-note">Continue with high-utility concrete characters often used in everyday nouns and study contexts.</p>
-        <div class="letters-grid">
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="学">
             <div class="letter">学</div>
-            <button class="letter-audio" type="button" data-letter="学" aria-label="Play letter 学">
+            <button class="letter-audio" type="button" data-letter="学" aria-label="Play pronunciation for 学">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -347,9 +371,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="生">
             <div class="letter">生</div>
-            <button class="letter-audio" type="button" data-letter="生" aria-label="Play letter 生">
+            <button class="letter-audio" type="button" data-letter="生" aria-label="Play pronunciation for 生">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -362,9 +386,13 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+        </div>
+        <h3 class="letters-script-heading">Level 2 自然与核心主题字 (Nature &amp; Core Topic Characters)</h3>
+        <p class="letters-script-note">继续学习常见又高频的具体汉字，它们常常先进入名词和主题词。</p>
+        <div class="letters-grid">
+          <div class="card letter-card" data-letter="好">
             <div class="letter">好</div>
-            <button class="letter-audio" type="button" data-letter="好" aria-label="Play letter 好">
+            <button class="letter-audio" type="button" data-letter="好" aria-label="Play pronunciation for 好">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -377,9 +405,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="中">
             <div class="letter">中</div>
-            <button class="letter-audio" type="button" data-letter="中" aria-label="Play letter 中">
+            <button class="letter-audio" type="button" data-letter="中" aria-label="Play pronunciation for 中">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -392,9 +420,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="国">
             <div class="letter">国</div>
-            <button class="letter-audio" type="button" data-letter="国" aria-label="Play letter 国">
+            <button class="letter-audio" type="button" data-letter="国" aria-label="Play pronunciation for 国">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -407,9 +435,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="语">
             <div class="letter">语</div>
-            <button class="letter-audio" type="button" data-letter="语" aria-label="Play letter 语">
+            <button class="letter-audio" type="button" data-letter="语" aria-label="Play pronunciation for 语">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -422,9 +450,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="文">
             <div class="letter">文</div>
-            <button class="letter-audio" type="button" data-letter="文" aria-label="Play letter 文">
+            <button class="letter-audio" type="button" data-letter="文" aria-label="Play pronunciation for 文">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -437,9 +465,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="天">
             <div class="letter">天</div>
-            <button class="letter-audio" type="button" data-letter="天" aria-label="Play letter 天">
+            <button class="letter-audio" type="button" data-letter="天" aria-label="Play pronunciation for 天">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -452,9 +480,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="地">
             <div class="letter">地</div>
-            <button class="letter-audio" type="button" data-letter="地" aria-label="Play letter 地">
+            <button class="letter-audio" type="button" data-letter="地" aria-label="Play pronunciation for 地">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -467,9 +495,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="上">
             <div class="letter">上</div>
-            <button class="letter-audio" type="button" data-letter="上" aria-label="Play letter 上">
+            <button class="letter-audio" type="button" data-letter="上" aria-label="Play pronunciation for 上">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -482,9 +510,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="下">
             <div class="letter">下</div>
-            <button class="letter-audio" type="button" data-letter="下" aria-label="Play letter 下">
+            <button class="letter-audio" type="button" data-letter="下" aria-label="Play pronunciation for 下">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -497,9 +525,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="左">
             <div class="letter">左</div>
-            <button class="letter-audio" type="button" data-letter="左" aria-label="Play letter 左">
+            <button class="letter-audio" type="button" data-letter="左" aria-label="Play pronunciation for 左">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -512,9 +540,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="右">
             <div class="letter">右</div>
-            <button class="letter-audio" type="button" data-letter="右" aria-label="Play letter 右">
+            <button class="letter-audio" type="button" data-letter="右" aria-label="Play pronunciation for 右">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -527,9 +555,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="大">
             <div class="letter">大</div>
-            <button class="letter-audio" type="button" data-letter="大" aria-label="Play letter 大">
+            <button class="letter-audio" type="button" data-letter="大" aria-label="Play pronunciation for 大">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -542,9 +570,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="小">
             <div class="letter">小</div>
-            <button class="letter-audio" type="button" data-letter="小" aria-label="Play letter 小">
+            <button class="letter-audio" type="button" data-letter="小" aria-label="Play pronunciation for 小">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -557,9 +585,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="风">
             <div class="letter">风</div>
-            <button class="letter-audio" type="button" data-letter="风" aria-label="Play letter 风">
+            <button class="letter-audio" type="button" data-letter="风" aria-label="Play pronunciation for 风">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -572,9 +600,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="雨">
             <div class="letter">雨</div>
-            <button class="letter-audio" type="button" data-letter="雨" aria-label="Play letter 雨">
+            <button class="letter-audio" type="button" data-letter="雨" aria-label="Play pronunciation for 雨">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -588,12 +616,12 @@
             </button>
           </div>
         </div>
-        <h3 class="letters-script-heading">Level 3 — 高频代词与语法字 (Pronouns & Grammar Characters)</h3>
-        <p class="letters-script-note">Use these in minimal sentence frames: 我是, 你是, 这是, 那是, 有/没有.</p>
+        <h3 class="letters-script-heading">Level 3 代词与语法字 (Pronouns &amp; Grammar Characters)</h3>
+        <p class="letters-script-note">把这些字放进最小句框：我是，你是，他/她是，我们有/没有。</p>
         <div class="letters-grid">
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="我">
             <div class="letter">我</div>
-            <button class="letter-audio" type="button" data-letter="我" aria-label="Play letter 我">
+            <button class="letter-audio" type="button" data-letter="我" aria-label="Play pronunciation for 我">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -606,9 +634,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="你">
             <div class="letter">你</div>
-            <button class="letter-audio" type="button" data-letter="你" aria-label="Play letter 你">
+            <button class="letter-audio" type="button" data-letter="你" aria-label="Play pronunciation for 你">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -621,9 +649,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="他">
             <div class="letter">他</div>
-            <button class="letter-audio" type="button" data-letter="他" aria-label="Play letter 他">
+            <button class="letter-audio" type="button" data-letter="他" aria-label="Play pronunciation for 他">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -636,9 +664,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="她">
             <div class="letter">她</div>
-            <button class="letter-audio" type="button" data-letter="她" aria-label="Play letter 她">
+            <button class="letter-audio" type="button" data-letter="她" aria-label="Play pronunciation for 她">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -651,9 +679,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="们">
             <div class="letter">们</div>
-            <button class="letter-audio" type="button" data-letter="们" aria-label="Play letter 们">
+            <button class="letter-audio" type="button" data-letter="们" aria-label="Play pronunciation for 们">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -666,9 +694,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="是">
             <div class="letter">是</div>
-            <button class="letter-audio" type="button" data-letter="是" aria-label="Play letter 是">
+            <button class="letter-audio" type="button" data-letter="是" aria-label="Play pronunciation for 是">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -681,9 +709,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="不">
             <div class="letter">不</div>
-            <button class="letter-audio" type="button" data-letter="不" aria-label="Play letter 不">
+            <button class="letter-audio" type="button" data-letter="不" aria-label="Play pronunciation for 不">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -696,9 +724,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="的">
             <div class="letter">的</div>
-            <button class="letter-audio" type="button" data-letter="的" aria-label="Play letter 的">
+            <button class="letter-audio" type="button" data-letter="的" aria-label="Play pronunciation for 的">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -711,9 +739,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="在">
             <div class="letter">在</div>
-            <button class="letter-audio" type="button" data-letter="在" aria-label="Play letter 在">
+            <button class="letter-audio" type="button" data-letter="在" aria-label="Play pronunciation for 在">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -726,9 +754,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="有">
             <div class="letter">有</div>
-            <button class="letter-audio" type="button" data-letter="有" aria-label="Play letter 有">
+            <button class="letter-audio" type="button" data-letter="有" aria-label="Play pronunciation for 有">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -741,9 +769,13 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+        </div>
+        <h3 class="letters-script-heading">Level 4 动作字 (Action Characters)</h3>
+        <p class="letters-script-note">把动作字放进短句里练：我来，我去，我吃，我喝，我看，我听。</p>
+        <div class="letters-grid">
+          <div class="card letter-card" data-letter="这">
             <div class="letter">这</div>
-            <button class="letter-audio" type="button" data-letter="这" aria-label="Play letter 这">
+            <button class="letter-audio" type="button" data-letter="这" aria-label="Play pronunciation for 这">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -756,9 +788,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="那">
             <div class="letter">那</div>
-            <button class="letter-audio" type="button" data-letter="那" aria-label="Play letter 那">
+            <button class="letter-audio" type="button" data-letter="那" aria-label="Play pronunciation for 那">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -771,9 +803,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="个">
             <div class="letter">个</div>
-            <button class="letter-audio" type="button" data-letter="个" aria-label="Play letter 个">
+            <button class="letter-audio" type="button" data-letter="个" aria-label="Play pronunciation for 个">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -786,13 +818,9 @@
               </svg>
             </button>
           </div>
-        </div>
-        <h3 class="letters-script-heading">Level 4 — 常用动作字 (Action Characters)</h3>
-        <p class="letters-script-note">Add actions to sentence patterns: 我来, 我去, 我吃, 我喝, 我看, 我听.</p>
-        <div class="letters-grid">
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="来">
             <div class="letter">来</div>
-            <button class="letter-audio" type="button" data-letter="来" aria-label="Play letter 来">
+            <button class="letter-audio" type="button" data-letter="来" aria-label="Play pronunciation for 来">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -805,9 +833,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="去">
             <div class="letter">去</div>
-            <button class="letter-audio" type="button" data-letter="去" aria-label="Play letter 去">
+            <button class="letter-audio" type="button" data-letter="去" aria-label="Play pronunciation for 去">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -820,9 +848,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="吃">
             <div class="letter">吃</div>
-            <button class="letter-audio" type="button" data-letter="吃" aria-label="Play letter 吃">
+            <button class="letter-audio" type="button" data-letter="吃" aria-label="Play pronunciation for 吃">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -835,9 +863,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="喝">
             <div class="letter">喝</div>
-            <button class="letter-audio" type="button" data-letter="喝" aria-label="Play letter 喝">
+            <button class="letter-audio" type="button" data-letter="喝" aria-label="Play pronunciation for 喝">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -850,9 +878,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="看">
             <div class="letter">看</div>
-            <button class="letter-audio" type="button" data-letter="看" aria-label="Play letter 看">
+            <button class="letter-audio" type="button" data-letter="看" aria-label="Play pronunciation for 看">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -865,9 +893,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="听">
             <div class="letter">听</div>
-            <button class="letter-audio" type="button" data-letter="听" aria-label="Play letter 听">
+            <button class="letter-audio" type="button" data-letter="听" aria-label="Play pronunciation for 听">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -880,9 +908,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="说">
             <div class="letter">说</div>
-            <button class="letter-audio" type="button" data-letter="说" aria-label="Play letter 说">
+            <button class="letter-audio" type="button" data-letter="说" aria-label="Play pronunciation for 说">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -895,9 +923,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="读">
             <div class="letter">读</div>
-            <button class="letter-audio" type="button" data-letter="读" aria-label="Play letter 读">
+            <button class="letter-audio" type="button" data-letter="读" aria-label="Play pronunciation for 读">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -910,9 +938,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="写">
             <div class="letter">写</div>
-            <button class="letter-audio" type="button" data-letter="写" aria-label="Play letter 写">
+            <button class="letter-audio" type="button" data-letter="写" aria-label="Play pronunciation for 写">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -926,12 +954,12 @@
             </button>
           </div>
         </div>
-        <h3 class="letters-script-heading">Level 5 — 组合与主题扩展字 (Phrase-Building & Topic Expansion)</h3>
-        <p class="letters-script-note">Combine these into common everyday words: 学校, 老师, 朋友, 爱书, 爱猫, 爱狗.</p>
+        <h3 class="letters-script-heading">Level 5 组词与主题扩展 (Phrase-Building &amp; Topic Expansion)</h3>
+        <p class="letters-script-note">把这些字组合成常见词语：学校，老师，朋友，爱书，爱猫，爱狗。</p>
         <div class="letters-grid">
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="家">
             <div class="letter">家</div>
-            <button class="letter-audio" type="button" data-letter="家" aria-label="Play letter 家">
+            <button class="letter-audio" type="button" data-letter="家" aria-label="Play pronunciation for 家">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -944,9 +972,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="校">
             <div class="letter">校</div>
-            <button class="letter-audio" type="button" data-letter="校" aria-label="Play letter 校">
+            <button class="letter-audio" type="button" data-letter="校" aria-label="Play pronunciation for 校">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -959,9 +987,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="老">
             <div class="letter">老</div>
-            <button class="letter-audio" type="button" data-letter="老" aria-label="Play letter 老">
+            <button class="letter-audio" type="button" data-letter="老" aria-label="Play pronunciation for 老">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -974,9 +1002,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="师">
             <div class="letter">师</div>
-            <button class="letter-audio" type="button" data-letter="师" aria-label="Play letter 师">
+            <button class="letter-audio" type="button" data-letter="师" aria-label="Play pronunciation for 师">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -989,9 +1017,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="朋">
             <div class="letter">朋</div>
-            <button class="letter-audio" type="button" data-letter="朋" aria-label="Play letter 朋">
+            <button class="letter-audio" type="button" data-letter="朋" aria-label="Play pronunciation for 朋">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1004,9 +1032,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="友">
             <div class="letter">友</div>
-            <button class="letter-audio" type="button" data-letter="友" aria-label="Play letter 友">
+            <button class="letter-audio" type="button" data-letter="友" aria-label="Play pronunciation for 友">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1019,9 +1047,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="爱">
             <div class="letter">爱</div>
-            <button class="letter-audio" type="button" data-letter="爱" aria-label="Play letter 爱">
+            <button class="letter-audio" type="button" data-letter="爱" aria-label="Play pronunciation for 爱">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1034,9 +1062,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="猫">
             <div class="letter">猫</div>
-            <button class="letter-audio" type="button" data-letter="猫" aria-label="Play letter 猫">
+            <button class="letter-audio" type="button" data-letter="猫" aria-label="Play pronunciation for 猫">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1049,9 +1077,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="狗">
             <div class="letter">狗</div>
-            <button class="letter-audio" type="button" data-letter="狗" aria-label="Play letter 狗">
+            <button class="letter-audio" type="button" data-letter="狗" aria-label="Play pronunciation for 狗">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1064,9 +1092,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="车">
             <div class="letter">车</div>
-            <button class="letter-audio" type="button" data-letter="车" aria-label="Play letter 车">
+            <button class="letter-audio" type="button" data-letter="车" aria-label="Play pronunciation for 车">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1079,9 +1107,209 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="书">
             <div class="letter">书</div>
-            <button class="letter-audio" type="button" data-letter="书" aria-label="Play letter 书">
+            <button class="letter-audio" type="button" data-letter="书" aria-label="Play pronunciation for 书">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <h3 class="letters-script-heading">Level 6 部件组合 (Components Inside Full Characters)</h3>
+        <p class="letters-script-note">观察熟悉的部件如何组合成完整汉字：好 = 女 + 子，休 = 亻 + 木，明 = 日 + 月。</p>
+        <div class="letters-grid">
+          <div class="card letter-card" data-letter="好">
+            <div class="letter">好</div>
+            <div class="letter-card-caption">女 + 子</div>
+            <button class="letter-audio" type="button" data-letter="好" aria-label="Play pronunciation for 好">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="休">
+            <div class="letter">休</div>
+            <div class="letter-card-caption">亻 + 木</div>
+            <button class="letter-audio" type="button" data-letter="休" aria-label="Play pronunciation for 休">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="明">
+            <div class="letter">明</div>
+            <div class="letter-card-caption">日 + 月</div>
+            <button class="letter-audio" type="button" data-letter="明" aria-label="Play pronunciation for 明">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="林">
+            <div class="letter">林</div>
+            <div class="letter-card-caption">木 + 木</div>
+            <button class="letter-audio" type="button" data-letter="林" aria-label="Play pronunciation for 林">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="问">
+            <div class="letter">问</div>
+            <div class="letter-card-caption">门 + 口</div>
+            <button class="letter-audio" type="button" data-letter="问" aria-label="Play pronunciation for 问">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="男">
+            <div class="letter">男</div>
+            <div class="letter-card-caption">田 + 力</div>
+            <button class="letter-audio" type="button" data-letter="男" aria-label="Play pronunciation for 男">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <h3 class="letters-script-heading">第 7 级 字到词的阅读 (Character-to-Word Reading)</h3>
+        <p class="letters-script-note">Move from single-character recognition into short, high-frequency word chunks that learners can actually read.</p>
+        <div class="letters-grid">
+          <div class="card letter-card" data-letter="你好">
+            <div class="letter">你好</div>
+            <div class="letter-card-caption">你 + 好</div>
+            <button class="letter-audio" type="button" data-letter="你好" aria-label="Play pronunciation for 你好">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="中文">
+            <div class="letter">中文</div>
+            <div class="letter-card-caption">中 + 文</div>
+            <button class="letter-audio" type="button" data-letter="中文" aria-label="Play pronunciation for 中文">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="学生">
+            <div class="letter">学生</div>
+            <div class="letter-card-caption">学 + 生</div>
+            <button class="letter-audio" type="button" data-letter="学生" aria-label="Play pronunciation for 学生">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="朋友">
+            <div class="letter">朋友</div>
+            <div class="letter-card-caption">朋 + 友</div>
+            <button class="letter-audio" type="button" data-letter="朋友" aria-label="Play pronunciation for 朋友">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="明天">
+            <div class="letter">明天</div>
+            <div class="letter-card-caption">明 + 天</div>
+            <button class="letter-audio" type="button" data-letter="明天" aria-label="Play pronunciation for 明天">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="喝水">
+            <div class="letter">喝水</div>
+            <div class="letter-card-caption">喝 + 水</div>
+            <button class="letter-audio" type="button" data-letter="喝水" aria-label="Play pronunciation for 喝水">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1114,9 +1342,10 @@
     </footer>
 
     <!-- Shared client bundle -->
-    <script src="app.js?v=20260438"></script>
+    <script src="app.js?v=20260440"></script>
   </body>
 </html>
+
 
 
 

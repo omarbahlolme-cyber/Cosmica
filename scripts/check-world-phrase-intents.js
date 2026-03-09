@@ -56,6 +56,7 @@ const run = () => {
     }
     const pack = readJson(packPath);
     const phrases = isObject(pack?.phrases) ? pack.phrases : {};
+    const worldSourcePhrases = isObject(pack?.worldSource?.phrases) ? pack.worldSource.phrases : {};
 
     const phraseEntries = [];
     ["Introductions", "Questions"].forEach((sectionName) => {
@@ -80,6 +81,24 @@ const run = () => {
           `${worldKey}: legacy source "${legacySource}" still present (section="${hit.section}", phrase="${hit.worldPhrase}").`
         );
       }
+
+      ["Introductions", "Questions"].forEach((sectionName) => {
+        const section = isObject(worldSourcePhrases?.[sectionName]) ? worldSourcePhrases[sectionName] : {};
+        Object.entries(section).forEach(([sourceKey, worldPhrase]) => {
+          const normalizedSourceKey = String(sourceKey || "").trim().toLowerCase();
+          const normalizedWorldPhrase = String(worldPhrase || "").trim().toLowerCase();
+          if (
+            normalizedSourceKey === legacySource ||
+            normalizedWorldPhrase === legacySource ||
+            /\benglish\b/.test(normalizedSourceKey) ||
+            /\benglish\b/.test(normalizedWorldPhrase)
+          ) {
+            fail(
+              `${worldKey}: legacy worldSource phrase "${sourceKey}" -> "${worldPhrase}" still present in ${sectionName}.`
+            );
+          }
+        });
+      });
     });
 
     requiredIntents.forEach((intentKey) => {

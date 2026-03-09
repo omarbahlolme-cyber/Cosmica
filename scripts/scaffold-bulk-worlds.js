@@ -26,11 +26,11 @@ const iconSvg = `
 const worldConfigs = [
   {
     key: 'portuguese',
-    displayName: 'Portuguese',
-    nativeName: 'Português',
+    displayName: 'Brazilian Portuguese',
+    nativeName: 'Português do Brasil',
     htmlLang: 'pt',
-    ttsLanguageCode: 'pt-PT',
-    ttsVoice: 'pt-PT-Wavenet-A',
+    ttsLanguageCode: 'pt-BR',
+    ttsVoice: 'pt-BR-Wavenet-A',
     phraseIntents: {
       englishLanguageLabel: 'portuguese',
       forms: {
@@ -40,8 +40,8 @@ const worldConfigs = [
         ask_speak_world_language: 'você fala português?'
       }
     },
-    lettersTitle: 'Alfabeto Português (A-Z)',
-    lettersDescription: 'Tap a letter to hear clear Portuguese pronunciation. Additional forms include &Aacute;, &Acirc;, &Atilde;, &Agrave;, &Ccedil;, &Eacute;, &Ecirc;, &Iacute;, &Oacute;, &Ocirc;, &Otilde;, &Uacute;.',
+    lettersTitle: 'Alfabeto do português brasileiro',
+    lettersDescription: 'Hear each letter clearly. This page also covers the accented letters used in Brazilian Portuguese: &Aacute;, &Acirc;, &Atilde;, &Agrave;, &Ccedil;, &Eacute;, &Ecirc;, &Iacute;, &Oacute;, &Ocirc;, &Otilde;, &Uacute;.',
     letters: [
       ...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''),
       'Á','Â','Ã','À','Ç','É','Ê','Í','Ó','Ô','Õ','Ú'
@@ -63,8 +63,8 @@ const worldConfigs = [
         ask_speak_world_language: 'spreek je Nederlands?'
       }
     },
-    lettersTitle: 'Nederlands Alfabet (A-Z)',
-    lettersDescription: 'Tap a letter to hear clear Dutch pronunciation. Additional forms include &Eacute;, &Euml;, &Iuml;, &Ouml;, &Uuml;.',
+    lettersTitle: 'Nederlands alfabet',
+    lettersDescription: 'Hear each letter clearly. Dutch mainly uses the base alphabet, with forms like &eacute;, &euml;, &iuml;, &ouml;, and &uuml; appearing in borrowed words and pronunciation cues.',
     letters: [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''), 'É','Ë','Ï','Ö','Ü']
   },
   {
@@ -83,8 +83,8 @@ const worldConfigs = [
         ask_speak_world_language: 'talar du svenska?'
       }
     },
-    lettersTitle: 'Svenska alfabetet (A-Z)',
-    lettersDescription: 'Tap a letter to hear clear Swedish pronunciation. Additional Swedish letters: &Aring;, &Auml;, &Ouml;.',
+    lettersTitle: 'Svenska alfabetet',
+    lettersDescription: 'Hear each letter clearly. This page also includes the Swedish letters &Aring;, &Auml;, and &Ouml;.',
     letters: [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''), 'Å','Ä','Ö']
   },
   {

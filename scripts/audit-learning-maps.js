@@ -69,6 +69,137 @@ const GRAMMAR_SECTION_ORDER = [
   "Discourse & Flow",
 ];
 
+const LETTERS_PEDAGOGY_CHECKS = Object.freeze({
+  "letters-arabic.html": Object.freeze([
+    {
+      pattern: /Joining Shapes/i,
+      message: "Arabic letters page is missing explicit joining-form instruction.",
+    },
+    {
+      pattern: /<div class="letter">بـ<\/div>/u,
+      message: "Arabic letters page is missing initial-form shape cards.",
+    },
+    {
+      pattern: /stops the join/i,
+      message: "Arabic letters page is missing non-joining-letter guidance.",
+    },
+    {
+      pattern: /Read in connected word chunks/i,
+      message: "Arabic letters page is missing connected-word decoding guidance.",
+    },
+    {
+      pattern: /data-letter="باب"/u,
+      message: "Arabic letters page is missing short word-decoding cards.",
+    },
+  ]),
+  "letters-chinese.html": Object.freeze([
+    {
+      pattern: /<div class="eyebrow">Characters<\/div>/i,
+      message: "Chinese letters page still uses a generic letters eyebrow instead of characters.",
+    },
+    {
+      pattern: /<div class="letter">休<\/div>/u,
+      message: "Chinese letters page is missing component-aware full-character cards.",
+    },
+    {
+      pattern: /<div class="letter-card-caption">亻 \+ 木<\/div>/u,
+      message: "Chinese letters page is missing component captions for built characters.",
+    },
+    {
+      pattern: /top to bottom, left to right, and outside before inside/i,
+      message: "Chinese letters page is missing stroke-order guidance.",
+    },
+    {
+      pattern: /data-letter="你好"/u,
+      message: "Chinese letters page is missing character-to-word reading cards.",
+    },
+  ]),
+  "letters-japanese.html": Object.freeze([
+    {
+      pattern: /data-letter="が"/u,
+      message: "Japanese letters page is missing hiragana voiced kana.",
+    },
+    {
+      pattern: /data-letter="きゃ"/u,
+      message: "Japanese letters page is missing hiragana contracted sounds.",
+    },
+    {
+      pattern: /data-letter="ガ"/u,
+      message: "Japanese letters page is missing katakana voiced kana.",
+    },
+    {
+      pattern: /data-letter="ッ"/u,
+      message: "Japanese letters page is missing the katakana small-tsu cue.",
+    },
+    {
+      pattern: /Read small ya, yu, yo and small tsu as one beat/i,
+      message: "Japanese letters page is missing rhythm guidance for small kana.",
+    },
+    {
+      pattern: /data-letter="がっこう"/u,
+      message: "Japanese letters page is missing hiragana reading-flow examples.",
+    },
+    {
+      pattern: /data-letter="コーヒー"/u,
+      message: "Japanese letters page is missing katakana reading-flow examples.",
+    },
+  ]),
+  "letters-korean.html": Object.freeze([
+    {
+      pattern: /Level 3 .*Syllable Blocks/i,
+      message: "Korean letters page is missing a syllable-block section.",
+    },
+    {
+      pattern: /data-letter="가"/u,
+      message: "Korean letters page is missing syllable-block reading cards.",
+    },
+    {
+      pattern: /<div class="letter-card-caption">ㄱ \+ ㅏ<\/div>/u,
+      message: "Korean letters page is missing syllable composition captions.",
+    },
+    {
+      pattern: /Watch for final consonants at the bottom/i,
+      message: "Korean letters page is missing batchim guidance.",
+    },
+    {
+      pattern: /Final Consonants/i,
+      message: "Korean letters page is missing a final-consonant section.",
+    },
+    {
+      pattern: /data-letter="학교"/u,
+      message: "Korean letters page is missing word-level reading-ladder cards.",
+    },
+  ]),
+  "letters-hindi.html": Object.freeze([
+    {
+      pattern: /Akshara Building/i,
+      message: "Hindi letters page is missing akshara-building instruction.",
+    },
+    {
+      pattern: /data-letter="का"/u,
+      message: "Hindi letters page is missing vowel-plus-consonant akshara cards.",
+    },
+    {
+      pattern: /data-letter="क्"/u,
+      message: "Hindi letters page is missing the halant form card.",
+    },
+    {
+      pattern: /Matras can move, but the sound stays with one akshara/i,
+      message: "Hindi letters page is missing matra-placement guidance.",
+    },
+    {
+      pattern: /data-letter="दिन"/u,
+      message: "Hindi letters page is missing word-level reading-ladder cards.",
+    },
+  ]),
+});
+
+const ALLOWED_LETTER_DUPLICATES = Object.freeze({
+  "letters-arabic.html": new Set(["د", "ذ", "ر", "ز", "و"]),
+  "letters-chinese.html": new Set(["好"]),
+  "letters-hindi.html": new Set(["क"]),
+});
+
 const LEGACY_ENGLISH_SOURCES = new Set([
   "i am learning english",
   "i speak english",
@@ -210,35 +341,49 @@ const checkMapPages = () => {
     if (!/id=["']letters["']/i.test(content)) {
       pushFinding("high", fileName, "Missing #letters section anchor.");
     }
-    const letters = [...content.matchAll(/<div class=["']letter["']>([^<]+)<\/div>/gi)].map((m) =>
-      String(m[1] || "").trim()
-    );
+    const letterCards = [
+      ...content.matchAll(
+        /<div\b([^>]*)class=["'][^"']*\bletter-card\b[^"']*["']([^>]*)>\s*<div class=["']letter["']>([^<]+)<\/div>/gi
+      ),
+    ].map((match) => {
+      const attrs = `${String(match[1] || "")} ${String(match[2] || "")}`;
+      const visibleText = String(match[3] || "").trim();
+      const dataLetterMatch = attrs.match(/\bdata-letter=["']([^"']+)["']/i);
+      return {
+        visibleText,
+        speakText: String(dataLetterMatch?.[1] || visibleText).trim(),
+        speechDisabled: /\bdata-speech-disabled=["']true["']/i.test(attrs),
+      };
+    });
+    const letters = letterCards.map((card) => card.visibleText);
     const buttonLetters = [
       ...content.matchAll(/class=["'][^"']*\bletter-audio\b[^"']*["'][^>]*\bdata-letter=["']([^"']+)["']/gi),
     ].map((m) => String(m[1] || "").trim());
+    const audioEnabledCards = letterCards.filter((card) => !card.speechDisabled);
     if (!letters.length) {
       pushFinding("high", fileName, "No letter cards found.");
     }
-    if (letters.length !== buttonLetters.length) {
+    if (audioEnabledCards.length !== buttonLetters.length) {
       pushFinding(
         "high",
         fileName,
-        `Letter/button count mismatch: letters=${letters.length}, buttons=${buttonLetters.length}.`
+        `Letter/button count mismatch: audioCards=${audioEnabledCards.length}, buttons=${buttonLetters.length}.`
       );
     }
-    const pairCount = Math.min(letters.length, buttonLetters.length);
+    const pairCount = Math.min(audioEnabledCards.length, buttonLetters.length);
     for (let i = 0; i < pairCount; i += 1) {
-      if (normalize(letters[i]) !== normalize(buttonLetters[i])) {
+      if (normalize(audioEnabledCards[i].speakText) !== normalize(buttonLetters[i])) {
         pushFinding(
           "high",
           fileName,
-          `Letter mismatch at index ${i}: card="${letters[i]}" button="${buttonLetters[i]}".`
+          `Letter mismatch at index ${i}: card="${audioEnabledCards[i].speakText}" button="${buttonLetters[i]}".`
         );
       }
     }
+    const allowedDuplicates = ALLOWED_LETTER_DUPLICATES[fileName] || new Set();
     const duplicates = letters.filter(
       (value, idx) => letters.findIndex((other) => normalize(other) === normalize(value)) !== idx
-    );
+    ).filter((value) => !allowedDuplicates.has(String(value || "").trim()));
     if (duplicates.length) {
       pushFinding(
         "medium",
@@ -246,6 +391,13 @@ const checkMapPages = () => {
         `Duplicate letters detected: ${[...new Set(duplicates)].join(", ")}.`
       );
     }
+
+    const pedagogyChecks = LETTERS_PEDAGOGY_CHECKS[fileName] || [];
+    pedagogyChecks.forEach(({ pattern, message }) => {
+      if (!pattern.test(content)) {
+        pushFinding("high", fileName, message);
+      }
+    });
   });
 
   const checkMapShell = (fileName, content, pageClass, sectionId, controlsId) => {

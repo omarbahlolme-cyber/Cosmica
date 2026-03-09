@@ -27,8 +27,8 @@
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="Learn Japanese Characters | Cosmica" />
     <meta name="twitter:description" content="Practice Hiragana and Katakana with audio pronunciation and structured review to build a strong Japanese reading foundation." />
-    <link rel="preload" as="style" href="style.css?v=20260438" />
-    <link rel="stylesheet" href="style.css?v=20260438" />
+    <link rel="preload" as="style" href="style.css?v=20260440" />
+    <link rel="stylesheet" href="style.css?v=20260440" />
     <link rel="stylesheet" href="maps/style-maps.css?v=20260417" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -84,28 +84,57 @@
               <span class="account-trigger-label">Guest</span>
               <span class="account-trigger-meta">Sign in</span>
             </span>
-            <span class="account-trigger-caret" aria-hidden="true">▾</span>
+            <span class="account-trigger-caret" aria-hidden="true">&#9662;</span>
           </button>
         </div>
       </div>
     </header>
 
     <!-- Page-specific main content -->
-    <main>
-      <h1 class="visually-hidden">Learn Japanese Characters</h1>
-      <!-- Content section -->
+                        <main>
+      <h1 class="visually-hidden">Learn Japanese Kana</h1>
       <section class="section letters-grid-section reveal" id="letters">
         <div class="section-title">
           <div class="eyebrow">Kana</div>
           <h2>日本語かな</h2>
-          <p>This is a Foundation-level Japanese map: master Hiragana first, then Katakana. (Kanji progression belongs to later levels.)</p>
+          <p>This foundation map starts with the core hiragana and katakana charts, then adds voiced sounds, contracted sounds, and the small っ / ッ cue used in real reading.</p>
+        </div>
+        <div class="letters-study-grid">
+          <article class="letters-study-panel">
+            <div class="letters-study-kicker">Write</div>
+            <h3 class="letters-study-title">Trace vowels and rows before speed</h3>
+            <ul class="letters-study-points">
+              <li>Write あいうえお first, then rebuild each consonant row until the pattern feels automatic.</li>
+              <li>Keep the kana shape smooth and balanced before trying to write quickly.</li>
+              <li>Read each row aloud as a rhythm unit instead of isolated symbols with long pauses.</li>
+            </ul>
+          </article>
+          <article class="letters-study-panel">
+            <div class="letters-study-kicker">Rhythm</div>
+            <h3 class="letters-study-title">Read small ya, yu, yo and small tsu as one beat</h3>
+            <ul class="letters-study-points">
+              <li>A small ゃ/ゅ/ょ joins the kana before it, so きゃ is one sound chunk, not two separate beats.</li>
+              <li>A small っ or ッ marks a doubled consonant and creates a short stop before the next kana.</li>
+              <li>Practice chunking first, then add pitch and speed after the rhythm is stable.</li>
+            </ul>
+          </article>
+          <article class="letters-study-panel">
+            <div class="letters-study-kicker">Decode</div>
+            <h3 class="letters-study-title">Move quickly from charts to real reading chunks</h3>
+            <ul class="letters-study-points">
+              <li>Use the chart only as a launchpad, then practice words with yoon, small tsu, and long vowels.</li>
+              <li>Read hiragana in whole rhythm groups like きょう and がっこう.</li>
+              <li>Read katakana in loanword chunks like コーヒー and チケット.</li>
+            </ul>
+          </article>
         </div>
         <div class="letters-script-group letters-script-group-hiragana">
-          <h3 class="letters-script-heading">ひらがな (Hiragana)</h3>
-          <div class="letters-grid">
-          <div class="card letter-card">
+        <h3 class="letters-script-heading">ひらがな 基本 (Core Kana)</h3>
+        <p class="letters-script-note">Start with the five vowels, then read each consonant row aloud until the chart feels automatic.</p>
+        <div class="letters-grid">
+          <div class="card letter-card" data-letter="あ">
             <div class="letter">あ</div>
-            <button class="letter-audio" type="button" data-letter="あ" aria-label="Play letter あ">
+            <button class="letter-audio" type="button" data-letter="あ" aria-label="Play pronunciation for あ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -118,9 +147,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="い">
             <div class="letter">い</div>
-            <button class="letter-audio" type="button" data-letter="い" aria-label="Play letter い">
+            <button class="letter-audio" type="button" data-letter="い" aria-label="Play pronunciation for い">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -133,9 +162,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="う">
             <div class="letter">う</div>
-            <button class="letter-audio" type="button" data-letter="う" aria-label="Play letter う">
+            <button class="letter-audio" type="button" data-letter="う" aria-label="Play pronunciation for う">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -148,9 +177,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="え">
             <div class="letter">え</div>
-            <button class="letter-audio" type="button" data-letter="え" aria-label="Play letter え">
+            <button class="letter-audio" type="button" data-letter="え" aria-label="Play pronunciation for え">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -163,9 +192,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="お">
             <div class="letter">お</div>
-            <button class="letter-audio" type="button" data-letter="お" aria-label="Play letter お">
+            <button class="letter-audio" type="button" data-letter="お" aria-label="Play pronunciation for お">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -178,9 +207,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="か">
             <div class="letter">か</div>
-            <button class="letter-audio" type="button" data-letter="か" aria-label="Play letter か">
+            <button class="letter-audio" type="button" data-letter="か" aria-label="Play pronunciation for か">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -193,9 +222,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="き">
             <div class="letter">き</div>
-            <button class="letter-audio" type="button" data-letter="き" aria-label="Play letter き">
+            <button class="letter-audio" type="button" data-letter="き" aria-label="Play pronunciation for き">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -208,9 +237,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="く">
             <div class="letter">く</div>
-            <button class="letter-audio" type="button" data-letter="く" aria-label="Play letter く">
+            <button class="letter-audio" type="button" data-letter="く" aria-label="Play pronunciation for く">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -223,9 +252,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="け">
             <div class="letter">け</div>
-            <button class="letter-audio" type="button" data-letter="け" aria-label="Play letter け">
+            <button class="letter-audio" type="button" data-letter="け" aria-label="Play pronunciation for け">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -238,9 +267,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="こ">
             <div class="letter">こ</div>
-            <button class="letter-audio" type="button" data-letter="こ" aria-label="Play letter こ">
+            <button class="letter-audio" type="button" data-letter="こ" aria-label="Play pronunciation for こ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -253,9 +282,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="さ">
             <div class="letter">さ</div>
-            <button class="letter-audio" type="button" data-letter="さ" aria-label="Play letter さ">
+            <button class="letter-audio" type="button" data-letter="さ" aria-label="Play pronunciation for さ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -268,9 +297,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="し">
             <div class="letter">し</div>
-            <button class="letter-audio" type="button" data-letter="し" aria-label="Play letter し">
+            <button class="letter-audio" type="button" data-letter="し" aria-label="Play pronunciation for し">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -283,9 +312,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="す">
             <div class="letter">す</div>
-            <button class="letter-audio" type="button" data-letter="す" aria-label="Play letter す">
+            <button class="letter-audio" type="button" data-letter="す" aria-label="Play pronunciation for す">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -298,9 +327,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="せ">
             <div class="letter">せ</div>
-            <button class="letter-audio" type="button" data-letter="せ" aria-label="Play letter せ">
+            <button class="letter-audio" type="button" data-letter="せ" aria-label="Play pronunciation for せ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -313,9 +342,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="そ">
             <div class="letter">そ</div>
-            <button class="letter-audio" type="button" data-letter="そ" aria-label="Play letter そ">
+            <button class="letter-audio" type="button" data-letter="そ" aria-label="Play pronunciation for そ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -328,9 +357,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="た">
             <div class="letter">た</div>
-            <button class="letter-audio" type="button" data-letter="た" aria-label="Play letter た">
+            <button class="letter-audio" type="button" data-letter="た" aria-label="Play pronunciation for た">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -343,9 +372,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ち">
             <div class="letter">ち</div>
-            <button class="letter-audio" type="button" data-letter="ち" aria-label="Play letter ち">
+            <button class="letter-audio" type="button" data-letter="ち" aria-label="Play pronunciation for ち">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -358,9 +387,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="つ">
             <div class="letter">つ</div>
-            <button class="letter-audio" type="button" data-letter="つ" aria-label="Play letter つ">
+            <button class="letter-audio" type="button" data-letter="つ" aria-label="Play pronunciation for つ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -373,9 +402,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="て">
             <div class="letter">て</div>
-            <button class="letter-audio" type="button" data-letter="て" aria-label="Play letter て">
+            <button class="letter-audio" type="button" data-letter="て" aria-label="Play pronunciation for て">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -388,9 +417,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="と">
             <div class="letter">と</div>
-            <button class="letter-audio" type="button" data-letter="と" aria-label="Play letter と">
+            <button class="letter-audio" type="button" data-letter="と" aria-label="Play pronunciation for と">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -403,9 +432,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="な">
             <div class="letter">な</div>
-            <button class="letter-audio" type="button" data-letter="な" aria-label="Play letter な">
+            <button class="letter-audio" type="button" data-letter="な" aria-label="Play pronunciation for な">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -418,9 +447,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="に">
             <div class="letter">に</div>
-            <button class="letter-audio" type="button" data-letter="に" aria-label="Play letter に">
+            <button class="letter-audio" type="button" data-letter="に" aria-label="Play pronunciation for に">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -433,9 +462,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ぬ">
             <div class="letter">ぬ</div>
-            <button class="letter-audio" type="button" data-letter="ぬ" aria-label="Play letter ぬ">
+            <button class="letter-audio" type="button" data-letter="ぬ" aria-label="Play pronunciation for ぬ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -448,9 +477,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ね">
             <div class="letter">ね</div>
-            <button class="letter-audio" type="button" data-letter="ね" aria-label="Play letter ね">
+            <button class="letter-audio" type="button" data-letter="ね" aria-label="Play pronunciation for ね">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -463,9 +492,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="の">
             <div class="letter">の</div>
-            <button class="letter-audio" type="button" data-letter="の" aria-label="Play letter の">
+            <button class="letter-audio" type="button" data-letter="の" aria-label="Play pronunciation for の">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -478,9 +507,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="は">
             <div class="letter">は</div>
-            <button class="letter-audio" type="button" data-letter="は" aria-label="Play letter は">
+            <button class="letter-audio" type="button" data-letter="は" aria-label="Play pronunciation for は">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -493,9 +522,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ひ">
             <div class="letter">ひ</div>
-            <button class="letter-audio" type="button" data-letter="ひ" aria-label="Play letter ひ">
+            <button class="letter-audio" type="button" data-letter="ひ" aria-label="Play pronunciation for ひ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -508,9 +537,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ふ">
             <div class="letter">ふ</div>
-            <button class="letter-audio" type="button" data-letter="ふ" aria-label="Play letter ふ">
+            <button class="letter-audio" type="button" data-letter="ふ" aria-label="Play pronunciation for ふ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -523,9 +552,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="へ">
             <div class="letter">へ</div>
-            <button class="letter-audio" type="button" data-letter="へ" aria-label="Play letter へ">
+            <button class="letter-audio" type="button" data-letter="へ" aria-label="Play pronunciation for へ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -538,9 +567,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ほ">
             <div class="letter">ほ</div>
-            <button class="letter-audio" type="button" data-letter="ほ" aria-label="Play letter ほ">
+            <button class="letter-audio" type="button" data-letter="ほ" aria-label="Play pronunciation for ほ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -553,9 +582,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ま">
             <div class="letter">ま</div>
-            <button class="letter-audio" type="button" data-letter="ま" aria-label="Play letter ま">
+            <button class="letter-audio" type="button" data-letter="ま" aria-label="Play pronunciation for ま">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -568,9 +597,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="み">
             <div class="letter">み</div>
-            <button class="letter-audio" type="button" data-letter="み" aria-label="Play letter み">
+            <button class="letter-audio" type="button" data-letter="み" aria-label="Play pronunciation for み">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -583,9 +612,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="む">
             <div class="letter">む</div>
-            <button class="letter-audio" type="button" data-letter="む" aria-label="Play letter む">
+            <button class="letter-audio" type="button" data-letter="む" aria-label="Play pronunciation for む">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -598,9 +627,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="め">
             <div class="letter">め</div>
-            <button class="letter-audio" type="button" data-letter="め" aria-label="Play letter め">
+            <button class="letter-audio" type="button" data-letter="め" aria-label="Play pronunciation for め">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -613,9 +642,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="も">
             <div class="letter">も</div>
-            <button class="letter-audio" type="button" data-letter="も" aria-label="Play letter も">
+            <button class="letter-audio" type="button" data-letter="も" aria-label="Play pronunciation for も">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -628,9 +657,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="や">
             <div class="letter">や</div>
-            <button class="letter-audio" type="button" data-letter="や" aria-label="Play letter や">
+            <button class="letter-audio" type="button" data-letter="や" aria-label="Play pronunciation for や">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -643,9 +672,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ゆ">
             <div class="letter">ゆ</div>
-            <button class="letter-audio" type="button" data-letter="ゆ" aria-label="Play letter ゆ">
+            <button class="letter-audio" type="button" data-letter="ゆ" aria-label="Play pronunciation for ゆ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -658,9 +687,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="よ">
             <div class="letter">よ</div>
-            <button class="letter-audio" type="button" data-letter="よ" aria-label="Play letter よ">
+            <button class="letter-audio" type="button" data-letter="よ" aria-label="Play pronunciation for よ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -673,9 +702,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ら">
             <div class="letter">ら</div>
-            <button class="letter-audio" type="button" data-letter="ら" aria-label="Play letter ら">
+            <button class="letter-audio" type="button" data-letter="ら" aria-label="Play pronunciation for ら">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -688,9 +717,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="り">
             <div class="letter">り</div>
-            <button class="letter-audio" type="button" data-letter="り" aria-label="Play letter り">
+            <button class="letter-audio" type="button" data-letter="り" aria-label="Play pronunciation for り">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -703,9 +732,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="る">
             <div class="letter">る</div>
-            <button class="letter-audio" type="button" data-letter="る" aria-label="Play letter る">
+            <button class="letter-audio" type="button" data-letter="る" aria-label="Play pronunciation for る">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -718,9 +747,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="れ">
             <div class="letter">れ</div>
-            <button class="letter-audio" type="button" data-letter="れ" aria-label="Play letter れ">
+            <button class="letter-audio" type="button" data-letter="れ" aria-label="Play pronunciation for れ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -733,9 +762,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ろ">
             <div class="letter">ろ</div>
-            <button class="letter-audio" type="button" data-letter="ろ" aria-label="Play letter ろ">
+            <button class="letter-audio" type="button" data-letter="ろ" aria-label="Play pronunciation for ろ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -748,9 +777,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="わ">
             <div class="letter">わ</div>
-            <button class="letter-audio" type="button" data-letter="わ" aria-label="Play letter わ">
+            <button class="letter-audio" type="button" data-letter="わ" aria-label="Play pronunciation for わ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -763,9 +792,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="を">
             <div class="letter">を</div>
-            <button class="letter-audio" type="button" data-letter="を" aria-label="Play letter を">
+            <button class="letter-audio" type="button" data-letter="を" aria-label="Play pronunciation for を">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -778,9 +807,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ん">
             <div class="letter">ん</div>
-            <button class="letter-audio" type="button" data-letter="ん" aria-label="Play letter ん">
+            <button class="letter-audio" type="button" data-letter="ん" aria-label="Play pronunciation for ん">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -792,16 +821,639 @@
                 />
               </svg>
             </button>
-          </div>
           </div>
         </div>
-
+        <h3 class="letters-script-heading">ひらがな 濁音・半濁音 (Voiced Kana)</h3>
+        <p class="letters-script-note">Add dakuten and handakuten so you can hear the difference between か/が, さ/ざ, and は/ぱ style pairs.</p>
+        <div class="letters-grid">
+          <div class="card letter-card" data-letter="が">
+            <div class="letter">が</div>
+            <button class="letter-audio" type="button" data-letter="が" aria-label="Play pronunciation for が">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ぎ">
+            <div class="letter">ぎ</div>
+            <button class="letter-audio" type="button" data-letter="ぎ" aria-label="Play pronunciation for ぎ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ぐ">
+            <div class="letter">ぐ</div>
+            <button class="letter-audio" type="button" data-letter="ぐ" aria-label="Play pronunciation for ぐ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="げ">
+            <div class="letter">げ</div>
+            <button class="letter-audio" type="button" data-letter="げ" aria-label="Play pronunciation for げ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ご">
+            <div class="letter">ご</div>
+            <button class="letter-audio" type="button" data-letter="ご" aria-label="Play pronunciation for ご">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ざ">
+            <div class="letter">ざ</div>
+            <button class="letter-audio" type="button" data-letter="ざ" aria-label="Play pronunciation for ざ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="じ">
+            <div class="letter">じ</div>
+            <button class="letter-audio" type="button" data-letter="じ" aria-label="Play pronunciation for じ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ず">
+            <div class="letter">ず</div>
+            <button class="letter-audio" type="button" data-letter="ず" aria-label="Play pronunciation for ず">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ぜ">
+            <div class="letter">ぜ</div>
+            <button class="letter-audio" type="button" data-letter="ぜ" aria-label="Play pronunciation for ぜ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ぞ">
+            <div class="letter">ぞ</div>
+            <button class="letter-audio" type="button" data-letter="ぞ" aria-label="Play pronunciation for ぞ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="だ">
+            <div class="letter">だ</div>
+            <button class="letter-audio" type="button" data-letter="だ" aria-label="Play pronunciation for だ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ぢ">
+            <div class="letter">ぢ</div>
+            <button class="letter-audio" type="button" data-letter="ぢ" aria-label="Play pronunciation for ぢ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="づ">
+            <div class="letter">づ</div>
+            <button class="letter-audio" type="button" data-letter="づ" aria-label="Play pronunciation for づ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="で">
+            <div class="letter">で</div>
+            <button class="letter-audio" type="button" data-letter="で" aria-label="Play pronunciation for で">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ど">
+            <div class="letter">ど</div>
+            <button class="letter-audio" type="button" data-letter="ど" aria-label="Play pronunciation for ど">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ば">
+            <div class="letter">ば</div>
+            <button class="letter-audio" type="button" data-letter="ば" aria-label="Play pronunciation for ば">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="び">
+            <div class="letter">び</div>
+            <button class="letter-audio" type="button" data-letter="び" aria-label="Play pronunciation for び">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ぶ">
+            <div class="letter">ぶ</div>
+            <button class="letter-audio" type="button" data-letter="ぶ" aria-label="Play pronunciation for ぶ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="べ">
+            <div class="letter">べ</div>
+            <button class="letter-audio" type="button" data-letter="べ" aria-label="Play pronunciation for べ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ぼ">
+            <div class="letter">ぼ</div>
+            <button class="letter-audio" type="button" data-letter="ぼ" aria-label="Play pronunciation for ぼ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ぱ">
+            <div class="letter">ぱ</div>
+            <button class="letter-audio" type="button" data-letter="ぱ" aria-label="Play pronunciation for ぱ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ぴ">
+            <div class="letter">ぴ</div>
+            <button class="letter-audio" type="button" data-letter="ぴ" aria-label="Play pronunciation for ぴ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ぷ">
+            <div class="letter">ぷ</div>
+            <button class="letter-audio" type="button" data-letter="ぷ" aria-label="Play pronunciation for ぷ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ぺ">
+            <div class="letter">ぺ</div>
+            <button class="letter-audio" type="button" data-letter="ぺ" aria-label="Play pronunciation for ぺ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ぽ">
+            <div class="letter">ぽ</div>
+            <button class="letter-audio" type="button" data-letter="ぽ" aria-label="Play pronunciation for ぽ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <h3 class="letters-script-heading">ひらがな 拗音・促音 (Contracted Sounds)</h3>
+        <p class="letters-script-note">Read these as one beat: きゃ, しゅ, and ちょ blend with small ゃ/ゅ/ょ, while っ signals a doubled consonant.</p>
+        <div class="letters-grid">
+          <div class="card letter-card" data-letter="きゃ">
+            <div class="letter">きゃ</div>
+            <button class="letter-audio" type="button" data-letter="きゃ" aria-label="Play pronunciation for きゃ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="きゅ">
+            <div class="letter">きゅ</div>
+            <button class="letter-audio" type="button" data-letter="きゅ" aria-label="Play pronunciation for きゅ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="きょ">
+            <div class="letter">きょ</div>
+            <button class="letter-audio" type="button" data-letter="きょ" aria-label="Play pronunciation for きょ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="しゃ">
+            <div class="letter">しゃ</div>
+            <button class="letter-audio" type="button" data-letter="しゃ" aria-label="Play pronunciation for しゃ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="しゅ">
+            <div class="letter">しゅ</div>
+            <button class="letter-audio" type="button" data-letter="しゅ" aria-label="Play pronunciation for しゅ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="しょ">
+            <div class="letter">しょ</div>
+            <button class="letter-audio" type="button" data-letter="しょ" aria-label="Play pronunciation for しょ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ちゃ">
+            <div class="letter">ちゃ</div>
+            <button class="letter-audio" type="button" data-letter="ちゃ" aria-label="Play pronunciation for ちゃ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ちゅ">
+            <div class="letter">ちゅ</div>
+            <button class="letter-audio" type="button" data-letter="ちゅ" aria-label="Play pronunciation for ちゅ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ちょ">
+            <div class="letter">ちょ</div>
+            <button class="letter-audio" type="button" data-letter="ちょ" aria-label="Play pronunciation for ちょ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="にゃ">
+            <div class="letter">にゃ</div>
+            <button class="letter-audio" type="button" data-letter="にゃ" aria-label="Play pronunciation for にゃ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="にゅ">
+            <div class="letter">にゅ</div>
+            <button class="letter-audio" type="button" data-letter="にゅ" aria-label="Play pronunciation for にゅ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="にょ">
+            <div class="letter">にょ</div>
+            <button class="letter-audio" type="button" data-letter="にょ" aria-label="Play pronunciation for にょ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="りゃ">
+            <div class="letter">りゃ</div>
+            <button class="letter-audio" type="button" data-letter="りゃ" aria-label="Play pronunciation for りゃ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="りゅ">
+            <div class="letter">りゅ</div>
+            <button class="letter-audio" type="button" data-letter="りゅ" aria-label="Play pronunciation for りゅ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="りょ">
+            <div class="letter">りょ</div>
+            <button class="letter-audio" type="button" data-letter="りょ" aria-label="Play pronunciation for りょ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="っ">
+            <div class="letter">っ</div>
+            <button class="letter-audio" type="button" data-letter="っ" aria-label="Play pronunciation for っ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+        </div>
         <div class="letters-script-group letters-script-group-katakana">
-          <h3 class="letters-script-heading">カタカナ (Katakana)</h3>
-          <div class="letters-grid">
-          <div class="card letter-card">
+        <h3 class="letters-script-heading">カタカナ 基本 (Core Kana)</h3>
+        <p class="letters-script-note">Use the same row logic again in katakana so names and loanwords become readable faster.</p>
+        <div class="letters-grid">
+          <div class="card letter-card" data-letter="ア">
             <div class="letter">ア</div>
-            <button class="letter-audio" type="button" data-letter="ア" aria-label="Play letter ア">
+            <button class="letter-audio" type="button" data-letter="ア" aria-label="Play pronunciation for ア">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -814,9 +1466,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="イ">
             <div class="letter">イ</div>
-            <button class="letter-audio" type="button" data-letter="イ" aria-label="Play letter イ">
+            <button class="letter-audio" type="button" data-letter="イ" aria-label="Play pronunciation for イ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -829,9 +1481,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ウ">
             <div class="letter">ウ</div>
-            <button class="letter-audio" type="button" data-letter="ウ" aria-label="Play letter ウ">
+            <button class="letter-audio" type="button" data-letter="ウ" aria-label="Play pronunciation for ウ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -844,9 +1496,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="エ">
             <div class="letter">エ</div>
-            <button class="letter-audio" type="button" data-letter="エ" aria-label="Play letter エ">
+            <button class="letter-audio" type="button" data-letter="エ" aria-label="Play pronunciation for エ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -859,9 +1511,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="オ">
             <div class="letter">オ</div>
-            <button class="letter-audio" type="button" data-letter="オ" aria-label="Play letter オ">
+            <button class="letter-audio" type="button" data-letter="オ" aria-label="Play pronunciation for オ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -874,9 +1526,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="カ">
             <div class="letter">カ</div>
-            <button class="letter-audio" type="button" data-letter="カ" aria-label="Play letter カ">
+            <button class="letter-audio" type="button" data-letter="カ" aria-label="Play pronunciation for カ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -889,9 +1541,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="キ">
             <div class="letter">キ</div>
-            <button class="letter-audio" type="button" data-letter="キ" aria-label="Play letter キ">
+            <button class="letter-audio" type="button" data-letter="キ" aria-label="Play pronunciation for キ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -904,9 +1556,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ク">
             <div class="letter">ク</div>
-            <button class="letter-audio" type="button" data-letter="ク" aria-label="Play letter ク">
+            <button class="letter-audio" type="button" data-letter="ク" aria-label="Play pronunciation for ク">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -919,9 +1571,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ケ">
             <div class="letter">ケ</div>
-            <button class="letter-audio" type="button" data-letter="ケ" aria-label="Play letter ケ">
+            <button class="letter-audio" type="button" data-letter="ケ" aria-label="Play pronunciation for ケ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -934,9 +1586,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="コ">
             <div class="letter">コ</div>
-            <button class="letter-audio" type="button" data-letter="コ" aria-label="Play letter コ">
+            <button class="letter-audio" type="button" data-letter="コ" aria-label="Play pronunciation for コ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -949,9 +1601,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="サ">
             <div class="letter">サ</div>
-            <button class="letter-audio" type="button" data-letter="サ" aria-label="Play letter サ">
+            <button class="letter-audio" type="button" data-letter="サ" aria-label="Play pronunciation for サ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -964,9 +1616,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="シ">
             <div class="letter">シ</div>
-            <button class="letter-audio" type="button" data-letter="シ" aria-label="Play letter シ">
+            <button class="letter-audio" type="button" data-letter="シ" aria-label="Play pronunciation for シ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -979,9 +1631,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ス">
             <div class="letter">ス</div>
-            <button class="letter-audio" type="button" data-letter="ス" aria-label="Play letter ス">
+            <button class="letter-audio" type="button" data-letter="ス" aria-label="Play pronunciation for ス">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -994,9 +1646,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="セ">
             <div class="letter">セ</div>
-            <button class="letter-audio" type="button" data-letter="セ" aria-label="Play letter セ">
+            <button class="letter-audio" type="button" data-letter="セ" aria-label="Play pronunciation for セ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1009,9 +1661,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ソ">
             <div class="letter">ソ</div>
-            <button class="letter-audio" type="button" data-letter="ソ" aria-label="Play letter ソ">
+            <button class="letter-audio" type="button" data-letter="ソ" aria-label="Play pronunciation for ソ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1024,9 +1676,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="タ">
             <div class="letter">タ</div>
-            <button class="letter-audio" type="button" data-letter="タ" aria-label="Play letter タ">
+            <button class="letter-audio" type="button" data-letter="タ" aria-label="Play pronunciation for タ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1039,9 +1691,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="チ">
             <div class="letter">チ</div>
-            <button class="letter-audio" type="button" data-letter="チ" aria-label="Play letter チ">
+            <button class="letter-audio" type="button" data-letter="チ" aria-label="Play pronunciation for チ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1054,9 +1706,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ツ">
             <div class="letter">ツ</div>
-            <button class="letter-audio" type="button" data-letter="ツ" aria-label="Play letter ツ">
+            <button class="letter-audio" type="button" data-letter="ツ" aria-label="Play pronunciation for ツ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1069,9 +1721,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="テ">
             <div class="letter">テ</div>
-            <button class="letter-audio" type="button" data-letter="テ" aria-label="Play letter テ">
+            <button class="letter-audio" type="button" data-letter="テ" aria-label="Play pronunciation for テ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1084,9 +1736,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ト">
             <div class="letter">ト</div>
-            <button class="letter-audio" type="button" data-letter="ト" aria-label="Play letter ト">
+            <button class="letter-audio" type="button" data-letter="ト" aria-label="Play pronunciation for ト">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1099,9 +1751,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ナ">
             <div class="letter">ナ</div>
-            <button class="letter-audio" type="button" data-letter="ナ" aria-label="Play letter ナ">
+            <button class="letter-audio" type="button" data-letter="ナ" aria-label="Play pronunciation for ナ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1114,9 +1766,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ニ">
             <div class="letter">ニ</div>
-            <button class="letter-audio" type="button" data-letter="ニ" aria-label="Play letter ニ">
+            <button class="letter-audio" type="button" data-letter="ニ" aria-label="Play pronunciation for ニ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1129,9 +1781,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ヌ">
             <div class="letter">ヌ</div>
-            <button class="letter-audio" type="button" data-letter="ヌ" aria-label="Play letter ヌ">
+            <button class="letter-audio" type="button" data-letter="ヌ" aria-label="Play pronunciation for ヌ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1144,9 +1796,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ネ">
             <div class="letter">ネ</div>
-            <button class="letter-audio" type="button" data-letter="ネ" aria-label="Play letter ネ">
+            <button class="letter-audio" type="button" data-letter="ネ" aria-label="Play pronunciation for ネ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1159,9 +1811,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ノ">
             <div class="letter">ノ</div>
-            <button class="letter-audio" type="button" data-letter="ノ" aria-label="Play letter ノ">
+            <button class="letter-audio" type="button" data-letter="ノ" aria-label="Play pronunciation for ノ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1174,9 +1826,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ハ">
             <div class="letter">ハ</div>
-            <button class="letter-audio" type="button" data-letter="ハ" aria-label="Play letter ハ">
+            <button class="letter-audio" type="button" data-letter="ハ" aria-label="Play pronunciation for ハ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1189,9 +1841,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ヒ">
             <div class="letter">ヒ</div>
-            <button class="letter-audio" type="button" data-letter="ヒ" aria-label="Play letter ヒ">
+            <button class="letter-audio" type="button" data-letter="ヒ" aria-label="Play pronunciation for ヒ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1204,9 +1856,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="フ">
             <div class="letter">フ</div>
-            <button class="letter-audio" type="button" data-letter="フ" aria-label="Play letter フ">
+            <button class="letter-audio" type="button" data-letter="フ" aria-label="Play pronunciation for フ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1219,9 +1871,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ヘ">
             <div class="letter">ヘ</div>
-            <button class="letter-audio" type="button" data-letter="ヘ" aria-label="Play letter ヘ">
+            <button class="letter-audio" type="button" data-letter="ヘ" aria-label="Play pronunciation for ヘ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1234,9 +1886,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ホ">
             <div class="letter">ホ</div>
-            <button class="letter-audio" type="button" data-letter="ホ" aria-label="Play letter ホ">
+            <button class="letter-audio" type="button" data-letter="ホ" aria-label="Play pronunciation for ホ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1249,9 +1901,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="マ">
             <div class="letter">マ</div>
-            <button class="letter-audio" type="button" data-letter="マ" aria-label="Play letter マ">
+            <button class="letter-audio" type="button" data-letter="マ" aria-label="Play pronunciation for マ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1264,9 +1916,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ミ">
             <div class="letter">ミ</div>
-            <button class="letter-audio" type="button" data-letter="ミ" aria-label="Play letter ミ">
+            <button class="letter-audio" type="button" data-letter="ミ" aria-label="Play pronunciation for ミ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1279,9 +1931,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ム">
             <div class="letter">ム</div>
-            <button class="letter-audio" type="button" data-letter="ム" aria-label="Play letter ム">
+            <button class="letter-audio" type="button" data-letter="ム" aria-label="Play pronunciation for ム">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1294,9 +1946,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="メ">
             <div class="letter">メ</div>
-            <button class="letter-audio" type="button" data-letter="メ" aria-label="Play letter メ">
+            <button class="letter-audio" type="button" data-letter="メ" aria-label="Play pronunciation for メ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1309,9 +1961,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="モ">
             <div class="letter">モ</div>
-            <button class="letter-audio" type="button" data-letter="モ" aria-label="Play letter モ">
+            <button class="letter-audio" type="button" data-letter="モ" aria-label="Play pronunciation for モ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1324,9 +1976,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ヤ">
             <div class="letter">ヤ</div>
-            <button class="letter-audio" type="button" data-letter="ヤ" aria-label="Play letter ヤ">
+            <button class="letter-audio" type="button" data-letter="ヤ" aria-label="Play pronunciation for ヤ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1339,9 +1991,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ユ">
             <div class="letter">ユ</div>
-            <button class="letter-audio" type="button" data-letter="ユ" aria-label="Play letter ユ">
+            <button class="letter-audio" type="button" data-letter="ユ" aria-label="Play pronunciation for ユ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1354,9 +2006,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ヨ">
             <div class="letter">ヨ</div>
-            <button class="letter-audio" type="button" data-letter="ヨ" aria-label="Play letter ヨ">
+            <button class="letter-audio" type="button" data-letter="ヨ" aria-label="Play pronunciation for ヨ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1369,9 +2021,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ラ">
             <div class="letter">ラ</div>
-            <button class="letter-audio" type="button" data-letter="ラ" aria-label="Play letter ラ">
+            <button class="letter-audio" type="button" data-letter="ラ" aria-label="Play pronunciation for ラ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1384,9 +2036,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="リ">
             <div class="letter">リ</div>
-            <button class="letter-audio" type="button" data-letter="リ" aria-label="Play letter リ">
+            <button class="letter-audio" type="button" data-letter="リ" aria-label="Play pronunciation for リ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1399,9 +2051,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ル">
             <div class="letter">ル</div>
-            <button class="letter-audio" type="button" data-letter="ル" aria-label="Play letter ル">
+            <button class="letter-audio" type="button" data-letter="ル" aria-label="Play pronunciation for ル">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1414,9 +2066,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="レ">
             <div class="letter">レ</div>
-            <button class="letter-audio" type="button" data-letter="レ" aria-label="Play letter レ">
+            <button class="letter-audio" type="button" data-letter="レ" aria-label="Play pronunciation for レ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1429,9 +2081,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ロ">
             <div class="letter">ロ</div>
-            <button class="letter-audio" type="button" data-letter="ロ" aria-label="Play letter ロ">
+            <button class="letter-audio" type="button" data-letter="ロ" aria-label="Play pronunciation for ロ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1444,9 +2096,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ワ">
             <div class="letter">ワ</div>
-            <button class="letter-audio" type="button" data-letter="ワ" aria-label="Play letter ワ">
+            <button class="letter-audio" type="button" data-letter="ワ" aria-label="Play pronunciation for ワ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1459,9 +2111,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ヲ">
             <div class="letter">ヲ</div>
-            <button class="letter-audio" type="button" data-letter="ヲ" aria-label="Play letter ヲ">
+            <button class="letter-audio" type="button" data-letter="ヲ" aria-label="Play pronunciation for ヲ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1474,9 +2126,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ン">
             <div class="letter">ン</div>
-            <button class="letter-audio" type="button" data-letter="ン" aria-label="Play letter ン">
+            <button class="letter-audio" type="button" data-letter="ン" aria-label="Play pronunciation for ン">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1489,7 +2141,783 @@
               </svg>
             </button>
           </div>
+        </div>
+        <h3 class="letters-script-heading">カタカナ 濁音・半濁音 (Voiced Kana)</h3>
+        <p class="letters-script-note">These marks drive many common loanword sounds such as ガ, ズ, ベ, and ポ.</p>
+        <div class="letters-grid">
+          <div class="card letter-card" data-letter="ガ">
+            <div class="letter">ガ</div>
+            <button class="letter-audio" type="button" data-letter="ガ" aria-label="Play pronunciation for ガ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
           </div>
+          <div class="card letter-card" data-letter="ギ">
+            <div class="letter">ギ</div>
+            <button class="letter-audio" type="button" data-letter="ギ" aria-label="Play pronunciation for ギ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="グ">
+            <div class="letter">グ</div>
+            <button class="letter-audio" type="button" data-letter="グ" aria-label="Play pronunciation for グ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ゲ">
+            <div class="letter">ゲ</div>
+            <button class="letter-audio" type="button" data-letter="ゲ" aria-label="Play pronunciation for ゲ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ゴ">
+            <div class="letter">ゴ</div>
+            <button class="letter-audio" type="button" data-letter="ゴ" aria-label="Play pronunciation for ゴ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ザ">
+            <div class="letter">ザ</div>
+            <button class="letter-audio" type="button" data-letter="ザ" aria-label="Play pronunciation for ザ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ジ">
+            <div class="letter">ジ</div>
+            <button class="letter-audio" type="button" data-letter="ジ" aria-label="Play pronunciation for ジ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ズ">
+            <div class="letter">ズ</div>
+            <button class="letter-audio" type="button" data-letter="ズ" aria-label="Play pronunciation for ズ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ゼ">
+            <div class="letter">ゼ</div>
+            <button class="letter-audio" type="button" data-letter="ゼ" aria-label="Play pronunciation for ゼ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ゾ">
+            <div class="letter">ゾ</div>
+            <button class="letter-audio" type="button" data-letter="ゾ" aria-label="Play pronunciation for ゾ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ダ">
+            <div class="letter">ダ</div>
+            <button class="letter-audio" type="button" data-letter="ダ" aria-label="Play pronunciation for ダ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ヂ">
+            <div class="letter">ヂ</div>
+            <button class="letter-audio" type="button" data-letter="ヂ" aria-label="Play pronunciation for ヂ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ヅ">
+            <div class="letter">ヅ</div>
+            <button class="letter-audio" type="button" data-letter="ヅ" aria-label="Play pronunciation for ヅ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="デ">
+            <div class="letter">デ</div>
+            <button class="letter-audio" type="button" data-letter="デ" aria-label="Play pronunciation for デ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ド">
+            <div class="letter">ド</div>
+            <button class="letter-audio" type="button" data-letter="ド" aria-label="Play pronunciation for ド">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="バ">
+            <div class="letter">バ</div>
+            <button class="letter-audio" type="button" data-letter="バ" aria-label="Play pronunciation for バ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ビ">
+            <div class="letter">ビ</div>
+            <button class="letter-audio" type="button" data-letter="ビ" aria-label="Play pronunciation for ビ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ブ">
+            <div class="letter">ブ</div>
+            <button class="letter-audio" type="button" data-letter="ブ" aria-label="Play pronunciation for ブ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ベ">
+            <div class="letter">ベ</div>
+            <button class="letter-audio" type="button" data-letter="ベ" aria-label="Play pronunciation for ベ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ボ">
+            <div class="letter">ボ</div>
+            <button class="letter-audio" type="button" data-letter="ボ" aria-label="Play pronunciation for ボ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="パ">
+            <div class="letter">パ</div>
+            <button class="letter-audio" type="button" data-letter="パ" aria-label="Play pronunciation for パ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ピ">
+            <div class="letter">ピ</div>
+            <button class="letter-audio" type="button" data-letter="ピ" aria-label="Play pronunciation for ピ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="プ">
+            <div class="letter">プ</div>
+            <button class="letter-audio" type="button" data-letter="プ" aria-label="Play pronunciation for プ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ペ">
+            <div class="letter">ペ</div>
+            <button class="letter-audio" type="button" data-letter="ペ" aria-label="Play pronunciation for ペ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ポ">
+            <div class="letter">ポ</div>
+            <button class="letter-audio" type="button" data-letter="ポ" aria-label="Play pronunciation for ポ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <h3 class="letters-script-heading">カタカナ 拗音・促音 (Contracted Sounds)</h3>
+        <p class="letters-script-note">Practice small ャ/ュ/ョ combinations and the small ッ that marks a doubled consonant in many borrowed words.</p>
+        <div class="letters-grid">
+          <div class="card letter-card" data-letter="キャ">
+            <div class="letter">キャ</div>
+            <button class="letter-audio" type="button" data-letter="キャ" aria-label="Play pronunciation for キャ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="キュ">
+            <div class="letter">キュ</div>
+            <button class="letter-audio" type="button" data-letter="キュ" aria-label="Play pronunciation for キュ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="キョ">
+            <div class="letter">キョ</div>
+            <button class="letter-audio" type="button" data-letter="キョ" aria-label="Play pronunciation for キョ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="シュ">
+            <div class="letter">シュ</div>
+            <button class="letter-audio" type="button" data-letter="シュ" aria-label="Play pronunciation for シュ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ショ">
+            <div class="letter">ショ</div>
+            <button class="letter-audio" type="button" data-letter="ショ" aria-label="Play pronunciation for ショ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="チャ">
+            <div class="letter">チャ</div>
+            <button class="letter-audio" type="button" data-letter="チャ" aria-label="Play pronunciation for チャ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="チュ">
+            <div class="letter">チュ</div>
+            <button class="letter-audio" type="button" data-letter="チュ" aria-label="Play pronunciation for チュ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="チョ">
+            <div class="letter">チョ</div>
+            <button class="letter-audio" type="button" data-letter="チョ" aria-label="Play pronunciation for チョ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ニャ">
+            <div class="letter">ニャ</div>
+            <button class="letter-audio" type="button" data-letter="ニャ" aria-label="Play pronunciation for ニャ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ニュ">
+            <div class="letter">ニュ</div>
+            <button class="letter-audio" type="button" data-letter="ニュ" aria-label="Play pronunciation for ニュ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ニョ">
+            <div class="letter">ニョ</div>
+            <button class="letter-audio" type="button" data-letter="ニョ" aria-label="Play pronunciation for ニョ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="リャ">
+            <div class="letter">リャ</div>
+            <button class="letter-audio" type="button" data-letter="リャ" aria-label="Play pronunciation for リャ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="リュ">
+            <div class="letter">リュ</div>
+            <button class="letter-audio" type="button" data-letter="リュ" aria-label="Play pronunciation for リュ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="リョ">
+            <div class="letter">リョ</div>
+            <button class="letter-audio" type="button" data-letter="リョ" aria-label="Play pronunciation for リョ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ッ">
+            <div class="letter">ッ</div>
+            <button class="letter-audio" type="button" data-letter="ッ" aria-label="Play pronunciation for ッ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ファ">
+            <div class="letter">ファ</div>
+            <button class="letter-audio" type="button" data-letter="ファ" aria-label="Play pronunciation for ファ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ティ">
+            <div class="letter">ティ</div>
+            <button class="letter-audio" type="button" data-letter="ティ" aria-label="Play pronunciation for ティ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+        </div>
+        <div class="letters-script-group letters-script-group-reading">
+        <h3 class="letters-script-heading">ひらがな 読みの流れ (Reading Flow)</h3>
+        <p class="letters-script-note">Move from the chart into common rhythm chunks so yoon, small tsu, and long vowels work inside real reading.</p>
+        <div class="letters-grid">
+          <div class="card letter-card" data-letter="きょう">
+            <div class="letter">きょう</div>
+            <div class="letter-card-caption">きょ + う</div>
+            <button class="letter-audio" type="button" data-letter="きょう" aria-label="Play pronunciation for きょう">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="がっこう">
+            <div class="letter">がっこう</div>
+            <div class="letter-card-caption">が + っ + こう</div>
+            <button class="letter-audio" type="button" data-letter="がっこう" aria-label="Play pronunciation for がっこう">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="しゅくだい">
+            <div class="letter">しゅくだい</div>
+            <div class="letter-card-caption">しゅ + く + だ + い</div>
+            <button class="letter-audio" type="button" data-letter="しゅくだい" aria-label="Play pronunciation for しゅくだい">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="こんにちは">
+            <div class="letter">こんにちは</div>
+            <div class="letter-card-caption">こ + ん + に + ち + は</div>
+            <button class="letter-audio" type="button" data-letter="こんにちは" aria-label="Play pronunciation for こんにちは">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <h3 class="letters-script-heading">カタカナ 読みの流れ (Loanword Flow)</h3>
+        <p class="letters-script-note">Practice long vowels, doubled consonants, and chunking inside common katakana words.</p>
+        <div class="letters-grid">
+          <div class="card letter-card" data-letter="コーヒー">
+            <div class="letter">コーヒー</div>
+            <div class="letter-card-caption">コー + ヒー</div>
+            <button class="letter-audio" type="button" data-letter="コーヒー" aria-label="Play pronunciation for コーヒー">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="チケット">
+            <div class="letter">チケット</div>
+            <div class="letter-card-caption">チ + ケ + ッ + ト</div>
+            <button class="letter-audio" type="button" data-letter="チケット" aria-label="Play pronunciation for チケット">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ニュース">
+            <div class="letter">ニュース</div>
+            <div class="letter-card-caption">ニュー + ス</div>
+            <button class="letter-audio" type="button" data-letter="ニュース" aria-label="Play pronunciation for ニュース">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="スーパー">
+            <div class="letter">スーパー</div>
+            <div class="letter-card-caption">スー + パー</div>
+            <button class="letter-audio" type="button" data-letter="スーパー" aria-label="Play pronunciation for スーパー">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
         </div>
       </section>
     </main>
@@ -1510,9 +2938,10 @@
     </footer>
 
     <!-- Shared client bundle -->
-    <script src="app.js?v=20260438"></script>
+    <script src="app.js?v=20260440"></script>
   </body>
 </html>
+
 
 
 

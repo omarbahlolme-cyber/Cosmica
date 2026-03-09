@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-18T15:33:45.247Z",
+  "generatedAt": "2026-03-08T17:21:29.277Z",
   "worldLanguage": "portuguese",
   "baseLanguages": [
     "albanian",
@@ -51,9 +51,9 @@
         }
       },
       "bom dia": {
-        "source": "good day",
+        "source": "good morning",
         "translations": {
-          "english": "good day"
+          "english": "good morning"
         }
       },
       "boa tarde": {
@@ -191,21 +191,21 @@
         }
       },
       "ele": {
-        "source": "him",
+        "source": "he",
         "translations": {
-          "english": "him"
+          "english": "he"
         }
       },
       "ela": {
-        "source": "her",
+        "source": "she",
         "translations": {
-          "english": "her"
+          "english": "she"
         }
       },
       "isso": {
-        "source": "it",
+        "source": "it / that",
         "translations": {
-          "english": "it"
+          "english": "it / that"
         }
       },
       "nós": {
@@ -215,9 +215,9 @@
         }
       },
       "eles": {
-        "source": "them",
+        "source": "they",
         "translations": {
-          "english": "them"
+          "english": "they"
         }
       },
       "me": {
@@ -233,9 +233,9 @@
         }
       },
       "meu": {
-        "source": "mine",
+        "source": "my / mine",
         "translations": {
-          "english": "mine"
+          "english": "my / mine"
         }
       },
       "seu": {
@@ -251,9 +251,9 @@
         }
       },
       "nosso": {
-        "source": "ours",
+        "source": "our / ours",
         "translations": {
-          "english": "ours"
+          "english": "our / ours"
         }
       },
       "deles": {
@@ -450,7 +450,7 @@
           "english": "go"
         }
       },
-      "obter": {
+      "conseguir": {
         "source": "get",
         "translations": {
           "english": "get"
@@ -939,9 +939,9 @@
         }
       },
       "como": {
-        "source": "as",
+        "source": "how",
         "translations": {
-          "english": "as"
+          "english": "how"
         }
       },
       "qual": {
@@ -7997,7 +7997,9 @@
               "wrong": "Maria comer a maçã.",
               "fix": "Maria comeu a maçã."
             }
-          ]
+          ],
+          "sourceTitle": "basic clause order",
+          "sourceExample": "Maria ate the apple."
         },
         {
           "title": "Uso de Artigos Definidos",
@@ -8036,7 +8038,9 @@
               "wrong": "Cachorro está no parque.",
               "fix": "O cachorro está no parque."
             }
-          ]
+          ],
+          "sourceTitle": "definite articles in sentences",
+          "sourceExample": "The dog is in the park."
         },
         {
           "title": "Flexibilidade na Ordem",
@@ -8080,7 +8084,9 @@
               "wrong": "No parque, Maria comeu o maçã.",
               "fix": "No parque, Maria comeu a maçã."
             }
-          ]
+          ],
+          "sourceTitle": "flexible word order",
+          "sourceExample": "In the park, Maria ate the apple."
         },
         {
           "title": "Uso de Verbos no Passado",
@@ -8114,7 +8120,9 @@
               "wrong": "Eu comemos a maçã.",
               "fix": "Eu comi a maçã."
             }
-          ]
+          ],
+          "sourceTitle": "past events in a clause",
+          "sourceExample": "I ate the apple."
         },
         {
           "title": "Uso de Pronomes Pessoais",
@@ -8148,7 +8156,9 @@
               "wrong": "Ela foi ao mercados.",
               "fix": "Ela foi ao mercado."
             }
-          ]
+          ],
+          "sourceTitle": "personal pronouns in context",
+          "sourceExample": "She went to the market."
         }
       ],
       "Verbs": [
@@ -8184,7 +8194,9 @@
               "wrong": "Eu come maçã todos os dias.",
               "fix": "Eu como maçã todos os dias."
             }
-          ]
+          ],
+          "sourceTitle": "present indicative",
+          "sourceExample": "I eat apples every day."
         },
         {
           "title": "Pretérito Perfeito",
@@ -8218,7 +8230,9 @@
               "wrong": "Ela viajou para Brasil no ano passado.",
               "fix": "Ela viajou para o Brasil no ano passado."
             }
-          ]
+          ],
+          "sourceTitle": "preterite perfect",
+          "sourceExample": "She traveled to Brazil last year."
         },
         {
           "title": "Futuro do Presente",
@@ -8257,7 +8271,9 @@
               "wrong": "Nós vai ao cinema amanhã.",
               "fix": "Nós iremos ao cinema amanhã."
             }
-          ]
+          ],
+          "sourceTitle": "simple future",
+          "sourceExample": "We will go to the cinema tomorrow."
         },
         {
           "title": "Pretérito Imperfeito",
@@ -8296,7 +8312,9 @@
               "wrong": "Quando eu era criança, jogou futebol todos os dias.",
               "fix": "Quando eu era criança, jogava futebol todos os dias."
             }
-          ]
+          ],
+          "sourceTitle": "imperfect for past habits",
+          "sourceExample": "When I was a child, I played football every day."
         },
         {
           "title": "Condicional Simples",
@@ -8335,7 +8353,9 @@
               "wrong": "Se eu tinha dinheiro, compraria um carro.",
               "fix": "Se eu tivesse dinheiro, compraria um carro."
             }
-          ]
+          ],
+          "sourceTitle": "simple conditional",
+          "sourceExample": "If I had money, I would buy a car."
         },
         {
           "title": "Subjuntivo Presente",
@@ -8369,7 +8389,9 @@
               "wrong": "Espero que você vem à festa.",
               "fix": "Espero que você venha à festa."
             }
-          ]
+          ],
+          "sourceTitle": "present subjunctive",
+          "sourceExample": "I hope you come to the party."
         }
       ],
       "Tenses & Aspect": [
@@ -8405,7 +8427,9 @@
               "wrong": "Eu come frutas todos os dias.",
               "fix": "Eu como frutas todos os dias."
             }
-          ]
+          ],
+          "sourceTitle": "simple present for habits and general truths",
+          "sourceExample": "I eat fruit every day."
         },
         {
           "title": "Pretérito Perfeito",
@@ -8439,7 +8463,9 @@
               "wrong": "Ela compra um carro novo.",
               "fix": "Ela comprou um carro novo."
             }
-          ]
+          ],
+          "sourceTitle": "preterite perfect for completed past actions",
+          "sourceExample": "She bought a new car."
         },
         {
           "title": "Futuro do Presente",
@@ -8473,7 +8499,9 @@
               "wrong": "Nós vai ao cinema amanhã.",
               "fix": "Nós iremos ao cinema amanhã."
             }
-          ]
+          ],
+          "sourceTitle": "simple future for plans and predictions",
+          "sourceExample": "We will go to the cinema tomorrow."
         },
         {
           "title": "Pretérito Imperfeito",
@@ -8507,7 +8535,9 @@
               "wrong": "Quando eu sou criança, jogava futebol.",
               "fix": "Quando eu era criança, jogava futebol."
             }
-          ]
+          ],
+          "sourceTitle": "imperfect for past habits and background",
+          "sourceExample": "When I was a child, I played football."
         },
         {
           "title": "Futuro do Pretérito",
@@ -8541,7 +8571,9 @@
               "wrong": "Eu compra um carro se tivesse dinheiro.",
               "fix": "Eu compraria um carro se tivesse dinheiro."
             }
-          ]
+          ],
+          "sourceTitle": "conditional for hypothetical actions",
+          "sourceExample": "I would buy a car if I had money."
         },
         {
           "title": "Presente Contínuo",
@@ -8575,7 +8607,9 @@
               "wrong": "Eles estudam para a prova.",
               "fix": "Eles estão estudando para a prova."
             }
-          ]
+          ],
+          "sourceTitle": "present continuous with estar + gerund",
+          "sourceExample": "They are studying for the test."
         },
         {
           "title": "Pretérito Mais-que-perfeito",
@@ -8609,7 +8643,9 @@
               "wrong": "Quando cheguei, ele já saiu.",
               "fix": "Quando cheguei, ele já tinha saído."
             }
-          ]
+          ],
+          "sourceTitle": "pluperfect with tinha + participle",
+          "sourceExample": "When I arrived, he had already left."
         },
         {
           "title": "Futuro do Presente Composto",
@@ -8643,7 +8679,9 @@
               "wrong": "Quando eu chegar, você termina o trabalho.",
               "fix": "Quando eu chegar, você terá terminado o trabalho."
             }
-          ]
+          ],
+          "sourceTitle": "future perfect",
+          "sourceExample": "When I arrive, you will have finished the work."
         },
         {
           "title": "Aspecto Perfectivo e Imperfectivo",
@@ -8677,20 +8715,23 @@
               "wrong": "Ele lê o livro ontem. / Ele lê o livro todos os dias.",
               "fix": "Ele leu o livro ontem. / Ele lê o livro todos os dias."
             }
-          ]
+          ],
+          "sourceTitle": "perfective and imperfective aspect",
+          "sourceExample": "He read the book yesterday. He reads the book every day."
         },
         {
-          "title": "Uso de Partículas de Tempo",
+          "title": "Advérbios de tempo e aspecto",
           "points": [
-            "Partículas como 'já', 'ainda', 'nunca' ajudam a indicar tempo.",
-            "Essas partículas podem mudar o aspecto da frase.",
-            "Importante para clareza na comunicação."
+            "Advérbios como 'já', 'ainda' e 'nunca' situam a ação no tempo.",
+            "Eles podem reforçar ideia de conclusão, continuidade ou expectativa.",
+            "Observe a posição do advérbio em relação à negação e ao verbo."
           ],
-          "example": "Eu já comi. / Eu ainda não comi.",
+          "example": "Eu ainda não comi.",
           "ruleOrder": [
             "sujeito",
-            "verbo",
-            "partícula"
+            "advérbio",
+            "negação",
+            "verbo"
           ],
           "exampleHighlights": [
             {
@@ -8698,20 +8739,26 @@
               "text": "Eu"
             },
             {
-              "label": "verbo",
-              "text": "comi"
+              "label": "advérbio",
+              "text": "ainda"
             },
             {
-              "label": "partícula",
-              "text": "não comi"
+              "label": "negação",
+              "text": "não"
+            },
+            {
+              "label": "verbo",
+              "text": "comi"
             }
           ],
           "mistakes": [
             {
-              "wrong": "Eu já comi. / Eu ainda comi.",
-              "fix": "Eu já comi. / Eu ainda não comi."
+              "wrong": "Eu ainda comi.",
+              "fix": "Eu ainda não comi."
             }
-          ]
+          ],
+          "sourceTitle": "time and aspect adverbs",
+          "sourceExample": "I still have not eaten."
         }
       ],
       "Nouns & Articles": [
@@ -8752,7 +8799,9 @@
               "wrong": "Gato está no telhado.",
               "fix": "O gato está no telhado."
             }
-          ]
+          ],
+          "sourceTitle": "Artigos Definidos",
+          "sourceExample": "O gato está no telhado."
         },
         {
           "title": "Artigos Indefinidos",
@@ -8791,7 +8840,9 @@
               "wrong": "Mulher entrou na sala.",
               "fix": "Uma mulher entrou na sala."
             }
-          ]
+          ],
+          "sourceTitle": "Artigos Indefinidos",
+          "sourceExample": "Uma mulher entrou na sala."
         },
         {
           "title": "Singular e plural",
@@ -8886,7 +8937,9 @@
                 "complemento"
               ]
             }
-          ]
+          ],
+          "sourceTitle": "Singular e plural",
+          "sourceExample": "Os livros estão na mesa."
         },
         {
           "title": "Artigos com Adjetivos",
@@ -8925,7 +8978,9 @@
               "wrong": "Casa bonita é nova.",
               "fix": "A casa bonita é nova."
             }
-          ]
+          ],
+          "sourceTitle": "Artigos com Adjetivos",
+          "sourceExample": "A casa bonita é nova."
         },
         {
           "title": "Omissão de Artigos",
@@ -8959,7 +9014,9 @@
               "wrong": "Vou para a escola.",
               "fix": "Vou para escola."
             }
-          ]
+          ],
+          "sourceTitle": "Omissão de Artigos",
+          "sourceExample": "Vou para escola."
         },
         {
           "title": "Artigos em Expressões Idiomáticas",
@@ -8998,7 +9055,9 @@
               "wrong": "Ele está toa.",
               "fix": "Ele está à toa."
             }
-          ]
+          ],
+          "sourceTitle": "Artigos em Expressões Idiomáticas",
+          "sourceExample": "Ele está à toa."
         },
         {
           "title": "Artigos e Nomes Próprios",
@@ -9037,23 +9096,26 @@
               "wrong": "Brasil é grande.",
               "fix": "O Brasil é grande."
             }
-          ]
+          ],
+          "sourceTitle": "Artigos e Nomes Próprios",
+          "sourceExample": "O Brasil é grande."
         }
       ],
       "Pronouns & Reference": [
         {
-          "title": "Uso de Pronomes Pessoais",
+          "title": "Pronomes pessoais de sujeito",
           "points": [
-            "Os pronomes pessoais substituem substantivos.",
-            "Podem atuar como sujeitos ou objetos na frase.",
-            "A omissão do pronome é comum em português."
+            "Eu, tu, você, ele, ela, nós e eles identificam quem participa da ação.",
+            "Em português, o sujeito pode às vezes ficar implícito, mas o sistema pronominal continua importante para contraste e clareza."
           ],
           "example": "Eu gosto de música.",
           "ruleOrder": [
             "sujeito",
             "verbo",
-            "objeto"
+            "complemento"
           ],
+          "sourceTitle": "subject pronouns in Portuguese",
+          "sourceExample": "I like music.",
           "exampleHighlights": [
             {
               "label": "sujeito",
@@ -9064,41 +9126,87 @@
               "text": "gosto"
             },
             {
-              "label": "objeto",
+              "label": "complemento",
               "text": "de música"
             }
           ],
           "mistakes": [
             {
-              "wrong": "Gosto de música.",
+              "wrong": "Mim gosto de música.",
               "fix": "Eu gosto de música."
             }
           ]
         },
         {
-          "title": "Pronomes Possessivos",
+          "title": "Pronomes oblíquos diretos",
           "points": [
-            "Os pronomes possessivos indicam posse.",
-            "Concordam em gênero e número com o objeto possuído.",
-            "Podem ser usados com ou sem o substantivo."
+            "Me, te, o, a, nos e os substituem objetos diretos em muitos registros.",
+            "A colocação pode variar, mas a função principal é retomar o objeto sem repeti-lo."
           ],
-          "example": "Este livro é meu.",
+          "example": "Eu o vi ontem.",
           "ruleOrder": [
             "sujeito",
+            "pronome",
             "verbo",
-            "objeto"
+            "tempo"
           ],
+          "sourceTitle": "direct object pronouns",
+          "sourceExample": "I saw him yesterday.",
           "exampleHighlights": [
             {
               "label": "sujeito",
-              "text": "Este livro"
+              "text": "Eu"
+            },
+            {
+              "label": "pronome",
+              "text": "o"
+            },
+            {
+              "label": "verbo",
+              "text": "vi"
+            },
+            {
+              "label": "tempo",
+              "text": "ontem"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "Eu vi ele ontem.",
+              "fix": "Eu o vi ontem."
+            }
+          ]
+        },
+        {
+          "title": "Pronomes possessivos",
+          "points": [
+            "Meu, minha, seu, nossa e formas afins marcam posse ou vínculo.",
+            "Essas formas concordam com a coisa possuída, não com o possuidor."
+          ],
+          "example": "Este livro é meu.",
+          "ruleOrder": [
+            "demonstração",
+            "nome",
+            "verbo",
+            "posse"
+          ],
+          "sourceTitle": "possessive pronouns",
+          "sourceExample": "This book is mine.",
+          "exampleHighlights": [
+            {
+              "label": "demonstração",
+              "text": "Este"
+            },
+            {
+              "label": "nome",
+              "text": "livro"
             },
             {
               "label": "verbo",
               "text": "é"
             },
             {
-              "label": "objeto",
+              "label": "posse",
               "text": "meu"
             }
           ],
@@ -9110,89 +9218,92 @@
           ]
         },
         {
-          "title": "Pronomes Demonstrativos",
+          "title": "Pronomes demonstrativos",
           "points": [
-            "Os pronomes demonstrativos indicam a localização de algo.",
-            "Usados para distinguir entre coisas próximas e distantes.",
-            "A escolha do pronome depende do gênero e número."
+            "Este, esse e aquele ajudam a localizar algo no espaço, no discurso ou na memória compartilhada.",
+            "Também podem retomar partes já mencionadas da conversa."
           ],
-          "example": "Aquela casa é bonita.",
+          "example": "Aquele é o meu carro.",
           "ruleOrder": [
-            "sujeito",
+            "demonstração",
             "verbo",
-            "objeto"
+            "complemento"
           ],
+          "sourceTitle": "demonstrative pronouns",
+          "sourceExample": "That one is my car.",
           "exampleHighlights": [
             {
-              "label": "sujeito",
-              "text": "Aquela casa"
+              "label": "demonstração",
+              "text": "Aquele"
             },
             {
               "label": "verbo",
               "text": "é"
             },
             {
-              "label": "objeto",
-              "text": "bonita"
+              "label": "complemento",
+              "text": "o meu carro"
             }
           ],
           "mistakes": [
             {
-              "wrong": "Aquele casa é bonita.",
-              "fix": "Aquela casa é bonita."
+              "wrong": "Aquele é a meu carro.",
+              "fix": "Aquele é o meu carro."
             }
           ]
         },
         {
-          "title": "Pronomes Relativos",
+          "title": "Pronomes relativos com que",
           "points": [
-            "Os pronomes relativos conectam orações.",
-            "Substituem um substantivo mencionado anteriormente.",
-            "Podem indicar pessoas ou coisas."
+            "Que liga uma oração relativa ao nome que ela descreve.",
+            "Ele evita repetir o nome e ajuda a manter a frase encadeada."
           ],
           "example": "O livro que eu li é interessante.",
           "ruleOrder": [
-            "sujeito",
-            "verbo",
-            "objeto"
+            "nome",
+            "relativo",
+            "continuação"
           ],
+          "sourceTitle": "relative pronouns with que",
+          "sourceExample": "The book that I read is interesting.",
           "exampleHighlights": [
             {
-              "label": "sujeito",
-              "text": "O livro"
+              "label": "nome",
+              "text": "O"
             },
             {
-              "label": "verbo",
-              "text": "é"
+              "label": "relativo",
+              "text": "livro"
             },
             {
-              "label": "objeto",
-              "text": "interessante"
+              "label": "continuação",
+              "text": "que eu li é interessante"
             }
           ],
           "mistakes": [
             {
-              "wrong": "O livro que eu leio é interessante.",
+              "wrong": "O livro quem eu li é interessante.",
               "fix": "O livro que eu li é interessante."
             }
           ]
         },
         {
-          "title": "Pronomes Indefinidos",
+          "title": "Pronomes indefinidos",
           "points": [
-            "Os pronomes indefinidos referem-se a pessoas ou coisas de forma vaga.",
-            "Podem ser usados para generalizações.",
-            "Não têm uma referência específica."
+            "Alguém, ninguém, tudo e algo referem-se a pessoas ou coisas não especificadas.",
+            "São úteis quando a identidade exata não é o foco da frase."
           ],
           "example": "Alguém deixou a porta aberta.",
           "ruleOrder": [
-            "sujeito",
+            "pronome",
             "verbo",
-            "objeto"
+            "complemento"
           ],
+          "sourceTitle": "indefinite pronouns",
+          "sourceExample": "Someone left the door open.",
           "exampleHighlights": [
             {
-              "label": "sujeito",
+              "label": "pronome",
               "text": "Alguém"
             },
             {
@@ -9200,82 +9311,49 @@
               "text": "deixou"
             },
             {
-              "label": "objeto",
+              "label": "complemento",
               "text": "a porta aberta"
             }
           ],
           "mistakes": [
             {
-              "wrong": "Ninguém deixou a porta aberta.",
+              "wrong": "Quem deixou a porta aberta.",
               "fix": "Alguém deixou a porta aberta."
             }
           ]
         },
         {
-          "title": "Deixis e Referência",
+          "title": "Você / o senhor / a senhora",
           "points": [
-            "A deixis refere-se à localização no espaço e no tempo.",
-            "Pronomes podem mudar de significado dependendo do contexto.",
-            "Considerar o contexto é crucial para a interpretação correta."
+            "As formas de tratamento mudam conforme distância social, respeito e região.",
+            "Escolher entre você, o senhor e a senhora também é uma decisão pragmática."
           ],
-          "example": "Aqui está o que você pediu.",
+          "example": "O senhor pode me ajudar?",
           "ruleOrder": [
-            "sujeito",
+            "tratamento",
             "verbo",
-            "objeto"
+            "resto"
           ],
+          "sourceTitle": "forms of address in Portuguese",
+          "sourceExample": "Can you help me?",
           "exampleHighlights": [
             {
-              "label": "sujeito",
-              "text": "Aqui"
+              "label": "tratamento",
+              "text": "O"
             },
             {
               "label": "verbo",
-              "text": "está"
+              "text": "senhor"
             },
             {
-              "label": "objeto",
-              "text": "o que você pediu"
+              "label": "resto",
+              "text": "pode me ajudar"
             }
           ],
           "mistakes": [
             {
-              "wrong": "Lá está o que você pediu.",
-              "fix": "Aqui está o que você pediu."
-            }
-          ]
-        },
-        {
-          "title": "Polidez e Uso de Pronomes",
-          "points": [
-            "O uso de pronomes pode indicar formalidade.",
-            "Pronomes de tratamento demonstram respeito.",
-            "A escolha do pronome pode afetar a percepção social."
-          ],
-          "example": "Senhor, você pode ajudar-me?",
-          "ruleOrder": [
-            "sujeito",
-            "verbo",
-            "objeto"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "sujeito",
-              "text": "Senhor"
-            },
-            {
-              "label": "verbo",
-              "text": "pode"
-            },
-            {
-              "label": "objeto",
-              "text": "ajudar-me"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "Você pode ajudar-me?",
-              "fix": "Senhor, você pode ajudar-me?"
+              "wrong": "O senhor podes me ajudar?",
+              "fix": "O senhor pode me ajudar?"
             }
           ]
         }
@@ -9313,7 +9391,9 @@
               "wrong": "O carro vermelha é rápido.",
               "fix": "O carro vermelho é rápido."
             }
-          ]
+          ],
+          "sourceTitle": "Posição do Adjetivo",
+          "sourceExample": "O carro vermelho é rápido."
         },
         {
           "title": "Adjetivos de Opinião",
@@ -9342,7 +9422,9 @@
               "wrong": "A casa bonito é cara.",
               "fix": "A casa bonita é cara."
             }
-          ]
+          ],
+          "sourceTitle": "Adjetivos de Opinião",
+          "sourceExample": "A casa bonita é cara."
         },
         {
           "title": "Comparativos",
@@ -9386,7 +9468,9 @@
               "wrong": "Ela é mais alto que eu.",
               "fix": "Ela é mais alta que eu."
             }
-          ]
+          ],
+          "sourceTitle": "Comparativos",
+          "sourceExample": "Ela é mais alta que eu."
         },
         {
           "title": "Superlativos",
@@ -9425,7 +9509,9 @@
               "wrong": "Ele é mais inteligente da turma.",
               "fix": "Ele é o mais inteligente da turma."
             }
-          ]
+          ],
+          "sourceTitle": "Superlativos",
+          "sourceExample": "Ele é o mais inteligente da turma."
         },
         {
           "title": "Intensificadores",
@@ -9464,7 +9550,9 @@
               "wrong": "Ela é muitos bonita.",
               "fix": "Ela é muito bonita."
             }
-          ]
+          ],
+          "sourceTitle": "Intensificadores",
+          "sourceExample": "Ela é muito bonita."
         },
         {
           "title": "Adjetivos em Ordem",
@@ -9503,7 +9591,9 @@
               "wrong": "Um lindo carro vermelhos.",
               "fix": "Um lindo carro vermelho."
             }
-          ]
+          ],
+          "sourceTitle": "Adjetivos em Ordem",
+          "sourceExample": "Um lindo carro vermelho."
         },
         {
           "title": "Uso de 'mesmo'",
@@ -9547,7 +9637,9 @@
               "wrong": "Ele comprou o mesma carro que eu.",
               "fix": "Ele comprou o mesmo carro que eu."
             }
-          ]
+          ],
+          "sourceTitle": "Uso de 'mesmo'",
+          "sourceExample": "Ele comprou o mesmo carro que eu."
         },
         {
           "title": "Modificadores de Tempo",
@@ -9586,7 +9678,9 @@
               "wrong": "Hoje eu vou ao mercados.",
               "fix": "Hoje eu vou ao mercado."
             }
-          ]
+          ],
+          "sourceTitle": "Modificadores de Tempo",
+          "sourceExample": "Hoje eu vou ao mercado."
         },
         {
           "title": "Modificadores de Lugar",
@@ -9620,7 +9714,9 @@
               "wrong": "Ele estão aqui.",
               "fix": "Ele está aqui."
             }
-          ]
+          ],
+          "sourceTitle": "Modificadores de Lugar",
+          "sourceExample": "Ele está aqui."
         },
         {
           "title": "Modificadores de Modo",
@@ -9654,7 +9750,9 @@
               "wrong": "Ela fala rápidos.",
               "fix": "Ela fala rapidamente."
             }
-          ]
+          ],
+          "sourceTitle": "Modificadores de Modo",
+          "sourceExample": "Ela fala rapidamente."
         }
       ],
       "Questions": [
@@ -9690,7 +9788,9 @@
               "wrong": "Você gostas de música?",
               "fix": "Você gosta de música?"
             }
-          ]
+          ],
+          "sourceTitle": "simple yes/no questions",
+          "sourceExample": "Do you like music?"
         },
         {
           "title": "Uso de pronomes interrogativos",
@@ -9724,20 +9824,23 @@
               "wrong": "Quem são você?",
               "fix": "Quem é você?"
             }
-          ]
+          ],
+          "sourceTitle": "interrogative pronouns",
+          "sourceExample": "Who are you?"
         },
         {
-          "title": "Perguntas com partículas",
+          "title": "Perguntas negativas",
           "points": [
-            "Use a partícula 'não' para perguntas negativas.",
-            "Coloque 'não' após o verbo.",
-            "A entonação deve ser ascendente."
+            "Use 'não' para formar perguntas negativas.",
+            "A ordem básica da frase continua a mesma da frase afirmativa.",
+            "A entonação ajuda a marcar dúvida, surpresa ou confirmação."
           ],
           "example": "Você não gosta de música?",
           "ruleOrder": [
             "sujeito",
+            "negação",
             "verbo",
-            "partícula"
+            "complemento"
           ],
           "exampleHighlights": [
             {
@@ -9745,12 +9848,16 @@
               "text": "Você"
             },
             {
+              "label": "negação",
+              "text": "não"
+            },
+            {
               "label": "verbo",
               "text": "gosta"
             },
             {
-              "label": "partícula",
-              "text": "música"
+              "label": "complemento",
+              "text": "de música"
             }
           ],
           "mistakes": [
@@ -9758,7 +9865,9 @@
               "wrong": "Você não gostam de música?",
               "fix": "Você não gosta de música?"
             }
-          ]
+          ],
+          "sourceTitle": "negative questions",
+          "sourceExample": "Do you not like music?"
         },
         {
           "title": "Perguntas formais",
@@ -9792,7 +9901,9 @@
               "wrong": "O senhor gostaria um café?",
               "fix": "O senhor gostaria de um café?"
             }
-          ]
+          ],
+          "sourceTitle": "formal questions",
+          "sourceExample": "Would you like a coffee, sir?"
         },
         {
           "title": "Perguntas com 'por que'",
@@ -9826,7 +9937,9 @@
               "wrong": "Por que você não vem ontem?",
               "fix": "Por que você não veio?"
             }
-          ]
+          ],
+          "sourceTitle": "questions with por que",
+          "sourceExample": "Why did you not come?"
         },
         {
           "title": "Perguntas com 'qual'",
@@ -9860,7 +9973,9 @@
               "wrong": "Qual livro você prefereu?",
               "fix": "Qual livro você prefere?"
             }
-          ]
+          ],
+          "sourceTitle": "questions with qual",
+          "sourceExample": "Which book do you prefer?"
         },
         {
           "title": "Perguntas retóricas",
@@ -9894,7 +10009,9 @@
               "wrong": "Quem não gostariam de viajar?",
               "fix": "Quem não gostaria de viajar?"
             }
-          ]
+          ],
+          "sourceTitle": "rhetorical questions",
+          "sourceExample": "Who would not like to travel?"
         }
       ],
       "Negation": [
@@ -9935,7 +10052,9 @@
               "wrong": "Eu gosto de maçãs.",
               "fix": "Eu não gosto de maçãs."
             }
-          ]
+          ],
+          "sourceTitle": "nao for basic negation",
+          "sourceExample": "I do not like apples."
         },
         {
           "title": "Negação com advérbios",
@@ -9974,7 +10093,9 @@
               "wrong": "Eu sempre vou ao cinema.",
               "fix": "Eu nunca vou ao cinema."
             }
-          ]
+          ],
+          "sourceTitle": "nunca for never",
+          "sourceExample": "I never go to the cinema."
         },
         {
           "title": "Negação com pronomes",
@@ -9987,7 +10108,7 @@
           "ruleOrder": [
             "ninguém",
             "verbo",
-            "sujeito"
+            "complemento"
           ],
           "exampleHighlights": [
             {
@@ -9999,7 +10120,7 @@
               "text": "veio"
             },
             {
-              "label": "sujeito",
+              "label": "complemento",
               "text": "à festa"
             }
           ],
@@ -10008,7 +10129,9 @@
               "wrong": "Alguém veio à festa.",
               "fix": "Ninguém veio à festa."
             }
-          ]
+          ],
+          "sourceTitle": "ninguem as a negative subject",
+          "sourceExample": "Nobody came to the party."
         },
         {
           "title": "Negação com 'sem'",
@@ -10047,7 +10170,9 @@
               "wrong": "Eu fui com você.",
               "fix": "Eu fui sem você."
             }
-          ]
+          ],
+          "sourceTitle": "sem for without phrases",
+          "sourceExample": "I went without you."
         },
         {
           "title": "Negação com 'nada'",
@@ -10086,7 +10211,9 @@
               "wrong": "Eu fiz nada.",
               "fix": "Eu não fiz nada."
             }
-          ]
+          ],
+          "sourceTitle": "nao ... nada for nothing",
+          "sourceExample": "I did not do anything."
         },
         {
           "title": "Negação com 'jamais'",
@@ -10125,7 +10252,9 @@
               "wrong": "Eu esquecerei você.",
               "fix": "Eu jamais esquecerei você."
             }
-          ]
+          ],
+          "sourceTitle": "jamais for emphatic never",
+          "sourceExample": "I will never forget you."
         }
       ],
       "Connections": [
@@ -10166,7 +10295,9 @@
               "wrong": "Eu gosto maçãs e bananas.",
               "fix": "Eu gosto de maçãs e bananas."
             }
-          ]
+          ],
+          "sourceTitle": "simple conjunctions",
+          "sourceExample": "I like apples and bananas."
         },
         {
           "title": "Uso de Conjunções Complexas",
@@ -10205,7 +10336,9 @@
               "wrong": "Eu vou ao parque se não chover e.",
               "fix": "Eu vou ao parque se não chover."
             }
-          ]
+          ],
+          "sourceTitle": "complex conjunctions",
+          "sourceExample": "I go to the park if it does not rain."
         },
         {
           "title": "Uso de Frases Relativas",
@@ -10239,7 +10372,9 @@
               "wrong": "O livro que eu li são interessante.",
               "fix": "O livro que eu li é interessante."
             }
-          ]
+          ],
+          "sourceTitle": "relative clauses",
+          "sourceExample": "The book that I read is interesting."
         },
         {
           "title": "Uso de Preposições em Conexões",
@@ -10278,7 +10413,9 @@
               "wrong": "Eu fui cinema com meus amigos.",
               "fix": "Eu fui ao cinema com meus amigos."
             }
-          ]
+          ],
+          "sourceTitle": "prepositions in connections",
+          "sourceExample": "I went to the cinema with my friends."
         },
         {
           "title": "Uso de Conectores de Adição",
@@ -10317,7 +10454,9 @@
               "wrong": "Eu gosto de futebol, também gosto de basquete.",
               "fix": "Eu gosto de futebol; além disso, gosto de basquete."
             }
-          ]
+          ],
+          "sourceTitle": "connectors of addition",
+          "sourceExample": "I like football; in addition, I like basketball."
         },
         {
           "title": "Uso de Conectores de Contraste",
@@ -10356,7 +10495,9 @@
               "wrong": "Eu gosto de praia, mas prefere montanha.",
               "fix": "Eu gosto de praia, mas prefiro montanha."
             }
-          ]
+          ],
+          "sourceTitle": "connectors of contrast",
+          "sourceExample": "I like the beach, but I prefer the mountains."
         },
         {
           "title": "Uso de Conectores de Causa e Efeito",
@@ -10395,7 +10536,9 @@
               "wrong": "Eu estudei muito; portanto, passei na provas.",
               "fix": "Eu estudei muito; portanto, passei na prova."
             }
-          ]
+          ],
+          "sourceTitle": "connectors of cause and effect",
+          "sourceExample": "I studied a lot; therefore, I passed the test."
         }
       ],
       "Conditions": [
@@ -10408,21 +10551,16 @@
           ],
           "example": "Eu falaria se você me convidasse.",
           "ruleOrder": [
-            "sujeito",
-            "verbo",
-            "complemento"
+            "resultado",
+            "oração com se"
           ],
           "exampleHighlights": [
             {
-              "label": "sujeito",
-              "text": "Eu"
+              "label": "resultado",
+              "text": "Eu falaria"
             },
             {
-              "label": "verbo",
-              "text": "falaria"
-            },
-            {
-              "label": "complemento",
+              "label": "oração com se",
               "text": "se você me convidasse"
             }
           ],
@@ -10431,7 +10569,9 @@
               "wrong": "Eu falaria se você convida.",
               "fix": "Eu falaria se você me convidasse."
             }
-          ]
+          ],
+          "sourceTitle": "main clause plus se-clause in the simple conditional",
+          "sourceExample": "I would speak if you invited me."
         },
         {
           "title": "Condicional Composto",
@@ -10442,26 +10582,16 @@
           ],
           "example": "Eu teria ido se soubesse.",
           "ruleOrder": [
-            "sujeito",
-            "auxiliar",
-            "verbo",
-            "complemento"
+            "resultado",
+            "oração com se"
           ],
           "exampleHighlights": [
             {
-              "label": "sujeito",
-              "text": "Eu"
+              "label": "resultado",
+              "text": "Eu teria ido"
             },
             {
-              "label": "auxiliar",
-              "text": "teria"
-            },
-            {
-              "label": "verbo",
-              "text": "ido"
-            },
-            {
-              "label": "complemento",
+              "label": "oração com se",
               "text": "se soubesse"
             }
           ],
@@ -10470,7 +10600,9 @@
               "wrong": "Eu teria ir se soubesse.",
               "fix": "Eu teria ido se soubesse."
             }
-          ]
+          ],
+          "sourceTitle": "compound conditional with a se-clause",
+          "sourceExample": "I would have gone if I had known."
         },
         {
           "title": "Uso do 'Se' em Condicionais",
@@ -10481,27 +10613,17 @@
           ],
           "example": "Se eu tivesse dinheiro, compraria um carro.",
           "ruleOrder": [
-            "partícula",
-            "sujeito",
-            "verbo",
-            "complemento"
+            "oração com se",
+            "resultado"
           ],
           "exampleHighlights": [
             {
-              "label": "partícula",
-              "text": "Se"
+              "label": "oração com se",
+              "text": "Se eu tivesse dinheiro"
             },
             {
-              "label": "sujeito",
-              "text": "eu"
-            },
-            {
-              "label": "verbo",
-              "text": "tivesse"
-            },
-            {
-              "label": "complemento",
-              "text": "dinheiro, compraria um carro"
+              "label": "resultado",
+              "text": "compraria um carro"
             }
           ],
           "mistakes": [
@@ -10509,7 +10631,9 @@
               "wrong": "Se eu ter dinheiro, compraria um carro.",
               "fix": "Se eu tivesse dinheiro, compraria um carro."
             }
-          ]
+          ],
+          "sourceTitle": "se + imperfeito do subjuntivo with conditional result",
+          "sourceExample": "If I had money, I would buy a car."
         },
         {
           "title": "Condicionais Irreais",
@@ -10520,27 +10644,17 @@
           ],
           "example": "Se eu fosse rico, viajaria o mundo.",
           "ruleOrder": [
-            "partícula",
-            "sujeito",
-            "verbo",
-            "complemento"
+            "oração com se",
+            "resultado"
           ],
           "exampleHighlights": [
             {
-              "label": "partícula",
-              "text": "Se"
+              "label": "oração com se",
+              "text": "Se eu fosse rico"
             },
             {
-              "label": "sujeito",
-              "text": "eu"
-            },
-            {
-              "label": "verbo",
-              "text": "fosse"
-            },
-            {
-              "label": "complemento",
-              "text": "rico, viajaria o mundo"
+              "label": "resultado",
+              "text": "viajaria o mundo"
             }
           ],
           "mistakes": [
@@ -10548,7 +10662,9 @@
               "wrong": "Se eu sou rico, viajaria o mundo.",
               "fix": "Se eu fosse rico, viajaria o mundo."
             }
-          ]
+          ],
+          "sourceTitle": "se + imperfeito do subjuntivo for unreal conditions",
+          "sourceExample": "If I were rich, I would travel the world."
         },
         {
           "title": "Condicionais em Futuro",
@@ -10559,26 +10675,16 @@
           ],
           "example": "Se você estudar, passará no exame.",
           "ruleOrder": [
-            "partícula",
-            "sujeito",
-            "verbo",
-            "complemento"
+            "oração com se",
+            "resultado"
           ],
           "exampleHighlights": [
             {
-              "label": "partícula",
-              "text": "Se"
+              "label": "oração com se",
+              "text": "Se você estudar"
             },
             {
-              "label": "sujeito",
-              "text": "você"
-            },
-            {
-              "label": "verbo",
-              "text": "estudar"
-            },
-            {
-              "label": "complemento",
+              "label": "resultado",
               "text": "passará no exame"
             }
           ],
@@ -10587,7 +10693,9 @@
               "wrong": "Se você estudou, passará no exame.",
               "fix": "Se você estudar, passará no exame."
             }
-          ]
+          ],
+          "sourceTitle": "se + future-oriented condition",
+          "sourceExample": "If you study, you will pass the exam."
         },
         {
           "title": "Condicionais Mistos",
@@ -10597,26 +10705,16 @@
           ],
           "example": "Se eu tivesse estudado, agora estaria preparado.",
           "ruleOrder": [
-            "partícula",
-            "sujeito",
-            "verbo",
-            "complemento"
+            "oração com se",
+            "resultado"
           ],
           "exampleHighlights": [
             {
-              "label": "partícula",
-              "text": "Se"
+              "label": "oração com se",
+              "text": "Se eu tivesse estudado"
             },
             {
-              "label": "sujeito",
-              "text": "eu"
-            },
-            {
-              "label": "verbo",
-              "text": "tivesse estudado"
-            },
-            {
-              "label": "complemento",
+              "label": "resultado",
               "text": "agora estaria preparado"
             }
           ],
@@ -10625,18 +10723,19 @@
               "wrong": "Se eu estudava, agora estaria preparado.",
               "fix": "Se eu tivesse estudado, agora estaria preparado."
             }
-          ]
+          ],
+          "sourceTitle": "mixed conditional with a present result",
+          "sourceExample": "If I had studied, I would now be prepared."
         }
       ],
       "Voice & Focus": [
         {
-          "title": "Estrutura Básica da Frase",
+          "title": "A voz ativa destaca o agente",
           "points": [
-            "A ordem padrão é sujeito + verbo + objeto.",
-            "A flexibilidade permite ênfase em diferentes partes da frase.",
-            "O sujeito pode ser omitido se for claro pelo contexto."
+            "Na voz ativa, quem faz a ação fica em primeiro plano.",
+            "É a forma mais direta quando o agente importa."
           ],
-          "example": "Maria come maçã.",
+          "example": "O chef prepara o jantar.",
           "ruleOrder": [
             "sujeito",
             "verbo",
@@ -10645,1294 +10744,796 @@
           "exampleHighlights": [
             {
               "label": "sujeito",
-              "text": "Maria"
+              "text": "O chef"
             },
             {
               "label": "verbo",
-              "text": "come"
+              "text": "prepara"
             },
             {
               "label": "objeto",
-              "text": "maçã"
+              "text": "o jantar"
             }
           ],
+          "sourceTitle": "active clauses foreground the doer",
+          "sourceExample": "The chef prepares the dinner.",
           "mistakes": [
             {
-              "wrong": "Maria comer maçã.",
-              "fix": "Maria come maçã."
+              "wrong": "O jantar foi preparado pelo chef.",
+              "fix": "O chef prepara o jantar."
             }
           ]
         },
         {
-          "title": "Ênfase no Objeto",
+          "title": "Passiva com ser + particípio",
           "points": [
-            "Mudar a ordem pode destacar o objeto.",
-            "Use a estrutura objeto + verbo + sujeito para ênfase.",
-            "É comum em perguntas ou declarações enfáticas."
+            "A passiva com ser põe foco no elemento afetado pela ação.",
+            "O agente pode aparecer com por ou ficar omitido."
           ],
-          "example": "A maçã come Maria.",
+          "example": "O jantar foi preparado pelo chef.",
           "ruleOrder": [
-            "objeto",
-            "verbo",
-            "sujeito"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "objeto",
-              "text": "A maçã"
-            },
-            {
-              "label": "verbo",
-              "text": "come"
-            },
-            {
-              "label": "sujeito",
-              "text": "Maria"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "A maçã comem Maria.",
-              "fix": "A maçã come Maria."
-            }
-          ]
-        },
-        {
-          "title": "Uso do Passivo",
-          "points": [
-            "O passivo é usado para enfatizar a ação em vez do agente.",
-            "A estrutura é: sujeito + verbo ser + particípio.",
-            "É comum em contextos formais ou escritos."
-          ],
-          "example": "A maçã foi comida por Maria.",
-          "ruleOrder": [
-            "sujeito",
-            "verbo ser",
-            "particípio",
-            "por",
+            "paciente",
+            "passiva",
             "agente"
           ],
           "exampleHighlights": [
             {
-              "label": "sujeito",
-              "text": "A maçã"
+              "label": "paciente",
+              "text": "O jantar"
             },
             {
-              "label": "verbo ser",
+              "label": "passiva",
               "text": "foi"
             },
             {
-              "label": "particípio",
-              "text": "comida"
-            },
-            {
-              "label": "por",
-              "text": "por"
-            },
-            {
               "label": "agente",
-              "text": "Maria"
+              "text": "preparado pelo chef"
             }
           ],
+          "sourceTitle": "passive voice with ser",
+          "sourceExample": "The dinner was prepared by the chef.",
           "mistakes": [
             {
-              "wrong": "A maçã foi comido por Maria.",
-              "fix": "A maçã foi comida por Maria."
+              "wrong": "O chef prepara o jantar.",
+              "fix": "O jantar foi preparado pelo chef."
             }
           ]
         },
         {
-          "title": "Foco com Advérbios",
+          "title": "Passiva com se tira o agente do foco",
           "points": [
-            "Advérbios podem ser usados para destacar ações.",
-            "A posição do advérbio pode mudar o foco da frase.",
-            "Coloque o advérbio antes do verbo para ênfase."
+            "Estruturas com se permitem falar da ação sem destacar quem a faz.",
+            "Isso é muito comum em avisos, descrições gerais e linguagem pública."
           ],
-          "example": "Maria rapidamente come maçã.",
+          "example": "Vendem-se livros usados.",
           "ruleOrder": [
-            "sujeito",
-            "advérbio",
             "verbo",
-            "objeto"
+            "se",
+            "paciente"
           ],
           "exampleHighlights": [
             {
-              "label": "sujeito",
-              "text": "Maria"
-            },
-            {
-              "label": "advérbio",
-              "text": "rapidamente"
-            },
-            {
               "label": "verbo",
-              "text": "come"
+              "text": "Vendem-se"
             },
             {
-              "label": "objeto",
-              "text": "maçã"
+              "label": "se",
+              "text": "livros"
+            },
+            {
+              "label": "paciente",
+              "text": "usados"
             }
           ],
+          "sourceTitle": "se passive backgrounds the agent",
+          "sourceExample": "Used books are sold.",
           "mistakes": [
             {
-              "wrong": "Maria rapidamente comem maçã.",
-              "fix": "Maria rapidamente come maçã."
+              "wrong": "As pessoas vendem livros usados.",
+              "fix": "Vendem-se livros usados."
             }
           ]
         },
         {
-          "title": "Mudança de Foco com Pronomes",
+          "title": "Topicalização põe um termo em evidência",
           "points": [
-            "Pronomes podem ser usados para evitar repetição.",
-            "A posição do pronome pode alterar o foco da frase.",
-            "Coloque o pronome antes do verbo para ênfase."
+            "Um elemento pode ir para a frente da frase para virar o centro do comentário.",
+            "Isso muda o foco informacional sem mudar o evento básico."
           ],
-          "example": "Ela comeu a maçã, e eu também a comi.",
+          "example": "Esse livro, eu já li.",
           "ruleOrder": [
-            "sujeito",
-            "verbo",
-            "objeto",
-            "e",
-            "pronome"
+            "tópico",
+            "comentário"
           ],
           "exampleHighlights": [
             {
-              "label": "sujeito",
-              "text": "Ela"
+              "label": "tópico",
+              "text": "Esse livro"
             },
             {
-              "label": "verbo",
-              "text": "comeu"
-            },
-            {
-              "label": "objeto",
-              "text": "a"
-            },
-            {
-              "label": "e",
-              "text": "também"
-            },
-            {
-              "label": "pronome",
-              "text": "a comi"
+              "label": "comentário",
+              "text": "eu"
             }
           ],
+          "sourceTitle": "fronting for focus",
+          "sourceExample": "That book, I have already read.",
           "mistakes": [
             {
-              "wrong": "Ela comeu a maçã, e eu também comi.",
-              "fix": "Ela comeu a maçã, e eu também a comi."
+              "wrong": "Eu já li esse livro.",
+              "fix": "Esse livro, eu já li."
+            }
+          ]
+        },
+        {
+          "title": "Clivadas com foi ... que",
+          "points": [
+            "A clivada destaca explicitamente um elemento da frase.",
+            "Ela é útil para corrigir, contrastar ou responder com precisão."
+          ],
+          "example": "Foi a Ana que ligou.",
+          "ruleOrder": [
+            "moldura",
+            "foco",
+            "oração"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "moldura",
+              "text": "Foi"
+            },
+            {
+              "label": "foco",
+              "text": "a Ana"
+            },
+            {
+              "label": "oração",
+              "text": "que ligou"
+            }
+          ],
+          "sourceTitle": "cleft sentences for focus",
+          "sourceExample": "It was Ana who called.",
+          "mistakes": [
+            {
+              "wrong": "A Ana ligou.",
+              "fix": "Foi a Ana que ligou."
             }
           ]
         }
       ],
       "Modality": [
         {
-          "title": "Obrigações com 'dever'",
+          "title": "Ter de / dever para obrigação",
           "points": [
-            "Usado para expressar obrigações.",
-            "Conjugação no presente é comum.",
-            "Pode ser usado em perguntas."
+            "Ter de e dever podem marcar necessidade ou obrigação.",
+            "A escolha varia por variedade e intensidade pragmática."
           ],
-          "example": "Eu devo estudar para a prova.",
+          "example": "Eu tenho de sair agora.",
           "ruleOrder": [
-            "sujeito",
-            "verbo",
-            "objeto"
+            "modalidade",
+            "ação"
           ],
           "exampleHighlights": [
             {
-              "label": "sujeito",
-              "text": "Eu"
+              "label": "modalidade",
+              "text": "tenho de"
             },
             {
-              "label": "verbo",
-              "text": "devo"
-            },
-            {
-              "label": "objeto",
-              "text": "estudar para a prova"
+              "label": "ação",
+              "text": "sair agora"
             }
           ],
+          "sourceTitle": "strong obligation",
+          "sourceExample": "I have to leave now.",
           "mistakes": [
             {
-              "wrong": "Eu deve estudar para a prova.",
-              "fix": "Eu devo estudar para a prova."
+              "wrong": "Eu deveria sair agora.",
+              "fix": "Eu tenho de sair agora."
             }
           ]
         },
         {
-          "title": "Possibilidade com 'poder'",
+          "title": "Deveria para conselho",
           "points": [
-            "Usado para indicar possibilidade.",
-            "Conjugação varia conforme o tempo verbal.",
-            "Pode expressar permissão."
+            "Deveria traz recomendação mais suave que uma obrigação direta.",
+            "É útil para orientar sem impor."
           ],
-          "example": "Eu posso ir à festa amanhã.",
+          "example": "Você deveria dormir mais cedo.",
           "ruleOrder": [
-            "sujeito",
-            "verbo",
-            "objeto"
+            "conselho",
+            "ação"
           ],
           "exampleHighlights": [
             {
-              "label": "sujeito",
-              "text": "Eu"
+              "label": "conselho",
+              "text": "deveria"
             },
             {
-              "label": "verbo",
-              "text": "posso"
-            },
-            {
-              "label": "objeto",
-              "text": "ir à festa amanhã"
+              "label": "ação",
+              "text": "dormir mais cedo"
             }
           ],
+          "sourceTitle": "advice and recommendation",
+          "sourceExample": "You should sleep earlier.",
           "mistakes": [
             {
-              "wrong": "Eu pode ir à festa amanhã.",
-              "fix": "Eu posso ir à festa amanhã."
+              "wrong": "Você tem de dormir mais cedo.",
+              "fix": "Você deveria dormir mais cedo."
             }
           ]
         },
         {
-          "title": "Capacidade com 'saber'",
+          "title": "Saber / conseguir para habilidade",
           "points": [
-            "Usado para expressar habilidade.",
-            "Pode ser usado em contextos formais e informais.",
-            "Conjugação no passado é comum."
+            "Saber + infinitivo destaca habilidade aprendida; conseguir pode destacar êxito ou capacidade prática.",
+            "Nem toda habilidade usa o mesmo verbo em português."
           ],
           "example": "Eu sei tocar violão.",
           "ruleOrder": [
-            "sujeito",
-            "verbo",
-            "objeto"
+            "habilidade",
+            "conteúdo"
           ],
           "exampleHighlights": [
             {
-              "label": "sujeito",
-              "text": "Eu"
-            },
-            {
-              "label": "verbo",
+              "label": "habilidade",
               "text": "sei"
             },
             {
-              "label": "objeto",
+              "label": "conteúdo",
               "text": "tocar violão"
             }
           ],
+          "sourceTitle": "ability",
+          "sourceExample": "I can play the guitar.",
           "mistakes": [
             {
-              "wrong": "Eu sabe tocar violão.",
+              "wrong": "Eu quero tocar violão.",
               "fix": "Eu sei tocar violão."
             }
           ]
         },
         {
-          "title": "Certeza com 'deve'",
+          "title": "Talvez / pode ser para possibilidade",
           "points": [
-            "Usado para expressar certeza.",
-            "Comum em deduções.",
-            "Pode ser usado em frases negativas."
+            "Talvez e pode ser enfraquecem a certeza da afirmação.",
+            "São formas úteis de hipótese e cautela."
           ],
-          "example": "Ele deve estar em casa agora.",
+          "example": "Talvez ele chegue mais tarde.",
           "ruleOrder": [
-            "sujeito",
-            "verbo",
-            "objeto"
+            "possibilidade",
+            "evento"
           ],
           "exampleHighlights": [
             {
-              "label": "sujeito",
-              "text": "Ele"
+              "label": "possibilidade",
+              "text": "Talvez"
             },
             {
-              "label": "verbo",
-              "text": "deve"
-            },
-            {
-              "label": "objeto",
-              "text": "estar em casa agora"
+              "label": "evento",
+              "text": "ele chegue mais tarde"
             }
           ],
+          "sourceTitle": "possibility and probability",
+          "sourceExample": "Maybe he will arrive later.",
           "mistakes": [
             {
-              "wrong": "Ele deve em casa agora.",
-              "fix": "Ele deve estar em casa agora."
+              "wrong": "Ele chega mais tarde.",
+              "fix": "Talvez ele chegue mais tarde."
             }
           ]
         },
         {
-          "title": "Dúvida com 'poder'",
+          "title": "Poder e não poder para permissão",
           "points": [
-            "Usado para expressar incerteza.",
-            "Pode ser usado em perguntas.",
-            "Conjugação no futuro é comum."
+            "Poder pode marcar permissão; não poder marca proibição ou impossibilidade segundo o contexto.",
+            "O entorno decide qual leitura é a mais natural."
           ],
-          "example": "Você pode não ter visto o filme.",
+          "example": "Você não pode fumar aqui.",
           "ruleOrder": [
-            "sujeito",
-            "verbo",
-            "objeto"
+            "permissão",
+            "ação"
           ],
           "exampleHighlights": [
             {
-              "label": "sujeito",
+              "label": "permissão",
               "text": "Você"
             },
             {
-              "label": "verbo",
-              "text": "pode"
-            },
-            {
-              "label": "objeto",
-              "text": "não ter visto o filme"
+              "label": "ação",
+              "text": "pode fumar aqui"
             }
           ],
+          "sourceTitle": "permission and prohibition",
+          "sourceExample": "You cannot smoke here.",
           "mistakes": [
             {
-              "wrong": "Você pode não viu o filme.",
-              "fix": "Você pode não ter visto o filme."
-            }
-          ]
-        },
-        {
-          "title": "Permissão com 'poder'",
-          "points": [
-            "Usado para conceder permissão.",
-            "Comum em contextos informais.",
-            "Pode ser usado em frases negativas."
-          ],
-          "example": "Você pode sair mais cedo hoje.",
-          "ruleOrder": [
-            "sujeito",
-            "verbo",
-            "objeto"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "sujeito",
-              "text": "Você"
-            },
-            {
-              "label": "verbo",
-              "text": "pode"
-            },
-            {
-              "label": "objeto",
-              "text": "sair mais cedo hoje"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "Você pode saí mais cedo hoje.",
-              "fix": "Você pode sair mais cedo hoje."
-            }
-          ]
-        },
-        {
-          "title": "Sugestão com 'dever'",
-          "points": [
-            "Usado para fazer sugestões.",
-            "Pode ser usado em contextos formais.",
-            "Conjugação no passado é comum."
-          ],
-          "example": "Você deve tentar essa receita.",
-          "ruleOrder": [
-            "sujeito",
-            "verbo",
-            "objeto"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "sujeito",
-              "text": "Você"
-            },
-            {
-              "label": "verbo",
-              "text": "deve"
-            },
-            {
-              "label": "objeto",
-              "text": "tentar essa receita"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "Você deve tenta essa receita.",
-              "fix": "Você deve tentar essa receita."
-            }
-          ]
-        },
-        {
-          "title": "Conselho com 'dever'",
-          "points": [
-            "Usado para dar conselhos.",
-            "Comum em conversas informais.",
-            "Pode ser usado em frases negativas."
-          ],
-          "example": "Você deve descansar mais.",
-          "ruleOrder": [
-            "sujeito",
-            "verbo",
-            "objeto"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "sujeito",
-              "text": "Você"
-            },
-            {
-              "label": "verbo",
-              "text": "deve"
-            },
-            {
-              "label": "objeto",
-              "text": "descansar mais"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "Você deve descansas mais.",
-              "fix": "Você deve descansar mais."
+              "wrong": "Você não consegue fumar aqui.",
+              "fix": "Você não pode fumar aqui."
             }
           ]
         }
       ],
       "Reported Speech": [
         {
-          "title": "Introdução ao Discurso Indireto",
+          "title": "Discurso direto com aspas",
           "points": [
-            "O discurso indireto é utilizado para relatar o que alguém disse sem citar suas palavras exatas.",
-            "Verbos como 'dizer' e 'afirmar' são frequentemente usados.",
-            "Não é necessário mudar o tempo verbal se a declaração ainda é verdadeira."
+            "No discurso direto, reproduzimos as palavras exatas de quem falou.",
+            "Aspas ou travessão ajudam a marcar a mudança para a fala citada."
           ],
-          "example": "Ela disse que viria amanhã.",
+          "example": "Ela disse: \"Eu volto amanhã.\"",
           "ruleOrder": [
-            "sujeito",
-            "verbo",
-            "complemento"
+            "introdução",
+            "citação"
           ],
+          "sourceTitle": "direct quotation with quotation marks",
+          "sourceExample": "She said, “I will return tomorrow.”",
           "exampleHighlights": [
             {
-              "label": "sujeito",
-              "text": "Ela"
+              "label": "introdução",
+              "text": "Ela disse"
             },
             {
-              "label": "verbo",
-              "text": "disse"
-            },
-            {
-              "label": "complemento",
-              "text": "que viria amanhã"
+              "label": "citação",
+              "text": "Eu volto amanhã"
             }
           ],
           "mistakes": [
             {
-              "wrong": "Ela disse que virá amanhã.",
-              "fix": "Ela disse que viria amanhã."
+              "wrong": "Ela disse que voltaria amanhã.",
+              "fix": "Ela disse: \"Eu volto amanhã.\""
             }
           ]
         },
         {
-          "title": "Mudança de Tempo Verbal",
+          "title": "Discurso indireto com que",
           "points": [
-            "Ao relatar algo dito no passado, os tempos verbais podem mudar.",
-            "O passado simples geralmente se torna passado composto.",
-            "O presente pode se transformar em passado."
+            "Para relatar uma afirmação, o português usa com frequência que depois do verbo introdutor.",
+            "O foco passa a ser o conteúdo transmitido, não a formulação literal."
           ],
-          "example": "Ele disse que estava feliz.",
+          "example": "Ela disse que voltaria amanhã.",
           "ruleOrder": [
-            "sujeito",
-            "verbo",
-            "complemento"
+            "introdução",
+            "que",
+            "oração relatada"
           ],
+          "sourceTitle": "reported statements with que",
+          "sourceExample": "She said that she would return tomorrow.",
           "exampleHighlights": [
             {
-              "label": "sujeito",
-              "text": "Ele"
+              "label": "introdução",
+              "text": "Ela disse"
             },
             {
-              "label": "verbo",
-              "text": "disse"
+              "label": "que",
+              "text": "que"
             },
             {
-              "label": "complemento",
-              "text": "que estava feliz"
+              "label": "oração relatada",
+              "text": "voltaria amanhã"
             }
           ],
           "mistakes": [
             {
-              "wrong": "Ele disse que está feliz.",
-              "fix": "Ele disse que estava feliz."
+              "wrong": "Ela disse voltaria amanhã.",
+              "fix": "Ela disse que voltaria amanhã."
             }
           ]
         },
         {
-          "title": "Uso de Conectivos",
+          "title": "Perguntas indiretas com se",
           "points": [
-            "Conectivos como 'que' são essenciais para introduzir o discurso indireto.",
-            "Outros conectivos incluem 'se' e 'como'.",
-            "A escolha do conectivo pode alterar o significado da frase."
+            "Perguntas de sim ou não costumam ser relatadas com se.",
+            "A oração deixa de ter a entoação de pergunta direta e assume ordem declarativa."
           ],
           "example": "Ela perguntou se eu iria à festa.",
           "ruleOrder": [
-            "sujeito",
-            "verbo",
-            "conectivo",
-            "complemento"
+            "introdução",
+            "se",
+            "oração relatada"
           ],
+          "sourceTitle": "reported yes-no questions with se",
+          "sourceExample": "She asked whether I was going to the party.",
           "exampleHighlights": [
             {
-              "label": "sujeito",
-              "text": "Ela"
+              "label": "introdução",
+              "text": "Ela perguntou"
             },
             {
-              "label": "verbo",
-              "text": "perguntou"
-            },
-            {
-              "label": "conectivo",
+              "label": "se",
               "text": "se"
             },
             {
-              "label": "complemento",
+              "label": "oração relatada",
               "text": "eu iria à festa"
             }
           ],
           "mistakes": [
             {
-              "wrong": "Ela perguntou que eu iria à festa.",
+              "wrong": "Ela perguntou eu iria à festa.",
               "fix": "Ela perguntou se eu iria à festa."
             }
           ]
         },
         {
-          "title": "Relato de Perguntas",
+          "title": "Perguntas indiretas com palavra interrogativa",
           "points": [
-            "As perguntas no discurso indireto não mantêm a estrutura interrogativa.",
-            "Usa-se 'se' ou 'como' para introduzir perguntas.",
-            "O verbo deve ser ajustado para o tempo correto."
+            "Em perguntas com onde, quando, por que ou como, a palavra interrogativa permanece.",
+            "Depois dela, a frase segue a ordem normal da oração subordinada."
           ],
           "example": "Ele perguntou como eu estava.",
           "ruleOrder": [
-            "sujeito",
-            "verbo",
-            "conectivo",
-            "complemento"
+            "introdução",
+            "palavra interrogativa",
+            "oração relatada"
           ],
+          "sourceTitle": "reported wh-questions",
+          "sourceExample": "He asked how I was.",
           "exampleHighlights": [
             {
-              "label": "sujeito",
-              "text": "Ele"
+              "label": "introdução",
+              "text": "Ele perguntou"
             },
             {
-              "label": "verbo",
-              "text": "perguntou"
-            },
-            {
-              "label": "conectivo",
+              "label": "palavra interrogativa",
               "text": "como"
             },
             {
-              "label": "complemento",
+              "label": "oração relatada",
               "text": "eu estava"
             }
           ],
           "mistakes": [
             {
-              "wrong": "Ele perguntou: 'Como você está?'",
+              "wrong": "Ele perguntou se eu estava.",
               "fix": "Ele perguntou como eu estava."
             }
           ]
         },
         {
-          "title": "Relato de Ordens e Pedidos",
+          "title": "Pedidos e ordens relatados",
           "points": [
-            "Ordens e pedidos são introduzidos com 'para' ou 'que'.",
-            "O verbo deve estar no infinitivo ou no modo subjuntivo.",
-            "É importante manter o tom adequado ao relatar."
+            "Pedidos podem aparecer com para + infinitivo ou com que + subjuntivo, conforme o verbo e o registro.",
+            "A estrutura escolhida mostra a intenção do original sem copiar o imperativo diretamente."
           ],
           "example": "Ela pediu para eu ajudar.",
           "ruleOrder": [
-            "sujeito",
-            "verbo",
-            "conectivo",
-            "complemento"
+            "introdução",
+            "ligação",
+            "ação"
           ],
+          "sourceTitle": "reported requests and commands",
+          "sourceExample": "She asked me to help.",
           "exampleHighlights": [
             {
-              "label": "sujeito",
-              "text": "Ela"
+              "label": "introdução",
+              "text": "Ela pediu"
             },
             {
-              "label": "verbo",
-              "text": "pediu"
-            },
-            {
-              "label": "conectivo",
+              "label": "ligação",
               "text": "para"
             },
             {
-              "label": "complemento",
+              "label": "ação",
               "text": "eu ajudar"
             }
           ],
           "mistakes": [
             {
-              "wrong": "Ela pediu que eu ajude.",
+              "wrong": "Ela pediu eu ajudar.",
               "fix": "Ela pediu para eu ajudar."
             }
           ]
         },
         {
-          "title": "Discurso Indireto com Emoções",
+          "title": "Tempo e deíxis dependem do contexto",
           "points": [
-            "Relatar emoções pode ser feito com verbos como 'sentir' ou 'achar'.",
-            "É importante manter a concordância verbal.",
-            "As emoções podem ser descritas de forma mais sutil."
+            "Hoje, amanhã, aqui, eu e outros elementos de referência mudam conforme o novo ponto de vista.",
+            "O português ajusta tempos e expressões para preservar sentido, não por uma regra mecânica única."
           ],
-          "example": "Ele achou que eu estava triste.",
+          "example": "Ele disse que chegaria no dia seguinte.",
           "ruleOrder": [
-            "sujeito",
-            "verbo",
-            "conectivo",
-            "complemento"
+            "introdução",
+            "que",
+            "oração relatada"
           ],
+          "sourceTitle": "time and deixis depend on context in reported speech",
+          "sourceExample": "He said that he would arrive the next day.",
           "exampleHighlights": [
             {
-              "label": "sujeito",
-              "text": "Ele"
+              "label": "introdução",
+              "text": "Ele disse"
             },
             {
-              "label": "verbo",
-              "text": "achou"
-            },
-            {
-              "label": "conectivo",
+              "label": "que",
               "text": "que"
             },
             {
-              "label": "complemento",
-              "text": "eu estava triste"
+              "label": "oração relatada",
+              "text": "chegaria no dia seguinte"
             }
           ],
           "mistakes": [
             {
-              "wrong": "Ele achou que eu sou triste.",
-              "fix": "Ele achou que eu estava triste."
+              "wrong": "Ele disse que chegaria amanhã.",
+              "fix": "Ele disse que chegaria no dia seguinte."
             }
           ]
         }
       ],
       "Formality & Style": [
         {
-          "title": "Uso de 'Você' vs. 'Senhor/Senhora'",
+          "title": "Você / o senhor / a senhora",
           "points": [
-            "A escolha entre 'você' e 'senhor/senhora' depende do contexto social.",
-            "Usar 'senhor/senhora' é mais formal e respeitoso.",
-            "Em ambientes informais, 'você' é amplamente aceito."
+            "Essas formas de tratamento marcam distância social e respeito.",
+            "A escolha varia por país, região e situação."
           ],
-          "example": "Você pode me ajudar, senhor?",
+          "example": "A senhora poderia me ajudar?",
           "ruleOrder": [
-            "sujeito",
-            "verbo",
-            "objeto"
+            "tratamento",
+            "pedido"
           ],
           "exampleHighlights": [
             {
-              "label": "sujeito",
-              "text": "Você"
+              "label": "tratamento",
+              "text": "A senhora"
             },
             {
-              "label": "verbo",
-              "text": "pode"
-            },
-            {
-              "label": "objeto",
-              "text": "me ajudar, senhor"
+              "label": "pedido",
+              "text": "poderia me ajudar"
             }
           ],
+          "sourceTitle": "formal and informal second-person address",
+          "sourceExample": "Could you help me?",
           "mistakes": [
             {
-              "wrong": "Você pode me ajudar, senhora?",
-              "fix": "Você pode me ajudar, senhor?"
+              "wrong": "Você pode me ajudar?",
+              "fix": "A senhora poderia me ajudar?"
             }
           ]
         },
         {
-          "title": "Uso de 'Por favor' e 'Obrigado(a)'",
+          "title": "Pedidos educados com poderia",
           "points": [
-            "'Por favor' é essencial para pedidos educados.",
-            "'Obrigado(a)' expressa gratidão e deve ser usado sempre que apropriado.",
-            "A omissão dessas expressões pode soar rude."
+            "Poderia e por favor suavizam pedidos.",
+            "O português usa muito a flexão verbal para ajustar a delicadeza."
           ],
-          "example": "Por favor, me passe o sal. Obrigado!",
+          "example": "Você poderia repetir, por favor?",
           "ruleOrder": [
-            "sujeito",
-            "verbo",
-            "objeto"
+            "suavização",
+            "pedido"
           ],
           "exampleHighlights": [
             {
-              "label": "sujeito",
-              "text": "me passe"
+              "label": "suavização",
+              "text": "Você poderia repetir"
             },
             {
-              "label": "verbo",
-              "text": "o sal"
-            },
-            {
-              "label": "objeto",
-              "text": "Obrigado"
+              "label": "pedido",
+              "text": "por favor"
             }
           ],
+          "sourceTitle": "polite requests with softeners",
+          "sourceExample": "Could you repeat that, please?",
           "mistakes": [
             {
-              "wrong": "Me passe o sal. Obrigado!",
-              "fix": "Por favor, me passe o sal. Obrigado!"
+              "wrong": "Repete, por favor.",
+              "fix": "Você poderia repetir, por favor?"
             }
           ]
         },
         {
-          "title": "Uso de 'Desculpe' e 'Desculpe-me'",
+          "title": "Saudações e títulos mudam o tom",
           "points": [
-            "'Desculpe' é mais informal, enquanto 'desculpe-me' é mais formal.",
-            "Escolha a forma com base na relação com a pessoa.",
-            "Em contextos formais, prefira 'desculpe-me'."
+            "Bom dia, senhor e doutor ajudam a criar um registro mais formal.",
+            "A abertura da conversa já define expectativas de estilo."
           ],
-          "example": "Desculpe-me pelo atraso.",
+          "example": "Bom dia, doutora Helena.",
           "ruleOrder": [
-            "verbo",
-            "objeto"
+            "saudação",
+            "tratamento"
           ],
           "exampleHighlights": [
             {
-              "label": "verbo",
-              "text": "Desculpe-me"
+              "label": "saudação",
+              "text": "Bom dia"
             },
             {
-              "label": "objeto",
-              "text": "pelo atraso"
+              "label": "tratamento",
+              "text": "doutora Helena"
             }
           ],
+          "sourceTitle": "titles and formal greetings",
+          "sourceExample": "Good morning, Doctor Helena.",
           "mistakes": [
             {
-              "wrong": "Desculpe pelo atraso.",
-              "fix": "Desculpe-me pelo atraso."
+              "wrong": "Oi, Helena.",
+              "fix": "Bom dia, doutora Helena."
             }
           ]
         },
         {
-          "title": "Uso de 'Com licença' e 'Permita-me'",
+          "title": "Queria e gostaria soam mais diplomáticos",
           "points": [
-            "'Com licença' é usado para interromper ou pedir passagem.",
-            "'Permita-me' é mais formal e educado.",
-            "A escolha depende do grau de formalidade desejado."
+            "Quero pode soar direto; queria ou gostaria muitas vezes soam mais cuidadosos.",
+            "Isso importa muito em pedidos e contextos profissionais."
           ],
-          "example": "Com licença, posso passar?",
+          "example": "Gostaria de marcar uma reunião.",
           "ruleOrder": [
-            "sujeito",
-            "verbo"
+            "atenuação",
+            "objetivo"
           ],
           "exampleHighlights": [
             {
-              "label": "sujeito",
-              "text": "posso"
+              "label": "atenuação",
+              "text": "Gostaria"
             },
             {
-              "label": "verbo",
-              "text": "passar"
+              "label": "objetivo",
+              "text": "de marcar uma reunião"
             }
           ],
+          "sourceTitle": "softening and diplomatic style",
+          "sourceExample": "I would like to schedule a meeting.",
           "mistakes": [
             {
-              "wrong": "Posso passar?",
-              "fix": "Com licença, posso passar?"
-            }
-          ]
-        },
-        {
-          "title": "Uso de 'Agradeço' e 'Fico grato(a)'",
-          "points": [
-            "'Agradeço' é direto e pode ser usado em qualquer situação.",
-            "'Fico grato(a)' é mais formal e expressa um sentimento mais profundo.",
-            "Escolha a expressão com base na situação."
-          ],
-          "example": "Agradeço pela ajuda.",
-          "ruleOrder": [
-            "verbo",
-            "objeto"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "verbo",
-              "text": "Agradeço"
-            },
-            {
-              "label": "objeto",
-              "text": "pela ajuda"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "Obrigado pela ajuda.",
-              "fix": "Agradeço pela ajuda."
-            }
-          ]
-        },
-        {
-          "title": "Uso de 'Por gentileza' e 'Se não for incômodo'",
-          "points": [
-            "'Por gentileza' é uma forma educada de fazer um pedido.",
-            "'Se não for incômodo' é uma expressão que suaviza o pedido.",
-            "Ambas as expressões aumentam a cortesia."
-          ],
-          "example": "Por gentileza, poderia me ajudar?",
-          "ruleOrder": [
-            "sujeito",
-            "verbo"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "sujeito",
-              "text": "poderia"
-            },
-            {
-              "label": "verbo",
-              "text": "me ajudar"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "Pode me ajudar?",
-              "fix": "Por gentileza, poderia me ajudar?"
-            }
-          ]
-        },
-        {
-          "title": "Uso de 'Espero que' e 'Gostaria que'",
-          "points": [
-            "'Espero que' é usado para expressar desejos de forma simples.",
-            "'Gostaria que' é mais formal e expressa um desejo mais forte.",
-            "Escolha com base na formalidade da situação."
-          ],
-          "example": "Espero que você venha à festa.",
-          "ruleOrder": [
-            "verbo",
-            "sujeito",
-            "objeto"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "verbo",
-              "text": "Espero"
-            },
-            {
-              "label": "sujeito",
-              "text": "que você"
-            },
-            {
-              "label": "objeto",
-              "text": "venha à festa"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "Gostaria que você venha à festa.",
-              "fix": "Espero que você venha à festa."
+              "wrong": "Quero marcar uma reunião.",
+              "fix": "Gostaria de marcar uma reunião."
             }
           ]
         }
       ],
       "Discourse & Flow": [
         {
-          "title": "Conectores de Adição",
+          "title": "E / mas para somar e contrastar",
           "points": [
-            "Utilize 'e' para adicionar informações.",
-            "Use 'também' para enfatizar inclusão.",
-            "Evite repetições desnecessárias."
+            "E adiciona informação; mas cria oposição.",
+            "Esses conectores básicos sustentam grande parte da fluidez textual."
           ],
-          "example": "Eu gosto de maçãs e também de laranjas.",
+          "example": "Eu leio muito, mas escrevo pouco.",
           "ruleOrder": [
-            "sujeito",
-            "verbo",
-            "objeto",
-            "conector"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "sujeito",
-              "text": "Eu"
-            },
-            {
-              "label": "verbo",
-              "text": "gosto"
-            },
-            {
-              "label": "objeto",
-              "text": "de maçãs"
-            },
-            {
-              "label": "conector",
-              "text": "e também de laranjas"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "Eu gosto de maçãs e gosto de laranjas.",
-              "fix": "Eu gosto de maçãs e também de laranjas."
-            }
-          ]
-        },
-        {
-          "title": "Conectores de Contraste",
-          "points": [
-            "Use 'mas' para apresentar uma ideia oposta.",
-            "Utilize 'porém' em contextos mais formais.",
-            "Evite contradições diretas."
-          ],
-          "example": "Eu gosto de café, mas prefiro chá.",
-          "ruleOrder": [
-            "sujeito",
-            "verbo",
-            "objeto",
-            "conector"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "sujeito",
-              "text": "Eu"
-            },
-            {
-              "label": "verbo",
-              "text": "gosto"
-            },
-            {
-              "label": "objeto",
-              "text": "de café"
-            },
-            {
-              "label": "conector",
-              "text": "mas prefiro chá"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "Eu gosto de café, eu prefiro chá.",
-              "fix": "Eu gosto de café, mas prefiro chá."
-            }
-          ]
-        },
-        {
-          "title": "Conectores de Causa e Efeito",
-          "points": [
-            "Use 'porque' para explicar razões.",
-            "Utilize 'portanto' para indicar consequências.",
-            "Evite ambiguidade na relação."
-          ],
-          "example": "Eu estudei muito, portanto passei na prova.",
-          "ruleOrder": [
-            "sujeito",
-            "verbo",
-            "objeto",
-            "conector"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "sujeito",
-              "text": "Eu"
-            },
-            {
-              "label": "verbo",
-              "text": "estudei"
-            },
-            {
-              "label": "objeto",
-              "text": "muito"
-            },
-            {
-              "label": "conector",
-              "text": "portanto passei na prova"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "Eu estudei muito, eu passei na prova.",
-              "fix": "Eu estudei muito, portanto passei na prova."
-            }
-          ]
-        },
-        {
-          "title": "Conectores de Tempo",
-          "points": [
-            "Use 'quando' para indicar tempo.",
-            "Utilize 'antes' e 'depois' para sequências.",
-            "Evite confusões temporais."
-          ],
-          "example": "Quando cheguei, a festa já tinha começado.",
-          "ruleOrder": [
+            "ideia 1",
             "conector",
-            "sujeito",
-            "verbo",
-            "objeto"
+            "ideia 2"
           ],
           "exampleHighlights": [
             {
+              "label": "ideia 1",
+              "text": "Eu leio muito"
+            },
+            {
               "label": "conector",
-              "text": "Quando"
+              "text": "mas"
             },
             {
-              "label": "sujeito",
-              "text": "cheguei"
-            },
-            {
-              "label": "verbo",
-              "text": "a festa"
-            },
-            {
-              "label": "objeto",
-              "text": "já tinha começado"
+              "label": "ideia 2",
+              "text": "escrevo pouco"
             }
           ],
+          "sourceTitle": "addition and contrast markers",
+          "sourceExample": "I read a lot, but I write little.",
           "mistakes": [
             {
-              "wrong": "Quando eu cheguei, a festa começou.",
-              "fix": "Quando cheguei, a festa já tinha começado."
+              "wrong": "Eu leio muito, e escrevo pouco.",
+              "fix": "Eu leio muito, mas escrevo pouco."
             }
           ]
         },
         {
-          "title": "Uso de Pronomes Relativos",
+          "title": "Porque / por isso para causa e consequência",
           "points": [
-            "Use 'que' para conectar orações.",
-            "Utilize 'cujo' para indicar posse.",
-            "Evite ambiguidade na referência."
+            "Porque apresenta a razão; por isso apresenta o resultado.",
+            "Separar essas funções evita frases confusas."
           ],
-          "example": "O livro que eu comprei é interessante.",
+          "example": "Fiquei em casa porque chovia, por isso terminei o trabalho.",
           "ruleOrder": [
-            "sujeito",
-            "verbo",
-            "objeto",
-            "pronome relativo"
+            "causa",
+            "resultado"
           ],
           "exampleHighlights": [
             {
-              "label": "sujeito",
-              "text": "O livro"
+              "label": "causa",
+              "text": "Fiquei em casa porque chovia"
             },
             {
-              "label": "verbo",
-              "text": "que"
-            },
-            {
-              "label": "objeto",
-              "text": "eu comprei"
-            },
-            {
-              "label": "pronome relativo",
-              "text": "é interessante"
+              "label": "resultado",
+              "text": "por isso terminei o trabalho"
             }
           ],
+          "sourceTitle": "reason and result markers",
+          "sourceExample": "I stayed home because it was raining, so I finished the work.",
           "mistakes": [
             {
-              "wrong": "O livro que eu comprei interessante.",
-              "fix": "O livro que eu comprei é interessante."
+              "wrong": "Fiquei em casa por isso chovia.",
+              "fix": "Fiquei em casa porque chovia, por isso terminei o trabalho."
             }
           ]
         },
         {
-          "title": "Estruturas de Ênfase",
+          "title": "Primeiro / depois / finalmente organizam",
           "points": [
-            "Use 'é... que' para enfatizar.",
-            "Utilize 'justamente' para reforçar.",
-            "Evite ênfases desnecessárias."
+            "Marcadores de sequência são essenciais em instruções e narrativas.",
+            "Eles ajudam o ouvinte a acompanhar cada etapa."
           ],
-          "example": "É o João que trouxe o bolo.",
+          "example": "Primeiro leio o texto, depois faço o exercício.",
           "ruleOrder": [
-            "verbo",
-            "sujeito",
-            "conector",
-            "objeto"
+            "passo 1",
+            "passo 2"
           ],
           "exampleHighlights": [
             {
-              "label": "verbo",
-              "text": "É"
+              "label": "passo 1",
+              "text": "Primeiro leio o texto"
             },
             {
-              "label": "sujeito",
-              "text": "o João"
-            },
-            {
-              "label": "conector",
-              "text": "que"
-            },
-            {
-              "label": "objeto",
-              "text": "trouxe o bolo"
+              "label": "passo 2",
+              "text": "depois faço o exercício"
             }
           ],
+          "sourceTitle": "sequencing markers",
+          "sourceExample": "First I read the text, then I do the exercise.",
           "mistakes": [
             {
-              "wrong": "O João que trouxe o bolo.",
-              "fix": "É o João que trouxe o bolo."
+              "wrong": "Finalmente leio o texto, depois faço o exercício, primeiro planejo.",
+              "fix": "Primeiro leio o texto, depois faço o exercício."
             }
           ]
         },
         {
-          "title": "Uso de Conectores de Condição",
+          "title": "Na verdade e aliás ajustam o fluxo",
           "points": [
-            "Use 'se' para expressar condições.",
-            "Utilize 'caso' para situações hipotéticas.",
-            "Evite confusões nas condições."
+            "Na verdade reformula; aliás acrescenta uma observação relacionada.",
+            "Esses marcadores deixam a fala mais natural e guiada."
           ],
-          "example": "Se você estudar, passará na prova.",
+          "example": "Na verdade, o problema é simples.",
           "ruleOrder": [
-            "conector",
-            "sujeito",
-            "verbo",
-            "objeto"
+            "marcador",
+            "reformulação"
           ],
           "exampleHighlights": [
             {
-              "label": "conector",
-              "text": "Se"
+              "label": "marcador",
+              "text": "Na verdade"
             },
             {
-              "label": "sujeito",
-              "text": "você"
-            },
-            {
-              "label": "verbo",
-              "text": "estudar"
-            },
-            {
-              "label": "objeto",
-              "text": "passará na prova"
+              "label": "reformulação",
+              "text": "o problema é simples"
             }
           ],
+          "sourceTitle": "flow-managing discourse markers",
+          "sourceExample": "Actually, the problem is simple.",
           "mistakes": [
             {
-              "wrong": "Você estudar, passará na prova.",
-              "fix": "Se você estudar, passará na prova."
+              "wrong": "Por exemplo, o problema é simples.",
+              "fix": "Na verdade, o problema é simples."
             }
           ]
         },
         {
-          "title": "Estruturas de Conclusão",
+          "title": "Por exemplo e em resumo enquadram",
           "points": [
-            "Use 'portanto' para concluir.",
-            "Utilize 'assim' para resumir.",
-            "Evite conclusões abruptas."
+            "Por exemplo abre ilustração; em resumo sinaliza fechamento.",
+            "Esses sinais ajudam a organizar explicações mais longas."
           ],
-          "example": "Estudei bastante, portanto, passei no exame.",
+          "example": "Há muitas formas de praticar, por exemplo com diálogos.",
           "ruleOrder": [
-            "sujeito",
-            "verbo",
-            "objeto",
-            "conector"
+            "geral",
+            "exemplo"
           ],
           "exampleHighlights": [
             {
-              "label": "sujeito",
-              "text": "Estudei"
+              "label": "geral",
+              "text": "Há muitas formas de praticar"
             },
             {
-              "label": "verbo",
-              "text": "bastante"
-            },
-            {
-              "label": "objeto",
-              "text": "portanto"
-            },
-            {
-              "label": "conector",
-              "text": "passei no exame"
+              "label": "exemplo",
+              "text": "por exemplo com diálogos"
             }
           ],
+          "sourceTitle": "examples and conclusions",
+          "sourceExample": "There are many ways to practice, for example with dialogues.",
           "mistakes": [
             {
-              "wrong": "Estudei bastante, passei no exame.",
-              "fix": "Estudei bastante, portanto, passei no exame."
-            }
-          ]
-        },
-        {
-          "title": "Uso de Transições",
-          "points": [
-            "Use 'além disso' para adicionar informações.",
-            "Utilize 'por outro lado' para contrastar.",
-            "Evite transições fracas."
-          ],
-          "example": "Eu gosto de viajar; além disso, adoro conhecer novas culturas.",
-          "ruleOrder": [
-            "sujeito",
-            "verbo",
-            "objeto",
-            "conector"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "sujeito",
-              "text": "Eu"
-            },
-            {
-              "label": "verbo",
-              "text": "gosto"
-            },
-            {
-              "label": "objeto",
-              "text": "de viajar"
-            },
-            {
-              "label": "conector",
-              "text": "além disso, adoro conhecer novas culturas"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "Eu gosto de viajar, eu adoro conhecer novas culturas.",
-              "fix": "Eu gosto de viajar; além disso, adoro conhecer novas culturas."
-            }
-          ]
-        },
-        {
-          "title": "Uso de Exemplos",
-          "points": [
-            "Use 'por exemplo' para ilustrar.",
-            "Utilize 'como' para dar exemplos.",
-            "Evite exemplos irrelevantes."
-          ],
-          "example": "Muitos países têm problemas ambientais, como a poluição.",
-          "ruleOrder": [
-            "sujeito",
-            "verbo",
-            "objeto",
-            "conector"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "sujeito",
-              "text": "Muitos países"
-            },
-            {
-              "label": "verbo",
-              "text": "têm"
-            },
-            {
-              "label": "objeto",
-              "text": "problemas ambientais"
-            },
-            {
-              "label": "conector",
-              "text": "como a poluição"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "Muitos países têm problemas ambientais, a poluição.",
-              "fix": "Muitos países têm problemas ambientais, como a poluição."
+              "wrong": "Há muitas formas de praticar, em resumo com diálogos.",
+              "fix": "Há muitas formas de praticar, por exemplo com diálogos."
             }
           ]
         }
@@ -11961,7 +11562,6 @@
       "Greetings": {
         "hi": "oi",
         "hello": "olá",
-        "good morning": "bom dia",
         "good afternoon": "boa tarde",
         "good evening": "boa noite",
         "good night": "boa noite",
@@ -11975,7 +11575,6 @@
         "thank you": "obrigado",
         "you're welcome": "de nada",
         "thanks": "valeu",
-        "good day": "bom dia",
         "how are you": "como você está",
         "nice to meet you": "prazer em conhecê-lo",
         "pleased to meet you": "prazer em conhecê-lo",
@@ -11986,7 +11585,8 @@
         "have a good day": "tenha um bom dia",
         "good luck": "boa sorte",
         "welcome back": "bem-vindo de volta",
-        "no problem": "sem problemas"
+        "no problem": "sem problemas",
+        "good morning": "bom dia"
       },
       "Pronouns": {
         "i": "eu",
@@ -12049,7 +11649,6 @@
         "have": "ter",
         "do": "fazer",
         "go": "ir",
-        "get": "obter",
         "make": "fazer",
         "take": "levar",
         "come": "vir",
@@ -12127,7 +11726,8 @@
         "share": "compartilhar",
         "order": "pedir",
         "follow": "seguir",
-        "save": "salvar"
+        "save": "salvar",
+        "get": "conseguir"
       },
       "Questions & Connectors": {
         "who": "quem",
@@ -12135,7 +11735,6 @@
         "where": "onde",
         "when": "quando",
         "why": "por que",
-        "how": "como",
         "which": "qual",
         "whose": "de quem",
         "how many": "quantos",
@@ -12168,7 +11767,6 @@
         "so that": "para que",
         "in case": "caso",
         "because of": "por causa de",
-        "as": "como",
         "than": "do que",
         "through": "através",
         "without": "sem",
@@ -12186,7 +11784,8 @@
         "behind": "atrás de",
         "in front of": "na frente de",
         "next to": "ao lado de",
-        "past": "passado"
+        "past": "passado",
+        "how": "como"
       },
       "Numbers & Counting": {
         "zero": "zero",
@@ -13102,9 +12701,6 @@
         "this is my sister": "esta é minha irmã",
         "nice to meet you": "prazer em conhecê-lo",
         "pleased to meet you": "satisfeito em conhecê-lo",
-        "i am learning english": "eu estou aprendendo inglês",
-        "i speak english": "eu falo inglês",
-        "i do not speak english": "eu não falo inglês",
         "i am learning portuguese": "estou aprendendo português",
         "i speak portuguese": "eu falo português",
         "i do not speak portuguese": "eu não falo português"
@@ -13133,7 +12729,6 @@
         "what time is it": "que horas são",
         "how many people": "quantas pessoas",
         "which one is better": "qual é melhor",
-        "do you speak english": "você fala inglês",
         "do you have this": "você tem isso",
         "is this correct": "isto está correto",
         "is it open": "está aberto",
@@ -13383,979 +12978,327 @@
     },
     "grammarTitles": {
       "Sentence Structure": {
-        "basic word order": "ordem básica das palavras",
-        "sentence parts": "partes da frase",
-        "adding details": "adicionando detalhes",
-        "linking clauses": "ligando orações",
-        "sentence variety": "variedade de frases"
+        "basic clause order": "Ordem básica da frase",
+        "definite articles in sentences": "Uso de Artigos Definidos",
+        "flexible word order": "Flexibilidade na Ordem",
+        "past events in a clause": "Uso de Verbos no Passado",
+        "personal pronouns in context": "Uso de Pronomes Pessoais"
       },
       "Verbs": {
-        "action verbs": "verbos de ação",
-        "state verbs": "verbos de estado",
-        "linking verbs": "verbos de ligação",
-        "verb patterns": "padrões verbais",
-        "verb combinations": "combinações verbais",
-        "phrasal verbs": "verbos frasais"
+        "present indicative": "Presente do Indicativo",
+        "preterite perfect": "Pretérito Perfeito",
+        "simple future": "Futuro do Presente",
+        "imperfect for past habits": "Pretérito Imperfeito",
+        "simple conditional": "Condicional Simples",
+        "present subjunctive": "Subjuntivo Presente"
       },
       "Tenses & Aspect": {
-        "present simple": "presente simples",
-        "present continuous": "presente contínuo",
-        "past simple": "passado simples",
-        "past continuous": "passado contínuo",
-        "present perfect": "pretérito perfeito",
-        "past perfect": "pretérito mais-que-perfeito",
-        "future forms": "formas do futuro",
-        "future continuous": "futuro contínuo",
-        "future perfect": "futuro perfeito",
-        "aspect contrasts": "contrastes de aspecto"
+        "simple present for habits and general truths": "Presente Simples",
+        "preterite perfect for completed past actions": "Pretérito Perfeito",
+        "simple future for plans and predictions": "Futuro do Presente",
+        "imperfect for past habits and background": "Pretérito Imperfeito",
+        "conditional for hypothetical actions": "Futuro do Pretérito",
+        "present continuous with estar + gerund": "Presente Contínuo",
+        "pluperfect with tinha + participle": "Pretérito Mais-que-perfeito",
+        "future perfect": "Futuro do Presente Composto",
+        "perfective and imperfective aspect": "Aspecto Perfectivo e Imperfectivo",
+        "time and aspect adverbs": "Advérbios de tempo e aspecto"
       },
       "Nouns & Articles": {
-        "countable nouns": "substantivos contáveis",
-        "uncountable nouns": "substantivos incontáveis",
-        "articles": "artigos",
-        "plural forms": "formas plurais",
-        "possessive nouns": "substantivos possessivos",
-        "noun phrases": "frases nominais",
-        "quantifiers": "quantificadores"
+        "artigos definidos": "Artigos Definidos",
+        "artigos indefinidos": "Artigos Indefinidos",
+        "singular e plural": "Singular e plural",
+        "artigos com adjetivos": "Artigos com Adjetivos",
+        "omissão de artigos": "Omissão de Artigos",
+        "artigos em expressões idiomáticas": "Artigos em Expressões Idiomáticas",
+        "artigos e nomes próprios": "Artigos e Nomes Próprios"
       },
       "Pronouns & Reference": {
-        "subject pronouns": "pronomes sujeitos",
-        "object pronouns": "pronomes objetos",
-        "possessive forms": "formas possessivas",
-        "reflexive pronouns": "pronomes reflexivos",
-        "demonstratives": "demonstrativos",
-        "relative reference": "referência relativa",
-        "indefinite reference": "referência indefinida"
+        "subject pronouns in portuguese": "Pronomes pessoais de sujeito",
+        "direct object pronouns": "Pronomes oblíquos diretos",
+        "possessive pronouns": "Pronomes possessivos",
+        "demonstrative pronouns": "Pronomes demonstrativos",
+        "relative pronouns with que": "Pronomes relativos com que",
+        "indefinite pronouns": "Pronomes indefinidos",
+        "forms of address in portuguese": "Você / o senhor / a senhora"
       },
       "Modifiers": {
-        "adjectives basics": "noções básicas de adjetivos",
-        "adjective order": "ordem dos adjetivos",
-        "comparatives": "comparativos",
-        "superlatives": "superlativos",
-        "adverbs basics": "noções básicas de advérbios",
-        "frequency adverbs": "advérbios de frequência",
-        "time and place adverbs": "advérbios de tempo e lugar",
-        "degree words": "palavras de grau",
-        "participles": "particípios",
-        "modifier stacking": "empilhamento de modificadores"
+        "posição do adjetivo": "Posição do Adjetivo",
+        "adjetivos de opinião": "Adjetivos de Opinião",
+        "comparativos": "Comparativos",
+        "superlativos": "Superlativos",
+        "intensificadores": "Intensificadores",
+        "adjetivos em ordem": "Adjetivos em Ordem",
+        "uso de 'mesmo'": "Uso de 'mesmo'",
+        "modificadores de tempo": "Modificadores de Tempo",
+        "modificadores de lugar": "Modificadores de Lugar",
+        "modificadores de modo": "Modificadores de Modo"
       },
       "Questions": {
-        "yes no questions": "perguntas de sim ou não",
-        "wh questions": "perguntas com wh",
-        "questions with be": "perguntas com o verbo ser/estar",
-        "questions with do": "perguntas com o verbo fazer",
-        "questions with modals": "perguntas com verbos modais",
-        "tag questions": "perguntas de confirmação",
-        "indirect questions": "perguntas indiretas"
+        "simple yes/no questions": "Perguntas simples",
+        "interrogative pronouns": "Uso de pronomes interrogativos",
+        "negative questions": "Perguntas negativas",
+        "formal questions": "Perguntas formais",
+        "questions with por que": "Perguntas com 'por que'",
+        "questions with qual": "Perguntas com 'qual'",
+        "rhetorical questions": "Perguntas retóricas"
       },
       "Negation": {
-        "not with be": "não com ser",
-        "not with do": "não com fazer",
-        "negative short forms": "formas curtas negativas",
-        "negative words": "palavras negativas",
-        "negative questions": "perguntas negativas",
-        "limited negatives": "negativos limitados"
+        "nao for basic negation": "Negação simples",
+        "nunca for never": "Negação com advérbios",
+        "ninguem as a negative subject": "Negação com pronomes",
+        "sem for without phrases": "Negação com 'sem'",
+        "nao ... nada for nothing": "Negação com 'nada'",
+        "jamais for emphatic never": "Negação com 'jamais'"
       },
       "Connections": {
-        "basic connectors": "conectores básicos",
-        "reason and result": "razão e resultado",
-        "contrast and choice": "contraste e escolha",
-        "time connectors": "conectores de tempo",
-        "comparison links": "links de comparação",
-        "adding ideas": "adicionando ideias",
-        "ordering ideas": "ordenando ideias"
+        "simple conjunctions": "Uso de Conjunções Simples",
+        "complex conjunctions": "Uso de Conjunções Complexas",
+        "relative clauses": "Uso de Frases Relativas",
+        "prepositions in connections": "Uso de Preposições em Conexões",
+        "connectors of addition": "Uso de Conectores de Adição",
+        "connectors of contrast": "Uso de Conectores de Contraste",
+        "connectors of cause and effect": "Uso de Conectores de Causa e Efeito"
       },
       "Conditions": {
-        "real conditions": "condições reais",
-        "future conditions": "condições futuras",
-        "unreal present": "presente irreal",
-        "unreal past": "passado irreal",
-        "mixed conditions": "condições mistas",
-        "unless and otherwise": "a menos que e de outra forma"
+        "main clause plus se-clause in the simple conditional": "Condicional Simples",
+        "compound conditional with a se-clause": "Condicional Composto",
+        "se + imperfeito do subjuntivo with conditional result": "Uso do 'Se' em Condicionais",
+        "se + imperfeito do subjuntivo for unreal conditions": "Condicionais Irreais",
+        "se + future-oriented condition": "Condicionais em Futuro",
+        "mixed conditional with a present result": "Condicionais Mistos"
       },
       "Voice & Focus": {
-        "active voice": "voz ativa",
-        "passive voice": "voz passiva",
-        "focus shifts": "mudanças de foco",
-        "cleft sentences": "frases destacadas",
-        "there and it subjects": "sujeitos 'there' e 'it'"
+        "active clauses foreground the doer": "A voz ativa destaca o agente",
+        "passive voice with ser": "Passiva com ser + particípio",
+        "se passive backgrounds the agent": "Passiva com se tira o agente do foco",
+        "fronting for focus": "Topicalização põe um termo em evidência",
+        "cleft sentences for focus": "Clivadas com foi ... que"
       },
       "Modality": {
-        "ability": "habilidade",
-        "permission": "permissão",
-        "obligation": "obrigação",
-        "advice": "conselho",
-        "possibility": "possibilidade",
-        "probability": "probabilidade",
-        "polite requests": "pedidos educados",
-        "offers and invitations": "ofertas e convites"
+        "strong obligation": "Ter de / dever para obrigação",
+        "advice and recommendation": "Deveria para conselho",
+        "ability": "Saber / conseguir para habilidade",
+        "possibility and probability": "Talvez / pode ser para possibilidade",
+        "permission and prohibition": "Poder e não poder para permissão"
       },
       "Reported Speech": {
-        "reporting statements": "relatar declarações",
-        "reporting questions": "relatar perguntas",
-        "reporting requests": "relatar pedidos",
-        "reporting commands": "relatar comandos",
-        "backshift basics": "fundamentos do retrocesso",
-        "time place changes": "mudanças de tempo e lugar"
+        "direct quotation with quotation marks": "Discurso direto com aspas",
+        "reported statements with que": "Discurso indireto com que",
+        "reported yes-no questions with se": "Perguntas indiretas com se",
+        "reported wh-questions": "Perguntas indiretas com palavra interrogativa",
+        "reported requests and commands": "Pedidos e ordens relatados",
+        "time and deixis depend on context in reported speech": "Tempo e deíxis dependem do contexto"
       },
       "Formality & Style": {
-        "formal vs informal": "formal vs informal",
-        "contractions": "contrações",
-        "polite softening": "suavização educada",
-        "spoken vs written": "falado vs escrito",
-        "professional style": "estilo profissional",
-        "casual style": "estilo casual",
-        "clarity and brevity": "clareza e brevidade"
+        "formal and informal second-person address": "Você / o senhor / a senhora",
+        "polite requests with softeners": "Pedidos educados com poderia",
+        "titles and formal greetings": "Saudações e títulos mudam o tom",
+        "softening and diplomatic style": "Queria e gostaria soam mais diplomáticos"
       },
       "Discourse & Flow": {
-        "opening and closing": "abertura e fechamento",
-        "topic shifts": "mudanças de tópico",
-        "cohesion tools": "ferramentas de coesão",
-        "sequencing ideas": "sequenciamento de ideias",
-        "clarification moves": "movimentos de clarificação",
-        "summaries": "resumos",
-        "emphasis and repetition": "ênfase e repetição",
-        "conversation flow": "fluxo da conversa",
-        "giving examples": "dando exemplos",
-        "repair and correction": "reparo e correção"
+        "addition and contrast markers": "E / mas para somar e contrastar",
+        "reason and result markers": "Porque / por isso para causa e consequência",
+        "sequencing markers": "Primeiro / depois / finalmente organizam",
+        "flow-managing discourse markers": "Na verdade e aliás ajustam o fluxo",
+        "examples and conclusions": "Por exemplo e em resumo enquadram"
       }
     },
     "grammarExamples": {
       "Sentence Structure": {
-        "she reads a book.": "Ela lê um livro.",
-        "they named her captain.": "Eles a nomearam capitã.",
-        "she met him at noon at the station.": "Ela o encontrou ao meio-dia na estação.",
-        "i stayed home because it rained.": "Eu fiquei em casa porque choveu.",
-        "we finished early. we went home after class because we were tired.": "Nós terminamos cedo. Fomos para casa depois da aula porque estávamos cansados."
+        "maria ate the apple.": "Maria comeu a maçã.",
+        "the dog is in the park.": "O cachorro está no parque.",
+        "in the park, maria ate the apple.": "No parque, Maria comeu a maçã.",
+        "i ate the apple.": "Eu comi a maçã.",
+        "she went to the market.": "Ela foi ao mercado."
       },
       "Verbs": {
-        "they carry the boxes.": "Eles carregam as caixas.",
-        "she feels tired.": "Ela se sente cansada.",
-        "the room feels quiet.": "O quarto parece silencioso.",
-        "he placed the book on the table.": "Ele colocou o livro na mesa.",
-        "we decided to stay.": "Nós decidimos ficar.",
-        "she turned off the light.": "Ela apagou a luz."
+        "i eat apples every day.": "Eu como maçã todos os dias.",
+        "she traveled to brazil last year.": "Ela viajou para o Brasil no ano passado.",
+        "we will go to the cinema tomorrow.": "Nós iremos ao cinema amanhã.",
+        "when i was a child, i played football every day.": "Quando eu era criança, jogava futebol todos os dias.",
+        "if i had money, i would buy a car.": "Se eu tivesse dinheiro, compraria um carro.",
+        "i hope you come to the party.": "Espero que você venha à festa."
       },
       "Tenses & Aspect": {
-        "she works every day.": "Ela trabalha todos os dias.",
-        "i am waiting outside.": "Estou esperando do lado de fora.",
-        "they visited paris last year.": "",
-        "i was cooking when he called.": "Eu estava cozinhando quando ele ligou.",
-        "he has lived here for years.": "Ele mora aqui há anos.",
-        "she had left before i arrived.": "Ela tinha saído antes de eu chegar.",
-        "i will call you tonight. i am going to study later. i am meeting sam tomorrow.": "",
-        "i will be working at six.": "Estarei trabalhando às seis.",
-        "they will have finished by friday.": "Eles terão terminado até sexta-feira.",
-        "i work every day. i am working now. i have worked here for years.": ""
+        "i eat fruit every day.": "Eu como frutas todos os dias.",
+        "she bought a new car.": "Ela comprou um carro novo.",
+        "we will go to the cinema tomorrow.": "Nós iremos ao cinema amanhã.",
+        "when i was a child, i played football.": "Quando eu era criança, jogava futebol.",
+        "i would buy a car if i had money.": "Eu compraria um carro se tivesse dinheiro.",
+        "they are studying for the test.": "Eles estão estudando para a prova.",
+        "when i arrived, he had already left.": "Quando cheguei, ele já tinha saído.",
+        "when i arrive, you will have finished the work.": "Quando eu chegar, você terá terminado o trabalho.",
+        "he read the book yesterday. he reads the book every day.": "Ele leu o livro ontem. / Ele lê o livro todos os dias.",
+        "i still have not eaten.": "Eu ainda não comi."
       },
       "Nouns & Articles": {
-        "i have a coin and two apples.": "",
-        "we need some rice and a piece of bread.": "",
-        "i saw a dog. the dog is outside.": "",
-        "two apples and three children are here.": "",
-        "sara's phone is new.": "O telefone da Sara é novo.",
-        "she bought the red dress.": "",
-        "there are many options, and there is much information.": ""
+        "o gato está no telhado.": "O gato está no telhado.",
+        "uma mulher entrou na sala.": "Uma mulher entrou na sala.",
+        "os livros estão na mesa.": "Os livros estão na mesa.",
+        "a casa bonita é nova.": "A casa bonita é nova.",
+        "vou para escola.": "Vou para escola.",
+        "ele está à toa.": "Ele está à toa.",
+        "o brasil é grande.": "O Brasil é grande."
       },
       "Pronouns & Reference": {
-        "they are ready.": "",
-        "he saw me.": "",
-        "my bag is new. hers is old.": "",
-        "he hurt himself.": "",
-        "these keys are mine.": "",
-        "the man who called me left.": "",
-        "someone is waiting outside.": ""
+        "i like music.": "Eu gosto de música.",
+        "i saw him yesterday.": "Eu o vi ontem.",
+        "this book is mine.": "Este livro é meu.",
+        "that one is my car.": "Aquele é o meu carro.",
+        "the book that i read is interesting.": "O livro que eu li é interessante.",
+        "someone left the door open.": "Alguém deixou a porta aberta.",
+        "can you help me?": "O senhor pode me ajudar?"
       },
       "Modifiers": {
-        "she bought a lovely small red bag.": "",
-        "this is faster than that.": "",
-        "he is the tallest.": "",
-        "she speaks clearly.": "",
-        "she usually wakes early.": "",
-        "we met here yesterday.": "",
-        "the room is very warm.": "",
-        "the movie was boring, and i was bored.": "",
-        "she answered the very difficult question quickly.": "",
-        "the quiet house is empty.": ""
+        "o carro vermelho é rápido.": "O carro vermelho é rápido.",
+        "a casa bonita é cara.": "A casa bonita é cara.",
+        "ela é mais alta que eu.": "Ela é mais alta que eu.",
+        "ele é o mais inteligente da turma.": "Ele é o mais inteligente da turma.",
+        "ela é muito bonita.": "Ela é muito bonita.",
+        "um lindo carro vermelho.": "Um lindo carro vermelho.",
+        "ele comprou o mesmo carro que eu.": "Ele comprou o mesmo carro que eu.",
+        "hoje eu vou ao mercado.": "Hoje eu vou ao mercado.",
+        "ele está aqui.": "Ele está aqui.",
+        "ela fala rapidamente.": "Ela fala rapidamente."
       },
       "Questions": {
-        "do you work here?": "Você trabalha aqui?",
-        "where does he live?": "Onde ele mora?",
-        "is the store open?": "A loja está aberta?",
-        "did you call her?": "Você a chamou?",
-        "could you help me?": "Você poderia me ajudar?",
-        "you are ready, aren't you?": "Você está pronto, não está?",
-        "could you tell me where it is?": "Você poderia me dizer onde fica?"
+        "do you like music?": "Você gosta de música?",
+        "who are you?": "Quem é você?",
+        "do you not like music?": "Você não gosta de música?",
+        "would you like a coffee, sir?": "O senhor gostaria de um café?",
+        "why did you not come?": "Por que você não veio?",
+        "which book do you prefer?": "Qual livro você prefere?",
+        "who would not like to travel?": "Quem não gostaria de viajar?"
       },
       "Negation": {
-        "she is not tired.": "Ela não está cansada.",
-        "they do not agree.": "Eles não concordam.",
-        "i don't know.": "Eu não sei.",
-        "there is no milk.": "Não há leite.",
-        "don't you want coffee?": "Você não quer café?",
-        "he rarely eats out.": "Ele raramente come fora."
+        "i do not like apples.": "Eu não gosto de maçãs.",
+        "i never go to the cinema.": "Eu nunca vou ao cinema.",
+        "nobody came to the party.": "Ninguém veio à festa.",
+        "i went without you.": "Eu fui sem você.",
+        "i did not do anything.": "Eu não fiz nada.",
+        "i will never forget you.": "Eu jamais esquecerei você."
       },
       "Connections": {
-        "i called but no one answered.": "Eu liguei, mas ninguém atendeu.",
-        "it rained, so we stayed.": "Choveu, então ficamos.",
-        "she went, although she was tired.": "Ela foi, embora estivesse cansada.",
-        "call me when you arrive.": "Me ligue quando você chegar.",
-        "this feels like home.": "Isto parece casa.",
-        "we also need chairs.": "Nós também precisamos de cadeiras.",
-        "first we plan, then we act.": "Primeiro planejamos, depois agimos."
+        "i like apples and bananas.": "Eu gosto de maçãs e bananas.",
+        "i go to the park if it does not rain.": "Eu vou ao parque se não chover.",
+        "the book that i read is interesting.": "O livro que eu li é interessante.",
+        "i went to the cinema with my friends.": "Eu fui ao cinema com meus amigos.",
+        "i like football; in addition, i like basketball.": "Eu gosto de futebol; além disso, gosto de basquete.",
+        "i like the beach, but i prefer the mountains.": "Eu gosto de praia, mas prefiro montanha.",
+        "i studied a lot; therefore, i passed the test.": "Eu estudei muito; portanto, passei na prova."
       },
       "Conditions": {
-        "if you press this, it starts.": "Se você pressionar isso, começa.",
-        "if it is sunny, we will go.": "Se estiver ensolarado, iremos.",
-        "if i had time, i would help.": "Se eu tivesse tempo, eu ajudaria.",
-        "if we had left earlier, we would have arrived.": "Se tivéssemos saído mais cedo, teríamos chegado.",
-        "if she had studied, she would be calm now.": "Se ela tivesse estudado, estaria calma agora.",
-        "we will go unless it rains.": "Iremos a menos que chova."
+        "i would speak if you invited me.": "Eu falaria se você me convidasse.",
+        "i would have gone if i had known.": "Eu teria ido se soubesse.",
+        "if i had money, i would buy a car.": "Se eu tivesse dinheiro, compraria um carro.",
+        "if i were rich, i would travel the world.": "Se eu fosse rico, viajaria o mundo.",
+        "if you study, you will pass the exam.": "Se você estudar, passará no exame.",
+        "if i had studied, i would now be prepared.": "Se eu tivesse estudado, agora estaria preparado."
       },
       "Voice & Focus": {
-        "the chef cooked dinner.": "O chef cozinhou o jantar.",
-        "the meal was cooked.": "A refeição foi cozinhada.",
-        "that book, i finished yesterday.": "Aquele livro, eu terminei ontem.",
-        "it is john who called.": "É o John quem ligou.",
-        "there is a problem.": "Há um problema."
+        "the chef prepares the dinner.": "O chef prepara o jantar.",
+        "the dinner was prepared by the chef.": "O jantar foi preparado pelo chef.",
+        "used books are sold.": "Vendem-se livros usados.",
+        "that book, i have already read.": "Esse livro, eu já li.",
+        "it was ana who called.": "Foi a Ana que ligou."
       },
       "Modality": {
-        "she can swim.": "Ela pode nadar.",
-        "may i sit here?": "Posso sentar aqui?",
-        "you must wear a seatbelt.": "Você deve usar cinto de segurança.",
-        "you should rest.": "Você deveria descansar.",
-        "it might rain today.": "Pode chover hoje.",
-        "he will probably come.": "Ele provavelmente virá.",
-        "could you open the window?": "Você poderia abrir a janela?",
-        "would you like some tea?": "Você gostaria de um pouco de chá?"
+        "i have to leave now.": "Eu tenho de sair agora.",
+        "you should sleep earlier.": "Você deveria dormir mais cedo.",
+        "i can play the guitar.": "Eu sei tocar violão.",
+        "maybe he will arrive later.": "Talvez ele chegue mais tarde.",
+        "you cannot smoke here.": "Você não pode fumar aqui."
       },
       "Reported Speech": {
-        "she said she was ready.": "Ela disse que estava pronta.",
-        "he asked if i was okay.": "Ele perguntou se eu estava bem.",
-        "she asked me to wait.": "Ela me pediu para esperar.",
-        "he told us to leave.": "Ele nos disse para sair.",
-        "they said they had time.": "Eles disseram que tinham tempo.",
-        "he said he was there.": "Ele disse que estava lá."
+        "she said, “i will return tomorrow.”": "Ela disse: \"Eu volto amanhã.\"",
+        "she said that she would return tomorrow.": "Ela disse que voltaria amanhã.",
+        "she asked whether i was going to the party.": "Ela perguntou se eu iria à festa.",
+        "he asked how i was.": "Ele perguntou como eu estava.",
+        "she asked me to help.": "Ela pediu para eu ajudar.",
+        "he said that he would arrive the next day.": "Ele disse que chegaria no dia seguinte."
       },
       "Formality & Style": {
-        "could you assist me?": "Você poderia me ajudar?",
-        "i can't stay long.": "Não posso ficar muito tempo.",
-        "could you close the door?": "Você poderia fechar a porta?",
-        "please see the details below.": "Por favor, veja os detalhes abaixo.",
-        "thank you for your time.": "Obrigado pelo seu tempo.",
-        "hey, how is it going?": "Ei, como você está?",
-        "we need a quick answer.": "Precisamos de uma resposta rápida."
+        "could you help me?": "A senhora poderia me ajudar?",
+        "could you repeat that, please?": "Você poderia repetir, por favor?",
+        "good morning, doctor helena.": "Bom dia, doutora Helena.",
+        "i would like to schedule a meeting.": "Gostaria de marcar uma reunião."
       },
       "Discourse & Flow": {
-        "hi everyone, anyway, that is all for today.": "Olá a todos, de qualquer forma, isso é tudo por hoje.",
-        "by the way, i have news.": "A propósito, eu tenho novidades.",
-        "this idea connects to the last point.": "Essa ideia se conecta ao último ponto.",
-        "first we pack, then we leave.": "Primeiro nós fazemos as malas, depois nós saímos.",
-        "let me put it another way.": "Deixe-me colocar de outra forma.",
-        "in short, we are ready.": "Em resumo, estamos prontos.",
-        "it is really important.": "É realmente importante.",
-        "i see, please continue.": "Entendi, por favor continue.",
-        "for example, call the help desk.": "Por exemplo, ligue para o suporte.",
-        "sorry, let me try again.": "Desculpe, deixe-me tentar novamente."
+        "i read a lot, but i write little.": "Eu leio muito, mas escrevo pouco.",
+        "i stayed home because it was raining, so i finished the work.": "Fiquei em casa porque chovia, por isso terminei o trabalho.",
+        "first i read the text, then i do the exercise.": "Primeiro leio o texto, depois faço o exercício.",
+        "actually, the problem is simple.": "Na verdade, o problema é simples.",
+        "there are many ways to practice, for example with dialogues.": "Há muitas formas de praticar, por exemplo com diálogos."
       }
     },
     "grammarExplanations": {
-      "Sentence Structure": {
-        "this card explains basic word order and how to form it clearly in real sentences.": "Este cartão explica a ordem básica das palavras e como formá-la claramente em frases reais.",
-        "this card explains sentence parts and how to form it clearly in real sentences.": "Este cartão explica as partes da frase e como formá-las claramente em frases reais.",
-        "this card explains adding details and how to form it clearly in real sentences.": "Este cartão explica como adicionar detalhes e como formá-los claramente em frases reais.",
-        "this card explains linking clauses and how to form it clearly in real sentences.": "Este cartão explica como vincular orações e como formá-las claramente em frases reais.",
-        "this card explains sentence variety and how to form it clearly in real sentences.": "Este cartão explica a variedade de frases e como formá-las claramente em frases reais."
-      },
-      "Verbs": {
-        "this card explains action verbs and how to form it clearly in real sentences.": "Este cartão explica os verbos de ação e como formá-los claramente em frases reais.",
-        "this card explains state verbs and how to form it clearly in real sentences.": "Este cartão explica os verbos de estado e como formá-los claramente em frases reais.",
-        "this card explains linking verbs and how to form it clearly in real sentences.": "Este cartão explica os verbos de ligação e como formá-los claramente em frases reais.",
-        "this card explains verb patterns and how to form it clearly in real sentences.": "Este cartão explica os padrões verbais e como formá-los claramente em frases reais.",
-        "this card explains verb combinations and how to form it clearly in real sentences.": "Este cartão explica as combinações verbais e como formá-las claramente em frases reais.",
-        "this card explains phrasal verbs and how to form it clearly in real sentences.": "Este cartão explica os phrasal verbs e como formá-los claramente em frases reais."
-      },
-      "Tenses & Aspect": {
-        "this card explains present simple and how to form it clearly in real sentences.": "Este cartão explica o presente simples e como formá-lo claramente em frases reais.",
-        "this card explains present continuous and how to form it clearly in real sentences.": "Este cartão explica o presente contínuo e como formá-lo claramente em frases reais.",
-        "this card explains past simple and how to form it clearly in real sentences.": "Este cartão explica o passado simples e como formá-lo claramente em frases reais.",
-        "this card explains past continuous and how to form it clearly in real sentences.": "Este cartão explica o passado contínuo e como formá-lo claramente em frases reais.",
-        "this card explains present perfect and how to form it clearly in real sentences.": "Este cartão explica o presente perfeito e como formá-lo claramente em frases reais.",
-        "this card explains past perfect and how to form it clearly in real sentences.": "Este cartão explica o passado perfeito e como formá-lo claramente em frases reais.",
-        "this card explains future forms and how to form it clearly in real sentences.": "Este cartão explica as formas futuras e como formá-las claramente em frases reais.",
-        "this card explains future continuous and how to form it clearly in real sentences.": "Este cartão explica o futuro contínuo e como formá-lo claramente em frases reais.",
-        "this card explains future perfect and how to form it clearly in real sentences.": "Este cartão explica o futuro perfeito e como formá-lo claramente em frases reais.",
-        "this card explains aspect contrasts and how to form it clearly in real sentences.": "Este cartão explica os contrastes de aspecto e como formá-los claramente em frases reais."
-      },
-      "Nouns & Articles": {
-        "this card explains countable nouns and how to form it clearly in real sentences.": "Este cartão explica os substantivos contáveis e como formá-los claramente em frases reais.",
-        "this card explains uncountable nouns and how to form it clearly in real sentences.": "Este cartão explica os substantivos incontáveis e como formá-los claramente em frases reais.",
-        "this card explains articles and how to form it clearly in real sentences.": "Este cartão explica os artigos e como formá-los claramente em frases reais.",
-        "this card explains plural forms and how to form it clearly in real sentences.": "Este cartão explica as formas plurais e como formá-las claramente em frases reais.",
-        "this card explains possessive nouns and how to form it clearly in real sentences.": "Este cartão explica os substantivos possessivos e como formá-los claramente em frases reais.",
-        "this card explains noun phrases and how to form it clearly in real sentences.": "Este cartão explica as frases nominais e como formá-las claramente em frases reais.",
-        "this card explains quantifiers and how to form it clearly in real sentences.": "Este cartão explica os quantificadores e como formá-los claramente em frases reais."
-      },
-      "Pronouns & Reference": {
-        "this card explains subject pronouns and how to form it clearly in real sentences.": "Este cartão explica os pronomes sujeitos e como formá-los claramente em frases reais.",
-        "this card explains object pronouns and how to form it clearly in real sentences.": "Este cartão explica os pronomes objetos e como formá-los claramente em frases reais.",
-        "this card explains possessive forms and how to form it clearly in real sentences.": "Este cartão explica as formas possessivas e como formá-las claramente em frases reais.",
-        "this card explains reflexive pronouns and how to form it clearly in real sentences.": "Este cartão explica os pronomes reflexivos e como formá-los claramente em frases reais.",
-        "this card explains demonstratives and how to form it clearly in real sentences.": "Este cartão explica os demonstrativos e como formá-los claramente em frases reais.",
-        "this card explains relative reference and how to form it clearly in real sentences.": "Este cartão explica a referência relativa e como formá-la claramente em frases reais.",
-        "this card explains indefinite reference and how to form it clearly in real sentences.": "Este cartão explica a referência indefinida e como formá-la claramente em frases reais."
-      },
-      "Modifiers": {
-        "this card explains adjectives basics and how to form it clearly in real sentences.": "Este cartão explica o básico dos adjetivos e como formá-los claramente em frases reais.",
-        "this card explains adjective order and how to form it clearly in real sentences.": "Este cartão explica a ordem dos adjetivos e como formá-los claramente em frases reais.",
-        "this card explains comparatives and how to form it clearly in real sentences.": "Este cartão explica os comparativos e como formá-los claramente em frases reais.",
-        "this card explains superlatives and how to form it clearly in real sentences.": "Este cartão explica os superlativos e como formá-los claramente em frases reais.",
-        "this card explains adverbs basics and how to form it clearly in real sentences.": "Este cartão explica o básico dos advérbios e como formá-los claramente em frases reais.",
-        "this card explains frequency adverbs and how to form it clearly in real sentences.": "Este cartão explica os advérbios de frequência e como formá-los claramente em frases reais.",
-        "this card explains time and place adverbs and how to form it clearly in real sentences.": "Este cartão explica os advérbios de tempo e lugar e como formá-los claramente em frases reais.",
-        "this card explains degree words and how to form it clearly in real sentences.": "Este cartão explica as palavras de grau e como formá-las claramente em frases reais.",
-        "this card explains participles and how to form it clearly in real sentences.": "Este cartão explica os particípios e como formá-los claramente em frases reais.",
-        "this card explains modifier stacking and how to form it clearly in real sentences.": "Este cartão explica a empilhamento de modificadores e como formá-los claramente em frases reais."
-      },
-      "Questions": {
-        "this card explains yes no questions and how to form it clearly in real sentences.": "Este cartão explica perguntas de sim ou não e como formá-las claramente em frases reais.",
-        "this card explains wh questions and how to form it clearly in real sentences.": "Este cartão explica perguntas wh e como formá-las claramente em frases reais.",
-        "this card explains questions with be and how to form it clearly in real sentences.": "Este cartão explica perguntas com o verbo 'to be' e como formá-las claramente em frases reais.",
-        "this card explains questions with do and how to form it clearly in real sentences.": "Este cartão explica perguntas com 'do' e como formá-las claramente em frases reais.",
-        "this card explains questions with modals and how to form it clearly in real sentences.": "Este cartão explica perguntas com modais e como formá-las claramente em frases reais.",
-        "this card explains tag questions and how to form it clearly in real sentences.": "Este cartão explica perguntas tag e como formá-las claramente em frases reais.",
-        "this card explains indirect questions and how to form it clearly in real sentences.": "Este cartão explica perguntas indiretas e como formá-las claramente em frases reais."
-      },
-      "Negation": {
-        "this card explains not with be and how to form it clearly in real sentences.": "Este cartão explica o 'not' com o verbo 'to be' e como formá-lo claramente em frases reais.",
-        "this card explains not with do and how to form it clearly in real sentences.": "Este cartão explica o 'not' com o verbo 'do' e como formá-lo claramente em frases reais.",
-        "this card explains negative short forms and how to form it clearly in real sentences.": "Este cartão explica as formas curtas negativas e como formá-las claramente em frases reais.",
-        "this card explains negative words and how to form it clearly in real sentences.": "Este cartão explica palavras negativas e como formá-las claramente em frases reais.",
-        "this card explains negative questions and how to form it clearly in real sentences.": "Este cartão explica perguntas negativas e como formá-las claramente em frases reais.",
-        "this card explains limited negatives and how to form it clearly in real sentences.": "Este cartão explica negativas limitadas e como formá-las claramente em frases reais."
-      },
-      "Connections": {
-        "this card explains basic connectors and how to form it clearly in real sentences.": "Este cartão explica conectores básicos e como formá-los claramente em frases reais.",
-        "this card explains reason and result and how to form it clearly in real sentences.": "Este cartão explica razão e resultado e como formá-los claramente em frases reais.",
-        "this card explains contrast and choice and how to form it clearly in real sentences.": "Este cartão explica contraste e escolha e como formá-los claramente em frases reais.",
-        "this card explains time connectors and how to form it clearly in real sentences.": "Este cartão explica conectores de tempo e como formá-los claramente em frases reais.",
-        "this card explains comparison links and how to form it clearly in real sentences.": "Este cartão explica links de comparação e como formá-los claramente em frases reais.",
-        "this card explains adding ideas and how to form it clearly in real sentences.": "Este cartão explica a adição de ideias e como formá-las claramente em frases reais.",
-        "this card explains ordering ideas and how to form it clearly in real sentences.": "Este cartão explica a ordenação de ideias e como formá-las claramente em frases reais."
-      },
-      "Conditions": {
-        "this card explains real conditions and how to form it clearly in real sentences.": "Este cartão explica condições reais e como formá-las claramente em frases reais.",
-        "this card explains future conditions and how to form it clearly in real sentences.": "Este cartão explica condições futuras e como formá-las claramente em frases reais.",
-        "this card explains unreal present and how to form it clearly in real sentences.": "Este cartão explica o presente irreal e como formá-lo claramente em frases reais.",
-        "this card explains unreal past and how to form it clearly in real sentences.": "Este cartão explica o passado irreal e como formá-lo claramente em frases reais.",
-        "this card explains mixed conditions and how to form it clearly in real sentences.": "Este cartão explica condições mistas e como formá-las claramente em frases reais.",
-        "this card explains unless and otherwise and how to form it clearly in real sentences.": "Este cartão explica 'a menos que' e 'caso contrário' e como formá-los claramente em frases reais."
-      },
-      "Voice & Focus": {
-        "this card explains active voice and how to form it clearly in real sentences.": "Este cartão explica a voz ativa e como formá-la claramente em frases reais.",
-        "this card explains passive voice and how to form it clearly in real sentences.": "Este cartão explica a voz passiva e como formá-la claramente em frases reais.",
-        "this card explains focus shifts and how to form it clearly in real sentences.": "Este cartão explica mudanças de foco e como formá-las claramente em frases reais.",
-        "this card explains cleft sentences and how to form it clearly in real sentences.": "Este cartão explica frases destacadas e como formá-las claramente em frases reais.",
-        "this card explains there and it subjects and how to form it clearly in real sentences.": "Este cartão explica os sujeitos 'there' e 'it' e como formá-los claramente em frases reais."
-      },
-      "Modality": {
-        "this card explains ability and how to form it clearly in real sentences.": "Este cartão explica habilidade e como formá-la claramente em frases reais.",
-        "this card explains permission and how to form it clearly in real sentences.": "Este cartão explica permissão e como formá-la claramente em frases reais.",
-        "this card explains obligation and how to form it clearly in real sentences.": "Este cartão explica obrigação e como formá-la claramente em frases reais.",
-        "this card explains advice and how to form it clearly in real sentences.": "Este cartão explica conselho e como formá-lo claramente em frases reais.",
-        "this card explains possibility and how to form it clearly in real sentences.": "Este cartão explica possibilidade e como formá-la claramente em frases reais.",
-        "this card explains probability and how to form it clearly in real sentences.": "Este cartão explica probabilidade e como formá-la claramente em frases reais.",
-        "this card explains polite requests and how to form it clearly in real sentences.": "Este cartão explica pedidos educados e como formá-los claramente em frases reais.",
-        "this card explains offers and invitations and how to form it clearly in real sentences.": "Este cartão explica ofertas e convites e como formá-los claramente em frases reais."
-      },
-      "Reported Speech": {
-        "this card explains reporting statements and how to form it clearly in real sentences.": "Este cartão explica como relatar declarações e como formá-las claramente em frases reais.",
-        "this card explains reporting questions and how to form it clearly in real sentences.": "Este cartão explica como relatar perguntas e como formá-las claramente em frases reais.",
-        "this card explains reporting requests and how to form it clearly in real sentences.": "Este cartão explica como relatar pedidos e como formá-los claramente em frases reais.",
-        "this card explains reporting commands and how to form it clearly in real sentences.": "Este cartão explica como relatar comandos e como formá-los claramente em frases reais.",
-        "this card explains backshift basics and how to form it clearly in real sentences.": "Este cartão explica os fundamentos do retrocesso e como formá-lo claramente em frases reais.",
-        "this card explains time place changes and how to form it clearly in real sentences.": "Este cartão explica as mudanças de tempo e lugar e como formá-las claramente em frases reais."
-      },
-      "Formality & Style": {
-        "this card explains formal vs informal and how to form it clearly in real sentences.": "Este cartão explica formal vs informal e como formá-lo claramente em frases reais.",
-        "this card explains contractions and how to form it clearly in real sentences.": "Este cartão explica contrações e como formá-las claramente em frases reais.",
-        "this card explains polite softening and how to form it clearly in real sentences.": "Este cartão explica suavização educada e como formá-la claramente em frases reais.",
-        "this card explains spoken vs written and how to form it clearly in real sentences.": "Este cartão explica falado vs escrito e como formá-lo claramente em frases reais.",
-        "this card explains professional style and how to form it clearly in real sentences.": "Este cartão explica estilo profissional e como formá-lo claramente em frases reais.",
-        "this card explains casual style and how to form it clearly in real sentences.": "Este cartão explica estilo casual e como formá-lo claramente em frases reais.",
-        "this card explains clarity and brevity and how to form it clearly in real sentences.": "Este cartão explica clareza e brevidade e como formá-las claramente em frases reais."
-      },
-      "Discourse & Flow": {
-        "this card explains opening and closing and how to form it clearly in real sentences.": "Este cartão explica a abertura e o fechamento e como formá-los claramente em frases reais.",
-        "this card explains topic shifts and how to form it clearly in real sentences.": "Este cartão explica as mudanças de tópico e como formá-las claramente em frases reais.",
-        "this card explains cohesion tools and how to form it clearly in real sentences.": "Este cartão explica as ferramentas de coesão e como formá-las claramente em frases reais.",
-        "this card explains sequencing ideas and how to form it clearly in real sentences.": "Este cartão explica a sequenciação de ideias e como formá-las claramente em frases reais.",
-        "this card explains clarification moves and how to form it clearly in real sentences.": "Este cartão explica os movimentos de clarificação e como formá-los claramente em frases reais.",
-        "this card explains summaries and how to form it clearly in real sentences.": "Este cartão explica os resumos e como formá-los claramente em frases reais.",
-        "this card explains emphasis and repetition and how to form it clearly in real sentences.": "Este cartão explica a ênfase e a repetição e como formá-las claramente em frases reais.",
-        "this card explains conversation flow and how to form it clearly in real sentences.": "Este cartão explica o fluxo da conversa e como formá-lo claramente em frases reais.",
-        "this card explains giving examples and how to form it clearly in real sentences.": "Este cartão explica como dar exemplos e como formá-los claramente em frases reais.",
-        "this card explains repair and correction and how to form it clearly in real sentences.": "Este cartão explica a reparação e a correção e como formá-las claramente em frases reais."
-      }
+      "Sentence Structure": {},
+      "Verbs": {},
+      "Tenses & Aspect": {},
+      "Nouns & Articles": {},
+      "Pronouns & Reference": {},
+      "Modifiers": {},
+      "Questions": {},
+      "Negation": {},
+      "Connections": {},
+      "Conditions": {},
+      "Voice & Focus": {},
+      "Modality": {},
+      "Reported Speech": {},
+      "Formality & Style": {},
+      "Discourse & Flow": {}
     },
     "grammarPoints": {
-      "Sentence Structure": {
-        "basic word order in simple statements": "ordem básica das palavras para declarações",
-        "subject usually comes before the verb": "sujeito antes do verbo",
-        "if the verb takes an object, put it after the verb": "objeto após o verbo",
-        "a complete clause needs a subject": "",
-        "a complete clause needs a main verb": "",
-        "an object or complement can follow the verb": "",
-        "add a time phrase after the main clause (for example, at noon or yesterday)": "tempo no final da frase",
-        "add a place phrase after the time phrase (for example, at the station or in the kitchen)": "lugar após o verbo",
-        "main clause gives the core message": "ideia da oração principal",
-        "use a connector to link clauses (for example, because or when)": "adição de cláusula de razão",
-        "the linked clause needs its own subject and verb": "adição de cláusula de tempo",
-        "use short sentences for key points": "frases curtas para impacto",
-        "use longer sentences for supporting detail": "frases longas para detalhes",
-        "separate independent clauses with correct punctuation": "evitar frases corridas"
-      },
-      "Verbs": {
-        "action verbs show what the subject does": "verbos de ação para movimento",
-        "in simple statements, place the action verb after the subject": "verbos de ação para tarefas",
-        "if there is an object, place it after the action verb": "verbos de ação para mudança",
-        "state verbs describe a condition, thought, feeling, or possession": "verbos de estado para sentimentos",
-        "in simple statements, place the state verb after the subject": "verbos de estado para pensamentos",
-        "state verbs are usually not used in continuous forms": "verbos de estado para posse",
-        "linking verbs connect the subject to a complement": "ser como verbo de ligação",
-        "place the linking verb after the subject in a simple statement": "ligações de sentir e parecer",
-        "use an adjective or noun as the complement after the linking verb": "ligações de tornar-se e permanecer",
-        "some verbs are followed by a preposition phrase": "",
-        "after the verb and object, add the required preposition": "",
-        "complete the preposition with a noun phrase": "",
-        "one common verb combination is verb + to-infinitive": "",
-        "use to + base verb immediately after the main verb": "",
-        "do not omit to in this pattern": "",
-        "verb plus particle": "verbo mais partícula",
-        "separable phrasal verbs": "verbos frasais separáveis",
-        "meaning shift with particles": "mudança de significado com partículas"
-      },
-      "Tenses & Aspect": {
-        "present simple for habits": "presente simples para hábitos",
-        "present simple for facts": "presente simples para fatos",
-        "present simple for schedules": "presente simples para horários",
-        "present continuous for now": "presente contínuo para agora",
-        "present continuous for temporary actions": "presente contínuo para ações temporárias",
-        "present continuous for near plans": "presente contínuo para planos próximos",
-        "past simple for finished actions": "passado simples para ações concluídas",
-        "past simple for past time words": "passado simples para palavras de tempo passado",
-        "past simple for sequences": "passado simples para sequências",
-        "past continuous for background": "passado contínuo para contexto",
-        "past continuous with interruption": "passado contínuo com interrupção",
-        "past continuous for two actions": "passado contínuo para duas ações",
-        "present perfect for experience": "pretérito perfeito para experiência",
-        "present perfect for recent results": "pretérito perfeito para resultados recentes",
-        "present perfect with since and for": "pretérito perfeito com desde e por",
-        "past perfect for earlier past": "mais-que-perfeito para passado anterior",
-        "past perfect for cause in past": "mais-que-perfeito para causa no passado",
-        "past perfect with before": "mais-que-perfeito com antes",
-        "use will + base verb for one future form": "",
-        "use be going to + base verb for another future form": "",
-        "use present continuous + future time for arranged plans": "",
-        "future continuous for progress": "futuro contínuo para progresso",
-        "future continuous for background": "futuro contínuo para contexto",
-        "future continuous for polite inquiry": "futuro contínuo para consulta educada",
-        "future perfect for deadlines": "futuro perfeito para prazos",
-        "future perfect with by time": "futuro perfeito com até o momento",
-        "future perfect for completion": "futuro perfeito para conclusão",
-        "simple vs continuous contrast": "contraste entre simples e contínuo",
-        "perfect vs simple contrast": "contraste entre perfeito e simples",
-        "duration focus contrast": "contraste de foco na duração"
-      },
-      "Nouns & Articles": {
-        "countable nouns can be singular or plural": "",
-        "use a or an before singular countable nouns": "",
-        "use a number with plural countable nouns": "",
-        "uncountable nouns usually do not have plural forms": "",
-        "use some with uncountable nouns": "",
-        "use a piece of for countable units": "",
-        "use a or an for first mention of a singular countable noun": "",
-        "use the when the noun is specific or already known": "",
-        "place the article directly before the noun": "",
-        "use a plural noun for more than one": "",
-        "many plurals add -s or -es": "",
-        "some plurals are irregular (child -> children)": "",
-        "add apostrophe + s to a singular noun to show ownership": "",
-        "place the possessive noun before the thing owned": "",
-        "keep the apostrophe in the correct position": "",
-        "a noun phrase can include determiner + noun": "",
-        "an adjective can appear before the noun": "",
-        "keep the order determiner + adjective + noun": "",
-        "use many with plural countable nouns": "",
-        "use much with uncountable nouns": "",
-        "choose the quantifier by noun type": ""
-      },
-      "Pronouns & Reference": {
-        "subject pronouns replace noun subjects (i, you, he, she, it, we, they)": "",
-        "use a subject pronoun before the main verb in statements": "",
-        "choose the pronoun that matches number and person": "",
-        "object pronouns replace noun objects (me, you, him, her, it, us, them)": "",
-        "place object pronouns after the main verb": "",
-        "use object forms, not subject forms, in object position": "",
-        "use possessive adjectives before nouns (my, your, his, her, our, their)": "",
-        "use possessive pronouns without a noun (mine, yours, his, hers, ours, theirs)": "",
-        "do not add apostrophes to possessive pronouns": "",
-        "use reflexive pronouns when subject and object are the same": "",
-        "singular forms: myself, yourself, himself, herself, itself": "",
-        "plural forms: ourselves, yourselves, themselves": "",
-        "use this and these for things near the speaker": "",
-        "use that and those for things farther away": "",
-        "use this or that with singular nouns and these or those with plural nouns": "",
-        "use who for people in relative clauses": "",
-        "use which for things in relative clauses": "",
-        "use that for people or things in defining relative clauses": "",
-        "use someone and something in affirmative statements": "",
-        "use anyone and anything in negative statements and questions": "",
-        "use everyone and everything for complete groups": ""
-      },
-      "Modifiers": {
-        "adjectives describe nouns": "",
-        "adjectives can come before nouns": "",
-        "adjectives can come after linking verbs like be": "",
-        "when several adjectives come before a noun, use a common order": "",
-        "opinion usually comes before size": "",
-        "size usually comes before color": "",
-        "use comparatives to compare two things": "",
-        "many short adjectives take -er": "",
-        "many longer adjectives use more": "",
-        "use superlatives to compare one item with a group": "",
-        "many short adjectives take -est and longer adjectives use most": "",
-        "use the before superlative adjectives": "",
-        "adverbs can modify verbs": "",
-        "many adverbs of manner end in -ly": "",
-        "adverbs of manner usually come after the verb or object": "",
-        "common frequency adverbs include always, usually, often, sometimes, and never": "",
-        "place frequency adverbs before main verbs": "",
-        "place frequency adverbs after be": "",
-        "place adverbs answer where and time adverbs answer when": "",
-        "in neutral order, place usually comes before time": "",
-        "both often appear near the end of the clause": "",
-        "degree words modify adjectives or adverbs": "",
-        "use very to strengthen adjectives or adverbs": "",
-        "use enough after adjectives and adverbs": "",
-        "use -ing adjectives for things that cause a feeling": "",
-        "use -ed adjectives for how people feel": "",
-        "do not mix -ing and -ed meanings": "",
-        "when multiple modifiers appear, keep a clear order": "",
-        "put degree words before adjectives": "",
-        "keep manner adverbs in a natural position in the clause": ""
-      },
-      "Questions": {
-        "use do, does, or did before the subject": "",
-        "use the base verb after the subject": "",
-        "end yes-no questions with a question mark": "",
-        "start with a wh word such as who, what, where, when, why, or how": "",
-        "place the auxiliary before the subject": "",
-        "place be before the subject": "",
-        "do not use do or does with be questions": "",
-        "place the complement after the subject": "",
-        "keep the main verb in base form after do, does, or did": "",
-        "use did for past-time yes-no questions": "",
-        "place the modal before the subject": "",
-        "do not use do or does with modal questions": "",
-        "add a short tag after a statement": "",
-        "use a negative tag after a positive statement": "",
-        "use a positive tag after a negative statement": "",
-        "start with an introductory phrase such as could you tell me": "",
-        "use statement word order inside the embedded question": "",
-        "do not invert subject and verb inside the embedded question": ""
-      },
-      "Negation": {
-        "subject + be + not + complement": "sujeito + ser + não + complemento",
-        "subject + aux + not + base verb": "sujeito + auxiliar + não + verbo base",
-        "negative word + noun": "palavra negativa + substantivo",
-        "aux + not + subject + base verb + object": "auxiliar + não + sujeito + verbo base + objeto",
-        "subject + negative adverb + verb": "sujeito + advérbio negativo + verbo"
-      },
-      "Connections": {
-        "clause 1 + connector + clause 2": "oração 1 + conectivo + oração 2",
-        "reason clause + connector + result clause": "oração de razão + conectivo + oração de resultado",
-        "clause 1 + contrast connector + clause 2": "oração 1 + conectivo de contraste + oração 2",
-        "main clause + time connector + clause": "oração principal + conectivo de tempo + oração",
-        "subject + verb + comparison + object": "sujeito + verbo + comparação + objeto",
-        "addition marker + clause": "marcador de adição + oração",
-        "sequence + clause": "sequência + oração"
-      },
-      "Conditions": {
-        "if clause + result clause": "se cláusula + resultado cláusula",
-        "if clause + would clause": "se cláusula + cláusula de condicional",
-        "if clause + would have clause": "se cláusula + cláusula de condicional no passado",
-        "if clause (past perfect) + present result (would + base verb)": "se cláusula (pretérito mais-que-perfeito) + resultado presente (would + verbo base)",
-        "result clause + unless clause": "resultado cláusula + a menos que cláusula"
-      },
-      "Voice & Focus": {
-        "doer + action verb + object": "agente + verbo de ação + objeto",
-        "object + be verb + past participle": "objeto + verbo ser + particípio passado",
-        "focus phrase + subject + verb": "frase de foco + sujeito + verbo",
-        "it subject + focus phrase + clause": "sujeito it + frase de foco + oração",
-        "there subject + be verb + noun": "sujeito there + verbo ser + substantivo"
-      },
-      "Modality": {
-        "subject + modal + base verb": "sujeito + modal + verbo base",
-        "modal + subject + base verb": "modal + sujeito + verbo base",
-        "modal + base verb": "modal + verbo base",
-        "subject + modal + probability word + base verb": "sujeito + modal + palavra de probabilidade + verbo base",
-        "modal + subject + base verb + object": "modal + sujeito + verbo base + objeto",
-        "modal phrase + object": "frase modal + objeto"
-      },
-      "Reported Speech": {
-        "say with (that) clause": "dizer com cláusula (que)",
-        "that often omitted": "que muitas vezes é omitido",
-        "reporting verb + clause": "verbo de relato + cláusula",
-        "ask with if": "perguntar com se",
-        "ask with question word": "perguntar com palavra interrogativa",
-        "no inversion": "sem inversão",
-        "ask to do": "pedir para fazer",
-        "tell to do requests": "dizer para fazer pedidos",
-        "polite reporting": "relato educado",
-        "tell to do commands": "dizer para fazer comandos",
-        "order to do": "ordem para fazer",
-        "instruction shift": "mudança de instrução",
-        "present to past shift": "mudança do presente para o passado",
-        "will to would shift": "mudança de will para would",
-        "can to could shift": "mudança de can para could",
-        "now to then": "agora para então",
-        "here to there": "aqui para lá",
-        "today to that day": "hoje para aquele dia"
-      },
-      "Formality & Style": {
-        "formal word choice": "escolha de palavras formais",
-        "informal word choice": "escolha de palavras informais",
-        "match audience tone": "combinar o tom do público",
-        "short forms in speech": "formas curtas na fala",
-        "avoid in formal writing": "evitar na escrita formal",
-        "clarity choices": "escolhas de clareza",
-        "please for politeness": "por favor para polidez",
-        "soft request forms": "formas de pedido suave",
-        "indirect language": "linguagem indireta",
-        "spoken simplicity": "simplicidade na fala",
-        "written clarity": "clareza na escrita",
-        "sentence length control": "controle do comprimento da frase",
-        "clear purpose first": "propósito claro primeiro",
-        "neutral tone": "tom neutro",
-        "polite closing": "fechamento educado",
-        "friendly tone": "tom amigável",
-        "short phrases": "frases curtas",
-        "informal openings": "aberturas informais",
-        "short sentences": "frases curtas",
-        "avoid extra words": "evitar palavras extras",
-        "main point first": "ponto principal primeiro"
-      },
-      "Discourse & Flow": {
-        "start a talk": "começar uma conversa",
-        "end a talk": "terminar uma conversa",
-        "closing signal words": "palavras sinalizadoras de fechamento",
-        "change topic smoothly": "mudar de tópico suavemente",
-        "return to topic": "retornar ao tópico",
-        "signal the shift": "sinalizar a mudança",
-        "reference words": "palavras de referência",
-        "linking phrases": "frases de ligação",
-        "topic tracking": "acompanhar o tópico",
-        "first next last": "primeiro, próximo, último",
-        "sequence signal words": "palavras sinalizadoras de sequência",
-        "clear sequence": "sequência clara",
-        "rephrase key point": "reformular ponto chave",
-        "ask for clarity": "pedir clareza",
-        "confirm meaning": "confirmar significado",
-        "in short": "em resumo",
-        "to sum up": "para resumir",
-        "main point recap": "recapitulação do ponto principal",
-        "stress key idea": "enfatizar a ideia chave",
-        "repeat for focus": "repetir para foco",
-        "signal emphasis": "sinalizar ênfase",
-        "turn taking": "alternância de fala",
-        "listening signals": "sinais de escuta",
-        "smooth exchange": "troca suave",
-        "for example": "por exemplo",
-        "for instance": "por instância",
-        "such as": "tais como",
-        "self correction": "auto-correção",
-        "clarify quickly": "esclarecer rapidamente",
-        "restart phrasing": "reiniciar a formulação"
-      }
+      "Sentence Structure": {},
+      "Verbs": {},
+      "Tenses & Aspect": {},
+      "Nouns & Articles": {},
+      "Pronouns & Reference": {},
+      "Modifiers": {},
+      "Questions": {},
+      "Negation": {},
+      "Connections": {},
+      "Conditions": {},
+      "Voice & Focus": {},
+      "Modality": {},
+      "Reported Speech": {},
+      "Formality & Style": {},
+      "Discourse & Flow": {}
     },
     "grammarMistakeWrong": {
-      "Sentence Structure": {
-        "reads she a book.": "Ela lê um livro.",
-        "they named captain her.": "",
-        "she met him at noon the station.": "",
-        "i stayed home because.": "Eu fiquei em casa porque.",
-        "we finished early we went home after class because we were tired.": ""
-      },
-      "Verbs": {
-        "they the boxes carry.": "",
-        "she is feeling tired.": "",
-        "the room feels quietly.": "",
-        "he placed the book on.": "Ele colocou o livro em.",
-        "we decided stay.": "",
-        "he turned the light on off.": "Ele desligou a luz."
-      },
-      "Tenses & Aspect": {
-        "she work every day.": "",
-        "i am wait outside.": "",
-        "they visit paris last year.": "",
-        "she was cook when i called.": "Ela estava cozinhando quando eu liguei.",
-        "he has live here for years.": "",
-        "he had leave before i arrived.": "",
-        "she will going to call tomorrow.": "",
-        "she will be work at 8.": "",
-        "she will have finish by noon.": "",
-        "i have work here for years.": ""
-      },
-      "Nouns & Articles": {
-        "i have coin and two apples.": "",
-        "i need two breads.": "Eu preciso de dois pães.",
-        "i saw movie.": "Eu vi um filme.",
-        "three child play.": "Três crianças brincam.",
-        "the teachers book is new.": "O livro do professor é novo.",
-        "she bought the dress red.": "",
-        "how much apples?": "Quantas maçãs?"
-      },
-      "Pronouns & Reference": {
-        "her is here.": "",
-        "he saw i.": "",
-        "this book is her's.": "",
-        "i hurt me.": "",
-        "this books are mine.": "",
-        "the man which called me left.": "",
-        "i saw anyone at the station.": ""
-      },
-      "Modifiers": {
-        "she bought a red small bag.": "",
-        "this is more cheap.": "",
-        "he is the most fast.": "",
-        "she speaks slow.": "",
-        "she goes always early.": "",
-        "he arrived yesterday here.": "",
-        "it is enough hot.": "",
-        "i am boring.": "",
-        "she answered the difficult very question quickly.": "",
-        "the quiet house is noisily.": ""
-      },
-      "Questions": {
-        "you like coffee?": "Você gosta de café?",
-        "where you live?": "Onde você mora?",
-        "the store is open?": "",
-        "did you called her?": "",
-        "you can help me?": "Você pode me ajudar?",
-        "you are ready, are you?": "",
-        "could you tell me where is it?": ""
-      },
-      "Negation": {
-        "he not happy.": "Ele não está feliz.",
-        "she not like tea.": "Ela não gosta de chá.",
-        "he does notn't know.": "Ele não sabe.",
-        "i don't have nothing.": "Eu não tenho nada.",
-        "you don't like it?": "Você não gosta disso?",
-        "she hardly doesn't sleep.": "Ela quase não dorme."
-      },
-      "Connections": {
-        "i went and but stayed.": "Eu fui e mas fiquei.",
-        "i was late because the bus.": "Eu estava atrasado porque o ônibus.",
-        "i like tea but also or coffee.": "Eu gosto de chá mas também ou café.",
-        "i left before i will eat.": "Eu saí antes de eu comer.",
-        "she is like taller me.": "Ela é como mais alta que eu.",
-        "he also went but too.": "Ele também foi mas também.",
-        "finally, first we meet.": "Finalmente, primeiro nos encontramos."
-      },
-      "Conditions": {
-        "if you will come, we meet.": "Se você vier, nos encontramos.",
-        "if it will rain, we will stay.": "Se chover, ficaremos.",
-        "if i will have time, i would go.": "Se eu tiver tempo, eu iria.",
-        "if i knew, i would have told.": "Se eu soubesse, eu teria contado.",
-        "if i studied, i would have the job now.": "Se eu estudasse, eu teria o emprego agora.",
-        "we will go unless it will rain.": "Nós iremos a menos que chova."
-      },
-      "Voice & Focus": {
-        "the cake baked my mom.": "O bolo assou minha mãe.",
-        "the report finished yesterday.": "O relatório terminou ontem.",
-        "this book i bought yesterday it.": "Este livro eu comprei ontem.",
-        "was it she called.": "Foi ela que ligou.",
-        "is a problem in the room.": "Há um problema na sala."
-      },
-      "Modality": {
-        "she can to swim.": "Ela pode nadar.",
-        "may i to sit here?": "Posso sentar aqui?",
-        "you must to wear a badge.": "Você deve usar um crachá.",
-        "you should to rest.": "Você deveria descansar.",
-        "it might to rain.": "Pode ser que chova.",
-        "he probably to arrive late.": "Ele provavelmente chegará tarde.",
-        "could you opens the door?": "Você poderia abrir a porta?",
-        "do you like to come?": "Você gosta de vir?"
-      },
-      "Reported Speech": {
-        "she said me she is tired.": "Ela me disse que está cansada.",
-        "he asked where is the station.": "Ele perguntou onde está a estação.",
-        "she asked me can i help.": "Ela me perguntou se eu posso ajudar.",
-        "he told me to went.": "Ele me disse para ir.",
-        "she said she is ready.": "Ela disse que está pronta.",
-        "he said he will come here today.": "Ele disse que virá aqui hoje."
-      },
-      "Formality & Style": {
-        "hey, give me the report.": "Ei, me dê o relatório.",
-        "i am late, do not wait.": "Estou atrasado, não espere.",
-        "send me the file now.": "Envie-me o arquivo agora.",
-        "in formal writing: i arrived lol.": "Na escrita formal: Eu cheguei (risos).",
-        "hey, i need this asap.": "Ei, preciso disso com urgência.",
-        "dear sir or madam, what's up?": "Prezado Senhor ou Senhora, como vai?",
-        "due to the fact that it is raining, we will not go.": "Devido ao fato de que está chovendo, não iremos."
-      },
-      "Discourse & Flow": {
-        "i want to talk. goodbye.": "Eu quero falar. Adeus.",
-        "by the way because schedule.": "A propósito, por causa da agenda.",
-        "i bought a book. book is new.": "Eu comprei um livro. O livro é novo.",
-        "first i left, then i woke up.": "Primeiro eu saí, depois eu acordei.",
-        "what you said?": "O que você disse?",
-        "in short, many things.": "Em resumo, muitas coisas.",
-        "i do want to go not.": "Eu não quero ir.",
-        "me too. and you is?": "Eu também. E você, como está?",
-        "for example, it is.": "Por exemplo, é.",
-        "i mean, i am go.": "Quero dizer, eu vou."
-      }
+      "Sentence Structure": {},
+      "Verbs": {},
+      "Tenses & Aspect": {},
+      "Nouns & Articles": {},
+      "Pronouns & Reference": {},
+      "Modifiers": {},
+      "Questions": {},
+      "Negation": {},
+      "Connections": {},
+      "Conditions": {},
+      "Voice & Focus": {},
+      "Modality": {},
+      "Reported Speech": {},
+      "Formality & Style": {},
+      "Discourse & Flow": {}
     },
     "grammarMistakeFix": {
-      "Sentence Structure": {
-        "she reads a book.": "Ela lê um livro.",
-        "they named her captain.": "",
-        "she met him at noon at the station.": "Ela o encontrou ao meio-dia na estação.",
-        "i stayed home because it rained.": "Fiquei em casa porque choveu.",
-        "we finished early, and we went home after class because we were tired.": ""
-      },
-      "Verbs": {
-        "they carry the boxes.": "",
-        "she feels tired.": "",
-        "the room feels quiet.": "",
-        "he placed the book on the table.": "Ele colocou o livro na mesa.",
-        "we decided to stay.": "",
-        "he turned off the light.": "Ele apagou a luz."
-      },
-      "Tenses & Aspect": {
-        "she works every day.": "Ela trabalha todos os dias.",
-        "i am waiting outside.": "",
-        "they visited paris last year.": "",
-        "she was cooking when i called.": "Ela estava cozinhando quando eu liguei.",
-        "he has lived here for years.": "",
-        "he had left before i arrived.": "",
-        "she is going to call tomorrow.": "",
-        "she will be working at 8.": "Ela estará trabalhando às 8.",
-        "she will have finished by noon.": "Ela terá terminado até o meio-dia.",
-        "i have worked here for years.": ""
-      },
-      "Nouns & Articles": {
-        "i have a coin and two apples.": "",
-        "i need two pieces of bread.": "",
-        "i saw a movie.": "Eu vi um filme.",
-        "three children play.": "Três crianças brincam.",
-        "the teacher's book is new.": "O livro do professor é novo.",
-        "she bought the red dress.": "",
-        "how many apples?": "Quantas maçãs?"
-      },
-      "Pronouns & Reference": {
-        "she is here.": "",
-        "he saw me.": "",
-        "this book is hers.": "",
-        "i hurt myself.": "",
-        "these books are mine.": "",
-        "the man who called me left.": "",
-        "i saw someone at the station.": ""
-      },
-      "Modifiers": {
-        "she bought a small red bag.": "",
-        "this is cheaper.": "",
-        "he is the fastest.": "",
-        "she speaks slowly.": "",
-        "she always goes early.": "",
-        "he arrived here yesterday.": "",
-        "it is hot enough.": "",
-        "i am bored.": "",
-        "she answered the very difficult question quickly.": "",
-        "the quiet house is noisy.": ""
-      },
-      "Questions": {
-        "do you like coffee?": "Você gosta de café?",
-        "where do you live?": "Onde você mora?",
-        "is the store open?": "",
-        "did you call her?": "",
-        "can you help me?": "Você pode me ajudar?",
-        "you are ready, aren't you?": "",
-        "could you tell me where it is?": ""
-      },
-      "Negation": {
-        "he is not happy.": "Ele não está feliz.",
-        "she does not like tea.": "Ela não gosta de chá.",
-        "he doesn't know.": "Ele não sabe.",
-        "i don't have anything.": "Eu não tenho nada.",
-        "don't you like it?": "Você não gosta disso?",
-        "she hardly sleeps.": "Ela quase não dorme."
-      },
-      "Connections": {
-        "i went and stayed.": "Eu fui e fiquei.",
-        "i was late because the bus was late.": "Eu me atrasei porque o ônibus estava atrasado.",
-        "i like tea, but i also like coffee.": "Eu gosto de chá, mas também gosto de café.",
-        "i left before i ate.": "Eu saí antes de comer.",
-        "she is taller than me.": "Ela é mais alta do que eu.",
-        "he also went.": "Ele também foi.",
-        "first we met, finally we left.": "Primeiro nos encontramos, finalmente nós saímos."
-      },
-      "Conditions": {
-        "if you come, we meet.": "Se você vier, nos encontramos.",
-        "if it rains, we will stay.": "Se chover, ficaremos.",
-        "if i had time, i would go.": "Se eu tivesse tempo, eu iria.",
-        "if i had known, i would have told.": "Se eu soubesse, eu teria dito.",
-        "if i had studied, i would have the job now.": "Se eu tivesse estudado, eu teria o emprego agora.",
-        "we will go unless it rains.": "Nós iremos a menos que chova."
-      },
-      "Voice & Focus": {
-        "my mom baked the cake.": "Minha mãe assou o bolo.",
-        "the report was finished yesterday.": "O relatório foi terminado ontem.",
-        "this book, i bought yesterday.": "Este livro, eu comprei ontem.",
-        "it was she who called.": "Foi ela quem ligou.",
-        "there is a problem in the room.": "Há um problema na sala."
-      },
-      "Modality": {
-        "she can swim.": "Ela pode nadar.",
-        "may i sit here?": "Posso sentar aqui?",
-        "you must wear a badge.": "Você deve usar um crachá.",
-        "you should rest.": "Você deveria descansar.",
-        "it might rain.": "Pode ser que chova.",
-        "he will probably arrive late.": "Ele provavelmente chegará atrasado.",
-        "could you open the door, please?": "Você poderia abrir a porta, por favor?",
-        "would you like to come?": "Você gostaria de vir?"
-      },
-      "Reported Speech": {
-        "she said she was tired.": "Ela disse que estava cansada.",
-        "he asked where the station was.": "Ele perguntou onde estava a estação.",
-        "she asked me to help.": "Ela me pediu para ajudar.",
-        "he told me to go.": "Ele me disse para ir.",
-        "she said she was ready.": "Ela disse que estava pronta.",
-        "he said he would come there that day.": "Ele disse que viria lá naquele dia."
-      },
-      "Formality & Style": {
-        "hello, could you send the report?": "Olá, você poderia enviar o relatório?",
-        "i'm late, don't wait.": "Estou atrasado, não espere.",
-        "could you send me the file?": "Você poderia me enviar o arquivo?",
-        "in formal writing: i have arrived.": "Em uma escrita formal: Eu cheguei.",
-        "hello, i need this soon.": "Olá, eu preciso disso em breve.",
-        "hey, what's up?": "Oi, como vai?",
-        "it is raining, so we will not go.": "Está chovendo, então não iremos."
-      },
-      "Discourse & Flow": {
-        "hi, i wanted to talk. thanks, goodbye.": "Oi, eu queria conversar. Obrigado, adeus.",
-        "by the way, can we talk about the schedule?": "A propósito, podemos falar sobre a programação?",
-        "i bought a book. it is new.": "Eu comprei um livro. Ele é novo.",
-        "first i woke up, then i left.": "Primeiro eu acordei, depois eu saí.",
-        "what do you mean?": "O que você quer dizer?",
-        "in short, we need more time.": "Em resumo, precisamos de mais tempo.",
-        "i do want to go.": "Eu realmente quero ir.",
-        "me too. and you?": "Eu também. E você?",
-        "for example, it is useful for travel.": "Por exemplo, é útil para viajar.",
-        "sorry, i mean i am going.": "Desculpe, quero dizer que estou indo."
-      }
+      "Sentence Structure": {},
+      "Verbs": {},
+      "Tenses & Aspect": {},
+      "Nouns & Articles": {},
+      "Pronouns & Reference": {},
+      "Modifiers": {},
+      "Questions": {},
+      "Negation": {},
+      "Connections": {},
+      "Conditions": {},
+      "Voice & Focus": {},
+      "Modality": {},
+      "Reported Speech": {},
+      "Formality & Style": {},
+      "Discourse & Flow": {}
     }
   }
 }

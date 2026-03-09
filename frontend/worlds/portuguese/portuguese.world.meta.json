@@ -1,9 +1,9 @@
 {
   "worldKey": "portuguese",
-  "nativeName": "Português",
+  "nativeName": "Português do Brasil",
   "tts": {
-    "languageCode": "pt-PT",
-    "voice": "pt-PT-Wavenet-A"
+    "languageCode": "pt-BR",
+    "voice": "pt-BR-Wavenet-A"
   },
   "phraseIntents": {
     "englishLanguageLabel": "portuguese",

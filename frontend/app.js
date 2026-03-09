@@ -395,8 +395,8 @@ const WORLD_TTS_CONFIG = {
     voice: "es-ES-Neural2-F",
   },
   portuguese: {
-    languageCode: "pt-PT",
-    voice: "pt-PT-Wavenet-A",
+    languageCode: "pt-BR",
+    voice: "pt-BR-Wavenet-A",
   },
   dutch: {
     languageCode: "nl-NL",
@@ -4692,10 +4692,7 @@ const setupAccountHub = () => {
     if (progressCelebrationDismissTimer) {
       window.clearTimeout(progressCelebrationDismissTimer);
     }
-    const autoDismissMs = Math.max(
-      2800,
-      Math.min(14000, (Number(next.autoDismissMs) || 2500) * 2)
-    );
+    const autoDismissMs = Math.max(2800, Math.min(14000, (Number(next.autoDismissMs) || 2500) * 2));
     progressCelebrationDismissTimer = window.setTimeout(() => {
       closeProgressCelebrationPrompt();
     }, autoDismissMs);
@@ -4790,7 +4787,9 @@ const setupAccountHub = () => {
     }
 
     questSummaries.forEach((quest) => {
-      const questKey = String(quest?.key || "").trim().toLowerCase();
+      const questKey = String(quest?.key || "")
+        .trim()
+        .toLowerCase();
       if (!questKey) {
         return;
       }
@@ -6072,6 +6071,7 @@ const WORLD_LANGUAGE_ENTER_FROM_MAPS_EARLY_PX = 82;
 const MIMI_SITE_CONTEXT = [
   "Cosmica is a space-universe language learning site where each language is a world.",
   "Worlds available now: English, French, German, Spanish, Portuguese, Dutch, Swedish, Arabic, Chinese, Japanese, Korean, and Hindi.",
+  "Italian, Greek, Russian, and Vietnamese are visible on the homepage as next worlds in orbit, but they are not live yet.",
   "User actions: click a world to trigger a warp transition that says 'Entering {World} World'.",
   "Tone: cinematic, exploratory, playful, focused on discovery and learning by missions.",
   "Mimi can suggest worlds, give short quests, and teach greetings.",
@@ -6085,6 +6085,7 @@ const MIMI_SYSTEM_PROMPT = [
   "Maintain a cosmic discovery vibe while sounding natural and smart.",
   "Know Cosmica in detail: site sections, maps, world flow, base-language behavior, and currently available content.",
   "Treat English, French, German, Spanish, Portuguese, Dutch, Swedish, Arabic, Chinese, Japanese, Korean, and Hindi worlds as live.",
+  "Treat Italian, Greek, Russian, and Vietnamese as upcoming homepage worlds, not live courses yet.",
   "Ask for the user's target language, goal, and time available when needed.",
   "Give one concrete next step (a quick quest, a phrase to practice, or a world to enter).",
   "If asked about features beyond the current site, call them planned or upcoming.",
@@ -6097,7 +6098,7 @@ const worldLines = {
   French: "French world online. Parisian constellations are now in orbit.",
   German: "German world online. Precision constellations are now in orbit.",
   Spanish: "Spanish world online. Sunlit constellations are now in orbit.",
-  Portuguese: "Portuguese world online. Atlantic constellations are now in orbit.",
+  Portuguese: "Brazilian Portuguese world online. Carnival constellations are now in orbit.",
   Dutch: "Dutch world online. Canal constellations are now in orbit.",
   Swedish: "Swedish world online. Aurora constellations are now in orbit.",
   Arabic: "Arabic world online. Calligraphy constellations are now in orbit.",
@@ -6701,6 +6702,23 @@ const FLAG_SVGS = {
       </g>
     </svg>
   `,
+  br: `
+    <svg viewBox="0 0 60 40" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <rect width="60" height="40" fill="#009B3A"/>
+      <path d="M30 3.8 L54.2 20 L30 36.2 L5.8 20 Z" fill="#FFDF00"/>
+      <circle cx="30" cy="20" r="10" fill="#002776"/>
+      <path d="M20.5 18.6 C24.3 16.2 33.2 15.5 40.1 17.9" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round"/>
+      <g fill="#FFFFFF">
+        <circle cx="27.3" cy="17.6" r="0.9"/>
+        <circle cx="30.8" cy="14.8" r="0.8"/>
+        <circle cx="34.4" cy="17.3" r="0.85"/>
+        <circle cx="24.2" cy="21.2" r="0.7"/>
+        <circle cx="29.4" cy="22.2" r="0.75"/>
+        <circle cx="35.8" cy="21.3" r="0.7"/>
+        <circle cx="32.6" cy="24.4" r="0.75"/>
+      </g>
+    </svg>
+  `,
   in: `
     <svg viewBox="0 0 30 20" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
       <rect width="30" height="20" fill="#FFFFFF"/>
@@ -6734,6 +6752,43 @@ const FLAG_SVGS = {
         <line x1="15" y1="10" x2="15" y2="6.4" transform="rotate(330 15 10)" />
         <line x1="15" y1="10" x2="15" y2="6.4" transform="rotate(345 15 10)" />
       </g>
+    </svg>
+  `,
+  it: `
+    <svg viewBox="0 0 30 20" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <rect width="10" height="20" fill="#009246"/>
+      <rect x="10" width="10" height="20" fill="#FFFFFF"/>
+      <rect x="20" width="10" height="20" fill="#CE2B37"/>
+    </svg>
+  `,
+  gr: `
+    <svg viewBox="0 0 30 20" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <rect width="30" height="20" fill="#0D5EAF"/>
+      <g fill="#FFFFFF">
+        <rect y="2.222" width="30" height="2.222"/>
+        <rect y="6.666" width="30" height="2.222"/>
+        <rect y="11.11" width="30" height="2.222"/>
+        <rect y="15.554" width="30" height="2.222"/>
+        <rect width="12" height="12" fill="#0D5EAF"/>
+        <rect x="4.6" width="2.8" height="12"/>
+        <rect y="4.6" width="12" height="2.8"/>
+      </g>
+    </svg>
+  `,
+  ru: `
+    <svg viewBox="0 0 30 20" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <rect width="30" height="6.6667" fill="#FFFFFF"/>
+      <rect y="6.6667" width="30" height="6.6667" fill="#0039A6"/>
+      <rect y="13.3334" width="30" height="6.6666" fill="#D52B1E"/>
+    </svg>
+  `,
+  vn: `
+    <svg viewBox="0 0 30 20" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <defs>
+        <polygon id="vn-star" points="0,-1 0.225,-0.309 0.951,-0.309 0.363,0.118 0.588,0.809 0,0.382 -0.588,0.809 -0.363,0.118 -0.951,-0.309 -0.225,-0.309"/>
+      </defs>
+      <rect width="30" height="20" fill="#DA251D"/>
+      <use href="#vn-star" fill="#FFDD00" transform="translate(15 10) scale(5.4)"/>
     </svg>
   `,
 };
@@ -7227,7 +7282,10 @@ const scrollMimiBubbleIntoView = ({ behavior = "smooth", force = false } = {}) =
     // For tall expanding replies, follow the newest content near the bottom
     // instead of pinning the bubble top.
     const trackedBottom = speechText
-      ? Math.max(rect.top + 24, Math.min(rect.bottom, speechText.getBoundingClientRect().bottom + 16))
+      ? Math.max(
+          rect.top + 24,
+          Math.min(rect.bottom, speechText.getBoundingClientRect().bottom + 16)
+        )
       : rect.bottom;
     delta = trackedBottom - targetBottom;
     if (delta < 0 && !force) {
@@ -7634,18 +7692,18 @@ const LETTERS_TITLE_ENGLISH_SOURCES = Object.freeze({
   english: "Letters A-Z",
   french: "French alphabet",
   spanish: "Spanish alphabet",
-  arabic: "Arabic letters",
+  arabic: "Arabic script",
   chinese: "Chinese characters",
-  japanese: "Japanese characters",
-  korean: "Hangul letters",
-  hindi: "Devanagari letters",
+  japanese: "Japanese kana",
+  korean: "Hangul script",
+  hindi: "Devanagari script",
   german: "German alphabet",
   portuguese: "Portuguese alphabet",
   dutch: "Dutch alphabet",
   swedish: "Swedish alphabet",
 });
 
-const LETTERS_HELPER_ENGLISH_SOURCE = "Tap a letter to hear a clear pronunciation.";
+const LETTERS_HELPER_ENGLISH_SOURCE = "Tap a card to hear a clear pronunciation.";
 
 const ENGLISH_LETTERS_BASE_TITLE_FALLBACKS = Object.freeze({
   albanian: "Shkronjat A-Z",
@@ -7719,20 +7777,99 @@ const ENGLISH_LETTERS_BASE_HELPER_FALLBACKS = Object.freeze({
   vietnamese: "Chạm vào một chữ cái để nghe phát âm rõ ràng.",
 });
 
+const SCRIPT_AWARE_ENGLISH_LETTERS_BASE_TITLE_FALLBACKS = Object.freeze({
+  arabic: "الحروف العربية",
+  chinese: "汉字",
+  japanese: "かな",
+  korean: "한글",
+  hindi: "देवनागरी",
+});
+
 const resolveEnglishLettersBaseTitleFallback = (baseLanguage) =>
   String(
-    ENGLISH_LETTERS_BASE_TITLE_FALLBACKS[String(baseLanguage || "").trim().toLowerCase()] || ""
+    SCRIPT_AWARE_ENGLISH_LETTERS_BASE_TITLE_FALLBACKS[
+      String(baseLanguage || "")
+        .trim()
+        .toLowerCase()
+    ] ||
+      ENGLISH_LETTERS_BASE_TITLE_FALLBACKS[
+      String(baseLanguage || "")
+        .trim()
+        .toLowerCase()
+      ] ||
+      ""
   ).trim();
 
 const resolveEnglishLettersBaseHelperFallback = (baseLanguage) =>
   String(
-    ENGLISH_LETTERS_BASE_HELPER_FALLBACKS[String(baseLanguage || "").trim().toLowerCase()] || ""
+    ENGLISH_LETTERS_BASE_HELPER_FALLBACKS[
+      String(baseLanguage || "")
+        .trim()
+        .toLowerCase()
+    ] || ""
   ).trim();
 
 const LETTERS_LEVEL_NOTE_ENGLISH_SOURCES = Object.freeze({
   arabic: Object.freeze([
     "Start with the core letters first in a clear sequence from alif through zay.",
     "Continue with the remaining letters, then practice their word forms later.",
+  ]),
+  chinese: Object.freeze([
+    "Start with simple, concrete shapes that build visual recognition and stroke confidence.",
+    "Continue with high-utility concrete characters often used in everyday nouns and study contexts.",
+    "Use these in minimal sentence frames: 我是, 你是, 他/她是, 我们有/没有.",
+    "Add actions to sentence patterns: 我来, 我去, 我吃, 我喝, 我看, 我听.",
+    "Combine these into common everyday words: 学校, 老师, 朋友, 爱书, 爱猫, 爱狗.",
+  ]),
+  korean: Object.freeze([
+    "Start with consonant recognition and tense contrasts before syllable building.",
+    "Practice simple and compound vowels, then combine them into blocks like 가, 너, and 교.",
+  ]),
+  hindi: Object.freeze([
+    "Start with the core independent vowels and hear how each sound changes the mouth shape.",
+    "Group consonants by their sound families and practice them with clear aspiration contrasts.",
+    "Use these modern Hindi letters for Perso-Arabic loanwords that appear in contemporary vocabulary.",
+    "Practice vowel signs by attaching them to base consonants and reading the sound changes aloud.",
+    "Review these common conjuncts repeatedly so they become easy to recognize inside words.",
+  ]),
+});
+
+const ENHANCED_LETTERS_LEVEL_NOTE_ENGLISH_SOURCES = Object.freeze({
+  arabic: Object.freeze([
+    "Start with the core letters first in a clear sequence from alif through zay.",
+    "Continue with the remaining high-frequency letters, then recycle them inside short words.",
+    "Notice how a letter changes shape at the beginning, in the middle, and at the end of a word.",
+    "These letters do not connect to the following letter on the left, so they break the joining chain.",
+    "Train your ear and eye on short vowels first, then on the longer vowel patterns built from them.",
+  ]),
+  chinese: Object.freeze([
+    "Start with simple, concrete forms so visual recognition and stroke direction feel stable.",
+    "Continue with common concrete characters that quickly appear in early nouns and topic words.",
+    "Use these in minimal sentence frames such as 我是, 你是, and 我们有 / 没有.",
+    "Add action characters to short sentence patterns such as 我来, 我去, 我吃, and 我看.",
+    "Combine these into common everyday words such as 学校, 老师, 朋友, and 爱书.",
+    "Watch how familiar parts combine inside full characters, for example 好 = 女 + 子 and 明 = 日 + 月.",
+  ]),
+  japanese: Object.freeze([
+    "Start with the five vowels, then read each consonant row aloud until the chart feels automatic.",
+    "Add dakuten and handakuten so pairs like か / が and は / ぱ become easy to hear.",
+    "Read combinations like きゃ and しゅ as one beat, and remember that っ marks a doubled consonant.",
+    "Use the same row logic again in katakana so names and loanwords become readable faster.",
+    "These marks drive many common loanword sounds such as ガ, ズ, ベ, and ポ.",
+    "Practice small ャ / ュ / ョ combinations and the small ッ used inside many borrowed words.",
+  ]),
+  korean: Object.freeze([
+    "Start with consonant recognition and tense contrasts before you build full syllables.",
+    "Practice the simple and compound vowels, then combine them into familiar blocks such as 가, 거, and 교.",
+    "Read each block as one unit instead of spelling the jamo one by one.",
+  ]),
+  hindi: Object.freeze([
+    "Start with the core independent vowels and hear how each sound changes the mouth shape.",
+    "Group consonants by their sound families and practice them with clear aspiration contrasts.",
+    "Use these modern Hindi letters for Perso-Arabic loanwords that appear in contemporary vocabulary.",
+    "Practice vowel signs by attaching them to base consonants and reading the sound changes aloud.",
+    "Build one akshara multiple ways by combining a base consonant with different matras and with the halant form.",
+    "Review these common conjuncts repeatedly so they become easy to recognize inside words.",
   ]),
 });
 
@@ -7746,7 +7883,10 @@ const resolveLettersTitleEnglishSource = (nativeTitle) => {
     .trim();
 };
 
-const resolveLettersHelperEnglishSource = () => LETTERS_HELPER_ENGLISH_SOURCE;
+const resolveLettersHelperEnglishSource = (sourceText) =>
+  String(sourceText || LETTERS_HELPER_ENGLISH_SOURCE)
+    .replace(/\s+/g, " ")
+    .trim();
 
 const readLettersTitleTranslationCache = () => {
   if (lettersTitleTranslationCache instanceof Map) {
@@ -7894,12 +8034,14 @@ const buildLettersLevelEnglishFallback = (sourceText, index) => {
 
 const resolveLettersLevelHeadingEnglishSource = (sourceText, index) =>
   String(buildLettersLevelEnglishFallback(sourceText, index) || sourceText || "")
-    .replace(/â€”/g, "-")
+    .replace(/—/g, "-")
     .replace(/\s+/g, " ")
     .trim();
 
 const resolveLettersLevelNoteEnglishSource = (sourceText, index) => {
-  const mapped = LETTERS_LEVEL_NOTE_ENGLISH_SOURCES[WORLD_KEY];
+  const mapped =
+    ENHANCED_LETTERS_LEVEL_NOTE_ENGLISH_SOURCES[WORLD_KEY] ||
+    LETTERS_LEVEL_NOTE_ENGLISH_SOURCES[WORLD_KEY];
   const mappedText = Array.isArray(mapped) ? String(mapped[index] || "").trim() : "";
   if (mappedText) {
     return mappedText;
@@ -7939,9 +8081,7 @@ const setupLettersLevelTranslations = async () => {
     if (!node) {
       return;
     }
-    const sourceText = String(
-      node.dataset[sourceDatasetKey] || node.textContent || ""
-    )
+    const sourceText = String(node.dataset[sourceDatasetKey] || node.textContent || "")
       .replace(/\s+/g, " ")
       .trim();
     if (!sourceText) {
@@ -8020,10 +8160,11 @@ const setupLettersTitleTranslation = async () => {
   if (existingTranslationNode) {
     existingTranslationNode.remove();
   }
-  const sourceTitle =
-    String(lettersHeading.dataset.nativeTitleSource || lettersHeading.textContent || "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const sourceTitle = String(
+    lettersHeading.dataset.nativeTitleSource || lettersHeading.textContent || ""
+  )
+    .replace(/\s+/g, " ")
+    .trim();
   if (!sourceTitle) {
     return;
   }
@@ -8059,10 +8200,7 @@ const setupLettersTitleTranslation = async () => {
     return;
   }
 
-  const translated = await requestLettersTitleTranslation(
-    englishSourceTitle,
-    selectedBaseLanguage
-  );
+  const translated = await requestLettersTitleTranslation(englishSourceTitle, selectedBaseLanguage);
   if (!translated) {
     lettersHeading.textContent =
       selectedBaseLanguage === "english" ? englishSourceTitle : sourceTitle;
@@ -8227,13 +8365,24 @@ const setupLettersSectionCompleteButton = () => {
   refreshLettersLessonShell();
 };
 
-const slugifyLettersCardPracticeValue = (value) =>
-  String(value || "")
+const slugifyLettersCardPracticeValue = (value) => {
+  const normalized = String(value || "")
+    .normalize("NFKC")
     .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
+    .toLowerCase();
+  const unicodeSlug = normalized
+    .replace(/[^\p{L}\p{N}]+/gu, "-")
     .replace(/^-+|-+$/g, "")
     .slice(0, 80);
+  if (unicodeSlug) {
+    return unicodeSlug;
+  }
+  return Array.from(normalized)
+    .map((char) => char.codePointAt(0)?.toString(16) || "")
+    .filter(Boolean)
+    .join("-")
+    .slice(0, 80);
+};
 
 const buildLettersCardPracticeSectionKey = (sectionKey, cardKey) => {
   const normalizedSection = String(sectionKey || "core").trim() || "core";
@@ -8400,7 +8549,7 @@ const setupLettersLessonShell = () => {
   if (!host.dataset.bound) {
     host.dataset.bound = "1";
     host.innerHTML = `
-      <section class="map-lesson-shell map-lesson-shell-letters" aria-label="Letters lesson mission">
+      <section class="map-lesson-shell map-lesson-shell-letters" aria-label="Script lesson mission">
         <div class="map-lesson-shell-copy">
           <span class="map-lesson-shell-tag">Run</span>
           <h3>Sound Dock</h3>
@@ -8416,7 +8565,7 @@ const setupLettersLessonShell = () => {
             <span data-letters-lesson-progress>0%</span>
           </div>
           <div class="map-lesson-bar" aria-hidden="true"><span data-letters-lesson-bar></span></div>
-          <p class="map-lesson-next">Next: <strong data-letters-lesson-next>Start with A</strong></p>
+          <p class="map-lesson-next">Next: <strong data-letters-lesson-next>first card</strong></p>
           <div class="map-lesson-actions">
             <button type="button" class="map-lesson-action map-lesson-action-primary" data-letters-start>
               Start
@@ -8469,7 +8618,9 @@ const setupLettersLessonShell = () => {
     const selectedBaseLanguage = readStoredBaseLanguagePreference();
     const nextIncompleteCard = document.querySelector(".letter-card");
     const nextLetter = String(
-      nextIncompleteCard?.dataset.letter || nextIncompleteCard?.querySelector(".letter")?.textContent || "A"
+      nextIncompleteCard?.dataset.letter ||
+        nextIncompleteCard?.querySelector(".letter")?.textContent ||
+        "first card"
     ).trim();
 
     host.style.setProperty("--map-lesson-progress", `${(progressPercent * 3.6).toFixed(2)}`);
@@ -8493,7 +8644,7 @@ const setupLettersLessonShell = () => {
         : "Support: Off";
     }
     if (practiceNode) {
-      practiceNode.textContent = `${practicedLetters}/${totalLetters || 0} letters`;
+      practiceNode.textContent = `${practicedLetters}/${totalLetters || 0} cards`;
     }
     if (checkpointNode) {
       checkpointNode.textContent = checkpointCleared ? "Gate: Clear" : "Gate: Locked";
@@ -8503,8 +8654,8 @@ const setupLettersLessonShell = () => {
     }
     if (copyNode) {
       copyNode.textContent = checkpointCleared
-        ? "Gate cleared."
-        : "Tap tiles.";
+        ? "Checkpoint cleared."
+        : "Tap cards to hear the sound.";
     }
   };
 
@@ -8585,20 +8736,21 @@ const setupLettersHelperTranslation = async () => {
     translationNode.remove();
   }
 
-  const nativeText =
-    String(
-      helperParagraph.dataset.nativeHelperSource ||
-        LETTERS_HELPER_NATIVE_TEXT[WORLD_KEY] ||
-        mainNode.textContent ||
-        ""
-    )
-      .replace(/\s+/g, " ")
-      .trim();
+  const nativeText = String(
+    helperParagraph.dataset.nativeHelperSource ||
+      mainNode.textContent ||
+      LETTERS_HELPER_NATIVE_TEXT[WORLD_KEY] ||
+      ""
+  )
+    .replace(/\s+/g, " ")
+    .trim();
   helperParagraph.dataset.nativeHelperSource = nativeText;
   if (nativeText) {
     mainNode.textContent = nativeText;
   }
-  const englishSourceText = resolveLettersHelperEnglishSource();
+  const englishSourceText = resolveLettersHelperEnglishSource(
+    helperParagraph.dataset.englishHelperSource || nativeText
+  );
   helperParagraph.dataset.englishHelperSource = englishSourceText;
 
   const selectedBaseLanguage = readStoredBaseLanguagePreference();
@@ -8644,7 +8796,7 @@ const setupLettersHelperTranslation = async () => {
 };
 
 const HINDI_ROMANIZATION_VARIANTS = Object.freeze({
-  practical: Object.freeze({
+  practical: {
     अ: "a",
     आ: "aa",
     इ: "i",
@@ -8715,8 +8867,8 @@ const HINDI_ROMANIZATION_VARIANTS = Object.freeze({
     त्र: "tra",
     ज्ञ: "gya",
     श्र: "shra",
-  }),
-  iast: Object.freeze({
+  },
+  iast: {
     अ: "a",
     आ: "ā",
     इ: "i",
@@ -8787,11 +8939,11 @@ const HINDI_ROMANIZATION_VARIANTS = Object.freeze({
     त्र: "tra",
     ज्ञ: "jña",
     श्र: "śra",
-  }),
+  },
 });
 
 const LETTER_ROMANIZATION_MAP = Object.freeze({
-  korean: Object.freeze({
+  korean: {
     ㄱ: "g/k",
     ㄲ: "kk",
     ㄴ: "n",
@@ -8832,8 +8984,8 @@ const LETTER_ROMANIZATION_MAP = Object.freeze({
     ㅡ: "eu",
     ㅢ: "ui",
     ㅣ: "i",
-  }),
-  chinese: Object.freeze({
+  },
+  chinese: {
     一: "yī",
     二: "èr",
     三: "sān",
@@ -8899,8 +9051,8 @@ const LETTER_ROMANIZATION_MAP = Object.freeze({
     狗: "gǒu",
     车: "chē",
     书: "shū",
-  }),
-  japanese: Object.freeze({
+  },
+  japanese: {
     あ: "a",
     い: "i",
     う: "u",
@@ -8993,8 +9145,8 @@ const LETTER_ROMANIZATION_MAP = Object.freeze({
     ワ: "wa",
     ヲ: "o (written wo)",
     ン: "n",
-  }),
-  arabic: Object.freeze({
+  },
+  arabic: {
     ا: "ʾalif",
     ب: "bāʾ",
     ت: "tāʾ",
@@ -9023,8 +9175,229 @@ const LETTER_ROMANIZATION_MAP = Object.freeze({
     ه: "hāʾ",
     و: "wāw",
     ي: "yāʾ",
+  },
+  hindi: {
+    अ: "a",
+    आ: "aa",
+    इ: "i",
+    ई: "ii",
+    उ: "u",
+    ऊ: "uu",
+    ऋ: "ri",
+    ए: "e",
+    ऐ: "ai",
+    ओ: "o",
+    औ: "au",
+    अं: "an",
+    अः: "ah",
+    क: "ka",
+    ख: "kha",
+    ग: "ga",
+    घ: "gha",
+    ङ: "nga",
+    च: "ca",
+    छ: "cha",
+    ज: "ja",
+    झ: "jha",
+    ञ: "nya",
+    ट: "ṭa",
+    ठ: "ṭha",
+    ड: "ḍa",
+    ढ: "ḍha",
+    ण: "ṇa",
+    त: "ta",
+    थ: "tha",
+    द: "da",
+    ध: "dha",
+    न: "na",
+    प: "pa",
+    फ: "pha",
+    ब: "ba",
+    भ: "bha",
+    म: "ma",
+    य: "ya",
+    र: "ra",
+    ल: "la",
+    व: "va",
+    श: "sha",
+    ष: "sha",
+    स: "sa",
+    ह: "ha",
+    क़: "qa",
+    ख़: "kha",
+    ग़: "ga",
+    ज़: "za",
+    ड़: "ṛa",
+    ढ़: "ṛha",
+    फ़: "fa",
+    "ा": "aa-matra",
+    "ि": "i-matra",
+    "ी": "ii-matra",
+    "ु": "u-matra",
+    "ू": "uu-matra",
+    "ृ": "ri-matra",
+    "े": "e-matra",
+    "ै": "ai-matra",
+    "ो": "o-matra",
+    "ौ": "au-matra",
+    "ं": "anusvara",
+    "ः": "visarga",
+    "ँ": "chandrabindu",
+    क्ष: "ksha",
+    त्र: "tra",
+    ज्ञ: "gya",
+    श्र: "shra",
+  },
+});
+
+const ENHANCED_LETTER_ROMANIZATION_OVERRIDES = Object.freeze({
+  arabic: Object.freeze({
+    "بـ": "bāʾ - initial form",
+    "ـبـ": "bāʾ - middle form",
+    "ـب": "bāʾ - final form",
+    "نـ": "nūn - initial form",
+    "ـنـ": "nūn - middle form",
+    "ـن": "nūn - final form",
+    "مـ": "mīm - initial form",
+    "ـمـ": "mīm - middle form",
+    "ـم": "mīm - final form",
+    "يـ": "yāʾ - initial form",
+    "ـيـ": "yāʾ - middle form",
+    "ـي": "yāʾ - final form",
+    "بَ": "ba",
+    "بِ": "bi",
+    "بُ": "bu",
+    با: "baa",
+    بي: "bii",
+    بو: "buu",
   }),
-  hindi: HINDI_ROMANIZATION_VARIANTS.practical,
+  chinese: Object.freeze({
+    休: "xiū",
+    明: "míng",
+    林: "lín",
+    问: "wèn",
+    男: "nán",
+  }),
+  japanese: Object.freeze({
+    が: "ga",
+    ぎ: "gi",
+    ぐ: "gu",
+    げ: "ge",
+    ご: "go",
+    ざ: "za",
+    じ: "ji",
+    ず: "zu",
+    ぜ: "ze",
+    ぞ: "zo",
+    だ: "da",
+    ぢ: "ji",
+    づ: "zu",
+    で: "de",
+    ど: "do",
+    ば: "ba",
+    び: "bi",
+    ぶ: "bu",
+    べ: "be",
+    ぼ: "bo",
+    ぱ: "pa",
+    ぴ: "pi",
+    ぷ: "pu",
+    ぺ: "pe",
+    ぽ: "po",
+    きゃ: "kya",
+    きゅ: "kyu",
+    きょ: "kyo",
+    しゃ: "sha",
+    しゅ: "shu",
+    しょ: "sho",
+    ちゃ: "cha",
+    ちゅ: "chu",
+    ちょ: "cho",
+    にゃ: "nya",
+    にゅ: "nyu",
+    にょ: "nyo",
+    りゃ: "rya",
+    りゅ: "ryu",
+    りょ: "ryo",
+    っ: "small tsu / doubled consonant cue",
+    ガ: "ga",
+    ギ: "gi",
+    グ: "gu",
+    ゲ: "ge",
+    ゴ: "go",
+    ザ: "za",
+    ジ: "ji",
+    ズ: "zu",
+    ゼ: "ze",
+    ゾ: "zo",
+    ダ: "da",
+    ヂ: "ji",
+    ヅ: "zu",
+    デ: "de",
+    ド: "do",
+    バ: "ba",
+    ビ: "bi",
+    ブ: "bu",
+    ベ: "be",
+    ボ: "bo",
+    パ: "pa",
+    ピ: "pi",
+    プ: "pu",
+    ペ: "pe",
+    ポ: "po",
+    キャ: "kya",
+    キュ: "kyu",
+    キョ: "kyo",
+    シュ: "shu",
+    ショ: "sho",
+    チャ: "cha",
+    チュ: "chu",
+    チョ: "cho",
+    ニャ: "nya",
+    ニュ: "nyu",
+    ニョ: "nyo",
+    リャ: "rya",
+    リュ: "ryu",
+    リョ: "ryo",
+    ッ: "small tsu / doubled consonant cue",
+    ファ: "fa",
+    ティ: "ti",
+  }),
+  korean: Object.freeze({
+    가: "ga",
+    거: "geo",
+    교: "gyo",
+    나: "na",
+    누: "nu",
+    다: "da",
+    바: "ba",
+    사: "sa",
+    각: "gak",
+    강: "gang",
+    한: "han",
+    글: "geul",
+  }),
+});
+
+const ENHANCED_HINDI_ROMANIZATION_VARIANTS = Object.freeze({
+  practical: Object.freeze({
+    "का": "kaa",
+    "कि": "ki",
+    "की": "kee",
+    "कु": "ku",
+    "के": "ke",
+    "को": "ko",
+    "क्": "k (halant)",
+  }),
+  iast: Object.freeze({
+    "का": "kā",
+    "कि": "ki",
+    "की": "kī",
+    "कु": "ku",
+    "के": "ke",
+    "को": "ko",
+    "क्": "k (halant)",
+  }),
 });
 
 const REPORTED_MISSING_ROMANIZATION_KEYS = new Set();
@@ -9064,9 +9437,20 @@ const setHindiRomanizationVariant = (variant) => {
 const getActiveLetterRomanizationMap = () => {
   if (WORLD_KEY === "hindi") {
     const variant = getHindiRomanizationVariant();
-    return HINDI_ROMANIZATION_VARIANTS[variant] || HINDI_ROMANIZATION_VARIANTS.practical;
+    return {
+      ...(HINDI_ROMANIZATION_VARIANTS[variant] || HINDI_ROMANIZATION_VARIANTS.practical),
+      ...(ENHANCED_HINDI_ROMANIZATION_VARIANTS[variant] || ENHANCED_HINDI_ROMANIZATION_VARIANTS.practical),
+    };
   }
-  return LETTER_ROMANIZATION_MAP[WORLD_KEY];
+  const baseMap = LETTER_ROMANIZATION_MAP[WORLD_KEY];
+  const overrideMap = ENHANCED_LETTER_ROMANIZATION_OVERRIDES[WORLD_KEY];
+  if (!baseMap && !overrideMap) {
+    return undefined;
+  }
+  return {
+    ...(baseMap || {}),
+    ...(overrideMap || {}),
+  };
 };
 
 const setupHindiRomanizationToggle = () => {
@@ -9125,7 +9509,83 @@ const isRomanizationDiagnosticsEnabled = () => {
   return true;
 };
 
-// Render optional romanization helpers (currently focused on Hindi variants).
+const normalizeLetterSupportText = (value) =>
+  String(value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[|/]+/g, " ")
+    .replace(/[-–—]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+
+const resolveLetterSupportCopy = (captionText, romanizationText) => {
+  const normalizedCaptionText = String(captionText || "").replace(/\s*\|\s*/g, " - ").trim();
+  const normalizedRomanizationText = String(romanizationText || "").trim();
+  if (!normalizedCaptionText) {
+    return {
+      captionText: "",
+      romanizationText: normalizedRomanizationText,
+      suppressRomanization: !normalizedRomanizationText,
+    };
+  }
+  if (!normalizedRomanizationText) {
+    return {
+      captionText: normalizedCaptionText,
+      romanizationText: "",
+      suppressRomanization: true,
+    };
+  }
+
+  const captionKey = normalizeLetterSupportText(normalizedCaptionText);
+  const romanizationKey = normalizeLetterSupportText(normalizedRomanizationText);
+  if (!captionKey) {
+    return {
+      captionText: "",
+      romanizationText: normalizedRomanizationText,
+      suppressRomanization: false,
+    };
+  }
+  if (!romanizationKey) {
+    return {
+      captionText: normalizedCaptionText,
+      romanizationText: "",
+      suppressRomanization: true,
+    };
+  }
+
+  if (captionKey === romanizationKey) {
+    return {
+      captionText: normalizedCaptionText,
+      romanizationText: "",
+      suppressRomanization: true,
+    };
+  }
+
+  if (captionKey.includes(romanizationKey) && normalizedCaptionText.length >= normalizedRomanizationText.length) {
+    return {
+      captionText: normalizedCaptionText,
+      romanizationText: "",
+      suppressRomanization: true,
+    };
+  }
+
+  if (romanizationKey.includes(captionKey) && normalizedRomanizationText.length > normalizedCaptionText.length) {
+    return {
+      captionText: normalizedRomanizationText,
+      romanizationText: "",
+      suppressRomanization: true,
+    };
+  }
+
+  return {
+    captionText: normalizedCaptionText,
+    romanizationText: normalizedRomanizationText,
+    suppressRomanization: false,
+  };
+};
+
+// Render optional romanization helpers while collapsing duplicate teaching lines.
 const setupLetterRomanization = () => {
   if (!document.body.classList.contains("letters-page")) {
     return;
@@ -9146,14 +9606,25 @@ const setupLetterRomanization = () => {
     if (!symbol) {
       return;
     }
-    const romanization = worldMap[symbol];
-    if (!romanization) {
-      if (missingSymbols) {
+    const captionEl = card.querySelector(".letter-card-caption");
+    const captionText = String(captionEl?.textContent || "").trim();
+    const romanization = String(worldMap[symbol] || "").trim();
+    const supportCopy = resolveLetterSupportCopy(captionText, romanization);
+    if (captionEl) {
+      captionEl.textContent = supportCopy.captionText;
+      captionEl.hidden = !supportCopy.captionText;
+    }
+
+    let romanizationEl = card.querySelector(".letter-romanization");
+    if (!supportCopy.romanizationText) {
+      if (romanizationEl) {
+        romanizationEl.hidden = true;
+      }
+      if (!romanization && missingSymbols && !captionText) {
         missingSymbols.push(symbol);
       }
       return;
     }
-    let romanizationEl = card.querySelector(".letter-romanization");
     if (!romanizationEl) {
       romanizationEl = document.createElement("div");
       romanizationEl.className = "letter-romanization";
@@ -9162,7 +9633,8 @@ const setupLetterRomanization = () => {
       const audioEl = card.querySelector(".letter-audio");
       card.insertBefore(romanizationEl, audioEl || null);
     }
-    romanizationEl.textContent = romanization;
+    romanizationEl.hidden = false;
+    romanizationEl.textContent = supportCopy.romanizationText;
   });
 
   if (missingSymbols && missingSymbols.length) {
@@ -9217,7 +9689,7 @@ const greetings = {
   German: "Hallo",
   Japanese: "Konnichiwa",
   Chinese: "Ni hao",
-  Portuguese: "Ola",
+  Portuguese: "Olá",
   Hindi: "Namaste",
 };
 
@@ -9824,6 +10296,21 @@ const observeRevealElement = (el) => {
   observedRevealElements.add(el);
 };
 
+const buildSerializedCometCadence = (cometCount) => {
+  const count = Math.max(1, Number(cometCount) || 1);
+  const isMobileMeteorCadence = window.matchMedia("(max-width: 960px)").matches;
+  const flightSec = isMobileMeteorCadence
+    ? 4.1 + Math.random() * 0.35
+    : 4.5 + Math.random() * 0.55;
+  const gapSec = isMobileMeteorCadence ? 1.55 : 1.85;
+  const cycleStepSec = flightSec + gapSec;
+  return {
+    cycleSec: cycleStepSec * count,
+    cycleStepSec,
+    isMobileMeteorCadence,
+  };
+};
+
 const activateRevealStateForElement = (el) => {
   if (!el || !(el instanceof HTMLElement)) {
     return;
@@ -10174,13 +10661,8 @@ const setupWorldPageInteractiveFx = () => {
         .slice(0, cometCount)
         .sort(() => Math.random() - 0.5)
         .map((slot) => Math.max(8, Math.min(64, slot + (Math.random() * 6 - 3))));
-      const isMobileMeteorCadence = window.matchMedia("(max-width: 960px)").matches;
-      const baseDurationSec = isMobileMeteorCadence
-        ? 6.4 + Math.random() * 0.6
-        : 5.8 + Math.random() * 2.2;
-      const launchStrideSec = isMobileMeteorCadence
-        ? baseDurationSec / Math.max(1, cometCount)
-        : Math.max(1.2, baseDurationSec * 0.34);
+      const { cycleSec, cycleStepSec, isMobileMeteorCadence } =
+        buildSerializedCometCadence(cometCount);
       for (let i = 0; i < cometCount; i += 1) {
         const comet = document.createElement("span");
         comet.className = "world-fx-comet";
@@ -10191,12 +10673,10 @@ const setupWorldPageInteractiveFx = () => {
         comet.style.setProperty("--c-size", `${(78 + Math.random() * 44).toFixed(2)}px`);
         comet.style.setProperty(
           "--c-delay",
-          `${(i * launchStrideSec + (isMobileMeteorCadence ? 0 : Math.random() * 0.35)).toFixed(2)}s`
+          `${(i * cycleStepSec).toFixed(2)}s`
         );
-        comet.style.setProperty(
-          "--c-duration",
-          `${(isMobileMeteorCadence ? baseDurationSec : baseDurationSec + (Math.random() * 0.6 - 0.3)).toFixed(2)}s`
-        );
+        comet.style.setProperty("--c-cycle", `${cycleSec.toFixed(2)}s`);
+        comet.style.setProperty("--c-flight-window", isMobileMeteorCadence ? "mobile" : "desktop");
         comets.appendChild(comet);
       }
       worldAmbient.appendChild(comets);
@@ -11956,7 +12436,9 @@ const scheduleWorldGuestAuthPrompt = () => {
       return;
     }
     markWorldGuestAuthPromptSeen();
-    openGuestSignupPanelUpwards("Create an account to save progress and continue where you left off.");
+    openGuestSignupPanelUpwards(
+      "Create an account to save progress and continue where you left off."
+    );
   }, 1400);
 };
 
@@ -12700,7 +13182,9 @@ const setupWorldMissionPath = () => {
     if (!normalized) {
       return "Off";
     }
-    const matchedPill = availableLanguagePills.find((pill) => getLanguagePillKey(pill) === normalized);
+    const matchedPill = availableLanguagePills.find(
+      (pill) => getLanguagePillKey(pill) === normalized
+    );
     const rawLabel = normalizeLanguageLabel(
       matchedPill?.querySelector(".language-pill-label")?.textContent || normalized
     );
@@ -12838,7 +13322,11 @@ const setupWorldMissionPath = () => {
         }
       }
       if (completeButton instanceof HTMLButtonElement) {
-        completeButton.textContent = isComplete ? "Done" : card.classList.contains("mission-lesson-boss") ? "Clear" : "Done";
+        completeButton.textContent = isComplete
+          ? "Done"
+          : card.classList.contains("mission-lesson-boss")
+            ? "Clear"
+            : "Done";
         completeButton.disabled = isLocked;
       }
 
@@ -12849,8 +13337,9 @@ const setupWorldMissionPath = () => {
         !isLocked &&
         !premiumLocked
       ) {
-        nextCoreMissionName = String(card.dataset.displayName || card.querySelector("h3")?.textContent || "")
-          .trim();
+        nextCoreMissionName = String(
+          card.dataset.displayName || card.querySelector("h3")?.textContent || ""
+        ).trim();
       }
     });
 
@@ -12874,8 +13363,7 @@ const setupWorldMissionPath = () => {
       languageChipNode.textContent = `Support: ${getLanguageDisplayLabel(baseLanguage)}`;
     }
 
-    let currentCopy =
-      "Pick a language to start.";
+    let currentCopy = "Pick a language to start.";
     let nextLabel = "Pick a language";
     let heroLabel = "Start";
     if (baseLanguage) {
@@ -12938,10 +13426,10 @@ const setupWorldMissionPath = () => {
     }
   };
 
-    missionCards.forEach((card) => {
-      if (card.dataset.missionBound === "true") {
-        return;
-      }
+  missionCards.forEach((card) => {
+    if (card.dataset.missionBound === "true") {
+      return;
+    }
     card.dataset.missionBound = "true";
     const launchButton = card.querySelector(".mission-lesson-launch");
     const completeButton = card.querySelector(".mission-lesson-complete");
@@ -12966,7 +13454,10 @@ const setupWorldMissionPath = () => {
         if (!prerequisitesMet) {
           return;
         }
-        if (card.dataset.premium === "true" && !userHasPremiumAccess(getAuthSnapshot()?.user || null)) {
+        if (
+          card.dataset.premium === "true" &&
+          !userHasPremiumAccess(getAuthSnapshot()?.user || null)
+        ) {
           openPremiumForMission(card);
           return;
         }
@@ -13004,7 +13495,10 @@ const setupWorldMissionPath = () => {
         if (!prerequisitesMet || card.classList.contains("is-busy")) {
           return;
         }
-        if (card.dataset.premium === "true" && !userHasPremiumAccess(getAuthSnapshot()?.user || null)) {
+        if (
+          card.dataset.premium === "true" &&
+          !userHasPremiumAccess(getAuthSnapshot()?.user || null)
+        ) {
           openPremiumForMission(card);
           return;
         }
@@ -13525,10 +14019,10 @@ const setupSpeechCards = () => {
     ɪ: "ɪ",
   });
   const WORLD_LETTER_SPEECH_OVERRIDES = Object.freeze({
-    portuguese: Object.freeze({
+    portuguese: {
       Ç: "cê cedilha",
       ç: "cê cedilha",
-    }),
+    },
   });
 
   const normalizeLetterSpeechText = (rawText) => {
@@ -13541,8 +14035,12 @@ const setupSpeechCards = () => {
     if (!text) {
       return "";
     }
+    const hasCombiningMarks = /\p{M}/u.test(text);
     const exactLetterTokens = text.match(/\p{L}/gu);
     if (!exactLetterTokens || !exactLetterTokens.length) {
+      return text;
+    }
+    if (hasCombiningMarks || exactLetterTokens.length !== 1) {
       return text;
     }
     const rawToken = exactLetterTokens[exactLetterTokens.length - 1];
@@ -13560,6 +14058,12 @@ const setupSpeechCards = () => {
 
   const setupCards = (cards, labelSelector, datasetKey, ariaPrefix, rate, pitch, normalizeText) => {
     cards.forEach((card) => {
+      if (card.dataset.speechDisabled === "true") {
+        card.classList.add("is-speech-disabled");
+        card.removeAttribute("role");
+        card.removeAttribute("tabindex");
+        return;
+      }
       const label = card.querySelector(labelSelector);
       const sourceText = String(
         label?.textContent?.trim() || card.dataset[datasetKey] || ""
@@ -14098,13 +14602,8 @@ const setupHomeAltInteractivity = () => {
       .slice(0, cometCount)
       .sort(() => Math.random() - 0.5)
       .map((slot) => Math.max(8, Math.min(64, slot + (Math.random() * 6 - 3))));
-    const isMobileMeteorCadence = window.matchMedia("(max-width: 960px)").matches;
-    const baseDurationSec = isMobileMeteorCadence
-      ? 6.4 + Math.random() * 0.6
-      : 5.8 + Math.random() * 2.2;
-    const launchStrideSec = isMobileMeteorCadence
-      ? baseDurationSec / Math.max(1, cometCount)
-      : Math.max(1.2, baseDurationSec * 0.34);
+    const { cycleSec, cycleStepSec, isMobileMeteorCadence } =
+      buildSerializedCometCadence(cometCount);
     for (let i = 0; i < cometCount; i += 1) {
       const comet = document.createElement("span");
       comet.className = "home-fx-comet";
@@ -14112,12 +14611,10 @@ const setupHomeAltInteractivity = () => {
       comet.style.setProperty("--c-size", `${(78 + Math.random() * 44).toFixed(2)}px`);
       comet.style.setProperty(
         "--c-delay",
-        `${(i * launchStrideSec + (isMobileMeteorCadence ? 0 : Math.random() * 0.35)).toFixed(2)}s`
+        `${(i * cycleStepSec).toFixed(2)}s`
       );
-      comet.style.setProperty(
-        "--c-duration",
-        `${(isMobileMeteorCadence ? baseDurationSec : baseDurationSec + (Math.random() * 0.6 - 0.3)).toFixed(2)}s`
-      );
+      comet.style.setProperty("--c-cycle", `${cycleSec.toFixed(2)}s`);
+      comet.style.setProperty("--c-flight-window", isMobileMeteorCadence ? "mobile" : "desktop");
       layer.appendChild(comet);
     }
     document.body.appendChild(layer);
@@ -14131,6 +14628,44 @@ const setupHomeAltInteractivity = () => {
     )
   );
   const pressTimers = new WeakMap();
+  const supportsSurfacePointerDepth = !shouldUseLiteInteractiveEffects && !prefersReducedMotion;
+
+  const updateInteractiveSurfaceFocus = (surface, event) => {
+    if (
+      !supportsSurfacePointerDepth ||
+      !surface ||
+      surface.classList.contains("world-card") ||
+      event.pointerType !== "mouse"
+    ) {
+      return;
+    }
+    const bounds = surface.getBoundingClientRect();
+    if (!bounds.width || !bounds.height) {
+      return;
+    }
+    const pointerX = ((event.clientX - bounds.left) / bounds.width) * 100;
+    const pointerY = ((event.clientY - bounds.top) / bounds.height) * 100;
+    const clampedX = Math.max(0, Math.min(100, pointerX));
+    const clampedY = Math.max(0, Math.min(100, pointerY));
+    const tiltRangeX = 3.4;
+    const tiltRangeY = 4;
+    const tiltX = ((50 - clampedY) / 50) * tiltRangeX;
+    const tiltY = ((clampedX - 50) / 50) * tiltRangeY;
+    surface.style.setProperty("--surface-focus-x", `${clampedX.toFixed(2)}%`);
+    surface.style.setProperty("--surface-focus-y", `${clampedY.toFixed(2)}%`);
+    surface.style.setProperty("--surface-tilt-x", `${tiltX.toFixed(2)}deg`);
+    surface.style.setProperty("--surface-tilt-y", `${tiltY.toFixed(2)}deg`);
+  };
+
+  const resetInteractiveSurfaceFocus = (surface) => {
+    if (!surface) {
+      return;
+    }
+    surface.style.removeProperty("--surface-focus-x");
+    surface.style.removeProperty("--surface-focus-y");
+    surface.style.removeProperty("--surface-tilt-x");
+    surface.style.removeProperty("--surface-tilt-y");
+  };
 
   const queuePressRelease = (surface, delayMs = 110) => {
     if (!surface) {
@@ -14172,16 +14707,27 @@ const setupHomeAltInteractivity = () => {
         return;
       }
       surface.classList.add("is-hovered");
+      updateInteractiveSurfaceFocus(surface, event);
+    });
+    surface.addEventListener("pointermove", (event) => {
+      updateInteractiveSurfaceFocus(surface, event);
     });
     surface.addEventListener("pointerleave", () => {
       surface.classList.remove("is-hovered");
+      resetInteractiveSurfaceFocus(surface);
     });
 
     surface.addEventListener("focusin", () => {
       surface.classList.add("is-hovered");
+      if (surface.classList.contains("world-card")) {
+        return;
+      }
+      surface.style.setProperty("--surface-focus-x", "50%");
+      surface.style.setProperty("--surface-focus-y", "36%");
     });
     surface.addEventListener("focusout", () => {
       surface.classList.remove("is-hovered");
+      resetInteractiveSurfaceFocus(surface);
     });
   });
 
@@ -14329,7 +14875,16 @@ const setupHomeAltInteractivity = () => {
     return;
   }
 
-  const sectionHashes = ["#home", "#how", "#worlds", "#faq", "#guide", "#join", "#support", "#policies"];
+  const sectionHashes = [
+    "#home",
+    "#how",
+    "#worlds",
+    "#faq",
+    "#guide",
+    "#join",
+    "#support",
+    "#policies",
+  ];
   const trackedSections = sectionHashes
     .map((hash) => ({ hash, section: document.querySelector(hash) }))
     .filter((entry) => entry.section);

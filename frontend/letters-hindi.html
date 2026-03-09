@@ -27,8 +27,8 @@
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="Learn Hindi Script | Cosmica" />
     <meta name="twitter:description" content="Practice Hindi letters in Devanagari with audio pronunciation and structured review to build reading confidence from the start." />
-    <link rel="preload" as="style" href="style.css?v=20260438" />
-    <link rel="stylesheet" href="style.css?v=20260438" />
+    <link rel="preload" as="style" href="style.css?v=20260440" />
+    <link rel="stylesheet" href="style.css?v=20260440" />
     <link rel="stylesheet" href="maps/style-maps.css?v=20260417" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -84,27 +84,56 @@
               <span class="account-trigger-label">Guest</span>
               <span class="account-trigger-meta">Sign in</span>
             </span>
-            <span class="account-trigger-caret" aria-hidden="true">▾</span>
+            <span class="account-trigger-caret" aria-hidden="true">&#9662;</span>
           </button>
         </div>
       </div>
     </header>
 
     <!-- Page-specific main content -->
-    <main>
+                            <main>
       <h1 class="visually-hidden">Learn Hindi Script</h1>
-      <!-- Content section -->
       <section class="section letters-grid-section reveal" id="letters">
         <div class="section-title">
-          <div class="eyebrow">Letters</div>
+          <div class="eyebrow">Script</div>
           <h2>देवनागरी अक्षर</h2>
-          <p>This Devanagari map builds script control through vowels, consonants, matras, signs, and common conjuncts in a practical sequence.</p>
+          <p>This Devanagari map moves from vowels and consonants into matras, akshara building, and common conjuncts so you read full sound units instead of isolated symbols.</p>
+        </div>
+        <div class="letters-study-grid">
+          <article class="letters-study-panel">
+            <div class="letters-study-kicker">Decode</div>
+            <h3 class="letters-study-title">Read the headline as one word line</h3>
+            <ul class="letters-study-points">
+              <li>The top bar links letters visually across the word, so train your eye to scan full aksharas under one headline.</li>
+              <li>Do not read Devanagari as loose alphabet pieces; read one consonant-vowel unit at a time.</li>
+              <li>After spotting each akshara, blend them straight into the word without long pauses.</li>
+            </ul>
+          </article>
+          <article class="letters-study-panel">
+            <div class="letters-study-kicker">Matras</div>
+            <h3 class="letters-study-title">Matras can move, but the sound stays with one akshara</h3>
+            <ul class="letters-study-points">
+              <li>A matra may sit before, after, above, or below the consonant, but it still belongs to the same sound unit.</li>
+              <li>Practice क, का, कि, की, कु, and को as one family.</li>
+              <li>Remember that ि is written before the consonant shape but pronounced after k.</li>
+            </ul>
+          </article>
+          <article class="letters-study-panel">
+            <div class="letters-study-kicker">Halant</div>
+            <h3 class="letters-study-title">Use halant to stop the inherent a</h3>
+            <ul class="letters-study-points">
+              <li>A bare consonant usually carries an inherent a sound until a matra or halant changes it.</li>
+              <li>The halant removes that vowel and helps create conjunct clusters like क्ष and त्र.</li>
+              <li>Write the full akshara slowly first, then read the cluster in one breath.</li>
+            </ul>
+          </article>
         </div>
         <h3 class="letters-script-heading">स्वर (Vowels)</h3>
+        <p class="letters-script-note">पहले मूल स्वरों से शुरू करें और हर ध्वनि को साफ़ सुनें।</p>
         <div class="letters-grid">
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="अ">
             <div class="letter">अ</div>
-            <button class="letter-audio" type="button" data-letter="अ" aria-label="Play letter अ">
+            <button class="letter-audio" type="button" data-letter="अ" aria-label="Play pronunciation for अ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -117,9 +146,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="आ">
             <div class="letter">आ</div>
-            <button class="letter-audio" type="button" data-letter="आ" aria-label="Play letter आ">
+            <button class="letter-audio" type="button" data-letter="आ" aria-label="Play pronunciation for आ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -132,9 +161,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="इ">
             <div class="letter">इ</div>
-            <button class="letter-audio" type="button" data-letter="इ" aria-label="Play letter इ">
+            <button class="letter-audio" type="button" data-letter="इ" aria-label="Play pronunciation for इ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -147,9 +176,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ई">
             <div class="letter">ई</div>
-            <button class="letter-audio" type="button" data-letter="ई" aria-label="Play letter ई">
+            <button class="letter-audio" type="button" data-letter="ई" aria-label="Play pronunciation for ई">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -162,9 +191,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="उ">
             <div class="letter">उ</div>
-            <button class="letter-audio" type="button" data-letter="उ" aria-label="Play letter उ">
+            <button class="letter-audio" type="button" data-letter="उ" aria-label="Play pronunciation for उ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -177,9 +206,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ऊ">
             <div class="letter">ऊ</div>
-            <button class="letter-audio" type="button" data-letter="ऊ" aria-label="Play letter ऊ">
+            <button class="letter-audio" type="button" data-letter="ऊ" aria-label="Play pronunciation for ऊ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -192,9 +221,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ऋ">
             <div class="letter">ऋ</div>
-            <button class="letter-audio" type="button" data-letter="ऋ" aria-label="Play letter ऋ">
+            <button class="letter-audio" type="button" data-letter="ऋ" aria-label="Play pronunciation for ऋ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -207,9 +236,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ए">
             <div class="letter">ए</div>
-            <button class="letter-audio" type="button" data-letter="ए" aria-label="Play letter ए">
+            <button class="letter-audio" type="button" data-letter="ए" aria-label="Play pronunciation for ए">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -222,9 +251,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ऐ">
             <div class="letter">ऐ</div>
-            <button class="letter-audio" type="button" data-letter="ऐ" aria-label="Play letter ऐ">
+            <button class="letter-audio" type="button" data-letter="ऐ" aria-label="Play pronunciation for ऐ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -237,9 +266,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ओ">
             <div class="letter">ओ</div>
-            <button class="letter-audio" type="button" data-letter="ओ" aria-label="Play letter ओ">
+            <button class="letter-audio" type="button" data-letter="ओ" aria-label="Play pronunciation for ओ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -252,9 +281,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="औ">
             <div class="letter">औ</div>
-            <button class="letter-audio" type="button" data-letter="औ" aria-label="Play letter औ">
+            <button class="letter-audio" type="button" data-letter="औ" aria-label="Play pronunciation for औ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -267,9 +296,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="अं">
             <div class="letter">अं</div>
-            <button class="letter-audio" type="button" data-letter="अं" aria-label="Play letter अं">
+            <button class="letter-audio" type="button" data-letter="अं" aria-label="Play pronunciation for अं">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -282,9 +311,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="अः">
             <div class="letter">अः</div>
-            <button class="letter-audio" type="button" data-letter="अः" aria-label="Play letter अः">
+            <button class="letter-audio" type="button" data-letter="अः" aria-label="Play pronunciation for अः">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -298,12 +327,12 @@
             </button>
           </div>
         </div>
-
         <h3 class="letters-script-heading">व्यंजन (Consonants)</h3>
+        <p class="letters-script-note">व्यंजनों को ध्वनि-परिवारों में पहचानें और उच्चारण के साथ पढ़ें।</p>
         <div class="letters-grid">
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="क">
             <div class="letter">क</div>
-            <button class="letter-audio" type="button" data-letter="क" aria-label="Play letter क">
+            <button class="letter-audio" type="button" data-letter="क" aria-label="Play pronunciation for क">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -316,9 +345,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ख">
             <div class="letter">ख</div>
-            <button class="letter-audio" type="button" data-letter="ख" aria-label="Play letter ख">
+            <button class="letter-audio" type="button" data-letter="ख" aria-label="Play pronunciation for ख">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -331,9 +360,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ग">
             <div class="letter">ग</div>
-            <button class="letter-audio" type="button" data-letter="ग" aria-label="Play letter ग">
+            <button class="letter-audio" type="button" data-letter="ग" aria-label="Play pronunciation for ग">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -346,9 +375,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="घ">
             <div class="letter">घ</div>
-            <button class="letter-audio" type="button" data-letter="घ" aria-label="Play letter घ">
+            <button class="letter-audio" type="button" data-letter="घ" aria-label="Play pronunciation for घ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -361,9 +390,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ङ">
             <div class="letter">ङ</div>
-            <button class="letter-audio" type="button" data-letter="ङ" aria-label="Play letter ङ">
+            <button class="letter-audio" type="button" data-letter="ङ" aria-label="Play pronunciation for ङ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -376,9 +405,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="च">
             <div class="letter">च</div>
-            <button class="letter-audio" type="button" data-letter="च" aria-label="Play letter च">
+            <button class="letter-audio" type="button" data-letter="च" aria-label="Play pronunciation for च">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -391,9 +420,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="छ">
             <div class="letter">छ</div>
-            <button class="letter-audio" type="button" data-letter="छ" aria-label="Play letter छ">
+            <button class="letter-audio" type="button" data-letter="छ" aria-label="Play pronunciation for छ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -406,9 +435,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ज">
             <div class="letter">ज</div>
-            <button class="letter-audio" type="button" data-letter="ज" aria-label="Play letter ज">
+            <button class="letter-audio" type="button" data-letter="ज" aria-label="Play pronunciation for ज">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -421,9 +450,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="झ">
             <div class="letter">झ</div>
-            <button class="letter-audio" type="button" data-letter="झ" aria-label="Play letter झ">
+            <button class="letter-audio" type="button" data-letter="झ" aria-label="Play pronunciation for झ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -436,9 +465,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ञ">
             <div class="letter">ञ</div>
-            <button class="letter-audio" type="button" data-letter="ञ" aria-label="Play letter ञ">
+            <button class="letter-audio" type="button" data-letter="ञ" aria-label="Play pronunciation for ञ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -451,9 +480,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ट">
             <div class="letter">ट</div>
-            <button class="letter-audio" type="button" data-letter="ट" aria-label="Play letter ट">
+            <button class="letter-audio" type="button" data-letter="ट" aria-label="Play pronunciation for ट">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -466,9 +495,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ठ">
             <div class="letter">ठ</div>
-            <button class="letter-audio" type="button" data-letter="ठ" aria-label="Play letter ठ">
+            <button class="letter-audio" type="button" data-letter="ठ" aria-label="Play pronunciation for ठ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -481,9 +510,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ड">
             <div class="letter">ड</div>
-            <button class="letter-audio" type="button" data-letter="ड" aria-label="Play letter ड">
+            <button class="letter-audio" type="button" data-letter="ड" aria-label="Play pronunciation for ड">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -496,9 +525,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ढ">
             <div class="letter">ढ</div>
-            <button class="letter-audio" type="button" data-letter="ढ" aria-label="Play letter ढ">
+            <button class="letter-audio" type="button" data-letter="ढ" aria-label="Play pronunciation for ढ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -511,9 +540,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ण">
             <div class="letter">ण</div>
-            <button class="letter-audio" type="button" data-letter="ण" aria-label="Play letter ण">
+            <button class="letter-audio" type="button" data-letter="ण" aria-label="Play pronunciation for ण">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -526,9 +555,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="त">
             <div class="letter">त</div>
-            <button class="letter-audio" type="button" data-letter="त" aria-label="Play letter त">
+            <button class="letter-audio" type="button" data-letter="त" aria-label="Play pronunciation for त">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -541,9 +570,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="थ">
             <div class="letter">थ</div>
-            <button class="letter-audio" type="button" data-letter="थ" aria-label="Play letter थ">
+            <button class="letter-audio" type="button" data-letter="थ" aria-label="Play pronunciation for थ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -556,9 +585,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="द">
             <div class="letter">द</div>
-            <button class="letter-audio" type="button" data-letter="द" aria-label="Play letter द">
+            <button class="letter-audio" type="button" data-letter="द" aria-label="Play pronunciation for द">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -571,9 +600,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ध">
             <div class="letter">ध</div>
-            <button class="letter-audio" type="button" data-letter="ध" aria-label="Play letter ध">
+            <button class="letter-audio" type="button" data-letter="ध" aria-label="Play pronunciation for ध">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -586,9 +615,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="न">
             <div class="letter">न</div>
-            <button class="letter-audio" type="button" data-letter="न" aria-label="Play letter न">
+            <button class="letter-audio" type="button" data-letter="न" aria-label="Play pronunciation for न">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -601,9 +630,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="प">
             <div class="letter">प</div>
-            <button class="letter-audio" type="button" data-letter="प" aria-label="Play letter प">
+            <button class="letter-audio" type="button" data-letter="प" aria-label="Play pronunciation for प">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -616,9 +645,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="फ">
             <div class="letter">फ</div>
-            <button class="letter-audio" type="button" data-letter="फ" aria-label="Play letter फ">
+            <button class="letter-audio" type="button" data-letter="फ" aria-label="Play pronunciation for फ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -631,9 +660,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ब">
             <div class="letter">ब</div>
-            <button class="letter-audio" type="button" data-letter="ब" aria-label="Play letter ब">
+            <button class="letter-audio" type="button" data-letter="ब" aria-label="Play pronunciation for ब">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -646,9 +675,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="भ">
             <div class="letter">भ</div>
-            <button class="letter-audio" type="button" data-letter="भ" aria-label="Play letter भ">
+            <button class="letter-audio" type="button" data-letter="भ" aria-label="Play pronunciation for भ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -661,9 +690,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="म">
             <div class="letter">म</div>
-            <button class="letter-audio" type="button" data-letter="म" aria-label="Play letter म">
+            <button class="letter-audio" type="button" data-letter="म" aria-label="Play pronunciation for म">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -676,9 +705,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="य">
             <div class="letter">य</div>
-            <button class="letter-audio" type="button" data-letter="य" aria-label="Play letter य">
+            <button class="letter-audio" type="button" data-letter="य" aria-label="Play pronunciation for य">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -691,9 +720,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="र">
             <div class="letter">र</div>
-            <button class="letter-audio" type="button" data-letter="र" aria-label="Play letter र">
+            <button class="letter-audio" type="button" data-letter="र" aria-label="Play pronunciation for र">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -706,9 +735,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ल">
             <div class="letter">ल</div>
-            <button class="letter-audio" type="button" data-letter="ल" aria-label="Play letter ल">
+            <button class="letter-audio" type="button" data-letter="ल" aria-label="Play pronunciation for ल">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -721,9 +750,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="व">
             <div class="letter">व</div>
-            <button class="letter-audio" type="button" data-letter="व" aria-label="Play letter व">
+            <button class="letter-audio" type="button" data-letter="व" aria-label="Play pronunciation for व">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -736,9 +765,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="श">
             <div class="letter">श</div>
-            <button class="letter-audio" type="button" data-letter="श" aria-label="Play letter श">
+            <button class="letter-audio" type="button" data-letter="श" aria-label="Play pronunciation for श">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -751,9 +780,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ष">
             <div class="letter">ष</div>
-            <button class="letter-audio" type="button" data-letter="ष" aria-label="Play letter ष">
+            <button class="letter-audio" type="button" data-letter="ष" aria-label="Play pronunciation for ष">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -766,9 +795,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="स">
             <div class="letter">स</div>
-            <button class="letter-audio" type="button" data-letter="स" aria-label="Play letter स">
+            <button class="letter-audio" type="button" data-letter="स" aria-label="Play pronunciation for स">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -781,9 +810,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ह">
             <div class="letter">ह</div>
-            <button class="letter-audio" type="button" data-letter="ह" aria-label="Play letter ह">
+            <button class="letter-audio" type="button" data-letter="ह" aria-label="Play pronunciation for ह">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -797,12 +826,12 @@
             </button>
           </div>
         </div>
-
         <h3 class="letters-script-heading">नुक्ता वाले अक्षर (Modern Hindi)</h3>
+        <p class="letters-script-note">इन अक्षरों का प्रयोग उर्दू-फ़ारसी मूल के शब्दों में अक्सर मिलता है।</p>
         <div class="letters-grid">
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="क़">
             <div class="letter">क़</div>
-            <button class="letter-audio" type="button" data-letter="क़" aria-label="Play letter क़">
+            <button class="letter-audio" type="button" data-letter="क़" aria-label="Play pronunciation for क़">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -815,9 +844,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ख़">
             <div class="letter">ख़</div>
-            <button class="letter-audio" type="button" data-letter="ख़" aria-label="Play letter ख़">
+            <button class="letter-audio" type="button" data-letter="ख़" aria-label="Play pronunciation for ख़">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -830,9 +859,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ग़">
             <div class="letter">ग़</div>
-            <button class="letter-audio" type="button" data-letter="ग़" aria-label="Play letter ग़">
+            <button class="letter-audio" type="button" data-letter="ग़" aria-label="Play pronunciation for ग़">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -845,9 +874,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ज़">
             <div class="letter">ज़</div>
-            <button class="letter-audio" type="button" data-letter="ज़" aria-label="Play letter ज़">
+            <button class="letter-audio" type="button" data-letter="ज़" aria-label="Play pronunciation for ज़">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -860,9 +889,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ड़">
             <div class="letter">ड़</div>
-            <button class="letter-audio" type="button" data-letter="ड़" aria-label="Play letter ड़">
+            <button class="letter-audio" type="button" data-letter="ड़" aria-label="Play pronunciation for ड़">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -875,9 +904,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ढ़">
             <div class="letter">ढ़</div>
-            <button class="letter-audio" type="button" data-letter="ढ़" aria-label="Play letter ढ़">
+            <button class="letter-audio" type="button" data-letter="ढ़" aria-label="Play pronunciation for ढ़">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -890,9 +919,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="फ़">
             <div class="letter">फ़</div>
-            <button class="letter-audio" type="button" data-letter="फ़" aria-label="Play letter फ़">
+            <button class="letter-audio" type="button" data-letter="फ़" aria-label="Play pronunciation for फ़">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -906,12 +935,12 @@
             </button>
           </div>
         </div>
-
         <h3 class="letters-script-heading">मात्राएँ (Vowel Signs)</h3>
+        <p class="letters-script-note">इन मात्राओं को आधार अक्षरों के साथ जोड़कर पढ़ने का अभ्यास करें।</p>
         <div class="letters-grid">
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ा">
             <div class="letter">ा</div>
-            <button class="letter-audio" type="button" data-letter="ा" aria-label="Play vowel sign ा">
+            <button class="letter-audio" type="button" data-letter="ा" aria-label="Play pronunciation for ा">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -924,9 +953,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ि">
             <div class="letter">ि</div>
-            <button class="letter-audio" type="button" data-letter="ि" aria-label="Play vowel sign ि">
+            <button class="letter-audio" type="button" data-letter="ि" aria-label="Play pronunciation for ि">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -939,9 +968,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ी">
             <div class="letter">ी</div>
-            <button class="letter-audio" type="button" data-letter="ी" aria-label="Play vowel sign ी">
+            <button class="letter-audio" type="button" data-letter="ी" aria-label="Play pronunciation for ी">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -954,9 +983,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ु">
             <div class="letter">ु</div>
-            <button class="letter-audio" type="button" data-letter="ु" aria-label="Play vowel sign ु">
+            <button class="letter-audio" type="button" data-letter="ु" aria-label="Play pronunciation for ु">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -969,9 +998,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ू">
             <div class="letter">ू</div>
-            <button class="letter-audio" type="button" data-letter="ू" aria-label="Play vowel sign ू">
+            <button class="letter-audio" type="button" data-letter="ू" aria-label="Play pronunciation for ू">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -984,9 +1013,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ृ">
             <div class="letter">ृ</div>
-            <button class="letter-audio" type="button" data-letter="ृ" aria-label="Play vowel sign ृ">
+            <button class="letter-audio" type="button" data-letter="ृ" aria-label="Play pronunciation for ृ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -999,9 +1028,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="े">
             <div class="letter">े</div>
-            <button class="letter-audio" type="button" data-letter="े" aria-label="Play vowel sign े">
+            <button class="letter-audio" type="button" data-letter="े" aria-label="Play pronunciation for े">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1014,9 +1043,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ै">
             <div class="letter">ै</div>
-            <button class="letter-audio" type="button" data-letter="ै" aria-label="Play vowel sign ै">
+            <button class="letter-audio" type="button" data-letter="ै" aria-label="Play pronunciation for ै">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1029,9 +1058,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ो">
             <div class="letter">ो</div>
-            <button class="letter-audio" type="button" data-letter="ो" aria-label="Play vowel sign ो">
+            <button class="letter-audio" type="button" data-letter="ो" aria-label="Play pronunciation for ो">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1044,9 +1073,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ौ">
             <div class="letter">ौ</div>
-            <button class="letter-audio" type="button" data-letter="ौ" aria-label="Play vowel sign ौ">
+            <button class="letter-audio" type="button" data-letter="ौ" aria-label="Play pronunciation for ौ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1059,9 +1088,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ं">
             <div class="letter">ं</div>
-            <button class="letter-audio" type="button" data-letter="ं" aria-label="Play sign ं">
+            <button class="letter-audio" type="button" data-letter="ं" aria-label="Play pronunciation for ं">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1074,9 +1103,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ः">
             <div class="letter">ः</div>
-            <button class="letter-audio" type="button" data-letter="ः" aria-label="Play sign ः">
+            <button class="letter-audio" type="button" data-letter="ः" aria-label="Play pronunciation for ः">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1089,9 +1118,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ँ">
             <div class="letter">ँ</div>
-            <button class="letter-audio" type="button" data-letter="ँ" aria-label="Play sign ँ">
+            <button class="letter-audio" type="button" data-letter="ँ" aria-label="Play pronunciation for ँ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1105,12 +1134,144 @@
             </button>
           </div>
         </div>
-
-        <h3 class="letters-script-heading">संयुक्त अक्षर (Common Conjuncts)</h3>
+        <h3 class="letters-script-heading">अक्षर बनाना (Akshara Building)</h3>
+        <p class="letters-script-note">एक ही व्यंजन के साथ अलग-अलग मात्राएँ जोड़कर पढ़ें: क, का, कि, की, कु, के, को, और halant वाला क्।</p>
         <div class="letters-grid">
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="क">
+            <div class="letter">क</div>
+            <div class="letter-card-caption">inherent a</div>
+            <button class="letter-audio" type="button" data-letter="क" aria-label="Play pronunciation for क">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="का">
+            <div class="letter">का</div>
+            <div class="letter-card-caption">ा adds aa after the consonant</div>
+            <button class="letter-audio" type="button" data-letter="का" aria-label="Play pronunciation for का">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="कि">
+            <div class="letter">कि</div>
+            <div class="letter-card-caption">ि is written before, read after k</div>
+            <button class="letter-audio" type="button" data-letter="कि" aria-label="Play pronunciation for कि">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="की">
+            <div class="letter">की</div>
+            <div class="letter-card-caption">ी adds long ii</div>
+            <button class="letter-audio" type="button" data-letter="की" aria-label="Play pronunciation for की">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="कु">
+            <div class="letter">कु</div>
+            <div class="letter-card-caption">ु sits below for short u</div>
+            <button class="letter-audio" type="button" data-letter="कु" aria-label="Play pronunciation for कु">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="के">
+            <div class="letter">के</div>
+            <div class="letter-card-caption">े adds e</div>
+            <button class="letter-audio" type="button" data-letter="के" aria-label="Play pronunciation for के">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="को">
+            <div class="letter">को</div>
+            <div class="letter-card-caption">ो adds o</div>
+            <button class="letter-audio" type="button" data-letter="को" aria-label="Play pronunciation for को">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="क्">
+            <div class="letter">क्</div>
+            <div class="letter-card-caption">halant removes the final a</div>
+            <button class="letter-audio" type="button" data-letter="क्" aria-label="Play pronunciation for क्">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <h3 class="letters-script-heading">संयुक्त अक्षर (Common Conjuncts)</h3>
+        <p class="letters-script-note">इन संयुक्ताक्षरों को बार-बार देखकर शब्द-पहचान तेज़ करें।</p>
+        <div class="letters-grid">
+          <div class="card letter-card" data-letter="क्ष">
             <div class="letter">क्ष</div>
-            <button class="letter-audio" type="button" data-letter="क्ष" aria-label="Play letter क्ष">
+            <button class="letter-audio" type="button" data-letter="क्ष" aria-label="Play pronunciation for क्ष">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1123,9 +1284,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="त्र">
             <div class="letter">त्र</div>
-            <button class="letter-audio" type="button" data-letter="त्र" aria-label="Play letter त्र">
+            <button class="letter-audio" type="button" data-letter="त्र" aria-label="Play pronunciation for त्र">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1138,9 +1299,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ज्ञ">
             <div class="letter">ज्ञ</div>
-            <button class="letter-audio" type="button" data-letter="ज्ञ" aria-label="Play letter ज्ञ">
+            <button class="letter-audio" type="button" data-letter="ज्ञ" aria-label="Play pronunciation for ज्ञ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1153,9 +1314,109 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="श्र">
             <div class="letter">श्र</div>
-            <button class="letter-audio" type="button" data-letter="श्र" aria-label="Play letter श्र">
+            <button class="letter-audio" type="button" data-letter="श्र" aria-label="Play pronunciation for श्र">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <h3 class="letters-script-heading">पढ़ने की सीढ़ी (Reading Ladder)</h3>
+        <p class="letters-script-note">Move from single aksharas into short everyday words so matras and conjuncts become readable in context.</p>
+        <div class="letters-grid">
+          <div class="card letter-card" data-letter="दिन">
+            <div class="letter">दिन</div>
+            <div class="letter-card-caption">दि + न</div>
+            <button class="letter-audio" type="button" data-letter="दिन" aria-label="Play pronunciation for दिन">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="काम">
+            <div class="letter">काम</div>
+            <div class="letter-card-caption">का + म</div>
+            <button class="letter-audio" type="button" data-letter="काम" aria-label="Play pronunciation for काम">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="घर">
+            <div class="letter">घर</div>
+            <div class="letter-card-caption">घ + र</div>
+            <button class="letter-audio" type="button" data-letter="घर" aria-label="Play pronunciation for घर">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="खेल">
+            <div class="letter">खेल</div>
+            <div class="letter-card-caption">खे + ल</div>
+            <button class="letter-audio" type="button" data-letter="खेल" aria-label="Play pronunciation for खेल">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="भारत">
+            <div class="letter">भारत</div>
+            <div class="letter-card-caption">भा + र + त</div>
+            <button class="letter-audio" type="button" data-letter="भारत" aria-label="Play pronunciation for भारत">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="प्रेम">
+            <div class="letter">प्रेम</div>
+            <div class="letter-card-caption">प्रे + म</div>
+            <button class="letter-audio" type="button" data-letter="प्रेम" aria-label="Play pronunciation for प्रेम">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -1188,9 +1449,10 @@
     </footer>
 
     <!-- Shared client bundle -->
-    <script src="app.js?v=20260438"></script>
+    <script src="app.js?v=20260440"></script>
   </body>
 </html>
+
 
 
 

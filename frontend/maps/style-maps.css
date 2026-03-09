@@ -631,6 +631,54 @@ body.letters-page:is(
   color: rgba(196, 217, 245, 0.88);
 }
 
+.letters-study-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin: 24px 0 34px;
+}
+
+.letters-study-panel {
+  padding: 18px 18px 16px;
+  border-radius: 22px;
+  border: 1px solid rgba(126, 202, 255, 0.24);
+  background:
+    linear-gradient(160deg, rgba(10, 18, 40, 0.58), rgba(7, 12, 26, 0.42)),
+    radial-gradient(circle at 88% 12%, rgba(132, 214, 255, 0.14), transparent 54%);
+  box-shadow: 0 16px 28px rgba(2, 8, 24, 0.32);
+}
+
+.letters-study-kicker {
+  margin-bottom: 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(120, 235, 255, 0.88);
+}
+
+.letters-study-title {
+  margin: 0 0 10px;
+  font-size: clamp(1rem, 1.7vw, 1.14rem);
+  line-height: 1.24;
+  color: #f4f8ff;
+}
+
+.letters-study-points {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 8px;
+  font-size: clamp(0.8rem, 1.4vw, 0.92rem);
+  line-height: 1.45;
+  color: rgba(198, 219, 246, 0.88);
+}
+
+.letters-study-grid + .letters-script-heading,
+.letters-study-grid + .letters-script-group {
+  margin-top: 26px;
+}
+
 body.letters-page[data-world="Japanese"] .letters-script-group {
   margin-top: 18px;
   padding: 16px 14px 14px;
@@ -649,7 +697,20 @@ body.letters-page[data-world="Japanese"] .letters-script-group .letters-grid {
   margin-top: 0;
 }
 
+body.letters-page[data-world="Japanese"] .letters-script-group .letters-grid + .letters-script-heading,
+body.letters-page[data-world="Japanese"]
+  .letters-script-group
+  .letters-grid
+  + .letters-script-note
+  + .letters-script-heading {
+  margin-top: 42px;
+}
+
 body.letters-page[data-world="Japanese"] .letters-script-group-katakana {
+  margin-top: 140px;
+}
+
+body.letters-page[data-world="Japanese"] .letters-script-group-reading {
   margin-top: 140px;
 }
 
@@ -657,10 +718,11 @@ body.letters-page[data-world="Japanese"] .letters-script-group-katakana {
   position: relative;
   border-radius: 18px;
   padding: 18px 14px 14px;
-  min-height: clamp(98px, 14vw, 120px);
+  min-height: clamp(112px, 15vw, 136px);
   display: grid;
   place-items: center;
   gap: 10px;
+  text-align: center;
   background: rgba(10, 16, 32, 0.58);
   border: 1px solid rgba(255, 255, 255, 0.16);
   box-shadow: 0 16px 28px rgba(2, 6, 18, 0.4),
@@ -677,6 +739,18 @@ body.letters-page[data-world="Japanese"] .letters-script-group-katakana {
     inset 0 0 0 1px rgba(120, 235, 255, 0.4);
 }
 
+.letter-card[data-speech-disabled="true"],
+.letter-card.is-speech-disabled {
+  cursor: default;
+}
+
+.letter-card[data-speech-disabled="true"]:hover,
+.letter-card.is-speech-disabled:hover {
+  transform: none;
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 16px 28px rgba(2, 6, 18, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
 .letter-card:focus-visible {
   outline: 2px solid rgba(104, 225, 255, 0.7);
   outline-offset: 4px;
@@ -687,6 +761,16 @@ body.letters-page[data-world="Japanese"] .letters-script-group-katakana {
   font-weight: 700;
   color: #f2f7ff;
   text-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+}
+
+.letter-card .letter-card-caption {
+  margin-top: -2px;
+  font-size: clamp(0.58rem, 1.2vw, 0.7rem);
+  line-height: 1.22;
+  letter-spacing: 0.01em;
+  color: rgba(184, 208, 236, 0.78);
+  text-align: center;
+  max-width: 100%;
 }
 
 .letter-card .letter-romanization {
@@ -760,6 +844,15 @@ body.letters-page[data-world="Japanese"] .letters-script-group-katakana {
 }
 
 @media (max-width: 720px) {
+  .letters-study-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin: 22px 0 28px;
+  }
+  .letters-study-panel {
+    padding: 16px 15px 14px;
+    border-radius: 20px;
+  }
   .letters-grid {
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   }
@@ -2307,7 +2400,7 @@ body.phrases-page[data-world="Arabic"] .phrase-card,
 html[lang="ar"] body.phrases-page .phrase-card {
   direction: rtl;
   text-align: right;
-  padding-top: 36px;
+  padding-top: 50px;
 }
 
 body.words-page[data-world="Arabic"] .word-card .word,
@@ -2436,7 +2529,7 @@ html[lang="ar"] body.phrases-page .phrase-card .word-audio {
   grid-template-rows: auto auto 1fr auto;
   gap: 8px;
   min-height: clamp(124px, 16vw, 154px);
-  padding: 34px 14px 12px;
+  padding: 50px 14px 12px;
   align-items: start;
 }
 
@@ -2525,7 +2618,7 @@ html[lang="ar"] body.phrases-page .phrase-card .word-audio {
 
 .letter-card {
   display: grid;
-  grid-template-rows: 1fr auto auto;
+  grid-template-rows: 1fr auto auto auto;
   align-content: center;
 }
 

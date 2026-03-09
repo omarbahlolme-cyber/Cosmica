@@ -27,8 +27,8 @@
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="Learn Arabic Alphabet | Cosmica" />
     <meta name="twitter:description" content="Practice Arabic letters with audio pronunciation and structured review to build reading confidence and letter recognition." />
-    <link rel="preload" as="style" href="style.css?v=20260438" />
-    <link rel="stylesheet" href="style.css?v=20260438" />
+    <link rel="preload" as="style" href="style.css?v=20260440" />
+    <link rel="stylesheet" href="style.css?v=20260440" />
     <link rel="stylesheet" href="maps/style-maps.css?v=20260417" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -84,28 +84,56 @@
               <span class="account-trigger-label">Guest</span>
               <span class="account-trigger-meta">Sign in</span>
             </span>
-            <span class="account-trigger-caret" aria-hidden="true">▾</span>
+            <span class="account-trigger-caret" aria-hidden="true">&#9662;</span>
           </button>
         </div>
       </div>
     </header>
 
     <!-- Page-specific main content -->
-    <main>
-      <h1 class="visually-hidden">Learn Arabic Alphabet</h1>
-      <!-- Content section -->
+                            <main>
+      <h1 class="visually-hidden">Learn Arabic Script</h1>
       <section class="section letters-grid-section reveal" id="letters">
         <div class="section-title" style="max-width:100%;width:100%;display:block;">
-          <div class="eyebrow" style="direction:ltr;text-align:left;display:block;margin:0 auto 10px 0;">Letters</div>
-          <h2 style="direction:rtl;text-align:right;display:block;float:right;max-width:100%;margin:0 0 10px auto;">الحروف العربية</h2>
-          <p style="clear:both;text-align:right;margin:0 0 0 auto;">This Arabic letters map builds core script recognition first, then prepares you for word-position forms (initial, medial, and final) in later study.</p>
+          <div class="eyebrow">Script</div>
+          <h2 style="direction:rtl;text-align:right;display:block;max-width:100%;margin:0 0 10px auto;">الحروف العربية</h2>
+          <p>This Arabic script map starts with the core alphabet, then adds joining behavior, non-joining letters, and short-vowel reading so the script works inside real words.</p>
         </div>
-        <h3 class="letters-script-heading" style="direction:rtl;text-align:right;">المستوى ١ — الحروف الأساسية (Core Sequence)</h3>
-        <p class="letters-script-note" style="direction:rtl;text-align:right;">ابدأ بهذه الحروف الأساسية بترتيب واضح من البداية حتى الزاي.</p>
+        <div class="letters-study-grid">
+          <article class="letters-study-panel">
+            <div class="letters-study-kicker">Decode</div>
+            <h3 class="letters-study-title">Read in connected word chunks</h3>
+            <ul class="letters-study-points">
+              <li>Arabic runs from right to left, so begin at the far-right edge of the word.</li>
+              <li>Track the baseline first, then use the dots to confirm which letter family you are seeing.</li>
+              <li>Pause only when a non-joining letter like د or و breaks the chain.</li>
+            </ul>
+          </article>
+          <article class="letters-study-panel">
+            <div class="letters-study-kicker">Vowels</div>
+            <h3 class="letters-study-title">Build vowels after the consonant frame</h3>
+            <ul class="letters-study-points">
+              <li>Spot the consonants first, then add fatḥa, kasra, or ḍamma to hear the short vowel.</li>
+              <li>Long vowels stretch with ا, ي, or و after the consonant pattern.</li>
+              <li>Practice minimal contrasts in one burst: بَ / بِ / بُ, then با / بي / بو.</li>
+            </ul>
+          </article>
+          <article class="letters-study-panel">
+            <div class="letters-study-kicker">Write</div>
+            <h3 class="letters-study-title">Trace the base shape before the dots</h3>
+            <ul class="letters-study-points">
+              <li>Write the connected line first, then add dots last so similar families stay grouped in memory.</li>
+              <li>Repeat isolated, initial, medial, and final forms as one family instead of four separate symbols.</li>
+              <li>After writing a short word once, read the whole word aloud without spelling each letter separately.</li>
+            </ul>
+          </article>
+        </div>
+        <h3 class="letters-script-heading" style="direction:rtl;text-align:right;">المستوى 1 من الحروف الأساسية (Core Sequence)</h3>
+        <p class="letters-script-note" style="direction:rtl;text-align:right;">ابدأ بهذه الحروف الأساسية بترتيب واضح من الألف حتى الزاي.</p>
         <div class="letters-grid">
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ا">
             <div class="letter">ا</div>
-            <button class="letter-audio" type="button" data-letter="ا" aria-label="Play letter ا">
+            <button class="letter-audio" type="button" data-letter="ا" aria-label="Play pronunciation for ا">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -118,9 +146,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ب">
             <div class="letter">ب</div>
-            <button class="letter-audio" type="button" data-letter="ب" aria-label="Play letter ب">
+            <button class="letter-audio" type="button" data-letter="ب" aria-label="Play pronunciation for ب">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -133,9 +161,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ت">
             <div class="letter">ت</div>
-            <button class="letter-audio" type="button" data-letter="ت" aria-label="Play letter ت">
+            <button class="letter-audio" type="button" data-letter="ت" aria-label="Play pronunciation for ت">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -148,9 +176,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ث">
             <div class="letter">ث</div>
-            <button class="letter-audio" type="button" data-letter="ث" aria-label="Play letter ث">
+            <button class="letter-audio" type="button" data-letter="ث" aria-label="Play pronunciation for ث">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -163,9 +191,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ج">
             <div class="letter">ج</div>
-            <button class="letter-audio" type="button" data-letter="ج" aria-label="Play letter ج">
+            <button class="letter-audio" type="button" data-letter="ج" aria-label="Play pronunciation for ج">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -178,9 +206,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ح">
             <div class="letter">ح</div>
-            <button class="letter-audio" type="button" data-letter="ح" aria-label="Play letter ح">
+            <button class="letter-audio" type="button" data-letter="ح" aria-label="Play pronunciation for ح">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -193,9 +221,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="خ">
             <div class="letter">خ</div>
-            <button class="letter-audio" type="button" data-letter="خ" aria-label="Play letter خ">
+            <button class="letter-audio" type="button" data-letter="خ" aria-label="Play pronunciation for خ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -208,9 +236,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="د">
             <div class="letter">د</div>
-            <button class="letter-audio" type="button" data-letter="د" aria-label="Play letter د">
+            <button class="letter-audio" type="button" data-letter="د" aria-label="Play pronunciation for د">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -223,9 +251,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ذ">
             <div class="letter">ذ</div>
-            <button class="letter-audio" type="button" data-letter="ذ" aria-label="Play letter ذ">
+            <button class="letter-audio" type="button" data-letter="ذ" aria-label="Play pronunciation for ذ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -238,9 +266,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ر">
             <div class="letter">ر</div>
-            <button class="letter-audio" type="button" data-letter="ر" aria-label="Play letter ر">
+            <button class="letter-audio" type="button" data-letter="ر" aria-label="Play pronunciation for ر">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -253,9 +281,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ز">
             <div class="letter">ز</div>
-            <button class="letter-audio" type="button" data-letter="ز" aria-label="Play letter ز">
+            <button class="letter-audio" type="button" data-letter="ز" aria-label="Play pronunciation for ز">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -269,12 +297,12 @@
             </button>
           </div>
         </div>
-        <h3 class="letters-script-heading" style="direction:rtl;text-align:right;">المستوى ٢ — بقية الحروف (Extended Sequence)</h3>
-        <p class="letters-script-note" style="direction:rtl;text-align:right;">تابع بقية الحروف، ثم تدرب لاحقًا على أشكالها داخل الكلمات.</p>
+        <h3 class="letters-script-heading" style="direction:rtl;text-align:right;">المستوى 2 من بقية الحروف (Extended Sequence)</h3>
+        <p class="letters-script-note" style="direction:rtl;text-align:right;">تابع مع بقية الحروف الشائعة ثم ارجع إليها داخل كلمات قصيرة.</p>
         <div class="letters-grid">
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="س">
             <div class="letter">س</div>
-            <button class="letter-audio" type="button" data-letter="س" aria-label="Play letter س">
+            <button class="letter-audio" type="button" data-letter="س" aria-label="Play pronunciation for س">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -287,9 +315,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ش">
             <div class="letter">ش</div>
-            <button class="letter-audio" type="button" data-letter="ش" aria-label="Play letter ش">
+            <button class="letter-audio" type="button" data-letter="ش" aria-label="Play pronunciation for ش">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -302,9 +330,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ص">
             <div class="letter">ص</div>
-            <button class="letter-audio" type="button" data-letter="ص" aria-label="Play letter ص">
+            <button class="letter-audio" type="button" data-letter="ص" aria-label="Play pronunciation for ص">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -317,9 +345,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ض">
             <div class="letter">ض</div>
-            <button class="letter-audio" type="button" data-letter="ض" aria-label="Play letter ض">
+            <button class="letter-audio" type="button" data-letter="ض" aria-label="Play pronunciation for ض">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -332,9 +360,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ط">
             <div class="letter">ط</div>
-            <button class="letter-audio" type="button" data-letter="ط" aria-label="Play letter ط">
+            <button class="letter-audio" type="button" data-letter="ط" aria-label="Play pronunciation for ط">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -347,9 +375,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ظ">
             <div class="letter">ظ</div>
-            <button class="letter-audio" type="button" data-letter="ظ" aria-label="Play letter ظ">
+            <button class="letter-audio" type="button" data-letter="ظ" aria-label="Play pronunciation for ظ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -362,9 +390,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ع">
             <div class="letter">ع</div>
-            <button class="letter-audio" type="button" data-letter="ع" aria-label="Play letter ع">
+            <button class="letter-audio" type="button" data-letter="ع" aria-label="Play pronunciation for ع">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -377,9 +405,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="غ">
             <div class="letter">غ</div>
-            <button class="letter-audio" type="button" data-letter="غ" aria-label="Play letter غ">
+            <button class="letter-audio" type="button" data-letter="غ" aria-label="Play pronunciation for غ">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -392,9 +420,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ف">
             <div class="letter">ف</div>
-            <button class="letter-audio" type="button" data-letter="ف" aria-label="Play letter ف">
+            <button class="letter-audio" type="button" data-letter="ف" aria-label="Play pronunciation for ف">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -407,9 +435,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ق">
             <div class="letter">ق</div>
-            <button class="letter-audio" type="button" data-letter="ق" aria-label="Play letter ق">
+            <button class="letter-audio" type="button" data-letter="ق" aria-label="Play pronunciation for ق">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -422,9 +450,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ك">
             <div class="letter">ك</div>
-            <button class="letter-audio" type="button" data-letter="ك" aria-label="Play letter ك">
+            <button class="letter-audio" type="button" data-letter="ك" aria-label="Play pronunciation for ك">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -437,9 +465,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ل">
             <div class="letter">ل</div>
-            <button class="letter-audio" type="button" data-letter="ل" aria-label="Play letter ل">
+            <button class="letter-audio" type="button" data-letter="ل" aria-label="Play pronunciation for ل">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -452,9 +480,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="م">
             <div class="letter">م</div>
-            <button class="letter-audio" type="button" data-letter="م" aria-label="Play letter م">
+            <button class="letter-audio" type="button" data-letter="م" aria-label="Play pronunciation for م">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -467,9 +495,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ن">
             <div class="letter">ن</div>
-            <button class="letter-audio" type="button" data-letter="ن" aria-label="Play letter ن">
+            <button class="letter-audio" type="button" data-letter="ن" aria-label="Play pronunciation for ن">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -482,9 +510,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ه">
             <div class="letter">ه</div>
-            <button class="letter-audio" type="button" data-letter="ه" aria-label="Play letter ه">
+            <button class="letter-audio" type="button" data-letter="ه" aria-label="Play pronunciation for ه">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -497,9 +525,9 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="و">
             <div class="letter">و</div>
-            <button class="letter-audio" type="button" data-letter="و" aria-label="Play letter و">
+            <button class="letter-audio" type="button" data-letter="و" aria-label="Play pronunciation for و">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -512,9 +540,393 @@
               </svg>
             </button>
           </div>
-          <div class="card letter-card">
+          <div class="card letter-card" data-letter="ي">
             <div class="letter">ي</div>
-            <button class="letter-audio" type="button" data-letter="ي" aria-label="Play letter ي">
+            <button class="letter-audio" type="button" data-letter="ي" aria-label="Play pronunciation for ي">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <h3 class="letters-script-heading" style="direction:rtl;text-align:right;">المستوى 3 من أشكال الوصل (Joining Shapes)</h3>
+        <p class="letters-script-note" style="direction:rtl;text-align:right;">لاحظ كيف يتغير شكل بعض الحروف في أول الكلمة ووسطها وآخرها.</p>
+        <div class="letters-grid">
+          <div class="card letter-card" data-letter="ب">
+            <div class="letter">بـ</div>
+            <div class="letter-card-caption">initial form</div>
+            <button class="letter-audio" type="button" data-letter="ب" aria-label="Play pronunciation for ب">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ـبـ" data-speech-disabled="true">
+            <div class="letter">ـبـ</div>
+            <div class="letter-card-caption">middle form</div>
+          </div>
+          <div class="card letter-card" data-letter="ـب" data-speech-disabled="true">
+            <div class="letter">ـب</div>
+            <div class="letter-card-caption">final form</div>
+          </div>
+          <div class="card letter-card" data-letter="ن">
+            <div class="letter">نـ</div>
+            <div class="letter-card-caption">initial form</div>
+            <button class="letter-audio" type="button" data-letter="ن" aria-label="Play pronunciation for ن">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ـنـ" data-speech-disabled="true">
+            <div class="letter">ـنـ</div>
+            <div class="letter-card-caption">middle form</div>
+          </div>
+          <div class="card letter-card" data-letter="ـن" data-speech-disabled="true">
+            <div class="letter">ـن</div>
+            <div class="letter-card-caption">final form</div>
+          </div>
+          <div class="card letter-card" data-letter="م">
+            <div class="letter">مـ</div>
+            <div class="letter-card-caption">initial form</div>
+            <button class="letter-audio" type="button" data-letter="م" aria-label="Play pronunciation for م">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ـمـ" data-speech-disabled="true">
+            <div class="letter">ـمـ</div>
+            <div class="letter-card-caption">middle form</div>
+          </div>
+          <div class="card letter-card" data-letter="ـم" data-speech-disabled="true">
+            <div class="letter">ـم</div>
+            <div class="letter-card-caption">final form</div>
+          </div>
+          <div class="card letter-card" data-letter="ي">
+            <div class="letter">يـ</div>
+            <div class="letter-card-caption">initial form</div>
+            <button class="letter-audio" type="button" data-letter="ي" aria-label="Play pronunciation for ي">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ـيـ" data-speech-disabled="true">
+            <div class="letter">ـيـ</div>
+            <div class="letter-card-caption">middle form</div>
+          </div>
+          <div class="card letter-card" data-letter="ـي" data-speech-disabled="true">
+            <div class="letter">ـي</div>
+            <div class="letter-card-caption">final form</div>
+          </div>
+        </div>
+        <h3 class="letters-script-heading" style="direction:rtl;text-align:right;">المستوى 4 من الحروف غير الواصلة لليسار (Non-Joining Letters)</h3>
+        <p class="letters-script-note" style="direction:rtl;text-align:right;">هذه الحروف لا تتصل بما بعدها من الجهة اليسرى، لذلك تقطع شكل الكلمة.</p>
+        <div class="letters-grid">
+          <div class="card letter-card" data-letter="د">
+            <div class="letter">د</div>
+            <div class="letter-card-caption">stops the join</div>
+            <button class="letter-audio" type="button" data-letter="د" aria-label="Play pronunciation for د">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ذ">
+            <div class="letter">ذ</div>
+            <div class="letter-card-caption">stops the join</div>
+            <button class="letter-audio" type="button" data-letter="ذ" aria-label="Play pronunciation for ذ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ر">
+            <div class="letter">ر</div>
+            <div class="letter-card-caption">stops the join</div>
+            <button class="letter-audio" type="button" data-letter="ر" aria-label="Play pronunciation for ر">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="ز">
+            <div class="letter">ز</div>
+            <div class="letter-card-caption">stops the join</div>
+            <button class="letter-audio" type="button" data-letter="ز" aria-label="Play pronunciation for ز">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="و">
+            <div class="letter">و</div>
+            <div class="letter-card-caption">stops the join</div>
+            <button class="letter-audio" type="button" data-letter="و" aria-label="Play pronunciation for و">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <h3 class="letters-script-heading" style="direction:rtl;text-align:right;">المستوى 5 من الحركات القصيرة والطويلة (Vowel Patterns)</h3>
+        <p class="letters-script-note" style="direction:rtl;text-align:right;">درّب أذنك وعينك على الفتحة والكسرة والضمة ثم على المدود الطويلة.</p>
+        <div class="letters-grid">
+          <div class="card letter-card" data-letter="بَ">
+            <div class="letter">بَ</div>
+            <div class="letter-card-caption">ba - short a</div>
+            <button class="letter-audio" type="button" data-letter="بَ" aria-label="Play pronunciation for بَ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="بِ">
+            <div class="letter">بِ</div>
+            <div class="letter-card-caption">bi - short i</div>
+            <button class="letter-audio" type="button" data-letter="بِ" aria-label="Play pronunciation for بِ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="بُ">
+            <div class="letter">بُ</div>
+            <div class="letter-card-caption">bu - short u</div>
+            <button class="letter-audio" type="button" data-letter="بُ" aria-label="Play pronunciation for بُ">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="با">
+            <div class="letter">با</div>
+            <div class="letter-card-caption">baa - long a</div>
+            <button class="letter-audio" type="button" data-letter="با" aria-label="Play pronunciation for با">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="بي">
+            <div class="letter">بي</div>
+            <div class="letter-card-caption">bii - long i</div>
+            <button class="letter-audio" type="button" data-letter="بي" aria-label="Play pronunciation for بي">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="بو">
+            <div class="letter">بو</div>
+            <div class="letter-card-caption">buu - long u</div>
+            <button class="letter-audio" type="button" data-letter="بو" aria-label="Play pronunciation for بو">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <h3 class="letters-script-heading" style="direction:rtl;text-align:right;">المستوى 6 من قراءة كلمات قصيرة (Word Decoding)</h3>
+        <p class="letters-script-note" style="direction:rtl;text-align:right;">Move from isolated shapes into short connected words and read each item in one breath.</p>
+        <div class="letters-grid">
+          <div class="card letter-card" data-letter="باب">
+            <div class="letter">باب</div>
+            <div class="letter-card-caption">b + long a + b</div>
+            <button class="letter-audio" type="button" data-letter="باب" aria-label="Play pronunciation for باب">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="بيت">
+            <div class="letter">بيت</div>
+            <div class="letter-card-caption">b + long i + t</div>
+            <button class="letter-audio" type="button" data-letter="بيت" aria-label="Play pronunciation for بيت">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="نور">
+            <div class="letter">نور</div>
+            <div class="letter-card-caption">n + long u + r</div>
+            <button class="letter-audio" type="button" data-letter="نور" aria-label="Play pronunciation for نور">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="يوم">
+            <div class="letter">يوم</div>
+            <div class="letter-card-caption">y + long u + m</div>
+            <button class="letter-audio" type="button" data-letter="يوم" aria-label="Play pronunciation for يوم">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="درس">
+            <div class="letter">درس</div>
+            <div class="letter-card-caption">watch د stop the join</div>
+            <button class="letter-audio" type="button" data-letter="درس" aria-label="Play pronunciation for درس">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
+                <path
+                  d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="card letter-card" data-letter="كتاب">
+            <div class="letter">كتاب</div>
+            <div class="letter-card-caption">k + t + long a + b</div>
+            <button class="letter-audio" type="button" data-letter="كتاب" aria-label="Play pronunciation for كتاب">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor" />
                 <path
@@ -547,9 +959,10 @@
     </footer>
 
     <!-- Shared client bundle -->
-    <script src="app.js?v=20260438"></script>
+    <script src="app.js?v=20260440"></script>
   </body>
 </html>
+
 
 
 

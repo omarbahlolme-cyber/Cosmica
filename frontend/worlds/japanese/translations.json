@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-18T15:33:45.329Z",
+  "generatedAt": "2026-03-08T17:21:29.262Z",
   "worldLanguage": "japanese",
   "baseLanguages": [
     "albanian",
@@ -39,9 +39,9 @@
   "words": {
     "Greetings": {
       "こんにちは": {
-        "source": "good afternoon",
+        "source": "hello",
         "translations": {
-          "english": "good afternoon"
+          "english": "hello"
         },
         "register": "polite"
       },
@@ -73,7 +73,7 @@
         },
         "register": "formal"
       },
-      "バイ": {
+      "バイバイ": {
         "source": "bye",
         "translations": {
           "english": "bye"
@@ -4554,7 +4554,7 @@
           "english": "okay"
         }
       },
-      "孤独": {
+      "さみしい": {
         "source": "lonely",
         "translations": {
           "english": "lonely"
@@ -6462,7 +6462,7 @@
         },
         "register": "polite"
       },
-      "失礼しました": {
+      "失礼します": {
         "source": "pardon me",
         "translations": {
           "english": "pardon me"
@@ -6497,7 +6497,7 @@
         },
         "register": "polite"
       },
-      "本当にありがとう": {
+      "本当にありがとうございます": {
         "source": "thanks a lot",
         "translations": {
           "english": "thanks a lot"
@@ -6621,7 +6621,7 @@
           "english": "this is my friend"
         }
       },
-      "こちらは私の兄弟です": {
+      "こちらは私の兄 / 弟です": {
         "source": "this is my brother",
         "translations": {
           "english": "this is my brother"
@@ -6754,7 +6754,7 @@
           "english": "who is that"
         }
       },
-      "あなたはどこですか": {
+      "どこにいますか": {
         "source": "where are you",
         "translations": {
           "english": "where are you"
@@ -6794,13 +6794,6 @@
         "source": "which one is better",
         "translations": {
           "english": "which one is better"
-        }
-      },
-      "日本語を話せますか？": {
-        "source": "do you speak japanese",
-        "intent": "ask_speak_world_language",
-        "translations": {
-          "english": "do you speak japanese"
         }
       },
       "これがありますか": {
@@ -6849,6 +6842,13 @@
         "source": "what is your name",
         "translations": {
           "english": "what is your name"
+        }
+      },
+      "日本語を話せますか？": {
+        "source": "do you speak japanese",
+        "intent": "ask_speak_world_language",
+        "translations": {
+          "english": "do you speak japanese"
         }
       }
     },
@@ -8203,7 +8203,9 @@
               "wrong": "私はりんご食べます。",
               "fix": "私はりんごを食べます。"
             }
-          ]
+          ],
+          "sourceTitle": "basic SOV word order",
+          "sourceExample": "I eat an apple."
         },
         {
           "title": "主題「は」の使用",
@@ -8232,7 +8234,9 @@
               "wrong": "私学生です。",
               "fix": "私は学生です。"
             }
-          ]
+          ],
+          "sourceTitle": "topic marker wa",
+          "sourceExample": "I am a student."
         },
         {
           "title": "場所「で」の使用",
@@ -8266,7 +8270,9 @@
               "wrong": "公園に子どもが遊んでいます。",
               "fix": "公園で子どもが遊んでいます。"
             }
-          ]
+          ],
+          "sourceTitle": "place marker de",
+          "sourceExample": "Children are playing in the park."
         },
         {
           "title": "時間表現と時制",
@@ -8305,7 +8311,9 @@
               "wrong": "彼は昨日映画を見ます。",
               "fix": "彼は昨日映画を見ました。"
             }
-          ]
+          ],
+          "sourceTitle": "time expressions and tense",
+          "sourceExample": "He watched a movie yesterday."
         },
         {
           "title": "丁寧体の文末",
@@ -8334,7 +8342,9 @@
               "wrong": "先生に会ったです。",
               "fix": "先生に会いました。"
             }
-          ]
+          ],
+          "sourceTitle": "polite sentence endings",
+          "sourceExample": "I met the teacher."
         }
       ],
       "Verbs": [
@@ -8365,7 +8375,9 @@
               "wrong": "私は毎日日本語勉強します。",
               "fix": "私は毎日日本語を勉強します。"
             }
-          ]
+          ],
+          "sourceTitle": "non-past basic verbs",
+          "sourceExample": "I study Japanese every day."
         },
         {
           "title": "過去形の動詞",
@@ -8394,7 +8406,9 @@
               "wrong": "彼は昨日映画見ました。",
               "fix": "彼は昨日映画を見ました。"
             }
-          ]
+          ],
+          "sourceTitle": "past tense verbs",
+          "sourceExample": "He watched a movie yesterday."
         },
         {
           "title": "進行形の使用",
@@ -8423,7 +8437,9 @@
               "wrong": "彼女は今、料理しています。",
               "fix": "彼女は今、料理をしています。"
             }
-          ]
+          ],
+          "sourceTitle": "ongoing actions with te-iru",
+          "sourceExample": "She is cooking now."
         },
         {
           "title": "意向形の使い方",
@@ -8452,7 +8468,9 @@
               "wrong": "私は明日、映画見ようと思います。",
               "fix": "私は明日、映画を見ようと思います。"
             }
-          ]
+          ],
+          "sourceTitle": "volitional form and intention",
+          "sourceExample": "I am thinking of watching a movie tomorrow."
         },
         {
           "title": "受動態の構造",
@@ -8481,7 +8499,9 @@
               "wrong": "この本は彼書かれました。",
               "fix": "この本は彼によって書かれました。"
             }
-          ]
+          ],
+          "sourceTitle": "passive form",
+          "sourceExample": "This book was written by him."
         },
         {
           "title": "敬語の動詞",
@@ -8510,7 +8530,9 @@
               "wrong": "社長は言いました。",
               "fix": "社長はおっしゃいました。"
             }
-          ]
+          ],
+          "sourceTitle": "honorific verbs",
+          "sourceExample": "The company president said it."
         }
       ],
       "Tenses & Aspect": [
@@ -8546,7 +8568,9 @@
               "wrong": "毎朝コーヒーを飲みました。",
               "fix": "毎朝コーヒーを飲みます。"
             }
-          ]
+          ],
+          "sourceTitle": "non-past for habits and regular actions",
+          "sourceExample": "I drink coffee every morning."
         },
         {
           "title": "過去",
@@ -8580,7 +8604,9 @@
               "wrong": "昨日、図書館に行きます。",
               "fix": "昨日、図書館に行きました。"
             }
-          ]
+          ],
+          "sourceTitle": "past tense for completed actions",
+          "sourceExample": "I went to the library yesterday."
         },
         {
           "title": "進行「〜ている」",
@@ -8614,7 +8640,9 @@
               "wrong": "今、雨が降ります。",
               "fix": "今、雨が降っています。"
             }
-          ]
+          ],
+          "sourceTitle": "te-iru for ongoing actions",
+          "sourceExample": "It is raining now."
         },
         {
           "title": "結果状態「〜ている」",
@@ -8643,7 +8671,9 @@
               "wrong": "ドアが開けています。",
               "fix": "ドアが開いています。"
             }
-          ]
+          ],
+          "sourceTitle": "te-iru for resulting states",
+          "sourceExample": "The door is open."
         },
         {
           "title": "経験「〜たことがある」",
@@ -8672,7 +8702,9 @@
               "wrong": "日本に行くことがあります。",
               "fix": "日本に行ったことがあります。"
             }
-          ]
+          ],
+          "sourceTitle": "experience with ta koto ga aru",
+          "sourceExample": "I have been to Japan."
         },
         {
           "title": "直前「〜ところです」",
@@ -8701,7 +8733,9 @@
               "wrong": "今から出かけたところです。",
               "fix": "今から出かけるところです。"
             }
-          ]
+          ],
+          "sourceTitle": "tokoro da for something about to happen",
+          "sourceExample": "I am just about to go out."
         },
         {
           "title": "直後「〜たところです」",
@@ -8730,7 +8764,9 @@
               "wrong": "たった今、着くところです。",
               "fix": "たった今、着いたところです。"
             }
-          ]
+          ],
+          "sourceTitle": "ta tokoro da for something that just happened",
+          "sourceExample": "I just arrived."
         },
         {
           "title": "継続「〜てきた」",
@@ -8764,7 +8800,9 @@
               "wrong": "日本語を三年間勉強してきます。",
               "fix": "日本語を三年間勉強してきました。"
             }
-          ]
+          ],
+          "sourceTitle": "te-kita for continuation up to now",
+          "sourceExample": "I have been studying Japanese for three years."
         },
         {
           "title": "予定「〜つもりです」",
@@ -8798,21 +8836,23 @@
               "wrong": "来年、日本へ留学したつもりです。",
               "fix": "来年、日本へ留学するつもりです。"
             }
-          ]
+          ],
+          "sourceTitle": "tsumori da for intentions and plans",
+          "sourceExample": "I plan to study abroad in Japan next year."
         },
         {
-          "title": "過去進行",
+          "title": "過去の継続・反復「〜ていた」",
           "points": [
-            "過去の継続動作は「〜ていました」です。",
-            "過去の時間枠を示す語と相性が良いです。",
-            "現在進行形と使い分けます。"
+            "「〜ていた」は過去の継続した状態や、くり返しの習慣を表せます。",
+            "「子どものころ」「当時」などの時間表現とよく結びつきます。",
+            "文脈に応じて継続か反復かを読み分けます。"
           ],
           "example": "子どものころ、毎日川で遊んでいました。",
           "ruleOrder": [
             "時間枠",
             "頻度",
             "場所",
-            "過去進行"
+            "〜ていた形"
           ],
           "exampleHighlights": [
             {
@@ -8828,7 +8868,7 @@
               "text": "川で"
             },
             {
-              "label": "過去進行",
+              "label": "〜ていた形",
               "text": "遊んでいました"
             }
           ],
@@ -8837,7 +8877,9 @@
               "wrong": "子どものころ、毎日川で遊んでいます。",
               "fix": "子どものころ、毎日川で遊んでいました。"
             }
-          ]
+          ],
+          "sourceTitle": "te-ita for past ongoing or repeated actions",
+          "sourceExample": "When I was a child, I played in the river every day."
         }
       ],
       "Nouns & Articles": [
@@ -8873,7 +8915,9 @@
               "wrong": "猫を好きです。",
               "fix": "猫が好きです。"
             }
-          ]
+          ],
+          "sourceTitle": "名詞の基本的な使い方",
+          "sourceExample": "猫が好きです。"
         },
         {
           "title": "助詞の役割",
@@ -8912,7 +8956,9 @@
               "wrong": "彼が学生です。",
               "fix": "彼は学生です。"
             }
-          ]
+          ],
+          "sourceTitle": "助詞の役割",
+          "sourceExample": "彼は学生です。"
         },
         {
           "title": "所有の表現",
@@ -8951,7 +8997,9 @@
               "wrong": "彼は本です。",
               "fix": "彼の本です。"
             }
-          ]
+          ],
+          "sourceTitle": "所有の表現",
+          "sourceExample": "彼の本です。"
         },
         {
           "title": "数詞と助詞の組み合わせ",
@@ -8990,7 +9038,9 @@
               "wrong": "リンゴが二人あります。",
               "fix": "リンゴが二つあります。"
             }
-          ]
+          ],
+          "sourceTitle": "数詞と助詞の組み合わせ",
+          "sourceExample": "リンゴが二つあります。"
         },
         {
           "title": "助詞「へ」と「に」の使い分け",
@@ -9024,7 +9074,9 @@
               "wrong": "学校を行きます。",
               "fix": "学校へ行きます。"
             }
-          ]
+          ],
+          "sourceTitle": "助詞「へ」と「に」の使い分け",
+          "sourceExample": "学校へ行きます。"
         },
         {
           "title": "敬語と名詞の使い方",
@@ -9058,7 +9110,9 @@
               "wrong": "先生が来ます。",
               "fix": "先生がいらっしゃいます。"
             }
-          ]
+          ],
+          "sourceTitle": "敬語と名詞の使い方",
+          "sourceExample": "先生がいらっしゃいます。"
         },
         {
           "title": "単数と複数の表し方",
@@ -9138,220 +9192,249 @@
                 "動詞"
               ]
             }
-          ]
+          ],
+          "sourceTitle": "単数と複数の表し方",
+          "sourceExample": "友達が二人来ます。"
         }
       ],
       "Pronouns & Reference": [
         {
-          "title": "基本的な人称代名詞",
+          "title": "人称代名詞は場面で選ぶ",
           "points": [
-            "私、あなた、彼、彼女などの基本的な代名詞を使用する。",
-            "話し手と聞き手の関係を考慮する。",
-            "文脈に応じて代名詞を選択する。"
+            "私、僕、俺などは話し手の立場や場面によって選び方が変わります。",
+            "英語の I のようにいつも同じ形を使うわけではありません。"
           ],
           "example": "私は学生です。",
           "ruleOrder": [
-            "主語",
-            "動詞"
+            "話し手",
+            "名詞",
+            "丁寧さ"
           ],
+          "sourceTitle": "personal pronouns depend on situation",
+          "sourceExample": "I am a student.",
           "exampleHighlights": [
             {
-              "label": "主語",
+              "label": "話し手",
               "text": "私"
             },
             {
-              "label": "動詞",
+              "label": "名詞",
+              "text": "学生"
+            },
+            {
+              "label": "丁寧さ",
               "text": "です"
             }
           ],
           "mistakes": [
             {
-              "wrong": "私が学生ます。",
+              "wrong": "私学生です。",
               "fix": "私は学生です。"
             }
           ]
         },
         {
-          "title": "省略とプロドロップ",
+          "title": "主語は文脈で省略する",
           "points": [
-            "主語を省略することが一般的である。",
-            "文脈から主語が明らかな場合、省略を使用する。",
-            "省略は自然な会話でよく見られる。"
+            "日本語では主語や目的語が文脈から分かるとき、言わないほうが自然なことがあります。",
+            "省略できるのは意味が共有されているときだけです。"
           ],
-          "example": "行きます。",
+          "example": "もう食べました。",
           "ruleOrder": [
-            "主語を省略",
-            "動詞"
+            "副詞",
+            "述語"
           ],
+          "sourceTitle": "subjects can be omitted from context",
+          "sourceExample": "I have already eaten.",
           "exampleHighlights": [
             {
-              "label": "主語を省略",
-              "text": "行き"
+              "label": "副詞",
+              "text": "もう"
             },
             {
-              "label": "動詞",
-              "text": "ます"
+              "label": "述語",
+              "text": "食べました"
             }
           ],
           "mistakes": [
             {
-              "wrong": "明日行きますは。",
-              "fix": "行きます。"
+              "wrong": "私はもう食べました。",
+              "fix": "もう食べました。"
             }
           ]
         },
         {
-          "title": "指示代名詞の使用",
+          "title": "こそあど言葉で指す",
           "points": [
-            "これ、それ、あれなどの指示代名詞を使う。",
-            "距離や文脈に基づいて選択する。",
-            "指示代名詞は具体的なものを指し示す。"
+            "これ・それ・あれ・どれは距離や共有知識に応じて使い分けます。",
+            "この・その・あのは名詞の前に置き、これ・それ・あれは単独で使えます。"
           ],
           "example": "これは本です。",
           "ruleOrder": [
-            "主語",
-            "動詞"
+            "指示",
+            "名詞",
+            "丁寧さ"
           ],
+          "sourceTitle": "ko-so-a-do demonstratives",
+          "sourceExample": "This is a book.",
           "exampleHighlights": [
             {
-              "label": "主語",
+              "label": "指示",
               "text": "これ"
             },
             {
-              "label": "動詞",
+              "label": "名詞",
+              "text": "本"
+            },
+            {
+              "label": "丁寧さ",
               "text": "です"
             }
           ],
           "mistakes": [
             {
-              "wrong": "これを本です。",
+              "wrong": "このは本です。",
               "fix": "これは本です。"
             }
           ]
         },
         {
-          "title": "敬語の使い方",
+          "title": "相手には名前や肩書きを使うことが多い",
           "points": [
-            "相手に対する敬意を表すために敬語を使用する。",
-            "動詞や名詞に敬語を適用する。",
-            "文脈に応じた敬語の選択が重要。"
+            "日本語ではあなたを多用するより、名前や先生・部長などの肩書きで呼ぶほうが自然です。",
+            "呼び方そのものが人間関係や丁寧さを表します。"
           ],
-          "example": "先生は来られますか？",
+          "example": "田中さんはもう帰りましたか。",
           "ruleOrder": [
-            "主語",
-            "動詞",
-            "補語"
+            "呼びかけ",
+            "副詞",
+            "述語"
           ],
+          "sourceTitle": "names and titles are often more natural than anata",
+          "sourceExample": "Has Tanaka already gone home?",
           "exampleHighlights": [
             {
-              "label": "主語",
-              "text": "先生"
-            },
-            {
-              "label": "動詞",
-              "text": "来られます"
-            },
-            {
-              "label": "補語",
-              "text": "か"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "先生は来ますか？",
-              "fix": "先生は来られますか？"
-            }
-          ]
-        },
-        {
-          "title": "敬称の使い分け",
-          "points": [
-            "さん、くん、ちゃんなどの敬称を使う。",
-            "相手の年齢や地位に応じて選択する。",
-            "敬称は人間関係を反映する。"
-          ],
-          "example": "田中さんは元気です。",
-          "ruleOrder": [
-            "主語",
-            "動詞",
-            "補語"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "主語",
+              "label": "呼びかけ",
               "text": "田中さん"
             },
             {
-              "label": "動詞",
-              "text": "元気"
+              "label": "副詞",
+              "text": "もう"
             },
             {
-              "label": "補語",
-              "text": "です"
+              "label": "述語",
+              "text": "帰りましたか"
             }
           ],
           "mistakes": [
             {
-              "wrong": "田中くんは元気です。",
-              "fix": "田中さんは元気です。"
+              "wrong": "あなたはもう帰りましたか。",
+              "fix": "田中さんはもう帰りましたか。"
             }
           ]
         },
         {
-          "title": "複数形の代名詞",
+          "title": "自分で自分を指す",
           "points": [
-            "私たち、あなたたち、彼らなどの複数形代名詞を使用する。",
-            "文脈に応じて適切な代名詞を選択する。",
-            "複数形はグループを示す。"
+            "自分は文脈によって主語に戻る再帰的な表現として使われます。",
+            "誰を指すかは会話の流れで判断する必要があります。"
+          ],
+          "example": "彼は自分で決めた。",
+          "ruleOrder": [
+            "主題",
+            "自己参照",
+            "述語"
+          ],
+          "sourceTitle": "self reference with jibun",
+          "sourceExample": "He decided for himself.",
+          "exampleHighlights": [
+            {
+              "label": "主題",
+              "text": "彼は"
+            },
+            {
+              "label": "自己参照",
+              "text": "自分で"
+            },
+            {
+              "label": "述語",
+              "text": "決めた"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "彼は彼で決めた。",
+              "fix": "彼は自分で決めた。"
+            }
+          ]
+        },
+        {
+          "title": "複数は たち / ら を必要なときだけ使う",
+          "points": [
+            "私たち、彼らのような複数形はありますが、英語ほど頻繁には出ません。",
+            "人数や集合性をはっきり示したいときに使うと自然です。"
           ],
           "example": "私たちは学生です。",
           "ruleOrder": [
-            "主語",
-            "動詞"
+            "話し手たち",
+            "名詞",
+            "丁寧さ"
           ],
+          "sourceTitle": "plural pronouns with tachi and ra",
+          "sourceExample": "We are students.",
           "exampleHighlights": [
             {
-              "label": "主語",
-              "text": "私たち"
+              "label": "話し手たち",
+              "text": "私たちは"
             },
             {
-              "label": "動詞",
+              "label": "名詞",
+              "text": "学生"
+            },
+            {
+              "label": "丁寧さ",
               "text": "です"
             }
           ],
           "mistakes": [
             {
-              "wrong": "私たちは学生います。",
+              "wrong": "私は学生です。",
               "fix": "私たちは学生です。"
             }
           ]
         },
         {
-          "title": "代名詞の文脈依存性",
+          "title": "彼 / 彼女 より名詞が自然なことが多い",
           "points": [
-            "代名詞は文脈に依存して意味が変わる。",
-            "前の文や状況を考慮する。",
-            "代名詞の使用は理解を助ける。"
+            "会話では彼・彼女よりも人名や役割名を繰り返すほうが自然なことが多いです。",
+            "代名詞の使いすぎは翻訳調に聞こえることがあります。"
           ],
-          "example": "彼は明日来ます。",
+          "example": "山田さんは明日来ます。",
           "ruleOrder": [
-            "主語",
-            "動詞"
+            "人物",
+            "時間",
+            "述語"
           ],
+          "sourceTitle": "names are often more natural than kare or kanojo",
+          "sourceExample": "Yamada is coming tomorrow.",
           "exampleHighlights": [
             {
-              "label": "主語",
-              "text": "彼"
+              "label": "人物",
+              "text": "山田さんは"
             },
             {
-              "label": "動詞",
+              "label": "時間",
+              "text": "明日"
+            },
+            {
+              "label": "述語",
               "text": "来ます"
             }
           ],
           "mistakes": [
             {
-              "wrong": "彼女は明日来ます。",
-              "fix": "彼は明日来ます。"
+              "wrong": "彼は明日来ます。",
+              "fix": "山田さんは明日来ます。"
             }
           ]
         }
@@ -9389,7 +9472,9 @@
               "wrong": "犬が大きいです。",
               "fix": "大きい犬がいます。"
             }
-          ]
+          ],
+          "sourceTitle": "い形容詞の連体修飾",
+          "sourceExample": "大きい犬がいます。"
         },
         {
           "title": "な形容詞の連体修飾",
@@ -9423,7 +9508,9 @@
               "wrong": "静か部屋で勉強します。",
               "fix": "静かな部屋で勉強します。"
             }
-          ]
+          ],
+          "sourceTitle": "な形容詞の連体修飾",
+          "sourceExample": "静かな部屋で勉強します。"
         },
         {
           "title": "い形容詞の副詞化",
@@ -9457,7 +9544,9 @@
               "wrong": "彼は速い走ります。",
               "fix": "彼は速く走ります。"
             }
-          ]
+          ],
+          "sourceTitle": "い形容詞の副詞化",
+          "sourceExample": "彼は速く走ります。"
         },
         {
           "title": "程度副詞",
@@ -9491,7 +9580,9 @@
               "wrong": "今日はとてもに寒いです。",
               "fix": "今日はとても寒いです。"
             }
-          ]
+          ],
+          "sourceTitle": "程度副詞",
+          "sourceExample": "今日はとても寒いです。"
         },
         {
           "title": "比較「〜より」",
@@ -9525,7 +9616,9 @@
               "wrong": "兄は私から背が高いです。",
               "fix": "兄は私より背が高いです。"
             }
-          ]
+          ],
+          "sourceTitle": "比較「〜より」",
+          "sourceExample": "兄は私より背が高いです。"
         },
         {
           "title": "最上級「いちばん」",
@@ -9559,7 +9652,9 @@
               "wrong": "彼がいちばんより上手です。",
               "fix": "彼がいちばん上手です。"
             }
-          ]
+          ],
+          "sourceTitle": "最上級「いちばん」",
+          "sourceExample": "彼がいちばん上手です。"
         },
         {
           "title": "数量表現",
@@ -9593,7 +9688,9 @@
               "wrong": "三つリンゴがあります。",
               "fix": "三つのリンゴがあります。"
             }
-          ]
+          ],
+          "sourceTitle": "数量表現",
+          "sourceExample": "三つのリンゴがあります。"
         },
         {
           "title": "名詞修飾の「の」",
@@ -9627,7 +9724,9 @@
               "wrong": "日本文化が好きです。",
               "fix": "日本の文化が好きです。"
             }
-          ]
+          ],
+          "sourceTitle": "名詞修飾の「の」",
+          "sourceExample": "日本の文化が好きです。"
         },
         {
           "title": "頻度副詞",
@@ -9666,7 +9765,9 @@
               "wrong": "私はよくに音楽を聞きます。",
               "fix": "私はよく音楽を聞きます。"
             }
-          ]
+          ],
+          "sourceTitle": "頻度副詞",
+          "sourceExample": "私はよく音楽を聞きます。"
         },
         {
           "title": "数量副詞",
@@ -9700,7 +9801,9 @@
               "wrong": "本をたくさんを読みます。",
               "fix": "本をたくさん読みます。"
             }
-          ]
+          ],
+          "sourceTitle": "数量副詞",
+          "sourceExample": "本をたくさん読みます。"
         }
       ],
       "Questions": [
@@ -9736,7 +9839,9 @@
               "wrong": "これはあなたの本です。",
               "fix": "これはあなたの本ですか。"
             }
-          ]
+          ],
+          "sourceTitle": "yes/no questions with ka",
+          "sourceExample": "Is this your book?"
         },
         {
           "title": "「何」を使う質問",
@@ -9770,7 +9875,9 @@
               "wrong": "これはだれですか。",
               "fix": "これは何ですか。"
             }
-          ]
+          ],
+          "sourceTitle": "questions with nani",
+          "sourceExample": "What is this?"
         },
         {
           "title": "「どこ」を使う質問",
@@ -9804,7 +9911,9 @@
               "wrong": "どこで住んでいますか。",
               "fix": "どこに住んでいますか。"
             }
-          ]
+          ],
+          "sourceTitle": "questions with doko",
+          "sourceExample": "Where do you live?"
         },
         {
           "title": "「いつ」を使う質問",
@@ -9833,7 +9942,9 @@
               "wrong": "どこ出発しますか。",
               "fix": "いつ出発しますか。"
             }
-          ]
+          ],
+          "sourceTitle": "questions with itsu",
+          "sourceExample": "When are you leaving?"
         },
         {
           "title": "「だれ」を使う質問",
@@ -9867,7 +9978,9 @@
               "wrong": "だれを来ましたか。",
               "fix": "だれが来ましたか。"
             }
-          ]
+          ],
+          "sourceTitle": "questions with dare",
+          "sourceExample": "Who came?"
         },
         {
           "title": "選択質問",
@@ -9901,7 +10014,9 @@
               "wrong": "コーヒーとお茶、どちらを好きですか。",
               "fix": "コーヒーとお茶、どちらが好きですか。"
             }
-          ]
+          ],
+          "sourceTitle": "alternative questions with dochira",
+          "sourceExample": "Which do you like, coffee or tea?"
         },
         {
           "title": "理由質問",
@@ -9935,7 +10050,9 @@
               "wrong": "どうして遅れたですか。",
               "fix": "どうして遅れたのですか。"
             }
-          ]
+          ],
+          "sourceTitle": "asking for reasons with doushite",
+          "sourceExample": "Why were you late?"
         }
       ],
       "Negation": [
@@ -9966,7 +10083,9 @@
               "wrong": "彼は学生ありません。",
               "fix": "彼は学生ではありません。"
             }
-          ]
+          ],
+          "sourceTitle": "dewa arimasen for noun predicate negation",
+          "sourceExample": "He is not a student."
         },
         {
           "title": "動詞非過去の否定",
@@ -9995,7 +10114,9 @@
               "wrong": "彼は行きます。",
               "fix": "彼は行きません。"
             }
-          ]
+          ],
+          "sourceTitle": "masen for non-past verb negation",
+          "sourceExample": "He does not go."
         },
         {
           "title": "動詞過去の否定",
@@ -10024,7 +10145,9 @@
               "wrong": "昨日は行きません。",
               "fix": "昨日は行きませんでした。"
             }
-          ]
+          ],
+          "sourceTitle": "masen deshita for past polite negation",
+          "sourceExample": "I did not go yesterday."
         },
         {
           "title": "な形容詞の否定",
@@ -10053,7 +10176,9 @@
               "wrong": "この部屋は静かないです。",
               "fix": "この部屋は静かではありません。"
             }
-          ]
+          ],
+          "sourceTitle": "dewa arimasen for na-adjective negation",
+          "sourceExample": "This room is not quiet."
         },
         {
           "title": "い形容詞の否定",
@@ -10082,7 +10207,9 @@
               "wrong": "この本は高いないです。",
               "fix": "この本は高くないです。"
             }
-          ]
+          ],
+          "sourceTitle": "kunai desu for i-adjective negation",
+          "sourceExample": "This book is not expensive."
         },
         {
           "title": "「〜なくてもいい」",
@@ -10111,7 +10238,9 @@
               "wrong": "今日は行かないてもいいです。",
               "fix": "今日は行かなくてもいいです。"
             }
-          ]
+          ],
+          "sourceTitle": "nakutemo ii for not having to do something",
+          "sourceExample": "You do not have to go today."
         }
       ],
       "Connections": [
@@ -10147,7 +10276,9 @@
               "wrong": "朝ご飯を食べました。そしてで、学校へ行きました。",
               "fix": "朝ご飯を食べました。そして、学校へ行きました。"
             }
-          ]
+          ],
+          "sourceTitle": "soshite for addition",
+          "sourceExample": "I ate breakfast. And then I went to school."
         },
         {
           "title": "逆接「が」",
@@ -10181,7 +10312,9 @@
               "wrong": "この店は安いで、おいしいです。",
               "fix": "この店は安いですが、おいしいです。"
             }
-          ]
+          ],
+          "sourceTitle": "ga for contrast",
+          "sourceExample": "This restaurant is cheap, but it is tasty."
         },
         {
           "title": "理由「から」",
@@ -10215,7 +10348,9 @@
               "wrong": "雨が降っているからで、出かけません。",
               "fix": "雨が降っているから、出かけません。"
             }
-          ]
+          ],
+          "sourceTitle": "kara for reasons",
+          "sourceExample": "It is raining, so I am not going out."
         },
         {
           "title": "理由「ので」",
@@ -10249,7 +10384,9 @@
               "wrong": "体調が悪いのでで、休みます。",
               "fix": "体調が悪いので、休みます。"
             }
-          ]
+          ],
+          "sourceTitle": "node for reasons",
+          "sourceExample": "I am not feeling well, so I am taking a day off."
         },
         {
           "title": "逆接「しかし」",
@@ -10283,7 +10420,9 @@
               "wrong": "早く寝ました。しかしで、まだ眠いです。",
               "fix": "早く寝ました。しかし、まだ眠いです。"
             }
-          ]
+          ],
+          "sourceTitle": "shikashi for strong contrast",
+          "sourceExample": "I went to bed early. However, I am still sleepy."
         },
         {
           "title": "目的「ために」",
@@ -10317,7 +10456,9 @@
               "wrong": "日本語を勉強するためにで、日本へ行きます。",
               "fix": "日本語を勉強するために、日本へ行きます。"
             }
-          ]
+          ],
+          "sourceTitle": "tame ni for purpose",
+          "sourceExample": "I am going to Japan in order to study Japanese."
         },
         {
           "title": "時間接続「とき」",
@@ -10351,7 +10492,9 @@
               "wrong": "家に帰るときで、電話しました。",
               "fix": "家に帰ったとき、電話しました。"
             }
-          ]
+          ],
+          "sourceTitle": "toki for time clauses",
+          "sourceExample": "When I got home, I made a phone call."
         }
       ],
       "Conditions": [
@@ -10387,7 +10530,9 @@
               "wrong": "雨が降った、出かけません。",
               "fix": "雨が降ったら、出かけません。"
             }
-          ]
+          ],
+          "sourceTitle": "tara for event-dependent conditions",
+          "sourceExample": "If it rains, I will not go out."
         },
         {
           "title": "条件「〜ば」",
@@ -10421,7 +10566,9 @@
               "wrong": "時間があるば、手伝います。",
               "fix": "時間があれば、手伝います。"
             }
-          ]
+          ],
+          "sourceTitle": "ba for conditional assumptions",
+          "sourceExample": "If I have time, I will help."
         },
         {
           "title": "条件「〜なら」",
@@ -10455,7 +10602,9 @@
               "wrong": "日本へ行くば、京都も行ってください。",
               "fix": "日本へ行くなら、京都も行ってください。"
             }
-          ]
+          ],
+          "sourceTitle": "nara for topic-based conditions",
+          "sourceExample": "If you are going to Japan, please go to Kyoto too."
         },
         {
           "title": "恒常条件「〜と」",
@@ -10489,7 +10638,9 @@
               "wrong": "春になるたら、桜が咲きます。",
               "fix": "春になると、桜が咲きます。"
             }
-          ]
+          ],
+          "sourceTitle": "to for automatic or habitual results",
+          "sourceExample": "When spring comes, cherry blossoms bloom."
         },
         {
           "title": "否定条件「〜なければ」",
@@ -10523,7 +10674,9 @@
               "wrong": "お金がないば、買えません。",
               "fix": "お金がなければ、買えません。"
             }
-          ]
+          ],
+          "sourceTitle": "nakereba for negative conditions",
+          "sourceExample": "If there is no money, I cannot buy it."
         },
         {
           "title": "譲歩条件「〜ても」",
@@ -10557,590 +10710,480 @@
               "wrong": "雨が降るても、行きます。",
               "fix": "雨が降っても、行きます。"
             }
-          ]
+          ],
+          "sourceTitle": "temo for concessive conditions",
+          "sourceExample": "Even if it rains, I will go."
         }
       ],
       "Voice & Focus": [
         {
-          "title": "受け身",
+          "title": "能動文では動作主を普通に述べる",
           "points": [
-            "受け身は「〜られる」などで作ります。",
-            "行為者には「に」を使います。",
-            "能動文と区別します。"
+            "能動文は誰が何をしたかをそのまま述べる基本形です。",
+            "行為者を前に出したいときに最も自然です。"
           ],
-          "example": "彼は先生にほめられました。",
+          "example": "田中さんがドアを開けました。",
           "ruleOrder": [
-            "受け身主語",
-            "行為者",
-            "受け身動詞"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "受け身主語",
-              "text": "彼は"
-            },
-            {
-              "label": "行為者",
-              "text": "先生に"
-            },
-            {
-              "label": "受け身動詞",
-              "text": "ほめられました"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "彼は先生にほめました。",
-              "fix": "彼は先生にほめられました。"
-            }
-          ]
-        },
-        {
-          "title": "使役",
-          "points": [
-            "使役は「〜させる」で表します。",
-            "使役主体と被使役者を区別します。",
-            "目的語と動詞形を合わせます。"
-          ],
-          "example": "母は子どもに野菜を食べさせました。",
-          "ruleOrder": [
-            "使役主体",
-            "被使役者",
-            "目的語",
-            "使役動詞"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "使役主体",
-              "text": "母は"
-            },
-            {
-              "label": "被使役者",
-              "text": "子どもに"
-            },
-            {
-              "label": "目的語",
-              "text": "野菜を"
-            },
-            {
-              "label": "使役動詞",
-              "text": "食べさせました"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "母は子どもに野菜を食べました。",
-              "fix": "母は子どもに野菜を食べさせました。"
-            }
-          ]
-        },
-        {
-          "title": "受け身の助詞",
-          "points": [
-            "受け身の行為者は「に」で示すのが基本です。",
-            "「を」は行為者に使いません。",
-            "助詞の役割を保持します。"
-          ],
-          "example": "この歌は多くの人に愛されています。",
-          "ruleOrder": [
-            "主題",
-            "行為者",
-            "受け身動詞"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "主題",
-              "text": "この歌は"
-            },
-            {
-              "label": "行為者",
-              "text": "多くの人に"
-            },
-            {
-              "label": "受け身動詞",
-              "text": "愛されています"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "この歌は多くの人を愛されています。",
-              "fix": "この歌は多くの人に愛されています。"
-            }
-          ]
-        },
-        {
-          "title": "焦点「だけ」",
-          "points": [
-            "限定焦点には「だけ」を使います。",
-            "主語焦点では「だけが」が自然です。",
-            "助詞の選択を誤らないようにします。"
-          ],
-          "example": "私だけが知っています。",
-          "ruleOrder": [
-            "焦点語",
-            "主語助詞",
+            "動作主",
+            "対象",
             "述語"
           ],
           "exampleHighlights": [
             {
-              "label": "焦点語",
-              "text": "私だけ"
+              "label": "動作主",
+              "text": "田中さんが"
             },
             {
-              "label": "主語助詞",
-              "text": "が"
+              "label": "対象",
+              "text": "ドアを"
+            },
+            {
+              "label": "述語",
+              "text": "開けました"
+            }
+          ],
+          "sourceTitle": "active clauses foreground the doer",
+          "sourceExample": "Tanaka opened the door.",
+          "mistakes": [
+            {
+              "wrong": "ドアが田中さんに開けられました。",
+              "fix": "田中さんがドアを開けました。"
+            }
+          ]
+        },
+        {
+          "title": "受け身で受け手を前に出す",
+          "points": [
+            "受け身は影響を受ける側を前に出します。",
+            "行為者を背景に置いたり、省いたりしやすくなります。"
+          ],
+          "example": "ドアが田中さんに開けられました。",
+          "ruleOrder": [
+            "受け手",
+            "行為者",
+            "受け身述語"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "受け手",
+              "text": "ドアが田中さんに開け"
+            },
+            {
+              "label": "行為者",
+              "text": "られ"
+            },
+            {
+              "label": "受け身述語",
+              "text": "ました"
+            }
+          ],
+          "sourceTitle": "passive voice backgrounds the doer",
+          "sourceExample": "The door was opened by Tanaka.",
+          "mistakes": [
+            {
+              "wrong": "田中さんがドアを開けました。",
+              "fix": "ドアが田中さんに開けられました。"
+            }
+          ]
+        },
+        {
+          "title": "は で話題を立てる",
+          "points": [
+            "は は文の話題を立て、後ろでその話題について述べます。",
+            "焦点そのものというより、何について話すかを整える働きが強いです。"
+          ],
+          "example": "この本は、もう読みました。",
+          "ruleOrder": [
+            "話題",
+            "コメント"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "話題",
+              "text": "この本は"
+            },
+            {
+              "label": "コメント",
+              "text": "もう読みました"
+            }
+          ],
+          "sourceTitle": "topic marking with wa",
+          "sourceExample": "As for this book, I already read it.",
+          "mistakes": [
+            {
+              "wrong": "この本を、もう読みました。",
+              "fix": "この本は、もう読みました。"
+            }
+          ]
+        },
+        {
+          "title": "だけ で焦点をしぼる",
+          "points": [
+            "だけ はその要素だけを取り立てます。",
+            "範囲を限定することで、焦点がはっきりします。"
+          ],
+          "example": "私だけが知っています。",
+          "ruleOrder": [
+            "限定",
+            "述語"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "限定",
+              "text": "私だけが"
             },
             {
               "label": "述語",
               "text": "知っています"
             }
           ],
+          "sourceTitle": "focus particles limit scope",
+          "sourceExample": "Only I know.",
           "mistakes": [
             {
-              "wrong": "私だけを知っています。",
+              "wrong": "私が知っています。",
               "fix": "私だけが知っています。"
             }
           ]
         },
         {
-          "title": "主題と焦点の分離",
+          "title": "〜のは ... です で焦点化する",
           "points": [
-            "主題は「は」、焦点主語は「が」で示せます。",
-            "二重主語構文の基本形を守ります。",
-            "助詞の役割を入れ替えません。"
+            "〜のは ... です は、文の一部を答えとして浮かび上がらせる焦点化の形です。",
+            "説明や訂正で特に使いやすい構文です。"
           ],
-          "example": "猫は魚が好きです。",
+          "example": "来たのは田中さんです。",
           "ruleOrder": [
-            "主題",
-            "焦点主語",
-            "述語"
+            "枠",
+            "焦点"
           ],
           "exampleHighlights": [
             {
-              "label": "主題",
-              "text": "猫は"
+              "label": "枠",
+              "text": "来たのは"
             },
             {
-              "label": "焦点主語",
-              "text": "魚が"
-            },
-            {
-              "label": "述語",
-              "text": "好きです"
+              "label": "焦点",
+              "text": "田中さんです"
             }
           ],
+          "sourceTitle": "cleft-like focus with no wa ... desu",
+          "sourceExample": "The one who came is Tanaka.",
           "mistakes": [
             {
-              "wrong": "猫は魚を好きです。",
-              "fix": "猫は魚が好きです。"
+              "wrong": "田中さんが来ました。",
+              "fix": "来たのは田中さんです。"
             }
           ]
         }
       ],
       "Modality": [
         {
-          "title": "義務を表す",
+          "title": "〜なければならない で義務",
           "points": [
-            "義務を表すには「なければならない」を使う。",
-            "主語と動詞の位置に注意する。",
-            "丁寧な表現を心がける。"
+            "〜なければならない は強い必要や義務を表します。",
+            "会話では短い形もありますが、意味の強さは残ります。"
           ],
           "example": "宿題をしなければならない。",
           "ruleOrder": [
-            "主語",
-            "動詞"
+            "義務",
+            "動作"
           ],
           "exampleHighlights": [
             {
-              "label": "主語",
-              "text": "宿題を"
+              "label": "義務",
+              "text": "なければならない"
             },
             {
-              "label": "動詞",
-              "text": "しなければならない"
+              "label": "動作",
+              "text": "宿題をし"
             }
           ],
+          "sourceTitle": "strong obligation",
+          "sourceExample": "I must do my homework.",
           "mistakes": [
             {
-              "wrong": "宿題しなければならない。",
+              "wrong": "宿題をしたほうがいい。",
               "fix": "宿題をしなければならない。"
             }
           ]
         },
         {
-          "title": "可能性を表す",
+          "title": "〜ほうがいい で助言",
           "points": [
-            "可能性を表すには「かもしれない」を使う。",
-            "文脈によって使い方が変わる。",
-            "話し手の立場を明確にする。"
+            "〜ほうがいい は相手への助言や勧めを表します。",
+            "義務より柔らかく、選択の余地があります。"
           ],
-          "example": "明日雨が降るかもしれない。",
+          "example": "早く寝たほうがいいです。",
           "ruleOrder": [
-            "主語",
-            "動詞"
+            "助言",
+            "内容"
           ],
           "exampleHighlights": [
             {
-              "label": "主語",
-              "text": "雨が"
+              "label": "助言",
+              "text": "ほうがいい"
             },
             {
-              "label": "動詞",
-              "text": "降るかもしれない"
+              "label": "内容",
+              "text": "です"
             }
           ],
+          "sourceTitle": "advice and recommendation",
+          "sourceExample": "You should go to bed early.",
           "mistakes": [
             {
-              "wrong": "明日雨降るかもしれない。",
-              "fix": "明日雨が降るかもしれない。"
+              "wrong": "早く寝なければならないです。",
+              "fix": "早く寝たほうがいいです。"
             }
           ]
         },
         {
-          "title": "能力を表す",
+          "title": "〜ことができる で能力",
           "points": [
-            "能力を表すには「ことができる」を使う。",
-            "動詞の形に注意する。",
-            "具体的な行動を示す。"
+            "〜ことができる は能力や可能な行為を表します。",
+            "技能としてできることを言いたいときに便利です。"
           ],
-          "example": "日本語を話すことができる。",
+          "example": "日本語を話すことができます。",
           "ruleOrder": [
-            "主語",
-            "動詞",
-            "目的語"
+            "能力",
+            "内容"
           ],
           "exampleHighlights": [
             {
-              "label": "主語",
-              "text": "日本語を"
+              "label": "能力",
+              "text": "日本語を話すこ"
             },
             {
-              "label": "動詞",
-              "text": "話すことが"
-            },
-            {
-              "label": "目的語",
-              "text": "できる"
+              "label": "内容",
+              "text": "とができます"
             }
           ],
+          "sourceTitle": "ability",
+          "sourceExample": "I can speak Japanese.",
           "mistakes": [
             {
-              "wrong": "日本語話すことができる。",
-              "fix": "日本語を話すことができる。"
+              "wrong": "日本語を話したいです。",
+              "fix": "日本語を話すことができます。"
             }
           ]
         },
         {
-          "title": "確実性を表す",
+          "title": "〜かもしれない で可能性",
           "points": [
-            "確実性を表すには「に違いない」を使う。",
-            "話し手の確信を示す。",
-            "文の構造に注意する。"
+            "〜かもしれない は確信を弱め、推量を表します。",
+            "断定を避けたいときにもよく使います。"
           ],
-          "example": "彼は来るに違いない。",
+          "example": "明日は雨かもしれない。",
           "ruleOrder": [
-            "主語",
-            "動詞"
+            "可能性",
+            "出来事"
           ],
           "exampleHighlights": [
             {
-              "label": "主語",
-              "text": "彼"
+              "label": "可能性",
+              "text": "かもしれない"
             },
             {
-              "label": "動詞",
-              "text": "来るに違いない"
+              "label": "出来事",
+              "text": "明日は雨"
             }
           ],
+          "sourceTitle": "possibility and probability",
+          "sourceExample": "It might rain tomorrow.",
           "mistakes": [
             {
-              "wrong": "彼来るに違いない。",
-              "fix": "彼は来るに違いない。"
+              "wrong": "明日は雨です。",
+              "fix": "明日は雨かもしれない。"
             }
           ]
         },
         {
-          "title": "話し手の立場を示す",
+          "title": "〜てもいい / 〜てはいけない で許可と禁止",
           "points": [
-            "話し手の立場を示すには「と思う」を使う。",
-            "意見や感想を述べる際に使う。",
-            "主語の明示が重要。"
+            "〜てもいい は許可、〜てはいけない は禁止を表します。",
+            "学習初期から非常によく出る基本パターンです。"
           ],
-          "example": "彼は優しいと思う。",
+          "example": "ここで写真を撮ってはいけません。",
           "ruleOrder": [
-            "主語",
-            "動詞",
-            "目的語"
+            "禁止",
+            "行為"
           ],
           "exampleHighlights": [
             {
-              "label": "主語",
-              "text": "彼は"
+              "label": "禁止",
+              "text": "ここで写真を撮っ"
             },
             {
-              "label": "動詞",
-              "text": "優しいと"
-            },
-            {
-              "label": "目的語",
-              "text": "思う"
+              "label": "行為",
+              "text": "てはいけません"
             }
           ],
+          "sourceTitle": "permission and prohibition",
+          "sourceExample": "You must not take photos here.",
           "mistakes": [
             {
-              "wrong": "彼優しいと思う。",
-              "fix": "彼は優しいと思う。"
-            }
-          ]
-        },
-        {
-          "title": "許可を表す",
-          "points": [
-            "許可を表すには「てもいい」を使う。",
-            "カジュアルな会話でよく使われる。",
-            "相手への配慮を示す。"
-          ],
-          "example": "ここにいてもいい。",
-          "ruleOrder": [
-            "主語",
-            "動詞",
-            "目的語"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "主語",
-              "text": "ここに"
-            },
-            {
-              "label": "動詞",
-              "text": "いても"
-            },
-            {
-              "label": "目的語",
-              "text": "いい"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "ここにいていい。",
-              "fix": "ここにいてもいい。"
-            }
-          ]
-        },
-        {
-          "title": "意志を表す",
-          "points": [
-            "意志を表すには「つもりだ」を使う。",
-            "未来の計画を述べる際に使う。",
-            "主語の明示が必要。"
-          ],
-          "example": "来年日本に行くつもりだ。",
-          "ruleOrder": [
-            "主語",
-            "動詞",
-            "目的語"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "主語",
-              "text": "来年"
-            },
-            {
-              "label": "動詞",
-              "text": "日本に行く"
-            },
-            {
-              "label": "目的語",
-              "text": "つもりだ"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "来年日本行くつもりだ。",
-              "fix": "来年日本に行くつもりだ。"
-            }
-          ]
-        },
-        {
-          "title": "推測を表す",
-          "points": [
-            "推測を表すには「だろう」を使う。",
-            "相手の意見に同意する際に使う。",
-            "文の構造に注意。"
-          ],
-          "example": "彼はもう帰っただろう。",
-          "ruleOrder": [
-            "主語",
-            "動詞"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "主語",
-              "text": "彼は"
-            },
-            {
-              "label": "動詞",
-              "text": "帰っただろう"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "彼もう帰っただろう。",
-              "fix": "彼はもう帰っただろう。"
+              "wrong": "ここで写真を撮ってもいいです。",
+              "fix": "ここで写真を撮ってはいけません。"
             }
           ]
         }
       ],
       "Reported Speech": [
         {
-          "title": "直接引用",
+          "title": "直接引用は「」で囲む",
           "points": [
-            "直接引用は「」で発話を囲みます。",
-            "引用節の後に「と言う／言った」を置きます。",
-            "元の発話形式を保ちます。"
+            "直接引用では元の発話を「」でそのまま示します。",
+            "引用の後ろにと言う・と聞くなどの動詞が続きます。"
           ],
           "example": "彼は「明日行きます」と言いました。",
           "ruleOrder": [
             "話者",
-            "引用文",
-            "引用動詞"
+            "引用",
+            "伝達"
           ],
+          "sourceTitle": "direct quotation with Japanese quotation marks",
+          "sourceExample": "He said, “I will go tomorrow.”",
           "exampleHighlights": [
             {
               "label": "話者",
               "text": "彼は"
             },
             {
-              "label": "引用文",
-              "text": "「明日行きます」"
+              "label": "引用",
+              "text": "明日行きます"
             },
             {
-              "label": "引用動詞",
+              "label": "伝達",
               "text": "と言いました"
             }
           ],
           "mistakes": [
             {
-              "wrong": "彼は明日行きますと言いました。",
+              "wrong": "彼は明日行くと言いました。",
               "fix": "彼は「明日行きます」と言いました。"
             }
           ]
         },
         {
-          "title": "間接引用",
+          "title": "普通形 + と言う",
           "points": [
-            "間接引用では通常「と」を使います。",
-            "引用符は必須ではありません。",
-            "文全体を報告形式にします。"
+            "内容を間接的に伝えるときは普通形の文に と言う を続ける形が基本です。",
+            "英語の that のような別の接続語を足さないのが自然です。"
           ],
           "example": "彼は明日行くと言いました。",
           "ruleOrder": [
             "話者",
-            "内容節",
-            "引用動詞"
+            "内容",
+            "伝達"
           ],
+          "sourceTitle": "reported statements with to iu",
+          "sourceExample": "He said that he would go tomorrow.",
           "exampleHighlights": [
             {
               "label": "話者",
-              "text": "彼は"
+              "text": "彼は明日行く"
             },
             {
-              "label": "内容節",
-              "text": "明日行く"
+              "label": "内容",
+              "text": "と"
             },
             {
-              "label": "引用動詞",
-              "text": "と言いました"
+              "label": "伝達",
+              "text": "言いました"
             }
           ],
           "mistakes": [
             {
-              "wrong": "彼は「明日行く」と言いました。",
+              "wrong": "彼は明日行くを言いました。",
               "fix": "彼は明日行くと言いました。"
             }
           ]
         },
         {
-          "title": "依頼の引用",
+          "title": "伝聞の そうだ",
           "points": [
-            "依頼の報告には「〜ように言う」を使います。",
-            "命令形の直引用と区別します。",
-            "従属節の形を保ちます。"
+            "人づてに聞いた情報を伝えるときは そうだ がよく使われます。",
+            "自分で確認した事実ではなく、聞いた内容として示せます。"
           ],
-          "example": "先生は静かにするように言いました。",
+          "example": "田中さんは明日来るそうです。",
+          "ruleOrder": [
+            "人物",
+            "内容",
+            "伝聞"
+          ],
+          "sourceTitle": "hearsay with so da",
+          "sourceExample": "I heard that Tanaka is coming tomorrow.",
+          "exampleHighlights": [
+            {
+              "label": "人物",
+              "text": "田中さんは"
+            },
+            {
+              "label": "内容",
+              "text": "明日来る"
+            },
+            {
+              "label": "伝聞",
+              "text": "そうです"
+            }
+          ],
+          "mistakes": [
+            {
+              "wrong": "田中さんは明日来るです。",
+              "fix": "田中さんは明日来るそうです。"
+            }
+          ]
+        },
+        {
+          "title": "依頼や指示は 〜ように言う",
+          "points": [
+            "依頼や指示を報告するときは ように言う がよく使われます。",
+            "命令形をそのまま残すより、日本語らしい報告の形になります。"
+          ],
+          "example": "先生は早く来るように言いました。",
           "ruleOrder": [
             "話者",
-            "依頼内容",
-            "報告動詞"
+            "内容",
+            "伝達"
           ],
+          "sourceTitle": "reported requests with yo ni iu",
+          "sourceExample": "The teacher told us to come early.",
           "exampleHighlights": [
             {
               "label": "話者",
               "text": "先生は"
             },
             {
-              "label": "依頼内容",
-              "text": "静かにするように"
+              "label": "内容",
+              "text": "早く来る"
             },
             {
-              "label": "報告動詞",
-              "text": "言いました"
+              "label": "伝達",
+              "text": "ように言いました"
             }
           ],
           "mistakes": [
             {
-              "wrong": "先生は静かにすると言いました。",
-              "fix": "先生は静かにするように言いました。"
+              "wrong": "先生は早く来ると言いました。",
+              "fix": "先生は早く来るように言いました。"
             }
           ]
         },
         {
-          "title": "命令の引用",
+          "title": "疑問の内容は か / かどうか",
           "points": [
-            "命令の報告にも「〜ように言う」を使えます。",
-            "受け手に対する指示内容を表します。",
-            "動詞形を丁寧に整えます。"
+            "間接的に質問内容を伝えるときは か や かどうか を使います。",
+            "元の疑問文の語順を保つのではなく、内容を名詞化して扱うイメージです。"
           ],
-          "example": "母は早く寝るように言いました。",
-          "ruleOrder": [
-            "話者",
-            "命令内容",
-            "報告動詞"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "話者",
-              "text": "母は"
-            },
-            {
-              "label": "命令内容",
-              "text": "早く寝るように"
-            },
-            {
-              "label": "報告動詞",
-              "text": "言いました"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "母は早く寝ると言いました。",
-              "fix": "母は早く寝るように言いました。"
-            }
-          ]
-        },
-        {
-          "title": "疑問の引用",
-          "points": [
-            "疑問内容の引用では「のか」などを使います。",
-            "疑問文をそのまま直引用しない形もあります。",
-            "疑問の従属形を作ります。"
-          ],
-          "example": "彼はどこに行くのかと聞きました。",
+          "example": "彼は来られるかどうか聞きました。",
           "ruleOrder": [
             "話者",
             "疑問内容",
-            "報告動詞"
+            "伝達"
           ],
+          "sourceTitle": "reported questions with ka or ka do ka",
+          "sourceExample": "He asked whether someone could come.",
           "exampleHighlights": [
             {
               "label": "話者",
@@ -11148,41 +11191,42 @@
             },
             {
               "label": "疑問内容",
-              "text": "どこに行くのか"
+              "text": "来られるかどうか"
             },
             {
-              "label": "報告動詞",
-              "text": "と聞きました"
+              "label": "伝達",
+              "text": "聞きました"
             }
           ],
           "mistakes": [
             {
-              "wrong": "彼はどこに行くと聞きました。",
-              "fix": "彼はどこに行くのかと聞きました。"
+              "wrong": "彼は来られると聞きました。",
+              "fix": "彼は来られるかどうか聞きました。"
             }
           ]
         },
         {
-          "title": "敬語の引用",
+          "title": "敬意を込めて報告する",
           "points": [
-            "目上の人の発話は敬語動詞で報告します。",
-            "「言う」と「おっしゃる」を使い分けます。",
-            "場面に合うレジスターを選びます。"
+            "話し手本人への敬意は おっしゃる などの敬語動詞で示せます。",
+            "引用内容そのものより、誰の発話をどう扱うかが大切です。"
           ],
-          "example": "部長は資料を提出してくださいとおっしゃいました。",
+          "example": "部長は後で説明するとおっしゃいました。",
           "ruleOrder": [
             "話者",
-            "引用内容",
+            "内容",
             "敬語動詞"
           ],
+          "sourceTitle": "honorific reporting verbs",
+          "sourceExample": "The manager said that he would explain later.",
           "exampleHighlights": [
             {
               "label": "話者",
-              "text": "部長は"
+              "text": "部長は後で説明する"
             },
             {
-              "label": "引用内容",
-              "text": "資料を提出してくださいと"
+              "label": "内容",
+              "text": "と"
             },
             {
               "label": "敬語動詞",
@@ -11191,555 +11235,287 @@
           ],
           "mistakes": [
             {
-              "wrong": "部長は資料を提出してくださいと言いました。",
-              "fix": "部長は資料を提出してくださいとおっしゃいました。"
+              "wrong": "部長は後で説明すると言いました。",
+              "fix": "部長は後で説明するとおっしゃいました。"
             }
           ]
         }
       ],
       "Formality & Style": [
         {
-          "title": "基本的な敬語の使い方",
+          "title": "です / ます 体と普通体",
           "points": [
-            "敬語は日本語の重要な要素です。",
-            "話し手の立場によって使い分けます。",
-            "相手に対する敬意を表現します。"
+            "日本語では丁寧さが文末の形で大きく変わります。",
+            "同じ内容でも、です / ます にするだけで距離感が変わります。"
           ],
-          "example": "先生はおっしゃいました。",
+          "example": "今日は忙しいです。",
           "ruleOrder": [
-            "主語",
-            "動詞"
+            "内容",
+            "丁寧さ"
           ],
           "exampleHighlights": [
             {
-              "label": "主語",
-              "text": "先生"
+              "label": "内容",
+              "text": "今日は忙しい"
             },
             {
-              "label": "動詞",
-              "text": "おっしゃいました"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "先生が言った。",
-              "fix": "先生はおっしゃいました。"
-            }
-          ]
-        },
-        {
-          "title": "丁寧語と普通語の使い分け",
-          "points": [
-            "丁寧語は一般的な会話で使います。",
-            "普通語は親しい間柄で使用します。",
-            "場面に応じた言葉遣いが重要です。"
-          ],
-          "example": "今日はいい天気ですね。",
-          "ruleOrder": [
-            "主語",
-            "動詞",
-            "目的語"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "主語",
-              "text": "今日"
-            },
-            {
-              "label": "動詞",
-              "text": "いい"
-            },
-            {
-              "label": "目的語",
-              "text": "天気"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "今日はいい天気。",
-              "fix": "今日はいい天気ですね。"
-            }
-          ]
-        },
-        {
-          "title": "尊敬語の使用法",
-          "points": [
-            "尊敬語は相手の行動を高めて表現します。",
-            "特定の動詞に変化を加えます。",
-            "相手への敬意を強調します。"
-          ],
-          "example": "社長はお出かけです。",
-          "ruleOrder": [
-            "主語",
-            "動詞",
-            "目的語"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "主語",
-              "text": "社長"
-            },
-            {
-              "label": "動詞",
-              "text": "お出かけ"
-            },
-            {
-              "label": "目的語",
+              "label": "丁寧さ",
               "text": "です"
             }
           ],
+          "sourceTitle": "formal and informal speech styles",
+          "sourceExample": "I am busy today.",
           "mistakes": [
             {
-              "wrong": "社長が出かけた。",
-              "fix": "社長はお出かけです。"
+              "wrong": "今日は忙しい。",
+              "fix": "今日は忙しいです。"
             }
           ]
         },
         {
-          "title": "謙譲語の使い方",
+          "title": "名前 + さん / 先生 が自然",
           "points": [
-            "謙譲語は自分の行動を低めて表現します。",
-            "相手に対する敬意を示します。",
-            "ビジネスシーンでよく使われます。"
+            "相手には名前や肩書きを使うほうが自然な場面が多いです。",
+            "あなたを多用すると不自然に聞こえることがあります。"
           ],
-          "example": "私が伺います。",
-          "ruleOrder": [
-            "主語",
-            "動詞"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "主語",
-              "text": "私"
-            },
-            {
-              "label": "動詞",
-              "text": "伺います"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "私が行く。",
-              "fix": "私が伺います。"
-            }
-          ]
-        },
-        {
-          "title": "丁寧な依頼の表現",
-          "points": [
-            "依頼をする際は丁寧な言い回しを使います。",
-            "相手に配慮した表現が求められます。",
-            "「～ていただけますか？」が一般的です。"
-          ],
-          "example": "手伝っていただけますか？",
-          "ruleOrder": [
-            "依頼表現",
-            "疑問終助詞"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "依頼表現",
-              "text": "手伝っていただけます"
-            },
-            {
-              "label": "疑問終助詞",
-              "text": "か"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "手伝って。",
-              "fix": "手伝っていただけますか？"
-            }
-          ]
-        },
-        {
-          "title": "フォーマルな挨拶",
-          "points": [
-            "フォーマルな場面では適切な挨拶が必要です。",
-            "時間帯に応じた挨拶を使います。",
-            "相手の地位に応じた表現が重要です。"
-          ],
-          "example": "おはようございます。",
-          "ruleOrder": [
-            "主語",
-            "動詞"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "主語",
-              "text": "おはよう"
-            },
-            {
-              "label": "動詞",
-              "text": "ございます"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "おはよう。",
-              "fix": "おはようございます。"
-            }
-          ]
-        },
-        {
-          "title": "カジュアルな表現とフォーマルな表現の違い",
-          "points": [
-            "カジュアルな表現は友人との会話で使います。",
-            "フォーマルな表現はビジネスシーンで必要です。",
-            "場面に応じた言葉遣いが求められます。"
-          ],
-          "example": "先生、お元気ですか。",
+          "example": "田中さん、少しよろしいですか。",
           "ruleOrder": [
             "呼びかけ",
-            "丁寧表現"
+            "依頼"
           ],
           "exampleHighlights": [
             {
               "label": "呼びかけ",
-              "text": "先生"
+              "text": "さん"
             },
             {
-              "label": "丁寧表現",
-              "text": "お元気ですか"
+              "label": "依頼",
+              "text": "少しよろしいですか"
             }
           ],
+          "sourceTitle": "titles and respectful address",
+          "sourceExample": "Tanaka, do you have a moment?",
           "mistakes": [
             {
-              "wrong": "先生、元気？",
-              "fix": "先生、お元気ですか。"
+              "wrong": "田中、少しよろしいですか。",
+              "fix": "田中さん、少しよろしいですか。"
+            }
+          ]
+        },
+        {
+          "title": "依頼は 〜てください と 〜てもらえますか",
+          "points": [
+            "〜てください は基本的な依頼、〜てもらえますか はさらに柔らかい依頼です。",
+            "直接命令より丁寧で協調的に聞こえます。"
+          ],
+          "example": "もう一度言ってもらえますか。",
+          "ruleOrder": [
+            "依頼",
+            "内容"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "依頼",
+              "text": "もう一度言って"
+            },
+            {
+              "label": "内容",
+              "text": "もらえますか"
+            }
+          ],
+          "sourceTitle": "polite requests with softeners",
+          "sourceExample": "Could you say it one more time?",
+          "mistakes": [
+            {
+              "wrong": "もう一度言って。",
+              "fix": "もう一度言ってもらえますか。"
+            }
+          ]
+        },
+        {
+          "title": "失礼します などで場面を整える",
+          "points": [
+            "失礼します、よろしくお願いします などは場面全体の礼儀を作ります。",
+            "単語の意味だけでなく、社会的な振る舞いとして覚える必要があります。"
+          ],
+          "example": "失礼します、先に帰ります。",
+          "ruleOrder": [
+            "定型表現",
+            "内容"
+          ],
+          "exampleHighlights": [
+            {
+              "label": "定型表現",
+              "text": "失礼します"
+            },
+            {
+              "label": "内容",
+              "text": "先に帰ります"
+            }
+          ],
+          "sourceTitle": "set polite formulas and softening",
+          "sourceExample": "Excuse me, I will leave first.",
+          "mistakes": [
+            {
+              "wrong": "先に帰ります。",
+              "fix": "失礼します、先に帰ります。"
             }
           ]
         }
       ],
       "Discourse & Flow": [
         {
-          "title": "追加情報の接続",
+          "title": "そして / でも で流れを作る",
           "points": [
-            "追加には「そして」を使います。",
-            "接続語の後に余分な助詞を置きません。",
-            "文の流れを段階的に示します。"
+            "そして は追加、でも は対比や転換を示します。",
+            "接続詞を選ぶと、話の動きが聞き手に伝わりやすくなります。"
           ],
-          "example": "私は日本語を勉強しています。そして、英語も勉強しています。",
+          "example": "日本語を勉強しています。でも、まだ難しいです。",
           "ruleOrder": [
-            "文1",
-            "接続語",
-            "文2"
+            "前半",
+            "接続",
+            "後半"
           ],
           "exampleHighlights": [
             {
-              "label": "文1",
-              "text": "私は日本語を勉強しています"
+              "label": "前半",
+              "text": "日本語を勉強しています"
             },
             {
-              "label": "接続語",
-              "text": "そして"
+              "label": "接続",
+              "text": "でも"
             },
             {
-              "label": "文2",
-              "text": "英語も勉強しています"
+              "label": "後半",
+              "text": "まだ難しいです"
             }
           ],
+          "sourceTitle": "addition and contrast markers",
+          "sourceExample": "I am studying Japanese, but it is still difficult.",
           "mistakes": [
             {
-              "wrong": "私は日本語を勉強しています。そしてで、英語も勉強しています。",
-              "fix": "私は日本語を勉強しています。そして、英語も勉強しています。"
+              "wrong": "日本語を勉強しています。そして、まだ難しいです。",
+              "fix": "日本語を勉強しています。でも、まだ難しいです。"
             }
           ]
         },
         {
-          "title": "逆接の接続",
+          "title": "から / ので / だから で理由と結果",
           "points": [
-            "逆接には「しかし」を使います。",
-            "対立する情報を明確にします。",
-            "接続語を適切に選びます。"
+            "から・ので は理由、だから は結果や結論を示します。",
+            "理由をどう出すかで文の響きも変わります。"
           ],
-          "example": "この本は難しいです。しかし、おもしろいです。",
+          "example": "雨が降っているので、出かけません。",
           "ruleOrder": [
-            "文1",
-            "接続語",
-            "文2"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "文1",
-              "text": "この本は難しいです"
-            },
-            {
-              "label": "接続語",
-              "text": "しかし"
-            },
-            {
-              "label": "文2",
-              "text": "おもしろいです"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "この本は難しいです。だから、おもしろいです。",
-              "fix": "この本は難しいです。しかし、おもしろいです。"
-            }
-          ]
-        },
-        {
-          "title": "具体例の提示",
-          "points": [
-            "例示には「例えば」を使います。",
-            "主張と例を論理的に結びます。",
-            "例示語の接続形を誤りません。"
-          ],
-          "example": "果物が好きです。例えば、りんごをよく食べます。",
-          "ruleOrder": [
-            "主張",
-            "例示語",
-            "具体例"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "主張",
-              "text": "果物が好きです"
-            },
-            {
-              "label": "例示語",
-              "text": "例えば"
-            },
-            {
-              "label": "具体例",
-              "text": "りんごをよく食べます"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "果物が好きです。例えばで、りんごをよく食べます。",
-              "fix": "果物が好きです。例えば、りんごをよく食べます。"
-            }
-          ]
-        },
-        {
-          "title": "言い換え",
-          "points": [
-            "言い換えには「つまり」を使います。",
-            "前文を要約して再提示します。",
-            "接続の形を保ちます。"
-          ],
-          "example": "この問題は難しいです。つまり、時間が必要です。",
-          "ruleOrder": [
-            "前文",
-            "言い換え語",
-            "要約文"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "前文",
-              "text": "この問題は難しいです"
-            },
-            {
-              "label": "言い換え語",
-              "text": "つまり"
-            },
-            {
-              "label": "要約文",
-              "text": "時間が必要です"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "この問題は難しいです。つまりで、時間が必要です。",
-              "fix": "この問題は難しいです。つまり、時間が必要です。"
-            }
-          ]
-        },
-        {
-          "title": "対比の提示",
-          "points": [
-            "対比には「一方」を使えます。",
-            "二つの性質を並べて示します。",
-            "対比語の使い方を誤りません。"
-          ],
-          "example": "兄は朝型です。一方、私は夜型です。",
-          "ruleOrder": [
-            "文1",
-            "対比語",
-            "文2"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "文1",
-              "text": "兄は朝型です"
-            },
-            {
-              "label": "対比語",
-              "text": "一方"
-            },
-            {
-              "label": "文2",
-              "text": "私は夜型です"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "兄は朝型です。一方でで、私は夜型です。",
-              "fix": "兄は朝型です。一方、私は夜型です。"
-            }
-          ]
-        },
-        {
-          "title": "原因と結果",
-          "points": [
-            "結果導入には「だから」を使えます。",
-            "原因文と結果文を分けます。",
-            "「だからで」は誤用です。"
-          ],
-          "example": "雨が降りました。だから、試合は中止です。",
-          "ruleOrder": [
-            "原因",
-            "結果語",
+            "理由",
             "結果"
           ],
           "exampleHighlights": [
             {
-              "label": "原因",
-              "text": "雨が降りました"
-            },
-            {
-              "label": "結果語",
-              "text": "だから"
+              "label": "理由",
+              "text": "雨が降っている"
             },
             {
               "label": "結果",
-              "text": "試合は中止です"
+              "text": "ので 出かけません"
             }
           ],
+          "sourceTitle": "reason and result markers",
+          "sourceExample": "Because it is raining, I will not go out.",
           "mistakes": [
             {
-              "wrong": "雨が降りました。だからで、試合は中止です。",
-              "fix": "雨が降りました。だから、試合は中止です。"
+              "wrong": "雨が降っているので、だから出かけません。",
+              "fix": "雨が降っているので、出かけません。"
             }
           ]
         },
         {
-          "title": "逆接展開",
+          "title": "まず / 次に / 最後に で順序を示す",
           "points": [
-            "前文を受けて逆方向に展開します。",
-            "逆接語で関係を明示します。",
-            "論理関係を崩しません。"
+            "手順や説明では順序標識が非常に大切です。",
+            "聞き手は何が先で何が後かを簡単に追えます。"
           ],
-          "example": "急いでいました。しかし、電車に遅れました。",
+          "example": "まず本文を読み、次にメモを取ります。",
           "ruleOrder": [
-            "前文",
-            "逆接語",
-            "後文"
+            "最初",
+            "次"
           ],
           "exampleHighlights": [
             {
-              "label": "前文",
-              "text": "急いでいました"
+              "label": "最初",
+              "text": "まず本文を読み"
             },
             {
-              "label": "逆接語",
-              "text": "しかし"
-            },
-            {
-              "label": "後文",
-              "text": "電車に遅れました"
+              "label": "次",
+              "text": "次にメモを取ります"
             }
           ],
+          "sourceTitle": "sequencing markers",
+          "sourceExample": "First read the text, then take notes.",
           "mistakes": [
             {
-              "wrong": "急いでいました。しかしで、電車に遅れました。",
-              "fix": "急いでいました。しかし、電車に遅れました。"
+              "wrong": "最後に本文を読み、次にメモを取ります。",
+              "fix": "まず本文を読み、次にメモを取ります。"
             }
           ]
         },
         {
-          "title": "順序表現",
+          "title": "は が情報の流れを整える",
           "points": [
-            "手順は「まず／次に」で示します。",
-            "順序語は固定表現として使います。",
-            "助詞の脱落に注意します。"
+            "は は話題を立て、が は新情報や焦点を強く出すことがあります。",
+            "日本語の流れはこの対比でかなり変わります。"
           ],
-          "example": "まず手を洗って、次に食事をします。",
+          "example": "この本は、もう読みました。",
           "ruleOrder": [
-            "順序1",
-            "順序2",
-            "動作"
+            "話題",
+            "コメント"
           ],
           "exampleHighlights": [
             {
-              "label": "順序1",
-              "text": "まず手を洗って"
+              "label": "話題",
+              "text": "この本は、も"
             },
             {
-              "label": "順序2",
-              "text": "次に"
-            },
-            {
-              "label": "動作",
-              "text": "食事をします"
+              "label": "コメント",
+              "text": "う読みました"
             }
           ],
+          "sourceTitle": "topic and focus marking",
+          "sourceExample": "As for this book, I have already read it.",
           "mistakes": [
             {
-              "wrong": "まず手を洗って、次食事をします。",
-              "fix": "まず手を洗って、次に食事をします。"
+              "wrong": "この本が、もう読みました。",
+              "fix": "この本は、もう読みました。"
             }
           ]
         },
         {
-          "title": "話題転換",
+          "title": "例えば / つまり でまとめる",
           "points": [
-            "話題転換には「ところで」を使います。",
-            "新しい話題への移行を示します。",
-            "転換語の形を保ちます。"
+            "例えば は具体例、つまり は言い換えや要約に役立ちます。",
+            "段落全体の整理に使える重要な標識です。"
           ],
-          "example": "ところで、週末の予定はありますか。",
+          "example": "勉強法はいろいろあります。例えば、音読です。",
           "ruleOrder": [
-            "転換語",
-            "新話題"
+            "一般論",
+            "例"
           ],
           "exampleHighlights": [
             {
-              "label": "転換語",
-              "text": "ところで"
+              "label": "一般論",
+              "text": "勉強法はいろいろあります"
             },
             {
-              "label": "新話題",
-              "text": "週末の予定はありますか"
+              "label": "例",
+              "text": "例えば 音読です"
             }
           ],
+          "sourceTitle": "examples and conclusions",
+          "sourceExample": "There are various study methods, for example reading aloud.",
           "mistakes": [
             {
-              "wrong": "ところ週末の予定はありますか。",
-              "fix": "ところで、週末の予定はありますか。"
-            }
-          ]
-        },
-        {
-          "title": "結論提示",
-          "points": [
-            "結論には「結論として」を使います。",
-            "最後に判断を明示します。",
-            "結論語を正しく接続します。"
-          ],
-          "example": "結論として、この案は実行可能です。",
-          "ruleOrder": [
-            "結論語",
-            "結論文"
-          ],
-          "exampleHighlights": [
-            {
-              "label": "結論語",
-              "text": "結論として"
-            },
-            {
-              "label": "結論文",
-              "text": "この案は実行可能です"
-            }
-          ],
-          "mistakes": [
-            {
-              "wrong": "結論としてで、この案は実行可能です。",
-              "fix": "結論として、この案は実行可能です。"
+              "wrong": "勉強法はいろいろあります。つまり、音読です。",
+              "fix": "勉強法はいろいろあります。例えば、音読です。"
             }
           ]
         }
@@ -11766,14 +11542,10 @@
   "worldSource": {
     "words": {
       "Greetings": {
-        "hi": "こんにちは",
-        "hello": "こんにちは",
         "good morning": "おはようございます",
-        "good afternoon": "こんにちは",
         "good evening": "こんばんは",
         "good night": "おやすみなさい",
         "goodbye": "さようなら",
-        "bye": "バイ",
         "see you": "またね",
         "take care": "気をつけて",
         "welcome": "ようこそ",
@@ -11793,7 +11565,9 @@
         "have a good day": "良い一日を",
         "good luck": "頑張って",
         "welcome back": "お帰りなさい",
-        "no problem": "問題ありません"
+        "no problem": "問題ありません",
+        "bye": "バイバイ",
+        "hello": "こんにちは"
       },
       "Pronouns": {
         "i": "私",
@@ -12552,7 +12326,6 @@
         "nervous": "緊張している",
         "calm": "落ち着いている",
         "okay": "大丈夫",
-        "lonely": "孤独",
         "confused": "混乱している",
         "proud": "誇りに思っている",
         "relaxed": "リラックスしている",
@@ -12575,7 +12348,8 @@
         "disappointed": "失望している",
         "relieved": "ほっとしている",
         "anxious": "不安な",
-        "content": "満ち足りている"
+        "content": "満ち足りている",
+        "lonely": "さみしい"
       },
       "Family & Relationships": {
         "family": "家族",
@@ -12880,12 +12654,12 @@
       },
       "Politeness": {
         "excuse me": "すみません",
-        "pardon me": "失礼しました",
+        "pardon me": "失礼します",
         "i am sorry": "ごめんなさい",
         "sorry about that": "それについては申し訳ありません",
         "thank you": "ありがとう",
         "thank you very much": "ありがとうございます",
-        "thanks a lot": "本当にありがとう",
+        "thanks a lot": "本当にありがとうございます",
         "i appreciate it": "感謝します",
         "you are welcome": "どういたしまして",
         "no problem": "問題ありません",
@@ -12906,15 +12680,12 @@
         "i am new here": "私はここに来たばかりです",
         "let me introduce myself": "自己紹介をさせてください",
         "this is my friend": "こちらは私の友達です",
-        "this is my brother": "こちらは私の兄弟です",
+        "this is my brother": "こちらは私の兄 / 弟です",
         "this is my sister": "こちらは私の姉妹です",
         "nice to meet you": "お会いできて嬉しいです",
         "pleased to meet you": "お会いできて光栄です",
-        "i am learning english": "日本語を勉強しています",
         "i am learning japanese": "日本語を勉強しています",
-        "i speak english": "日本語を話せます",
         "i speak japanese": "日本語を話せます",
-        "i do not speak english": "日本語を話せません",
         "i do not speak japanese": "日本語を話せません"
       },
       "Conversation": {
@@ -12934,14 +12705,13 @@
         "what is this": "これは何ですか",
         "what is that": "あれは何ですか",
         "who is that": "あの人は誰ですか",
-        "where are you": "あなたはどこですか",
+        "where are you": "どこにいますか",
         "where is the bathroom": "トイレはどこですか",
         "where is the station": "駅はどこですか",
         "when is it": "それはいつですか",
         "what time is it": "今何時ですか",
         "how many people": "何人ですか",
         "which one is better": "どちらの方が良いですか",
-        "do you speak english": "日本語を話せますか？",
         "do you speak japanese": "日本語を話せますか？",
         "do you have this": "これがありますか",
         "is this correct": "これは正しいですか",
@@ -13191,979 +12961,327 @@
     },
     "grammarTitles": {
       "Sentence Structure": {
-        "basic word order": "基本的な語順",
-        "sentence parts": "文の部分",
-        "adding details": "詳細の追加",
-        "linking clauses": "節の接続",
-        "sentence variety": "文の多様性"
+        "basic sov word order": "基本語順（SOV）",
+        "topic marker wa": "主題「は」の使用",
+        "place marker de": "場所「で」の使用",
+        "time expressions and tense": "時間表現と時制",
+        "polite sentence endings": "丁寧体の文末"
       },
       "Verbs": {
-        "action verbs": "動作動詞",
-        "state verbs": "状態動詞",
-        "linking verbs": "連結動詞",
-        "verb patterns": "動詞パターン",
-        "verb combinations": "動詞の組み合わせ",
-        "phrasal verbs": "句動詞"
+        "non-past basic verbs": "基本動詞の現在形",
+        "past tense verbs": "過去形の動詞",
+        "ongoing actions with te-iru": "進行形の使用",
+        "volitional form and intention": "意向形の使い方",
+        "passive form": "受動態の構造",
+        "honorific verbs": "敬語の動詞"
       },
       "Tenses & Aspect": {
-        "present simple": "現在形",
-        "present continuous": "現在進行形",
-        "past simple": "過去形",
-        "past continuous": "過去進行形",
-        "present perfect": "現在完了形",
-        "past perfect": "過去完了形",
-        "future forms": "未来形",
-        "future continuous": "未来進行形",
-        "future perfect": "未来完了形",
-        "aspect contrasts": "アスペクトの対比"
+        "non-past for habits and regular actions": "非過去（習慣）",
+        "past tense for completed actions": "過去",
+        "te-iru for ongoing actions": "進行「〜ている」",
+        "te-iru for resulting states": "結果状態「〜ている」",
+        "experience with ta koto ga aru": "経験「〜たことがある」",
+        "tokoro da for something about to happen": "直前「〜ところです」",
+        "ta tokoro da for something that just happened": "直後「〜たところです」",
+        "te-kita for continuation up to now": "継続「〜てきた」",
+        "tsumori da for intentions and plans": "予定「〜つもりです」",
+        "te-ita for past ongoing or repeated actions": "過去の継続・反復「〜ていた」"
       },
       "Nouns & Articles": {
-        "countable nouns": "可算名詞",
-        "uncountable nouns": "不可算名詞",
-        "articles": "冠詞",
-        "plural forms": "複数形",
-        "possessive nouns": "所有格名詞",
-        "noun phrases": "名詞句",
-        "quantifiers": "量詞"
+        "名詞の基本的な使い方": "名詞の基本的な使い方",
+        "助詞の役割": "助詞の役割",
+        "所有の表現": "所有の表現",
+        "数詞と助詞の組み合わせ": "数詞と助詞の組み合わせ",
+        "助詞「へ」と「に」の使い分け": "助詞「へ」と「に」の使い分け",
+        "敬語と名詞の使い方": "敬語と名詞の使い方",
+        "単数と複数の表し方": "単数と複数の表し方"
       },
       "Pronouns & Reference": {
-        "subject pronouns": "主語の代名詞",
-        "object pronouns": "目的語の代名詞",
-        "possessive forms": "所有格",
-        "reflexive pronouns": "再帰代名詞",
-        "demonstratives": "指示詞",
-        "relative reference": "関係参照",
-        "indefinite reference": "不定参照"
+        "personal pronouns depend on situation": "人称代名詞は場面で選ぶ",
+        "subjects can be omitted from context": "主語は文脈で省略する",
+        "ko-so-a-do demonstratives": "こそあど言葉で指す",
+        "names and titles are often more natural than anata": "相手には名前や肩書きを使うことが多い",
+        "self reference with jibun": "自分で自分を指す",
+        "plural pronouns with tachi and ra": "複数は たち / ら を必要なときだけ使う",
+        "names are often more natural than kare or kanojo": "彼 / 彼女 より名詞が自然なことが多い"
       },
       "Modifiers": {
-        "adjectives basics": "形容詞の基本",
-        "adjective order": "形容詞の順序",
-        "comparatives": "比較級",
-        "superlatives": "最上級",
-        "adverbs basics": "副詞の基本",
-        "frequency adverbs": "頻度副詞",
-        "time and place adverbs": "時間と場所の副詞",
-        "degree words": "程度を表す言葉",
-        "participles": "分詞",
-        "modifier stacking": "修飾語の重ね合わせ"
+        "い形容詞の連体修飾": "い形容詞の連体修飾",
+        "な形容詞の連体修飾": "な形容詞の連体修飾",
+        "い形容詞の副詞化": "い形容詞の副詞化",
+        "程度副詞": "程度副詞",
+        "比較「〜より」": "比較「〜より」",
+        "最上級「いちばん」": "最上級「いちばん」",
+        "数量表現": "数量表現",
+        "名詞修飾の「の」": "名詞修飾の「の」",
+        "頻度副詞": "頻度副詞",
+        "数量副詞": "数量副詞"
       },
       "Questions": {
-        "yes no questions": "はい・いいえの質問",
-        "wh questions": "疑問詞の質問",
-        "questions with be": "be動詞を使った質問",
-        "questions with do": "do動詞を使った質問",
-        "questions with modals": "助動詞を使った質問",
-        "tag questions": "付加疑問文",
-        "indirect questions": "間接疑問文"
+        "yes/no questions with ka": "はい・いいえ質問",
+        "questions with nani": "「何」を使う質問",
+        "questions with doko": "「どこ」を使う質問",
+        "questions with itsu": "「いつ」を使う質問",
+        "questions with dare": "「だれ」を使う質問",
+        "alternative questions with dochira": "選択質問",
+        "asking for reasons with doushite": "理由質問"
       },
       "Negation": {
-        "not with be": "be動詞の否定",
-        "not with do": "do動詞の否定",
-        "negative short forms": "短縮形の否定",
-        "negative words": "否定語",
-        "negative questions": "否定疑問文",
-        "limited negatives": "限定的な否定"
+        "dewa arimasen for noun predicate negation": "名詞述語の否定",
+        "masen for non-past verb negation": "動詞非過去の否定",
+        "masen deshita for past polite negation": "動詞過去の否定",
+        "dewa arimasen for na-adjective negation": "な形容詞の否定",
+        "kunai desu for i-adjective negation": "い形容詞の否定",
+        "nakutemo ii for not having to do something": "「〜なくてもいい」"
       },
       "Connections": {
-        "basic connectors": "基本的な接続詞",
-        "reason and result": "理由と結果",
-        "contrast and choice": "対比と選択",
-        "time connectors": "時間接続詞",
-        "comparison links": "比較リンク",
-        "adding ideas": "アイデアの追加",
-        "ordering ideas": "アイデアの順序"
+        "soshite for addition": "追加「そして」",
+        "ga for contrast": "逆接「が」",
+        "kara for reasons": "理由「から」",
+        "node for reasons": "理由「ので」",
+        "shikashi for strong contrast": "逆接「しかし」",
+        "tame ni for purpose": "目的「ために」",
+        "toki for time clauses": "時間接続「とき」"
       },
       "Conditions": {
-        "real conditions": "現実条件",
-        "future conditions": "未来条件",
-        "unreal present": "非現実的現在",
-        "unreal past": "非現実的過去",
-        "mixed conditions": "混合条件",
-        "unless and otherwise": "もし～でなければ"
+        "tara for event-dependent conditions": "条件「〜たら」",
+        "ba for conditional assumptions": "条件「〜ば」",
+        "nara for topic-based conditions": "条件「〜なら」",
+        "to for automatic or habitual results": "恒常条件「〜と」",
+        "nakereba for negative conditions": "否定条件「〜なければ」",
+        "temo for concessive conditions": "譲歩条件「〜ても」"
       },
       "Voice & Focus": {
-        "active voice": "能動態",
-        "passive voice": "受動態",
-        "focus shifts": "焦点の移動",
-        "cleft sentences": "分裂文",
-        "there and it subjects": "thereおよびit主語"
+        "active clauses foreground the doer": "能動文では動作主を普通に述べる",
+        "passive voice backgrounds the doer": "受け身で受け手を前に出す",
+        "topic marking with wa": "は で話題を立てる",
+        "focus particles limit scope": "だけ で焦点をしぼる",
+        "cleft-like focus with no wa ... desu": "〜のは ... です で焦点化する"
       },
       "Modality": {
-        "ability": "能力",
-        "permission": "許可",
-        "obligation": "義務",
-        "advice": "アドバイス",
-        "possibility": "可能性",
-        "probability": "確率",
-        "polite requests": "丁寧なリクエスト",
-        "offers and invitations": "提案と招待"
+        "strong obligation": "〜なければならない で義務",
+        "advice and recommendation": "〜ほうがいい で助言",
+        "ability": "〜ことができる で能力",
+        "possibility and probability": "〜かもしれない で可能性",
+        "permission and prohibition": "〜てもいい / 〜てはいけない で許可と禁止"
       },
       "Reported Speech": {
-        "reporting statements": "報告文",
-        "reporting questions": "報告質問",
-        "reporting requests": "報告依頼",
-        "reporting commands": "報告命令",
-        "backshift basics": "バックシフトの基本",
-        "time place changes": "時間と場所の変更"
+        "direct quotation with japanese quotation marks": "直接引用は「」で囲む",
+        "reported statements with to iu": "普通形 + と言う",
+        "hearsay with so da": "伝聞の そうだ",
+        "reported requests with yo ni iu": "依頼や指示は 〜ように言う",
+        "reported questions with ka or ka do ka": "疑問の内容は か / かどうか",
+        "honorific reporting verbs": "敬意を込めて報告する"
       },
       "Formality & Style": {
-        "formal vs informal": "フォーマルとインフォーマル",
-        "contractions": "短縮形",
-        "polite softening": "丁寧な和らげ",
-        "spoken vs written": "口語と文語",
-        "professional style": "プロフェッショナルスタイル",
-        "casual style": "カジュアルスタイル",
-        "clarity and brevity": "明確さと簡潔さ"
+        "formal and informal speech styles": "です / ます 体と普通体",
+        "titles and respectful address": "名前 + さん / 先生 が自然",
+        "polite requests with softeners": "依頼は 〜てください と 〜てもらえますか",
+        "set polite formulas and softening": "失礼します などで場面を整える"
       },
       "Discourse & Flow": {
-        "opening and closing": "始まりと終わり",
-        "topic shifts": "話題の移行",
-        "cohesion tools": "結束の道具",
-        "sequencing ideas": "アイデアの順序付け",
-        "clarification moves": "明確化の動き",
-        "summaries": "要約",
-        "emphasis and repetition": "強調と繰り返し",
-        "conversation flow": "会話の流れ",
-        "giving examples": "例を挙げる",
-        "repair and correction": "修正と訂正"
+        "addition and contrast markers": "そして / でも で流れを作る",
+        "reason and result markers": "から / ので / だから で理由と結果",
+        "sequencing markers": "まず / 次に / 最後に で順序を示す",
+        "topic and focus marking": "は が情報の流れを整える",
+        "examples and conclusions": "例えば / つまり でまとめる"
       }
     },
     "grammarExamples": {
       "Sentence Structure": {
-        "she reads a book.": "彼女は本を読みます。",
-        "they named her captain.": "彼らは彼女をキャプテンと名付けました。",
-        "she met him at noon at the station.": "彼女は正午に駅で彼に会いました。",
-        "i stayed home because it rained.": "雨が降ったので、私は家にいました。",
-        "we finished early. we went home after class because we were tired.": "私たちは早く終わりました。疲れていたので、授業の後に帰りました。"
+        "i eat an apple.": "私はりんごを食べます。",
+        "i am a student.": "私は学生です。",
+        "children are playing in the park.": "公園で子どもが遊んでいます。",
+        "he watched a movie yesterday.": "彼は昨日映画を見ました。",
+        "i met the teacher.": "先生に会いました。"
       },
       "Verbs": {
-        "they carry the boxes.": "彼らは箱を運びます。",
-        "she feels tired.": "彼女は疲れています。",
-        "the room feels quiet.": "部屋は静かに感じます。",
-        "he placed the book on the table.": "彼は本をテーブルの上に置きました。",
-        "we decided to stay.": "私たちは滞在することに決めました。",
-        "she turned off the light.": "彼女は電気を消しました。"
+        "i study japanese every day.": "私は毎日日本語を勉強します。",
+        "he watched a movie yesterday.": "彼は昨日映画を見ました。",
+        "she is cooking now.": "彼女は今、料理をしています。",
+        "i am thinking of watching a movie tomorrow.": "私は明日、映画を見ようと思います。",
+        "this book was written by him.": "この本は彼によって書かれました。",
+        "the company president said it.": "社長はおっしゃいました。"
       },
       "Tenses & Aspect": {
-        "she works every day.": "彼女は毎日働いています。",
-        "i am waiting outside.": "私は外で待っています。",
-        "they visited paris last year.": "",
-        "i was cooking when he called.": "彼が電話をかけてきたとき、私は料理をしていました。",
-        "he has lived here for years.": "彼は何年もここに住んでいます。",
-        "she had left before i arrived.": "私が到着する前に彼女は出発していました。",
-        "i will call you tonight. i am going to study later. i am meeting sam tomorrow.": "",
-        "i will be working at six.": "私は6時に働いています。",
-        "they will have finished by friday.": "彼らは金曜日までに終わっているでしょう。",
-        "i work every day. i am working now. i have worked here for years.": ""
+        "i drink coffee every morning.": "毎朝コーヒーを飲みます。",
+        "i went to the library yesterday.": "昨日、図書館に行きました。",
+        "it is raining now.": "今、雨が降っています。",
+        "the door is open.": "ドアが開いています。",
+        "i have been to japan.": "日本に行ったことがあります。",
+        "i am just about to go out.": "今から出かけるところです。",
+        "i just arrived.": "たった今、着いたところです。",
+        "i have been studying japanese for three years.": "日本語を三年間勉強してきました。",
+        "i plan to study abroad in japan next year.": "来年、日本へ留学するつもりです。",
+        "when i was a child, i played in the river every day.": "子どものころ、毎日川で遊んでいました。"
       },
       "Nouns & Articles": {
-        "i have a coin and two apples.": "",
-        "we need some rice and a piece of bread.": "",
-        "i saw a dog. the dog is outside.": "",
-        "two apples and three children are here.": "",
-        "sara's phone is new.": "サラの電話は新しいです。",
-        "she bought the red dress.": "",
-        "there are many options, and there is much information.": ""
+        "猫が好きです。": "猫が好きです。",
+        "彼は学生です。": "彼は学生です。",
+        "彼の本です。": "彼の本です。",
+        "リンゴが二つあります。": "リンゴが二つあります。",
+        "学校へ行きます。": "学校へ行きます。",
+        "先生がいらっしゃいます。": "先生がいらっしゃいます。",
+        "友達が二人来ます。": "友達が二人来ます。"
       },
       "Pronouns & Reference": {
-        "they are ready.": "",
-        "he saw me.": "",
-        "my bag is new. hers is old.": "",
-        "he hurt himself.": "",
-        "these keys are mine.": "",
-        "the man who called me left.": "",
-        "someone is waiting outside.": ""
+        "i am a student.": "私は学生です。",
+        "i have already eaten.": "もう食べました。",
+        "this is a book.": "これは本です。",
+        "has tanaka already gone home?": "田中さんはもう帰りましたか。",
+        "he decided for himself.": "彼は自分で決めた。",
+        "we are students.": "私たちは学生です。",
+        "yamada is coming tomorrow.": "山田さんは明日来ます。"
       },
       "Modifiers": {
-        "she bought a lovely small red bag.": "",
-        "this is faster than that.": "",
-        "he is the tallest.": "",
-        "she speaks clearly.": "",
-        "she usually wakes early.": "",
-        "we met here yesterday.": "",
-        "the room is very warm.": "",
-        "the movie was boring, and i was bored.": "",
-        "she answered the very difficult question quickly.": "",
-        "the quiet house is empty.": ""
+        "大きい犬がいます。": "大きい犬がいます。",
+        "静かな部屋で勉強します。": "静かな部屋で勉強します。",
+        "彼は速く走ります。": "彼は速く走ります。",
+        "今日はとても寒いです。": "今日はとても寒いです。",
+        "兄は私より背が高いです。": "兄は私より背が高いです。",
+        "彼がいちばん上手です。": "彼がいちばん上手です。",
+        "三つのリンゴがあります。": "三つのリンゴがあります。",
+        "日本の文化が好きです。": "日本の文化が好きです。",
+        "私はよく音楽を聞きます。": "私はよく音楽を聞きます。",
+        "本をたくさん読みます。": "本をたくさん読みます。"
       },
       "Questions": {
-        "do you work here?": "ここで働いていますか？",
-        "where does he live?": "彼はどこに住んでいますか？",
-        "is the store open?": "店は開いていますか？",
-        "did you call her?": "彼女に電話しましたか？",
-        "could you help me?": "手伝っていただけますか？",
-        "you are ready, aren't you?": "準備ができていますよね？",
-        "could you tell me where it is?": "それがどこにあるか教えていただけますか？"
+        "is this your book?": "これはあなたの本ですか。",
+        "what is this?": "これは何ですか。",
+        "where do you live?": "どこに住んでいますか。",
+        "when are you leaving?": "いつ出発しますか。",
+        "who came?": "だれが来ましたか。",
+        "which do you like, coffee or tea?": "コーヒーとお茶、どちらが好きですか。",
+        "why were you late?": "どうして遅れたのですか。"
       },
       "Negation": {
-        "she is not tired.": "彼女は疲れていません。",
-        "they do not agree.": "彼らは同意していません。",
-        "i don't know.": "私は知りません。",
-        "there is no milk.": "牛乳はありません。",
-        "don't you want coffee?": "コーヒーはいらないのですか？",
-        "he rarely eats out.": "彼はめったに外食しません。"
+        "he is not a student.": "彼は学生ではありません。",
+        "he does not go.": "彼は行きません。",
+        "i did not go yesterday.": "昨日は行きませんでした。",
+        "this room is not quiet.": "この部屋は静かではありません。",
+        "this book is not expensive.": "この本は高くないです。",
+        "you do not have to go today.": "今日は行かなくてもいいです。"
       },
       "Connections": {
-        "i called but no one answered.": "電話したけど誰も出なかった。",
-        "it rained, so we stayed.": "雨が降ったので、私たちは留まりました。",
-        "she went, although she was tired.": "彼女は疲れていたけれども、行きました。",
-        "call me when you arrive.": "到着したら電話してください。",
-        "this feels like home.": "ここはまるで家のように感じます。",
-        "we also need chairs.": "私たちも椅子が必要です。",
-        "first we plan, then we act.": "まず計画を立てて、それから行動します。"
+        "i ate breakfast. and then i went to school.": "朝ご飯を食べました。そして、学校へ行きました。",
+        "this restaurant is cheap, but it is tasty.": "この店は安いですが、おいしいです。",
+        "it is raining, so i am not going out.": "雨が降っているから、出かけません。",
+        "i am not feeling well, so i am taking a day off.": "体調が悪いので、休みます。",
+        "i went to bed early. however, i am still sleepy.": "早く寝ました。しかし、まだ眠いです。",
+        "i am going to japan in order to study japanese.": "日本語を勉強するために、日本へ行きます。",
+        "when i got home, i made a phone call.": "家に帰ったとき、電話しました。"
       },
       "Conditions": {
-        "if you press this, it starts.": "これを押すと、始まります。",
-        "if it is sunny, we will go.": "晴れたら、行きます。",
-        "if i had time, i would help.": "時間があれば、手伝います。",
-        "if we had left earlier, we would have arrived.": "もっと早く出発していれば、到着していたでしょう。",
-        "if she had studied, she would be calm now.": "彼女が勉強していれば、今は落ち着いているでしょう。",
-        "we will go unless it rains.": "雨が降らなければ、行きます。"
+        "if it rains, i will not go out.": "雨が降ったら、出かけません。",
+        "if i have time, i will help.": "時間があれば、手伝います。",
+        "if you are going to japan, please go to kyoto too.": "日本へ行くなら、京都も行ってください。",
+        "when spring comes, cherry blossoms bloom.": "春になると、桜が咲きます。",
+        "if there is no money, i cannot buy it.": "お金がなければ、買えません。",
+        "even if it rains, i will go.": "雨が降っても、行きます。"
       },
       "Voice & Focus": {
-        "the chef cooked dinner.": "シェフが夕食を作った。",
-        "the meal was cooked.": "食事が作られた。",
-        "that book, i finished yesterday.": "その本は、私は昨日読み終えた。",
-        "it is john who called.": "電話をかけたのはジョンです。",
-        "there is a problem.": "問題があります。"
+        "tanaka opened the door.": "田中さんがドアを開けました。",
+        "the door was opened by tanaka.": "ドアが田中さんに開けられました。",
+        "as for this book, i already read it.": "この本は、もう読みました。",
+        "only i know.": "私だけが知っています。",
+        "the one who came is tanaka.": "来たのは田中さんです。"
       },
       "Modality": {
-        "she can swim.": "彼女は泳げます。",
-        "may i sit here?": "ここに座ってもいいですか？",
-        "you must wear a seatbelt.": "シートベルトを着用しなければなりません。",
-        "you should rest.": "休んだ方がいいです。",
-        "it might rain today.": "今日は雨が降るかもしれません。",
-        "he will probably come.": "彼はおそらく来るでしょう。",
-        "could you open the window?": "窓を開けていただけますか？",
-        "would you like some tea?": "お茶はいかがですか？"
+        "i must do my homework.": "宿題をしなければならない。",
+        "you should go to bed early.": "早く寝たほうがいいです。",
+        "i can speak japanese.": "日本語を話すことができます。",
+        "it might rain tomorrow.": "明日は雨かもしれない。",
+        "you must not take photos here.": "ここで写真を撮ってはいけません。"
       },
       "Reported Speech": {
-        "she said she was ready.": "彼女は準備ができていると言った。",
-        "he asked if i was okay.": "彼は私が大丈夫かどうか尋ねた。",
-        "she asked me to wait.": "彼女は私に待つように頼んだ。",
-        "he told us to leave.": "彼は私たちに出て行くように言った。",
-        "they said they had time.": "彼らは時間があると言った。",
-        "he said he was there.": "彼はそこにいると言った。"
+        "he said, “i will go tomorrow.”": "彼は「明日行きます」と言いました。",
+        "he said that he would go tomorrow.": "彼は明日行くと言いました。",
+        "i heard that tanaka is coming tomorrow.": "田中さんは明日来るそうです。",
+        "the teacher told us to come early.": "先生は早く来るように言いました。",
+        "he asked whether someone could come.": "彼は来られるかどうか聞きました。",
+        "the manager said that he would explain later.": "部長は後で説明するとおっしゃいました。"
       },
       "Formality & Style": {
-        "could you assist me?": "手伝っていただけますか？",
-        "i can't stay long.": "長くは滞在できません。",
-        "could you close the door?": "ドアを閉めていただけますか？",
-        "please see the details below.": "以下の詳細をご覧ください。",
-        "thank you for your time.": "お時間をいただきありがとうございます。",
-        "hey, how is it going?": "やあ、元気ですか？",
-        "we need a quick answer.": "迅速な回答が必要です。"
+        "i am busy today.": "今日は忙しいです。",
+        "tanaka, do you have a moment?": "田中さん、少しよろしいですか。",
+        "could you say it one more time?": "もう一度言ってもらえますか。",
+        "excuse me, i will leave first.": "失礼します、先に帰ります。"
       },
       "Discourse & Flow": {
-        "hi everyone, anyway, that is all for today.": "皆さん、こんにちは、とにかく今日はこれで終わりです。",
-        "by the way, i have news.": "ところで、ニュースがあります。",
-        "this idea connects to the last point.": "このアイデアは前のポイントに関連しています。",
-        "first we pack, then we leave.": "まず荷物を詰めて、それから出発します。",
-        "let me put it another way.": "別の言い方をしましょう。",
-        "in short, we are ready.": "要するに、私たちは準備ができています。",
-        "it is really important.": "それは本当に重要です。",
-        "i see, please continue.": "わかりました、続けてください。",
-        "for example, call the help desk.": "例えば、ヘルプデスクに電話してください。",
-        "sorry, let me try again.": "ごめんなさい、もう一度試させてください。"
+        "i am studying japanese, but it is still difficult.": "日本語を勉強しています。でも、まだ難しいです。",
+        "because it is raining, i will not go out.": "雨が降っているので、出かけません。",
+        "first read the text, then take notes.": "まず本文を読み、次にメモを取ります。",
+        "as for this book, i have already read it.": "この本は、もう読みました。",
+        "there are various study methods, for example reading aloud.": "勉強法はいろいろあります。例えば、音読です。"
       }
     },
     "grammarExplanations": {
-      "Sentence Structure": {
-        "this card explains basic word order and how to form it clearly in real sentences.": "このカードは基本的な語順と、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains sentence parts and how to form it clearly in real sentences.": "このカードは文の構成要素と、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains adding details and how to form it clearly in real sentences.": "このカードは詳細を追加することと、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains linking clauses and how to form it clearly in real sentences.": "このカードは節をつなぐことと、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains sentence variety and how to form it clearly in real sentences.": "このカードは文の多様性と、それを実際の文で明確に形成する方法を説明しています。"
-      },
-      "Verbs": {
-        "this card explains action verbs and how to form it clearly in real sentences.": "このカードは動作動詞と、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains state verbs and how to form it clearly in real sentences.": "このカードは状態動詞と、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains linking verbs and how to form it clearly in real sentences.": "このカードは連結動詞と、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains verb patterns and how to form it clearly in real sentences.": "このカードは動詞のパターンと、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains verb combinations and how to form it clearly in real sentences.": "このカードは動詞の組み合わせと、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains phrasal verbs and how to form it clearly in real sentences.": "このカードは句動詞と、それを実際の文で明確に形成する方法を説明しています。"
-      },
-      "Tenses & Aspect": {
-        "this card explains present simple and how to form it clearly in real sentences.": "このカードは現在形とそれを実際の文で明確に形成する方法を説明しています。",
-        "this card explains present continuous and how to form it clearly in real sentences.": "このカードは現在進行形とそれを実際の文で明確に形成する方法を説明しています。",
-        "this card explains past simple and how to form it clearly in real sentences.": "このカードは過去形とそれを実際の文で明確に形成する方法を説明しています。",
-        "this card explains past continuous and how to form it clearly in real sentences.": "このカードは過去進行形とそれを実際の文で明確に形成する方法を説明しています。",
-        "this card explains present perfect and how to form it clearly in real sentences.": "このカードは現在完了形とそれを実際の文で明確に形成する方法を説明しています。",
-        "this card explains past perfect and how to form it clearly in real sentences.": "このカードは過去完了形とそれを実際の文で明確に形成する方法を説明しています。",
-        "this card explains future forms and how to form it clearly in real sentences.": "このカードは未来形とそれを実際の文で明確に形成する方法を説明しています。",
-        "this card explains future continuous and how to form it clearly in real sentences.": "このカードは未来進行形とそれを実際の文で明確に形成する方法を説明しています。",
-        "this card explains future perfect and how to form it clearly in real sentences.": "このカードは未来完了形とそれを実際の文で明確に形成する方法を説明しています。",
-        "this card explains aspect contrasts and how to form it clearly in real sentences.": "このカードはアスペクトの対比とそれを実際の文で明確に形成する方法を説明しています。"
-      },
-      "Nouns & Articles": {
-        "this card explains countable nouns and how to form it clearly in real sentences.": "このカードは可算名詞と、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains uncountable nouns and how to form it clearly in real sentences.": "このカードは不可算名詞と、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains articles and how to form it clearly in real sentences.": "このカードは冠詞と、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains plural forms and how to form it clearly in real sentences.": "このカードは複数形と、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains possessive nouns and how to form it clearly in real sentences.": "このカードは所有格名詞と、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains noun phrases and how to form it clearly in real sentences.": "このカードは名詞句と、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains quantifiers and how to form it clearly in real sentences.": "このカードは量詞と、それを実際の文で明確に形成する方法を説明しています。"
-      },
-      "Pronouns & Reference": {
-        "this card explains subject pronouns and how to form it clearly in real sentences.": "このカードは主語代名詞とそれを実際の文で明確に形成する方法を説明しています。",
-        "this card explains object pronouns and how to form it clearly in real sentences.": "このカードは目的語代名詞とそれを実際の文で明確に形成する方法を説明しています。",
-        "this card explains possessive forms and how to form it clearly in real sentences.": "このカードは所有格の形とそれを実際の文で明確に形成する方法を説明しています。",
-        "this card explains reflexive pronouns and how to form it clearly in real sentences.": "このカードは再帰代名詞とそれを実際の文で明確に形成する方法を説明しています。",
-        "this card explains demonstratives and how to form it clearly in real sentences.": "このカードは指示詞とそれを実際の文で明確に形成する方法を説明しています。",
-        "this card explains relative reference and how to form it clearly in real sentences.": "このカードは関係参照とそれを実際の文で明確に形成する方法を説明しています。",
-        "this card explains indefinite reference and how to form it clearly in real sentences.": "このカードは不定参照とそれを実際の文で明確に形成する方法を説明しています。"
-      },
-      "Modifiers": {
-        "this card explains adjectives basics and how to form it clearly in real sentences.": "このカードは形容詞の基本と、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains adjective order and how to form it clearly in real sentences.": "このカードは形容詞の順序と、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains comparatives and how to form it clearly in real sentences.": "このカードは比較級について説明し、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains superlatives and how to form it clearly in real sentences.": "このカードは最上級について説明し、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains adverbs basics and how to form it clearly in real sentences.": "このカードは副詞の基本と、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains frequency adverbs and how to form it clearly in real sentences.": "このカードは頻度副詞について説明し、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains time and place adverbs and how to form it clearly in real sentences.": "このカードは時間と場所の副詞について説明し、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains degree words and how to form it clearly in real sentences.": "このカードは程度を表す言葉について説明し、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains participles and how to form it clearly in real sentences.": "このカードは分詞について説明し、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains modifier stacking and how to form it clearly in real sentences.": "このカードは修飾語の重ね方について説明し、それを実際の文で明確に形成する方法を説明しています。"
-      },
-      "Questions": {
-        "this card explains yes no questions and how to form it clearly in real sentences.": "このカードは、イエス・ノー質問とそれを実際の文で明確に形成する方法を説明しています。",
-        "this card explains wh questions and how to form it clearly in real sentences.": "このカードは、WH質問とそれを実際の文で明確に形成する方法を説明しています。",
-        "this card explains questions with be and how to form it clearly in real sentences.": "このカードは、beを使った質問とそれを実際の文で明確に形成する方法を説明しています。",
-        "this card explains questions with do and how to form it clearly in real sentences.": "このカードは、doを使った質問とそれを実際の文で明確に形成する方法を説明しています。",
-        "this card explains questions with modals and how to form it clearly in real sentences.": "このカードは、モーダルを使った質問とそれを実際の文で明確に形成する方法を説明しています。",
-        "this card explains tag questions and how to form it clearly in real sentences.": "このカードは、タグ質問とそれを実際の文で明確に形成する方法を説明しています。",
-        "this card explains indirect questions and how to form it clearly in real sentences.": "このカードは、間接質問とそれを実際の文で明確に形成する方法を説明しています。"
-      },
-      "Negation": {
-        "this card explains not with be and how to form it clearly in real sentences.": "このカードは「be」を使った否定の説明と、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains not with do and how to form it clearly in real sentences.": "このカードは「do」を使った否定の説明と、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains negative short forms and how to form it clearly in real sentences.": "このカードは否定の短縮形の説明と、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains negative words and how to form it clearly in real sentences.": "このカードは否定語の説明と、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains negative questions and how to form it clearly in real sentences.": "このカードは否定疑問文の説明と、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains limited negatives and how to form it clearly in real sentences.": "このカードは限定的な否定の説明と、それを実際の文で明確に形成する方法を説明しています。"
-      },
-      "Connections": {
-        "this card explains basic connectors and how to form it clearly in real sentences.": "このカードは基本的な接続詞と、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains reason and result and how to form it clearly in real sentences.": "このカードは理由と結果について、そしてそれを実際の文で明確に形成する方法を説明しています。",
-        "this card explains contrast and choice and how to form it clearly in real sentences.": "このカードは対比と選択について、そしてそれを実際の文で明確に形成する方法を説明しています。",
-        "this card explains time connectors and how to form it clearly in real sentences.": "このカードは時間接続詞について、そしてそれを実際の文で明確に形成する方法を説明しています。",
-        "this card explains comparison links and how to form it clearly in real sentences.": "このカードは比較のリンクについて、そしてそれを実際の文で明確に形成する方法を説明しています。",
-        "this card explains adding ideas and how to form it clearly in real sentences.": "このカードはアイデアの追加について、そしてそれを実際の文で明確に形成する方法を説明しています。",
-        "this card explains ordering ideas and how to form it clearly in real sentences.": "このカードはアイデアの順序について、そしてそれを実際の文で明確に形成する方法を説明しています。"
-      },
-      "Conditions": {
-        "this card explains real conditions and how to form it clearly in real sentences.": "このカードは現実の条件と、それを明確に実際の文で形成する方法を説明しています。",
-        "this card explains future conditions and how to form it clearly in real sentences.": "このカードは未来の条件と、それを明確に実際の文で形成する方法を説明しています。",
-        "this card explains unreal present and how to form it clearly in real sentences.": "このカードは非現実的な現在の条件と、それを明確に実際の文で形成する方法を説明しています。",
-        "this card explains unreal past and how to form it clearly in real sentences.": "このカードは非現実的な過去の条件と、それを明確に実際の文で形成する方法を説明しています。",
-        "this card explains mixed conditions and how to form it clearly in real sentences.": "このカードは混合条件と、それを明確に実際の文で形成する方法を説明しています。",
-        "this card explains unless and otherwise and how to form it clearly in real sentences.": "このカードは「unless」と「otherwise」について、そしてそれを明確に実際の文で形成する方法を説明しています。"
-      },
-      "Voice & Focus": {
-        "this card explains active voice and how to form it clearly in real sentences.": "このカードは能動態と、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains passive voice and how to form it clearly in real sentences.": "このカードは受動態と、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains focus shifts and how to form it clearly in real sentences.": "このカードは焦点の移動と、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains cleft sentences and how to form it clearly in real sentences.": "このカードは分裂文と、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains there and it subjects and how to form it clearly in real sentences.": "このカードは「there」と「it」の主語と、それを実際の文で明確に形成する方法を説明しています。"
-      },
-      "Modality": {
-        "this card explains ability and how to form it clearly in real sentences.": "このカードは能力について説明し、実際の文で明確に形成する方法を示しています。",
-        "this card explains permission and how to form it clearly in real sentences.": "このカードは許可について説明し、実際の文で明確に形成する方法を示しています。",
-        "this card explains obligation and how to form it clearly in real sentences.": "このカードは義務について説明し、実際の文で明確に形成する方法を示しています。",
-        "this card explains advice and how to form it clearly in real sentences.": "このカードはアドバイスについて説明し、実際の文で明確に形成する方法を示しています。",
-        "this card explains possibility and how to form it clearly in real sentences.": "このカードは可能性について説明し、実際の文で明確に形成する方法を示しています。",
-        "this card explains probability and how to form it clearly in real sentences.": "このカードは確率について説明し、実際の文で明確に形成する方法を示しています。",
-        "this card explains polite requests and how to form it clearly in real sentences.": "このカードは丁寧なリクエストについて説明し、実際の文で明確に形成する方法を示しています。",
-        "this card explains offers and invitations and how to form it clearly in real sentences.": "このカードは提案と招待について説明し、実際の文で明確に形成する方法を示しています。"
-      },
-      "Reported Speech": {
-        "this card explains reporting statements and how to form it clearly in real sentences.": "このカードは、報告文の説明と、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains reporting questions and how to form it clearly in real sentences.": "このカードは、報告質問の説明と、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains reporting requests and how to form it clearly in real sentences.": "このカードは、報告依頼の説明と、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains reporting commands and how to form it clearly in real sentences.": "このカードは、報告命令の説明と、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains backshift basics and how to form it clearly in real sentences.": "このカードは、時制の後退の基本と、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains time place changes and how to form it clearly in real sentences.": "このカードは、時間と場所の変更についての説明と、それを実際の文で明確に形成する方法を説明しています。"
-      },
-      "Formality & Style": {
-        "this card explains formal vs informal and how to form it clearly in real sentences.": "このカードはフォーマルとインフォーマルの違いと、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains contractions and how to form it clearly in real sentences.": "このカードは短縮形についてと、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains polite softening and how to form it clearly in real sentences.": "このカードは丁寧な和らげ方についてと、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains spoken vs written and how to form it clearly in real sentences.": "このカードは口語と文語の違いと、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains professional style and how to form it clearly in real sentences.": "このカードはプロフェッショナルスタイルについてと、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains casual style and how to form it clearly in real sentences.": "このカードはカジュアルスタイルについてと、それを実際の文で明確に形成する方法を説明しています。",
-        "this card explains clarity and brevity and how to form it clearly in real sentences.": "このカードは明確さと簡潔さについてと、それを実際の文で明確に形成する方法を説明しています。"
-      },
-      "Discourse & Flow": {
-        "this card explains opening and closing and how to form it clearly in real sentences.": "このカードは、オープニングとクロージングについて、実際の文で明確に形成する方法を説明しています。",
-        "this card explains topic shifts and how to form it clearly in real sentences.": "このカードは、トピックのシフトについて、実際の文で明確に形成する方法を説明しています。",
-        "this card explains cohesion tools and how to form it clearly in real sentences.": "このカードは、コヒージョンツールについて、実際の文で明確に形成する方法を説明しています。",
-        "this card explains sequencing ideas and how to form it clearly in real sentences.": "このカードは、アイデアのシーケンシングについて、実際の文で明確に形成する方法を説明しています。",
-        "this card explains clarification moves and how to form it clearly in real sentences.": "このカードは、明確化の手法について、実際の文で明確に形成する方法を説明しています。",
-        "this card explains summaries and how to form it clearly in real sentences.": "このカードは、要約について、実際の文で明確に形成する方法を説明しています。",
-        "this card explains emphasis and repetition and how to form it clearly in real sentences.": "このカードは、強調と繰り返しについて、実際の文で明確に形成する方法を説明しています。",
-        "this card explains conversation flow and how to form it clearly in real sentences.": "このカードは、会話の流れについて、実際の文で明確に形成する方法を説明しています。",
-        "this card explains giving examples and how to form it clearly in real sentences.": "このカードは、例を挙げることについて、実際の文で明確に形成する方法を説明しています。",
-        "this card explains repair and correction and how to form it clearly in real sentences.": "このカードは、修正と訂正について、実際の文で明確に形成する方法を説明しています。"
-      }
+      "Sentence Structure": {},
+      "Verbs": {},
+      "Tenses & Aspect": {},
+      "Nouns & Articles": {},
+      "Pronouns & Reference": {},
+      "Modifiers": {},
+      "Questions": {},
+      "Negation": {},
+      "Connections": {},
+      "Conditions": {},
+      "Voice & Focus": {},
+      "Modality": {},
+      "Reported Speech": {},
+      "Formality & Style": {},
+      "Discourse & Flow": {}
     },
     "grammarPoints": {
-      "Sentence Structure": {
-        "basic word order in simple statements": "文の基本語順",
-        "subject usually comes before the verb": "動詞の前に主語",
-        "if the verb takes an object, put it after the verb": "動詞の後に目的語",
-        "a complete clause needs a subject": "",
-        "a complete clause needs a main verb": "",
-        "an object or complement can follow the verb": "",
-        "add a time phrase after the main clause (for example, at noon or yesterday)": "文の最後に時間",
-        "add a place phrase after the time phrase (for example, at the station or in the kitchen)": "動詞の後に場所",
-        "main clause gives the core message": "主節のアイデア",
-        "use a connector to link clauses (for example, because or when)": "理由節の追加",
-        "the linked clause needs its own subject and verb": "時間節の追加",
-        "use short sentences for key points": "インパクトのための短い文",
-        "use longer sentences for supporting detail": "詳細のための長い文",
-        "separate independent clauses with correct punctuation": "ランオン文を避ける"
-      },
-      "Verbs": {
-        "action verbs show what the subject does": "移動のための動作動詞",
-        "in simple statements, place the action verb after the subject": "作業のための動作動詞",
-        "if there is an object, place it after the action verb": "変化のための動作動詞",
-        "state verbs describe a condition, thought, feeling, or possession": "感情のための状態動詞",
-        "in simple statements, place the state verb after the subject": "思考のための状態動詞",
-        "state verbs are usually not used in continuous forms": "所有のための状態動詞",
-        "linking verbs connect the subject to a complement": "連結動詞としてのbe",
-        "place the linking verb after the subject in a simple statement": "感じると見えるリンク",
-        "use an adjective or noun as the complement after the linking verb": "なると留まるリンク",
-        "some verbs are followed by a preposition phrase": "",
-        "after the verb and object, add the required preposition": "",
-        "complete the preposition with a noun phrase": "",
-        "one common verb combination is verb + to-infinitive": "",
-        "use to + base verb immediately after the main verb": "",
-        "do not omit to in this pattern": "",
-        "verb plus particle": "動詞プラス粒子",
-        "separable phrasal verbs": "分離可能な句動詞",
-        "meaning shift with particles": "粒子による意味の変化"
-      },
-      "Tenses & Aspect": {
-        "present simple for habits": "習慣のための現在形",
-        "present simple for facts": "事実のための現在形",
-        "present simple for schedules": "スケジュールのための現在形",
-        "present continuous for now": "今のための現在進行形",
-        "present continuous for temporary actions": "一時的な行動のための現在進行形",
-        "present continuous for near plans": "近い計画のための現在進行形",
-        "past simple for finished actions": "完了した行動のための過去形",
-        "past simple for past time words": "過去の時間を示す言葉のための過去形",
-        "past simple for sequences": "順序のための過去形",
-        "past continuous for background": "背景のための過去進行形",
-        "past continuous with interruption": "中断を伴う過去進行形",
-        "past continuous for two actions": "二つの行動のための過去進行形",
-        "present perfect for experience": "経験のための現在完了形",
-        "present perfect for recent results": "最近の結果のための現在完了形",
-        "present perfect with since and for": "sinceとforを用いた現在完了形",
-        "past perfect for earlier past": "より早い過去のための過去完了形",
-        "past perfect for cause in past": "過去の原因のための過去完了形",
-        "past perfect with before": "beforeを用いた過去完了形",
-        "use will + base verb for one future form": "",
-        "use be going to + base verb for another future form": "",
-        "use present continuous + future time for arranged plans": "",
-        "future continuous for progress": "進行中のための未来進行形",
-        "future continuous for background": "背景のための未来進行形",
-        "future continuous for polite inquiry": "丁寧な問い合わせのための未来進行形",
-        "future perfect for deadlines": "締切のための未来完了形",
-        "future perfect with by time": "by timeを用いた未来完了形",
-        "future perfect for completion": "完了のための未来完了形",
-        "simple vs continuous contrast": "単純形と進行形の対比",
-        "perfect vs simple contrast": "完了形と単純形の対比",
-        "duration focus contrast": "期間の焦点の対比"
-      },
-      "Nouns & Articles": {
-        "countable nouns can be singular or plural": "",
-        "use a or an before singular countable nouns": "",
-        "use a number with plural countable nouns": "",
-        "uncountable nouns usually do not have plural forms": "",
-        "use some with uncountable nouns": "",
-        "use a piece of for countable units": "",
-        "use a or an for first mention of a singular countable noun": "",
-        "use the when the noun is specific or already known": "",
-        "place the article directly before the noun": "",
-        "use a plural noun for more than one": "",
-        "many plurals add -s or -es": "",
-        "some plurals are irregular (child -> children)": "",
-        "add apostrophe + s to a singular noun to show ownership": "",
-        "place the possessive noun before the thing owned": "",
-        "keep the apostrophe in the correct position": "",
-        "a noun phrase can include determiner + noun": "",
-        "an adjective can appear before the noun": "",
-        "keep the order determiner + adjective + noun": "",
-        "use many with plural countable nouns": "",
-        "use much with uncountable nouns": "",
-        "choose the quantifier by noun type": ""
-      },
-      "Pronouns & Reference": {
-        "subject pronouns replace noun subjects (i, you, he, she, it, we, they)": "",
-        "use a subject pronoun before the main verb in statements": "",
-        "choose the pronoun that matches number and person": "",
-        "object pronouns replace noun objects (me, you, him, her, it, us, them)": "",
-        "place object pronouns after the main verb": "",
-        "use object forms, not subject forms, in object position": "",
-        "use possessive adjectives before nouns (my, your, his, her, our, their)": "",
-        "use possessive pronouns without a noun (mine, yours, his, hers, ours, theirs)": "",
-        "do not add apostrophes to possessive pronouns": "",
-        "use reflexive pronouns when subject and object are the same": "",
-        "singular forms: myself, yourself, himself, herself, itself": "",
-        "plural forms: ourselves, yourselves, themselves": "",
-        "use this and these for things near the speaker": "",
-        "use that and those for things farther away": "",
-        "use this or that with singular nouns and these or those with plural nouns": "",
-        "use who for people in relative clauses": "",
-        "use which for things in relative clauses": "",
-        "use that for people or things in defining relative clauses": "",
-        "use someone and something in affirmative statements": "",
-        "use anyone and anything in negative statements and questions": "",
-        "use everyone and everything for complete groups": ""
-      },
-      "Modifiers": {
-        "adjectives describe nouns": "",
-        "adjectives can come before nouns": "",
-        "adjectives can come after linking verbs like be": "",
-        "when several adjectives come before a noun, use a common order": "",
-        "opinion usually comes before size": "",
-        "size usually comes before color": "",
-        "use comparatives to compare two things": "",
-        "many short adjectives take -er": "",
-        "many longer adjectives use more": "",
-        "use superlatives to compare one item with a group": "",
-        "many short adjectives take -est and longer adjectives use most": "",
-        "use the before superlative adjectives": "",
-        "adverbs can modify verbs": "",
-        "many adverbs of manner end in -ly": "",
-        "adverbs of manner usually come after the verb or object": "",
-        "common frequency adverbs include always, usually, often, sometimes, and never": "",
-        "place frequency adverbs before main verbs": "",
-        "place frequency adverbs after be": "",
-        "place adverbs answer where and time adverbs answer when": "",
-        "in neutral order, place usually comes before time": "",
-        "both often appear near the end of the clause": "",
-        "degree words modify adjectives or adverbs": "",
-        "use very to strengthen adjectives or adverbs": "",
-        "use enough after adjectives and adverbs": "",
-        "use -ing adjectives for things that cause a feeling": "",
-        "use -ed adjectives for how people feel": "",
-        "do not mix -ing and -ed meanings": "",
-        "when multiple modifiers appear, keep a clear order": "",
-        "put degree words before adjectives": "",
-        "keep manner adverbs in a natural position in the clause": ""
-      },
-      "Questions": {
-        "use do, does, or did before the subject": "",
-        "use the base verb after the subject": "",
-        "end yes-no questions with a question mark": "",
-        "start with a wh word such as who, what, where, when, why, or how": "",
-        "place the auxiliary before the subject": "",
-        "place be before the subject": "",
-        "do not use do or does with be questions": "",
-        "place the complement after the subject": "",
-        "keep the main verb in base form after do, does, or did": "",
-        "use did for past-time yes-no questions": "",
-        "place the modal before the subject": "",
-        "do not use do or does with modal questions": "",
-        "add a short tag after a statement": "",
-        "use a negative tag after a positive statement": "",
-        "use a positive tag after a negative statement": "",
-        "start with an introductory phrase such as could you tell me": "",
-        "use statement word order inside the embedded question": "",
-        "do not invert subject and verb inside the embedded question": ""
-      },
-      "Negation": {
-        "subject + be + not + complement": "主語 + be動詞 + not + 補語",
-        "subject + aux + not + base verb": "主語 + 助動詞 + not + 基本動詞",
-        "negative word + noun": "否定語 + 名詞",
-        "aux + not + subject + base verb + object": "助動詞 + not + 主語 + 基本動詞 + 目的語",
-        "subject + negative adverb + verb": "主語 + 否定副詞 + 動詞"
-      },
-      "Connections": {
-        "clause 1 + connector + clause 2": "節1 + 接続詞 + 節2",
-        "reason clause + connector + result clause": "理由節 + 接続詞 + 結果節",
-        "clause 1 + contrast connector + clause 2": "節1 + 対比接続詞 + 節2",
-        "main clause + time connector + clause": "主節 + 時間接続詞 + 節",
-        "subject + verb + comparison + object": "主語 + 動詞 + 比較 + 目的語",
-        "addition marker + clause": "追加マーカー + 節",
-        "sequence + clause": "順序 + 節"
-      },
-      "Conditions": {
-        "if clause + result clause": "もし節 + 結果節",
-        "if clause + would clause": "もし節 + 〜だろう節",
-        "if clause + would have clause": "もし節 + 〜だっただろう節",
-        "if clause (past perfect) + present result (would + base verb)": "もし節（過去完了） + 現在の結果（〜だろう + 基本動詞）",
-        "result clause + unless clause": "結果節 + 〜でない限り節"
-      },
-      "Voice & Focus": {
-        "doer + action verb + object": "行為者 + 動詞 + 目的語",
-        "object + be verb + past participle": "目的語 + です + 過去分詞",
-        "focus phrase + subject + verb": "焦点フレーズ + 主語 + 動詞",
-        "it subject + focus phrase + clause": "それ + 焦点フレーズ + 節",
-        "there subject + be verb + noun": "そこ + です + 名詞"
-      },
-      "Modality": {
-        "subject + modal + base verb": "主語 + 助動詞 + 基本動詞",
-        "modal + subject + base verb": "助動詞 + 主語 + 基本動詞",
-        "modal + base verb": "助動詞 + 基本動詞",
-        "subject + modal + probability word + base verb": "主語 + 助動詞 + 確率の言葉 + 基本動詞",
-        "modal + subject + base verb + object": "助動詞 + 主語 + 基本動詞 + 目的語",
-        "modal phrase + object": "助動詞句 + 目的語"
-      },
-      "Reported Speech": {
-        "say with (that) clause": "（that）節を使って言う",
-        "that often omitted": "しばしば省略される",
-        "reporting verb + clause": "報告動詞 + 節",
-        "ask with if": "ifを使って尋ねる",
-        "ask with question word": "疑問詞を使って尋ねる",
-        "no inversion": "倒置なし",
-        "ask to do": "するように頼む",
-        "tell to do requests": "するように頼む",
-        "polite reporting": "丁寧な報告",
-        "tell to do commands": "命令として伝える",
-        "order to do": "するように命じる",
-        "instruction shift": "指示の転換",
-        "present to past shift": "現在から過去への転換",
-        "will to would shift": "willからwouldへの転換",
-        "can to could shift": "canからcouldへの転換",
-        "now to then": "今からその時へ",
-        "here to there": "ここからあそこへ",
-        "today to that day": "今日からその日へ"
-      },
-      "Formality & Style": {
-        "formal word choice": "正式な言葉の選択",
-        "informal word choice": "非公式な言葉の選択",
-        "match audience tone": "聴衆のトーンに合わせる",
-        "short forms in speech": "スピーチでの短縮形",
-        "avoid in formal writing": "正式な文章では避ける",
-        "clarity choices": "明確さの選択",
-        "please for politeness": "丁寧さのための「お願いします」",
-        "soft request forms": "柔らかい依頼の形",
-        "indirect language": "間接的な言語",
-        "spoken simplicity": "話し言葉のシンプルさ",
-        "written clarity": "書き言葉の明確さ",
-        "sentence length control": "文の長さのコントロール",
-        "clear purpose first": "明確な目的を最初に",
-        "neutral tone": "中立的なトーン",
-        "polite closing": "丁寧な締めくくり",
-        "friendly tone": "友好的なトーン",
-        "short phrases": "短いフレーズ",
-        "informal openings": "非公式な始まり",
-        "short sentences": "短い文",
-        "avoid extra words": "余分な言葉を避ける",
-        "main point first": "主なポイントを最初に"
-      },
-      "Discourse & Flow": {
-        "start a talk": "話を始める",
-        "end a talk": "話を終える",
-        "closing signal words": "締めの合図の言葉",
-        "change topic smoothly": "スムーズに話題を変える",
-        "return to topic": "話題に戻る",
-        "signal the shift": "移行を示す",
-        "reference words": "参照語",
-        "linking phrases": "つなぎのフレーズ",
-        "topic tracking": "話題の追跡",
-        "first next last": "最初 次 最後",
-        "sequence signal words": "順序を示す言葉",
-        "clear sequence": "明確な順序",
-        "rephrase key point": "重要なポイントを言い換える",
-        "ask for clarity": "明確さを求める",
-        "confirm meaning": "意味を確認する",
-        "in short": "要するに",
-        "to sum up": "まとめると",
-        "main point recap": "主なポイントの再確認",
-        "stress key idea": "重要なアイデアを強調する",
-        "repeat for focus": "焦点を合わせるために繰り返す",
-        "signal emphasis": "強調を示す",
-        "turn taking": "発言の交代",
-        "listening signals": "聞き手の合図",
-        "smooth exchange": "スムーズなやり取り",
-        "for example": "例えば",
-        "for instance": "例として",
-        "such as": "など",
-        "self correction": "自己修正",
-        "clarify quickly": "迅速に明確にする",
-        "restart phrasing": "フレーズを再開する"
-      }
+      "Sentence Structure": {},
+      "Verbs": {},
+      "Tenses & Aspect": {},
+      "Nouns & Articles": {},
+      "Pronouns & Reference": {},
+      "Modifiers": {},
+      "Questions": {},
+      "Negation": {},
+      "Connections": {},
+      "Conditions": {},
+      "Voice & Focus": {},
+      "Modality": {},
+      "Reported Speech": {},
+      "Formality & Style": {},
+      "Discourse & Flow": {}
     },
     "grammarMistakeWrong": {
-      "Sentence Structure": {
-        "reads she a book.": "彼女は本を読みます。",
-        "they named captain her.": "",
-        "she met him at noon the station.": "",
-        "i stayed home because.": "私は家にいました、なぜなら。",
-        "we finished early we went home after class because we were tired.": ""
-      },
-      "Verbs": {
-        "they the boxes carry.": "",
-        "she is feeling tired.": "",
-        "the room feels quietly.": "",
-        "he placed the book on.": "彼は本を置きました。",
-        "we decided stay.": "",
-        "he turned the light on off.": "彼はライトを消しました。"
-      },
-      "Tenses & Aspect": {
-        "she work every day.": "",
-        "i am wait outside.": "",
-        "they visit paris last year.": "",
-        "she was cook when i called.": "彼女は私が電話したとき料理をしていました。",
-        "he has live here for years.": "",
-        "he had leave before i arrived.": "",
-        "she will going to call tomorrow.": "",
-        "she will be work at 8.": "",
-        "she will have finish by noon.": "",
-        "i have work here for years.": ""
-      },
-      "Nouns & Articles": {
-        "i have coin and two apples.": "",
-        "i need two breads.": "私はパンを二つ必要です。",
-        "i saw movie.": "私は映画を見ました。",
-        "three child play.": "三人の子供が遊んでいます。",
-        "the teachers book is new.": "その教師の本は新しいです。",
-        "she bought the dress red.": "",
-        "how much apples?": "リンゴはいくらですか？"
-      },
-      "Pronouns & Reference": {
-        "her is here.": "",
-        "he saw i.": "",
-        "this book is her's.": "",
-        "i hurt me.": "",
-        "this books are mine.": "",
-        "the man which called me left.": "",
-        "i saw anyone at the station.": ""
-      },
-      "Modifiers": {
-        "she bought a red small bag.": "",
-        "this is more cheap.": "",
-        "he is the most fast.": "",
-        "she speaks slow.": "",
-        "she goes always early.": "",
-        "he arrived yesterday here.": "",
-        "it is enough hot.": "",
-        "i am boring.": "",
-        "she answered the difficult very question quickly.": "",
-        "the quiet house is noisily.": ""
-      },
-      "Questions": {
-        "you like coffee?": "コーヒーが好きですか？",
-        "where you live?": "どこに住んでいますか？",
-        "the store is open?": "",
-        "did you called her?": "",
-        "you can help me?": "手伝ってくれますか？",
-        "you are ready, are you?": "",
-        "could you tell me where is it?": ""
-      },
-      "Negation": {
-        "he not happy.": "彼は幸せではない。",
-        "she not like tea.": "彼女はお茶が好きではない。",
-        "he does notn't know.": "彼は知らない。",
-        "i don't have nothing.": "私は何も持っていない。",
-        "you don't like it?": "あなたはそれが好きではないのですか？",
-        "she hardly doesn't sleep.": "彼女はほとんど眠らない。"
-      },
-      "Connections": {
-        "i went and but stayed.": "私は行ったが、留まった。",
-        "i was late because the bus.": "私はバスのせいで遅れた。",
-        "i like tea but also or coffee.": "私は紅茶が好きだが、コーヒーも好きだ。",
-        "i left before i will eat.": "私は食べる前に出た。",
-        "she is like taller me.": "彼女は私より背が高い。",
-        "he also went but too.": "彼も行ったが、遅れた。",
-        "finally, first we meet.": "最後に、最初に会おう。"
-      },
-      "Conditions": {
-        "if you will come, we meet.": "もしあなたが来るなら、私たちは会います。",
-        "if it will rain, we will stay.": "もし雨が降るなら、私たちは留まります。",
-        "if i will have time, i would go.": "もし時間があれば、私は行くだろう。",
-        "if i knew, i would have told.": "もし私が知っていたら、私は言っただろう。",
-        "if i studied, i would have the job now.": "もし私が勉強していたら、今その仕事を持っていただろう。",
-        "we will go unless it will rain.": "雨が降らない限り、私たちは行きます。"
-      },
-      "Voice & Focus": {
-        "the cake baked my mom.": "ケーキは母が焼いた。",
-        "the report finished yesterday.": "報告書は昨日終わった。",
-        "this book i bought yesterday it.": "この本は昨日買ったものです。",
-        "was it she called.": "彼女が電話したのですか。",
-        "is a problem in the room.": "部屋に問題があります。"
-      },
-      "Modality": {
-        "she can to swim.": "彼女は泳げる。",
-        "may i to sit here?": "ここに座ってもいいですか？",
-        "you must to wear a badge.": "バッジを着用しなければなりません。",
-        "you should to rest.": "休むべきです。",
-        "it might to rain.": "雨が降るかもしれません。",
-        "he probably to arrive late.": "彼はおそらく遅れて到着するでしょう。",
-        "could you opens the door?": "ドアを開けていただけますか？",
-        "do you like to come?": "来るのは好きですか？"
-      },
-      "Reported Speech": {
-        "she said me she is tired.": "彼女は私に疲れていると言った。",
-        "he asked where is the station.": "彼は駅はどこかと尋ねた。",
-        "she asked me can i help.": "彼女は私に手伝えるかと尋ねた。",
-        "he told me to went.": "彼は私に行くように言った。",
-        "she said she is ready.": "彼女は準備ができていると言った。",
-        "he said he will come here today.": "彼は今日ここに来ると言った。"
-      },
-      "Formality & Style": {
-        "hey, give me the report.": "レポートをください。",
-        "i am late, do not wait.": "遅れていますので、お待ちしないでください。",
-        "send me the file now.": "今すぐファイルを送ってください。",
-        "in formal writing: i arrived lol.": "正式な文書では：到着しました（笑）。",
-        "hey, i need this asap.": "これをできるだけ早く必要です。",
-        "dear sir or madam, what's up?": "拝啓、何かご用でしょうか？",
-        "due to the fact that it is raining, we will not go.": "雨が降っているため、行きません。"
-      },
-      "Discourse & Flow": {
-        "i want to talk. goodbye.": "話したいです。さようなら。",
-        "by the way because schedule.": "ところで、スケジュールのためです。",
-        "i bought a book. book is new.": "本を買いました。本は新しいです。",
-        "first i left, then i woke up.": "最初に出かけて、その後目が覚めました。",
-        "what you said?": "あなたが言ったことは何ですか？",
-        "in short, many things.": "要するに、いろいろなことです。",
-        "i do want to go not.": "行きたくないです。",
-        "me too. and you is?": "私も。あなたはどうですか？",
-        "for example, it is.": "例えば、それです。",
-        "i mean, i am go.": "つまり、私は行きます。"
-      }
+      "Sentence Structure": {},
+      "Verbs": {},
+      "Tenses & Aspect": {},
+      "Nouns & Articles": {},
+      "Pronouns & Reference": {},
+      "Modifiers": {},
+      "Questions": {},
+      "Negation": {},
+      "Connections": {},
+      "Conditions": {},
+      "Voice & Focus": {},
+      "Modality": {},
+      "Reported Speech": {},
+      "Formality & Style": {},
+      "Discourse & Flow": {}
     },
     "grammarMistakeFix": {
-      "Sentence Structure": {
-        "she reads a book.": "彼女は本を読みます。",
-        "they named her captain.": "",
-        "she met him at noon at the station.": "彼女は正午に駅で彼に会いました。",
-        "i stayed home because it rained.": "雨が降ったので、私は家にいました。",
-        "we finished early, and we went home after class because we were tired.": ""
-      },
-      "Verbs": {
-        "they carry the boxes.": "",
-        "she feels tired.": "",
-        "the room feels quiet.": "",
-        "he placed the book on the table.": "彼は本をテーブルの上に置きました。",
-        "we decided to stay.": "",
-        "he turned off the light.": "彼は電気を消しました。"
-      },
-      "Tenses & Aspect": {
-        "she works every day.": "彼女は毎日働いています。",
-        "i am waiting outside.": "",
-        "they visited paris last year.": "",
-        "she was cooking when i called.": "私が電話したとき、彼女は料理をしていました。",
-        "he has lived here for years.": "",
-        "he had left before i arrived.": "",
-        "she is going to call tomorrow.": "",
-        "she will be working at 8.": "彼女は8時に働いているでしょう。",
-        "she will have finished by noon.": "彼女は正午までに終わっているでしょう。",
-        "i have worked here for years.": ""
-      },
-      "Nouns & Articles": {
-        "i have a coin and two apples.": "",
-        "i need two pieces of bread.": "",
-        "i saw a movie.": "私は映画を見ました。",
-        "three children play.": "三人の子供が遊んでいます。",
-        "the teacher's book is new.": "先生の本は新しいです。",
-        "she bought the red dress.": "",
-        "how many apples?": "いくつのリンゴがありますか？"
-      },
-      "Pronouns & Reference": {
-        "she is here.": "",
-        "he saw me.": "",
-        "this book is hers.": "",
-        "i hurt myself.": "",
-        "these books are mine.": "",
-        "the man who called me left.": "",
-        "i saw someone at the station.": ""
-      },
-      "Modifiers": {
-        "she bought a small red bag.": "",
-        "this is cheaper.": "",
-        "he is the fastest.": "",
-        "she speaks slowly.": "",
-        "she always goes early.": "",
-        "he arrived here yesterday.": "",
-        "it is hot enough.": "",
-        "i am bored.": "",
-        "she answered the very difficult question quickly.": "",
-        "the quiet house is noisy.": ""
-      },
-      "Questions": {
-        "do you like coffee?": "コーヒーは好きですか？",
-        "where do you live?": "どこに住んでいますか？",
-        "is the store open?": "",
-        "did you call her?": "",
-        "can you help me?": "手伝ってもらえますか？",
-        "you are ready, aren't you?": "",
-        "could you tell me where it is?": ""
-      },
-      "Negation": {
-        "he is not happy.": "彼は幸せではありません。",
-        "she does not like tea.": "彼女はお茶が好きではありません。",
-        "he doesn't know.": "彼は知りません。",
-        "i don't have anything.": "私は何も持っていません。",
-        "don't you like it?": "それが好きではないのですか？",
-        "she hardly sleeps.": "彼女はほとんど眠りません。"
-      },
-      "Connections": {
-        "i went and stayed.": "私は行って滞在しました。",
-        "i was late because the bus was late.": "バスが遅れたので、私は遅れました。",
-        "i like tea, but i also like coffee.": "私はお茶が好きですが、コーヒーも好きです。",
-        "i left before i ate.": "私は食べる前に出発しました。",
-        "she is taller than me.": "彼女は私より背が高いです。",
-        "he also went.": "彼も行きました。",
-        "first we met, finally we left.": "最初に私たちは会い、最後に出発しました。"
-      },
-      "Conditions": {
-        "if you come, we meet.": "もし来たら、私たちは会います。",
-        "if it rains, we will stay.": "もし雨が降ったら、私たちは留まります。",
-        "if i had time, i would go.": "もし時間があったら、私は行くだろう。",
-        "if i had known, i would have told.": "もし知っていたら、私は言っただろう。",
-        "if i had studied, i would have the job now.": "もし勉強していたら、今はその仕事を持っていただろう。",
-        "we will go unless it rains.": "雨が降らなければ、私たちは行きます。"
-      },
-      "Voice & Focus": {
-        "my mom baked the cake.": "母がケーキを焼きました。",
-        "the report was finished yesterday.": "報告書は昨日完成しました。",
-        "this book, i bought yesterday.": "この本は昨日買いました。",
-        "it was she who called.": "電話をかけたのは彼女です。",
-        "there is a problem in the room.": "部屋に問題があります。"
-      },
-      "Modality": {
-        "she can swim.": "彼女は泳げます。",
-        "may i sit here?": "ここに座ってもいいですか？",
-        "you must wear a badge.": "バッジを着用しなければなりません。",
-        "you should rest.": "休むべきです。",
-        "it might rain.": "雨が降るかもしれません。",
-        "he will probably arrive late.": "彼はおそらく遅れて到着するでしょう。",
-        "could you open the door, please?": "ドアを開けていただけますか？",
-        "would you like to come?": "来ませんか？"
-      },
-      "Reported Speech": {
-        "she said she was tired.": "彼女は疲れていると言った。",
-        "he asked where the station was.": "彼は駅がどこか尋ねた。",
-        "she asked me to help.": "彼女は私に助けてほしいと頼んだ。",
-        "he told me to go.": "彼は私に行くように言った。",
-        "she said she was ready.": "彼女は準備ができていると言った。",
-        "he said he would come there that day.": "彼はその日にそこに来ると言った。"
-      },
-      "Formality & Style": {
-        "hello, could you send the report?": "こんにちは、レポートを送っていただけますか？",
-        "i'm late, don't wait.": "遅れていますので、待たないでください。",
-        "could you send me the file?": "ファイルを送っていただけますか？",
-        "in formal writing: i have arrived.": "正式な文書では：到着しました。",
-        "hello, i need this soon.": "こんにちは、これを早めに必要です。",
-        "hey, what's up?": "やあ、どうしたの？",
-        "it is raining, so we will not go.": "雨が降っているので、行きません。"
-      },
-      "Discourse & Flow": {
-        "hi, i wanted to talk. thanks, goodbye.": "こんにちは、話したいと思っていました。ありがとう、さようなら。",
-        "by the way, can we talk about the schedule?": "ところで、スケジュールについて話せますか？",
-        "i bought a book. it is new.": "本を買いました。それは新しいです。",
-        "first i woke up, then i left.": "最初に起きて、それから出かけました。",
-        "what do you mean?": "どういう意味ですか？",
-        "in short, we need more time.": "要するに、もっと時間が必要です。",
-        "i do want to go.": "行きたいです。",
-        "me too. and you?": "私もです。あなたは？",
-        "for example, it is useful for travel.": "例えば、旅行に役立ちます。",
-        "sorry, i mean i am going.": "ごめんなさい、行くつもりです。"
-      }
+      "Sentence Structure": {},
+      "Verbs": {},
+      "Tenses & Aspect": {},
+      "Nouns & Articles": {},
+      "Pronouns & Reference": {},
+      "Modifiers": {},
+      "Questions": {},
+      "Negation": {},
+      "Connections": {},
+      "Conditions": {},
+      "Voice & Focus": {},
+      "Modality": {},
+      "Reported Speech": {},
+      "Formality & Style": {},
+      "Discourse & Flow": {}
     }
   }
 }
