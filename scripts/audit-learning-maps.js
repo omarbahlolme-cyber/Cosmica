@@ -76,7 +76,7 @@ const LETTERS_PEDAGOGY_CHECKS = Object.freeze({
       message: "Arabic letters page is missing explicit joining-form instruction.",
     },
     {
-      pattern: /<div class="letter">بـ<\/div>/u,
+      pattern: /<div class="letter">??<\/div>/u,
       message: "Arabic letters page is missing initial-form shape cards.",
     },
     {
@@ -88,7 +88,7 @@ const LETTERS_PEDAGOGY_CHECKS = Object.freeze({
       message: "Arabic letters page is missing connected-word decoding guidance.",
     },
     {
-      pattern: /data-letter="باب"/u,
+      pattern: /data-letter="???"/u,
       message: "Arabic letters page is missing short word-decoding cards.",
     },
   ]),
@@ -98,11 +98,11 @@ const LETTERS_PEDAGOGY_CHECKS = Object.freeze({
       message: "Chinese letters page still uses a generic letters eyebrow instead of characters.",
     },
     {
-      pattern: /<div class="letter">休<\/div>/u,
+      pattern: /<div class="letter">?<\/div>/u,
       message: "Chinese letters page is missing component-aware full-character cards.",
     },
     {
-      pattern: /<div class="letter-card-caption">亻 \+ 木<\/div>/u,
+      pattern: /<div class="letter-card-caption">? + ?<\/div>/u,
       message: "Chinese letters page is missing component captions for built characters.",
     },
     {
@@ -110,25 +110,25 @@ const LETTERS_PEDAGOGY_CHECKS = Object.freeze({
       message: "Chinese letters page is missing stroke-order guidance.",
     },
     {
-      pattern: /data-letter="你好"/u,
+      pattern: /data-letter="??"/u,
       message: "Chinese letters page is missing character-to-word reading cards.",
     },
   ]),
   "letters-japanese.html": Object.freeze([
     {
-      pattern: /data-letter="が"/u,
+      pattern: /data-letter="?"/u,
       message: "Japanese letters page is missing hiragana voiced kana.",
     },
     {
-      pattern: /data-letter="きゃ"/u,
+      pattern: /data-letter="??"/u,
       message: "Japanese letters page is missing hiragana contracted sounds.",
     },
     {
-      pattern: /data-letter="ガ"/u,
+      pattern: /data-letter="?"/u,
       message: "Japanese letters page is missing katakana voiced kana.",
     },
     {
-      pattern: /data-letter="ッ"/u,
+      pattern: /data-letter="?"/u,
       message: "Japanese letters page is missing the katakana small-tsu cue.",
     },
     {
@@ -136,11 +136,11 @@ const LETTERS_PEDAGOGY_CHECKS = Object.freeze({
       message: "Japanese letters page is missing rhythm guidance for small kana.",
     },
     {
-      pattern: /data-letter="がっこう"/u,
+      pattern: /data-letter="????"/u,
       message: "Japanese letters page is missing hiragana reading-flow examples.",
     },
     {
-      pattern: /data-letter="コーヒー"/u,
+      pattern: /data-letter="????"/u,
       message: "Japanese letters page is missing katakana reading-flow examples.",
     },
   ]),
@@ -150,11 +150,11 @@ const LETTERS_PEDAGOGY_CHECKS = Object.freeze({
       message: "Korean letters page is missing a syllable-block section.",
     },
     {
-      pattern: /data-letter="가"/u,
+      pattern: /data-letter="?"/u,
       message: "Korean letters page is missing syllable-block reading cards.",
     },
     {
-      pattern: /<div class="letter-card-caption">ㄱ \+ ㅏ<\/div>/u,
+      pattern: /<div class="letter-card-caption">? + ?<\/div>/u,
       message: "Korean letters page is missing syllable composition captions.",
     },
     {
@@ -166,7 +166,7 @@ const LETTERS_PEDAGOGY_CHECKS = Object.freeze({
       message: "Korean letters page is missing a final-consonant section.",
     },
     {
-      pattern: /data-letter="학교"/u,
+      pattern: /data-letter="??"/u,
       message: "Korean letters page is missing word-level reading-ladder cards.",
     },
   ]),
@@ -176,11 +176,11 @@ const LETTERS_PEDAGOGY_CHECKS = Object.freeze({
       message: "Hindi letters page is missing akshara-building instruction.",
     },
     {
-      pattern: /data-letter="का"/u,
+      pattern: /data-letter="??"/u,
       message: "Hindi letters page is missing vowel-plus-consonant akshara cards.",
     },
     {
-      pattern: /data-letter="क्"/u,
+      pattern: /data-letter="??"/u,
       message: "Hindi letters page is missing the halant form card.",
     },
     {
@@ -188,16 +188,16 @@ const LETTERS_PEDAGOGY_CHECKS = Object.freeze({
       message: "Hindi letters page is missing matra-placement guidance.",
     },
     {
-      pattern: /data-letter="दिन"/u,
+      pattern: /data-letter="???"/u,
       message: "Hindi letters page is missing word-level reading-ladder cards.",
     },
   ]),
 });
 
 const ALLOWED_LETTER_DUPLICATES = Object.freeze({
-  "letters-arabic.html": new Set(["د", "ذ", "ر", "ز", "و"]),
-  "letters-chinese.html": new Set(["好"]),
-  "letters-hindi.html": new Set(["क"]),
+  "letters-arabic.html": new Set(["?", "?", "?", "?", "?"]),
+  "letters-chinese.html": new Set(["?"]),
+  "letters-hindi.html": new Set(["?"]),
 });
 
 const LEGACY_ENGLISH_SOURCES = new Set([

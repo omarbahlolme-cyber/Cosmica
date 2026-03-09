@@ -40,8 +40,8 @@ const FINAL_CARD_PATCHES = {
     "Nouns & Articles": {
       5: {
         firstMistake: {
-          wrong: "苹果们都很甜。",
-          fix: "苹果都很甜。",
+          wrong: "苹果们都是水果。",
+          fix: "苹果都是水果。",
         },
       },
     },
@@ -78,10 +78,10 @@ const FINAL_CARD_PATCHES = {
     },
     "Reported Speech": {
       1: {
-        highlightTexts: ["Il dit", "qu'", "il vient demain"],
+        highlightTexts: ["Il dit", "qu", "il vient demain"],
       },
       2: {
-        highlightTexts: ["Il a dit", "qu'", "il viendrait le lendemain"],
+        highlightTexts: ["Il a dit", "qu", "il viendrait le lendemain"],
       },
     },
   },
