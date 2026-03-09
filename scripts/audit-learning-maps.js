@@ -273,8 +273,6 @@ const semanticSimilarity = (a, b) => Math.max(jaccard(a, b), charNgramSimilarity
 
 const hasLetterOrNumber = (value) => /[\p{L}\p{N}]/u.test(String(value || ""));
 
-const isBoundaryChar = (char) => !char || !/[\p{L}\p{N}]/u.test(char);
-
 const findPhraseSpan = (sentence, phrase, fromIndex = 0) => {
   const source = String(sentence || "");
   const target = String(phrase || "").trim();
@@ -287,17 +285,10 @@ const findPhraseSpan = (sentence, phrase, fromIndex = 0) => {
   if (starts[0] > 0) {
     starts.push(0);
   }
-  const checkBoundary = /\s/u.test(source) && hasLetterOrNumber(target);
   for (const start of starts) {
     let at = sourceLower.indexOf(targetLower, start);
     while (at >= 0) {
-      const before = source[at - 1] || "";
-      const after = source[at + target.length] || "";
-      const boundaryOk = !checkBoundary || (isBoundaryChar(before) && isBoundaryChar(after));
-      if (boundaryOk) {
-        return { start: at, end: at + target.length };
-      }
-      at = sourceLower.indexOf(targetLower, at + 1);
+      return { start: at, end: at + target.length };
     }
   }
   return null;
@@ -645,7 +636,7 @@ const checkWorldPacks = () => {
                 );
                 return;
               }
-              const span = findPhraseSpan(example, text, cursor) || findPhraseSpan(example, text, 0);
+              const span = findPhraseSpan(example, text, cursor);
               if (!span) {
                 pushFinding(
                   "high",

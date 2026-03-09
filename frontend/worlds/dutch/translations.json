@@ -12333,17 +12333,17 @@
           ],
           "example": "Hoe gaat het met u?",
           "ruleOrder": [
-            "aanhef",
-            "vraag"
+            "vraag",
+            "aanhef"
           ],
           "exampleHighlights": [
             {
-              "label": "aanhef",
-              "text": "u"
-            },
-            {
               "label": "vraag",
               "text": "Hoe gaat het met"
+            },
+            {
+              "label": "aanhef",
+              "text": "u"
             }
           ],
           "sourceTitle": "formal and informal second-person address",

@@ -15403,6 +15403,20 @@
               "wrong": "Die Sprecherin sagte, sie ist bereit.",
               "fix": "Die Sprecherin sagte, sie sei bereit."
             }
+          ],
+          "exampleHighlights": [
+            {
+              "label": "Einleitung",
+              "text": "Die Sprecherin sagte"
+            },
+            {
+              "label": "Subjekt",
+              "text": "sie"
+            },
+            {
+              "label": "Konjunktiv",
+              "text": "sei bereit"
+            }
           ]
         },
         {

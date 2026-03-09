@@ -48,7 +48,7 @@ const PRONOUN_EXPECTATIONS = {
     nous: "we",
   },
   german: {
-    sie: "she",
+    sie: "she / they",
   },
   portuguese: {
     ele: "he",

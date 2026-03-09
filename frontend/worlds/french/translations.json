@@ -11013,8 +11013,8 @@
           "sourceExample": "I want to learn faster.",
           "mistakes": [
             {
-              "wrong": "Il est chez lui.",
-              "fix": "Il doit être chez lui."
+              "wrong": "Je dois apprendre plus vite.",
+              "fix": "Je veux apprendre plus vite."
             }
           ]
         },
@@ -11099,6 +11099,20 @@
               "wrong": "Il dit il vient demain.",
               "fix": "Il dit qu'il vient demain."
             }
+          ],
+          "exampleHighlights": [
+            {
+              "label": "verbe introducteur",
+              "text": "Il dit"
+            },
+            {
+              "label": "que",
+              "text": "qu"
+            },
+            {
+              "label": "proposition",
+              "text": "il vient demain"
+            }
           ]
         },
         {
@@ -11119,6 +11133,20 @@
             {
               "wrong": "Il a dit qu'il vient demain.",
               "fix": "Il a dit qu'il viendrait le lendemain."
+            }
+          ],
+          "exampleHighlights": [
+            {
+              "label": "verbe introducteur",
+              "text": "Il a dit"
+            },
+            {
+              "label": "que",
+              "text": "qu"
+            },
+            {
+              "label": "proposition",
+              "text": "il viendrait le lendemain"
             }
           ]
         },

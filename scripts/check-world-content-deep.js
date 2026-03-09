@@ -480,7 +480,7 @@ const main = () => {
           );
         }
 
-        const expectedHighlights = inferHighlightsForCard(worldKey, sectionName, card);
+        const expectedHighlights = inferHighlightsForCard(worldKey, sectionName, card, cardIndex);
         if (expectedHighlights.length >= 2 && !sameHighlights(highlights, expectedHighlights)) {
           fail(
             failures,

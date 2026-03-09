@@ -10822,17 +10822,17 @@
           ],
           "example": "오늘 숙제를 해야 해요.",
           "ruleOrder": [
-            "의무",
-            "행동"
+            "행동",
+            "의무"
           ],
           "exampleHighlights": [
             {
-              "label": "의무",
-              "text": "해야 해요"
+              "label": "행동",
+              "text": "오늘 숙제를"
             },
             {
-              "label": "행동",
-              "text": "숙제를"
+              "label": "의무",
+              "text": "해야 해요"
             }
           ],
           "sourceTitle": "strong obligation",
@@ -10852,16 +10852,16 @@
           ],
           "example": "일찍 자는 게 좋아요.",
           "ruleOrder": [
-            "조언",
-            "내용"
+            "내용",
+            "조언"
           ],
           "exampleHighlights": [
             {
-              "label": "조언",
-              "text": "는"
+              "label": "내용",
+              "text": "일찍 자는"
             },
             {
-              "label": "내용",
+              "label": "조언",
               "text": "게 좋아요"
             }
           ],
@@ -10888,11 +10888,11 @@
           "exampleHighlights": [
             {
               "label": "주어",
-              "text": "수"
+              "text": "저는"
             },
             {
               "label": "능력",
-              "text": "영할 수 있어요"
+              "text": "수영할 수 있어요"
             }
           ],
           "sourceTitle": "ability",
@@ -10912,17 +10912,17 @@
           ],
           "example": "그가 늦을지도 몰라요.",
           "ruleOrder": [
-            "가능성",
-            "사건"
+            "사건",
+            "가능성"
           ],
           "exampleHighlights": [
             {
-              "label": "가능성",
-              "text": "늦을지도"
+              "label": "사건",
+              "text": "그가 늦을"
             },
             {
-              "label": "사건",
-              "text": "몰라요"
+              "label": "가능성",
+              "text": "지도 몰라요"
             }
           ],
           "sourceTitle": "possibility and probability",
@@ -10942,16 +10942,16 @@
           ],
           "example": "여기서 사진을 찍으면 안 돼요.",
           "ruleOrder": [
-            "금지",
-            "행동"
+            "행동",
+            "금지"
           ],
           "exampleHighlights": [
             {
-              "label": "금지",
-              "text": "면"
+              "label": "행동",
+              "text": "여기서 사진을 찍으면"
             },
             {
-              "label": "행동",
+              "label": "금지",
               "text": "안 돼요"
             }
           ],
@@ -11096,7 +11096,7 @@
             },
             {
               "label": "요청",
-              "text": "기다려달라고 했다"
+              "text": "기다려 달라고 했다"
             }
           ],
           "mistakes": [
@@ -11443,7 +11443,7 @@
             },
             {
               "label": "예시",
-              "text": "예를 들어 따라 읽기예요"
+              "text": "예를 들어, 따라 읽기예요"
             }
           ],
           "sourceTitle": "examples and conclusions",

@@ -9017,19 +9017,19 @@
           ],
           "exampleHighlights": [
             {
-              "label": "名詞",
+              "label": "??",
               "text": "リンゴ"
             },
             {
-              "label": "助詞",
+              "label": "??",
               "text": "が"
             },
             {
-              "label": "数詞+助数詞",
+              "label": "?? + ???",
               "text": "二つ"
             },
             {
-              "label": "述語",
+              "label": "??",
               "text": "あります"
             }
           ],
@@ -10886,17 +10886,17 @@
           ],
           "example": "宿題をしなければならない。",
           "ruleOrder": [
-            "義務",
-            "動作"
+            "動作",
+            "義務"
           ],
           "exampleHighlights": [
             {
-              "label": "義務",
-              "text": "なければならない"
-            },
-            {
               "label": "動作",
               "text": "宿題をし"
+            },
+            {
+              "label": "義務",
+              "text": "なければならない"
             }
           ],
           "sourceTitle": "strong obligation",
@@ -10916,17 +10916,17 @@
           ],
           "example": "早く寝たほうがいいです。",
           "ruleOrder": [
-            "助言",
-            "内容"
+            "内容",
+            "助言"
           ],
           "exampleHighlights": [
             {
-              "label": "助言",
-              "text": "ほうがいい"
+              "label": "内容",
+              "text": "早く寝た"
             },
             {
-              "label": "内容",
-              "text": "です"
+              "label": "助言",
+              "text": "ほうがいいです"
             }
           ],
           "sourceTitle": "advice and recommendation",
@@ -10946,17 +10946,17 @@
           ],
           "example": "日本語を話すことができます。",
           "ruleOrder": [
-            "能力",
-            "内容"
+            "内容",
+            "能力"
           ],
           "exampleHighlights": [
             {
-              "label": "能力",
-              "text": "日本語を話すこ"
+              "label": "内容",
+              "text": "日本語を話す"
             },
             {
-              "label": "内容",
-              "text": "とができます"
+              "label": "能力",
+              "text": "ことができます"
             }
           ],
           "sourceTitle": "ability",
@@ -10976,17 +10976,17 @@
           ],
           "example": "明日は雨かもしれない。",
           "ruleOrder": [
-            "可能性",
-            "出来事"
+            "出来事",
+            "可能性"
           ],
           "exampleHighlights": [
             {
-              "label": "可能性",
-              "text": "かもしれない"
-            },
-            {
               "label": "出来事",
               "text": "明日は雨"
+            },
+            {
+              "label": "可能性",
+              "text": "かもしれない"
             }
           ],
           "sourceTitle": "possibility and probability",
@@ -11006,16 +11006,16 @@
           ],
           "example": "ここで写真を撮ってはいけません。",
           "ruleOrder": [
-            "禁止",
-            "行為"
+            "行為",
+            "禁止"
           ],
           "exampleHighlights": [
             {
-              "label": "禁止",
+              "label": "行為",
               "text": "ここで写真を撮っ"
             },
             {
-              "label": "行為",
+              "label": "禁止",
               "text": "てはいけません"
             }
           ],
@@ -11417,7 +11417,7 @@
             },
             {
               "label": "結果",
-              "text": "ので 出かけません"
+              "text": "ので、出かけません"
             }
           ],
           "sourceTitle": "reason and result markers",
@@ -11507,7 +11507,7 @@
             },
             {
               "label": "例",
-              "text": "例えば 音読です"
+              "text": "例えば、音読です"
             }
           ],
           "sourceTitle": "examples and conclusions",

@@ -9170,11 +9170,11 @@
           "exampleHighlights": [
             {
               "label": "संबंधवाचक भाग",
-              "text": "जो"
+              "text": "जो लड़का खड़ा है"
             },
             {
               "label": "मुख्य भाग",
-              "text": "लड़का खड़ा है वह मेरा भाई है"
+              "text": "वह मेरा भाई है"
             }
           ]
         },
@@ -10759,7 +10759,7 @@
             },
             {
               "label": "कर्मवाच्य क्रिया",
-              "text": "लिखा गया।"
+              "text": "लिखा गया"
             }
           ],
           "sourceTitle": "passive voice backgrounds the doer",
@@ -10859,7 +10859,7 @@
             },
             {
               "label": "क्रिया",
-              "text": "भी आया।"
+              "text": "भी आया"
             }
           ],
           "sourceTitle": "additive focus with bhi",
@@ -10881,17 +10881,17 @@
           ],
           "example": "मुझे आज देर तक काम करना पड़ेगा।",
           "ruleOrder": [
-            "मजबूरी",
-            "क्रिया"
+            "क्रिया",
+            "मजबूरी"
           ],
           "exampleHighlights": [
             {
-              "label": "मजबूरी",
-              "text": "पड़ेगा"
+              "label": "क्रिया",
+              "text": "मुझे आज देर तक काम करना"
             },
             {
-              "label": "क्रिया",
-              "text": "आज देर तक काम करना"
+              "label": "मजबूरी",
+              "text": "पड़ेगा"
             }
           ],
           "sourceTitle": "strong obligation",
@@ -10911,17 +10911,17 @@
           ],
           "example": "तुम्हें जल्दी सोना चाहिए।",
           "ruleOrder": [
-            "सलाह",
-            "क्रिया"
+            "क्रिया",
+            "सलाह"
           ],
           "exampleHighlights": [
             {
-              "label": "सलाह",
-              "text": "चाहिए"
-            },
-            {
               "label": "क्रिया",
               "text": "तुम्हें जल्दी सोना"
+            },
+            {
+              "label": "सलाह",
+              "text": "चाहिए"
             }
           ],
           "sourceTitle": "advice and recommendation",
@@ -10942,8 +10942,8 @@
           "example": "मैं यह काम कर सकता हूँ।",
           "ruleOrder": [
             "कर्ता",
-            "क्षमता",
-            "क्रिया"
+            "क्रिया",
+            "क्षमता"
           ],
           "exampleHighlights": [
             {
@@ -10951,12 +10951,12 @@
               "text": "मैं"
             },
             {
-              "label": "क्षमता",
-              "text": "सकता हूँ"
-            },
-            {
               "label": "क्रिया",
               "text": "यह काम कर"
+            },
+            {
+              "label": "क्षमता",
+              "text": "सकता हूँ"
             }
           ],
           "sourceTitle": "ability",
@@ -10974,7 +10974,7 @@
             "शायद और सकता है कथन को अनिश्चित बनाते हैं।",
             "ये अनुमान और सावधान बयान के लिए उपयोगी हैं।"
           ],
-          "example": "वह शायद देर से आए।",
+          "example": "शायद वह देर से आए।",
           "ruleOrder": [
             "संभावना",
             "घटना"
@@ -10982,11 +10982,11 @@
           "exampleHighlights": [
             {
               "label": "संभावना",
-              "text": "वह"
+              "text": "शायद"
             },
             {
               "label": "घटना",
-              "text": "से आए"
+              "text": "वह देर से आए"
             }
           ],
           "sourceTitle": "possibility and probability",
@@ -11006,17 +11006,17 @@
           ],
           "example": "यहाँ फोटो लेना मना है।",
           "ruleOrder": [
-            "मनाही",
-            "क्रिया"
+            "क्रिया",
+            "मनाही"
           ],
           "exampleHighlights": [
             {
-              "label": "मनाही",
-              "text": "है"
+              "label": "क्रिया",
+              "text": "यहाँ फोटो लेना"
             },
             {
-              "label": "क्रिया",
-              "text": "यहाँ फोटो लेना मना"
+              "label": "मनाही",
+              "text": "मना है"
             }
           ],
           "sourceTitle": "permission and prohibition",
@@ -11345,7 +11345,7 @@
             },
             {
               "label": "क्रिया",
-              "text": "बैठिए।"
+              "text": "बैठिए"
             }
           ],
           "sourceTitle": "formal imperatives and softened style",
@@ -11472,7 +11472,7 @@
             },
             {
               "label": "मुख्य कथन",
-              "text": "ही आज आया।"
+              "text": "ही आज आया"
             }
           ],
           "sourceTitle": "focus and topic markers",
@@ -11498,11 +11498,11 @@
           "exampleHighlights": [
             {
               "label": "सामान्य बात",
-              "text": "अभ्यास कई तरह से हो सकता"
+              "text": "अभ्यास कई तरह से हो सकता है"
             },
             {
               "label": "उदाहरण",
-              "text": "है उदाहरण के लिए, सुनकर दोहराना"
+              "text": "उदाहरण के लिए, सुनकर दोहराना"
             }
           ],
           "sourceTitle": "examples and conclusions",

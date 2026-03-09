@@ -8,6 +8,7 @@ const { repairNegationInPack } = require("./repair-negation-section");
 const { repairPronounsReportedMistakesInPack } = require("./repair-pronouns-reported-mistakes");
 const { repairTensesAspectInPack } = require("./repair-tenses-aspect-section");
 const { repairVoiceFormalityMistakesInPack } = require("./repair-voice-formality-mistakes");
+const { repairFinalPedagogyGapsInPack } = require("./repair-final-pedagogy-gaps");
 const { repairGrammarHighlightsInPack } = require("./grammar-highlight-repairs");
 
 const root = path.join(__dirname, "..", "frontend", "worlds");
@@ -30,11 +31,12 @@ for (const [world, sectionOverrides] of Object.entries(overrides)) {
   const repairedDiscourseModalityMistakes = repairDiscourseModalityMistakesInPack(pack, world);
   const repairedVoiceFormalityMistakes = repairVoiceFormalityMistakesInPack(pack, world);
   const repairedCards = repairGrammarHighlightsInPack(pack, world);
+  const repairedFinalGaps = repairFinalPedagogyGapsInPack(pack, world);
 
   fs.writeFileSync(file, `${JSON.stringify(pack, null, 2)}\n`, "utf8");
   updated += 1;
   console.log(
-    `Applied pedagogy overrides: ${world} (tenses: ${repairedTensesAspect}, conditions: ${repairedConditions}, negation: ${repairedNegation}, pronouns/reported mistakes: ${repairedPronounsReportedMistakes}, discourse/modality mistakes: ${repairedDiscourseModalityMistakes}, voice/formality mistakes: ${repairedVoiceFormalityMistakes}, highlight repairs: ${repairedCards})`
+    `Applied pedagogy overrides: ${world} (tenses: ${repairedTensesAspect}, conditions: ${repairedConditions}, negation: ${repairedNegation}, pronouns/reported mistakes: ${repairedPronounsReportedMistakes}, discourse/modality mistakes: ${repairedDiscourseModalityMistakes}, voice/formality mistakes: ${repairedVoiceFormalityMistakes}, highlight repairs: ${repairedCards}, final gaps: ${repairedFinalGaps})`
   );
 }
 

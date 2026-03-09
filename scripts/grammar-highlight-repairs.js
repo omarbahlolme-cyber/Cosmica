@@ -1,3 +1,5 @@
+const { getFinalPedagogyCardPatch } = require("./repair-final-pedagogy-gaps");
+
 const SECTION_TARGETS = new Set([
   "Conditions",
   "Pronouns & Reference",
@@ -1126,9 +1128,13 @@ const inferPronounHighlights = (card) => {
   return inferSimpleSyntaxHighlights(sentence, ruleOrder);
 };
 
-const inferHighlightsForCard = (worldKey, sectionName, card) => {
+const inferHighlightsForCard = (worldKey, sectionName, card, cardIndex = -1) => {
   if (!SECTION_TARGETS.has(sectionName) || !card || typeof card !== "object") {
     return [];
+  }
+  const explicitPatch = getFinalPedagogyCardPatch(worldKey, sectionName, cardIndex);
+  if (Array.isArray(explicitPatch?.highlightTexts)) {
+    return buildHighlights(explicitPatch.ruleOrder || card.ruleOrder || [], explicitPatch.highlightTexts);
   }
   if (!Array.isArray(card.ruleOrder) || card.ruleOrder.length < 2 || !String(card.example || "").trim()) {
     return [];
@@ -1165,8 +1171,8 @@ const repairGrammarHighlightsInPack = (pack, worldKey) => {
     if (!Array.isArray(cards)) {
       return;
     }
-    cards.forEach((card) => {
-      const inferred = inferHighlightsForCard(worldKey, sectionName, card);
+    cards.forEach((card, cardIndex) => {
+      const inferred = inferHighlightsForCard(worldKey, sectionName, card, cardIndex);
       if (inferred.length >= 2 && !sameHighlights(card.exampleHighlights || [], inferred)) {
         card.exampleHighlights = inferred;
         changed += 1;

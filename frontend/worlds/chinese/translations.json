@@ -9074,8 +9074,8 @@
           ],
           "mistakes": [
             {
-              "wrong": "苹果们在桌上。",
-              "fix": "苹果在桌上。"
+              "wrong": "苹果们都很甜。",
+              "fix": "苹果都很甜。"
             }
           ],
           "sourceTitle": "men mostly for people",
@@ -10247,7 +10247,7 @@
           "example": "他跑得不快。",
           "ruleOrder": [
             "主语",
-            "动词+得",
+            "动词 + 得",
             "否定词",
             "补语"
           ],
@@ -10257,7 +10257,7 @@
               "text": "他"
             },
             {
-              "label": "动词+得",
+              "label": "动词 + 得",
               "text": "跑得"
             },
             {
@@ -11548,7 +11548,7 @@
             },
             {
               "label": "结果",
-              "text": "所以 我没出去"
+              "text": "所以我没出去"
             }
           ],
           "sourceTitle": "reason and result markers",
@@ -11643,7 +11643,7 @@
             },
             {
               "label": "举例",
-              "text": "比如 跟读"
+              "text": "比如跟读"
             }
           ],
           "sourceTitle": "examples and conclusions",
