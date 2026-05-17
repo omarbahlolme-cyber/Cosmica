@@ -20,6 +20,8 @@ const fs = require("fs");
 const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
+const compression = require("compression");
+const CleanCSS = require("clean-css");
 const { rateLimit } = require("express-rate-limit");
 const OpenAI = require("openai");
 const nodemailer = require("nodemailer");
@@ -40,6 +42,7 @@ const APP_VERSION = (() => {
   }
 })();
 const isProduction = process.env.NODE_ENV === "production";
+const DEFAULT_PUBLIC_APP_ORIGIN = "https://www.cosmicalearn.com";
 const PROJECT_ROOT = path.resolve(__dirname, "..");
 const FRONTEND_ROOT = path.join(PROJECT_ROOT, "frontend");
 const FRONTEND_MAPS_ROOT = path.join(FRONTEND_ROOT, "maps");
@@ -62,6 +65,12 @@ app.use((req, res, next) => {
   res.setHeader("X-Request-Id", requestId);
   next();
 });
+
+app.use(
+  compression({
+    threshold: 1024,
+  })
+);
 
 /* --------------------------------------------------------------------------
    TRANSPORT + SECURITY HEADERS
@@ -429,7 +438,56 @@ const sendMapAssetAlias = (fileName) => (req, res) => {
   return res.sendFile(path.join(FRONTEND_MAPS_ROOT, fileName));
 };
 
+const optimizedAssetCache = new Map();
+
+const applyStaticAssetCacheHeaders = (req, res, ext) => {
+  const versionTag = String(req.query?.v || "").trim();
+  if (versionTag && (FRESH_ASSET_EXTENSIONS.has(ext) || CACHEABLE_MEDIA_EXTENSIONS.has(ext))) {
+    res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+  } else if (FRESH_ASSET_EXTENSIONS.has(ext)) {
+    res.setHeader("Cache-Control", "public, max-age=600, stale-while-revalidate=86400");
+  } else if (CACHEABLE_MEDIA_EXTENSIONS.has(ext)) {
+    res.setHeader("Cache-Control", "public, max-age=86400, stale-while-revalidate=604800");
+  }
+};
+
+const sendOptimizedCssAsset = (fileName) => (req, res) => {
+  const filePath = path.join(FRONTEND_ROOT, fileName);
+  const ext = path.extname(fileName).toLowerCase();
+  try {
+    const output = prepareOptimizedCssAsset(fileName);
+    applyStaticAssetCacheHeaders(req, res, ext);
+    res.type("text/css");
+    return res.send(output);
+  } catch (error) {
+    console.warn(`[asset-optimize] Failed to optimize ${fileName}: ${error.message || error}`);
+    applyStaticAssetCacheHeaders(req, res, ext);
+    return res.sendFile(filePath);
+  }
+};
+
+const prepareOptimizedCssAsset = (fileName) => {
+  const filePath = path.join(FRONTEND_ROOT, fileName);
+  const stat = fs.statSync(filePath);
+  const cacheKey = `${filePath}:${stat.mtimeMs}:${stat.size}`;
+  const cached = optimizedAssetCache.get(cacheKey);
+  if (cached) {
+    return cached;
+  }
+
+  const source = fs.readFileSync(filePath, "utf8");
+  const minified = new CleanCSS({ level: 1 }).minify(source);
+  if (minified.errors?.length || !minified.styles) {
+    throw new Error(minified.errors?.join("; ") || "CSS minification returned empty output");
+  }
+
+  optimizedAssetCache.clear();
+  optimizedAssetCache.set(cacheKey, minified.styles);
+  return minified.styles;
+};
+
 // Backward-compatible aliases for map bundle assets expected at root paths.
+app.get("/style.css", sendOptimizedCssAsset("style.css"));
 app.get("/app-maps.js", sendMapAssetAlias("app-maps.js"));
 app.get("/style-maps.css", sendMapAssetAlias("style-maps.css"));
 app.get("/translations.json", sendMapAssetAlias("translations.json"));
@@ -489,6 +547,19 @@ app.use("/api", (req, res, next) => {
 });
 app.use("/api", cors(corsOptions));
 app.use("/api", apiLimiter);
+app.use("/api", (req, res, next) => {
+  const startedAtMs = Date.now();
+  res.on("finish", () => {
+    const durationMs = Date.now() - startedAtMs;
+    if (durationMs >= API_SLOW_REQUEST_WARN_MS) {
+      console.warn(`[api-slow] ${req.method} ${req.originalUrl} -> ${res.statusCode} in ${durationMs}ms`, {
+        requestId: req.requestId || "",
+      });
+    }
+    trackApiFailureSpike(req, res, durationMs);
+  });
+  next();
+});
 
 /* --------------------------------------------------------------------------
    SECURITY CONTACT FILE
@@ -514,6 +585,47 @@ const RUM_WEBHOOK_URL = process.env.RUM_WEBHOOK_URL || "";
 const AUTH_ALERT_WEBHOOK_URL = String(
   process.env.AUTH_ALERT_WEBHOOK_URL || ERROR_WEBHOOK_URL || ""
 ).trim();
+const PROCESS_STARTED_AT_ISO = new Date().toISOString();
+const WEBHOOK_REQUEST_TIMEOUT_MS = Math.max(
+  1000,
+  Number(process.env.WEBHOOK_REQUEST_TIMEOUT_MS || 8000)
+);
+const OPENAI_ROUTE_TIMEOUT_MS = Math.max(
+  2000,
+  Number(process.env.OPENAI_ROUTE_TIMEOUT_MS || 20000)
+);
+const GOOGLE_TTS_ROUTE_TIMEOUT_MS = Math.max(
+  2000,
+  Number(process.env.GOOGLE_TTS_ROUTE_TIMEOUT_MS || 20000)
+);
+const EMAIL_DELIVERY_TIMEOUT_MS = Math.max(
+  2000,
+  Number(process.env.EMAIL_DELIVERY_TIMEOUT_MS || 15000)
+);
+const API_SLOW_REQUEST_WARN_MS = Math.max(
+  250,
+  Number(process.env.API_SLOW_REQUEST_WARN_MS || 2500)
+);
+const API_5XX_SPIKE_WINDOW_MS = Math.max(
+  60 * 1000,
+  Number(process.env.API_5XX_SPIKE_WINDOW_MS || 5 * 60 * 1000)
+);
+const API_5XX_SPIKE_THRESHOLD = Math.max(
+  3,
+  Number(process.env.API_5XX_SPIKE_THRESHOLD || 10)
+);
+const API_5XX_SPIKE_COOLDOWN_MS = Math.max(
+  60 * 1000,
+  Number(process.env.API_5XX_SPIKE_COOLDOWN_MS || 15 * 60 * 1000)
+);
+const DEPENDENCY_FAILURE_ALERT_THRESHOLD = Math.max(
+  2,
+  Number(process.env.DEPENDENCY_FAILURE_ALERT_THRESHOLD || 3)
+);
+const DEPENDENCY_FAILURE_ALERT_COOLDOWN_MS = Math.max(
+  60 * 1000,
+  Number(process.env.DEPENDENCY_FAILURE_ALERT_COOLDOWN_MS || 15 * 60 * 1000)
+);
 const AUTH_LOGIN_SPIKE_WINDOW_MS = Math.max(
   60 * 1000,
   Number(process.env.AUTH_LOGIN_SPIKE_WINDOW_MS || 5 * 60 * 1000)
@@ -541,6 +653,11 @@ const GOOGLE_TTS_DEFAULT_LANGUAGE = process.env.GOOGLE_TTS_LANGUAGE_CODE || "en-
 const GOOGLE_TTS_DEFAULT_VOICE = process.env.GOOGLE_TTS_VOICE || "en-GB-Neural2-F";
 const authLoginFailureSpikeTracker = new Map();
 const authAlertLastSentByKey = new Map();
+const apiFailureSpikeState = {
+  windowStartedAtMs: 0,
+  count: 0,
+  lastAlertAtMs: 0,
+};
 
 const getStripeClient = (() => {
   let cachedClient = null;
@@ -602,17 +719,298 @@ const getGoogleTtsClient = (() => {
   };
 })();
 
+const hasOpenAiChatConfig = () =>
+  Boolean(String(process.env.OPENAI_CHAT_KEY || process.env.OPENAI_API_KEY || "").trim());
+
+const hasGoogleTtsConfig = () =>
+  GOOGLE_TTS_ENABLED && Boolean(String(process.env.GOOGLE_TTS_CREDENTIALS_B64 || "").trim());
+
+const createTimeoutError = (label, timeoutMs) => {
+  const error = new Error(`${label} timed out after ${timeoutMs}ms`);
+  error.code = "ETIMEDOUT";
+  error.timeoutMs = timeoutMs;
+  return error;
+};
+
+const normalizeRuntimeErrorMessage = (error) =>
+  String(error?.message || error || "Unknown error")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 260);
+
+const raceWithTimeout = async (promiseOrFactory, timeoutMs, label) => {
+  let timer = null;
+  try {
+    return await Promise.race([
+      typeof promiseOrFactory === "function" ? promiseOrFactory() : promiseOrFactory,
+      new Promise((_, reject) => {
+        timer = setTimeout(() => reject(createTimeoutError(label, timeoutMs)), timeoutMs);
+      }),
+    ]);
+  } finally {
+    if (timer) {
+      clearTimeout(timer);
+    }
+  }
+};
+
+const fetchWithTimeout = async (url, { timeoutMs = WEBHOOK_REQUEST_TIMEOUT_MS, ...options } = {}) => {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, { ...options, signal: controller.signal });
+  } catch (error) {
+    if (error?.name === "AbortError") {
+      throw createTimeoutError(`Fetch ${String(url || "")}`, timeoutMs);
+    }
+    throw error;
+  } finally {
+    clearTimeout(timer);
+  }
+};
+
+const createRuntimeDependencyState = ({ label, critical = true, configured = true, enabled = true }) => ({
+  label,
+  critical,
+  configured,
+  enabled,
+  lastSuccessAt: "",
+  lastFailureAt: "",
+  lastDurationMs: null,
+  lastError: "",
+  consecutiveFailures: 0,
+  totalSuccesses: 0,
+  totalFailures: 0,
+  lastAlertAtMs: 0,
+});
+
+const runtimeDependencyStates = {
+  openaiChat: createRuntimeDependencyState({
+    label: "OpenAI chat",
+    critical: true,
+    configured: hasOpenAiChatConfig(),
+  }),
+  openaiTranslate: createRuntimeDependencyState({
+    label: "OpenAI translate",
+    critical: true,
+    configured: hasOpenAiChatConfig(),
+  }),
+  feedbackDelivery: createRuntimeDependencyState({
+    label: "Feedback email delivery",
+    critical: true,
+    configured: false,
+  }),
+  googleTts: createRuntimeDependencyState({
+    label: "Google TTS",
+    critical: true,
+    configured: hasGoogleTtsConfig(),
+    enabled: GOOGLE_TTS_ENABLED,
+  }),
+};
+
+const syncRuntimeDependencyConfiguration = () => {
+  runtimeDependencyStates.openaiChat.configured = hasOpenAiChatConfig();
+  runtimeDependencyStates.openaiTranslate.configured = hasOpenAiChatConfig();
+  runtimeDependencyStates.feedbackDelivery.configured = hasAnyEmailDeliveryConfig();
+  runtimeDependencyStates.googleTts.enabled = GOOGLE_TTS_ENABLED;
+  runtimeDependencyStates.googleTts.configured = hasGoogleTtsConfig();
+};
+
+const maybeAlertDependencyFailure = (dependencyKey, state, error, durationMs) => {
+  if (
+    !ERROR_WEBHOOK_URL ||
+    !state ||
+    state.consecutiveFailures < DEPENDENCY_FAILURE_ALERT_THRESHOLD
+  ) {
+    return;
+  }
+  const nowMs = Date.now();
+  if (nowMs - Number(state.lastAlertAtMs || 0) < DEPENDENCY_FAILURE_ALERT_COOLDOWN_MS) {
+    return;
+  }
+  state.lastAlertAtMs = nowMs;
+  void postErrorWebhook({
+    type: "dependency_failure_spike",
+    severity: "error",
+    dependency: dependencyKey,
+    label: state.label,
+    consecutiveFailures: state.consecutiveFailures,
+    cooldownMs: DEPENDENCY_FAILURE_ALERT_COOLDOWN_MS,
+    threshold: DEPENDENCY_FAILURE_ALERT_THRESHOLD,
+    durationMs,
+    errorMessage: normalizeRuntimeErrorMessage(error),
+    timestamp: new Date(nowMs).toISOString(),
+  });
+};
+
+const markRuntimeDependencySuccess = (dependencyKey, durationMs) => {
+  const state = runtimeDependencyStates[dependencyKey];
+  if (!state) {
+    return;
+  }
+  state.lastSuccessAt = new Date().toISOString();
+  state.lastDurationMs = Math.max(0, Math.round(Number(durationMs) || 0));
+  state.lastError = "";
+  state.consecutiveFailures = 0;
+  state.totalSuccesses += 1;
+};
+
+const markRuntimeDependencyFailure = (dependencyKey, error, durationMs) => {
+  const state = runtimeDependencyStates[dependencyKey];
+  if (!state) {
+    return;
+  }
+  state.lastFailureAt = new Date().toISOString();
+  state.lastDurationMs = Math.max(0, Math.round(Number(durationMs) || 0));
+  state.lastError = normalizeRuntimeErrorMessage(error);
+  state.consecutiveFailures += 1;
+  state.totalFailures += 1;
+  maybeAlertDependencyFailure(dependencyKey, state, error, durationMs);
+};
+
+const runTrackedDependencyOperation = async ({
+  dependencyKey,
+  timeoutMs,
+  label,
+  operation,
+}) => {
+  syncRuntimeDependencyConfiguration();
+  const startedAtMs = Date.now();
+  try {
+    const result = await raceWithTimeout(operation, timeoutMs, label || dependencyKey);
+    markRuntimeDependencySuccess(dependencyKey, Date.now() - startedAtMs);
+    return result;
+  } catch (error) {
+    markRuntimeDependencyFailure(dependencyKey, error, Date.now() - startedAtMs);
+    throw error;
+  }
+};
+
+const serializeRuntimeDependencyState = (dependencyKey, state) => {
+  const dependencyState = state || runtimeDependencyStates[dependencyKey];
+  if (!dependencyState) {
+    return null;
+  }
+  let status = "unknown";
+  if (!dependencyState.enabled) {
+    status = "disabled";
+  } else if (!dependencyState.configured) {
+    status = "not_configured";
+  } else if (dependencyState.consecutiveFailures >= DEPENDENCY_FAILURE_ALERT_THRESHOLD) {
+    status = "failing";
+  } else if (dependencyState.consecutiveFailures > 0) {
+    status = "degraded";
+  } else if (dependencyState.lastSuccessAt) {
+    status = "ok";
+  }
+  return {
+    label: dependencyState.label,
+    critical: dependencyState.critical,
+    enabled: dependencyState.enabled,
+    configured: dependencyState.configured,
+    status,
+    consecutiveFailures: dependencyState.consecutiveFailures,
+    lastSuccessAt: dependencyState.lastSuccessAt || null,
+    lastFailureAt: dependencyState.lastFailureAt || null,
+    lastDurationMs:
+      Number.isFinite(dependencyState.lastDurationMs) && dependencyState.lastDurationMs >= 0
+        ? dependencyState.lastDurationMs
+        : null,
+    lastError: dependencyState.lastError || null,
+    totalSuccesses: dependencyState.totalSuccesses,
+    totalFailures: dependencyState.totalFailures,
+  };
+};
+
+const getRuntimeHealthSummary = () => {
+  syncRuntimeDependencyConfiguration();
+  const dependencies = {};
+  let runtimeStatus = "ok";
+
+  for (const [dependencyKey, state] of Object.entries(runtimeDependencyStates)) {
+    const serialized = serializeRuntimeDependencyState(dependencyKey, state);
+    dependencies[dependencyKey] = serialized;
+    if (!serialized || !serialized.critical) {
+      continue;
+    }
+    if (serialized.status === "failing" || serialized.status === "not_configured") {
+      runtimeStatus = "failing";
+      continue;
+    }
+    if (runtimeStatus !== "failing" && serialized.status === "degraded") {
+      runtimeStatus = "degraded";
+    }
+  }
+
+  return {
+    status: runtimeStatus,
+    dependencies,
+    apiFailures: {
+      threshold: API_5XX_SPIKE_THRESHOLD,
+      windowMs: API_5XX_SPIKE_WINDOW_MS,
+      cooldownMs: API_5XX_SPIKE_COOLDOWN_MS,
+      windowStartedAt:
+        apiFailureSpikeState.windowStartedAtMs > 0
+          ? new Date(apiFailureSpikeState.windowStartedAtMs).toISOString()
+          : null,
+      countInWindow: apiFailureSpikeState.count,
+      lastAlertAt:
+        apiFailureSpikeState.lastAlertAtMs > 0
+          ? new Date(apiFailureSpikeState.lastAlertAtMs).toISOString()
+          : null,
+    },
+  };
+};
+
+const trackApiFailureSpike = (req, res, durationMs) => {
+  if ((res?.statusCode || 0) < 500 || !ERROR_WEBHOOK_URL) {
+    return;
+  }
+  const nowMs = Date.now();
+  if (
+    !Number.isFinite(apiFailureSpikeState.windowStartedAtMs) ||
+    nowMs - apiFailureSpikeState.windowStartedAtMs > API_5XX_SPIKE_WINDOW_MS
+  ) {
+    apiFailureSpikeState.windowStartedAtMs = nowMs;
+    apiFailureSpikeState.count = 0;
+  }
+  apiFailureSpikeState.count += 1;
+  if (apiFailureSpikeState.count < API_5XX_SPIKE_THRESHOLD) {
+    return;
+  }
+  if (nowMs - Number(apiFailureSpikeState.lastAlertAtMs || 0) < API_5XX_SPIKE_COOLDOWN_MS) {
+    return;
+  }
+  apiFailureSpikeState.lastAlertAtMs = nowMs;
+  void postErrorWebhook({
+    type: "api_5xx_spike",
+    severity: "error",
+    threshold: API_5XX_SPIKE_THRESHOLD,
+    observedCount: apiFailureSpikeState.count,
+    windowMs: API_5XX_SPIKE_WINDOW_MS,
+    cooldownMs: API_5XX_SPIKE_COOLDOWN_MS,
+    timestamp: new Date(nowMs).toISOString(),
+    requestId: String(req?.requestId || ""),
+    endpoint: String(req?.originalUrl || "").slice(0, 240),
+    method: String(req?.method || "").slice(0, 16),
+    statusCode: Number(res?.statusCode || 0),
+    durationMs: Math.max(0, Math.round(Number(durationMs) || 0)),
+    ipHash: getRequestIpHash(req) || "",
+  });
+};
+
 const postErrorWebhook = async (payload) => {
   if (!ERROR_WEBHOOK_URL) {
     return;
   }
   try {
-    await fetch(ERROR_WEBHOOK_URL, {
+    await fetchWithTimeout(ERROR_WEBHOOK_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
+      timeoutMs: WEBHOOK_REQUEST_TIMEOUT_MS,
     });
   } catch (error) {
     console.error("Error webhook failed:", error.message || error);
@@ -624,12 +1022,13 @@ const postRumWebhook = async (payload) => {
     return;
   }
   try {
-    await fetch(RUM_WEBHOOK_URL, {
+    await fetchWithTimeout(RUM_WEBHOOK_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
+      timeoutMs: WEBHOOK_REQUEST_TIMEOUT_MS,
     });
   } catch (error) {
     console.error("RUM webhook failed:", error.message || error);
@@ -641,12 +1040,13 @@ const postAuthAlertWebhook = async (payload) => {
     return;
   }
   try {
-    await fetch(AUTH_ALERT_WEBHOOK_URL, {
+    await fetchWithTimeout(AUTH_ALERT_WEBHOOK_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
+      timeoutMs: WEBHOOK_REQUEST_TIMEOUT_MS,
     });
   } catch (error) {
     console.error("Auth alert webhook failed:", error.message || error);
@@ -833,13 +1233,14 @@ const sendViaResend = async ({ from, to, replyTo, subject, text }) => {
     payload.reply_to = replyTo;
   }
   try {
-    const response = await fetch("https://api.resend.com/emails", {
+    const response = await fetchWithTimeout("https://api.resend.com/emails", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${apiKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
+      timeoutMs: EMAIL_DELIVERY_TIMEOUT_MS,
     });
     if (!response.ok) {
       const body = await response.json().catch(() => ({}));
@@ -888,8 +1289,9 @@ const runAuthRuntimeConfigAudit = () => {
   }
   if (isProduction) {
     if (!publicOrigin) {
-      issues.push("Missing PUBLIC_APP_ORIGIN in production.");
-      hasFatalStartupIssue = true;
+      warnings.push(
+        `Missing PUBLIC_APP_ORIGIN in production; defaulting public URL helpers to ${DEFAULT_PUBLIC_APP_ORIGIN}.`
+      );
     } else {
       try {
         const parsed = new URL(publicOrigin);
@@ -996,7 +1398,7 @@ const sendTransactionalEmail = async ({ to, subject, text, replyTo = "" }) => {
    AUTH + ACCOUNT DATA STORE
    Account/session persistence (file by default, optional Postgres backend).
    -------------------------------------------------------------------------- */
-const AUTH_DATA_ROOT = path.join(__dirname, "data");
+const AUTH_DATA_ROOT = path.resolve(process.env.AUTH_DATA_ROOT || path.join(__dirname, "data"));
 const AUTH_STORE_FILE = path.join(AUTH_DATA_ROOT, "accounts.json");
 const AUTH_STORE_LAST_KNOWN_GOOD_FILE = path.join(AUTH_DATA_ROOT, "accounts.last-known-good.json");
 const AUTH_STORE_BACKEND_DEFAULT = "file";
@@ -4365,6 +4767,9 @@ const getPublicAppOrigin = (req) => {
       return parsed.origin;
     } catch {}
   }
+  if (isProduction) {
+    return DEFAULT_PUBLIC_APP_ORIGIN;
+  }
   return requestOrigin;
 };
 
@@ -7491,6 +7896,18 @@ app.post("/api/billing/webhooks/stripe", billingWebhookLimiter, async (req, res)
       }
       event = stripe.webhooks.constructEvent(req.rawBody, signature, webhookSecret);
     } else {
+      if (isProduction) {
+        reportServerError(
+          "stripe-webhook-missing-secret",
+          new Error("Missing STRIPE_WEBHOOK_SECRET in production"),
+          {
+            requestId: req.requestId,
+            method: req.method,
+            path: req.originalUrl,
+          }
+        );
+        return res.status(503).json({ error: "Stripe webhook signature verification is not configured" });
+      }
       const candidate = req.body;
       if (!candidate || typeof candidate !== "object") {
         return res.status(400).json({ error: "Invalid Stripe webhook payload" });
@@ -8763,43 +9180,55 @@ app.post("/api/feedback", feedbackLimiter, async (req, res) => {
     const subject = `Cosmica feedback from ${safeName}${safeEmail ? ` (${safeEmail})` : ""}`;
     const text = `Name: ${safeName}\nEmail: ${safeEmail}\n\n${safeMessage}`;
 
-    if (hasResend) {
-      const resendResult = await sendViaResend({
-        from: fromAddress,
-        to,
-        replyTo: replyToHeader,
-        subject,
-        text,
-      });
-      if (!resendResult.ok) {
-        throw new Error(resendResult.error || "Resend failed");
-      }
-    } else {
-      const mailer = getMailer();
-      if (!mailer || !smtpUser) {
-        return res.status(500).json({ error: "Missing SMTP configuration" });
-      }
-      const sendFeedback = async (senderAddress) => {
-        const fromHeader = displayName ? `${displayName} <${senderAddress}>` : senderAddress;
-        await mailer.sendMail({
-          from: fromHeader,
-          to,
-          replyTo: replyToHeader,
-          subject,
-          text,
-        });
-      };
-
-      try {
-        await sendFeedback(fromAddress);
-      } catch (error) {
-        if (fromAddress !== smtpUser) {
-          await sendFeedback(smtpUser);
-        } else {
-          throw error;
+    await runTrackedDependencyOperation({
+      dependencyKey: "feedbackDelivery",
+      timeoutMs: EMAIL_DELIVERY_TIMEOUT_MS,
+      label: "Feedback delivery",
+      operation: async () => {
+        if (hasResend) {
+          const resendResult = await sendViaResend({
+            from: fromAddress,
+            to,
+            replyTo: replyToHeader,
+            subject,
+            text,
+          });
+          if (!resendResult.ok) {
+            throw new Error(resendResult.error || "Resend failed");
+          }
+          return;
         }
-      }
-    }
+
+        const mailer = getMailer();
+        if (!mailer || !smtpUser) {
+          throw new Error("Missing SMTP configuration");
+        }
+        const sendFeedback = async (senderAddress) => {
+          const fromHeader = displayName ? `${displayName} <${senderAddress}>` : senderAddress;
+          await raceWithTimeout(
+            mailer.sendMail({
+              from: fromHeader,
+              to,
+              replyTo: replyToHeader,
+              subject,
+              text,
+            }),
+            EMAIL_DELIVERY_TIMEOUT_MS,
+            `SMTP feedback delivery (${senderAddress})`
+          );
+        };
+
+        try {
+          await sendFeedback(fromAddress);
+        } catch (error) {
+          if (fromAddress !== smtpUser) {
+            await sendFeedback(smtpUser);
+          } else {
+            throw error;
+          }
+        }
+      },
+    });
 
     return res.json({ ok: true });
   } catch (error) {
@@ -8808,7 +9237,7 @@ app.post("/api/feedback", feedbackLimiter, async (req, res) => {
       method: req.method,
       path: req.originalUrl,
     });
-    return res.status(500).json({ error: "Failed to send feedback" });
+    return res.status(500).json({ error: "Failed to send feedback", requestId: req.requestId });
   }
 });
 
@@ -8817,8 +9246,8 @@ app.post("/api/feedback", feedbackLimiter, async (req, res) => {
    Dedicated endpoint for short UI translation tasks to avoid chat contention.
    -------------------------------------------------------------------------- */
 app.post("/api/translate", translateLimiter, async (req, res) => {
-  if (!process.env.OPENAI_CHAT_KEY && !process.env.OPENAI_API_KEY) {
-    return res.status(500).json({ error: "Missing OPENAI_CHAT_KEY" });
+  if (!hasOpenAiChatConfig()) {
+    return res.status(500).json({ error: "Missing OPENAI_CHAT_KEY", requestId: req.requestId });
   }
 
   const text = String(req.body?.text || "").trim();
@@ -8831,26 +9260,32 @@ app.post("/api/translate", translateLimiter, async (req, res) => {
   }
 
   try {
-    const response = await getChatClient().chat.completions.create({
-      model: process.env.OPENAI_MODEL || "gpt-4o-mini",
-      temperature: 0.2,
-      max_tokens: 180,
-      messages: [
-        {
-          role: "system",
-          content:
-            "Translate the text to the requested target language. Return only the translated text without commentary.",
-        },
-        {
-          role: "user",
-          content: `Target language: ${targetLanguage}\nText: ${text}`,
-        },
-      ],
+    const response = await runTrackedDependencyOperation({
+      dependencyKey: "openaiTranslate",
+      timeoutMs: OPENAI_ROUTE_TIMEOUT_MS,
+      label: "OpenAI translate",
+      operation: () =>
+        getChatClient().chat.completions.create({
+          model: process.env.OPENAI_MODEL || "gpt-4o-mini",
+          temperature: 0.2,
+          max_tokens: 180,
+          messages: [
+            {
+              role: "system",
+              content:
+                "Translate the text to the requested target language. Return only the translated text without commentary.",
+            },
+            {
+              role: "user",
+              content: `Target language: ${targetLanguage}\nText: ${text}`,
+            },
+          ],
+        }),
     });
 
     const translation = response.choices?.[0]?.message?.content?.trim();
     if (!translation) {
-      return res.status(500).json({ error: "Empty translation response" });
+      return res.status(500).json({ error: "Empty translation response", requestId: req.requestId });
     }
     return res.json({ translation });
   } catch (error) {
@@ -8859,7 +9294,7 @@ app.post("/api/translate", translateLimiter, async (req, res) => {
       method: req.method,
       path: req.originalUrl,
     });
-    return res.status(500).json({ error: "Translation request failed" });
+    return res.status(500).json({ error: "Translation request failed", requestId: req.requestId });
   }
 });
 
@@ -8891,20 +9326,26 @@ app.post("/api/tts", ttsLimiter, async (req, res) => {
       return res.status(503).json({ error: "TTS unavailable" });
     }
 
-    const [response] = await client.synthesizeSpeech({
-      input: { text },
-      voice: {
-        languageCode,
-        name: voice || undefined,
-      },
-      audioConfig: {
-        audioEncoding: "MP3",
-        speakingRate:
-          Number.isFinite(speakingRate) && speakingRate >= 0.25 && speakingRate <= 4
-            ? speakingRate
-            : 1,
-        pitch: Number.isFinite(pitch) && pitch >= -20 && pitch <= 20 ? pitch : 0,
-      },
+    const [response] = await runTrackedDependencyOperation({
+      dependencyKey: "googleTts",
+      timeoutMs: GOOGLE_TTS_ROUTE_TIMEOUT_MS,
+      label: "Google TTS",
+      operation: () =>
+        client.synthesizeSpeech({
+          input: { text },
+          voice: {
+            languageCode,
+            name: voice || undefined,
+          },
+          audioConfig: {
+            audioEncoding: "MP3",
+            speakingRate:
+              Number.isFinite(speakingRate) && speakingRate >= 0.25 && speakingRate <= 4
+                ? speakingRate
+                : 1,
+            pitch: Number.isFinite(pitch) && pitch >= -20 && pitch <= 20 ? pitch : 0,
+          },
+        }),
     });
 
     if (!response?.audioContent) {
@@ -8925,7 +9366,7 @@ app.post("/api/tts", ttsLimiter, async (req, res) => {
       method: req.method,
       path: req.originalUrl,
     });
-    return res.status(500).json({ error: "TTS request failed" });
+    return res.status(500).json({ error: "TTS request failed", requestId: req.requestId });
   }
 });
 
@@ -8933,8 +9374,8 @@ app.post("/api/tts", ttsLimiter, async (req, res) => {
    ROUTE: MIMI CHAT PROXY
    -------------------------------------------------------------------------- */
 app.post("/api/chat", chatLimiter, async (req, res) => {
-  if (!process.env.OPENAI_CHAT_KEY && !process.env.OPENAI_API_KEY) {
-    return res.status(500).json({ error: "Missing OPENAI_CHAT_KEY" });
+  if (!hasOpenAiChatConfig()) {
+    return res.status(500).json({ error: "Missing OPENAI_CHAT_KEY", requestId: req.requestId });
   }
 
   const { messages } = req.body || {};
@@ -8943,16 +9384,22 @@ app.post("/api/chat", chatLimiter, async (req, res) => {
   }
 
   try {
-    const response = await getChatClient().chat.completions.create({
-      model: process.env.OPENAI_MODEL || "gpt-4o-mini",
-      messages,
-      temperature: 0.7,
-      max_tokens: 240,
+    const response = await runTrackedDependencyOperation({
+      dependencyKey: "openaiChat",
+      timeoutMs: OPENAI_ROUTE_TIMEOUT_MS,
+      label: "OpenAI chat",
+      operation: () =>
+        getChatClient().chat.completions.create({
+          model: process.env.OPENAI_MODEL || "gpt-4o-mini",
+          messages,
+          temperature: 0.7,
+          max_tokens: 240,
+        }),
     });
 
     const content = response.choices?.[0]?.message?.content?.trim();
     if (!content) {
-      return res.status(500).json({ error: "Empty response" });
+      return res.status(500).json({ error: "Empty response", requestId: req.requestId });
     }
 
     return res.json({ content });
@@ -8962,7 +9409,7 @@ app.post("/api/chat", chatLimiter, async (req, res) => {
       method: req.method,
       path: req.originalUrl,
     });
-    return res.status(500).json({ error: "Chat request failed" });
+    return res.status(500).json({ error: "Chat request failed", requestId: req.requestId });
   }
 });
 
@@ -8971,13 +9418,18 @@ app.post("/api/chat", chatLimiter, async (req, res) => {
    -------------------------------------------------------------------------- */
 app.get("/api/health", healthLimiter, (req, res) => {
   const checkoutConfig = resolveConfiguredPremiumCheckoutOptions();
+  const runtime = getRuntimeHealthSummary();
   res.json({
     status: "ok",
+    runtimeStatus: runtime.status,
     version: APP_VERSION,
     uptimeSec: Math.round(process.uptime()),
+    startedAt: PROCESS_STARTED_AT_ISO,
     timestamp: new Date().toISOString(),
     premiumCheckoutConfigured: checkoutConfig.configured,
     premiumCheckoutSource: checkoutConfig.source,
+    dependencies: runtime.dependencies,
+    apiFailures: runtime.apiFailures,
   });
 });
 
@@ -9084,8 +9536,22 @@ const startServer = async () => {
   } else {
     console.log("[auth-store] Using file backend for accounts and sessions.");
   }
+  try {
+    prepareOptimizedCssAsset("style.css");
+  } catch (error) {
+    console.warn(`[asset-optimize] Failed to prewarm style.css: ${error.message || error}`);
+  }
   app.listen(port, () => {
     console.log(`Server listening on http://localhost:${port}`);
+    void postErrorWebhook({
+      type: "server_startup",
+      severity: "info",
+      version: APP_VERSION,
+      environment: process.env.NODE_ENV || "development",
+      port,
+      startedAt: PROCESS_STARTED_AT_ISO,
+      timestamp: new Date().toISOString(),
+    });
   });
 };
 

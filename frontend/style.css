@@ -17069,6 +17069,16 @@ section,
   overflow: visible;
 }
 
+/* Keep decorative desktop/tablet effects from inflating layout metrics. */
+body.home-alt-luxe .hero-right {
+  overflow: clip;
+}
+
+/* The page wrapper clips stray world decoration; sections should not locally clip content. */
+body.world-page :is(.world-section, #world, #language, #maps) {
+  overflow: visible;
+}
+
 @media (max-width: 1024px) {
   .cookie-notice {
     left: 8px;

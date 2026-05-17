@@ -4,6 +4,10 @@ const https = require("https");
 require("dotenv").config();
 
 const baseUrl = String(process.env.VERIFY_BASE_URL || "https://www.cosmicalearn.com").trim().replace(/\/+$/, "");
+const REQUEST_TIMEOUT_MS = Math.max(
+  2000,
+  Number(process.env.VERIFY_REQUEST_TIMEOUT_MS || 15000)
+);
 const adminBasicUser = String(
   process.env.VERIFY_ADMIN_BASIC_USER || process.env.ADMIN_SECURITY_BASIC_USER || ""
 );
@@ -43,6 +47,7 @@ const safeJsonParse = (value) => {
 
 const request = (pathname, options = {}) =>
   new Promise((resolve) => {
+    const startedAtMs = Date.now();
     const req = https.request(
       `${baseUrl}${pathname}`,
       {
@@ -54,11 +59,26 @@ const request = (pathname, options = {}) =>
         res.on("data", (chunk) => chunks.push(Buffer.from(chunk)));
         res.on("end", () => {
           const body = Buffer.concat(chunks).toString("utf8");
-          resolve({ status: res.statusCode || 0, body, headers: res.headers || {} });
+          resolve({
+            status: res.statusCode || 0,
+            body,
+            headers: res.headers || {},
+            durationMs: Date.now() - startedAtMs,
+          });
         });
       }
     );
-    req.on("error", (error) => resolve({ status: 0, body: String(error.message || error) }));
+    req.setTimeout(REQUEST_TIMEOUT_MS, () => {
+      req.destroy(new Error(`Request timed out after ${REQUEST_TIMEOUT_MS}ms`));
+    });
+    req.on("error", (error) =>
+      resolve({
+        status: 0,
+        body: String(error.message || error),
+        headers: {},
+        durationMs: Date.now() - startedAtMs,
+      })
+    );
     if (options.body) {
       req.write(options.body);
     }
@@ -133,10 +153,11 @@ const containsIgnoreCase = (text, needle) =>
 const run = async () => {
   const health = await request("/api/health", { headers: { Accept: "application/json" } });
   const healthJson = safeJsonParse(health.body);
+  const runtimeStatus = String(healthJson?.runtimeStatus || "ok").trim().toLowerCase();
   addResult(
     "health",
-    health.status === 200 && healthJson && healthJson.status === "ok",
-    `status=${health.status} premiumConfigured=${Boolean(healthJson && healthJson.premiumCheckoutConfigured)}`
+    health.status === 200 && healthJson && healthJson.status === "ok" && runtimeStatus !== "failing",
+    `status=${health.status} runtimeStatus=${runtimeStatus} premiumConfigured=${Boolean(healthJson && healthJson.premiumCheckoutConfigured)} durationMs=${health.durationMs}`
   );
 
   const home = await request("/", { headers: { Accept: "text/html" } });

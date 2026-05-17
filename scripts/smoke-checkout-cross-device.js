@@ -11,10 +11,12 @@ const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
 const { spawn } = require("child_process");
+const { createAuthTestStore } = require("./lib/auth-test-store");
 
 const REQUEST_TIMEOUT_MS = Math.max(3000, Number(process.env.SMOKE_REQUEST_TIMEOUT_MS || 12000));
 const ROOT = path.resolve(__dirname, "..");
-const AUTH_STORE_FILE = path.join(ROOT, "backend", "data", "accounts.json");
+const authTestStore = createAuthTestStore({ root: ROOT, namespace: "checkout-cross-device" });
+const AUTH_STORE_FILE = authTestStore.file("accounts.json");
 const LOCAL_PORT = Number(process.env.SMOKE_LOCAL_PORT || 4174);
 const smokeExternalBaseUrl = String(process.env.SMOKE_BASE_URL || "")
   .trim()
@@ -61,6 +63,7 @@ const seedLocalSmokeUser = async () => {
   if (USE_EXTERNAL_BASE) {
     return;
   }
+  authTestStore.prepare();
   if (!authStoreSnapshotRaw) {
     authStoreSnapshotRaw = fs.readFileSync(AUTH_STORE_FILE, "utf8");
   }
@@ -114,6 +117,7 @@ const startLocalServer = () => {
     cwd: ROOT,
     env: {
       ...process.env,
+      ...authTestStore.env(),
       PORT: String(LOCAL_PORT),
       STRIPE_WEBHOOK_SECRET: String(process.env.STRIPE_WEBHOOK_SECRET || "smoke-checkout-local-secret"),
     },
@@ -386,6 +390,7 @@ const main = async () => {
   } finally {
     await stopLocalServer(localServer);
     restoreAuthStore();
+    authTestStore.cleanup();
   }
 };
 

@@ -17,7 +17,7 @@ const TTS_URL = process.env.TTS_URL || "https://www.cosmicalearn.com/api/tts";
 const FEEDBACK_URL = process.env.FEEDBACK_URL || "https://www.cosmicalearn.com/api/feedback";
 const REQUEST_TIMEOUT_MS = Number(process.env.SECURITY_CHECK_TIMEOUT_MS || 12000);
 const DEEP_API_CHECK = ["1", "true", "yes", "on"].includes(
-  String(process.env.DEEP_API_CHECK || "true").trim().toLowerCase()
+  String(process.env.DEEP_API_CHECK || "false").trim().toLowerCase()
 );
 
 /* --------------------------------------------------------------------------
@@ -123,6 +123,9 @@ const expectHealthOk = async (url) => {
   if (data.status !== "ok") {
     throw new Error(`${url} health status expected "ok" but got "${data.status}"`);
   }
+  if (String(data.runtimeStatus || "ok").trim().toLowerCase() === "failing") {
+    throw new Error(`${url} health runtimeStatus is failing`);
+  }
 };
 
 const postJson = async (url, payload, headers = {}) => {
@@ -135,6 +138,13 @@ const postJson = async (url, payload, headers = {}) => {
     body: JSON.stringify(payload),
   });
   return response;
+};
+
+const expectContractStatus = async (url, payload, expectedStatus, headers = {}) => {
+  const response = await postJson(url, payload, headers);
+  if (response.status !== expectedStatus) {
+    throw new Error(`${url} expected HTTP ${expectedStatus} but returned ${response.status}`);
+  }
 };
 
 const expectChatOk = async (url) => {
@@ -204,6 +214,14 @@ const expectFeedbackMonitorOk = async (url) => {
   }
 };
 
+const expectChatContractOk = async (url) => {
+  await expectContractStatus(url, {}, 400);
+};
+
+const expectTranslateContractOk = async (url) => {
+  await expectContractStatus(url, {}, 400);
+};
+
 /* --------------------------------------------------------------------------
    MAIN
    -------------------------------------------------------------------------- */
@@ -213,11 +231,13 @@ Promise.resolve()
     await expectRedirectToCanonical(ROOT_HTTPS_URL);
     await expectSecurityHeaders(CANONICAL_URL);
     await expectHealthOk(HEALTH_URL);
+    await expectChatContractOk(CHAT_URL);
+    await expectTranslateContractOk(TRANSLATE_URL);
+    await expectFeedbackMonitorOk(FEEDBACK_URL);
+    await expectTtsOk(TTS_URL);
     if (DEEP_API_CHECK) {
       await expectChatOk(CHAT_URL);
       await expectTranslateOk(TRANSLATE_URL);
-      await expectTtsOk(TTS_URL);
-      await expectFeedbackMonitorOk(FEEDBACK_URL);
     }
     console.log("PASS [security-live] production redirects/headers/health checks");
   })

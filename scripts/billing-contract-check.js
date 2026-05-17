@@ -10,9 +10,11 @@ const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
 const { spawn } = require("child_process");
+const { createAuthTestStore } = require("./lib/auth-test-store");
 
 const ROOT = path.resolve(__dirname, "..");
-const AUTH_STORE_FILE = path.join(ROOT, "backend", "data", "accounts.json");
+const authTestStore = createAuthTestStore({ root: ROOT, namespace: "billing-contract" });
+const AUTH_STORE_FILE = authTestStore.file("accounts.json");
 const PORT = Number(process.env.BILLING_CONTRACT_PORT || 4175);
 const BASE_URL = `http://127.0.0.1:${PORT}`;
 const STARTUP_TIMEOUT_MS = 25000;
@@ -56,6 +58,7 @@ const deriveHash = (password, salt, iterations, keylen, digest) =>
   });
 
 const seedTestUser = async () => {
+  authTestStore.prepare();
   if (!authStoreSnapshotRaw) {
     authStoreSnapshotRaw = fs.readFileSync(AUTH_STORE_FILE, "utf8");
   }
@@ -238,6 +241,7 @@ const startServer = () => {
     cwd: ROOT,
     env: {
       ...process.env,
+      ...authTestStore.env(),
       PORT: String(PORT),
       STRIPE_WEBHOOK_SECRET: String(process.env.STRIPE_WEBHOOK_SECRET || "billing-contract-test-secret"),
     },
@@ -282,6 +286,7 @@ const main = async () => {
   } finally {
     await stopServer(child);
     restoreAuthStore();
+    authTestStore.cleanup();
   }
 };
 

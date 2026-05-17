@@ -3,9 +3,11 @@ const path = require("path");
 const crypto = require("crypto");
 const { spawn } = require("child_process");
 const { chromium } = require("playwright");
+const { createAuthTestStore } = require("./lib/auth-test-store");
 
 const ROOT = path.resolve(__dirname, "..");
-const AUTH_STORE_FILE = path.join(ROOT, "backend", "data", "accounts.json");
+const authTestStore = createAuthTestStore({ root: ROOT, namespace: "user-matrix" });
+const AUTH_STORE_FILE = authTestStore.file("accounts.json");
 const PORT = Number(process.env.MATRIX_PORT || 4183);
 const BASE_URL = `http://127.0.0.1:${PORT}`;
 const STARTUP_TIMEOUT_MS = 30000;
@@ -106,6 +108,7 @@ const buildUserRecord = async ({ id, email, password, displayName, premium }) =>
 };
 
 const seedUsers = async () => {
+  authTestStore.prepare();
   if (!authSnapshotRaw) {
     authSnapshotRaw = fs.readFileSync(AUTH_STORE_FILE, "utf8");
   }
@@ -133,6 +136,7 @@ const startServer = () => {
     cwd: ROOT,
     env: {
       ...process.env,
+      ...authTestStore.env(),
       PORT: String(PORT),
       ALLOW_SELF_PREMIUM_UPGRADE: "true",
       STRIPE_WEBHOOK_SECRET: String(process.env.STRIPE_WEBHOOK_SECRET || "matrix-local-secret"),
@@ -527,6 +531,7 @@ const runMatrix = async () => {
     }
     await stopServer(server.child);
     restoreStore();
+    authTestStore.cleanup();
   }
 };
 

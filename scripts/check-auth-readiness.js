@@ -88,6 +88,33 @@ try {
     addResult("warn", "No alert webhook configured for auth/security notifications.");
   }
 
+  const stripeSecretKey = String(process.env.STRIPE_SECRET_KEY || "").trim();
+  const stripePriceId = String(
+    process.env.STRIPE_PREMIUM_PRICE_ID ||
+      process.env.STRIPE_PRICE_ID ||
+      process.env.PREMIUM_STRIPE_PRICE_ID ||
+      ""
+  ).trim();
+  const stripeWebhookSecret = String(process.env.STRIPE_WEBHOOK_SECRET || "").trim();
+  if (stripeSecretKey || stripePriceId || stripeWebhookSecret) {
+    if (stripeSecretKey && stripePriceId) {
+      addResult("pass", "Stripe checkout credentials configured.");
+    } else {
+      addResult(
+        isProduction ? "fail" : "warn",
+        "Stripe checkout is partially configured; set both STRIPE_SECRET_KEY and STRIPE_PREMIUM_PRICE_ID."
+      );
+    }
+    if (stripeWebhookSecret) {
+      addResult("pass", "Stripe webhook signing secret configured.");
+    } else {
+      addResult(
+        isProduction ? "fail" : "warn",
+        "Missing STRIPE_WEBHOOK_SECRET. Stripe webhooks must be signed in production."
+      );
+    }
+  }
+
   const publicOrigin = String(process.env.PUBLIC_APP_ORIGIN || "").trim();
   const authStoreBackend = String(process.env.AUTH_STORE_BACKEND || "file").trim().toLowerCase() || "file";
   const authPostgresUrl = String(process.env.AUTH_POSTGRES_URL || process.env.DATABASE_URL || "").trim();
