@@ -17,7 +17,7 @@ const REQUEST_TIMEOUT_MS = Math.max(3000, Number(process.env.SMOKE_REQUEST_TIMEO
 const ROOT = path.resolve(__dirname, "..");
 const authTestStore = createAuthTestStore({ root: ROOT, namespace: "premium-continuity" });
 const AUTH_STORE_FILE = authTestStore.file("accounts.json");
-const LOCAL_PORT = Number(process.env.SMOKE_LOCAL_PORT || 4176);
+const LOCAL_PORT = Number(process.env.SMOKE_PREMIUM_LOCAL_PORT || process.env.SMOKE_LOCAL_PORT || 4177);
 const BASE_URL = `http://127.0.0.1:${LOCAL_PORT}`;
 const STARTUP_TIMEOUT_MS = 25000;
 

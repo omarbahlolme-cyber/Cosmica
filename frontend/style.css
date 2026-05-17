@@ -18701,3 +18701,15 @@ body.world-page #maps .map-card.is-cosmic-burst .map-stamp {
     font-size: clamp(1.52rem, 1.16rem + 1vw, 1.92rem);
   }
 }
+
+/* Final overflow guard: decorative home/world effects must not widen layout metrics. */
+body.home-alt-luxe main,
+body.home-alt-luxe .hero,
+body.home-alt-luxe .hero-right,
+body.home-alt-luxe .orbit-system {
+  overflow-x: clip !important;
+}
+
+body.world-page :is(.world-section, #world, #language, #maps) {
+  overflow: visible !important;
+}
