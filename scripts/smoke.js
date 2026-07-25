@@ -6,6 +6,7 @@
 const fs = require("fs");
 const path = require("path");
 const { spawn } = require("child_process");
+const { createAuthTestStore } = require("./lib/auth-test-store");
 
 const ROOT = path.resolve(__dirname, "..");
 const FRONTEND_ROOT = path.join(ROOT, "frontend");
@@ -13,6 +14,11 @@ const PORT = Number(process.env.SMOKE_PORT || 4173);
 const BASE_URL = `http://127.0.0.1:${PORT}`;
 const STARTUP_TIMEOUT_MS = 20000;
 const REQUEST_TIMEOUT_MS = 10000;
+const authTestStore = createAuthTestStore({
+  root: ROOT,
+  namespace: "smoke",
+  envKey: "SMOKE_AUTH_DATA_ROOT",
+});
 
 const ROUTES = [
   "/",
@@ -204,9 +210,18 @@ const checkRoutes = async () => {
 
 const startServer = () => {
   try {
+    authTestStore.prepare();
     const child = spawn(process.execPath, ["server.js"], {
       cwd: ROOT,
-      env: { ...process.env, PORT: String(PORT) },
+      env: {
+        ...process.env,
+        ...authTestStore.env(),
+        PORT: String(PORT),
+        AUTH_STORE_BACKEND: "file",
+        AUTH_POSTGRES_URL: "",
+        DATABASE_URL: "",
+        AUTH_POSTGRES_FALLBACK_TO_FILE: "false",
+      },
       stdio: ["ignore", "pipe", "pipe"],
     });
 
@@ -288,6 +303,8 @@ const main = async () => {
   }
   }
 
+  authTestStore.cleanup();
+
   if (allFailures.length) {
     console.error("SMOKE CHECK FAILED");
     allFailures.forEach((failure) => console.error(`- ${failure}`));
@@ -298,6 +315,7 @@ const main = async () => {
 };
 
 main().catch((error) => {
+  authTestStore.cleanup();
   console.error("SMOKE CHECK FAILED");
   console.error(`- ${error.message || error}`);
   process.exit(1);

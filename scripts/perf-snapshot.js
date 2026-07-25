@@ -6,6 +6,7 @@
 const fs = require("fs");
 const path = require("path");
 const { spawn } = require("child_process");
+const { createAuthTestStore } = require("./lib/auth-test-store");
 
 /* --------------------------------------------------------------------------
    CONFIG
@@ -17,6 +18,11 @@ const PORT = Number(process.env.PERF_PORT || 4174);
 const BASE_URL = `http://127.0.0.1:${PORT}`;
 const STARTUP_TIMEOUT_MS = 20000;
 const REQUEST_TIMEOUT_MS = 10000;
+const authTestStore = createAuthTestStore({
+  root: ROOT,
+  namespace: "perf",
+  envKey: "PERF_AUTH_DATA_ROOT",
+});
 
 const ROUTES = [
   "/index.html",
@@ -48,9 +54,18 @@ const fetchWithTimeout = async (url, timeoutMs = REQUEST_TIMEOUT_MS) => {
 };
 
 const startServer = () => {
+  authTestStore.prepare();
   const child = spawn(process.execPath, ["server.js"], {
     cwd: ROOT,
-    env: { ...process.env, PORT: String(PORT) },
+    env: {
+      ...process.env,
+      ...authTestStore.env(),
+      PORT: String(PORT),
+      AUTH_STORE_BACKEND: "file",
+      AUTH_POSTGRES_URL: "",
+      DATABASE_URL: "",
+      AUTH_POSTGRES_FALLBACK_TO_FILE: "false",
+    },
     stdio: ["ignore", "pipe", "pipe"],
   });
 
@@ -133,6 +148,7 @@ const buildSnapshot = async () => {
     throw new Error(message);
   } finally {
     await stopServer(child);
+    authTestStore.cleanup();
   }
 };
 
@@ -161,6 +177,7 @@ buildSnapshot()
     console.log(JSON.stringify(snapshot, null, 2));
   })
   .catch((error) => {
+    authTestStore.cleanup();
     console.error("PERF SNAPSHOT FAILED");
     console.error(`- ${error.message || error}`);
     process.exit(1);

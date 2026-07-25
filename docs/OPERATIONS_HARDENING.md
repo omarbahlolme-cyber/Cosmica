@@ -203,13 +203,19 @@ Use this to control where account/session state is stored.
    - Uses `backend/data/accounts.json` (+ last-known-good snapshot).
 2. Optional Postgres mode:
    - `AUTH_STORE_BACKEND=postgres`
-   - Set `AUTH_POSTGRES_URL` (or fallback `DATABASE_URL`).
+   - Set `AUTH_POSTGRES_URL` to the provider's direct connection URL.
+   - Remote production URLs must include `sslmode=require` (or stronger).
+   - For Neon, use the direct Oregon endpoint with `channel_binding=require`, not the pooled endpoint.
 3. Production behavior:
    - If Postgres mode is enabled without URL, startup fails fast.
    - If file mode is used in production, readiness emits a warning (acceptable only with persistent disk + single instance).
+   - Keep `AUTH_POSTGRES_FALLBACK_TO_FILE=false`; production readiness fails when fallback is enabled because an ephemeral file store can split account and premium state.
+   - Idle Postgres pool errors are reported without crashing the process; the next query reconnects after Neon scale-to-zero.
 4. Recommended migration flow:
-   - Deploy once with Postgres env keys configured.
-   - Server auto-bootstraps Postgres store from current in-memory/file state if DB row is empty.
+   - Use `AUTH_POSTGRES_BOOTSTRAP_FROM_FILE=false` for a clean database.
+   - Use `AUTH_POSTGRES_BOOTSTRAP_FROM_FILE=true` only during an intentional, supervised file-to-Postgres migration.
+   - Keep `AUTH_POSTGRES_MAX_CONNECTIONS=5` for the single Render service.
+   - Deploy once with Postgres env keys configured; the server creates the table and initial row.
    - Run `npm run auth:check:readiness` and verify no `FAIL`.
 
 ### 4.4 Security audit policy

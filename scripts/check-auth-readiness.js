@@ -118,11 +118,63 @@ try {
   const publicOrigin = String(process.env.PUBLIC_APP_ORIGIN || "").trim();
   const authStoreBackend = String(process.env.AUTH_STORE_BACKEND || "file").trim().toLowerCase() || "file";
   const authPostgresUrl = String(process.env.AUTH_POSTGRES_URL || process.env.DATABASE_URL || "").trim();
+  const authPostgresBootstrapFromFile = isTruthy(process.env.AUTH_POSTGRES_BOOTSTRAP_FROM_FILE);
+  const authPostgresFallbackToFile = ["1", "true", "yes"].includes(
+    String(process.env.AUTH_POSTGRES_FALLBACK_TO_FILE || "")
+      .trim()
+      .toLowerCase()
+  );
   if (authStoreBackend === "postgres") {
     if (authPostgresUrl) {
-      addResult("pass", "Postgres auth store URL configured.");
+      try {
+        const parsed = new URL(authPostgresUrl);
+        const protocolOk = parsed.protocol === "postgres:" || parsed.protocol === "postgresql:";
+        const hostname = parsed.hostname.toLowerCase();
+        const isLocalPostgres =
+          hostname === "localhost" || hostname === "127.0.0.1" || hostname === "::1";
+        const isNeon = hostname.endsWith(".neon.tech");
+        const isPooledNeon = isNeon && hostname.includes("-pooler.");
+        const sslMode = String(parsed.searchParams.get("sslmode") || "").toLowerCase();
+        const tlsRequired = ["require", "verify-ca", "verify-full"].includes(sslMode);
+        if (!protocolOk) {
+          addResult("fail", "AUTH_POSTGRES_URL must use postgres:// or postgresql://.");
+        } else if (isProduction && !isLocalPostgres && !tlsRequired) {
+          addResult("fail", "Remote production Postgres URL must include sslmode=require or stronger.");
+        } else if (isPooledNeon) {
+          addResult("fail", "Use the direct Neon connection URL, not the pooled URL.");
+        } else {
+          addResult("pass", "Postgres auth store URL is valid and transport policy is satisfied.");
+        }
+        if (
+          isNeon &&
+          String(parsed.searchParams.get("channel_binding") || "").toLowerCase() !== "require"
+        ) {
+          addResult("warn", "Neon URL should include channel_binding=require.");
+        }
+      } catch {
+        addResult("fail", "AUTH_POSTGRES_URL is not a valid URL.");
+      }
+    } else if (authPostgresFallbackToFile) {
+      addResult(
+        "warn",
+        "AUTH_STORE_BACKEND=postgres has no AUTH_POSTGRES_URL/DATABASE_URL; emergency file fallback will be used until Postgres is configured."
+      );
     } else {
       addResult("fail", "AUTH_STORE_BACKEND=postgres requires AUTH_POSTGRES_URL (or DATABASE_URL).");
+    }
+    if (authPostgresFallbackToFile) {
+      addResult(
+        isProduction ? "fail" : "warn",
+        "AUTH_POSTGRES_FALLBACK_TO_FILE is enabled. Production must fail closed to prevent split auth data."
+      );
+    }
+    if (authPostgresBootstrapFromFile) {
+      addResult(
+        isProduction ? "fail" : "warn",
+        "AUTH_POSTGRES_BOOTSTRAP_FROM_FILE is enabled; an empty Postgres store can import local account data."
+      );
+    } else {
+      addResult("pass", "Postgres file bootstrap is disabled.");
     }
   } else if (authStoreBackend === "file") {
     if (isProduction) {

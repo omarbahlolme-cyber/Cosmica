@@ -86,10 +86,13 @@ const request = (pathname, options = {}) =>
   });
 
 const addResult = (name, ok, details) => {
-  checks.push({ name, ok, details });
+  const check = { name, ok, details };
+  checks.push(check);
   if (!ok) {
     hasFailure = true;
   }
+  const mark = ok ? "PASS" : "FAIL";
+  console.log(`[${mark}] ${check.name} :: ${check.details}`);
 };
 
 const extractCookieHeader = (headers) => {
@@ -149,6 +152,8 @@ const verifyProgressContractShape = (payload) => {
 
 const containsIgnoreCase = (text, needle) =>
   String(text || "").toLowerCase().includes(String(needle || "").toLowerCase());
+
+console.log(`VERIFY_BASE_URL=${baseUrl}`);
 
 const run = async () => {
   const health = await request("/api/health", { headers: { Accept: "application/json" } });
@@ -414,12 +419,6 @@ const run = async () => {
   } else {
     hasCoverageSkips = true;
     addResult("admin-api-auth", true, "skipped (set VERIFY_ADMIN_TOKEN to test)");
-  }
-
-  console.log(`VERIFY_BASE_URL=${baseUrl}`);
-  for (const check of checks) {
-    const mark = check.ok ? "PASS" : "FAIL";
-    console.log(`[${mark}] ${check.name} :: ${check.details}`);
   }
 
   if (hasCoverageSkips) {

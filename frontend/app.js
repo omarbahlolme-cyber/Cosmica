@@ -830,6 +830,22 @@ window.addEventListener(
    ========================================================================== */
 // Thin API wrapper for auth/account/progress/billing endpoints used across UI modules.
 const createCosmicaAuthClient = () => {
+  const AUTH_SESSION_HINT_COOKIE_NAME = "cosmica_session_hint";
+
+  const hasSessionHintCookie = () =>
+    document.cookie
+      .split(";")
+      .map((item) => item.trim())
+      .some((item) => item === `${AUTH_SESSION_HINT_COOKIE_NAME}=1`);
+
+  const hasStoredAuthHint = () => {
+    try {
+      return sessionStorage.getItem("cosmicaAuthStateHint") === "1";
+    } catch {
+      return false;
+    }
+  };
+
   const parseJsonResponse = async (response) => {
     try {
       return await response.json();
@@ -933,6 +949,9 @@ const createCosmicaAuthClient = () => {
         method: "POST",
       }),
     getSession: async () => {
+      if (!hasSessionHintCookie() && !hasStoredAuthHint()) {
+        return null;
+      }
       const payload = await requestOrNullOnUnauthorized("/api/auth/me");
       if (payload) {
         applyBaseLanguageFromAuthPayload(payload);

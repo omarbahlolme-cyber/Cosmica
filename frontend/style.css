@@ -11416,6 +11416,14 @@ body.world-page .world-maps {
   margin-bottom: 28px;
 }
 
+body.world-page:not(.show-language) #language {
+  display: none !important;
+}
+
+body.world-page:not(.show-language) .world-maps {
+  margin-top: clamp(72px, 10vw, 120px);
+}
+
 body.world-page .world-hero {
   display: grid;
   grid-template-columns: minmax(300px, 1fr) minmax(260px, 360px);
@@ -16761,6 +16769,10 @@ section,
     margin-top: 228px;
   }
 
+  body.world-page:not(.show-language) .world-maps {
+    margin-top: 96px;
+  }
+
   body.world-page :is(#world, #language, #maps) {
     scroll-margin-top: 228px;
   }
@@ -17387,6 +17399,10 @@ body.world-page :is(.world-section, #world, #language, #maps) {
     margin-top: 132px;
   }
 
+  body.world-page:not(.show-language) .world-maps {
+    margin-top: 88px;
+  }
+
   body.world-page .world-maps .steps {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -17400,6 +17416,10 @@ body.world-page :is(.world-section, #world, #language, #maps) {
 @media (min-width: 1024px) and (max-width: 1366px) and (orientation: portrait) {
   body.world-page .world-maps {
     margin-top: 132px;
+  }
+
+  body.world-page:not(.show-language) .world-maps {
+    margin-top: 88px;
   }
 }
 
@@ -17943,6 +17963,10 @@ body.is-ipad.world-page .world-maps {
   margin-top: 284px;
 }
 
+body.is-ipad.world-page:not(.show-language) .world-maps {
+  margin-top: 96px;
+}
+
 body.is-ipad.world-page :is(#world, #language, #maps) {
   scroll-margin-top: 284px;
 }
@@ -18008,6 +18032,10 @@ body.is-ipad .footer-inline-links {
 
   body.world-page .world-maps {
     margin-top: 248px !important;
+  }
+
+  body.world-page:not(.show-language) .world-maps {
+    margin-top: 72px !important;
   }
 
   body.world-page :is(#world, #language, #maps) {
@@ -18077,6 +18105,10 @@ body.is-ipad .footer-inline-links {
 
   body.world-page .world-maps {
     margin-top: 312px !important;
+  }
+
+  body.world-page:not(.show-language) .world-maps {
+    margin-top: 96px !important;
   }
 
   body.world-page :is(#world, #language, #maps) {

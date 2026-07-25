@@ -2,15 +2,28 @@ services:
   - type: web
     name: cosmica
     runtime: node
+    region: oregon
     buildCommand: npm install
     startCommand: npm start
     healthCheckPath: /api/health
     autoDeployTrigger: commit
     envVars:
+      - key: NODE_VERSION
+        value: 24.14.1
       - key: NODE_ENV
         value: production
       - key: PUBLIC_APP_ORIGIN
         value: https://www.cosmicalearn.com
+      - key: AUTH_STORE_BACKEND
+        value: postgres
+      - key: AUTH_POSTGRES_URL
+        sync: false
+      - key: AUTH_POSTGRES_MAX_CONNECTIONS
+        value: "5"
+      - key: AUTH_POSTGRES_BOOTSTRAP_FROM_FILE
+        value: "false"
+      - key: AUTH_POSTGRES_FALLBACK_TO_FILE
+        value: "false"
       - key: ADMIN_SECURITY_TOKEN
         sync: false
       - key: STRIPE_SECRET_KEY

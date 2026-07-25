@@ -5,6 +5,7 @@
    ========================================================================== */
 const path = require("path");
 const { spawn } = require("child_process");
+const { createAuthTestStore } = require("./lib/auth-test-store");
 
 const ROOT = path.resolve(__dirname, "..");
 const PORT = Number(process.env.CACHE_POLICY_PORT || 4174);
@@ -12,6 +13,11 @@ const BASE_URL = `http://127.0.0.1:${PORT}`;
 const STARTUP_TIMEOUT_MS = 20000;
 const REQUEST_TIMEOUT_MS = 10000;
 const ROUTES = ["/index.html", "/world-german.html"];
+const authTestStore = createAuthTestStore({
+  root: ROOT,
+  namespace: "html-cache",
+  envKey: "CACHE_POLICY_AUTH_DATA_ROOT",
+});
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -30,9 +36,18 @@ const isSpawnRestriction = (value) =>
 
 const startServer = () => {
   try {
+    authTestStore.prepare();
     const child = spawn(process.execPath, ["server.js"], {
       cwd: ROOT,
-      env: { ...process.env, PORT: String(PORT) },
+      env: {
+        ...process.env,
+        ...authTestStore.env(),
+        PORT: String(PORT),
+        AUTH_STORE_BACKEND: "file",
+        AUTH_POSTGRES_URL: "",
+        DATABASE_URL: "",
+        AUTH_POSTGRES_FALLBACK_TO_FILE: "false",
+      },
       stdio: ["ignore", "pipe", "pipe"],
     });
 
@@ -105,6 +120,7 @@ const main = async () => {
   const { child, getStderr } = startServer();
   if (!child) {
     const stderr = getStderr();
+    authTestStore.cleanup();
     if (isSpawnRestriction(stderr)) {
       console.warn("SKIP [html-cache] blocked by environment restrictions");
       if (stderr) {
@@ -132,10 +148,12 @@ const main = async () => {
     console.log("PASS [html-cache] HTML responses are prefetch-eligible");
   } finally {
     await stopServer(child);
+    authTestStore.cleanup();
   }
 };
 
 main().catch((error) => {
+  authTestStore.cleanup();
   console.error(`FAIL [html-cache] ${error.message || error}`);
   process.exit(1);
 });

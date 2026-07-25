@@ -6,3 +6,5 @@ live_*.js
 live_*.css
 tmp/
 backend/data/
+docs/*recovery-codes*.txt
+docs/Essential Notes.txt

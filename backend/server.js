@@ -1263,6 +1263,33 @@ const hasSmtpDeliveryConfig = () =>
 const hasAnyEmailDeliveryConfig = () =>
   Boolean(String(process.env.RESEND_API_KEY || "").trim()) || hasSmtpDeliveryConfig();
 
+const validatePostgresConnectionUrl = (rawUrl) => {
+  if (!rawUrl) {
+    return { ok: false, reason: "missing", isLocal: false, isNeon: false };
+  }
+  try {
+    const parsed = new URL(rawUrl);
+    if (parsed.protocol !== "postgres:" && parsed.protocol !== "postgresql:") {
+      return { ok: false, reason: "protocol", isLocal: false, isNeon: false };
+    }
+    const hostname = parsed.hostname.toLowerCase();
+    const isLocal = hostname === "localhost" || hostname === "127.0.0.1" || hostname === "::1";
+    const isNeon = hostname.endsWith(".neon.tech");
+    const sslMode = String(parsed.searchParams.get("sslmode") || "").toLowerCase();
+    return {
+      ok: true,
+      isLocal,
+      isNeon,
+      isPooledNeon: isNeon && hostname.includes("-pooler."),
+      usesTls: ["require", "verify-ca", "verify-full"].includes(sslMode),
+      requiresChannelBinding:
+        String(parsed.searchParams.get("channel_binding") || "").toLowerCase() === "require",
+    };
+  } catch {
+    return { ok: false, reason: "format", isLocal: false, isNeon: false };
+  }
+};
+
 const runAuthRuntimeConfigAudit = () => {
   const issues = [];
   const warnings = [];
@@ -1314,12 +1341,58 @@ const runAuthRuntimeConfigAudit = () => {
         "Auth store is file-backed; production should run on persistent storage and a single instance, or migrate auth data to a shared database."
       );
     }
-    if (AUTH_STORE_BACKEND === "postgres" && !AUTH_POSTGRES_URL) {
+    if (
+      AUTH_STORE_BACKEND === "postgres" &&
+      !AUTH_POSTGRES_URL &&
+      !AUTH_POSTGRES_FALLBACK_TO_FILE
+    ) {
       issues.push("AUTH_STORE_BACKEND=postgres requires AUTH_POSTGRES_URL (or DATABASE_URL).");
       hasFatalStartupIssue = true;
     }
+    if (AUTH_STORE_BACKEND === "postgres" && AUTH_POSTGRES_FALLBACK_TO_FILE) {
+      warnings.push(
+        "AUTH_POSTGRES_FALLBACK_TO_FILE is enabled; if Postgres is unavailable, production will boot with the file auth store. This is an emergency-only mode."
+      );
+      if (!AUTH_POSTGRES_URL) {
+        warnings.push(
+          "AUTH_STORE_BACKEND=postgres has no AUTH_POSTGRES_URL/DATABASE_URL; production will use the emergency file auth store until the database URL is configured."
+        );
+      }
+    }
+    if (AUTH_STORE_BACKEND === "postgres" && AUTH_POSTGRES_URL) {
+      const postgresUrlStatus = validatePostgresConnectionUrl(AUTH_POSTGRES_URL);
+      if (!postgresUrlStatus.ok) {
+        issues.push("AUTH_POSTGRES_URL must be a valid postgres:// or postgresql:// URL.");
+        hasFatalStartupIssue = true;
+      } else {
+        if (!postgresUrlStatus.isLocal && !postgresUrlStatus.usesTls) {
+          issues.push("Remote AUTH_POSTGRES_URL must enforce TLS with sslmode=require or stronger.");
+          hasFatalStartupIssue = true;
+        }
+        if (postgresUrlStatus.isPooledNeon) {
+          issues.push(
+            "Use Neon's direct connection URL for AUTH_POSTGRES_URL; the pooled URL is incompatible with this service's startup settings."
+          );
+          hasFatalStartupIssue = true;
+        }
+        if (postgresUrlStatus.isNeon && !postgresUrlStatus.requiresChannelBinding) {
+          warnings.push(
+            "Neon AUTH_POSTGRES_URL should include channel_binding=require for stronger connection authentication."
+          );
+        }
+      }
+    }
+    if (AUTH_STORE_BACKEND === "postgres" && AUTH_POSTGRES_BOOTSTRAP_FROM_FILE) {
+      warnings.push(
+        "AUTH_POSTGRES_BOOTSTRAP_FROM_FILE is enabled in production; an empty Postgres store will import local file-backed accounts."
+      );
+    }
   }
-  if (AUTH_STORE_BACKEND === "postgres" && !AUTH_POSTGRES_URL) {
+  if (
+    AUTH_STORE_BACKEND === "postgres" &&
+    !AUTH_POSTGRES_URL &&
+    !AUTH_POSTGRES_FALLBACK_TO_FILE
+  ) {
     warnings.push(
       "AUTH_STORE_BACKEND=postgres requested but AUTH_POSTGRES_URL/DATABASE_URL is empty."
     );
@@ -1420,6 +1493,28 @@ const AUTH_POSTGRES_ROW_KEY =
   String(process.env.AUTH_POSTGRES_ROW_KEY || "primary")
     .trim()
     .slice(0, 120) || "primary";
+const AUTH_POSTGRES_CONNECTION_TIMEOUT_MS = Math.max(
+  1000,
+  Math.min(30000, Number(process.env.AUTH_POSTGRES_CONNECTION_TIMEOUT_MS || 10000) || 10000)
+);
+const AUTH_POSTGRES_QUERY_TIMEOUT_MS = Math.max(
+  1000,
+  Math.min(30000, Number(process.env.AUTH_POSTGRES_QUERY_TIMEOUT_MS || 15000) || 15000)
+);
+const AUTH_POSTGRES_MAX_CONNECTIONS = Math.max(
+  1,
+  Math.min(20, Number(process.env.AUTH_POSTGRES_MAX_CONNECTIONS || 5) || 5)
+);
+const AUTH_POSTGRES_BOOTSTRAP_FROM_FILE = ["1", "true", "yes"].includes(
+  String(process.env.AUTH_POSTGRES_BOOTSTRAP_FROM_FILE || "")
+    .trim()
+    .toLowerCase()
+);
+const AUTH_POSTGRES_FALLBACK_TO_FILE = ["1", "true", "yes"].includes(
+  String(process.env.AUTH_POSTGRES_FALLBACK_TO_FILE || "")
+    .trim()
+    .toLowerCase()
+);
 const DELETED_ACCOUNTS_AUDIT_FILE = path.join(AUTH_DATA_ROOT, "deleted-accounts.json");
 const REGISTERED_ACCOUNTS_AUDIT_FILE = path.join(AUTH_DATA_ROOT, "registered-accounts.json");
 const BLOCKED_USERS_STORE_FILE = path.join(AUTH_DATA_ROOT, "blocked-users.json");
@@ -1428,6 +1523,7 @@ const AUTH_STORE_SCHEMA_VERSION = 1;
 const BLOCKED_USERS_SCHEMA_VERSION = 1;
 const SECURITY_EVENTS_SCHEMA_VERSION = 1;
 const AUTH_COOKIE_NAME = "cosmica_session";
+const AUTH_SESSION_HINT_COOKIE_NAME = "cosmica_session_hint";
 const SESSION_TTL_MS = 1000 * 60 * 60 * 24 * 30;
 const MAX_SESSIONS_PER_USER = 6;
 const ADMIN_SECURITY_TOKEN = String(
@@ -2496,6 +2592,42 @@ const loadAuthStoreFromDisk = () => {
 let authStorePostgresPool = null;
 let authStorePostgresRevision = 0;
 
+const closeAuthStorePostgresPool = async () => {
+  const pool = authStorePostgresPool;
+  authStorePostgresPool = null;
+  if (!pool) {
+    return;
+  }
+  try {
+    await pool.end();
+  } catch (error) {
+    reportServerError("auth-store-postgres-close", error);
+  }
+};
+
+const getPostgresStartupFailureGuidance = (error) => {
+  const errorCode = String(error?.code || "").trim().toUpperCase();
+  if (errorCode === "ENOTFOUND" || errorCode === "EAI_AGAIN") {
+    return [
+      "[auth-store] Postgres hostname lookup failed.",
+      "Confirm the database is active, then replace AUTH_POSTGRES_URL with its current direct connection URL.",
+    ].join(" ");
+  }
+  if (errorCode === "ECONNREFUSED" || errorCode === "ETIMEDOUT") {
+    return [
+      "[auth-store] Postgres could not be reached.",
+      "Confirm the database is available and AUTH_POSTGRES_URL points to its current connection URL.",
+    ].join(" ");
+  }
+  if (errorCode === "28P01" || errorCode === "28000") {
+    return [
+      "[auth-store] Postgres rejected the configured credentials.",
+      "Rotate the database credentials and update AUTH_POSTGRES_URL.",
+    ].join(" ");
+  }
+  return "";
+};
+
 const getAuthStorePostgresPool = () => {
   if (authStorePostgresPool) {
     return authStorePostgresPool;
@@ -2508,10 +2640,26 @@ const getAuthStorePostgresPool = () => {
       `Postgres backend requested but pg package is missing: ${error?.message || error}`
     );
   }
-  authStorePostgresPool = new Pool({
-    connectionString: AUTH_POSTGRES_URL,
-    ssl: isProduction ? { rejectUnauthorized: false } : undefined,
+  const postgresConnectionUrl = new URL(AUTH_POSTGRES_URL);
+  if (postgresConnectionUrl.searchParams.get("sslmode") === "require") {
+    postgresConnectionUrl.searchParams.set("sslmode", "verify-full");
+  }
+  const pool = new Pool({
+    connectionString: postgresConnectionUrl.toString(),
+    connectionTimeoutMillis: AUTH_POSTGRES_CONNECTION_TIMEOUT_MS,
+    query_timeout: AUTH_POSTGRES_QUERY_TIMEOUT_MS,
+    statement_timeout: AUTH_POSTGRES_QUERY_TIMEOUT_MS,
+    max: AUTH_POSTGRES_MAX_CONNECTIONS,
+    idleTimeoutMillis: 30000,
+    keepAlive: true,
+    enableChannelBinding: true,
   });
+  pool.on("error", (error) => {
+    reportServerError("auth-store-postgres-idle-client", error, {
+      recoverable: true,
+    });
+  });
+  authStorePostgresPool = pool;
   return authStorePostgresPool;
 };
 
@@ -2759,10 +2907,17 @@ const initializeAuthStoreFromPostgres = async () => {
     authStorePostgresRevision = Number(existingSnapshot.revision) || 0;
     return;
   }
-  const bootstrappedStore = normalizeAuthStore(authStore);
+  const bootstrappedStore = AUTH_POSTGRES_BOOTSTRAP_FROM_FILE
+    ? normalizeAuthStore(authStore)
+    : createEmptyAuthStore();
   await upsertAuthStoreSnapshotInPostgres({ revision: 1, store: bootstrappedStore });
   authStore = bootstrappedStore;
   authStorePostgresRevision = 1;
+  console.log(
+    AUTH_POSTGRES_BOOTSTRAP_FROM_FILE
+      ? "[auth-store] Initialized Postgres auth store from local file data."
+      : "[auth-store] Initialized a clean Postgres auth store."
+  );
 };
 
 const normalizeDeletedAccountPremiumSnapshot = (snapshot) => {
@@ -3600,6 +3755,16 @@ const setAuthSessionCookie = (req, res, rawToken) => {
     httpOnly: true,
   });
   res.append("Set-Cookie", cookie);
+  res.append(
+    "Set-Cookie",
+    serializeCookie(AUTH_SESSION_HINT_COOKIE_NAME, "1", {
+      path: "/",
+      maxAgeSec: Math.floor(SESSION_TTL_MS / 1000),
+      sameSite: "Lax",
+      secure: shouldUseSecureAuthCookie(req),
+      httpOnly: false,
+    })
+  );
 };
 
 const clearAuthSessionCookie = (req, res) => {
@@ -3612,6 +3777,17 @@ const clearAuthSessionCookie = (req, res) => {
     httpOnly: true,
   });
   res.append("Set-Cookie", cookie);
+  res.append(
+    "Set-Cookie",
+    serializeCookie(AUTH_SESSION_HINT_COOKIE_NAME, "", {
+      path: "/",
+      maxAgeSec: 0,
+      expires: new Date(0),
+      sameSite: "Lax",
+      secure: shouldUseSecureAuthCookie(req),
+      httpOnly: false,
+    })
+  );
 };
 
 const readGoogleOauthFlowCookie = (req) => {
@@ -9530,8 +9706,24 @@ const startServer = async () => {
       console.log("[auth-store] Using Postgres backend for accounts and sessions.");
     } catch (error) {
       reportServerError("auth-store-postgres-init", error);
-      console.error("[auth-store] Failed to initialize Postgres backend. Server startup aborted.");
-      process.exit(1);
+      const startupGuidance = getPostgresStartupFailureGuidance(error);
+      if (startupGuidance) {
+        console.error(startupGuidance);
+      }
+      if (AUTH_POSTGRES_FALLBACK_TO_FILE) {
+        await closeAuthStorePostgresPool();
+        AUTH_STORE_BACKEND = "file";
+        console.error(
+          "[auth-store] Failed to initialize Postgres backend. Falling back to file backend because AUTH_POSTGRES_FALLBACK_TO_FILE is enabled."
+        );
+        console.warn(
+          "[auth-store] Emergency file fallback is active. Fix AUTH_POSTGRES_URL/Render Postgres before accepting real user or billing traffic."
+        );
+      }
+      if (AUTH_STORE_BACKEND === "postgres") {
+        console.error("[auth-store] Failed to initialize Postgres backend. Server startup aborted.");
+        process.exit(1);
+      }
     }
   } else {
     console.log("[auth-store] Using file backend for accounts and sessions.");

@@ -7,6 +7,12 @@ const copyIfExists = (source, target) => {
   }
 };
 
+const writeJsonIfMissing = (target, value) => {
+  if (!fs.existsSync(target)) {
+    fs.writeFileSync(target, JSON.stringify(value, null, 2), "utf8");
+  }
+};
+
 const createAuthTestStore = ({ root, namespace, envKey = "AUTH_TEST_DATA_ROOT" }) => {
   const defaultRoot = path.join(root, "backend", "data");
   const explicitRoot = String(process.env[envKey] || process.env.AUTH_DATA_ROOT || "").trim();
@@ -30,6 +36,32 @@ const createAuthTestStore = ({ root, namespace, envKey = "AUTH_TEST_DATA_ROOT" }
     ]) {
       copyIfExists(path.join(defaultRoot, fileName), path.join(authDataRoot, fileName));
     }
+    const updatedAt = new Date().toISOString();
+    const emptyAuthStore = {
+      schemaVersion: 1,
+      updatedAt,
+      users: {},
+      emailIndex: {},
+      sessions: {},
+      giftTokens: { tokens: {} },
+      deletedUsers: { userIds: {}, emails: {} },
+    };
+    writeJsonIfMissing(path.join(authDataRoot, "accounts.json"), emptyAuthStore);
+    writeJsonIfMissing(path.join(authDataRoot, "accounts.last-known-good.json"), emptyAuthStore);
+    writeJsonIfMissing(path.join(authDataRoot, "deleted-accounts.json"), []);
+    writeJsonIfMissing(path.join(authDataRoot, "registered-accounts.json"), []);
+    writeJsonIfMissing(path.join(authDataRoot, "blocked-users.json"), {
+      schemaVersion: 1,
+      updatedAt,
+      emails: {},
+      userIds: {},
+      ipHashes: {},
+    });
+    writeJsonIfMissing(path.join(authDataRoot, "security-events.json"), {
+      schemaVersion: 1,
+      updatedAt,
+      events: [],
+    });
   };
 
   const cleanup = () => {
