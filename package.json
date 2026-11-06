@@ -108,7 +108,7 @@
     "express": "^4.22.2",
     "express-rate-limit": "^8.7.0",
     "helmet": "^8.1.0",
-    "nodemailer": "^9.0.3",
+    "nodemailer": "^10.1.4",
     "openai": "^6.38.0",
     "pg": "^8.20.0",
     "stripe": "^20.4.1",
