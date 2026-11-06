@@ -34,20 +34,52 @@ const app = express();
 const port = Number(process.env.PORT) || 3000;
 app.disable("x-powered-by");
 app.set("trust proxy", 1);
-const APP_VERSION = (() => {
-  try {
-    return require("../package.json").version || "unknown";
-  } catch {
-    return "unknown";
-  }
-})();
 const isProduction = process.env.NODE_ENV === "production";
 const DEFAULT_PUBLIC_APP_ORIGIN = "https://www.cosmicalearn.com";
+const configuredPublicOrigin = String(process.env.PUBLIC_APP_ORIGIN || DEFAULT_PUBLIC_APP_ORIGIN).trim();
+const publicAppUrl = (() => {
+  try {
+    return new URL(configuredPublicOrigin);
+  } catch {
+    return new URL(DEFAULT_PUBLIC_APP_ORIGIN);
+  }
+})();
+const canonicalPublicHost = publicAppUrl.host.toLowerCase();
+const trustedProductionHosts = new Set([
+  canonicalPublicHost,
+  "cosmicalearn.com",
+  String(process.env.RENDER_EXTERNAL_HOSTNAME || "").trim().toLowerCase(),
+].filter(Boolean));
 const PROJECT_ROOT = path.resolve(__dirname, "..");
 const FRONTEND_ROOT = path.join(PROJECT_ROOT, "frontend");
 const FRONTEND_MAPS_ROOT = path.join(FRONTEND_ROOT, "maps");
 const ADMIN_SECURITY_BASIC_USER = String(process.env.ADMIN_SECURITY_BASIC_USER || "").trim();
 const ADMIN_SECURITY_BASIC_PASS = String(process.env.ADMIN_SECURITY_BASIC_PASS || "").trim();
+const INLINE_SCRIPT_HASH_FILES = ["admin-security.html", "index.html", "offline.html"];
+
+const getExecutableInlineScriptHashes = () => {
+  const hashes = new Set();
+  for (const fileName of INLINE_SCRIPT_HASH_FILES) {
+    const filePath = path.join(FRONTEND_ROOT, fileName);
+    if (!fs.existsSync(filePath)) {
+      continue;
+    }
+    const html = fs.readFileSync(filePath, "utf8");
+    const scriptPattern = /<script(?![^>]*\bsrc=)([^>]*)>([\s\S]*?)<\/script>/gi;
+    let match = null;
+    while ((match = scriptPattern.exec(html))) {
+      const attributes = String(match[1] || "");
+      if (/\btype=["']application\/ld\+json["']/i.test(attributes)) {
+        continue;
+      }
+      const digest = crypto.createHash("sha256").update(match[2]).digest("base64");
+      hashes.add(`'sha256-${digest}'`);
+    }
+  }
+  return [...hashes];
+};
+
+const executableInlineScriptHashes = getExecutableInlineScriptHashes();
 
 app.use(
   express.json({
@@ -95,15 +127,16 @@ app.use((req, res, next) => {
   if (!isProduction || isLocalHost(req.headers.host || "")) {
     return next();
   }
-  const hostHeader = req.headers.host || "www.cosmicalearn.com";
-  const [hostname, portPart] = hostHeader.split(":");
-  const canonicalHost =
-    hostname.toLowerCase() === "cosmicalearn.com" ? "www.cosmicalearn.com" : hostname;
-  const normalizedHost = portPart ? `${canonicalHost}:${portPart}` : canonicalHost;
-  if (isSecureRequest(req) && normalizedHost === hostHeader) {
+  const hostHeader = String(req.headers.host || "").trim().toLowerCase();
+  if (!trustedProductionHosts.has(hostHeader)) {
+    return res.status(400).type("text/plain").send("Invalid host header.");
+  }
+  const isPublicHost = hostHeader === "cosmicalearn.com" || hostHeader === canonicalPublicHost;
+  const redirectHost = isPublicHost ? canonicalPublicHost : hostHeader;
+  if (isSecureRequest(req) && redirectHost === hostHeader) {
     return next();
   }
-  return res.redirect(308, `https://${normalizedHost}${req.originalUrl}`);
+  return res.redirect(308, `https://${redirectHost}${req.originalUrl}`);
 });
 
 app.use(
@@ -118,7 +151,11 @@ app.use(
         frameAncestors: ["'none'"],
         imgSrc: ["'self'", "data:", "https:"],
         objectSrc: ["'none'"],
-        scriptSrc: ["'self'", "'unsafe-inline'", "https://static.cloudflareinsights.com"],
+        scriptSrc: [
+          "'self'",
+          ...executableInlineScriptHashes,
+          "https://static.cloudflareinsights.com",
+        ],
         styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
         connectSrc: [
           "'self'",
@@ -172,8 +209,14 @@ const allowedOrigins = new Set([
   "http://127.0.0.1:5500",
   "https://cosmicalearn.com",
   "https://www.cosmicalearn.com",
-  "https://cosmica-03wo.onrender.com",
 ]);
+
+const renderExternalHostname = String(process.env.RENDER_EXTERNAL_HOSTNAME || "")
+  .trim()
+  .toLowerCase();
+if (renderExternalHostname) {
+  allowedOrigins.add(`https://${renderExternalHostname}`);
+}
 
 const extraOrigins = (process.env.ALLOWED_ORIGINS || "")
   .split(",")
@@ -306,7 +349,14 @@ const billingWebhookLimiter = createLimiter({
 /* --------------------------------------------------------------------------
    STATIC ASSET HOSTING
    -------------------------------------------------------------------------- */
-const FRESH_ASSET_EXTENSIONS = new Set([".js", ".css", ".json", ".map", ".webmanifest"]);
+const FRESH_ASSET_EXTENSIONS = new Set([".js", ".css", ".json", ".map"]);
+
+// Existing browsers may still request the retired worker's original URL.
+app.get("/service-worker.js", (req, res) => {
+  res.setHeader("Cache-Control", "no-store");
+  res.type("application/javascript");
+  res.sendFile(path.join(FRONTEND_ROOT, "service-worker.js"), { cacheControl: false });
+});
 
 const CACHEABLE_MEDIA_EXTENSIONS = new Set([
   ".svg",
@@ -330,7 +380,6 @@ const LEGACY_WORLD_ROUTE_REDIRECTS = new Map([
   ["/phrases.html", "/english-phrases.html"],
   ["/grammar.html", "/english-grammar.html"],
 ]);
-const PREMIUM_GRAMMAR_ROUTE_PATTERN = /^\/(?:english-grammar|grammar-[a-z0-9-]+)\.html$/;
 
 const parseBasicAuthHeader = (authorizationHeader = "") => {
   const raw = String(authorizationHeader || "").trim();
@@ -414,15 +463,6 @@ app.get("/gift/redeem", (req, res) => {
   }
   const search = params.toString();
   return res.redirect(302, `/${search ? `?${search}` : ""}`);
-});
-
-// Premium grammar URLs stay indexable; frontend enforces preview-vs-premium depth.
-app.use((req, res, next) => {
-  const requestPath = String(req.path || "").toLowerCase();
-  if (!PREMIUM_GRAMMAR_ROUTE_PATTERN.test(requestPath)) {
-    return next();
-  }
-  return next();
 });
 
 const sendMapAssetAlias = (fileName) => (req, res) => {
@@ -9592,13 +9632,12 @@ app.post("/api/chat", chatLimiter, async (req, res) => {
 /* --------------------------------------------------------------------------
    ROUTE: HEALTH CHECK
    -------------------------------------------------------------------------- */
-app.get("/api/health", healthLimiter, (req, res) => {
+const buildDetailedHealthPayload = () => {
   const checkoutConfig = resolveConfiguredPremiumCheckoutOptions();
   const runtime = getRuntimeHealthSummary();
-  res.json({
+  return {
     status: "ok",
     runtimeStatus: runtime.status,
-    version: APP_VERSION,
     uptimeSec: Math.round(process.uptime()),
     startedAt: PROCESS_STARTED_AT_ISO,
     timestamp: new Date().toISOString(),
@@ -9606,6 +9645,26 @@ app.get("/api/health", healthLimiter, (req, res) => {
     premiumCheckoutSource: checkoutConfig.source,
     dependencies: runtime.dependencies,
     apiFailures: runtime.apiFailures,
+  };
+};
+
+app.get(
+  "/api/admin/security/health",
+  adminSecurityLimiter,
+  requireAdminSecurityAccess,
+  (req, res) => {
+    res.setHeader("Cache-Control", "no-store");
+    return res.json(buildDetailedHealthPayload());
+  }
+);
+
+app.get("/api/health", healthLimiter, (req, res) => {
+  const health = buildDetailedHealthPayload();
+  res.setHeader("Cache-Control", "no-store");
+  return res.json({
+    status: health.status,
+    runtimeStatus: health.runtimeStatus,
+    timestamp: health.timestamp,
   });
 });
 
@@ -9738,7 +9797,6 @@ const startServer = async () => {
     void postErrorWebhook({
       type: "server_startup",
       severity: "info",
-      version: APP_VERSION,
       environment: process.env.NODE_ENV || "development",
       port,
       startedAt: PROCESS_STARTED_AT_ISO,

@@ -111,6 +111,12 @@ const expectSecurityHeaders = async (url) => {
       throw new Error(`${url} missing security header: ${headerName}`);
     }
   }
+
+  const csp = response.headers.get("content-security-policy") || "";
+  const scriptDirective = (csp.match(/(?:^|;)\s*script-src\s+([^;]+)/i) || [null, ""])[1];
+  if (!scriptDirective || scriptDirective.includes("'unsafe-inline'")) {
+    throw new Error(`${url} CSP script-src must use exact hashes instead of unsafe-inline`);
+  }
 };
 
 const expectHealthOk = async (url) => {
@@ -125,6 +131,11 @@ const expectHealthOk = async (url) => {
   }
   if (String(data.runtimeStatus || "ok").trim().toLowerCase() === "failing") {
     throw new Error(`${url} health runtimeStatus is failing`);
+  }
+  for (const privateField of ["dependencies", "apiFailures", "premiumCheckoutConfigured"]) {
+    if (Object.prototype.hasOwnProperty.call(data, privateField)) {
+      throw new Error(`${url} public health response exposes private field: ${privateField}`);
+    }
   }
 };
 

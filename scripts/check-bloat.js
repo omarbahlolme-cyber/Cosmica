@@ -46,6 +46,10 @@ const HTML_CLASS_ATTR_REGEX = /\bclass\s*=\s*["']([^"']+)["']/gi;
 const HTML_ID_ATTR_REGEX = /\bid\s*=\s*["']([^"']+)["']/gi;
 const JS_SELECTOR_REGEX = /["'`](?:[#.]([A-Za-z_][A-Za-z0-9_-]*))/g;
 const JS_CLASSNAME_ASSIGN_REGEX = /\bclassName\s*=\s*["'`]([^"'`]+)["'`]/g;
+// The homepage creates semantic HTML with node(tag, classes, text) and SVG with
+// literal { class: "..." } attributes. These are actual class uses, not exceptions.
+const JS_NODE_FACTORY_CLASS_REGEX = /\bnode\s*\(\s*["'`][a-z][\w-]*["'`]\s*,\s*["'`]([^"'`]+)["'`]/g;
+const JS_SVG_CLASS_ATTRIBUTE_REGEX = /\bclass\s*:\s*["'`]([^"'`]+)["'`]/g;
 const JS_CLASSLIST_CALL_REGEX = /\bclassList\.(?:add|remove|toggle|contains)\(([^)]*)\)/g;
 const JS_QUOTED_CLASS_TOKEN_REGEX = /["'`]([A-Za-z_][A-Za-z0-9_-]*)["'`]/g;
 const HEX_COLOR_TOKEN_REGEX = /^[A-Fa-f0-9]{3,8}$/;
@@ -103,6 +107,15 @@ const collectLocalReferences = () => {
     }
   }
 
+  // Explicit server sendFile routes are public references too (including the
+  // retirement endpoint used by browsers with an older worker registration).
+  const serverSource = readText(path.join(ROOT, "backend/server.js"));
+  const servedFile = /\bres\.sendFile\(path\.join\(FRONTEND_ROOT,\s*["']([^"']+)["']\)/g;
+  let servedMatch;
+  while ((servedMatch = servedFile.exec(serverSource)) !== null) {
+    const normalized = normalizeRef(servedMatch[1]);
+    if (normalized) referenced.add(normalized);
+  }
   return referenced;
 };
 
@@ -203,6 +216,12 @@ const collectUsedTokens = () => {
       let tokenMatch;
       while ((tokenMatch = JS_QUOTED_CLASS_TOKEN_REGEX.exec(argList)) !== null) {
         classes.add(tokenMatch[1]);
+      }
+    }
+    for (const factoryPattern of [JS_NODE_FACTORY_CLASS_REGEX, JS_SVG_CLASS_ATTRIBUTE_REGEX]) {
+      let factoryClass;
+      while ((factoryClass = factoryPattern.exec(content)) !== null) {
+        factoryClass[1].split(/\s+/).filter(Boolean).forEach((token) => classes.add(token));
       }
     }
   }

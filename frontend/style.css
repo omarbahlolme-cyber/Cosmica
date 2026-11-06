@@ -1026,69 +1026,11 @@ body.world-page .nav-links a {
     inset 0 -10px 16px rgba(7, 23, 46, 0.34);
 }
 
-.install-app-trigger {
-  --install-app-footer-offset: 0px;
-  --install-app-lift: 0px;
-  position: fixed;
-  right: 22px;
-  bottom: 22px;
-  z-index: 90;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 156px;
-  min-height: 48px;
-  padding: 11px 18px;
-  border-radius: 999px;
-  border: 1px solid rgba(118, 232, 208, 0.46);
-  background:
-    radial-gradient(circle at 20% 16%, rgba(110, 247, 194, 0.18), transparent 52%),
-    linear-gradient(
-        140deg,
-        rgba(255, 255, 255, 0.18) 0%,
-        rgba(255, 255, 255, 0.05) 38%,
-        rgba(7, 24, 34, 0.68) 100%
-      )
-      padding-box,
-    linear-gradient(
-        122deg,
-        rgba(110, 247, 194, 0.78),
-        rgba(104, 225, 255, 0.74) 54%,
-        rgba(160, 205, 255, 0.7)
-      )
-      border-box;
-  color: #edf8ff;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  box-shadow:
-    0 16px 30px rgba(6, 22, 42, 0.42),
-    0 0 0 1px rgba(214, 250, 240, 0.12),
-    inset 0 1px 0 rgba(236, 252, 246, 0.18);
-  cursor: pointer;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  transform: translateY(calc(var(--install-app-footer-offset) + var(--install-app-lift)));
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    filter 0.2s ease,
-    opacity 0.18s ease;
-}
 
-.install-app-trigger:hover,
-.install-app-trigger:focus-visible {
-  --install-app-lift: -2px;
-  border-color: rgba(150, 241, 222, 0.66);
-  filter: brightness(1.05) saturate(1.06);
-  box-shadow:
-    0 20px 36px rgba(6, 25, 47, 0.5),
-    0 0 0 1px rgba(223, 252, 242, 0.16),
-    inset 0 1px 0 rgba(242, 255, 248, 0.24);
-}
 
-.install-app-trigger:active {
-  --install-app-lift: 0px;
-}
+
+
+
 
 /* Premium progress celebrations (XP/quest completion). */
 .progress-celebration-overlay {
@@ -1318,9 +1260,7 @@ body.world-page .nav-links a {
   }
 }
 
-body.is-standalone-app .install-app-trigger {
-  display: none !important;
-}
+
 
 .account-slot {
   display: inline-flex;
@@ -1720,6 +1660,39 @@ body.is-standalone-app .install-app-trigger {
 .account-dropdown-card > * {
   position: relative;
   z-index: 1;
+}
+
+/* Shared account dismissal stays visible in guest and signed-in panels. */
+.account-dropdown-card .account-close {
+  position: absolute;
+  z-index: 3;
+  top: 10px;
+  right: 10px;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid #303341;
+  border-radius: 9px;
+  background: #151822;
+  color: #f1f0eb;
+  font: 24px/1 sans-serif;
+  cursor: pointer;
+}
+.account-close:hover { border-color: #8974ba; background: #211c30; }
+.account-close:focus-visible { outline: 2px solid #b5a5fb; outline-offset: 3px; }
+.account-dropdown .account-dropdown-card :is(.account-guest-head, .account-menu-header) { padding-right: 48px; }
+.footer .footer-legal-links a { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; padding-block: 8px; }
+
+@media (max-width: 390px) {
+  body.world-page .nav .brand { min-width: 0; gap: 6px; }
+  body.world-page .nav .brand-title { font-size: 17px; }
+  body.world-page .nav .brand-sub { font-size: 8px; letter-spacing: .02em; }
+  body.world-page .nav .nav-controls { gap: 6px; }
+  body.world-page .nav .sound-toggle { min-height: 44px; padding: 7px 8px; font-size: 10px; }
+  body.world-page .nav .account-trigger { width: 44px; min-width: 44px; min-height: 44px; padding: 5px; }
+  body.world-page .nav .account-trigger-caret { display: none; }
 }
 
 html.premium-setup-lock,
@@ -4538,276 +4511,51 @@ body:not(.world-page) .hero .eyebrow {
   transform: translateY(-2px);
 }
 
-.install-app-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 120;
-  display: grid;
-  place-items: center;
-  padding: 20px;
-  background:
-    radial-gradient(circle at top, rgba(90, 170, 255, 0.2), transparent 34%), rgba(4, 7, 18, 0.8);
-  backdrop-filter: blur(18px) saturate(0.9);
-  -webkit-backdrop-filter: blur(18px) saturate(0.9);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 180ms ease;
-}
 
-.install-app-overlay.is-visible {
-  opacity: 1;
-  pointer-events: auto;
-}
 
-.install-app-card {
-  position: relative;
-  isolation: isolate;
-  width: min(560px, calc(100vw - 24px));
-  border-radius: 26px;
-  border: 1px solid rgba(166, 226, 255, 0.34);
-  background:
-    radial-gradient(circle at 12% 0%, rgba(110, 247, 194, 0.18), transparent 32%),
-    radial-gradient(circle at 90% 12%, rgba(255, 180, 84, 0.16), transparent 28%),
-    linear-gradient(145deg, rgba(8, 15, 35, 0.98), rgba(11, 10, 28, 0.97));
-  box-shadow:
-    0 32px 78px rgba(2, 5, 16, 0.64),
-    0 0 0 1px rgba(176, 229, 255, 0.07),
-    inset 0 1px 0 rgba(236, 248, 255, 0.1),
-    inset 0 -28px 42px rgba(4, 10, 28, 0.34);
-  padding: 26px 24px 22px;
-  overflow: hidden;
-}
 
-.install-app-card::before,
-.install-app-card::after {
-  content: "";
-  position: absolute;
-  inset: auto;
-  pointer-events: none;
-  z-index: -1;
-}
 
-.install-app-card::before {
-  top: -18%;
-  right: -12%;
-  width: 220px;
-  height: 220px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(109, 244, 203, 0.18), transparent 70%);
-  filter: blur(8px);
-}
 
-.install-app-card::after {
-  left: -14%;
-  bottom: -24%;
-  width: 280px;
-  height: 220px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(104, 225, 255, 0.14), transparent 72%);
-  filter: blur(10px);
-}
 
-.install-app-card h3 {
-  margin: 0;
-  font-size: clamp(1.32rem, 2.4vw, 1.8rem);
-  color: rgba(255, 246, 218, 0.98);
-  text-shadow: 0 8px 24px rgba(107, 194, 255, 0.18);
-}
 
-.install-app-message {
-  margin: 10px 0 0;
-  color: rgba(214, 233, 252, 0.88);
-  line-height: 1.55;
-}
 
-.install-app-close {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  width: 38px;
-  height: 38px;
-  border-radius: 999px;
-  border: 1px solid rgba(188, 232, 255, 0.3);
-  background: rgba(10, 22, 45, 0.56);
-  color: rgba(214, 233, 252, 0.92);
-  font: inherit;
-  font-weight: 700;
-  cursor: pointer;
-  transition:
-    transform 140ms ease,
-    border-color 140ms ease,
-    background 140ms ease;
-}
 
-.install-app-close:hover,
-.install-app-close:focus-visible {
-  transform: scale(1.05);
-  border-color: rgba(220, 242, 255, 0.52);
-  background: rgba(14, 28, 58, 0.82);
-}
 
-.install-app-options {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
-  margin-top: 20px;
-}
 
-.install-app-option {
-  position: relative;
-  overflow: hidden;
-  text-align: left;
-  min-height: 152px;
-  padding: 18px 18px 16px;
-  border-radius: 22px;
-  border: 1px solid transparent;
-  background:
-    linear-gradient(
-        160deg,
-        rgba(255, 255, 255, 0.14),
-        rgba(255, 255, 255, 0.05) 34%,
-        rgba(7, 16, 34, 0.24)
-      )
-      padding-box,
-    linear-gradient(
-        130deg,
-        rgba(104, 225, 255, 0.6),
-        rgba(110, 247, 194, 0.34) 46%,
-        rgba(255, 180, 84, 0.26)
-      )
-      border-box;
-  color: var(--text);
-  cursor: pointer;
-  box-shadow:
-    0 18px 32px rgba(4, 10, 24, 0.34),
-    inset 0 1px 0 rgba(245, 251, 255, 0.1);
-  transition:
-    transform 0.18s ease,
-    border-color 0.18s ease,
-    box-shadow 0.18s ease,
-    filter 0.18s ease,
-    background 0.18s ease;
-}
 
-.install-app-option::before {
-  content: "";
-  position: absolute;
-  inset: 1px;
-  border-radius: inherit;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0)),
-    radial-gradient(circle at 14% 12%, rgba(255, 255, 255, 0.14), transparent 28%);
-  pointer-events: none;
-  opacity: 0.95;
-}
 
-.install-app-option::after {
-  content: "";
-  position: absolute;
-  top: -150%;
-  left: -24%;
-  width: 34%;
-  height: 380%;
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0),
-    rgba(255, 248, 228, 0.48),
-    rgba(255, 255, 255, 0)
-  );
-  transform: rotate(18deg) translateX(-260%);
-  transition: transform 0.46s ease;
-  pointer-events: none;
-}
 
-.install-app-option-mobile {
-  background:
-    radial-gradient(circle at 88% 14%, rgba(255, 180, 84, 0.16), transparent 32%),
-    linear-gradient(
-        160deg,
-        rgba(255, 255, 255, 0.14),
-        rgba(255, 255, 255, 0.05) 34%,
-        rgba(7, 16, 34, 0.24)
-      )
-      padding-box,
-    linear-gradient(
-        130deg,
-        rgba(255, 189, 101, 0.72),
-        rgba(255, 123, 173, 0.38) 48%,
-        rgba(109, 213, 255, 0.44)
-      )
-      border-box;
-}
 
-.install-app-option-desktop {
-  background:
-    radial-gradient(circle at 10% 14%, rgba(110, 247, 194, 0.18), transparent 32%),
-    linear-gradient(
-        160deg,
-        rgba(255, 255, 255, 0.14),
-        rgba(255, 255, 255, 0.05) 34%,
-        rgba(7, 16, 34, 0.24)
-      )
-      padding-box,
-    linear-gradient(
-        130deg,
-        rgba(104, 225, 255, 0.72),
-        rgba(110, 247, 194, 0.42) 48%,
-        rgba(183, 215, 255, 0.34)
-      )
-      border-box;
-}
 
-.install-app-option:hover,
-.install-app-option:focus-visible {
-  transform: translateY(-2px);
-  border-color: rgba(158, 231, 255, 0.5);
-  box-shadow:
-    0 24px 38px rgba(4, 12, 28, 0.5),
-    0 0 24px rgba(130, 209, 255, 0.12),
-    inset 0 1px 0 rgba(244, 251, 255, 0.16);
-  filter: saturate(1.08) brightness(1.04);
-}
 
-.install-app-option:hover::after,
-.install-app-option:focus-visible::after {
-  transform: rotate(18deg) translateX(470%);
-}
 
-.install-app-option:active {
-  transform: translateY(0);
-  box-shadow:
-    0 10px 18px rgba(4, 12, 28, 0.34),
-    inset 0 1px 0 rgba(244, 251, 255, 0.1);
-}
 
-.install-app-option-label {
-  display: block;
-  font-family: var(--font-title);
-  font-size: 1.02rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  color: rgba(255, 244, 222, 0.98);
-  text-shadow: 0 0 12px rgba(135, 212, 255, 0.18);
-}
 
-.install-app-option-copy {
-  display: block;
-  margin-top: 10px;
-  color: rgba(196, 223, 250, 0.82);
-  line-height: 1.5;
-}
 
-.install-app-feedback {
-  min-height: 24px;
-  margin: 16px 0 0;
-  color: rgba(255, 221, 168, 0.94);
-  font-size: 0.94rem;
-  line-height: 1.5;
-}
 
-body.install-app-modal-open {
-  overflow: hidden;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .hero-meta {
   display: grid;
@@ -14353,27 +14101,13 @@ body.world-page.start-lesson-transition #language.language-reveal {
 }
 
 @media (max-width: 720px) {
-  .install-app-trigger {
-    right: 14px;
-    bottom: max(14px, env(safe-area-inset-bottom));
-    min-width: 142px;
-    min-height: 46px;
-    padding-inline: 16px;
-  }
+  
 
-  .install-app-card {
-    padding: 24px 18px 18px;
-    border-radius: 22px;
-  }
+  
 
-  .install-app-options {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
+  
 
-  .install-app-option {
-    min-height: 132px;
-  }
+  
 
   .nav {
     display: flex;
@@ -14415,11 +14149,7 @@ body.world-page.start-lesson-transition #language.language-reveal {
     gap: 8px;
   }
 
-  .install-app-trigger {
-    min-width: 102px;
-    margin-right: 0;
-    padding-inline: 12px;
-  }
+  
 
   .brand-mark {
     width: 36px;
@@ -18744,4 +18474,90 @@ body.home-alt-luxe .orbit-system {
 
 body.world-page :is(.world-section, #world, #language, #maps) {
   overflow: visible !important;
+}
+
+/* Accessible keyboard entry point for every static page. */
+.skip-link {
+  position: fixed;
+  z-index: 100000;
+  top: max(8px, env(safe-area-inset-top));
+  left: 12px;
+  padding: 10px 14px;
+  border: 2px solid #fff;
+  border-radius: 10px;
+  color: #07101f;
+  background: #fff;
+  font-weight: 700;
+  transform: translateY(-180%);
+  transition: transform 120ms ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+.mobile-nav-toggle {
+  display: none;
+}
+
+@media (max-width: 720px) {
+  .nav.mobile-nav-ready {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "brand controls"
+      "toggle toggle"
+      "links links";
+  }
+
+  .mobile-nav-toggle {
+    grid-area: toggle;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    justify-self: stretch;
+    gap: 8px;
+    width: 100%;
+    min-height: 44px;
+    border: 1px solid rgba(181, 229, 255, 0.5);
+    border-radius: 12px;
+    color: #eef9ff;
+    background: rgba(9, 23, 53, 0.9);
+    font: 700 0.86rem/1 "Space Grotesk", sans-serif;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+  }
+
+  .mobile-nav-toggle:focus-visible {
+    outline: 3px solid #7becc6;
+    outline-offset: 2px;
+  }
+
+  .nav.mobile-nav-ready .nav-links {
+    display: none !important;
+  }
+
+  .nav.mobile-nav-ready.mobile-nav-open .nav-links {
+    grid-area: links;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    width: 100%;
+    margin-top: 0 !important;
+  }
+
+  .nav.mobile-nav-ready .nav-links a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px !important;
+    padding: 9px 10px !important;
+    font-size: 0.78rem !important;
+    line-height: 1.2 !important;
+    letter-spacing: 0.02em !important;
+    white-space: normal !important;
+  }
+
+  body.cookie-notice-open .scroll-top-btn {
+    bottom: calc(132px + env(safe-area-inset-bottom));
+  }
 }

@@ -166,6 +166,77 @@ if (navRoot) {
   const navLinksCount = navRoot.querySelectorAll(".nav-links a").length;
   navRoot.classList.toggle("nav-single-link", navLinksCount <= 1);
 }
+
+// Collapse crowded navigation links behind an accessible menu on small screens.
+const setupMobileNavigation = () => {
+  if (!navRoot || navRoot.dataset.mobileNavBound === "1") {
+    return;
+  }
+  const navLinks = navRoot.querySelector(".nav-links");
+  if (!navLinks || navLinks.querySelectorAll("a").length <= 1) {
+    return;
+  }
+  navRoot.dataset.mobileNavBound = "1";
+  const linksId = navLinks.id || "primary-navigation";
+  navLinks.id = linksId;
+
+  const toggle = document.createElement("button");
+  toggle.type = "button";
+  toggle.className = "mobile-nav-toggle";
+  toggle.setAttribute("aria-controls", linksId);
+  toggle.setAttribute("aria-expanded", "false");
+  toggle.innerHTML = '<span aria-hidden="true">☰</span><span>Menu</span>';
+  navRoot.insertBefore(toggle, navLinks);
+  navRoot.classList.add("mobile-nav-ready");
+
+  const closeMenu = ({ restoreFocus = false } = {}) => {
+    navRoot.classList.remove("mobile-nav-open");
+    toggle.setAttribute("aria-expanded", "false");
+    if (restoreFocus) {
+      toggle.focus();
+    }
+    syncRuntimeNavHeightVar();
+  };
+  const openMenu = () => {
+    navRoot.classList.add("mobile-nav-open");
+    toggle.setAttribute("aria-expanded", "true");
+    syncRuntimeNavHeightVar();
+  };
+
+  toggle.addEventListener("click", () => {
+    if (navRoot.classList.contains("mobile-nav-open")) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+  });
+  navLinks.addEventListener("click", (event) => {
+    if (event.target.closest("a")) {
+      closeMenu();
+    }
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && navRoot.classList.contains("mobile-nav-open")) {
+      closeMenu({ restoreFocus: true });
+    }
+  });
+  document.addEventListener("pointerdown", (event) => {
+    if (navRoot.classList.contains("mobile-nav-open") && !navRoot.contains(event.target)) {
+      closeMenu();
+    }
+  });
+  window.addEventListener(
+    "resize",
+    () => {
+      if (window.innerWidth > 720 && navRoot.classList.contains("mobile-nav-open")) {
+        closeMenu();
+      }
+    },
+    { passive: true }
+  );
+};
+
+setupMobileNavigation();
 /* ==========================================================================
    WORLD CONTEXT
    Resolve active world from URL/body and select world-specific translation packs.
@@ -198,13 +269,33 @@ const normalizeStoredBaseLanguagePreference = (value) => {
   }
   return normalized;
 };
-const readStoredBaseLanguagePreference = () =>
-  normalizeStoredBaseLanguagePreference(localStorage.getItem("cosmicaBaseLanguage"));
+// Keep the current choice usable when browser storage is blocked or full.
+let visitBaseLanguagePreference = null;
+const readStoredBaseLanguagePreference = () => {
+  if (visitBaseLanguagePreference !== null) {
+    return visitBaseLanguagePreference;
+  }
+  try {
+    return normalizeStoredBaseLanguagePreference(localStorage.getItem("cosmicaBaseLanguage"));
+  } catch {
+    return "";
+  }
+};
+const writeBaseLanguagePreference = (value = "") => {
+  visitBaseLanguagePreference = normalizeStoredBaseLanguagePreference(value);
+  try {
+    if (visitBaseLanguagePreference) {
+      localStorage.setItem("cosmicaBaseLanguage", visitBaseLanguagePreference);
+    } else {
+      localStorage.removeItem("cosmicaBaseLanguage");
+    }
+    // Keep normal cross-tab storage behavior; retain memory only on failed writes.
+    visitBaseLanguagePreference = null;
+  } catch {}
+};
 
 if (isHomePagePath) {
-  try {
-    localStorage.removeItem("cosmicaBaseLanguage");
-  } catch {}
+  writeBaseLanguagePreference();
 }
 const WORLD_MAP_TITLE_TRANSLATIONS = {
   english: {
@@ -576,32 +667,6 @@ const resolveAssetVersion = () => {
 const ASSET_VERSION = resolveAssetVersion();
 const withAssetVersion = (assetPath) =>
   ASSET_VERSION ? `${assetPath}?v=${encodeURIComponent(ASSET_VERSION)}` : assetPath;
-const LEGACY_PWA_INSTALL_DISMISSED_KEY = "cosmicaPwaInstallPromptDismissed:v1";
-const sanitizeStoreListingUrl = (value) => {
-  const raw = String(value || "").trim();
-  if (!raw) {
-    return "";
-  }
-  try {
-    const parsed = new URL(raw, window.location.href);
-    if (!/^https?:$/i.test(parsed.protocol)) {
-      return "";
-    }
-    return parsed.toString();
-  } catch {
-    return "";
-  }
-};
-const COSMICA_STORE_LINKS =
-  window.COSMICA_STORE_LINKS && typeof window.COSMICA_STORE_LINKS === "object"
-    ? window.COSMICA_STORE_LINKS
-    : {};
-const COSMICA_APP_STORE_URL = sanitizeStoreListingUrl(COSMICA_STORE_LINKS.appStoreUrl || "");
-const COSMICA_PLAY_STORE_URL = sanitizeStoreListingUrl(COSMICA_STORE_LINKS.playStoreUrl || "");
-let deferredInstallPrompt = null;
-let installEntryButton = null;
-let installModal = null;
-let installEntryButtonFooterGuardInitialized = false;
 let WORLD_TRANSLATIONS = null;
 let WORLD_GRAMMAR_TITLE_MAP = null;
 let WORLD_GRAMMAR_EXAMPLE_MAP = null;
@@ -829,6 +894,9 @@ window.addEventListener(
    Exposed globally for upcoming account UI and gamification flows.
    ========================================================================== */
 // Thin API wrapper for auth/account/progress/billing endpoints used across UI modules.
+const interfaceMessage = (legacy, current) =>
+  document.body.classList.contains("world-page") ? legacy : current;
+
 const createCosmicaAuthClient = () => {
   const AUTH_SESSION_HINT_COOKIE_NAME = "cosmica_session_hint";
 
@@ -878,7 +946,13 @@ const createCosmicaAuthClient = () => {
       const message =
         (payload && typeof payload.error === "string" && payload.error) ||
         `Request failed (${response.status})`;
-      const error = new Error(message);
+      const serviceUnavailable = /^(?:Email verification|Premium checkout) is not configured yet\.?$/.test(message);
+      const displayMessage = serviceUnavailable
+        ? interfaceMessage(message, message.startsWith("Email")
+          ? "Email verification is unavailable. Please contact support."
+          : "Checkout is unavailable. Please try again.")
+        : message;
+      const error = new Error(displayMessage);
       error.status = response.status;
       error.payload = payload;
       throw error;
@@ -899,7 +973,7 @@ const createCosmicaAuthClient = () => {
 
   const applyBaseLanguageFromAuthPayload = (payload) => {
     if (isHomePagePath) {
-      localStorage.removeItem("cosmicaBaseLanguage");
+      writeBaseLanguagePreference();
       return;
     }
     // World base-language selection is session-scoped and should not be
@@ -1536,11 +1610,11 @@ const createCosmicaGamificationClient = () => {
         state.ready = true;
         state.loading = false;
         if (status === 404) {
-          state.error = "Auth API is unavailable (404). Start the backend server with npm start.";
+          state.error = interfaceMessage("Auth API is unavailable (404). Start the backend server with npm start.", "Sign-in is unavailable. Please try again.");
         } else if (status > 0) {
-          state.error = `Auth request failed (${status}).`;
+          state.error = interfaceMessage(`Auth request failed (${status}).`, "Sign-in is unavailable. Please try again.");
         } else {
-          state.error = "Auth API is unreachable. Check that the backend server is running.";
+          state.error = interfaceMessage("Auth API is unreachable. Check that the backend server is running.", "Unable to connect. Check your connection and try again.");
         }
         notify();
       }
@@ -1886,7 +1960,7 @@ const setupAccountHub = () => {
     return;
   }
   trigger.setAttribute("type", "button");
-  trigger.setAttribute("aria-haspopup", "menu");
+  trigger.setAttribute("aria-haspopup", "dialog");
   trigger.setAttribute("aria-expanded", "false");
   trigger.removeAttribute("tabindex");
   const triggerAvatar = accountSlot.querySelector(".account-trigger-avatar");
@@ -1901,12 +1975,13 @@ const setupAccountHub = () => {
   dropdown.className = "account-dropdown";
   dropdown.hidden = true;
   dropdown.innerHTML = `
-    <div class="account-dropdown-card" role="menu" aria-label="Profile menu">
+    <div class="account-dropdown-card" role="dialog" aria-label="Account">
+      <button class="account-close" type="button" aria-label="Close account panel"><span aria-hidden="true">&times;</span></button>
       <p class="account-feedback" aria-live="polite"></p>
       <section class="account-guest-pane">
         <header class="account-guest-head">
           <p class="account-pane-title">Account & Progress</p>
-          <h3>Keep your streak and XP synced</h3>
+          <h3>Sign in or create an account</h3>
         </header>
         <div class="account-auth-switch" role="tablist" aria-label="Account forms">
           <button type="button" data-auth-panel="login" aria-selected="true">Log in</button>
@@ -1941,7 +2016,7 @@ const setupAccountHub = () => {
             <label>Email <input type="email" name="email" autocomplete="email" required /></label>
             <label>Password <input type="password" name="password" autocomplete="current-password" minlength="8" required /></label>
             <button type="button" class="account-inline-link account-login-forgot">Forgot password?</button>
-            <button type="submit">Start learning</button>
+            <button type="submit">Log in</button>
             <button type="button" class="account-resend-button" hidden>Resend verification email</button>
           </form>
           <form class="account-form signup-form" data-auth-panel-content="signup" hidden>
@@ -2154,7 +2229,7 @@ const setupAccountHub = () => {
           <span role="cell" class="premium-compare-pro">✓</span>
         </div>
         <div class="premium-compare-row" role="row">
-          <span role="cell">Unlock grammar maps</span>
+          <span role="cell">Interactive grammar explanations</span>
           <span role="cell" class="premium-compare-muted">—</span>
           <span role="cell" class="premium-compare-pro">✓</span>
         </div>
@@ -2487,7 +2562,6 @@ const setupAccountHub = () => {
   let hasAutoOpenedGiftAuth = false;
   let reopenPremiumGiftAfterAuth = false;
   let logoutConfirmArmedAtMs = 0;
-  let hasShownEntryMenuPrompt = false;
   let progressCelebrationOverlay = null;
   let progressCelebrationCard = null;
   let progressCelebrationKickerNode = null;
@@ -2625,24 +2699,6 @@ const setupAccountHub = () => {
         hideTriggerNoticeBubble();
       },
       Math.max(1200, Number(durationMs) || 9000)
-    );
-  };
-
-  const maybeShowEntryMenuPrompt = (snapshot) => {
-    if (hasShownEntryMenuPrompt || !trigger || !trigger.isConnected) {
-      return;
-    }
-    const isAuthenticated = Boolean(snapshot?.isAuthenticated);
-    const isReady = snapshot?.ready !== false;
-    if (isAuthenticated || !isReady) {
-      return;
-    }
-    hasShownEntryMenuPrompt = true;
-    showTriggerNoticeBubble(
-      "Become an Explorer Now.\nLog in or create your account.",
-      "success",
-      4000,
-      { compact: true }
     );
   };
 
@@ -3042,7 +3098,7 @@ const setupAccountHub = () => {
       showTriggerNoticeBubble("Premium checkout was cancelled. No charge was made.", "info", 7000);
     } else if (premiumState === "required") {
       showTriggerNoticeBubble(
-        "Grammar maps are Premium-only. Upgrade to unlock them.",
+        "Interactive grammar explanations and progress tools require Premium.",
         "info",
         9000
       );
@@ -3305,12 +3361,12 @@ const setupAccountHub = () => {
 
         if (returnedHtml) {
           lastErrorMessage =
-            "Google authentication endpoint returned website HTML instead of API JSON. Ensure the app is running through the backend server and /api routes are not being rewritten to index.html.";
+            interfaceMessage("Google authentication endpoint returned website HTML instead of API JSON. Ensure the app is running through the backend server and /api routes are not being rewritten to index.html.", "Google sign-in is unavailable. Please try again.");
           continue;
         }
 
         if (response.status === 404) {
-          lastErrorMessage = `Google authentication endpoint not found (${response.status}).`;
+          lastErrorMessage = interfaceMessage(`Google authentication endpoint not found (${response.status}).`, "Google sign-in is unavailable. Please try again.");
           continue;
         }
 
@@ -3659,16 +3715,6 @@ const setupAccountHub = () => {
     premiumCheckoutFeedback.dataset.tone = String(tone || "");
   };
 
-  const setNativeCheckoutBlockedState = () => {
-    premiumCheckoutOptionsReady = false;
-    renderPremiumCheckoutOptions(buildFallbackPremiumBillingOptions());
-    setPremiumCheckoutPrimaryState(false);
-    setPremiumCheckoutFeedback(
-      "Premium purchase in the mobile app is not enabled yet. Use cosmicalearn.com in your browser to subscribe for now.",
-      "info"
-    );
-  };
-
   const setPremiumCheckoutPrimaryState = (isLoading = false) => {
     if (!(premiumCheckoutPrimaryBtn instanceof HTMLButtonElement)) {
       return;
@@ -3821,10 +3867,6 @@ const setupAccountHub = () => {
   };
 
   const redirectToExternalPremiumCheckout = ({ url = "", label = "Premium" } = {}) => {
-    if (isNativeShellRuntime()) {
-      setNativeCheckoutBlockedState();
-      return;
-    }
     const safeUrl = sanitizePremiumCheckoutUrl(url);
     if (!safeUrl) {
       setPremiumCheckoutPrimaryState(false);
@@ -3845,13 +3887,6 @@ const setupAccountHub = () => {
     setPremiumCheckoutFeedback("");
     premiumCheckoutOverlay.hidden = false;
     syncPremiumModalBodyLock();
-    if (isNativeShellRuntime()) {
-      setNativeCheckoutBlockedState();
-      window.setTimeout(() => {
-        premiumCheckoutCard?.focus?.();
-      }, 20);
-      return;
-    }
     setPremiumCheckoutFeedback("Loading secure subscription options...", "info");
     const loadResult = await loadPremiumBillingOptions();
     if (!premiumCheckoutOptionsReady) {
@@ -3866,7 +3901,7 @@ const setupAccountHub = () => {
       }
       if (loadResult?.reason === "not_configured") {
         setPremiumCheckoutFeedback(
-          "Premium checkout is not configured on the server yet. Please contact support.",
+          interfaceMessage("Premium checkout is not configured on the server yet. Please contact support.", "Checkout is unavailable. Please contact support."),
           "error"
         );
         return;
@@ -4911,7 +4946,6 @@ const setupAccountHub = () => {
     const showPasswordManagement = Boolean(isAuthenticated && currentAuthProvider !== "google");
     const showGooglePasswordNote = Boolean(isAuthenticated && currentAuthProvider === "google");
 
-    maybeShowEntryMenuPrompt(snapshot);
 
     if (!hasShownPremiumWelcome && pendingPremiumWelcomeMode === "test") {
       openPremiumSuccessModal({ testMode: true });
@@ -4971,12 +5005,13 @@ const setupAccountHub = () => {
     }
 
     if (triggerMeta) {
+      triggerMeta.hidden = isAuthenticated;
       triggerMeta.textContent = shouldSuppressGuestFlash
         ? "Loading..."
         : isAuthenticated
           ? hasPremiumAccess
             ? `Level ${levelMeta.level}`
-            : `Active ${activeDays}d`
+            : "Account"
           : "Sign in";
     }
     if (trigger) {
@@ -5222,6 +5257,10 @@ const setupAccountHub = () => {
     window.location.href = `/${safeHash}`;
   };
 
+  dropdown.querySelector(".account-close")?.addEventListener("click", () => {
+    closeDropdown();
+    trigger.focus({ preventScroll: true });
+  });
   trigger?.addEventListener("click", () => {
     if (dropdown.hidden) {
       openDropdown();
@@ -6093,11 +6132,11 @@ const WORLD_LANGUAGE_ENTER_FROM_MAPS_EARLY_PX = 82;
 const MIMI_SITE_CONTEXT = [
   "Cosmica is a space-universe language learning site where each language is a world.",
   "Worlds available now: English, French, German, Spanish, Portuguese, Dutch, Swedish, Arabic, Chinese, Japanese, Korean, and Hindi.",
-  "Italian, Greek, Russian, and Vietnamese are visible on the homepage as next worlds in orbit, but they are not live yet.",
+  interfaceMessage("Italian, Greek, Russian, and Vietnamese are visible on the homepage as next worlds in orbit, but they are not live yet.", "Recommend the 12 listed language courses and the mathematics studio."),
   "User actions: click a world to trigger a warp transition that says 'Entering {World} World'.",
   "Tone: cinematic, exploratory, playful, focused on discovery and learning by missions.",
   "Mimi can suggest worlds, give short quests, and teach greetings.",
-  "Planned expansions: more worlds, quest campaigns, voice practice, daily missions, badges, and deeper world lore.",
+  interfaceMessage("Planned expansions: more worlds, quest campaigns, voice practice, daily missions, badges, and deeper world lore.", "Only describe working features; do not invent courses or tools."),
 ].join(" ");
 const MIMI_SYSTEM_PROMPT = [
   "You are Mimi, the alien guide for the Cosmica language academy.",
@@ -6107,10 +6146,10 @@ const MIMI_SYSTEM_PROMPT = [
   "Maintain a cosmic discovery vibe while sounding natural and smart.",
   "Know Cosmica in detail: site sections, maps, world flow, base-language behavior, and currently available content.",
   "Treat English, French, German, Spanish, Portuguese, Dutch, Swedish, Arabic, Chinese, Japanese, Korean, and Hindi worlds as live.",
-  "Treat Italian, Greek, Russian, and Vietnamese as upcoming homepage worlds, not live courses yet.",
+  interfaceMessage("Treat Italian, Greek, Russian, and Vietnamese as upcoming homepage worlds, not live courses yet.", "Use actual course links to determine availability."),
   "Ask for the user's target language, goal, and time available when needed.",
   "Give one concrete next step (a quick quest, a phrase to practice, or a world to enter).",
-  "If asked about features beyond the current site, call them planned or upcoming.",
+  interfaceMessage("If asked about features beyond the current site, call them planned or upcoming.", "State current availability without promises."),
   "If you are uncertain about a factual claim, say so briefly and avoid inventing specifics.",
   "Never claim to access user data or progress.",
   MIMI_SITE_CONTEXT,
@@ -7687,8 +7726,7 @@ const getApiEndpointCandidates = () => {
   // Public production hosts.
   const isCosmicaPublicHost =
     normalizedHost === "cosmicalearn.com" ||
-    normalizedHost === "www.cosmicalearn.com" ||
-    normalizedHost === "cosmica-03wo.onrender.com";
+    normalizedHost === "www.cosmicalearn.com";
   if (isCosmicaPublicHost) {
     // Prefer same-origin route first on mobile/public to avoid cross-origin/WAF edge cases.
     addCandidate(endpoint);
@@ -10937,10 +10975,8 @@ const resetAmbientEngine = () => {
   }
   if (audioContext && audioContext.state !== "closed") {
     try {
-      audioContext.close();
-    } catch (error) {
-      console.warn("Audio close failed during reset.", error);
-    }
+      void Promise.resolve(audioContext.close()).catch(() => {});
+    } catch {}
   }
   audioContext = null;
   ambientGain = null;
@@ -10953,10 +10989,14 @@ const resetAmbientEngine = () => {
 
 // Build the procedural ambient audio graph (strings/pulse/sparkle layers).
 const createAmbientSound = () => {
+  const AmbientAudioContext = window.AudioContext || window.webkitAudioContext;
+  if (typeof AmbientAudioContext !== "function") {
+    return false;
+  }
   if (audioContext) {
     resetAmbientEngine();
   }
-  audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  audioContext = new AmbientAudioContext();
   ambientGain = audioContext.createGain();
   // Start muted so "Sound: Off" stays silent until explicitly toggled on.
   ambientGain.gain.value = 0;
@@ -11226,6 +11266,7 @@ const createAmbientSound = () => {
     }, 100);
     scheduleBar(nextBarTime);
   }
+  return true;
 };
 // Sync visual state for the header sound toggle.
 const setSoundUi = (isOn) => {
@@ -11234,6 +11275,7 @@ const setSoundUi = (isOn) => {
   }
 
   soundToggle.classList.toggle("active", isOn);
+  soundToggle.setAttribute("aria-pressed", String(Boolean(isOn)));
   soundLabel.textContent = isOn ? "Sound: On" : "Sound: Off";
 };
 
@@ -11269,41 +11311,48 @@ const refreshIntensityFromScroll = () => {
 };
 
 const ensureAmbient = async () => {
-  if (!audioContext) {
-    createAmbientSound();
-  }
-
-  if (audioContext.state === "suspended") {
-    await audioContext.resume();
+  try {
+    if (audioContext?.state === "closed") {
+      resetAmbientEngine();
+    }
+    if (!audioContext && !createAmbientSound()) {
+      return false;
+    }
+    if (audioContext.state === "suspended" || audioContext.state === "interrupted") {
+      await audioContext.resume();
+    }
+    return audioContext.state === "running" && Boolean(ambientGain);
+  } catch {
+    resetAmbientEngine();
+    return false;
   }
 };
 
 const playAmbient = async () => {
-  await ensureAmbient();
-  if (audioContext && audioContext.state === "suspended") {
-    try {
-      await audioContext.resume();
-    } catch (error) {
-      console.warn("Audio resume failed, recreating engine.", error);
-      createAmbientSound();
-    }
+  if (!(await ensureAmbient())) {
+    await stopAmbient();
+    return;
   }
-  ambientGain.gain.setTargetAtTime(7.56, audioContext.currentTime, 0.8);
-  ambientPlaying = true;
-  ambientPrimed = true;
-  desiredSoundOn = true;
-  setSoundUi(true);
-  updateStarEnergy(0.3);
-  barCount = 0;
-  refreshIntensityFromScroll();
-  if (!intensityRaf) {
-    updateIntensity();
+  try {
+    ambientGain.gain.setTargetAtTime(7.56, audioContext.currentTime, 0.8);
+    ambientPlaying = true;
+    ambientPrimed = true;
+    desiredSoundOn = true;
+    setSoundUi(true);
+    updateStarEnergy(0.3);
+    barCount = 0;
+    refreshIntensityFromScroll();
+    if (!intensityRaf) {
+      updateIntensity();
+    }
+  } catch {
+    resetAmbientEngine();
+    desiredSoundOn = false;
+    setSoundUi(false);
   }
 };
 
 const stopAmbient = async () => {
-  await ensureAmbient();
-  ambientGain.gain.setTargetAtTime(0.0, audioContext.currentTime, 0.3);
   ambientPlaying = false;
   desiredSoundOn = false;
   if (intensityRaf) {
@@ -11311,30 +11360,22 @@ const stopAmbient = async () => {
     intensityRaf = null;
   }
   setSoundUi(false);
-  if (audioContext && audioContext.state === "running") {
-    try {
-      await audioContext.suspend();
-    } catch (error) {
-      console.warn("Audio suspend failed on stop.", error);
+  try {
+    if (audioContext && ambientGain) {
+      ambientGain.gain.setTargetAtTime(0.0, audioContext.currentTime, 0.3);
     }
+    if (audioContext?.state === "running") {
+      await audioContext.suspend();
+    }
+  } catch {
+    resetAmbientEngine();
   }
 };
 
 const toggleSound = async () => {
-  await ensureAmbient();
-  if (audioContext && audioContext.state === "suspended") {
-    try {
-      await audioContext.resume();
-    } catch (error) {
-      console.warn("Audio resume failed on toggle, recreating engine.", error);
-      createAmbientSound();
-    }
-  }
   if (ambientPlaying) {
-    desiredSoundOn = false;
     await stopAmbient();
   } else {
-    desiredSoundOn = true;
     await playAmbient();
   }
 };
@@ -11355,29 +11396,15 @@ const enforceSoundOffForMaps = () => {
   if (!isMapPage) {
     return;
   }
-  desiredSoundOn = false;
-  setSoundUi(false);
-  if (ambientPlaying) {
-    stopAmbient();
-    return;
-  }
-  if (audioContext && audioContext.state === "running") {
-    audioContext.suspend().catch(() => {});
-  }
+  void stopAmbient();
 };
 
 const unlockAudioContext = async () => {
-  await ensureAmbient();
-  if (audioContext && audioContext.state === "suspended") {
-    try {
-      await audioContext.resume();
-    } catch (error) {
-      console.warn("Audio resume failed on unlock, recreating engine.", error);
-      createAmbientSound();
-    }
-  }
   if (desiredSoundOn && !ambientPlaying) {
     await playAmbient();
+  } else if (!(await ensureAmbient())) {
+    desiredSoundOn = false;
+    setSoundUi(false);
   }
 };
 
@@ -11758,7 +11785,7 @@ if (joinForm) {
     return endpoints;
   };
 
-  const updateJoinErrors = () => {
+  const updateJoinErrors = (onlyField = null) => {
     if (!joinName || !joinEmail || !joinFeedback) {
       return;
     }
@@ -11767,9 +11794,12 @@ if (joinForm) {
     const emailOk = emailValue.length > 0 && isValidEmail(emailValue);
     const feedbackOk = joinFeedback.value.trim().length > 0;
 
-    joinName.classList.toggle("field-error", !nameOk);
-    joinEmail.classList.toggle("field-error", !emailOk);
-    joinFeedback.classList.toggle("field-error", !feedbackOk);
+    for (const [field, valid] of [[joinName, nameOk], [joinEmail, emailOk], [joinFeedback, feedbackOk]]) {
+      if (onlyField && field !== onlyField) continue;
+      field.classList.toggle("field-error", !valid);
+      field.setAttribute("aria-invalid", String(!valid));
+      if (joinStatus) field.setAttribute("aria-describedby", "joinStatus");
+    }
   };
 
   [joinName, joinEmail, joinFeedback].forEach((field) => {
@@ -11778,11 +11808,14 @@ if (joinForm) {
     }
     field.addEventListener("input", () => {
       field.classList.remove("field-error");
+      field.removeAttribute("aria-invalid");
       if (joinStatus) {
         joinStatus.textContent = "";
       }
     });
-    field.addEventListener("blur", updateJoinErrors);
+    field.addEventListener("blur", () => {
+      if (field.value.trim() || field.classList.contains("field-error")) updateJoinErrors(field);
+    });
   });
 
   joinForm.addEventListener("submit", async (event) => {
@@ -11797,8 +11830,9 @@ if (joinForm) {
     if (!nameOk || !emailOk || !feedbackOk) {
       updateJoinErrors();
       if (joinStatus) {
-        joinStatus.textContent = "Please complete all fields to send feedback.";
+        joinStatus.textContent = !nameOk ? "Enter your name." : !emailOk ? "Enter a valid email address." : "Add your feedback.";
       }
+      (!nameOk ? joinName : !emailOk ? joinEmail : joinFeedback).focus();
       return;
     }
     joinName.classList.remove("field-error");
@@ -12944,7 +12978,7 @@ if (languagePills.length) {
   const storedLanguageRaw = readStoredBaseLanguagePreference();
   const storedLanguage = storedLanguageRaw === WORLD_KEY ? "" : storedLanguageRaw;
   if (storedLanguageRaw === WORLD_KEY) {
-    localStorage.removeItem("cosmicaBaseLanguage");
+    writeBaseLanguagePreference();
     applyWorldMapBilingualTitles();
   }
   if (storedLanguage) {
@@ -12987,13 +13021,13 @@ if (languagePills.length) {
       selectedPill.classList.add("is-selected");
     }
     if (selected) {
-      localStorage.setItem("cosmicaBaseLanguage", selected);
+      writeBaseLanguagePreference(selected);
       void warmMapTranslationsCache();
       void warmWorldTranslationsCache();
       void warmWorldAfterBaseLanguageSelection();
       scheduleWorldEntryMapWarm({ source: "language" });
     } else {
-      localStorage.removeItem("cosmicaBaseLanguage");
+      writeBaseLanguagePreference();
       scheduleWorldEntryMapWarm({ source: "language" });
     }
     document.body.classList.add("language-picked");
@@ -13035,9 +13069,9 @@ if (languagePills.length) {
       selectedPill ? getLanguagePillKey(selectedPill) : ""
     );
     if (selectedLanguage) {
-      localStorage.setItem("cosmicaBaseLanguage", selectedLanguage);
+      writeBaseLanguagePreference(selectedLanguage);
     } else {
-      localStorage.removeItem("cosmicaBaseLanguage");
+      writeBaseLanguagePreference();
     }
     refreshMapsForBaseLanguage();
     applyWorldMapBilingualTitles();
@@ -15081,6 +15115,7 @@ const setupEssentialCookieNotice = () => {
       localStorage.setItem(COOKIE_NOTICE_DISMISSED_KEY, "1");
     } catch {}
     notice.classList.remove("is-visible");
+    document.body.classList.remove("cookie-notice-open");
     window.setTimeout(() => {
       if (notice.parentElement) {
         notice.remove();
@@ -15090,366 +15125,9 @@ const setupEssentialCookieNotice = () => {
 
   dismissButton?.addEventListener("click", dismissNotice);
   document.body.appendChild(notice);
+  document.body.classList.add("cookie-notice-open");
   window.requestAnimationFrame(() => {
     notice.classList.add("is-visible");
-  });
-};
-
-/* --------------------------------------------------------------------------
-   PWA INSTALL + SERVICE WORKER
-   Register install/runtime support once for all pages.
-   -------------------------------------------------------------------------- */
-const isStandaloneAppDisplay = () =>
-  window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
-
-const isNativeShellRuntime = () => {
-  try {
-    const cap = window.Capacitor;
-    if (cap && typeof cap.isNativePlatform === "function") {
-      return cap.isNativePlatform() === true;
-    }
-    if (cap && typeof cap.getPlatform === "function") {
-      const platform = String(cap.getPlatform() || "")
-        .trim()
-        .toLowerCase();
-      if (platform === "ios" || platform === "android") {
-        return true;
-      }
-    }
-  } catch {}
-  const ua = String(window.navigator.userAgent || "").toLowerCase();
-  return /\bcapacitor\b/.test(ua);
-};
-
-const syncStandaloneBodyClass = () => {
-  document.body.classList.toggle("is-standalone-app", isStandaloneAppDisplay());
-};
-
-const shouldRegisterServiceWorker = () => {
-  if (!("serviceWorker" in navigator)) {
-    return false;
-  }
-  if (window.location.protocol === "https:") {
-    return true;
-  }
-  return false;
-};
-
-const clearDevelopmentServiceWorkerCaches = async () => {
-  const host = String(window.location.hostname || "").toLowerCase();
-  const isLocalDevHost = host === "localhost" || host === "127.0.0.1" || host === "::1";
-  if (!isLocalDevHost || !("serviceWorker" in navigator)) {
-    return;
-  }
-  try {
-    const registrations = await navigator.serviceWorker.getRegistrations();
-    await Promise.all(
-      registrations.map((registration) => registration.unregister().catch(() => false))
-    );
-  } catch {}
-  if ("caches" in window) {
-    try {
-      const cacheNames = await caches.keys();
-      await Promise.all(cacheNames.map((cacheName) => caches.delete(cacheName).catch(() => false)));
-    } catch {}
-  }
-};
-
-const clearLegacyInstallPromptDismissed = () => {
-  try {
-    localStorage.removeItem(LEGACY_PWA_INSTALL_DISMISSED_KEY);
-  } catch {}
-};
-
-const getInstallEntryFooter = () =>
-  document.querySelector(".footer") || document.querySelector("footer");
-
-const syncInstallEntryButtonFooterOffset = () => {
-  const button = installEntryButton;
-  if (!(button instanceof HTMLElement) || button.hidden) {
-    return;
-  }
-  const footer = getInstallEntryFooter();
-  if (!(footer instanceof HTMLElement)) {
-    button.style.setProperty("--install-app-footer-offset", "0px");
-    return;
-  }
-
-  const computedButtonStyle = window.getComputedStyle(button);
-  const buttonBottom = Number.parseFloat(computedButtonStyle.bottom || "0") || 0;
-  const footerRect = footer.getBoundingClientRect();
-  const footerGap = 30;
-  const overlap = window.innerHeight - buttonBottom + footerGap - footerRect.top;
-  const upwardOffset = overlap > 0 ? -Math.ceil(overlap) : 0;
-  button.style.setProperty("--install-app-footer-offset", `${upwardOffset}px`);
-};
-
-const queueInstallEntryButtonFooterSync = () => {
-  syncInstallEntryButtonFooterOffset();
-};
-
-const setupInstallEntryButtonFooterGuard = () => {
-  if (installEntryButtonFooterGuardInitialized) {
-    return;
-  }
-  installEntryButtonFooterGuardInitialized = true;
-  window.addEventListener("scroll", queueInstallEntryButtonFooterSync, { passive: true });
-  window.addEventListener("resize", queueInstallEntryButtonFooterSync);
-  window.addEventListener("load", queueInstallEntryButtonFooterSync, { once: true });
-};
-
-const isIosInstallCandidate = () => {
-  const ua = String(window.navigator.userAgent || "").toLowerCase();
-  const platform = String(window.navigator.platform || "").toLowerCase();
-  const maxTouchPoints = Number(window.navigator.maxTouchPoints || 0);
-  const isAppleTouchDevice =
-    /iphone|ipad|ipod/.test(ua) || (platform === "macintel" && maxTouchPoints > 1);
-  const isWebKitBrowser = /safari/.test(ua) && !/crios|fxios|edgios|opr\//.test(ua);
-  return isAppleTouchDevice && isWebKitBrowser && !isStandaloneAppDisplay();
-};
-
-const getMobileInstallPlatform = () => {
-  const ua = String(window.navigator.userAgent || "").toLowerCase();
-  const platform = String(window.navigator.platform || "").toLowerCase();
-  const maxTouchPoints = Number(window.navigator.maxTouchPoints || 0);
-  if (/android/.test(ua)) {
-    return "android";
-  }
-  if (/iphone|ipad|ipod/.test(ua) || (platform === "macintel" && maxTouchPoints > 1)) {
-    return "ios";
-  }
-  return "other";
-};
-
-const handleInstallTrigger = async (iosManual = false) => {
-  if (!deferredInstallPrompt) {
-    if (iosManual) {
-      window.alert("Open Safari's Share menu, then tap Add to Home Screen to install Cosmica.");
-    }
-    return;
-  }
-  try {
-    await deferredInstallPrompt.prompt();
-    const promptResult = await deferredInstallPrompt.userChoice;
-    if (promptResult?.outcome === "accepted") {
-      closeInstallModal();
-    }
-  } catch {}
-  deferredInstallPrompt = null;
-  updateInstallEntryButton();
-};
-
-const setInstallModalFeedback = (message = "") => {
-  const feedbackNode = installModal?.querySelector(".install-app-feedback");
-  if (!(feedbackNode instanceof HTMLElement)) {
-    return;
-  }
-  feedbackNode.textContent = String(message || "").trim();
-};
-
-const closeInstallModal = () => {
-  if (!(installModal instanceof HTMLElement)) {
-    return;
-  }
-  installModal.hidden = true;
-  installModal.classList.remove("is-visible");
-  document.body.classList.remove("install-app-modal-open");
-  setInstallModalFeedback("");
-};
-
-const handleMobileStoreInstall = () => {
-  const platform = getMobileInstallPlatform();
-  if (platform === "ios") {
-    if (COSMICA_APP_STORE_URL) {
-      window.location.href = COSMICA_APP_STORE_URL;
-      return;
-    }
-    setInstallModalFeedback(
-      "App Store download will appear here after the iPhone and iPad app is published."
-    );
-    return;
-  }
-  if (platform === "android") {
-    if (COSMICA_PLAY_STORE_URL) {
-      window.location.href = COSMICA_PLAY_STORE_URL;
-      return;
-    }
-    setInstallModalFeedback(
-      "Google Play download will appear here after the Android app is published."
-    );
-    return;
-  }
-  setInstallModalFeedback(
-    "Open this option on your phone or tablet to continue with App Store or Google Play download."
-  );
-};
-
-const handleDesktopPwaInstall = async () => {
-  if (deferredInstallPrompt) {
-    await handleInstallTrigger(false);
-    return;
-  }
-  if (isIosInstallCandidate()) {
-    setInstallModalFeedback(
-      "On iPhone or iPad, open Safari's Share menu and choose Add to Home Screen."
-    );
-    return;
-  }
-  setInstallModalFeedback(
-    "Desktop app install is available in supported Chromium browsers like Chrome or Edge over HTTPS."
-  );
-};
-
-const ensureInstallModal = () => {
-  if (installModal?.isConnected) {
-    return installModal;
-  }
-  if (!(document.body instanceof HTMLElement)) {
-    return null;
-  }
-
-  const overlay = document.createElement("div");
-  overlay.className = "install-app-overlay";
-  overlay.hidden = true;
-  overlay.innerHTML = `
-    <section class="install-app-card" role="dialog" aria-modal="true" aria-labelledby="installAppTitle">
-      <button type="button" class="install-app-close" aria-label="Close install app dialog">X</button>
-      <h3 id="installAppTitle">Install App</h3>
-      <p class="install-app-message">Choose how you want to install Cosmica.</p>
-      <div class="install-app-options">
-        <button type="button" class="install-app-option install-app-option-mobile">
-          <span class="install-app-option-label">Mobile Devices</span>
-          <span class="install-app-option-copy">Download from the App Store or Google Play.</span>
-        </button>
-        <button type="button" class="install-app-option install-app-option-desktop">
-          <span class="install-app-option-label">Desktop PWA</span>
-          <span class="install-app-option-copy">Install Cosmica as a desktop app from your browser.</span>
-        </button>
-      </div>
-      <p class="install-app-feedback" aria-live="polite"></p>
-    </section>
-  `;
-  overlay.addEventListener("click", (event) => {
-    if (event.target === overlay) {
-      closeInstallModal();
-    }
-  });
-  overlay.querySelector(".install-app-close")?.addEventListener("click", closeInstallModal);
-  overlay
-    .querySelector(".install-app-option-mobile")
-    ?.addEventListener("click", handleMobileStoreInstall);
-  overlay
-    .querySelector(".install-app-option-desktop")
-    ?.addEventListener("click", () => void handleDesktopPwaInstall());
-  document.body.appendChild(overlay);
-  installModal = overlay;
-  return overlay;
-};
-
-const openInstallModal = () => {
-  const modal = ensureInstallModal();
-  if (!(modal instanceof HTMLElement) || isStandaloneAppDisplay()) {
-    return;
-  }
-  modal.hidden = false;
-  document.body.classList.add("install-app-modal-open");
-  window.requestAnimationFrame(() => {
-    modal.classList.add("is-visible");
-  });
-  setInstallModalFeedback("");
-};
-
-const ensureInstallEntryButton = () => {
-  if (installEntryButton?.isConnected) {
-    return installEntryButton;
-  }
-  if (!(document.body instanceof HTMLElement)) {
-    return null;
-  }
-  const button = document.createElement("button");
-  button.type = "button";
-  button.className = "install-app-trigger";
-  button.hidden = true;
-  button.setAttribute("aria-label", "Install Cosmica app");
-  button.addEventListener("click", openInstallModal);
-  document.body.appendChild(button);
-  installEntryButton = button;
-  return button;
-};
-
-function updateInstallEntryButton() {
-  const button = ensureInstallEntryButton();
-  if (!button) {
-    return;
-  }
-  const shouldShow = !isStandaloneAppDisplay();
-  button.hidden = !shouldShow;
-  button.classList.toggle("is-visible", shouldShow);
-  button.textContent = "Install App";
-  if (!shouldShow) {
-    button.style.setProperty("--install-app-footer-offset", "0px");
-    return;
-  }
-  queueInstallEntryButtonFooterSync();
-}
-
-const setupInstallPromptUi = () => {
-  clearLegacyInstallPromptDismissed();
-  syncStandaloneBodyClass();
-  ensureInstallModal();
-  updateInstallEntryButton();
-  setupInstallEntryButtonFooterGuard();
-
-  const standaloneMedia = window.matchMedia("(display-mode: standalone)");
-  if (typeof standaloneMedia.addEventListener === "function") {
-    standaloneMedia.addEventListener("change", () => {
-      syncStandaloneBodyClass();
-      updateInstallEntryButton();
-    });
-  } else if (typeof standaloneMedia.addListener === "function") {
-    standaloneMedia.addListener(() => {
-      syncStandaloneBodyClass();
-      updateInstallEntryButton();
-    });
-  }
-
-  window.addEventListener("appinstalled", () => {
-    deferredInstallPrompt = null;
-    syncStandaloneBodyClass();
-    closeInstallModal();
-    updateInstallEntryButton();
-  });
-
-  window.addEventListener("beforeinstallprompt", (event) => {
-    event.preventDefault();
-    deferredInstallPrompt = event;
-    updateInstallEntryButton();
-  });
-
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && installModal && !installModal.hidden) {
-      closeInstallModal();
-    }
-  });
-};
-
-const registerServiceWorker = () => {
-  if (!shouldRegisterServiceWorker()) {
-    void clearDevelopmentServiceWorkerCaches();
-    return;
-  }
-  window.addEventListener("load", () => {
-    navigator.serviceWorker
-      .register(withAssetVersion("service-worker.js"), { scope: "/" })
-      .then((registration) => {
-        registration.update().catch(() => {});
-        return navigator.serviceWorker.ready
-          .then((readyRegistration) => {
-            readyRegistration.active?.postMessage({ type: "CLEAR_OLD_CACHES" });
-          })
-          .catch(() => {});
-      })
-      .catch(() => {});
   });
 };
 
@@ -15517,8 +15195,6 @@ const initializeCommonShell = () => {
   });
 };
 
-setupInstallPromptUi();
-registerServiceWorker();
 
 /* ==========================================================================
    APPLICATION BOOTSTRAP (BASE)

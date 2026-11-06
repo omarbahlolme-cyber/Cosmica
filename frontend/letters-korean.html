@@ -14,13 +14,6 @@
     />
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#0a0f24" />
-    <meta name="application-name" content="Cosmica" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="Cosmica" />
-    <link rel="manifest" href="/app.webmanifest" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/pwa/apple-touch-icon.png" />
     <link rel="canonical" href="https://www.cosmicalearn.com/letters-korean.html" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Cosmica" />
@@ -36,9 +29,10 @@
       name="twitter:description"
       content="Practice Hangul letters with clear audio, pronunciation support, and structured review for reading and speaking Korean."
     />
-    <link rel="preload" as="style" href="style.css?v=20260443" />
-    <link rel="stylesheet" href="style.css?v=20260443" />
-    <link rel="stylesheet" href="maps/style-maps.css?v=20260417" />
+    <link rel="preload" as="style" href="style.css?v=e980b20f1739" />
+    <link rel="stylesheet" href="style.css?v=e980b20f1739" />
+    <link rel="stylesheet" href="maps/style-maps.css?v=e980b20f1739" />
+    <link rel="stylesheet" href="ui/learning.css?v=20261025" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -64,6 +58,7 @@
     <meta name="twitter:image" content="https://www.cosmicalearn.com/og-image.svg" />
   </head>
   <body class="world-page letters-page" data-world="Korean">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <!-- Decorative background layers (aurora + starfield) -->
     <div class="aurora"></div>
     <div class="starfield starfield-deep" data-depth="0.15" aria-hidden="true"></div>
@@ -83,8 +78,8 @@
         <a href="world-korean.html#maps">Return to Korean World</a>
       </nav>
       <div class="nav-controls">
-        <button class="sound-toggle" id="soundToggle" type="button">
-          <span class="dot" aria-hidden="true"></span> <span class="sound-label">Sound: On</span>
+        <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false">
+          <span class="dot" aria-hidden="true"></span> <span class="sound-label">Sound: Off</span>
         </button>
         <div class="account-slot account-slot-preload" aria-hidden="true">
           <button class="account-trigger" type="button" tabindex="-1">
@@ -100,7 +95,7 @@
     </header>
 
     <!-- Page-specific main content -->
-    <main>
+    <main id="main-content">
       <h1 class="visually-hidden">Learn Korean Script</h1>
       <section class="section letters-grid-section reveal" id="letters">
         <div class="section-title">
@@ -1497,6 +1492,6 @@
     </footer>
 
     <!-- Shared client bundle -->
-    <script src="app.js?v=20260440"></script>
+    <script src="app.js?v=e980b20f1739"></script>
   </body>
 </html>

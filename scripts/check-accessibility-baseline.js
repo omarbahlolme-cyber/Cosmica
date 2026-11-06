@@ -52,6 +52,12 @@ for (const fileName of htmlFiles) {
   if (!/<main[\s>]/i.test(content)) {
     failures.push(`${fileName}: missing <main> landmark`);
   }
+  if (!/<main[^>]*\bid=["']main-content["']/i.test(content)) {
+    failures.push(`${fileName}: <main> must expose id="main-content"`);
+  }
+  if (!/<a[^>]*class=["'][^"']*\bskip-link\b[^"']*["'][^>]*href=["']#main-content["']/i.test(content)) {
+    failures.push(`${fileName}: missing skip link to #main-content`);
+  }
 
   const h1Count = countMatches(content, /<h1[\s>]/gi);
   if (h1Count !== 1) {
@@ -67,6 +73,11 @@ for (const fileName of htmlFiles) {
         failures.push(`${fileName}: .nav-links is missing aria-label`);
       }
     });
+  }
+
+  const soundToggle = content.match(/<button\b[^>]*\bid=["']soundToggle["'][^>]*>/i);
+  if (soundToggle && !/\baria-pressed=["'](?:true|false)["']/i.test(soundToggle[0])) {
+    failures.push(`${fileName}: #soundToggle is missing aria-pressed state`);
   }
 }
 

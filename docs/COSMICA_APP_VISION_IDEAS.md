@@ -1,5 +1,9 @@
 # Cosmica App Vision Ideas
 
+> Historical brainstorm, superseded on 6 November 2026. Cosmica is website-only;
+> installation, native packaging, and store distribution proposals below are
+> retired. Follow COSMICA_VISION.md and ROADMAP.md for current direction.
+
 ## Core direction
 
 Cosmica should feel less like a standard language app and more like a universe that users enter every day. The strongest product angle is a language-learning space adventure where each language is a world, each lesson path is a map, and progress feels like exploration instead of homework.

@@ -1,12 +1,14 @@
 const fs = require("fs");
 const path = require("path");
 const vm = require("vm");
+const { calculateAssetVersion } = require("./lib/asset-version");
 
 const ROOT = path.resolve(__dirname, "..");
 const FRONTEND = path.join(ROOT, "frontend");
 const MAPS_BUNDLE = path.join(FRONTEND, "maps", "app-maps.js");
-const MAP_STYLE_ASSET_VERSION = "20260417";
-const APP_ASSET_VERSION = "20260440";
+const ASSET_VERSION = calculateAssetVersion(ROOT);
+const MAP_STYLE_ASSET_VERSION = ASSET_VERSION;
+const APP_ASSET_VERSION = ASSET_VERSION;
 
 const LANGUAGES = [
   {
@@ -489,7 +491,7 @@ const renderGrammarPreviewCards = (entries) =>
     .join("\n");
 
 const buildStaticWordSections = (config) => {
-  const sectionLimit = config.key === "english" ? 0 : STATIC_WORD_SECTION_LIMIT_NON_ENGLISH;
+  const sectionLimit = STATIC_WORD_SECTION_LIMIT_NON_ENGLISH;
   const pack = loadWorldPack(config.key);
   return BASE_WORD_SECTION_ORDER.map((sectionName) => {
     const worldSection = pack?.words?.[sectionName];
@@ -522,7 +524,7 @@ const buildStaticWordSections = (config) => {
 };
 
 const buildStaticPhraseSections = (config) => {
-  const sectionLimit = config.key === "english" ? 0 : STATIC_PHRASE_SECTION_LIMIT_NON_ENGLISH;
+  const sectionLimit = STATIC_PHRASE_SECTION_LIMIT_NON_ENGLISH;
   const pack = loadWorldPack(config.key);
   return BASE_PHRASE_SECTION_ORDER.map((sectionName) => {
     const worldSection = pack?.phrases?.[sectionName];
@@ -555,7 +557,7 @@ const buildStaticPhraseSections = (config) => {
 };
 
 const buildStaticGrammarSections = (config) => {
-  const sectionLimit = config.key === "english" ? 0 : STATIC_GRAMMAR_SECTION_LIMIT_NON_ENGLISH;
+  const sectionLimit = STATIC_GRAMMAR_SECTION_LIMIT_NON_ENGLISH;
   const pack = loadWorldPack(config.key);
   return BASE_GRAMMAR_SECTION_ORDER.map((sectionName) => {
     const translatedCards = Array.isArray(pack?.grammar?.cards?.[sectionName])
@@ -839,7 +841,7 @@ const buildMapContent = (config, map) => {
     const staticWordSections = clampSectionsByHtmlBudget(
       buildStaticWordSections(config),
       renderStaticWordSections,
-      config.key === "english" ? 0 : STATIC_WORD_HTML_BUDGET_NON_ENGLISH_BYTES
+      STATIC_WORD_HTML_BUDGET_NON_ENGLISH_BYTES
     );
     const staticWordSectionsHtml = renderStaticWordSections(staticWordSections);
     return `      <h1 class="visually-hidden">Learn ${config.language} Vocabulary Online</h1>
@@ -879,7 +881,7 @@ ${staticWordSectionsHtml}
     const staticPhraseSections = clampSectionsByHtmlBudget(
       buildStaticPhraseSections(config),
       renderStaticPhraseSections,
-      config.key === "english" ? 0 : STATIC_PHRASE_HTML_BUDGET_NON_ENGLISH_BYTES
+      STATIC_PHRASE_HTML_BUDGET_NON_ENGLISH_BYTES
     );
     const staticPhraseSectionsHtml = renderStaticPhraseSections(staticPhraseSections);
     return `      <h1 class="visually-hidden">Learn ${config.language} Phrases Online</h1>
@@ -918,7 +920,7 @@ ${staticPhraseSectionsHtml}
   const staticGrammarSections = clampSectionsByHtmlBudget(
     buildStaticGrammarSections(config),
     renderStaticGrammarSections,
-    config.key === "english" ? 0 : STATIC_GRAMMAR_HTML_BUDGET_NON_ENGLISH_BYTES
+    STATIC_GRAMMAR_HTML_BUDGET_NON_ENGLISH_BYTES
   );
   const staticGrammarSectionsHtml = renderStaticGrammarSections(staticGrammarSections);
   return `      <h1 class="visually-hidden">Learn ${config.language} Grammar Online</h1>
@@ -967,7 +969,10 @@ const replaceMapPage = (config, map, fileName, title, description, socialDescrip
   html = replaceJsonLdNameAndDescription(html, title, description);
   html = normalizeAccountCaret(html);
   const landingContent = buildMapContent(config, map);
-  html = html.replace(/<main>[\s\S]*?<\/main>/i, `<main>\n${landingContent}\n    </main>`);
+  html = html.replace(
+    /(<main\b[^>]*>)[\s\S]*?<\/main>/i,
+    `$1\n${landingContent}\n    </main>`
+  );
   html = html.replace(
     /<h1 class="visually-hidden">[\s\S]*?<\/h1>/,
     `<h1 class="visually-hidden">${hiddenH1}</h1>`

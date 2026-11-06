@@ -11,13 +11,6 @@
     <meta name="description" content="Study English grammar with structured lessons, practical examples, and clear explanations for accurate use." />
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#0a0f24" />
-    <meta name="application-name" content="Cosmica" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="Cosmica" />
-    <link rel="manifest" href="/app.webmanifest" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/pwa/apple-touch-icon.png" />
     <link rel="canonical" href="https://www.cosmicalearn.com/english-grammar.html" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Cosmica" />
@@ -27,9 +20,10 @@
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="Learn English Grammar | Cosmica" />
     <meta name="twitter:description" content="Learn English grammar with examples and guided lesson sections." />
-    <link rel="preload" as="style" href="style.css?v=20260443" />
-    <link rel="stylesheet" href="style.css?v=20260443" />
-    <link rel="stylesheet" href="maps/style-maps.css?v=20260417" />
+    <link rel="preload" as="style" href="style.css?v=e980b20f1739" />
+    <link rel="stylesheet" href="style.css?v=e980b20f1739" />
+    <link rel="stylesheet" href="maps/style-maps.css?v=e980b20f1739" />
+    <link rel="stylesheet" href="ui/learning.css?v=20261025" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -55,6 +49,7 @@
     <meta name="twitter:image" content="https://www.cosmicalearn.com/og-image.svg" />
   </head>
   <body class="world-page grammar-page">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <!-- Decorative background layers (aurora + starfield) -->
     <div class="aurora"></div>
     <div class="starfield starfield-deep" data-depth="0.15" aria-hidden="true"></div>
@@ -73,8 +68,8 @@
         <a href="english-world.html#maps">Return to English World</a>
       </nav>
       <div class="nav-controls">
-        <button class="sound-toggle" id="soundToggle" type="button">
-          <span class="dot" aria-hidden="true"></span> <span class="sound-label">Sound: On</span>
+        <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false">
+          <span class="dot" aria-hidden="true"></span> <span class="sound-label">Sound: Off</span>
         </button>
         <div class="account-slot account-slot-preload" aria-hidden="true">
           <button class="account-trigger" type="button" tabindex="-1">
@@ -89,7 +84,7 @@
       </div>
     </header>
     <!-- Page-specific main content -->
-    <main>
+    <main id="main-content">
       <h1 class="visually-hidden">Learn English Grammar Online</h1>
       <!-- SEO landing content -->
       <section class="section reveal seo-map-hero">
@@ -138,7 +133,693 @@
       </section>
       <div class="words-controls" id="grammarControls"></div>
       <div id="grammarSections" data-static-prerender="true" data-prerender-map="grammar">
-
+      <section class="section grammar-group reveal" data-section="Sentence Structure" data-prerendered="true" data-prerender-source="seo-static-v1">
+        <div class="section-title">
+          <h2 data-source-title="Sentence Structure" data-base-title="Sentence Structure"><span class="map-section-title-main">Sentence Structure</span></h2>
+        </div>
+        <div class="words-grid">
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="basic word order" data-section="Sentence Structure" data-index="0" data-source-title="basic word order" aria-label="basic word order">
+          <div class="grammar-text">
+            <span class="grammar-title-main">basic word order</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="sentence parts" data-section="Sentence Structure" data-index="1" data-source-title="sentence parts" aria-label="sentence parts">
+          <div class="grammar-text">
+            <span class="grammar-title-main">sentence parts</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="adding details" data-section="Sentence Structure" data-index="2" data-source-title="adding details" aria-label="adding details">
+          <div class="grammar-text">
+            <span class="grammar-title-main">adding details</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="linking clauses" data-section="Sentence Structure" data-index="3" data-source-title="linking clauses" aria-label="linking clauses">
+          <div class="grammar-text">
+            <span class="grammar-title-main">linking clauses</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="sentence variety" data-section="Sentence Structure" data-index="4" data-source-title="sentence variety" aria-label="sentence variety">
+          <div class="grammar-text">
+            <span class="grammar-title-main">sentence variety</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        </div>
+      </section>
+      <section class="section grammar-group reveal" data-section="Verbs" data-prerendered="true" data-prerender-source="seo-static-v1">
+        <div class="section-title">
+          <h2 data-source-title="Verbs" data-base-title="Verbs"><span class="map-section-title-main">Verbs</span></h2>
+        </div>
+        <div class="words-grid">
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="action verbs" data-section="Verbs" data-index="0" data-source-title="action verbs" aria-label="action verbs">
+          <div class="grammar-text">
+            <span class="grammar-title-main">action verbs</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="state verbs" data-section="Verbs" data-index="1" data-source-title="state verbs" aria-label="state verbs">
+          <div class="grammar-text">
+            <span class="grammar-title-main">state verbs</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="linking verbs" data-section="Verbs" data-index="2" data-source-title="linking verbs" aria-label="linking verbs">
+          <div class="grammar-text">
+            <span class="grammar-title-main">linking verbs</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="verb patterns" data-section="Verbs" data-index="3" data-source-title="verb patterns" aria-label="verb patterns">
+          <div class="grammar-text">
+            <span class="grammar-title-main">verb patterns</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="verb combinations" data-section="Verbs" data-index="4" data-source-title="verb combinations" aria-label="verb combinations">
+          <div class="grammar-text">
+            <span class="grammar-title-main">verb combinations</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="phrasal verbs" data-section="Verbs" data-index="5" data-source-title="phrasal verbs" aria-label="phrasal verbs">
+          <div class="grammar-text">
+            <span class="grammar-title-main">phrasal verbs</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        </div>
+      </section>
+      <section class="section grammar-group reveal" data-section="Tenses &amp; Aspect" data-prerendered="true" data-prerender-source="seo-static-v1">
+        <div class="section-title">
+          <h2 data-source-title="Tenses &amp; Aspect" data-base-title="Tenses &amp; Aspect"><span class="map-section-title-main">Tenses &amp; Aspect</span></h2>
+        </div>
+        <div class="words-grid">
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="present simple" data-section="Tenses &amp; Aspect" data-index="0" data-source-title="present simple" aria-label="present simple">
+          <div class="grammar-text">
+            <span class="grammar-title-main">present simple</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="present continuous" data-section="Tenses &amp; Aspect" data-index="1" data-source-title="present continuous" aria-label="present continuous">
+          <div class="grammar-text">
+            <span class="grammar-title-main">present continuous</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="past simple" data-section="Tenses &amp; Aspect" data-index="2" data-source-title="past simple" aria-label="past simple">
+          <div class="grammar-text">
+            <span class="grammar-title-main">past simple</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="past continuous" data-section="Tenses &amp; Aspect" data-index="3" data-source-title="past continuous" aria-label="past continuous">
+          <div class="grammar-text">
+            <span class="grammar-title-main">past continuous</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="present perfect" data-section="Tenses &amp; Aspect" data-index="4" data-source-title="present perfect" aria-label="present perfect">
+          <div class="grammar-text">
+            <span class="grammar-title-main">present perfect</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="past perfect" data-section="Tenses &amp; Aspect" data-index="5" data-source-title="past perfect" aria-label="past perfect">
+          <div class="grammar-text">
+            <span class="grammar-title-main">past perfect</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="future forms" data-section="Tenses &amp; Aspect" data-index="6" data-source-title="future forms" aria-label="future forms">
+          <div class="grammar-text">
+            <span class="grammar-title-main">future forms</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        </div>
+      </section>
+      <section class="section grammar-group reveal" data-section="Nouns &amp; Articles" data-prerendered="true" data-prerender-source="seo-static-v1">
+        <div class="section-title">
+          <h2 data-source-title="Nouns &amp; Articles" data-base-title="Nouns &amp; Articles"><span class="map-section-title-main">Nouns &amp; Articles</span></h2>
+        </div>
+        <div class="words-grid">
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="countable nouns" data-section="Nouns &amp; Articles" data-index="0" data-source-title="countable nouns" aria-label="countable nouns">
+          <div class="grammar-text">
+            <span class="grammar-title-main">countable nouns</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="uncountable nouns" data-section="Nouns &amp; Articles" data-index="1" data-source-title="uncountable nouns" aria-label="uncountable nouns">
+          <div class="grammar-text">
+            <span class="grammar-title-main">uncountable nouns</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="articles" data-section="Nouns &amp; Articles" data-index="2" data-source-title="articles" aria-label="articles">
+          <div class="grammar-text">
+            <span class="grammar-title-main">articles</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="plural forms" data-section="Nouns &amp; Articles" data-index="3" data-source-title="plural forms" aria-label="plural forms">
+          <div class="grammar-text">
+            <span class="grammar-title-main">plural forms</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="possessive nouns" data-section="Nouns &amp; Articles" data-index="4" data-source-title="possessive nouns" aria-label="possessive nouns">
+          <div class="grammar-text">
+            <span class="grammar-title-main">possessive nouns</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="noun phrases" data-section="Nouns &amp; Articles" data-index="5" data-source-title="noun phrases" aria-label="noun phrases">
+          <div class="grammar-text">
+            <span class="grammar-title-main">noun phrases</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="quantifiers" data-section="Nouns &amp; Articles" data-index="6" data-source-title="quantifiers" aria-label="quantifiers">
+          <div class="grammar-text">
+            <span class="grammar-title-main">quantifiers</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        </div>
+      </section>
+      <section class="section grammar-group reveal" data-section="Pronouns &amp; Reference" data-prerendered="true" data-prerender-source="seo-static-v1">
+        <div class="section-title">
+          <h2 data-source-title="Pronouns &amp; Reference" data-base-title="Pronouns &amp; Reference"><span class="map-section-title-main">Pronouns &amp; Reference</span></h2>
+        </div>
+        <div class="words-grid">
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="subject pronouns" data-section="Pronouns &amp; Reference" data-index="0" data-source-title="subject pronouns" aria-label="subject pronouns">
+          <div class="grammar-text">
+            <span class="grammar-title-main">subject pronouns</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="object pronouns" data-section="Pronouns &amp; Reference" data-index="1" data-source-title="object pronouns" aria-label="object pronouns">
+          <div class="grammar-text">
+            <span class="grammar-title-main">object pronouns</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="possessive forms" data-section="Pronouns &amp; Reference" data-index="2" data-source-title="possessive forms" aria-label="possessive forms">
+          <div class="grammar-text">
+            <span class="grammar-title-main">possessive forms</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="reflexive pronouns" data-section="Pronouns &amp; Reference" data-index="3" data-source-title="reflexive pronouns" aria-label="reflexive pronouns">
+          <div class="grammar-text">
+            <span class="grammar-title-main">reflexive pronouns</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="demonstratives" data-section="Pronouns &amp; Reference" data-index="4" data-source-title="demonstratives" aria-label="demonstratives">
+          <div class="grammar-text">
+            <span class="grammar-title-main">demonstratives</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="relative reference" data-section="Pronouns &amp; Reference" data-index="5" data-source-title="relative reference" aria-label="relative reference">
+          <div class="grammar-text">
+            <span class="grammar-title-main">relative reference</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="indefinite reference" data-section="Pronouns &amp; Reference" data-index="6" data-source-title="indefinite reference" aria-label="indefinite reference">
+          <div class="grammar-text">
+            <span class="grammar-title-main">indefinite reference</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        </div>
+      </section>
+      <section class="section grammar-group reveal" data-section="Modifiers" data-prerendered="true" data-prerender-source="seo-static-v1">
+        <div class="section-title">
+          <h2 data-source-title="Modifiers" data-base-title="Modifiers"><span class="map-section-title-main">Modifiers</span></h2>
+        </div>
+        <div class="words-grid">
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="adjectives basics" data-section="Modifiers" data-index="0" data-source-title="adjectives basics" aria-label="adjectives basics">
+          <div class="grammar-text">
+            <span class="grammar-title-main">adjectives basics</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="adjective order" data-section="Modifiers" data-index="1" data-source-title="adjective order" aria-label="adjective order">
+          <div class="grammar-text">
+            <span class="grammar-title-main">adjective order</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="comparatives" data-section="Modifiers" data-index="2" data-source-title="comparatives" aria-label="comparatives">
+          <div class="grammar-text">
+            <span class="grammar-title-main">comparatives</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="superlatives" data-section="Modifiers" data-index="3" data-source-title="superlatives" aria-label="superlatives">
+          <div class="grammar-text">
+            <span class="grammar-title-main">superlatives</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="adverbs basics" data-section="Modifiers" data-index="4" data-source-title="adverbs basics" aria-label="adverbs basics">
+          <div class="grammar-text">
+            <span class="grammar-title-main">adverbs basics</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="frequency adverbs" data-section="Modifiers" data-index="5" data-source-title="frequency adverbs" aria-label="frequency adverbs">
+          <div class="grammar-text">
+            <span class="grammar-title-main">frequency adverbs</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="time and place adverbs" data-section="Modifiers" data-index="6" data-source-title="time and place adverbs" aria-label="time and place adverbs">
+          <div class="grammar-text">
+            <span class="grammar-title-main">time and place adverbs</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        </div>
+      </section>
+      <section class="section grammar-group reveal" data-section="Questions" data-prerendered="true" data-prerender-source="seo-static-v1">
+        <div class="section-title">
+          <h2 data-source-title="Questions" data-base-title="Questions"><span class="map-section-title-main">Questions</span></h2>
+        </div>
+        <div class="words-grid">
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="yes no questions" data-section="Questions" data-index="0" data-source-title="yes no questions" aria-label="yes no questions">
+          <div class="grammar-text">
+            <span class="grammar-title-main">yes no questions</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="wh questions" data-section="Questions" data-index="1" data-source-title="wh questions" aria-label="wh questions">
+          <div class="grammar-text">
+            <span class="grammar-title-main">wh questions</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="questions with be" data-section="Questions" data-index="2" data-source-title="questions with be" aria-label="questions with be">
+          <div class="grammar-text">
+            <span class="grammar-title-main">questions with be</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="questions with do" data-section="Questions" data-index="3" data-source-title="questions with do" aria-label="questions with do">
+          <div class="grammar-text">
+            <span class="grammar-title-main">questions with do</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="questions with modals" data-section="Questions" data-index="4" data-source-title="questions with modals" aria-label="questions with modals">
+          <div class="grammar-text">
+            <span class="grammar-title-main">questions with modals</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="tag questions" data-section="Questions" data-index="5" data-source-title="tag questions" aria-label="tag questions">
+          <div class="grammar-text">
+            <span class="grammar-title-main">tag questions</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="indirect questions" data-section="Questions" data-index="6" data-source-title="indirect questions" aria-label="indirect questions">
+          <div class="grammar-text">
+            <span class="grammar-title-main">indirect questions</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        </div>
+      </section>
+      <section class="section grammar-group reveal" data-section="Negation" data-prerendered="true" data-prerender-source="seo-static-v1">
+        <div class="section-title">
+          <h2 data-source-title="Negation" data-base-title="Negation"><span class="map-section-title-main">Negation</span></h2>
+        </div>
+        <div class="words-grid">
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="not with be" data-section="Negation" data-index="0" data-source-title="not with be" aria-label="not with be">
+          <div class="grammar-text">
+            <span class="grammar-title-main">not with be</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="not with do" data-section="Negation" data-index="1" data-source-title="not with do" aria-label="not with do">
+          <div class="grammar-text">
+            <span class="grammar-title-main">not with do</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="negative short forms" data-section="Negation" data-index="2" data-source-title="negative short forms" aria-label="negative short forms">
+          <div class="grammar-text">
+            <span class="grammar-title-main">negative short forms</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="negative words" data-section="Negation" data-index="3" data-source-title="negative words" aria-label="negative words">
+          <div class="grammar-text">
+            <span class="grammar-title-main">negative words</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="negative questions" data-section="Negation" data-index="4" data-source-title="negative questions" aria-label="negative questions">
+          <div class="grammar-text">
+            <span class="grammar-title-main">negative questions</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="limited negatives" data-section="Negation" data-index="5" data-source-title="limited negatives" aria-label="limited negatives">
+          <div class="grammar-text">
+            <span class="grammar-title-main">limited negatives</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        </div>
+      </section>
+      <section class="section grammar-group reveal" data-section="Connections" data-prerendered="true" data-prerender-source="seo-static-v1">
+        <div class="section-title">
+          <h2 data-source-title="Connections" data-base-title="Connections"><span class="map-section-title-main">Connections</span></h2>
+        </div>
+        <div class="words-grid">
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="basic connectors" data-section="Connections" data-index="0" data-source-title="basic connectors" aria-label="basic connectors">
+          <div class="grammar-text">
+            <span class="grammar-title-main">basic connectors</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="reason and result" data-section="Connections" data-index="1" data-source-title="reason and result" aria-label="reason and result">
+          <div class="grammar-text">
+            <span class="grammar-title-main">reason and result</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="contrast and choice" data-section="Connections" data-index="2" data-source-title="contrast and choice" aria-label="contrast and choice">
+          <div class="grammar-text">
+            <span class="grammar-title-main">contrast and choice</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="time connectors" data-section="Connections" data-index="3" data-source-title="time connectors" aria-label="time connectors">
+          <div class="grammar-text">
+            <span class="grammar-title-main">time connectors</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="comparison links" data-section="Connections" data-index="4" data-source-title="comparison links" aria-label="comparison links">
+          <div class="grammar-text">
+            <span class="grammar-title-main">comparison links</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="adding ideas" data-section="Connections" data-index="5" data-source-title="adding ideas" aria-label="adding ideas">
+          <div class="grammar-text">
+            <span class="grammar-title-main">adding ideas</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="ordering ideas" data-section="Connections" data-index="6" data-source-title="ordering ideas" aria-label="ordering ideas">
+          <div class="grammar-text">
+            <span class="grammar-title-main">ordering ideas</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        </div>
+      </section>
+      <section class="section grammar-group reveal" data-section="Conditions" data-prerendered="true" data-prerender-source="seo-static-v1">
+        <div class="section-title">
+          <h2 data-source-title="Conditions" data-base-title="Conditions"><span class="map-section-title-main">Conditions</span></h2>
+        </div>
+        <div class="words-grid">
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="real conditions" data-section="Conditions" data-index="0" data-source-title="real conditions" aria-label="real conditions">
+          <div class="grammar-text">
+            <span class="grammar-title-main">real conditions</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="future conditions" data-section="Conditions" data-index="1" data-source-title="future conditions" aria-label="future conditions">
+          <div class="grammar-text">
+            <span class="grammar-title-main">future conditions</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="unreal present" data-section="Conditions" data-index="2" data-source-title="unreal present" aria-label="unreal present">
+          <div class="grammar-text">
+            <span class="grammar-title-main">unreal present</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="unreal past" data-section="Conditions" data-index="3" data-source-title="unreal past" aria-label="unreal past">
+          <div class="grammar-text">
+            <span class="grammar-title-main">unreal past</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="mixed conditions" data-section="Conditions" data-index="4" data-source-title="mixed conditions" aria-label="mixed conditions">
+          <div class="grammar-text">
+            <span class="grammar-title-main">mixed conditions</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="unless and otherwise" data-section="Conditions" data-index="5" data-source-title="unless and otherwise" aria-label="unless and otherwise">
+          <div class="grammar-text">
+            <span class="grammar-title-main">unless and otherwise</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        </div>
+      </section>
+      <section class="section grammar-group reveal" data-section="Voice &amp; Focus" data-prerendered="true" data-prerender-source="seo-static-v1">
+        <div class="section-title">
+          <h2 data-source-title="Voice &amp; Focus" data-base-title="Voice &amp; Focus"><span class="map-section-title-main">Voice &amp; Focus</span></h2>
+        </div>
+        <div class="words-grid">
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="active voice" data-section="Voice &amp; Focus" data-index="0" data-source-title="active voice" aria-label="active voice">
+          <div class="grammar-text">
+            <span class="grammar-title-main">active voice</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="passive voice" data-section="Voice &amp; Focus" data-index="1" data-source-title="passive voice" aria-label="passive voice">
+          <div class="grammar-text">
+            <span class="grammar-title-main">passive voice</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="focus shifts" data-section="Voice &amp; Focus" data-index="2" data-source-title="focus shifts" aria-label="focus shifts">
+          <div class="grammar-text">
+            <span class="grammar-title-main">focus shifts</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="cleft sentences" data-section="Voice &amp; Focus" data-index="3" data-source-title="cleft sentences" aria-label="cleft sentences">
+          <div class="grammar-text">
+            <span class="grammar-title-main">cleft sentences</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="there and it subjects" data-section="Voice &amp; Focus" data-index="4" data-source-title="there and it subjects" aria-label="there and it subjects">
+          <div class="grammar-text">
+            <span class="grammar-title-main">there and it subjects</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        </div>
+      </section>
+      <section class="section grammar-group reveal" data-section="Modality" data-prerendered="true" data-prerender-source="seo-static-v1">
+        <div class="section-title">
+          <h2 data-source-title="Modality" data-base-title="Modality"><span class="map-section-title-main">Modality</span></h2>
+        </div>
+        <div class="words-grid">
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="ability" data-section="Modality" data-index="0" data-source-title="ability" aria-label="ability">
+          <div class="grammar-text">
+            <span class="grammar-title-main">ability</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="permission" data-section="Modality" data-index="1" data-source-title="permission" aria-label="permission">
+          <div class="grammar-text">
+            <span class="grammar-title-main">permission</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="obligation" data-section="Modality" data-index="2" data-source-title="obligation" aria-label="obligation">
+          <div class="grammar-text">
+            <span class="grammar-title-main">obligation</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="advice" data-section="Modality" data-index="3" data-source-title="advice" aria-label="advice">
+          <div class="grammar-text">
+            <span class="grammar-title-main">advice</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="possibility" data-section="Modality" data-index="4" data-source-title="possibility" aria-label="possibility">
+          <div class="grammar-text">
+            <span class="grammar-title-main">possibility</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="probability" data-section="Modality" data-index="5" data-source-title="probability" aria-label="probability">
+          <div class="grammar-text">
+            <span class="grammar-title-main">probability</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="polite requests" data-section="Modality" data-index="6" data-source-title="polite requests" aria-label="polite requests">
+          <div class="grammar-text">
+            <span class="grammar-title-main">polite requests</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        </div>
+      </section>
+      <section class="section grammar-group reveal" data-section="Reported Speech" data-prerendered="true" data-prerender-source="seo-static-v1">
+        <div class="section-title">
+          <h2 data-source-title="Reported Speech" data-base-title="Reported Speech"><span class="map-section-title-main">Reported Speech</span></h2>
+        </div>
+        <div class="words-grid">
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="reporting statements" data-section="Reported Speech" data-index="0" data-source-title="reporting statements" aria-label="reporting statements">
+          <div class="grammar-text">
+            <span class="grammar-title-main">reporting statements</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="reporting questions" data-section="Reported Speech" data-index="1" data-source-title="reporting questions" aria-label="reporting questions">
+          <div class="grammar-text">
+            <span class="grammar-title-main">reporting questions</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="reporting requests" data-section="Reported Speech" data-index="2" data-source-title="reporting requests" aria-label="reporting requests">
+          <div class="grammar-text">
+            <span class="grammar-title-main">reporting requests</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="reporting commands" data-section="Reported Speech" data-index="3" data-source-title="reporting commands" aria-label="reporting commands">
+          <div class="grammar-text">
+            <span class="grammar-title-main">reporting commands</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="backshift basics" data-section="Reported Speech" data-index="4" data-source-title="backshift basics" aria-label="backshift basics">
+          <div class="grammar-text">
+            <span class="grammar-title-main">backshift basics</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="time place changes" data-section="Reported Speech" data-index="5" data-source-title="time place changes" aria-label="time place changes">
+          <div class="grammar-text">
+            <span class="grammar-title-main">time place changes</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        </div>
+      </section>
+      <section class="section grammar-group reveal" data-section="Formality &amp; Style" data-prerendered="true" data-prerender-source="seo-static-v1">
+        <div class="section-title">
+          <h2 data-source-title="Formality &amp; Style" data-base-title="Formality &amp; Style"><span class="map-section-title-main">Formality &amp; Style</span></h2>
+        </div>
+        <div class="words-grid">
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="formal vs informal" data-section="Formality &amp; Style" data-index="0" data-source-title="formal vs informal" aria-label="formal vs informal">
+          <div class="grammar-text">
+            <span class="grammar-title-main">formal vs informal</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="contractions" data-section="Formality &amp; Style" data-index="1" data-source-title="contractions" aria-label="contractions">
+          <div class="grammar-text">
+            <span class="grammar-title-main">contractions</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="polite softening" data-section="Formality &amp; Style" data-index="2" data-source-title="polite softening" aria-label="polite softening">
+          <div class="grammar-text">
+            <span class="grammar-title-main">polite softening</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="spoken vs written" data-section="Formality &amp; Style" data-index="3" data-source-title="spoken vs written" aria-label="spoken vs written">
+          <div class="grammar-text">
+            <span class="grammar-title-main">spoken vs written</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="professional style" data-section="Formality &amp; Style" data-index="4" data-source-title="professional style" aria-label="professional style">
+          <div class="grammar-text">
+            <span class="grammar-title-main">professional style</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="casual style" data-section="Formality &amp; Style" data-index="5" data-source-title="casual style" aria-label="casual style">
+          <div class="grammar-text">
+            <span class="grammar-title-main">casual style</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="clarity and brevity" data-section="Formality &amp; Style" data-index="6" data-source-title="clarity and brevity" aria-label="clarity and brevity">
+          <div class="grammar-text">
+            <span class="grammar-title-main">clarity and brevity</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        </div>
+      </section>
+      <section class="section grammar-group reveal" data-section="Discourse &amp; Flow" data-prerendered="true" data-prerender-source="seo-static-v1">
+        <div class="section-title">
+          <h2 data-source-title="Discourse &amp; Flow" data-base-title="Discourse &amp; Flow"><span class="map-section-title-main">Discourse &amp; Flow</span></h2>
+        </div>
+        <div class="words-grid">
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="opening and closing" data-section="Discourse &amp; Flow" data-index="0" data-source-title="opening and closing" aria-label="opening and closing">
+          <div class="grammar-text">
+            <span class="grammar-title-main">opening and closing</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="topic shifts" data-section="Discourse &amp; Flow" data-index="1" data-source-title="topic shifts" aria-label="topic shifts">
+          <div class="grammar-text">
+            <span class="grammar-title-main">topic shifts</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="cohesion tools" data-section="Discourse &amp; Flow" data-index="2" data-source-title="cohesion tools" aria-label="cohesion tools">
+          <div class="grammar-text">
+            <span class="grammar-title-main">cohesion tools</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="sequencing ideas" data-section="Discourse &amp; Flow" data-index="3" data-source-title="sequencing ideas" aria-label="sequencing ideas">
+          <div class="grammar-text">
+            <span class="grammar-title-main">sequencing ideas</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="clarification moves" data-section="Discourse &amp; Flow" data-index="4" data-source-title="clarification moves" aria-label="clarification moves">
+          <div class="grammar-text">
+            <span class="grammar-title-main">clarification moves</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="summaries" data-section="Discourse &amp; Flow" data-index="5" data-source-title="summaries" aria-label="summaries">
+          <div class="grammar-text">
+            <span class="grammar-title-main">summaries</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        <div class="card grammar-card" tabindex="0" role="button" data-concept="emphasis and repetition" data-section="Discourse &amp; Flow" data-index="6" data-source-title="emphasis and repetition" aria-label="emphasis and repetition">
+          <div class="grammar-text">
+            <span class="grammar-title-main">emphasis and repetition</span>
+            <span class="grammar-title-translation" hidden="hidden"></span>
+          </div>
+        </div>
+        </div>
+      </section>
       </div>
     </main>
     <!-- Shared footer -->
@@ -155,6 +836,6 @@
       </span>
     </footer>
     <!-- Shared client bundle -->
-    <script src="app.js?v=20260440" defer></script>
+    <script src="app.js?v=e980b20f1739" defer></script>
   </body>
 </html>

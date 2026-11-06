@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "buildInputs": {
+    "frontend/ui/cosmic-scene.js": "743c04824e595214cc0db5fe7fc644b500f6bb784759c62a4d095715f237e614",
+    "frontend/ui/subject-star-clusters.js": "edf17501bcc26d5cb656b5241ab0cea77922cb624e6056dae1acac305b69a4a8",
+    "frontend/ui/space-backdrop.js": "54145c9248d804c886f3bf97987a7f561172c2fe57a01024445c485765e611c9",
+    "scripts/build-universe.js": "3591f3c373914fba3ab7ee70463e68962f6e1464d46c704607ae391326fd1881",
+    "scripts/lib/universe-assets.js": "69b465ef81f6f2623ef3421d64898a2fcc36df0fd4a181b2d27d5691c4903049"
+  },
+  "buildDependencies": {
+    "esbuild": {
+      "version": "0.28.2",
+      "resolved": "https://registry.npmjs.org/esbuild/-/esbuild-0.28.2.tgz",
+      "integrity": "sha512-HKVLS8dvII+xoKW9kmqxbRKrnWEXfJJr/FZhhJmiqIB0e053QNYFqOBouTMO/k5sID4MvCiUCvv8b9M4h32wIA=="
+    }
+  },
+  "assets": {
+    "ui/universe.css": {
+      "sha256": "65fd0b346eab514adf1bee0c09c33ffc286769e7c7a0b71a177a3752026b3afc",
+      "bytes": 11060,
+      "version": "65fd0b346eab"
+    },
+    "ui/observatory.css": {
+      "sha256": "5553a14e462d04182b0a1db2cbcb9df9b845c951b19a3bb1941dcaf97a0f8a7b",
+      "bytes": 14008,
+      "version": "5553a14e462d"
+    },
+    "ui/navigation.css": {
+      "sha256": "5fadd54953f49e98d3b0d3d7ca7ca74bc16b73bd915efd0bda54c0bc6f83b04a",
+      "bytes": 8803,
+      "version": "5fadd54953f4"
+    },
+    "ui/flight-overlays.css": {
+      "sha256": "0b3776c4e920adffa31c04ffa03fd17a9d5f1e91f3508a9ec084f8002d0e039d",
+      "bytes": 16418,
+      "version": "0b3776c4e920"
+    },
+    "ui/language-chrome.css": {
+      "sha256": "6e35e8428164120b110c2454d32f95395e832f2124ad8d7cae2b38382914faea",
+      "bytes": 12404,
+      "version": "6e35e8428164"
+    },
+    "ui/cosmic-scene.bundle.js": {
+      "sha256": "c803f44746f51817b81e641a081506ff3a42077851ff9c881a6d029876fdae36",
+      "bytes": 17066,
+      "version": "c803f44746f5"
+    },
+    "ui/universe.js": {
+      "sha256": "80d8b9f97466c30ccb4237a4f744afeda078048cb5c0c830cec56740540d6731",
+      "bytes": 47672,
+      "version": "80d8b9f97466"
+    },
+    "ui/maths-lab.css": {
+      "sha256": "d441df6ff01b25d5e2348c379034719a580b7a3d8a5729600de7469af42bdd8a",
+      "bytes": 18205,
+      "version": "d441df6ff01b"
+    },
+    "ui/maths-lab.js": {
+      "sha256": "0400fa3320866513589f3477c47fe092e09eae37ce653df2159fa1bda898753f",
+      "bytes": 11355,
+      "version": "0400fa332086"
+    },
+    "ui/flight-pages.css": {
+      "sha256": "4713919dfd58db9e68f9e5c3ebdd49db03cd4dd5701b419a79443f0aee7e57d9",
+      "bytes": 10363,
+      "version": "4713919dfd58"
+    }
+  }
+}

@@ -7,20 +7,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="shortcut icon" href="/favicon.svg" />
-    <title>Learn English, French, Spanish and More Online | Cosmica</title>
+    <title>Cosmica | Galaxies and subjects</title>
     <meta
       name="description"
-      content="Learn English, French, Spanish, Arabic, Chinese, Japanese, and more with structured lessons for letters, vocabulary, phrases, and grammar."
+      content="Browse nine galaxies, find a subject, and open Cosmica's language courses or mathematics studio."
     />
     <meta name="robots" content="index, follow" />
-    <meta name="theme-color" content="#0a0f24" />
-    <meta name="application-name" content="Cosmica" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="Cosmica" />
-    <link rel="manifest" href="/app.webmanifest" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/pwa/apple-touch-icon.png" />
+    <meta name="theme-color" content="#080b0d" />
     <link rel="canonical" href="https://www.cosmicalearn.com/" />
     <!-- Multilingual SEO: hreflang cluster -->
     <link rel="alternate" hreflang="en" href="https://www.cosmicalearn.com/" />
@@ -28,20 +21,20 @@
     <!-- /Multilingual SEO: hreflang cluster -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Cosmica" />
-    <meta property="og:title" content="Learn English, French, Spanish and More Online | Cosmica" />
+    <meta property="og:title" content="Cosmica | Galaxies and subjects" />
     <meta
       property="og:description"
-      content="Structured language lessons with audio, vocabulary, phrases, grammar, and guided practice across 12 language worlds."
+      content="Browse nine galaxies and their subjects, with twelve language courses and an interactive mathematics studio."
     />
     <meta property="og:url" content="https://www.cosmicalearn.com/" />
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Learn English, French, Spanish and More Online | Cosmica" />
+    <meta name="twitter:title" content="Cosmica | Galaxies and subjects" />
     <meta
       name="twitter:description"
-      content="Structured language lessons with audio, vocabulary, phrases, grammar, and guided practice across 12 language worlds."
+      content="Browse nine galaxies and their subjects, with twelve language courses and an interactive mathematics studio."
     />
-    <link rel="preload" as="style" href="style.css?v=20260443" />
-    <link rel="stylesheet" href="style.css?v=20260443" />
+    <link rel="preload" as="style" href="style.css?v=e980b20f1739" />
+    <link rel="stylesheet" href="style.css?v=e980b20f1739" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -153,805 +146,68 @@
         ]
       }
     </script>
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "Is Cosmica for beginners or advanced learners?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Cosmica supports both. You can start with letters and core vocabulary, then move into phrases, pronunciation, and advanced grammar review."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Which languages can I learn on Cosmica?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Cosmica includes English, French, Spanish, Arabic, Chinese, Japanese, Korean, Hindi, German, Brazilian Portuguese, Dutch, and Swedish. Italian, Greek, Russian, and Vietnamese are next in orbit on the homepage."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Does Cosmica include audio and structured lesson paths?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes. Cosmica uses structured lesson maps with audio, vocabulary, phrases, grammar, and guided practice to build speaking confidence."
-            }
-          }
-        ]
-      }
-    </script>
+
+    <link rel="stylesheet" href="ui/universe.css?v=65fd0b346eab" />
+    <link rel="stylesheet" href="ui/observatory.css?v=5553a14e462d" />
+    <link rel="stylesheet" href="ui/navigation.css?v=5fadd54953f4" />
     <meta property="og:image" content="https://www.cosmicalearn.com/og-image.svg" />
     <meta name="twitter:image" content="https://www.cosmicalearn.com/og-image.svg" />
+    <link rel="stylesheet" href="ui/flight-overlays.css?v=0b3776c4e920" />
+    <link rel="stylesheet" href="ui/language-chrome.css?v=6e35e8428164" />
   </head>
-  <body class="home-alt-luxe">
-    <!-- Decorative background layers (aurora + starfield) -->
-    <div class="aurora"></div>
-    <div class="starfield starfield-deep" data-depth="0.15" aria-hidden="true"></div>
-    <div class="starfield starfield-mid" data-depth="0.3" aria-hidden="true"></div>
-    <div class="starfield starfield-near" data-depth="0.5" aria-hidden="true"></div>
-    <!-- Global navigation header -->
-    <header class="nav">
-      <div class="brand">
-        <span class="brand-mark">C</span>
-        <div>
-          <div class="brand-title">Cosmica</div>
-          <div class="brand-sub">Language Worlds</div>
-        </div>
-      </div>
-      <nav class="nav-links" aria-label="Primary navigation">
-        <a href="#how">How it works</a> <a href="#worlds">Worlds</a> <a href="#guide">AI guide</a>
-        <a href="#join">Feedback</a> <a href="#support">Support us</a>
-        <a href="#policies">Policies</a>
-      </nav>
+  <body class="universe-page home-page galaxy-page">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <svg xmlns="http://www.w3.org/2000/svg" class="home-symbols" aria-hidden="true"><defs>
+      <symbol id="ux-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+      <symbol id="ux-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></symbol>
+      <symbol id="ux-list" viewBox="0 0 24 24"><path d="M9 6h12M9 12h12M9 18h12M3 6h1M3 12h1M3 18h1"/></symbol>
+      <symbol id="ux-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></symbol>
+      <symbol id="ux-orbit" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><ellipse cx="12" cy="12" rx="11" ry="5" transform="rotate(-35 12 12)"/></symbol>
+    </defs></svg>
+    <header class="nav home-header">
+      <a class="ux-brand" href="index.html" aria-label="Cosmica home" data-universe-home>
+        <svg class="ux-brand-symbol" viewBox="0 0 40 40" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="10" stroke="currentColor"/><ellipse cx="20" cy="20" rx="19" ry="7" transform="rotate(-38 20 20)" stroke="currentColor"/><circle cx="32" cy="10" r="2.2" fill="currentColor"/></svg>
+        <span class="ux-brand-name">cosmica<span class="home-brand-dot">.</span></span>
+      </a>
+      <nav class="nav-links" aria-label="Primary navigation"><button class="ux-search-trigger" type="button" data-open-dialog="uxSearchDialog" aria-label="Search galaxies and subjects"><svg class="ux-icon" aria-hidden="true"><use href="#ux-search"/></svg><span>Search</span><kbd aria-hidden="true">/</kbd></button></nav>
       <div class="nav-controls">
-        <button class="sound-toggle" id="soundToggle" type="button">
-          <span class="dot" aria-hidden="true"></span> <span class="sound-label">Sound: On</span>
-        </button>
-        <div class="account-slot account-slot-preload" aria-hidden="true">
-          <button class="account-trigger" type="button" tabindex="-1">
-            <span class="account-trigger-avatar" aria-hidden="true">G</span>
-            <span class="account-trigger-copy">
-              <span class="account-trigger-label">Guest</span>
-              <span class="account-trigger-meta">Sign in</span>
-            </span>
-            <span class="account-trigger-caret" aria-hidden="true">&#9662;</span>
-          </button>
-        </div>
+        <div class="account-slot account-slot-preload" aria-hidden="true"><button class="account-trigger" type="button" tabindex="-1"><span class="account-trigger-avatar" aria-hidden="true">G</span><span class="account-trigger-copy"><span class="account-trigger-label">Guest</span><span class="account-trigger-meta">Sign in</span></span><span class="account-trigger-caret" aria-hidden="true">&#9662;</span></button></div>
       </div>
     </header>
-    <!-- Page-specific main content -->
-    <main>
-      <!-- Content section -->
-      <section class="hero" id="home">
-        <div class="hero-left">
-          <div class="eyebrow">
-            Learn 12 languages online with step-by-step lessons, audio, and practice
-          </div>
-          <h1>
-            Learn languages online.
-            <span class="hero-title-break">Build real speaking confidence.</span>
-          </h1>
-          <p class="lede">
-            Build speaking confidence with vocabulary, phrases, grammar, and pronunciation.
-          </p>
-          <div class="hero-actions">
-            <button class="primary" id="startVoyageButton" type="button">Start Learning</button>
-            <button class="ghost" id="talkButton" type="button">Chat With Mimi</button>
-          </div>
-          <div class="hero-meta">
-            <div>
-              <div class="meta-number">12</div>
-              <div class="meta-label">Language worlds available</div>
-            </div>
-            <div>
-              <div class="meta-number">Audio + AI</div>
-              <div class="meta-label">Pronunciation and guided support</div>
-            </div>
-            <div>
-              <div class="meta-number">Flexible access</div>
-              <div class="meta-label">Free and premium plans</div>
-            </div>
-          </div>
-        </div>
-        <div class="hero-right">
-          <div class="orbit-system" aria-hidden="true">
-            <div class="orbit-sun"></div>
-            <div class="orbit-ring orbit-ring-inner">
-              <div class="orbit-planet" style="--angle: 0deg">
-                <div class="planet-body"><div class="flag-badge" data-flag="gb"></div></div>
-              </div>
-              <div class="orbit-planet" style="--angle: 60deg">
-                <div class="planet-body"><div class="flag-badge" data-flag="fr"></div></div>
-              </div>
-              <div class="orbit-planet" style="--angle: 120deg">
-                <div class="planet-body"><div class="flag-badge" data-flag="es"></div></div>
-              </div>
-              <div class="orbit-planet" style="--angle: 300deg">
-                <div class="planet-body"><div class="flag-badge" data-flag="se"></div></div>
-              </div>
-              <div class="orbit-planet" style="--angle: 240deg">
-                <div class="planet-body"><div class="flag-badge" data-flag="kr"></div></div>
-              </div>
-              <div class="orbit-planet" style="--angle: 180deg">
-                <div class="planet-body"><div class="flag-badge" data-flag="ae"></div></div>
-              </div>
-            </div>
-            <div class="orbit-ring orbit-ring-outer">
-              <div class="orbit-planet" style="--angle: 0deg">
-                <div class="planet-body"><div class="flag-badge" data-flag="it"></div></div>
-              </div>
-              <div class="orbit-planet" style="--angle: 36deg">
-                <div class="planet-body"><div class="flag-badge" data-flag="nl"></div></div>
-              </div>
-              <div class="orbit-planet" style="--angle: 72deg">
-                <div class="planet-body"><div class="flag-badge" data-flag="de"></div></div>
-              </div>
-              <div class="orbit-planet" style="--angle: 108deg">
-                <div class="planet-body">
-                  <div class="flag-badge" data-flag="gr" style="--flag-spin: -45deg"></div>
-                </div>
-              </div>
-              <div class="orbit-planet" style="--angle: 144deg">
-                <div class="planet-body"><div class="flag-badge" data-flag="jp"></div></div>
-              </div>
-              <div class="orbit-planet" style="--angle: 180deg">
-                <div class="planet-body"><div class="flag-badge" data-flag="cn"></div></div>
-              </div>
-              <div class="orbit-planet" style="--angle: 216deg">
-                <div class="planet-body">
-                  <div class="flag-badge" data-flag="ru" style="--flag-spin: 55deg"></div>
-                </div>
-              </div>
-              <div class="orbit-planet" style="--angle: 252deg">
-                <div class="planet-body"><div class="flag-badge" data-flag="br"></div></div>
-              </div>
-              <div class="orbit-planet" style="--angle: 288deg">
-                <div class="planet-body"><div class="flag-badge" data-flag="vn"></div></div>
-              </div>
-              <div class="orbit-planet" style="--angle: 324deg">
-                <div class="planet-body"><div class="flag-badge" data-flag="in"></div></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <!-- Content section -->
-      <section class="section reveal" id="how">
-        <div class="section-title">
-          <h2>A clear path to real conversation</h2>
-          <p>Follow four lesson maps: Letters, Words, Phrases, and Grammar.</p>
-        </div>
-        <div class="steps">
-          <div class="card">
-            <div class="card-number">01</div>
-            <h3>Choose your language</h3>
-            <p>Start with letters, words, phrases, and grammar in the right order.</p>
-          </div>
-          <div class="card">
-            <div class="card-number">02</div>
-            <h3>Practice with audio</h3>
-            <p>Improve pronunciation, listening, and recall as you study.</p>
-          </div>
-          <div class="card">
-            <div class="card-number">03</div>
-            <h3>Speak with confidence</h3>
-            <p>Build clearer, more natural conversation step by step.</p>
-          </div>
-        </div>
-      </section>
-      <!-- Content section -->
-      <section class="section worlds reveal" id="worlds">
-        <div class="section-title">
-          <h2>Choose a language course</h2>
-          <p>
-            Learn with structured lessons in pronunciation, vocabulary, phrases, and grammar across
-            12 live language courses, with Italian, Greek, Russian, and Vietnamese next in orbit.
-          </p>
-        </div>
-        <div class="world-grid">
-          <a
-            class="world-card"
-            data-world="English"
-            href="english-world.html"
-            aria-label="Enter English course"
-          >
-            <div class="world-surface english">
-              <div class="world-vista vista-english" aria-hidden="true">
-                <span class="world-vista-orb"></span>
-                <span class="world-vista-back"></span>
-                <span class="world-vista-mid"></span>
-                <span class="world-vista-front"></span>
-                <span class="world-vista-accent"></span>
-              </div>
-              <div
-                class="flag-badge"
-                data-flag="gb"
-                role="img"
-                aria-label="United Kingdom flag"
-              ></div>
-            </div>
-            <div class="world-info">
-              <h3>English</h3>
-            </div>
-          </a>
-          <a
-            class="world-card"
-            data-world="French"
-            href="world-french.html"
-            aria-label="Enter French course"
-          >
-            <div class="world-surface french">
-              <div class="world-vista vista-french" aria-hidden="true">
-                <span class="world-vista-orb"></span>
-                <span class="world-vista-back"></span>
-                <span class="world-vista-mid"></span>
-                <span class="world-vista-front"></span>
-                <span class="world-vista-accent"></span>
-              </div>
-              <div class="flag-badge" data-flag="fr" role="img" aria-label="France flag"></div>
-            </div>
-            <div class="world-info">
-              <h3>French</h3>
-              <p class="world-native-name" lang="fr">Français</p>
-            </div>
-          </a>
-          <a
-            class="world-card"
-            data-world="German"
-            href="world-german.html"
-            aria-label="Enter German course"
-          >
-            <div class="world-surface german">
-              <div class="world-vista vista-german" aria-hidden="true">
-                <span class="world-vista-orb"></span>
-                <span class="world-vista-back"></span>
-                <span class="world-vista-mid"></span>
-                <span class="world-vista-front"></span>
-                <span class="world-vista-accent"></span>
-              </div>
-              <div class="flag-badge" data-flag="de" role="img" aria-label="Germany flag"></div>
-            </div>
-            <div class="world-info">
-              <h3>German</h3>
-              <p class="world-native-name" lang="de">Deutsch</p>
-            </div>
-          </a>
-          <a
-            class="world-card"
-            data-world="Spanish"
-            href="world-spanish.html"
-            aria-label="Enter Spanish course"
-          >
-            <div class="world-surface spanish">
-              <div class="world-vista vista-spanish" aria-hidden="true">
-                <span class="world-vista-orb"></span>
-                <span class="world-vista-back"></span>
-                <span class="world-vista-mid"></span>
-                <span class="world-vista-front"></span>
-                <span class="world-vista-accent"></span>
-              </div>
-              <div class="flag-badge" data-flag="es" role="img" aria-label="Spain flag"></div>
-            </div>
-            <div class="world-info">
-              <h3>Spanish</h3>
-              <p class="world-native-name" lang="es">Español</p>
-            </div>
-          </a>
-          <a
-            class="world-card"
-            data-world="Portuguese"
-            href="world-portuguese.html"
-            aria-label="Enter Brazilian Portuguese course"
-          >
-            <div class="world-surface portuguese">
-              <div class="world-vista vista-portuguese" aria-hidden="true">
-                <span class="world-vista-orb"></span>
-                <span class="world-vista-back"></span>
-                <span class="world-vista-mid"></span>
-                <span class="world-vista-front"></span>
-                <span class="world-vista-accent"></span>
-              </div>
-              <div class="flag-badge" data-flag="br" role="img" aria-label="Brazil flag"></div>
-            </div>
-            <div class="world-info">
-              <h3>Brazilian Portuguese</h3>
-              <p class="world-native-name" lang="pt-BR">Português do Brasil</p>
-            </div>
-          </a>
-          <a
-            class="world-card"
-            data-world="Dutch"
-            href="world-dutch.html"
-            aria-label="Enter Dutch course"
-          >
-            <div class="world-surface dutch">
-              <div class="world-vista vista-dutch" aria-hidden="true">
-                <span class="world-vista-orb"></span>
-                <span class="world-vista-back"></span>
-                <span class="world-vista-mid"></span>
-                <span class="world-vista-front"></span>
-                <span class="world-vista-accent"></span>
-              </div>
-              <div class="flag-badge" data-flag="nl" role="img" aria-label="Netherlands flag"></div>
-            </div>
-            <div class="world-info">
-              <h3>Dutch</h3>
-              <p class="world-native-name" lang="nl">Nederlands</p>
-            </div>
-          </a>
-          <a
-            class="world-card"
-            data-world="Swedish"
-            href="world-swedish.html"
-            aria-label="Enter Swedish course"
-          >
-            <div class="world-surface swedish">
-              <div class="world-vista vista-swedish" aria-hidden="true">
-                <span class="world-vista-orb"></span>
-                <span class="world-vista-back"></span>
-                <span class="world-vista-mid"></span>
-                <span class="world-vista-front"></span>
-                <span class="world-vista-accent"></span>
-              </div>
-              <div class="flag-badge" data-flag="se" role="img" aria-label="Sweden flag"></div>
-            </div>
-            <div class="world-info">
-              <h3>Swedish</h3>
-              <p class="world-native-name" lang="sv">Svenska</p>
-            </div>
-          </a>
-          <a
-            class="world-card"
-            data-world="Arabic"
-            href="world-arabic.html"
-            aria-label="Enter Arabic course"
-          >
-            <div class="world-surface arabic">
-              <div class="world-vista vista-arabic" aria-hidden="true">
-                <span class="world-vista-orb"></span>
-                <span class="world-vista-back"></span>
-                <span class="world-vista-mid"></span>
-                <span class="world-vista-front"></span>
-                <span class="world-vista-accent"></span>
-              </div>
-              <div
-                class="flag-badge"
-                data-flag="ae"
-                role="img"
-                aria-label="United Arab Emirates flag"
-              ></div>
-            </div>
-            <div class="world-info">
-              <h3>Arabic</h3>
-              <p class="world-native-name" lang="ar" dir="rtl">العربية</p>
-            </div>
-          </a>
-          <a
-            class="world-card"
-            data-world="Hindi"
-            href="world-hindi.html"
-            aria-label="Enter Hindi course"
-          >
-            <div class="world-surface hindi">
-              <div class="world-vista vista-hindi" aria-hidden="true">
-                <span class="world-vista-orb"></span>
-                <span class="world-vista-back"></span>
-                <span class="world-vista-mid"></span>
-                <span class="world-vista-front"></span>
-                <span class="world-vista-accent"></span>
-              </div>
-              <div class="flag-badge" data-flag="in" role="img" aria-label="India flag"></div>
-            </div>
-            <div class="world-info">
-              <h3>Hindi</h3>
-              <p class="world-native-name" lang="hi">&#2361;&#2367;&#2344;&#2381;&#2342;&#2368;</p>
-            </div>
-          </a>
-          <a
-            class="world-card"
-            data-world="Chinese"
-            href="world-chinese.html"
-            aria-label="Enter Chinese course"
-          >
-            <div class="world-surface chinese">
-              <div class="world-vista vista-chinese" aria-hidden="true">
-                <span class="world-vista-orb"></span>
-                <span class="world-vista-back"></span>
-                <span class="world-vista-mid"></span>
-                <span class="world-vista-front"></span>
-                <span class="world-vista-accent"></span>
-              </div>
-              <div class="flag-badge" data-flag="cn" role="img" aria-label="China flag"></div>
-            </div>
-            <div class="world-info">
-              <h3>Chinese</h3>
-              <p class="world-native-name" lang="zh">中文</p>
-            </div>
-          </a>
-          <a
-            class="world-card"
-            data-world="Japanese"
-            href="world-japanese.html"
-            aria-label="Enter Japanese course"
-          >
-            <div class="world-surface japanese">
-              <div class="world-vista vista-japanese" aria-hidden="true">
-                <span class="world-vista-orb"></span>
-                <span class="world-vista-back"></span>
-                <span class="world-vista-mid"></span>
-                <span class="world-vista-front"></span>
-                <span class="world-vista-accent"></span>
-              </div>
-              <div class="flag-badge" data-flag="jp" role="img" aria-label="Japan flag"></div>
-            </div>
-            <div class="world-info">
-              <h3>Japanese</h3>
-              <p class="world-native-name" lang="ja">日本語</p>
-            </div>
-          </a>
-          <a
-            class="world-card"
-            data-world="Korean"
-            href="world-korean.html"
-            aria-label="Enter Korean course"
-          >
-            <div class="world-surface korean">
-              <div class="world-vista vista-korean" aria-hidden="true">
-                <span class="world-vista-orb"></span>
-                <span class="world-vista-back"></span>
-                <span class="world-vista-mid"></span>
-                <span class="world-vista-front"></span>
-                <span class="world-vista-accent"></span>
-              </div>
-              <div class="flag-badge" data-flag="kr" role="img" aria-label="South Korea flag"></div>
-            </div>
-            <div class="world-info">
-              <h3>Korean</h3>
-              <p class="world-native-name" lang="ko">한국어</p>
-            </div>
-          </a>
-          <a
-            class="world-card"
-            data-world="Hindi"
-            href="world-hindi.html"
-            aria-label="Enter Hindi course"
-          >
-            <div class="world-surface hindi">
-              <div class="world-vista vista-hindi" aria-hidden="true">
-                <span class="world-vista-orb"></span>
-                <span class="world-vista-back"></span>
-                <span class="world-vista-mid"></span>
-                <span class="world-vista-front"></span>
-                <span class="world-vista-accent"></span>
-              </div>
-              <div class="flag-badge" data-flag="in" role="img" aria-label="India flag"></div>
-            </div>
-            <div class="world-info">
-              <h3>Hindi</h3>
-              <p class="world-native-name" lang="hi">हिन्दी</p>
-            </div>
-          </a>
-          <a
-            class="world-card coming-soon"
-            data-world="Italian"
-            href="#worlds"
-            aria-label="Italian course coming soon"
-            aria-disabled="true"
-          >
-            <div class="world-surface italian">
-              <div class="world-vista vista-italian" aria-hidden="true">
-                <span class="world-vista-orb"></span>
-                <span class="world-vista-back"></span>
-                <span class="world-vista-mid"></span>
-                <span class="world-vista-front"></span>
-                <span class="world-vista-accent"></span>
-              </div>
-              <div class="flag-badge" data-flag="it" role="img" aria-label="Italy flag"></div>
-            </div>
-            <div class="world-info">
-              <h3>Italian</h3>
-              <p class="world-native-name" lang="it">Italiano</p>
-            </div>
-            <span class="coming-soon-badge">Next in orbit</span>
-          </a>
-          <a
-            class="world-card coming-soon"
-            data-world="Greek"
-            href="#worlds"
-            aria-label="Greek course coming soon"
-            aria-disabled="true"
-          >
-            <div class="world-surface greek">
-              <div class="world-vista vista-greek" aria-hidden="true">
-                <span class="world-vista-orb"></span>
-                <span class="world-vista-back"></span>
-                <span class="world-vista-mid"></span>
-                <span class="world-vista-front"></span>
-                <span class="world-vista-accent"></span>
-              </div>
-              <div class="flag-badge" data-flag="gr" role="img" aria-label="Greece flag"></div>
-            </div>
-            <div class="world-info">
-              <h3>Greek</h3>
-              <p class="world-native-name" lang="el">
-                &#917;&#955;&#955;&#951;&#957;&#953;&#954;&#940;
-              </p>
-            </div>
-            <span class="coming-soon-badge">Next in orbit</span>
-          </a>
-          <a
-            class="world-card coming-soon"
-            data-world="Russian"
-            href="#worlds"
-            aria-label="Russian course coming soon"
-            aria-disabled="true"
-          >
-            <div class="world-surface russian">
-              <div class="world-vista vista-russian" aria-hidden="true">
-                <span class="world-vista-orb"></span>
-                <span class="world-vista-back"></span>
-                <span class="world-vista-mid"></span>
-                <span class="world-vista-front"></span>
-                <span class="world-vista-accent"></span>
-              </div>
-              <div class="flag-badge" data-flag="ru" role="img" aria-label="Russia flag"></div>
-            </div>
-            <div class="world-info">
-              <h3>Russian</h3>
-              <p class="world-native-name" lang="ru">
-                &#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;
-              </p>
-            </div>
-            <span class="coming-soon-badge">Next in orbit</span>
-          </a>
-          <a
-            class="world-card coming-soon"
-            data-world="Vietnamese"
-            href="#worlds"
-            aria-label="Vietnamese course coming soon"
-            aria-disabled="true"
-          >
-            <div class="world-surface vietnamese">
-              <div class="world-vista vista-vietnamese" aria-hidden="true">
-                <span class="world-vista-orb"></span>
-                <span class="world-vista-back"></span>
-                <span class="world-vista-mid"></span>
-                <span class="world-vista-front"></span>
-                <span class="world-vista-accent"></span>
-              </div>
-              <div class="flag-badge" data-flag="vn" role="img" aria-label="Vietnam flag"></div>
-            </div>
-            <div class="world-info">
-              <h3>Vietnamese</h3>
-              <p class="world-native-name" lang="vi">Ti&#7871;ng Vi&#7879;t</p>
-            </div>
-            <span class="coming-soon-badge">Next in orbit</span>
-          </a>
-        </div>
-      </section>
-      <!-- Content section -->
-      <section class="section guide reveal" id="guide">
-        <div class="guide-left">
-          <h2>Meet Mimi, your AI language guide</h2>
-          <p>
-            Mimi helps you practice, stay consistent, and choose the next useful lesson. Ask for a
-            phrase, a challenge, or guidance on what to study next.
-          </p>
-          <div class="speech" id="speechBubble" aria-live="polite">
-            <span class="speech-text" id="speechText">
-              Welcome, explorer. I am Mimi, your guide. Ask anything and we will solve it fast.
-            </span>
-            <div class="speech-bars" aria-hidden="true">
-              <span class="speech-bar"></span> <span class="speech-bar"></span>
-              <span class="speech-bar"></span>
-            </div>
-          </div>
-          <div class="mimi-chat" id="mimiChat">
-            <div class="chat-header">
-              <span class="chat-title">Mimi chat</span>
-              <span class="chat-status" id="chatStatus">
-                <span class="chat-dot" aria-hidden="true"></span>
-                <span class="chat-status-text">Mimi ready</span>
-              </span>
-            </div>
-            <div
-              class="chat-log"
-              id="chatLog"
-              aria-live="polite"
-              aria-label="Mimi chat messages"
-            ></div>
-            <form class="chat-input" id="chatForm">
-              <input
-                id="chatInput"
-                type="text"
-                placeholder="Ask Mimi your next objective..."
-                autocomplete="off"
-                maxlength="220"
-                aria-label="Ask Mimi"
-              />
-              <button class="primary chat-send" type="submit">Send</button>
-            </form>
-            <div class="chat-hints">
-              <button class="chat-chip" type="button" data-prompt="Teach me a simple greeting.">
-                Teach a greeting
-              </button>
-              <button class="chat-chip" type="button" data-prompt="Surprise me with a challenge.">
-                Surprise me
-              </button>
-            </div>
-          </div>
-        </div>
-        <div class="guide-right">
-          <div class="alien" id="alien">
-            <div class="alien-glow"></div>
-            <div class="alien-head">
-              <div class="alien-antenna"></div>
-              <div class="alien-antenna right"></div>
-              <div class="alien-eye left"></div>
-              <div class="alien-eye right"></div>
-              <div class="alien-blush left"></div>
-              <div class="alien-blush right"></div>
-              <div class="alien-mouth">
-                <svg viewBox="0 0 64 32" aria-hidden="true">
-                  <path id="mouthPath" d="M10 10 C 22 26, 42 26, 54 10" />
-                </svg>
-              </div>
-            </div>
-            <div class="alien-body">
-              <div class="alien-arm left"></div>
-              <div class="alien-arm right"></div>
-            </div>
-            <div class="alien-tail"></div>
-          </div>
-          <div class="tap-bubble" aria-hidden="true">Tap me</div>
-        </div>
-      </section>
-      <!-- Content section -->
-      <section class="section reveal" id="faq">
-        <div class="section-title">
-          <h2>Language learning FAQs</h2>
-          <p>Quick answers for learners comparing levels, languages, and course structure.</p>
-        </div>
-        <div class="faq-list">
-          <details class="faq-item">
-            <summary class="faq-question">Is Cosmica for beginners or advanced learners?</summary>
-            <div class="faq-answer">
-              <p>
-                Both. Start with letters, vocabulary, and phrases, then build toward stronger
-                pronunciation, comprehension, and advanced grammar.
-              </p>
-            </div>
-          </details>
-          <details class="faq-item">
-            <summary class="faq-question">Which languages can I learn on Cosmica?</summary>
-            <div class="faq-answer">
-              <p>
-                English, French, Spanish, Arabic, Chinese, Japanese, Korean, Hindi, German,
-                Brazilian Portuguese, Dutch, and Swedish are live now. Italian, Greek, Russian, and
-                Vietnamese are next in orbit.
-              </p>
-            </div>
-          </details>
-          <details class="faq-item">
-            <summary class="faq-question">
-              Does Cosmica include audio and structured lesson paths?
-            </summary>
-            <div class="faq-answer">
-              <p>
-                Yes. Each course is organized into letters, words, phrases, and grammar with audio
-                support and guided progression.
-              </p>
-            </div>
-          </details>
-        </div>
-      </section>
-      <!-- Content section -->
-      <section class="section join reveal" id="join">
-        <div class="join-panel">
-          <h2>Help build the future of Cosmica</h2>
-          <p>
-            Share feedback, shape new worlds, and help us build the best learning experience in this
-            universe.
-          </p>
-          <form class="join-actions" id="joinForm">
-            <input
-              type="text"
-              id="joinName"
-              name="name"
-              placeholder="Your name"
-              aria-label="Your name"
-            />
-            <input
-              type="email"
-              id="joinEmail"
-              name="email"
-              placeholder="Email address"
-              aria-label="Email address"
-            />
-            <textarea
-              id="joinFeedback"
-              name="feedback"
-              placeholder="Your text here..."
-              aria-label="Your feedback"
-            ></textarea>
-            <button class="primary" id="joinSubmit" type="submit">Send feedback</button>
-          </form>
-          <div class="join-status" id="joinStatus" aria-live="polite"></div>
-        </div>
-        <div class="support-panel" id="support">
-          <div class="support-copy">
-            <h3>Keep Cosmica free for all</h3>
-            <p>
-              Cosmica stays free. Your support helps us maintain quality and launch new worlds
-              faster.
-            </p>
-          </div>
-          <a
-            class="support-button"
-            href="https://ko-fi.com/supportcosmica"
-            target="_blank"
-            rel="noopener"
-            >Support us</a
-          >
-        </div>
-      </section>
-    </main>
-    <!-- Shared footer -->
-    <footer class="footer" id="policies">
-      <span>Cosmica Academy</span>
-      <span class="footer-inline-links">
-        <span class="footer-right-text">Built for explorers of every language.</span>
-        <span class="footer-legal-links">
-          <a href="privacy.html">Privacy</a>
-          <span class="footer-divider" aria-hidden="true">|</span> <a href="terms.html">Terms</a>
-          <span class="footer-divider" aria-hidden="true">|</span>
-          <a href="license.html">License</a>
-          <span class="footer-divider" aria-hidden="true">|</span>
-          <a href="#faq">FAQs</a>
-        </span>
-      </span>
-    </footer>
-    <div class="warp-overlay" id="warpOverlay" aria-hidden="true">
-      <div class="warp-dust" aria-hidden="true"></div>
-      <div class="warp-streaks" aria-hidden="true">
-        <span style="--x: 12%; --y: 18%; --l: 200px; --t: 1.2s; --d: 0s"></span>
-        <span style="--x: 30%; --y: 35%; --l: 160px; --t: 1.4s; --d: 0.2s"></span>
-        <span style="--x: 50%; --y: 22%; --l: 220px; --t: 1.1s; --d: 0.1s"></span>
-        <span style="--x: 70%; --y: 40%; --l: 180px; --t: 1.5s; --d: 0.3s"></span>
-        <span style="--x: 85%; --y: 60%; --l: 200px; --t: 1.3s; --d: 0.45s"></span>
-        <span style="--x: 18%; --y: 70%; --l: 140px; --t: 1.6s; --d: 0.15s"></span>
-        <span style="--x: 40%; --y: 82%; --l: 190px; --t: 1.2s; --d: 0.55s"></span>
-        <span style="--x: 62%; --y: 75%; --l: 210px; --t: 1.4s; --d: 0.25s"></span>
-        <span style="--x: 78%; --y: 20%; --l: 160px; --t: 1.3s; --d: 0.35s"></span>
-        <span style="--x: 10%; --y: 50%; --l: 220px; --t: 1.5s; --d: 0.5s"></span>
-        <span style="--x: 32%; --y: 10%; --l: 180px; --t: 1.1s; --d: 0.4s"></span>
-        <span style="--x: 92%; --y: 32%; --l: 140px; --t: 1.6s; --d: 0.6s"></span>
-      </div>
-      <div class="warp-flare" aria-hidden="true"></div>
-      <div class="warp-smoke smoke-a"></div>
-      <div class="warp-smoke smoke-b"></div>
-      <div class="warp-smoke smoke-c"></div>
-      <div class="warp-scene">
-        <div class="ship">
-          <div class="ship-body"></div>
-          <div class="ship-window"></div>
-          <div class="ship-flame"></div>
-        </div>
-        <div class="warp-text" id="warpText">Entering world</div>
-      </div>
+    <button class="home-menu-backdrop" id="homeMenuBackdrop" type="button" aria-label="Close subjects" tabindex="-1" hidden></button>
+    <div class="home-layout">
+      <aside class="home-sidebar" id="uxListView" aria-label="All galaxies" hidden>
+        <div class="home-sidebar-heading"><h2>All galaxies</h2><button id="uxMapView" type="button" aria-label="Close galaxies"><span aria-hidden="true">&#215;</span></button></div>
+        <p class="home-sidebar-description">Choose a subject area.</p>
+        <nav id="flightGalaxyItems" class="home-categories" aria-label="Subject categories"></nav>
+      </aside>
+      <main id="main-content" tabindex="-1">
+        <section class="home-hero" id="uxIntro" aria-labelledby="homeTitle">
+          <div class="home-hero-copy"><div class="home-breadcrumb" id="homeGalaxyBreadcrumb" hidden><button id="uxBack" type="button" hidden><span aria-hidden="true">&#8592;</span> All galaxies</button><span id="uxBreadcrumb">All subjects</span></div><p class="home-eyebrow" id="homeCategoryLabel">COSMICA / UNIVERSE</p><h1 id="homeTitle" tabindex="-1">Choose a subject</h1><p id="homeDescription">Browse languages, science, and more.</p><div class="home-preview-actions"><button id="homeHeroLink" class="home-primary" type="button" aria-controls="uxListView" aria-expanded="false">All galaxies<svg class="ux-icon" aria-hidden="true"><use href="#ux-list"/></svg></button><button class="home-switch-galaxy" id="homeGalaxySwitch" type="button" data-toggle-subjects aria-expanded="false" aria-controls="uxListView" hidden>Switch galaxy<svg class="ux-icon" aria-hidden="true"><use href="#ux-list"/></svg></button></div></div>
+          <div class="home-space-wrap"><div class="ux-space" id="uxSpace" aria-label="Browse galaxies"><div class="home-fallback-space" aria-hidden="true"><div class="home-fallback-galaxy"></div><span class="home-fallback-star"></span></div></div></div>
+          <div class="home-scene-controls" role="group" aria-label="Scene settings"><button id="uxMotion" type="button" aria-pressed="true" aria-label="Pause motion"><span class="home-motion-icon" aria-hidden="true">&#8545;</span><span id="homeMotionLabel">Pause motion</span></button><button id="uxSound" type="button" aria-pressed="false" aria-label="Turn sound on"><svg class="ux-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m11 5-5 4H3v6h3l5 4zM16 10l5 5m0-5-5 5"/></svg><span id="homeSoundLabel">Sound off</span></button></div>
+        </section>
+        <section class="ux-galaxy-view home-catalog" id="uxGalaxyView" aria-labelledby="uxGalaxyTitle" hidden>
+          <div class="home-catalog-heading"><div><h2 id="uxGalaxyTitle" tabindex="-1">Start learning</h2></div><span class="home-catalog-count" id="uxWorldCount" role="status">13 available subjects</span></div>
+          <div class="ux-world-toolbar"><div class="home-filter"><svg class="ux-icon" aria-hidden="true"><use href="#ux-search"/></svg><input type="search" id="uxWorldFilter" placeholder="Filter available courses" aria-label="Filter available courses" autocomplete="off" maxlength="120"/><button class="home-clear-filter" id="homeClearFilter" type="button" aria-label="Clear filter" hidden><span aria-hidden="true">&times;</span></button></div></div>
+          <div class="ux-world-grid" id="uxWorldGrid"></div>
+          <p class="ux-galaxy-note" id="uxGalaxyNote"></p>
+        </section>
+        <noscript><section class="ux-noscript"><h2>Start learning</h2><p>Open a course directly.</p><a href="english-world.html">English</a><a href="world-french.html">French</a><a href="world-spanish.html">Spanish</a><a href="world-arabic.html">Arabic</a><a href="world-chinese.html">Chinese</a><a href="world-japanese.html">Japanese</a><a href="world-korean.html">Korean</a><a href="world-hindi.html">Hindi</a><a href="world-german.html">German</a><a href="world-portuguese.html">Brazilian Portuguese</a><a href="world-dutch.html">Dutch</a><a href="world-swedish.html">Swedish</a><a href="maths-lab.html">Mathematics studio</a></section></noscript>
+        <footer class="ux-footer"><span>&copy; Cosmica</span><div class="ux-footer-links"><button type="button" class="ux-text-button" data-open-dialog="uxInfoDialog">About</button><button type="button" class="ux-text-button" data-open-dialog="uxGuideDialog">Ask Mimi</button><button type="button" class="ux-text-button" data-open-dialog="uxFeedbackDialog">Feedback</button><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div></footer>
+      </main>
     </div>
-    <script>
-      window.COSMICA_STORE_LINKS = Object.freeze({
-        appStoreUrl: "",
-        playStoreUrl: "",
-      });
-    </script>
-    <!-- Shared client bundle -->
-    <script src="app.js?v=20260440" defer></script>
+    <nav class="home-mobile-nav" id="homeMobileNav" aria-label="Browse Cosmica">
+      <button id="homeMobileSubjects" type="button" data-toggle-subjects aria-expanded="false" aria-controls="uxListView"><svg class="ux-icon" aria-hidden="true"><use href="#ux-list"/></svg><span>Galaxies</span><small id="homeMobileCategory">Galaxies</small></button>
+      <button type="button" data-open-dialog="uxSearchDialog"><svg class="ux-icon" aria-hidden="true"><use href="#ux-search"/></svg><span>Search</span></button>
+    </nav>
+    <dialog class="ux-dialog" id="uxSearchDialog" aria-labelledby="uxSearchTitle"><div class="ux-dialog-head"><h2 id="uxSearchTitle">Search subjects</h2><button class="ux-close" type="button" data-close aria-label="Close search">&times;</button></div><div class="ux-search-field"><svg class="ux-icon" aria-hidden="true"><use href="#ux-search"/></svg><input id="uxSearchInput" type="search" placeholder="Search subjects and courses" aria-label="Search subjects and courses" autocomplete="off" maxlength="160"/><button class="home-search-reset" id="homeSearchReset" type="button" aria-label="Clear search" hidden><span aria-hidden="true">&times;</span></button></div><div class="home-search-scope" id="homeSearchScope" role="group" aria-label="Search in"><button type="button" data-search-scope="all" aria-pressed="true">All</button></div><p class="home-search-count" id="homeSearchCount" role="status"></p><div class="ux-search-results" id="uxSearchResults" aria-label="Search results"></div></dialog>
+    <dialog class="ux-dialog" id="uxInfoDialog" aria-labelledby="uxInfoTitle"><div class="ux-dialog-head"><h2 id="uxInfoTitle">About Cosmica</h2><button class="ux-close" type="button" data-close aria-label="Close about Cosmica">&times;</button></div><div class="ux-dialog-content"><p>Choose a subject to open its courses.</p><ol class="home-info-steps"><li><strong>Choose a category.</strong><span>Find the area you want to learn about.</span></li><li><strong>Pick a subject.</strong><span>Open a language course or the mathematics studio.</span></li><li><strong>Start learning.</strong><span>Read, listen, practice, and explore at your own pace.</span></li></ol><p>Today, you can open 12 language courses and the interactive mathematics studio.</p><p>Your existing course progress stays with your account.</p></div></dialog>
+    <dialog class="ux-dialog" id="uxGuideDialog" aria-labelledby="uxGuideTitle"><div class="ux-dialog-head"><h2 id="uxGuideTitle">Ask Mimi</h2><button class="ux-close" type="button" data-close aria-label="Close Mimi chat">&times;</button></div><div class="ux-dialog-content"><div class="speech" id="speechBubble" aria-live="polite"><span class="speech-text" id="speechText">Ask for a language explanation or an example. Check important answers against your course material.</span></div><div class="mimi-chat" id="mimiChat"><div class="chat-header"><span class="chat-title">Your language questions</span><span class="chat-status" id="chatStatus"><span class="chat-status-text">Ready</span></span></div><div class="chat-log" id="chatLog" aria-live="polite" aria-label="Mimi chat messages"></div><form class="chat-input" id="chatForm"><input id="chatInput" type="text" placeholder="What would you like help with?" autocomplete="off" maxlength="220" aria-label="Ask Mimi"/><button class="primary chat-send" type="submit">Send</button></form></div></div></dialog>
+    <dialog class="ux-dialog" id="uxFeedbackDialog" aria-labelledby="uxFeedbackTitle"><div class="ux-dialog-head"><h2 id="uxFeedbackTitle">Share feedback</h2><button class="ux-close" type="button" data-close aria-label="Close feedback">&times;</button></div><div class="ux-dialog-content"><p>Tell us what helped, what felt confusing, or what you would like to learn next.</p><form class="join-actions" id="joinForm"><label for="joinName">Your name</label><input type="text" id="joinName" name="name" placeholder="Your name" aria-label="Your name" required autocomplete="name"/><label for="joinEmail">Email address</label><input type="email" id="joinEmail" name="email" placeholder="Email address" aria-label="Email address" required autocomplete="email"/><label for="joinFeedback">Your feedback</label><textarea id="joinFeedback" name="feedback" placeholder="Your feedback" aria-label="Your feedback" required></textarea><button class="primary" id="joinSubmit" type="submit">Send feedback</button></form><div class="join-status" id="joinStatus" aria-live="polite"></div></div></dialog>
+    <div class="ux-announcement" id="uxAnnouncement" role="status" hidden></div>
+    <script src="app.js?v=e980b20f1739" defer></script>
+    <script src="ui/cosmic-scene.bundle.js?v=c803f44746f5" defer></script>
+    <script src="ui/universe.js?v=80d8b9f97466" defer></script>
   </body>
 </html>

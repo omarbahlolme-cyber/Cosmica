@@ -538,5 +538,4 @@ const runMatrix = async () => {
 runMatrix().catch((error) => {
   console.error(`MATRIX ERROR: ${error?.stack || error?.message || error}`);
   process.exitCode = 1;
-  restoreStore();
 });

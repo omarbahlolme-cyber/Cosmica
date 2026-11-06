@@ -1,0 +1,13 @@
+$BaseUrl = "https://www.cosmicalearn.com"
+$Token = "f1PiXt2lTbecmREGIZl_x-9s8HcX1LT63W5fWj-FX2PXkmiDvtZx0ogoFLlrogdR".Trim()
+$Headers = @{ "x-admin-token" = $Token }
+
+$Body = @{
+  days = 365
+  title = "A Premium Gift For You"
+  message = "Here is your free Cosmica Premium gift. Enjoy full learning access and joyful language exploration."
+  from = "Andy 앤디"
+} | ConvertTo-Json -Compress
+
+$Create = Invoke-RestMethod -Uri "$BaseUrl/api/admin/security/gifts/create" -Method POST -Headers $Headers -ContentType "application/json" -Body $Body
+$Create.redeemUrl

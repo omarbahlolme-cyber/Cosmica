@@ -1,11 +1,12 @@
 const fs = require("fs");
 const path = require("path");
 const { repairDeepText } = require("./lib/mojibake");
+const { calculateAssetVersion } = require("./lib/asset-version");
 
 const ROOT = path.resolve(__dirname, "..");
 const FRONTEND = path.join(ROOT, "frontend");
 const SITE_ORIGIN = "https://www.cosmicalearn.com";
-const SHARED_ASSET_VERSION = "20260440";
+const SHARED_ASSET_VERSION = calculateAssetVersion(ROOT);
 const STYLE_ASSET_VERSION = SHARED_ASSET_VERSION;
 const APP_ASSET_VERSION = SHARED_ASSET_VERSION;
 const ACCOUNT_CARET_ENTITY = "&#9662;";
@@ -251,13 +252,6 @@ const pageShell = ({
     <meta name="description" content="${escapeHtml(description)}" />
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#0a0f24" />
-    <meta name="application-name" content="Cosmica" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="Cosmica" />
-    <link rel="manifest" href="/app.webmanifest" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/pwa/apple-touch-icon.png" />
     <link rel="canonical" href="${SITE_ORIGIN}/${escapeHtml(canonicalPath)}" />
 ${alternateLinks}
     <meta property="og:type" content="website" />
@@ -282,6 +276,7 @@ ${extraStructuredData ? `${extraStructuredData}\n` : ""}    <meta property="og:i
     <meta name="twitter:image" content="${SITE_ORIGIN}/og-image.svg" />
   </head>
   <body class="world-page seo-guide-page">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <!-- Decorative background layers (aurora + starfield) -->
     <div class="aurora"></div>
     <div class="starfield starfield-deep" data-depth="0.15" aria-hidden="true"></div>
@@ -300,8 +295,8 @@ ${extraStructuredData ? `${extraStructuredData}\n` : ""}    <meta property="og:i
         <a href="${escapeHtml(backHref)}">${escapeHtml(backLabel)}</a>
       </nav>
       <div class="nav-controls">
-        <button class="sound-toggle" id="soundToggle" type="button">
-          <span class="dot" aria-hidden="true"></span> <span class="sound-label">Sound: On</span>
+        <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false">
+          <span class="dot" aria-hidden="true"></span> <span class="sound-label">Sound: Off</span>
         </button>
         <div class="account-slot account-slot-preload" aria-hidden="true">
           <button class="account-trigger" type="button" tabindex="-1">
@@ -316,7 +311,7 @@ ${extraStructuredData ? `${extraStructuredData}\n` : ""}    <meta property="og:i
       </div>
     </header>
     <!-- Page-specific main content -->
-    <main>
+    <main id="main-content">
 ${content}
     </main>
     <!-- Shared footer -->
@@ -975,6 +970,5 @@ for (const config of PAGES) {
 }
 
 console.log(`Generated ${PAGES.length * 3} localized SEO landing pages.`);
-
 
 

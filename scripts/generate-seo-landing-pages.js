@@ -1,11 +1,12 @@
 const fs = require("fs");
 const path = require("path");
 const { repairDeepText } = require("./lib/mojibake");
+const { calculateAssetVersion } = require("./lib/asset-version");
 
 const ROOT = path.resolve(__dirname, "..");
 const FRONTEND = path.join(ROOT, "frontend");
 const SITE_ORIGIN = "https://www.cosmicalearn.com";
-const SHARED_ASSET_VERSION = "20260440";
+const SHARED_ASSET_VERSION = calculateAssetVersion(ROOT);
 const STYLE_ASSET_VERSION = SHARED_ASSET_VERSION;
 const APP_ASSET_VERSION = SHARED_ASSET_VERSION;
 const ACCOUNT_CARET_ENTITY = "&#9662;";
@@ -261,13 +262,6 @@ const pageShell = ({
     <meta name="description" content="${description}" />
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#0a0f24" />
-    <meta name="application-name" content="Cosmica" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="Cosmica" />
-    <link rel="manifest" href="/app.webmanifest" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/pwa/apple-touch-icon.png" />
     <link rel="canonical" href="${SITE_ORIGIN}/${canonicalPath}" />
 ${alternateLinks}
     <meta property="og:type" content="website" />
@@ -303,6 +297,7 @@ ${structuredData || jsonLdScript({
     <meta name="twitter:image" content="${SITE_ORIGIN}/og-image.svg" />
   </head>
   <body class="${bodyClass}">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <!-- Decorative background layers (aurora + starfield) -->
     <div class="aurora"></div>
     <div class="starfield starfield-deep" data-depth="0.15" aria-hidden="true"></div>
@@ -321,8 +316,8 @@ ${structuredData || jsonLdScript({
         <a href="${backHref}">${backLabel}</a>
       </nav>
       <div class="nav-controls">
-        <button class="sound-toggle" id="soundToggle" type="button">
-          <span class="dot" aria-hidden="true"></span> <span class="sound-label">Sound: On</span>
+        <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false">
+          <span class="dot" aria-hidden="true"></span> <span class="sound-label">Sound: Off</span>
         </button>
         <div class="account-slot account-slot-preload" aria-hidden="true">
           <button class="account-trigger" type="button" tabindex="-1">
@@ -337,7 +332,7 @@ ${structuredData || jsonLdScript({
       </div>
     </header>
     <!-- Page-specific main content -->
-    <main>
+    <main id="main-content">
 ${content}
     </main>
     <!-- Shared footer -->
@@ -856,5 +851,4 @@ for (const config of LANGUAGES) {
 }
 
 console.log(`Generated ${LANGUAGES.length * 3} SEO landing pages and linked them from world hubs.`);
-
 

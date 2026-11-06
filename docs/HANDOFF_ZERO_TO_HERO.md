@@ -63,13 +63,13 @@ Cosmica has two runtime layers:
 ## 2) First-time local setup
 
 Requirements:
-1. Node.js 18+ (LTS recommended)
-2. npm
+1. Node.js 24
+2. npm 10 or 11
 
 Install and run:
 
 ```bash
-npm install
+npm ci
 npm start
 ```
 

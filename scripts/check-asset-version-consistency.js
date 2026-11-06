@@ -5,12 +5,14 @@
    ========================================================================== */
 const fs = require("fs");
 const path = require("path");
+const { calculateAssetVersion } = require("./lib/asset-version");
 
 /* --------------------------------------------------------------------------
    PATHS + CONFIG
    -------------------------------------------------------------------------- */
 const ROOT = path.resolve(__dirname, "..");
 const FRONTEND_ROOT = path.join(ROOT, "frontend");
+const EXPECTED_ASSET_VERSION = calculateAssetVersion(ROOT);
 const shouldSkipHtmlFile = (name) => {
   const lower = String(name || "").toLowerCase();
   return (
@@ -29,6 +31,18 @@ const htmlFiles = fs
   .filter((name) => name.toLowerCase().endsWith(".html"))
   .filter((name) => !shouldSkipHtmlFile(name))
   .sort();
+const htmlSources = new Map(
+  htmlFiles.map((fileName) => [
+    fileName,
+    fs.readFileSync(path.join(FRONTEND_ROOT, fileName), "utf8"),
+  ])
+);
+const standaloneFiles = new Set(
+  htmlFiles.filter((fileName) =>
+    /<html\b[^>]*\bdata-runtime\s*=\s*["']standalone["']/i.test(htmlSources.get(fileName))
+  )
+);
+const sharedPageCount = htmlFiles.length - standaloneFiles.size;
 
 const ASSET_RULES = [
   { file: "style.css", attr: "href", required: true },
@@ -54,10 +68,67 @@ const collectAssetMatches = (htmlContent, assetFile, attrName) => {
   return versions;
 };
 
+// Independent learning tools opt in explicitly and validate their own local assets.
+const collectStandaloneAssets = (htmlContent) => {
+  const readAttribute = (tag, name) => {
+    const match = tag.match(new RegExp(`\\b${name}\\s*=\\s*["']([^"']*)["']`, "i"));
+    return match ? match[1] : "";
+  };
+  const assets = [];
+  const tags = htmlContent.match(/<(?:link|script)\b[^>]*>/gi) || [];
+  for (const tag of tags) {
+    const script = /^<script\b/i.test(tag);
+    if (!script && !/(?:^|\s)stylesheet(?:\s|$)/i.test(readAttribute(tag, "rel"))) {
+      continue;
+    }
+    const reference = readAttribute(tag, script ? "src" : "href");
+    if (!reference || /^(?:[a-z][a-z\d+.-]*:|\/\/)/i.test(reference)) {
+      continue;
+    }
+    assets.push({ reference, extension: script ? ".js" : ".css" });
+  }
+  return assets;
+};
+
+const validateStandaloneAssets = (fileName, content, failures) => {
+  const assets = collectStandaloneAssets(content);
+  for (const extension of [".css", ".js"]) {
+    if (!assets.some((asset) => asset.extension === extension)) {
+      failures.push(`${fileName}: standalone page requires a local ${extension} asset`);
+    }
+  }
+  for (const { reference, extension } of assets) {
+    try {
+      const url = new URL(reference, "https://cosmica.local/");
+      const relativePath = decodeURIComponent(url.pathname).replace(/^\/+/, "");
+      const absolutePath = path.resolve(FRONTEND_ROOT, relativePath);
+      const resolvedRelativePath = path.relative(FRONTEND_ROOT, absolutePath);
+      if (
+        resolvedRelativePath.startsWith("..") ||
+        path.isAbsolute(resolvedRelativePath) ||
+        path.extname(absolutePath).toLowerCase() !== extension ||
+        !fs.existsSync(absolutePath) ||
+        !fs.statSync(absolutePath).isFile()
+      ) {
+        failures.push(`${fileName}: standalone asset is missing or invalid: ${reference}`);
+      }
+      if (!String(url.searchParams.get("v") || "").trim()) {
+        failures.push(`${fileName}: standalone asset is missing ?v= version query param: ${reference}`);
+      }
+    } catch {
+      failures.push(`${fileName}: standalone asset URL is invalid: ${reference}`);
+    }
+  }
+};
+
 /* --------------------------------------------------------------------------
    MAIN
    -------------------------------------------------------------------------- */
 const failures = [];
+
+for (const fileName of standaloneFiles) {
+  validateStandaloneAssets(fileName, htmlSources.get(fileName), failures);
+}
 
 for (const rule of ASSET_RULES) {
   const versionsByFile = new Map();
@@ -66,15 +137,16 @@ for (const rule of ASSET_RULES) {
   let filesWithMatch = 0;
 
   for (const htmlFile of htmlFiles) {
-    const htmlPath = path.join(FRONTEND_ROOT, htmlFile);
-    const content = fs.readFileSync(htmlPath, "utf8");
+    const content = htmlSources.get(htmlFile);
     const matchedVersions = collectAssetMatches(content, rule.file, rule.attr);
     if (!matchedVersions.length) {
       continue;
     }
 
     totalMatches += matchedVersions.length;
-    filesWithMatch += 1;
+    if (!standaloneFiles.has(htmlFile)) {
+      filesWithMatch += 1;
+    }
     matchedVersions.forEach((version) => {
       if (!version) {
         failures.push(
@@ -84,12 +156,17 @@ for (const rule of ASSET_RULES) {
       }
       uniqueVersions.add(version);
       versionsByFile.set(htmlFile, version);
+      if (version !== EXPECTED_ASSET_VERSION) {
+        failures.push(
+          `${htmlFile}: ${rule.file} uses stale version ${version}; expected ${EXPECTED_ASSET_VERSION}`
+        );
+      }
     });
   }
 
-  if (rule.required && filesWithMatch !== htmlFiles.length) {
+  if (rule.required && filesWithMatch !== sharedPageCount) {
     failures.push(
-      `${rule.file}: expected reference in each HTML page (${htmlFiles.length}), found ${filesWithMatch}`
+      `${rule.file}: expected reference in each shared-runtime HTML page (${sharedPageCount}), found ${filesWithMatch}`
     );
   }
 
@@ -110,6 +187,6 @@ if (failures.length) {
 }
 
 console.log(
-  `PASS [assets] consistent versioned style/app references across ${htmlFiles.length} pages`
+  `PASS [assets] content-derived version ${EXPECTED_ASSET_VERSION} across ${sharedPageCount} shared pages; ${standaloneFiles.size} standalone pages validated`
 );
 

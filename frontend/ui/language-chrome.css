@@ -1,0 +1,198 @@
+/* Shared chrome matches learning.css. Galaxy artwork and map targets stay native. */
+body:is(.universe-page, .flight-page, .studio-page) {
+  --ui-bg: #080b12;
+  --ui-panel: #11151f;
+  --ui-field: #0b0f17;
+  --ui-line: #303341;
+  --ui-text: #f1f0eb;
+  --ui-muted: #a4a9b8;
+  --ui-accent: #b5a5fb;
+  --ui-font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --flight-bg: var(--ui-bg);
+  --flight-panel: var(--ui-panel);
+  --flight-text: var(--ui-text);
+  --flight-muted: var(--ui-muted);
+  --flight-orange: var(--ui-accent);
+  --flight-cyan: var(--ui-accent);
+  --flight-line: var(--ui-line);
+  --flight-overlay-ink: var(--ui-field);
+  --flight-overlay-panel: var(--ui-panel);
+  --flight-overlay-text: var(--ui-text);
+  --flight-overlay-muted: var(--ui-muted);
+  --flight-overlay-line: var(--ui-line);
+  --flight-overlay-amber: var(--ui-accent);
+  --flight-overlay-cyan: var(--ui-accent);
+}
+body.universe-page { --ux-ink: var(--ui-bg); --ux-text: var(--ui-text); --ux-muted: var(--ui-muted); --ux-line: #272b37; --ux-mint: var(--ui-accent); }
+
+/* Scope typography to interface regions, never to the galaxy scene. */
+body.universe-page :is(.home-header, .home-sidebar, .home-hero-copy, .home-catalog, .home-scene-controls, .home-mobile-nav, .ux-footer, .ux-dialog, .ux-announcement, .cookie-notice, .account-dropdown, .premium-setup-overlay, .premium-checkout-overlay),
+body.flight-page,
+body.studio-page {
+  font-family: var(--ui-font);
+  color: var(--ui-text);
+}
+
+body.universe-page .nav,
+body.flight-page .nav,
+body.studio-page .studio-header {
+  background: rgba(8, 11, 18, .95);
+  border-bottom: 1px solid #252936;
+  box-shadow: none;
+  backdrop-filter: blur(18px);
+}
+body.universe-page :is(.ux-brand-symbol, .home-brand-dot),
+body.flight-page .brand-mark,
+body.studio-page :is(.brand-period, .brand-symbol) { color: var(--ui-accent); border-color: var(--ui-accent); }
+body.universe-page .ux-brand-name,
+body.flight-page .brand-title,
+body.studio-page .studio-brand { font-family: "Space Grotesk", var(--ui-font); font-weight: 600; }
+
+body.universe-page .nav .ux-search-trigger,
+body:is(.universe-page, .flight-page) .account-trigger {
+  min-height: 44px;
+  border: 1px solid var(--ui-line);
+  border-radius: 10px;
+  background: #151822;
+  color: #d9d8df;
+  box-shadow: none;
+  font-family: var(--ui-font);
+}
+body.universe-page .ux-search-trigger kbd { border-radius: 4px; border-color: var(--ui-line); color: var(--ui-muted); }
+body:is(.universe-page, .flight-page) :is(.account-trigger-avatar, .account-menu-avatar) { border-radius: 50%; background: #282137; border-color: #41364f; color: #c4b4f5; }
+body:is(.universe-page, .flight-page) .account-trigger-label { color: var(--ui-text); }
+body:is(.universe-page, .flight-page) :is(.account-trigger-meta, .account-trigger-caret) { color: var(--ui-muted); }
+body.universe-page .nav .ux-search-trigger:hover,
+body:is(.universe-page, .flight-page) .account-trigger:is(:hover, :focus-visible, [aria-expanded="true"]) { border-color: #8974ba; background: #211c30; }
+
+body.universe-page :is(.home-primary, .home-search-all),
+body.studio-page .button-primary {
+  min-height: 44px;
+  border: 1px solid #baa9fa;
+  padding: 11px 19px;
+  border-radius: 9px;
+  background: var(--ui-accent);
+  color: #151020 !important;
+  font-family: var(--ui-font);
+  font-size: 13px;
+  font-weight: 650;
+  box-shadow: none;
+}
+body.universe-page :is(.home-primary, .home-search-all):hover,
+body.studio-page .button-primary:hover { background: #c6b9ff; border-color: #baa9fa; box-shadow: none; }
+body.universe-page .home-primary .ux-icon { color: #151020; }
+body.universe-page #uxMapView,
+body.universe-page :is(.home-switch-galaxy, .home-scene-controls button, .home-search-scope button, .ux-close, .home-clear-filter, .home-search-reset),
+body.studio-page :is(.button-secondary, .preset-buttons button) {
+  border: 1px solid var(--ui-line);
+  border-radius: 9px;
+  background: #151822;
+  color: #d9d8df;
+  font-family: var(--ui-font);
+  box-shadow: none;
+}
+body.universe-page :is(.home-switch-galaxy, .home-scene-controls button, .home-search-scope button):hover,
+body.studio-page :is(.button-secondary, .preset-buttons button):hover { border-color: #8974ba; background: #211c30; }
+body.universe-page :is(.home-switch-galaxy .ux-icon, .home-eyebrow) { color: var(--ui-accent); }
+body.universe-page .home-eyebrow::before { background: var(--ui-accent); box-shadow: none; }
+body.universe-page .home-search-scope button[aria-pressed="true"],
+body.studio-page .preset-buttons button[aria-pressed="true"] { border-color: #8974ba; background: #282137; color: #c4b4f5; }
+
+body.universe-page :is(.ux-dialog, .home-sidebar, .ux-announcement, .cookie-notice),
+body.flight-page :is(.legal-card, .cookie-notice),
+body.flight-offline #main-content,
+body.studio-page :is(.visual-panel, .controls-panel, .table-panel, .understanding-panel) {
+  border: 1px solid #282c38;
+  border-radius: 12px;
+  background: var(--ui-panel);
+  color: var(--ui-text);
+  box-shadow: none;
+}
+body.universe-page .home-sidebar { border-radius: 0 12px 12px 0; }
+body.universe-page .ux-dialog { box-shadow: 0 30px 90px #0009; }
+body.universe-page .home-category { border-radius: 9px; color: #d9d8df !important; }
+body.universe-page .home-category:is(:hover, :focus-visible, .is-previewed),
+body.universe-page .home-category[aria-current] { border-color: #41364f; background: #282137; color: #c4b4f5 !important; }
+body.universe-page :is(.home-category-count, .home-catalog-count) { color: #c4b4f5; border-color: #41364f; border-radius: 5px; }
+body.universe-page :is(.home-sidebar-description, .home-category-copy small, .home-catalog-heading p, .home-search-count, .ux-search-result small, .ux-empty, .ux-galaxy-note, #homeDescription) { color: var(--ui-muted); }
+
+body.universe-page .ux-world-card { border: 1px solid #323342; border-radius: 12px; background: linear-gradient(150deg, #1c1a29, #141823); box-shadow: none; }
+body.universe-page .ux-world-card:is(:hover, :focus-within) { border-color: #8974ba; background: #211c30; box-shadow: 0 10px 26px #0002; }
+body.universe-page .ux-world-card::after { content: none; }
+body.universe-page .ux-world-card h3 { color: #f1edf7; }
+body.universe-page .ux-world-card p { color: var(--ui-muted); }
+body.universe-page .ux-world-state { color: #c4b4f5; border-color: #303341; }
+body.universe-page .home-filter,
+body.universe-page .ux-search-field,
+body.universe-page .ux-dialog :is(input, textarea),
+body.studio-page :is(.parameter-heading input, .prediction-form input) { border-color: var(--ui-line); border-radius: 9px; background: var(--ui-field); color: var(--ui-text); }
+body.universe-page .ux-search-field input { border: 0; background: transparent; border-radius: 0; }
+body.universe-page .skip-link { color: #07101f; background: #fff; }
+body.universe-page .ux-close { width: 44px; height: 44px; flex: 0 0 44px; }
+body.universe-page .ux-footer-links :is(a, button) { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; padding-block: 8px; }
+body.studio-page .studio-footer a { min-height: 44px; }
+body.universe-page .ux-dialog .join-actions label { color: var(--ui-text); font-size: 13px; font-weight: 500; margin-bottom: -6px; }
+body.universe-page .home-breadcrumb { font-size: 12px; }
+body.universe-page .home-filter input:focus-visible { outline: none; }
+body.universe-page .home-breadcrumb button { color: var(--ui-accent); }
+body.universe-page :is(.home-filter, .ux-search-field):focus-within { border-color: var(--ui-accent); outline: 2px solid var(--ui-accent); outline-offset: 3px; }
+
+body.universe-page .ux-search-result { border-color: #272b37; border-radius: 9px; }
+body.universe-page .ux-search-result:is(:hover, :focus-visible) { background: #211c30; }
+body.universe-page .ux-search-result > .ux-icon { color: var(--ui-accent); }
+body.universe-page .ux-search-result mark { background: #5b468d; color: #fff; }
+
+body.universe-page .home-mobile-nav { border-color: #272b37; background: rgba(8, 11, 18, .97); box-shadow: none; }
+body.universe-page .home-mobile-nav button { border-radius: 9px; color: var(--ui-muted); }
+body.universe-page .home-mobile-nav button[aria-expanded="true"] { border-color: #41364f; background: #282137; color: #c4b4f5; }
+body.universe-page .home-mobile-nav .ux-icon { color: var(--ui-accent); }
+body.universe-page #homeMobileCategory { color: var(--ui-muted); }
+body.universe-page .ux-footer,
+body.flight-page .footer,
+body.studio-page .studio-footer {
+  max-width: none;
+  border-top: 1px solid #272b37;
+  background: var(--ui-bg);
+  color: #9b9eac;
+  font-family: var(--ui-font);
+  font-size: 12px;
+  box-shadow: none;
+}
+body.universe-page .ux-footer { margin-inline: 0; padding: 28px max(24px, calc((100vw - 1196px) / 2)); }
+body.home-page:not(.has-selected-category) .ux-footer { border-top-color: #272b37; }
+body.universe-page .ux-footer :is(a, button),
+body.flight-page .footer-legal-links a,
+body.studio-page .studio-footer a { color: #c4b4f5; }
+body.flight-page .legal-card::before,
+body.flight-page .brand-mark::after,
+body.studio-page :is(.visual-panel, .controls-panel, .table-panel, .understanding-panel)::before,
+body.studio-page .equation-display::after { content: none; }
+body.flight-page :is(.legal-card h1, .legal-card h2, .legal-card strong) { color: var(--ui-text); }
+body.flight-page :is(.legal-card p, .legal-card li) { color: var(--ui-muted); }
+body.flight-page .nav .nav-links a { border-color: var(--ui-line) !important; border-radius: 9px !important; background: #151822 !important; color: #d9d8df !important; font-family: var(--ui-font) !important; }
+body.flight-page .brand-sub { color: var(--ui-muted); }
+body.flight-page .brand-mark { border-radius: 12px; background: #171724; }
+body.flight-page .cookie-notice-dismiss,
+body.flight-offline .actions a { border-color: #baa9fa; border-radius: 9px; background: var(--ui-accent); color: #151020; }
+body.flight-offline button { border-radius: 9px; border-color: var(--ui-line); background: #151822; }
+body:is(.universe-page, .flight-page) .account-trigger-bubble { border-color: #41364f; border-radius: 9px; background: #282137; color: #ded5ff; box-shadow: none; }
+body.flight-page .legal-card code { border-color: var(--ui-line); border-radius: 5px; background: #151822; color: #c4b4f5; }
+/* Offline is standalone and cannot rely on the main stylesheet for notice layout. */
+body.flight-offline .cookie-notice { position: fixed; z-index: 130; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); display: flex; align-items: center; gap: 14px; width: min(720px, calc(100vw - 24px)); padding: 12px 14px; font: 13px/1.5 var(--ui-font); }
+body.flight-offline .cookie-notice:not(.is-visible) { opacity: 0; pointer-events: none; }
+body.flight-offline .cookie-notice p { margin: 0; color: var(--ui-text); }
+body.flight-offline .cookie-notice a { display: inline; min-height: 0; padding: 0; border: 0; border-radius: 0; background: none; color: #c4b4f5; text-decoration: underline; }
+body.flight-offline .cookie-notice-dismiss { flex-shrink: 0; padding: 8px 14px; font: 13px/1.5 var(--ui-font); }
+
+body.studio-page { --bg: var(--ui-bg); --panel: var(--ui-panel); --panel-soft: #171b27; --text: var(--ui-text); --muted: var(--ui-muted); --line: var(--ui-line); --purple: var(--ui-accent); --mint: #9ee9ce; --font: var(--ui-font); --heading: "Space Grotesk", var(--ui-font); background: radial-gradient(ellipse at 88% 0, #19182c 0, transparent 38%), var(--ui-bg); }
+body.studio-page :is(.studio-breadcrumb, .back-link, .eyebrow, .panel-tag, .button, .range-labels, .parameter-heading input, .preset-buttons button, .graph-legend, table, .studio-footer) { font-family: var(--ui-font); }
+body.studio-page :is(.panel-tag, .insight-strip, .equation-display, .question-symbol) { border-color: #41364f; border-radius: 9px; background: #1c1a29; color: #c4b4f5; }
+body.studio-page .parameter-heading input { color: var(--ui-text); }
+body.studio-page .prediction-form input { color: var(--ui-text); }
+body.studio-page .prediction-form .button { font-size: 12px; }
+body.studio-page .studio-footer { border-radius: 12px; padding-inline: 20px; }
+
+@media (max-width: 640px) {
+  body.universe-page .ux-footer { padding-inline: 18px; }
+  body.universe-page .nav .ux-search-trigger { border-color: var(--ui-line); background: #151822; }
+}

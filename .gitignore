@@ -8,3 +8,4 @@ tmp/
 backend/data/
 docs/*recovery-codes*.txt
 docs/Essential Notes.txt
+.neon

@@ -1,0 +1,7 @@
+# Exact content hashes must survive Windows and Linux checkouts unchanged.
+/frontend/ui/*.js text eol=lf
+/frontend/ui/*.css text eol=lf
+/frontend/ui/universe-assets.json text eol=lf
+/scripts/build-universe.js text eol=lf
+/scripts/check-universe-assets.js text eol=lf
+/scripts/lib/universe-assets.js text eol=lf

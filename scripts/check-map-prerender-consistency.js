@@ -1,6 +1,6 @@
 /* ==========================================================================
    MAP PRERENDER CONSISTENCY CHECK
-   - Validates static prerendered map sections on non-English map pages.
+   - Validates static prerendered map sections on every language map page.
    - Guards against duplicate section keys and empty static sections.
    ========================================================================== */
 const fs = require("fs");
@@ -9,7 +9,8 @@ const path = require("path");
 const ROOT = path.resolve(__dirname, "..");
 const FRONTEND_ROOT = path.join(ROOT, "frontend");
 
-const NON_ENGLISH_KEYS = [
+const LANGUAGE_KEYS = [
+  "english",
   "arabic",
   "chinese",
   "dutch",
@@ -26,21 +27,21 @@ const NON_ENGLISH_KEYS = [
 const MAP_CONFIG = [
   {
     mapKey: "words",
-    fileForKey: (key) => `words-${key}.html`,
+    fileForKey: (key) => (key === "english" ? "english-words.html" : `words-${key}.html`),
     sectionsContainerId: "wordsSections",
     sectionClass: "words-group",
     itemClass: "word-card",
   },
   {
     mapKey: "phrases",
-    fileForKey: (key) => `phrases-${key}.html`,
+    fileForKey: (key) => (key === "english" ? "english-phrases.html" : `phrases-${key}.html`),
     sectionsContainerId: "phrasesSections",
     sectionClass: "phrases-group",
     itemClass: "phrase-card",
   },
   {
     mapKey: "grammar",
-    fileForKey: (key) => `grammar-${key}.html`,
+    fileForKey: (key) => (key === "english" ? "english-grammar.html" : `grammar-${key}.html`),
     sectionsContainerId: "grammarSections",
     sectionClass: "grammar-group",
     itemClass: "grammar-card",
@@ -118,7 +119,7 @@ const countMatches = (value, regex) => {
 const failures = [];
 let checkedPages = 0;
 
-for (const languageKey of NON_ENGLISH_KEYS) {
+for (const languageKey of LANGUAGE_KEYS) {
   for (const map of MAP_CONFIG) {
     const fileName = map.fileForKey(languageKey);
     const html = readFile(fileName);
@@ -171,4 +172,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`PASS [map-prerender] validated ${checkedPages} non-English map pages`);
+console.log(`PASS [map-prerender] validated ${checkedPages} map pages across all languages`);

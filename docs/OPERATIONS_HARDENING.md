@@ -26,6 +26,29 @@ Apply these settings on your production domain:
    - Registrar lock / transfer lock: ON
    - WHOIS privacy: ON
 
+### 1.1 Production outage or incorrect `robots.txt`
+
+The repository ships an allow-all `frontend/robots.txt`. If the public URL returns `Disallow: /`,
+the response is being replaced or cached at the edge and cannot be corrected by an application
+commit alone.
+
+1. In Cloudflare, inspect DNS/proxy status, Redirect Rules, Transform Rules, Workers, Pages routes,
+   and any custom robots setting for `cosmicalearn.com` and `www.cosmicalearn.com`.
+2. Confirm the proxied origin points to the active Render service and that SSL mode is `Full
+   (strict)`.
+3. Purge the cached entries for `/`, `/robots.txt`, `/sitemap.xml`, and `/api/health` after removing
+   the bad rule or restoring the origin.
+4. Run `npm run verify:prod-integrations`. A production recovery is not complete until the homepage,
+   health route, sitemap, and robots policy all pass.
+5. The 15-minute uptime workflow also checks crawlability and will close its incident only after all
+   checks recover.
+6. In Render, confirm the active service exposes `RENDER_EXTERNAL_HOSTNAME` automatically. Do not
+   hard-code a previous `*.onrender.com` hostname in Cloudflare or application configuration.
+
+The public `/api/health` response is intentionally minimal. Dependency status, checkout readiness,
+uptime, and recent API failure counters are available to operators at
+`/api/admin/security/health` with the `x-admin-token` header.
+
 ## 2) GitHub Account and Repository Hardening
 
 ### 2.1 Required account controls

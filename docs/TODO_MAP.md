@@ -38,26 +38,6 @@ Central checklist for whole-site priorities.
 - [ ] Keep premium/free/guest gating clear and predictable in UI copy.
 - [ ] Remove or simplify any section that adds reading load without learning value.
 
-## P1 - Mobile App Store Rollout (Capacitor)
-
-- [ ] Run `npm run native:check` and fix any blocking mismatch (appId, bundle IDs, versions).
-- [ ] Keep `com.cosmicalearn.app` aligned across `capacitor.config.json`, Android, and iOS.
-- [ ] Set production app versions:
-- [ ] Android `versionCode` + `versionName`.
-- [ ] iOS `MARKETING_VERSION` + `CURRENT_PROJECT_VERSION`.
-- [ ] Run `npm run native:sync` before every Android/iOS build.
-- [ ] Build signed Android `AAB` in Android Studio and upload to Play Console Internal Testing.
-- [ ] Complete Play Console metadata: description, screenshots, icon, privacy policy URL, support URL, content rating, data safety.
-- [ ] Validate Android internal test flows on real devices: login/signup, world/map loading, audio playback, install/open behavior, premium state restore.
-- [ ] Use macOS + Xcode for iOS build, signing, archive, and TestFlight upload.
-- [ ] Complete App Store Connect metadata: screenshots, app privacy, age rating, support URL, terms/privacy links.
-- [ ] Validate iOS TestFlight flows on real iPhone/iPad: login/signup, world/map loading, audio playback, install/open behavior, premium state restore.
-- [ ] Decide native premium billing strategy before public release:
-- [ ] Keep purchase web-only in native runtime (current safe fallback), or
-- [ ] Implement Apple IAP + Google Play Billing for in-app premium purchase.
-- [ ] After listings are live, set real store links in `frontend/index.html` (`window.COSMICA_STORE_LINKS.appStoreUrl` and `.playStoreUrl`).
-- [ ] Re-run `npm run smoke` and `npm run native:check` before each store submission.
-
 ## P1 - Performance and Runtime Health
 
 - [ ] Keep `npm run perf:check` passing after every SEO/content batch.

@@ -19,11 +19,17 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Verify renderer build and spatial asset versions
+        run: npm run build:universe -- --check
+
+      - name: Asset and isolated-preview regression contracts
+        run: npm run test:universe:contracts
 
       - name: Syntax checks
         run: npm run check:syntax
@@ -56,6 +62,22 @@ jobs:
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium firefox webkit
+
+      - name: Universe interaction and fallback checks
+        env:
+          TMPDIR: ${{ runner.temp }}
+        run: |
+          npm run verify:universe
+          npm run verify:universe -- --browser=firefox --fallback-only
+          npm run verify:universe -- --browser=webkit --fallback-only
+
+      - name: Upload universe browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: universe-browser-evidence
+          path: ${{ runner.temp }}/cosmica-isolated-preview-*/output/
+          if-no-files-found: ignore
 
       - name: Viewport/browser matrix checks
         run: npm run verify:viewport

@@ -15,13 +15,15 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - name: Check production homepage + health
+      - name: Check production homepage, health, and crawlability
         id: check
         shell: bash
         run: |
           set -euo pipefail
           HOME_URL="https://www.cosmicalearn.com/"
           HEALTH_URL="https://www.cosmicalearn.com/api/health"
+          ROBOTS_URL="https://www.cosmicalearn.com/robots.txt"
+          SITEMAP_URL="https://www.cosmicalearn.com/sitemap.xml"
           CHAT_URL="https://www.cosmicalearn.com/api/chat"
           TRANSLATE_URL="https://www.cosmicalearn.com/api/translate"
           FEEDBACK_URL="https://www.cosmicalearn.com/api/feedback"
@@ -29,8 +31,12 @@ jobs:
 
           curl -fsSIL --max-time 20 "$HOME_URL" > home_headers.txt
           curl -fsS --max-time 20 "$HEALTH_URL" > health.json
+          curl -fsS --max-time 20 "$ROBOTS_URL" > robots.txt
+          curl -fsS --max-time 20 "$SITEMAP_URL" > sitemap.xml
 
           node -e "const fs=require('fs'); const h=JSON.parse(fs.readFileSync('health.json','utf8')); if(h.status!=='ok'){throw new Error('health status not ok')} if(!h.version){throw new Error('missing health version')}"
+          node -e "const fs=require('fs'); const r=fs.readFileSync('robots.txt','utf8'); if(!/User-agent:\s*\*/i.test(r)){throw new Error('robots.txt missing wildcard user-agent')} if(/Disallow:\s*\/\s*$/im.test(r)){throw new Error('robots.txt blocks the entire site')} if(!/Sitemap:\s*https:\/\/www\.cosmicalearn\.com\/sitemap\.xml/i.test(r)){throw new Error('robots.txt missing canonical sitemap')}"
+          node -e "const fs=require('fs'); const s=fs.readFileSync('sitemap.xml','utf8'); if(!/<urlset\b/i.test(s)||!/<loc>https:\/\/www\.cosmicalearn\.com\//i.test(s)){throw new Error('sitemap.xml is invalid or empty')}"
 
           check_status () {
             local url="$1"

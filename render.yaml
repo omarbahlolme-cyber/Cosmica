@@ -3,7 +3,7 @@ services:
     name: cosmica
     runtime: node
     region: oregon
-    buildCommand: npm install
+    buildCommand: npm ci --omit=dev && npm run check:universe-assets
     startCommand: npm start
     healthCheckPath: /api/health
     autoDeployTrigger: commit

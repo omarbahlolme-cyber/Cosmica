@@ -278,6 +278,17 @@ const readJson = (filePath) => {
   return JSON.parse(raw);
 };
 
+const countPrerenderedClass = (fileName, className) => {
+  const filePath = path.join(ROOT, "frontend", fileName);
+  if (!fs.existsSync(filePath)) {
+    return 0;
+  }
+  const html = fs.readFileSync(filePath, "utf8");
+  const escapedClass = className.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return (html.match(new RegExp(`class=["'][^"']*\\b${escapedClass}\\b[^"']*["']`, "gi")) || [])
+    .length;
+};
+
 const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
 const normalize = (value) => String(value || "").trim().toLowerCase();
 
@@ -371,10 +382,19 @@ const main = () => {
       if (!grammarDisplayModes.includes("english")) {
         fail(failures, worldKey, "english world meta.grammarDisplayModes must include english.");
       }
+      const wordsEntryCount = countPrerenderedClass("english-words.html", "word-card");
+      const phrasesEntryCount = countPrerenderedClass("english-phrases.html", "phrase-card");
+      const grammarCardCount = countPrerenderedClass("english-grammar.html", "grammar-card");
+      if (!wordsEntryCount || !phrasesEntryCount || !grammarCardCount) {
+        fail(failures, worldKey, "English static map prerenders must contain words, phrases, and grammar cards.");
+      }
       report.push({
         worldKey,
         status: "ok",
-        checked: "meta+routing",
+        checked: "meta+routing+static-maps",
+        wordsEntryCount,
+        phrasesEntryCount,
+        grammarCardCount,
       });
       return;
     }

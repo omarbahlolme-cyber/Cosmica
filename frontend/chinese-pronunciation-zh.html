@@ -14,13 +14,6 @@
     />
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#0a0f24" />
-    <meta name="application-name" content="Cosmica" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="Cosmica" />
-    <link rel="manifest" href="/app.webmanifest" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/pwa/apple-touch-icon.png" />
     <link rel="canonical" href="https://www.cosmicalearn.com/chinese-pronunciation-zh.html" />
     <!-- Multilingual SEO: hreflang cluster -->
     <link
@@ -54,8 +47,8 @@
       name="twitter:description"
       content="通过音频和跟读练习，提升发音清晰度与语调节奏。"
     />
-    <link rel="preload" as="style" href="style.css?v=20260443" />
-    <link rel="stylesheet" href="style.css?v=20260443" />
+    <link rel="preload" as="style" href="style.css?v=e980b20f1739" />
+    <link rel="stylesheet" href="style.css?v=e980b20f1739" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -124,6 +117,7 @@
     <meta name="twitter:image" content="https://www.cosmicalearn.com/og-image.svg" />
   </head>
   <body class="world-page seo-guide-page">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <!-- Decorative background layers (aurora + starfield) -->
     <div class="aurora"></div>
     <div class="starfield starfield-deep" data-depth="0.15" aria-hidden="true"></div>
@@ -142,8 +136,8 @@
         <a href="learn-chinese-online-zh.html">在线学习中文</a>
       </nav>
       <div class="nav-controls">
-        <button class="sound-toggle" id="soundToggle" type="button">
-          <span class="dot" aria-hidden="true"></span> <span class="sound-label">Sound: On</span>
+        <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false">
+          <span class="dot" aria-hidden="true"></span> <span class="sound-label">Sound: Off</span>
         </button>
         <div class="account-slot account-slot-preload" aria-hidden="true">
           <button class="account-trigger" type="button" tabindex="-1">
@@ -158,7 +152,7 @@
       </div>
     </header>
     <!-- Page-specific main content -->
-    <main>
+    <main id="main-content">
       <section class="section world-hero" id="guide">
         <div class="section-title">
           <div class="eyebrow">在线中文课程</div>
@@ -225,6 +219,6 @@
       </span>
     </footer>
     <!-- Shared client bundle -->
-    <script src="app.js?v=20260440" defer></script>
+    <script src="app.js?v=e980b20f1739" defer></script>
   </body>
 </html>

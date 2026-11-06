@@ -12,7 +12,6 @@ Cosmica is a static language-learning site with a small Node/Express backend for
 - Per-world linguist CSV tracker: `docs/LINGUIST_WORLD_REVIEW_TEMPLATE.csv`
 - Frontend runtime guardrails: `docs/FRONTEND_RUNTIME_NOTES.md`
 - Ops/security runbook: `docs/OPERATIONS_HARDENING.md`
-- App distribution guide (PWA + mobile stores): `docs/APP_DISTRIBUTION.md`
 - Billing ops quick commands: `docs/BILLING_OPS_QUICK_COMMANDS.md`
 - Policy enforcement runbook: `docs/ENFORCEMENT_RUNBOOK.md`
 - SEO Phase 6 playbook (Search Console/Bing + CTR workflow): `docs/SEO_PHASE6_PLAYBOOK.md`
@@ -56,8 +55,10 @@ For full recovery and incident workflow, use:
 
 ## Local run
 
+Requires Node.js 24 and npm 10 or 11 (matching `package.json`).
+
 ```bash
-npm install
+npm ci
 npm start
 ```
 

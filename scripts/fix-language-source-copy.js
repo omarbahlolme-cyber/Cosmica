@@ -1078,7 +1078,7 @@ const renderLettersMain = (config) => {
     ? config.groups.map((group) => renderLettersGroup(group)).join("\n")
     : (config.sections || []).map((section) => renderLettersSection(section)).join("\n");
 
-  return `    <main>
+  return `    <main id="main-content">
       <h1 class="visually-hidden">${escapeHtml(config.hiddenH1)}</h1>
       <section class="section letters-grid-section reveal" id="letters">
         <div class="section-title"${config.sectionTitleAttrs || ""}>
@@ -1096,7 +1096,7 @@ const rebuildLettersPages = () => {
   ENHANCED_LETTERS_PAGE_CONFIGS.forEach((config) => {
     const filePath = path.join(ROOT, config.file);
     const original = fs.readFileSync(filePath, "utf8");
-    const next = original.replace(/<main>[\s\S]*?<\/main>/i, renderLettersMain(config));
+    const next = original.replace(/<main\b[^>]*>[\s\S]*?<\/main>/i, renderLettersMain(config));
     if (next !== original) {
       fs.writeFileSync(filePath, next, "utf8");
       changed += 1;

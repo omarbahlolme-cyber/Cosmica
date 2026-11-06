@@ -161,8 +161,13 @@ const run = async () => {
   const runtimeStatus = String(healthJson?.runtimeStatus || "ok").trim().toLowerCase();
   addResult(
     "health",
-    health.status === 200 && healthJson && healthJson.status === "ok" && runtimeStatus !== "failing",
-    `status=${health.status} runtimeStatus=${runtimeStatus} premiumConfigured=${Boolean(healthJson && healthJson.premiumCheckoutConfigured)} durationMs=${health.durationMs}`
+    health.status === 200 &&
+      healthJson &&
+      healthJson.status === "ok" &&
+      runtimeStatus !== "failing" &&
+      !Object.prototype.hasOwnProperty.call(healthJson, "dependencies") &&
+      !Object.prototype.hasOwnProperty.call(healthJson, "apiFailures"),
+    `status=${health.status} runtimeStatus=${runtimeStatus} minimalPayload=${Boolean(healthJson && !healthJson.dependencies && !healthJson.apiFailures)} durationMs=${health.durationMs}`
   );
 
   const home = await request("/", { headers: { Accept: "text/html" } });
@@ -187,7 +192,12 @@ const run = async () => {
 
   const robots = await request("/robots.txt", { headers: { Accept: "text/plain,text/*" } });
   const robotsHasSitemap = containsIgnoreCase(robots.body, "sitemap:");
-  addResult("robots", robots.status === 200 && robotsHasSitemap, `status=${robots.status} hasSitemap=${robotsHasSitemap}`);
+  const robotsBlocksAll = /Disallow:\s*\/\s*$/im.test(String(robots.body || ""));
+  addResult(
+    "robots",
+    robots.status === 200 && robotsHasSitemap && !robotsBlocksAll,
+    `status=${robots.status} hasSitemap=${robotsHasSitemap} blocksAll=${robotsBlocksAll}`
+  );
 
   const sitemap = await request("/sitemap.xml", { headers: { Accept: "application/xml,text/xml,*/*" } });
   const sitemapContentType = String(sitemap.headers?.["content-type"] || "").toLowerCase();

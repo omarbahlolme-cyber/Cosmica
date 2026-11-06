@@ -18,12 +18,14 @@ const SEMVER_REGEX = /^\d+\.\d+\.\d+$/;
    MAIN
    -------------------------------------------------------------------------- */
 const failures = [];
+let packageVersion = "";
 
 if (!fs.existsSync(PACKAGE_PATH)) {
   failures.push("Missing package.json");
 } else {
   const pkg = JSON.parse(fs.readFileSync(PACKAGE_PATH, "utf8"));
-  if (!SEMVER_REGEX.test(String(pkg.version || ""))) {
+  packageVersion = String(pkg.version || "");
+  if (!SEMVER_REGEX.test(packageVersion)) {
     failures.push(`package.json version must be semver (x.y.z). Received: "${pkg.version}"`);
   }
 }
@@ -37,6 +39,12 @@ if (!fs.existsSync(CHANGELOG_PATH)) {
   }
   if (!/^##\s+\[Unreleased\]/m.test(changelog)) {
     failures.push("CHANGELOG.md must include a '## [Unreleased]' section");
+  }
+  const latestReleaseMatch = changelog.match(/^##\s+\[(\d+\.\d+\.\d+)\](?:\s+-\s+\d{4}-\d{2}-\d{2})?/m);
+  if (latestReleaseMatch && packageVersion && latestReleaseMatch[1] !== packageVersion) {
+    failures.push(
+      `package.json version ${packageVersion} must match latest CHANGELOG release ${latestReleaseMatch[1]}`
+    );
   }
 }
 

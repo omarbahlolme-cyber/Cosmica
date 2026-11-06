@@ -68,7 +68,7 @@ Messaging pillars:
 
 1. Offer tiers:
 - Free plan: meaningful value (letters/words/phrases + selected previews).
-- Premium plan: full grammar depth + advanced guidance + continuity.
+- Premium plan: interactive grammar explanations, tracked practice, advanced guidance, and continuity.
 
 2. Checkout quality:
 - clear success/cancel return paths,
@@ -110,4 +110,3 @@ Messaging pillars:
 1. Do not ship broad content rewrites without staged review.
 2. Keep feature flags/locks for unstable pedagogy segments.
 3. Keep rollback and backup workflows tested (`npm run backup:create`, `npm run backup:verify`).
-

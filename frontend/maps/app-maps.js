@@ -3807,7 +3807,7 @@ const isGrammarSectionLockedForCurrentAccess = (sectionName = "") => {
 };
 
 const openGrammarPremiumUpgrade = ({
-  message = "Upgrade to Premium to unlock the full grammar map.",
+  message = "Upgrade to Premium for interactive grammar explanations and progress tools.",
 } = {}) => {
   const snapshot =
     typeof window.cosmicaGamification?.getState === "function"
@@ -3847,15 +3847,15 @@ const createGrammarPreviewBanner = ({
     : "";
   details.textContent =
     lockedSectionCount > 0 || lockedTopicCount > 0
-      ? `${unlockedLead}${lockedSectionCount} sections and ${lockedTopicCount} topics stay Premium-only.`
-      : `${unlockedLead}Full grammar depth is available with Premium.`;
+      ? `${unlockedLead}${lockedSectionCount} sections and ${lockedTopicCount} topics have Premium interactive explanations and progress tools.`
+      : `${unlockedLead}Interactive explanations and progress tools are available with Premium.`;
   const button = document.createElement("button");
   button.type = "button";
   button.className = "premium-setup-primary";
-  button.textContent = "Unlock full grammar map";
+  button.textContent = "Unlock interactive grammar";
   button.addEventListener("click", () => {
     openGrammarPremiumUpgrade({
-      message: "Upgrade to Premium to unlock the full grammar map.",
+      message: "Upgrade to Premium for interactive grammar explanations and progress tools.",
     });
   });
   banner.appendChild(title);
@@ -3874,7 +3874,7 @@ const createGrammarPreviewUpgradeSection = ({
   const titleWrap = document.createElement("div");
   titleWrap.className = "section-title";
   const heading = document.createElement("h2");
-  heading.textContent = "Ready for full grammar?";
+  heading.textContent = "Ready for guided grammar practice?";
   titleWrap.appendChild(heading);
   const copy = document.createElement("p");
   copy.className = "grammar-preview-upgrade-copy";
@@ -3883,15 +3883,15 @@ const createGrammarPreviewUpgradeSection = ({
     : "";
   copy.textContent =
     lockedSectionCount > 0 || lockedTopicCount > 0
-      ? `${unlockedLead}Unlock ${lockedSectionCount} more sections and ${lockedTopicCount} more topics with Premium.`
-      : `${unlockedLead}Unlock full grammar depth with Premium.`;
+      ? `${unlockedLead}Use interactive explanations and tracked practice across ${lockedSectionCount} more sections and ${lockedTopicCount} more topics with Premium.`
+      : `${unlockedLead}Use interactive explanations and tracked practice with Premium.`;
   const action = document.createElement("button");
   action.type = "button";
   action.className = "premium-setup-primary";
   action.textContent = "Upgrade to Premium";
   action.addEventListener("click", () => {
     openGrammarPremiumUpgrade({
-      message: "Upgrade to Premium to unlock the full grammar map.",
+      message: "Upgrade to Premium for interactive grammar explanations and progress tools.",
     });
   });
   section.appendChild(titleWrap);
@@ -5779,8 +5779,7 @@ const requestRuntimeGrammarExplanationTranslation = async (
       normalizedHost.endsWith(".local");
     const isCosmicaPublicHost =
       normalizedHost === "cosmicalearn.com" ||
-      normalizedHost === "www.cosmicalearn.com" ||
-      normalizedHost === "cosmica-03wo.onrender.com";
+      normalizedHost === "www.cosmicalearn.com";
 
     if (!hostname || protocol === "file:") {
       addEndpointPair(

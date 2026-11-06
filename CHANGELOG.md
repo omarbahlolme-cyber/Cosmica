@@ -5,6 +5,19 @@ All notable changes to this project are documented in this file.
 ## [Unreleased]
 
 ### Changed
+- Replaced manual asset query tags with a deterministic content fingerprint and service-worker cache sync.
+- Added static English words, phrases, and grammar prerenders plus all-language prerender verification.
+- Added an accessible collapsible mobile navigation menu, skip links, and explicit sound-toggle state.
+- Aligned CI and Render installs with Node 24 and clean-lockfile deployments.
+- Clarified Premium as an entitlement for interactive explanations, tracked practice, and advanced tools.
+- Added runtime source-size ceilings and documented extraction boundaries for the large legacy entry points.
+- Hardened production host validation and expanded uptime checks to detect crawler blocking.
+- Updated dependencies and overrides so the full npm audit reports zero vulnerabilities.
+- Fixed user-matrix cleanup so startup failures restore the test store only once.
+- Removed the retired Render hostname and derive preview-origin trust/CORS from `RENDER_EXTERNAL_HOSTNAME`.
+- Replaced the CSP inline-script wildcard with exact startup-calculated SHA-256 hashes.
+- Moved detailed runtime health diagnostics behind the admin security token.
+- Aligned Android and iOS release metadata with package version 1.2.0 and added drift validation.
 - Mimi chat UX now auto-reveals Mimi's speech bubble when a user sends a message, and follows bubble growth during live reply typing.
 - Mimi bubble follow behavior is user-controlled: manual wheel/touch/keyboard scrolling cancels auto-follow for the current reply (no scroll lock).
 - Added premium gift-link modal flow on homepage with customizable URL text fields (`gift=1`, `giftTitle`, `giftMessage`, `giftFrom`, button labels).

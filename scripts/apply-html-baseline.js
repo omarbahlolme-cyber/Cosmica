@@ -123,6 +123,31 @@ const applyPageBaseline = (fileName) => {
 
   html = annotateThirdPartyTags(html);
 
+  if (!/class=["'][^"']*\bskip-link\b/i.test(html)) {
+    html = html.replace(
+      /(<body\b[^>]*>)/i,
+      '$1\n    <a class="skip-link" href="#main-content">Skip to main content</a>'
+    );
+  }
+
+  html = html.replace(/<main\b[^>]*>/i, (tag) => {
+    if (/\bid=["'][^"']+["']/i.test(tag)) {
+      return tag;
+    }
+    return addAttributeToTag(tag, 'id="main-content"');
+  });
+
+  html = html.replace(/<button\b[^>]*\bid=["']soundToggle["'][^>]*>/gi, (tag) => {
+    if (/\baria-pressed=["'][^"']+["']/i.test(tag)) {
+      return tag;
+    }
+    return addAttributeToTag(tag, 'aria-pressed="false"');
+  });
+  html = html.replace(
+    /(<span\b[^>]*class=["'][^"']*\bsound-label\b[^"']*["'][^>]*>)Sound:\s*On(<\/span>)/gi,
+    "$1Sound: Off$2"
+  );
+
   html = html.replace(/<nav\b[^>]*\bclass=["'][^"']*\bnav-links\b[^"']*["'][^>]*>/gi, (tag) => {
     if (/\baria-label=["'][^"']+["']/i.test(tag)) {
       return tag;

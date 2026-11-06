@@ -8,37 +8,22 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="shortcut icon" href="/favicon.svg" />
     <title>Learn English Phrases with Audio | Cosmica</title>
-    <meta
-      name="description"
-      content="Learn useful English phrases with structured practice, translation support, and audio for daily conversation."
-    />
+    <meta name="description" content="Learn useful English phrases with structured practice, translation support, and audio for daily conversation." />
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#0a0f24" />
-    <meta name="application-name" content="Cosmica" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="Cosmica" />
-    <link rel="manifest" href="/app.webmanifest" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/pwa/apple-touch-icon.png" />
     <link rel="canonical" href="https://www.cosmicalearn.com/english-phrases.html" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Cosmica" />
     <meta property="og:title" content="Learn English Phrases with Audio | Cosmica" />
-    <meta
-      property="og:description"
-      content="Practice useful English phrases with audio and translation support."
-    />
+    <meta property="og:description" content="Practice useful English phrases with audio and translation support." />
     <meta property="og:url" content="https://www.cosmicalearn.com/english-phrases.html" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="Learn English Phrases with Audio | Cosmica" />
-    <meta
-      name="twitter:description"
-      content="Practice useful English phrases with audio and translation support."
-    />
-    <link rel="preload" as="style" href="style.css?v=20260443" />
-    <link rel="stylesheet" href="style.css?v=20260443" />
-    <link rel="stylesheet" href="maps/style-maps.css?v=20260417" />
+    <meta name="twitter:description" content="Practice useful English phrases with audio and translation support." />
+    <link rel="preload" as="style" href="style.css?v=e980b20f1739" />
+    <link rel="stylesheet" href="style.css?v=e980b20f1739" />
+    <link rel="stylesheet" href="maps/style-maps.css?v=e980b20f1739" />
+    <link rel="stylesheet" href="ui/learning.css?v=20261025" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -64,6 +49,7 @@
     <meta name="twitter:image" content="https://www.cosmicalearn.com/og-image.svg" />
   </head>
   <body class="world-page phrases-page">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <!-- Decorative background layers (aurora + starfield) -->
     <div class="aurora"></div>
     <div class="starfield starfield-deep" data-depth="0.15" aria-hidden="true"></div>
@@ -82,8 +68,8 @@
         <a href="english-world.html#maps">Return to English World</a>
       </nav>
       <div class="nav-controls">
-        <button class="sound-toggle" id="soundToggle" type="button">
-          <span class="dot" aria-hidden="true"></span> <span class="sound-label">Sound: On</span>
+        <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false">
+          <span class="dot" aria-hidden="true"></span> <span class="sound-label">Sound: Off</span>
         </button>
         <div class="account-slot account-slot-preload" aria-hidden="true">
           <button class="account-trigger" type="button" tabindex="-1">
@@ -98,143 +84,690 @@
       </div>
     </header>
     <!-- Page-specific main content -->
-    <main>
+    <main id="main-content">
       <h1 class="visually-hidden">Learn English Phrases Online</h1>
       <!-- SEO landing content -->
       <section class="section reveal seo-map-hero">
         <div class="section-title">
           <div class="eyebrow" data-preview-ui-source="English Phrases">English Phrases</div>
-          <h2 data-preview-ui-source="Learn useful English phrases for everyday speaking">
-            Learn useful English phrases for everyday speaking
-          </h2>
-          <p data-preview-ui-source="Practical phrases with audio, translation, and quick review.">
-            Practical phrases with audio, translation, and quick review.
-          </p>
+          <h2 data-preview-ui-source="Learn useful English phrases for everyday speaking">Learn useful English phrases for everyday speaking</h2>
+          <p data-preview-ui-source="Practical phrases with audio, translation, and quick review.">Practical phrases with audio, translation, and quick review.</p>
         </div>
       </section>
       <section class="section reveal seo-map-support">
         <div class="section-title">
           <div class="eyebrow" data-preview-ui-source="How It Helps">How It Helps</div>
-          <h2 data-preview-ui-source="Move from words to real conversation">
-            Move from words to real conversation
-          </h2>
-          <p
-            data-preview-ui-source="Practice short phrases for greetings, questions, polite requests, and natural replies."
-          >
-            Practice short phrases for greetings, questions, polite requests, and natural replies.
-          </p>
+          <h2 data-preview-ui-source="Move from words to real conversation">Move from words to real conversation</h2>
+          <p data-preview-ui-source="Practice short phrases for greetings, questions, polite requests, and natural replies.">Practice short phrases for greetings, questions, polite requests, and natural replies.</p>
         </div>
       </section>
       <section class="section reveal seo-map-preview-section">
         <div class="section-title">
           <div class="eyebrow" data-preview-ui-source="Sample Phrases">Sample Phrases</div>
-          <h2 data-preview-ui-source="English phrase sets at a glance">
-            English phrase sets at a glance
-          </h2>
-          <p
-            data-preview-ui-source="Short examples from the page, paired with clear English meaning."
-          >
-            Short examples from the page, paired with clear English meaning.
-          </p>
+          <h2 data-preview-ui-source="English phrase sets at a glance">English phrase sets at a glance</h2>
+          <p data-preview-ui-source="Short examples from the page, paired with clear English meaning.">Short examples from the page, paired with clear English meaning.</p>
         </div>
         <div class="steps">
           <article class="card seo-preview-card">
-            <h3 data-preview-map="phrases" data-preview-section-title-source="Greetings">
-              Greetings
-            </h3>
+            <h3 data-preview-map="phrases" data-preview-section-title-source="Greetings">Greetings</h3>
             <div class="seo-preview-list">
-              <div class="seo-preview-item">
-                <span class="seo-preview-term">hi there</span>
-                <span
-                  class="seo-preview-gloss"
-                  data-preview-map="phrases"
-                  data-preview-section-source="Greetings"
-                  data-preview-source="hi there"
-                  data-preview-default-hidden="true"
-                  hidden="hidden"
-                  >Hi There</span
-                >
-              </div>
-              <div class="seo-preview-item">
-                <span class="seo-preview-term">hello there</span>
-                <span
-                  class="seo-preview-gloss"
-                  data-preview-map="phrases"
-                  data-preview-section-source="Greetings"
-                  data-preview-source="hello there"
-                  data-preview-default-hidden="true"
-                  hidden="hidden"
-                  >Hello There</span
-                >
-              </div>
+            <div class="seo-preview-item">
+              <span class="seo-preview-term">hi there</span>
+              <span class="seo-preview-gloss" data-preview-map="phrases" data-preview-section-source="Greetings" data-preview-source="hi there" data-preview-default-hidden="true" hidden="hidden">Hi There</span>
+            </div>
+            <div class="seo-preview-item">
+              <span class="seo-preview-term">hello there</span>
+              <span class="seo-preview-gloss" data-preview-map="phrases" data-preview-section-source="Greetings" data-preview-source="hello there" data-preview-default-hidden="true" hidden="hidden">Hello There</span>
+            </div>
             </div>
           </article>
           <article class="card seo-preview-card">
-            <h3 data-preview-map="phrases" data-preview-section-title-source="Politeness">
-              Politeness
-            </h3>
+            <h3 data-preview-map="phrases" data-preview-section-title-source="Politeness">Politeness</h3>
             <div class="seo-preview-list">
-              <div class="seo-preview-item">
-                <span class="seo-preview-term">excuse me</span>
-                <span
-                  class="seo-preview-gloss"
-                  data-preview-map="phrases"
-                  data-preview-section-source="Politeness"
-                  data-preview-source="excuse me"
-                  data-preview-default-hidden="true"
-                  hidden="hidden"
-                  >Excuse Me</span
-                >
-              </div>
-              <div class="seo-preview-item">
-                <span class="seo-preview-term">pardon me</span>
-                <span
-                  class="seo-preview-gloss"
-                  data-preview-map="phrases"
-                  data-preview-section-source="Politeness"
-                  data-preview-source="pardon me"
-                  data-preview-default-hidden="true"
-                  hidden="hidden"
-                  >Pardon Me</span
-                >
-              </div>
+            <div class="seo-preview-item">
+              <span class="seo-preview-term">excuse me</span>
+              <span class="seo-preview-gloss" data-preview-map="phrases" data-preview-section-source="Politeness" data-preview-source="excuse me" data-preview-default-hidden="true" hidden="hidden">Excuse Me</span>
+            </div>
+            <div class="seo-preview-item">
+              <span class="seo-preview-term">pardon me</span>
+              <span class="seo-preview-gloss" data-preview-map="phrases" data-preview-section-source="Politeness" data-preview-source="pardon me" data-preview-default-hidden="true" hidden="hidden">Pardon Me</span>
+            </div>
             </div>
           </article>
           <article class="card seo-preview-card">
-            <h3 data-preview-map="phrases" data-preview-section-title-source="Introductions">
-              Introductions
-            </h3>
+            <h3 data-preview-map="phrases" data-preview-section-title-source="Introductions">Introductions</h3>
             <div class="seo-preview-list">
-              <div class="seo-preview-item">
-                <span class="seo-preview-term">my name is</span>
-                <span
-                  class="seo-preview-gloss"
-                  data-preview-map="phrases"
-                  data-preview-section-source="Introductions"
-                  data-preview-source="my name is"
-                  data-preview-default-hidden="true"
-                  hidden="hidden"
-                  >My Name Is</span
-                >
-              </div>
-              <div class="seo-preview-item">
-                <span class="seo-preview-term">i am</span>
-                <span
-                  class="seo-preview-gloss"
-                  data-preview-map="phrases"
-                  data-preview-section-source="Introductions"
-                  data-preview-source="i am"
-                  data-preview-default-hidden="true"
-                  hidden="hidden"
-                  >I Am</span
-                >
-              </div>
+            <div class="seo-preview-item">
+              <span class="seo-preview-term">my name is</span>
+              <span class="seo-preview-gloss" data-preview-map="phrases" data-preview-section-source="Introductions" data-preview-source="my name is" data-preview-default-hidden="true" hidden="hidden">My Name Is</span>
+            </div>
+            <div class="seo-preview-item">
+              <span class="seo-preview-term">i am</span>
+              <span class="seo-preview-gloss" data-preview-map="phrases" data-preview-section-source="Introductions" data-preview-source="i am" data-preview-default-hidden="true" hidden="hidden">I Am</span>
+            </div>
             </div>
           </article>
         </div>
       </section>
       <div class="words-controls" id="phrasesControls"></div>
-      <div id="phrasesSections" data-static-prerender="true" data-prerender-map="phrases"></div>
+      <div id="phrasesSections" data-static-prerender="true" data-prerender-map="phrases">
+      <section class="section phrases-group reveal" data-section="Greetings" data-prerendered="true" data-prerender-source="seo-static-v1">
+        <div class="section-title">
+          <h2 data-source-title="Greetings" data-base-title="Greetings"><span class="map-section-title-main">Greetings</span></h2>
+        </div>
+        <div class="words-grid">
+        <div class="card phrase-card" data-phrase="hi there">
+          <div class="phrase-text">hi there</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="hi there" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="hello there">
+          <div class="phrase-text">hello there</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="hello there" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="good morning">
+          <div class="phrase-text">good morning</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="good morning" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="good afternoon">
+          <div class="phrase-text">good afternoon</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="good afternoon" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="good evening">
+          <div class="phrase-text">good evening</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="good evening" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="good night">
+          <div class="phrase-text">good night</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="good night" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="how are you">
+          <div class="phrase-text">how are you</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="how are you" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        </div>
+      </section>
+      <section class="section phrases-group reveal" data-section="Politeness" data-prerendered="true" data-prerender-source="seo-static-v1">
+        <div class="section-title">
+          <h2 data-source-title="Politeness" data-base-title="Politeness"><span class="map-section-title-main">Politeness</span></h2>
+        </div>
+        <div class="words-grid">
+        <div class="card phrase-card" data-phrase="excuse me">
+          <div class="phrase-text">excuse me</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="excuse me" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="pardon me">
+          <div class="phrase-text">pardon me</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="pardon me" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="i am sorry">
+          <div class="phrase-text">i am sorry</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="i am sorry" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="sorry about that">
+          <div class="phrase-text">sorry about that</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="sorry about that" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="thank you">
+          <div class="phrase-text">thank you</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="thank you" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="thank you very much">
+          <div class="phrase-text">thank you very much</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="thank you very much" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="thanks a lot">
+          <div class="phrase-text">thanks a lot</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="thanks a lot" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        </div>
+      </section>
+      <section class="section phrases-group reveal" data-section="Introductions" data-prerendered="true" data-prerender-source="seo-static-v1">
+        <div class="section-title">
+          <h2 data-source-title="Introductions" data-base-title="Introductions"><span class="map-section-title-main">Introductions</span></h2>
+        </div>
+        <div class="words-grid">
+        <div class="card phrase-card" data-phrase="my name is">
+          <div class="phrase-text">my name is</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="my name is" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="i am">
+          <div class="phrase-text">i am</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="i am" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="i am from">
+          <div class="phrase-text">i am from</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="i am from" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="i live in">
+          <div class="phrase-text">i live in</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="i live in" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="i work at">
+          <div class="phrase-text">i work at</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="i work at" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="i study at">
+          <div class="phrase-text">i study at</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="i study at" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="i am a student">
+          <div class="phrase-text">i am a student</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="i am a student" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        </div>
+      </section>
+      <section class="section phrases-group reveal" data-section="Conversation" data-prerendered="true" data-prerender-source="seo-static-v1">
+        <div class="section-title">
+          <h2 data-source-title="Conversation" data-base-title="Conversation"><span class="map-section-title-main">Conversation</span></h2>
+        </div>
+        <div class="words-grid">
+        <div class="card phrase-card" data-phrase="can you repeat that">
+          <div class="phrase-text">can you repeat that</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="can you repeat that" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="can you say that again">
+          <div class="phrase-text">can you say that again</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="can you say that again" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="what do you mean">
+          <div class="phrase-text">what do you mean</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="what do you mean" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="i do not understand">
+          <div class="phrase-text">i do not understand</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="i do not understand" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="i understand">
+          <div class="phrase-text">i understand</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="i understand" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="i see">
+          <div class="phrase-text">i see</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="i see" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="that makes sense">
+          <div class="phrase-text">that makes sense</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="that makes sense" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        </div>
+      </section>
+      <section class="section phrases-group reveal" data-section="Questions" data-prerendered="true" data-prerender-source="seo-static-v1">
+        <div class="section-title">
+          <h2 data-source-title="Questions" data-base-title="Questions"><span class="map-section-title-main">Questions</span></h2>
+        </div>
+        <div class="words-grid">
+        <div class="card phrase-card" data-phrase="what is this">
+          <div class="phrase-text">what is this</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="what is this" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="what is that">
+          <div class="phrase-text">what is that</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="what is that" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="who is that">
+          <div class="phrase-text">who is that</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="who is that" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="where are you">
+          <div class="phrase-text">where are you</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="where are you" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="where is the bathroom">
+          <div class="phrase-text">where is the bathroom</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="where is the bathroom" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="where is the station">
+          <div class="phrase-text">where is the station</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="where is the station" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="when is it">
+          <div class="phrase-text">when is it</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="when is it" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        </div>
+      </section>
+      <section class="section phrases-group reveal" data-section="Requests" data-prerendered="true" data-prerender-source="seo-static-v1">
+        <div class="section-title">
+          <h2 data-source-title="Requests" data-base-title="Requests"><span class="map-section-title-main">Requests</span></h2>
+        </div>
+        <div class="words-grid">
+        <div class="card phrase-card" data-phrase="can you help me">
+          <div class="phrase-text">can you help me</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="can you help me" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="could you help me">
+          <div class="phrase-text">could you help me</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="could you help me" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="please help me">
+          <div class="phrase-text">please help me</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="please help me" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="can you show me">
+          <div class="phrase-text">can you show me</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="can you show me" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="could you show me">
+          <div class="phrase-text">could you show me</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="could you show me" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="can you tell me">
+          <div class="phrase-text">can you tell me</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="can you tell me" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="could you tell me">
+          <div class="phrase-text">could you tell me</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="could you tell me" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        </div>
+      </section>
+      <section class="section phrases-group reveal" data-section="Time &amp; Plans" data-prerendered="true" data-prerender-source="seo-static-v1">
+        <div class="section-title">
+          <h2 data-source-title="Time &amp; Plans" data-base-title="Time &amp; Plans"><span class="map-section-title-main">Time &amp; Plans</span></h2>
+        </div>
+        <div class="words-grid">
+        <div class="card phrase-card" data-phrase="what time works">
+          <div class="phrase-text">what time works</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="what time works" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="what time is good">
+          <div class="phrase-text">what time is good</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="what time is good" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="do you have time">
+          <div class="phrase-text">do you have time</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="do you have time" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="are you free">
+          <div class="phrase-text">are you free</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="are you free" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="i am free">
+          <div class="phrase-text">i am free</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="i am free" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="i am busy">
+          <div class="phrase-text">i am busy</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="i am busy" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="let us meet">
+          <div class="phrase-text">let us meet</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="let us meet" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        </div>
+      </section>
+      <section class="section phrases-group reveal" data-section="Directions" data-prerendered="true" data-prerender-source="seo-static-v1">
+        <div class="section-title">
+          <h2 data-source-title="Directions" data-base-title="Directions"><span class="map-section-title-main">Directions</span></h2>
+        </div>
+        <div class="words-grid">
+        <div class="card phrase-card" data-phrase="turn left">
+          <div class="phrase-text">turn left</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="turn left" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="turn right">
+          <div class="phrase-text">turn right</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="turn right" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="go straight">
+          <div class="phrase-text">go straight</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="go straight" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="go back">
+          <div class="phrase-text">go back</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="go back" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="go ahead">
+          <div class="phrase-text">go ahead</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="go ahead" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="on the left">
+          <div class="phrase-text">on the left</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="on the left" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card phrase-card" data-phrase="on the right">
+          <div class="phrase-text">on the right</div>
+          <div class="phrase-translation" hidden="hidden"></div>
+          <button class="word-audio" type="button" data-word="on the right" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 9v6h4l5 4V5l-5 4H5Z" fill="currentColor"/>
+              <path d="M17 8c1.5 1.2 2.5 3 2.5 4.9S18.5 16.7 17 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        </div>
+      </section>
+      </div>
     </main>
     <!-- Shared footer -->
     <footer class="footer">
@@ -250,6 +783,6 @@
       </span>
     </footer>
     <!-- Shared client bundle -->
-    <script src="app.js?v=20260440" defer></script>
+    <script src="app.js?v=e980b20f1739" defer></script>
   </body>
 </html>

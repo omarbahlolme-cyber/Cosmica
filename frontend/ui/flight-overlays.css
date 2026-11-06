@@ -1,0 +1,559 @@
+/* Account surfaces use the language palette. Behavior and keyboard geometry stay in app.js. */
+body:is(.universe-page, .flight-page) {
+  --flight-overlay-ink: #090f13;
+  --flight-overlay-panel: #111a1f;
+  --flight-overlay-text: #edf1ed;
+  --flight-overlay-muted: #a5b2b5;
+  --flight-overlay-line: #87b7bd38;
+  --flight-overlay-amber: #b5a5fb;
+  --flight-overlay-cyan: #b5a5fb;
+}
+
+body:is(.universe-page, .flight-page) .account-trigger {
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid var(--flight-overlay-line);
+  border-radius: 10px;
+  background: #b5a5fb05;
+  box-shadow: none;
+  animation: none;
+}
+
+body:is(.universe-page, .flight-page) .account-trigger::before,
+body:is(.universe-page, .flight-page) .account-trigger::after {
+  display: none;
+}
+
+body:is(.universe-page, .flight-page) .account-trigger:is(:hover, :focus-visible, [aria-expanded="true"], .is-premium-user) {
+  border-color: #b5a5fb70;
+  background: #b5a5fb0c;
+  box-shadow: none;
+  transform: none;
+  filter: none;
+}
+
+body:is(.universe-page, .flight-page) :is(.account-trigger-avatar, .account-menu-avatar) {
+  border: 1px solid #b5a5fb55;
+  border-radius: 10px;
+  background: #b5a5fb0b;
+  color: var(--flight-overlay-cyan);
+  box-shadow: none;
+}
+
+body:is(.universe-page, .flight-page) :is(.account-dropdown-card, .premium-setup-card, .premium-checkout-card) {
+  border: 1px solid var(--flight-overlay-line);
+  border-top-color: #b5a5fb90;
+  border-radius: 16px;
+  background: var(--flight-overlay-panel);
+  color: var(--flight-overlay-text);
+  box-shadow: 0 30px 90px #0009;
+  font-family: var(--font-body, "Space Grotesk", ui-sans-serif, system-ui, sans-serif);
+  text-shadow: none;
+  animation: flight-overlay-arrival .24s ease-out;
+  transition: border-color .18s ease;
+}
+
+body:is(.universe-page, .flight-page) :is(.account-dropdown-card, .premium-setup-card, .premium-checkout-card):hover {
+  border-color: #b5a5fb5c;
+  border-top-color: #b5a5fb90;
+  box-shadow: 0 30px 90px #0009;
+  transform: none;
+}
+
+body:is(.universe-page, .flight-page) :is(.account-dropdown-card, .premium-setup-card, .premium-checkout-card)::before,
+body:is(.universe-page, .flight-page) :is(.account-dropdown-card, .premium-setup-card, .premium-checkout-card)::after {
+  display: none;
+}
+
+body:is(.universe-page, .flight-page) .account-dropdown-card {
+  padding: 18px;
+  scrollbar-color: #5b7a80 #111a1f;
+}
+
+body:is(.universe-page, .flight-page) :is(.account-guest-head, .account-menu-header) {
+  border: 0;
+  border-bottom: 1px solid var(--flight-overlay-line);
+  border-radius: 0;
+  background: none;
+  padding: 0 0 17px;
+  margin-bottom: 16px;
+  box-shadow: none;
+}
+
+body:is(.universe-page, .flight-page) .account-guest-head h3 {
+  color: var(--flight-overlay-text);
+  font-size: 20px;
+  line-height: 1.35;
+  letter-spacing: -.5px;
+}
+
+body:is(.universe-page, .flight-page) .account-pane-title {
+  color: var(--flight-overlay-amber);
+  font-size: 10px;
+  letter-spacing: .14em;
+}
+
+body:is(.universe-page, .flight-page) .account-auth-switch {
+  gap: 0;
+  padding: 0;
+  border: 1px solid var(--flight-overlay-line);
+  border-radius: 9px;
+  background: var(--flight-overlay-ink);
+}
+
+body:is(.universe-page, .flight-page) .account-auth-switch button {
+  min-height: 44px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: var(--flight-overlay-muted);
+  box-shadow: none;
+}
+
+body:is(.universe-page, .flight-page) .account-auth-switch button:is(.is-active, [aria-selected="true"]) {
+  border-bottom-color: var(--flight-overlay-amber);
+  background: #b5a5fb0b;
+  color: #ded5ff;
+}
+
+body:is(.universe-page, .flight-page) .account-form label {
+  color: #c7c7d0;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+body:is(.universe-page, .flight-page) .account-form {
+  gap: 10px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+body:is(.universe-page, .flight-page) .account-form input {
+  min-height: 46px;
+  border: 1px solid #b5a5fb3d;
+  border-radius: 9px;
+  background: var(--flight-overlay-ink);
+  color: var(--flight-overlay-text);
+  font-size: 16px;
+  box-shadow: none;
+}
+
+body:is(.universe-page, .flight-page) .account-form input:is(:focus, :focus-visible) {
+  border-color: var(--flight-overlay-cyan);
+  outline: 2px solid #b5a5fb3d;
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+body:is(.universe-page, .flight-page) .account-form input.is-invalid {
+  border-color: #ff8b7d;
+  background: #ff8b7d08;
+}
+
+body:is(.universe-page, .flight-page) :is(.account-form, .account-menu-links, .account-manage-panel, .account-delete-actions, .account-logout-actions) button,
+body:is(.universe-page, .flight-page) :is(.account-logout-trigger, .premium-setup-primary, .premium-setup-secondary, .premium-checkout-primary, .premium-checkout-secondary, .premium-checkout-option, .cookie-notice-dismiss) {
+  min-height: 44px;
+  border: 1px solid var(--flight-overlay-line);
+  border-radius: 9px;
+  background: #b5a5fb09;
+  color: var(--flight-overlay-text);
+  font-family: inherit;
+  font-size: 12px;
+  line-height: 1.5;
+  font-weight: 500;
+  letter-spacing: .015em;
+  box-shadow: none;
+  text-shadow: none;
+  animation: none;
+  filter: none;
+  transition: background .18s ease, border-color .18s ease, color .18s ease;
+}
+
+body:is(.universe-page, .flight-page) :is(.account-form, .account-menu-links, .account-manage-panel) button::before,
+body:is(.universe-page, .flight-page) :is(.account-form, .account-menu-links, .account-manage-panel) button::after{
+  display: none;
+}
+
+body:is(.universe-page, .flight-page) .premium-setup-primary::before,
+body:is(.universe-page, .flight-page) .premium-setup-primary::after {
+  display: none;
+}
+
+body:is(.universe-page, .flight-page) .account-dropdown .account-form button[type="submit"],
+body:is(.universe-page, .flight-page) .account-menu-links button[data-menu="premium"],
+body:is(.universe-page, .flight-page) :is(.premium-setup-primary, .premium-checkout-primary, .cookie-notice-dismiss) {
+  border-color: #b5a5fb78;
+  background: #b5a5fb;
+  color: #151020;
+  font-weight: 600;
+}
+
+body:is(.universe-page, .flight-page) .account-dropdown .account-form button[type="submit"] {
+  border-radius: 9px;
+  box-shadow: none;
+}
+
+body:is(.universe-page, .flight-page) .account-dropdown .account-form button[type="submit"]::after {
+  display: none;
+}
+
+body:is(.universe-page, .flight-page) .account-dropdown .account-form button[type="submit"]:is(:hover, :focus-visible) {
+  border-color: #ded5ff;
+  background: #c6b9ff;
+  color: #151020;
+  box-shadow: none;
+  transform: none;
+  filter: none;
+}
+
+body:is(.universe-page, .flight-page) :is(.account-form, .account-menu-links, .account-manage-panel, .account-delete-actions, .account-logout-actions) button:hover,
+body:is(.universe-page, .flight-page) :is(.account-logout-trigger, .premium-setup-primary, .premium-setup-secondary, .premium-checkout-primary, .premium-checkout-secondary, .premium-checkout-option, .cookie-notice-dismiss):hover {
+  border-color: #b5a5fb8c;
+  background: #211c30;
+  color: #f1f0eb;
+  box-shadow: none;
+  transform: none;
+  filter: none;
+}
+
+body:is(.universe-page, .flight-page) :is(.account-dropdown, .premium-setup-overlay, .premium-checkout-overlay, .cookie-notice) button:focus-visible {
+  outline: 2px solid var(--flight-overlay-cyan);
+  outline-offset: 3px;
+}
+
+body:is(.universe-page, .flight-page) .account-inline-link {
+  color: var(--flight-overlay-cyan);
+}
+
+body:is(.universe-page, .flight-page) .account-form-divider::before {
+  background: var(--flight-overlay-line);
+}
+
+body:is(.universe-page, .flight-page) .account-form-divider span {
+  background: var(--flight-overlay-panel);
+  color: var(--flight-overlay-muted);
+}
+
+body:is(.universe-page, .flight-page) .account-menu-topline {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding-right: 0;
+}
+
+body:is(.universe-page, .flight-page) .account-menu-summary {
+  position: static;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  margin: 0;
+}
+
+body:is(.universe-page, .flight-page) :is(.account-menu-stat, .account-menu-quests, .account-menu-quest-item, .account-subscription-status-badge) {
+  border-color: var(--flight-overlay-line);
+  border-radius: 9px;
+  background: #b5a5fb07;
+  color: #d9d8df;
+  box-shadow: none;
+}
+
+body:is(.universe-page, .flight-page) :is(.account-menu-xpfill, .account-menu-quest-fill) {
+  background: var(--flight-overlay-cyan);
+}
+
+body:is(.universe-page, .flight-page) .account-menu-header .account-menu-name,
+body:is(.universe-page, .flight-page) .account-premium-main {
+  color: inherit;
+  text-shadow: none;
+}
+
+body:is(.universe-page, .flight-page) .account-premium-sub {
+  color: #342b4c;
+}
+
+body:is(.universe-page, .flight-page) :is(.account-menu-level, .account-menu-xp, .account-menu-plan-status, .account-reset-intro, .account-subscription-note, .account-subscription-until, .account-subscription-sync) {
+  color: var(--flight-overlay-muted);
+}
+
+body:is(.universe-page, .flight-page) .account-feedback {
+  border-radius: 9px;
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+body:is(.universe-page, .flight-page) .account-feedback[data-tone="error"] {
+  color: #ffb3a8;
+}
+
+body:is(.universe-page, .flight-page) .account-feedback[data-tone="success"] {
+  color: #9ee6cb;
+}
+
+body:is(.universe-page, .flight-page) .account-feedback[data-tone="warning"] {
+  color: #ffcc9b;
+}
+
+body:is(.universe-page, .flight-page) .account-manage-panel .account-delete {
+  border-color: #f08d7b65;
+  background: #f08d7b09;
+  color: #ffb4a7;
+}
+
+body:is(.universe-page, .flight-page) :is(.premium-setup-overlay, .premium-checkout-overlay) {
+  background: #03090de0;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+body:is(.universe-page, .flight-page) :is(.premium-setup-card, .premium-checkout-card) h3 {
+  padding-right: 34px;
+  color: var(--flight-overlay-text);
+  font-size: clamp(21px, 3vw, 28px);
+  font-weight: 500;
+  letter-spacing: -.6px;
+  line-height: 1.3;
+  text-shadow: none;
+}
+
+body:is(.universe-page, .flight-page) :is(.premium-setup-message, .premium-checkout-message, .premium-checkout-note, .premium-gift-from) {
+  color: var(--flight-overlay-muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+body:is(.universe-page, .flight-page) :is(.premium-setup-close, .premium-checkout-close) {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--flight-overlay-line);
+  border-radius: 9px;
+  background: #0b141b;
+  color: #cbd9da;
+  font-size: 22px;
+  box-shadow: none;
+}
+
+body:is(.universe-page, .flight-page) .premium-plan-strip {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+body:is(.universe-page, .flight-page) .premium-plan-chip {
+  min-width: 0;
+  border: 1px solid var(--flight-overlay-line);
+  border-radius: 9px;
+  background: #b5a5fb05;
+  color: var(--flight-overlay-text);
+  box-shadow: none;
+  animation: none;
+  filter: none;
+}
+
+body:is(.universe-page, .flight-page) .premium-plan-chip-pro {
+  border-color: #b5a5fb70;
+  background: #b5a5fb08;
+}
+
+body:is(.universe-page, .flight-page) .premium-plan-badge {
+  position: static;
+  width: fit-content;
+  max-width: 100%;
+  padding: 2px 5px;
+  border: 1px solid #b5a5fb55;
+  border-radius: 0;
+  background: #b5a5fb12;
+  color: #ffd1ac;
+  font-size: 9px;
+  letter-spacing: .05em;
+  white-space: normal;
+  box-shadow: none;
+  text-shadow: none;
+}
+
+body:is(.universe-page, .flight-page) :is(.premium-plan-name, .premium-plan-price, .premium-plan-meta, .premium-compare-header-pro, .premium-compare-pro) {
+  color: #ffc292;
+  text-shadow: none;
+}
+
+body:is(.universe-page, .flight-page) .premium-compare {
+  border-color: var(--flight-overlay-line);
+  border-radius: 9px;
+  background: #b5a5fb05;
+}
+
+body:is(.universe-page, .flight-page) .premium-checkout-option.is-selected {
+  border-color: var(--flight-overlay-cyan);
+  background: #b5a5fb10;
+  box-shadow: none;
+}
+
+body:is(.universe-page, .flight-page) .premium-success-benefits {
+  color: #b8d8d7;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+
+
+
+
+body:is(.universe-page, .flight-page) .cookie-notice {
+  border: 1px solid var(--flight-overlay-line);
+  border-radius: 10px;
+  background: #10191ff7;
+  color: #b6c4c7;
+  box-shadow: 0 16px 50px #0007;
+}
+
+body:is(.universe-page, .flight-page) .cookie-notice a {
+  color: var(--flight-overlay-cyan);
+}
+
+body:is(.universe-page, .flight-page) .progress-celebration-overlay {
+  background: #03090de0;
+}
+
+body:is(.universe-page, .flight-page) .progress-celebration-card {
+  border: 1px solid var(--flight-overlay-line);
+  border-top-color: #b5a5fb90;
+  border-radius: 16px;
+  background: var(--flight-overlay-panel);
+  color: var(--flight-overlay-text);
+  box-shadow: 0 28px 90px #0009;
+  animation: none;
+}
+
+body:is(.universe-page, .flight-page) .progress-celebration-card::before,
+body:is(.universe-page, .flight-page) .progress-celebration-card::after {
+  display: none;
+}
+
+body:is(.universe-page, .flight-page) .progress-celebration-card .progress-celebration-kicker {
+  color: var(--flight-overlay-amber);
+}
+
+body:is(.universe-page, .flight-page) .progress-celebration-card .progress-celebration-title {
+  color: var(--flight-overlay-text);
+}
+
+body:is(.universe-page, .flight-page) .progress-celebration-card .progress-celebration-message {
+  color: var(--flight-overlay-muted);
+}
+
+body:is(.universe-page, .flight-page) .progress-celebration-card .progress-celebration-dismiss {
+  min-height: 44px;
+  border: 1px solid #b5a5fb78;
+  border-radius: 9px;
+  background: var(--flight-overlay-amber);
+  color: #151020;
+  box-shadow: none;
+}
+
+/* Native search, help and feedback dialogs share the same controls. */
+body:is(.universe-page, .flight-page) .ux-dialog .ux-close {
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 9px;
+}
+
+body:is(.universe-page, .flight-page) .ux-dialog .ux-search-field {
+  padding-block: 5px;
+}
+
+body:is(.universe-page, .flight-page) .ux-dialog :is(input, textarea) {
+  min-height: 44px;
+  min-width: 0;
+  border-radius: 9px;
+  font-size: 16px;
+}
+
+body:is(.universe-page, .flight-page) .ux-dialog .join-actions {
+  grid-template-columns: minmax(0, 1fr);
+  justify-content: stretch;
+  align-items: stretch;
+  width: 100%;
+  margin: 18px 0 0;
+}
+
+body:is(.universe-page, .flight-page) .ux-dialog .join-actions :is(input, textarea) {
+  width: 100%;
+  max-width: 100%;
+  border: 1px solid var(--flight-overlay-line);
+  background: var(--flight-overlay-ink);
+  color: var(--flight-overlay-text);
+  box-shadow: none;
+}
+
+body:is(.universe-page, .flight-page) .ux-dialog .join-actions textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+body:is(.universe-page, .flight-page) .ux-dialog .primary {
+  min-height: 44px;
+  padding: 10px 18px;
+  border: 1px solid #b5a5fb78;
+  border-radius: 9px;
+  background: var(--flight-overlay-amber);
+  color: #151020;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: none;
+  text-shadow: none;
+  transform: none;
+  filter: none;
+}
+
+body:is(.universe-page, .flight-page) .ux-dialog .primary::before,
+body:is(.universe-page, .flight-page) .ux-dialog .primary::after {
+  display: none;
+}
+
+body:is(.universe-page, .flight-page) .ux-dialog .primary:hover {
+  background: #c6b9ff;
+  box-shadow: none;
+  transform: none;
+}
+
+body:is(.universe-page, .flight-page) .ux-dialog .join-status {
+  position: static;
+  width: 100%;
+  margin: 12px 0 0;
+  transform: none;
+  color: var(--flight-overlay-muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+body:is(.universe-page, .flight-page) .ux-dialog :is(button, input, textarea):focus-visible {
+  outline: 2px solid var(--flight-overlay-cyan);
+  outline-offset: 3px;
+}
+
+body:is(.universe-page, .flight-page) .ux-dialog .ux-search-field input:focus-visible {
+  outline: none;
+}
+
+@keyframes flight-overlay-arrival {
+  from { opacity: .25; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 640px) {
+  body:is(.universe-page, .flight-page) .account-dropdown-card { padding: 15px; }
+  body:is(.universe-page, .flight-page) .account-menu-header { gap: 10px; }
+  body:is(.universe-page, .flight-page) .premium-plan-strip { gap: 8px; }
+  body:is(.universe-page, .flight-page) .premium-plan-chip { padding: 11px 9px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body:is(.universe-page, .flight-page) :is(.account-dropdown-card, .premium-setup-card, .premium-checkout-card) { animation: none; }
+}
